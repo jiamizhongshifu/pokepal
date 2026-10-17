@@ -1,0 +1,59 @@
+<!doctype html><meta charset="utf-8"><title>Island audio regression</title>
+<pre id="result">Running…</pre>
+<script type="module">
+// Run through Vite: /scripts/tests/island-audio.browser.html.
+// Test real playback orchestration with deterministic audio/network boundaries.
+const sources=[];
+let pendingDownload;
+class FakeAudioContext {
+  state='running'; destination={};
+  resume(){ return Promise.resolve(); }
+  decodeAudioData(){ return Promise.resolve({duration:.01}); }
+  createBufferSource(){
+    const source={playbackRate:{value:1},connect(){},start(){sources.push(this);},stop(){this.stopped=true;this.onended?.();},finish(){this.onended?.();}};
+    return source;
+  }
+}
+window.AudioContext=FakeAudioContext;
+const realFetch=window.fetch.bind(window);
+window.fetch=(url,...args)=>{
+  const path=String(url);
+  if(path==='/voice/manifest.json')return Promise.resolve(new Response(JSON.stringify(Object.fromEntries(['pending','lesson','island','first','second'].map(t=>['en|'+t,t+'.mp3'])))));
+  if(path==='/voice/pending.mp3')return new Promise(resolve=>{pendingDownload=()=>resolve(new Response(new ArrayBuffer(8)));});
+  if(path.startsWith('/voice/'))return Promise.resolve(new Response(new ArrayBuffer(8)));
+  return realFetch(url,...args);
+};
+const result=[];
+const assert=(ok,message)=>{if(!ok)throw Error(message);};
+const flush=()=>new Promise(r=>setTimeout(r,0));
+const until=async(fn)=>{for(let n=0;n<100&&!fn();n++)await new Promise(r=>setTimeout(r,10));};
+try{
+ const speech=await import('/src/lib/speech.ts');
+ const island=await import('/src/lib/islandSpeech.ts');
+ const {useGame}=await import('/src/store.ts');
+ useGame.setState(s=>({loaded:true,saveIssue:null,save:{...s.save,trainer:{name:'Audio test',avatar:'avatar-red',createdAt:Date.now()}}}));
+ const go=name=>useGame.getState().go({name});
+ go('home');
+ const delayed=island.sayOnIsland(['en','pending']);await until(()=>pendingDownload);assert(pendingDownload,'download started');
+ go('tasks');pendingDownload();assert(await delayed===false,'pending island recording must be rejected after navigation');assert(sources.length===0,'no late audio start');
+ result.push('Pending island download cannot start on tasks');
+ const teaching=speech.say(['en','lesson']);await until(()=>sources.length===1);const teacher=sources.at(-1);assert(teacher,'lesson starts');
+ const stale=island.narrateOnIsland(['en','island']);assert(await stale.done===false,'hidden island call rejected');stale.cancel();
+ assert(!teacher.stopped&&speech.isSpeaking(),'rejected island call/cancellation must preserve lesson');teacher.finish();assert(await teaching===true,'teaching completes');
+ result.push('Late island call and cancellation preserve foreground teaching');
+ go('home');const sequence=island.sayOnIsland(['en','first'],35,['en','second']);await until(()=>sources.length===2);sources.at(-1).finish();await flush();
+ const count=sources.length;go('tasks');assert(await sequence===false,'sequence is cancelled during pause');assert(sources.length===count,'second line cannot leak');
+ result.push('Leaving during a pause suppresses later bilingual lines');
+ go('home');const resumed=island.sayOnIsland(['en','island']);await until(()=>sources.length===count+1);assert(sources.length===count+1,'returning home allows new speech');sources.at(-1).finish();assert(await resumed===true,'home speech completes');
+ result.push('Returning home restores island speech');
+ Object.defineProperty(document,'hidden',{configurable:true,value:true});assert(await island.sayOnIsland(['en','island'])===false,'background tab muted');
+ result.push('Hidden tab cannot start island speech');
+ Object.defineProperty(document,'hidden',{configurable:true,value:false});
+ const {playLimitSeconds}=await import('/src/store.ts');
+ useGame.setState(s=>({save:{...s.save,daily:{...s.save.daily,playSeconds:playLimitSeconds(s.save)}}}));
+ assert(await island.sayOnIsland(['en','island'])===false,'resting overlay muted');
+ result.push('Daily rest overlay cannot play island speech');
+ window.__result={passed:true,checks:result};
+}catch(error){window.__result={passed:false,checks:result,error:String(error)};}
+document.querySelector('#result').textContent=JSON.stringify(window.__result,null,2);
+</script>

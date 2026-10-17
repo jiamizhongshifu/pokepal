@@ -1,0 +1,250 @@
+{
+  "balls": {
+    "great": 0,
+    "master": 0,
+    "poke": 1,
+    "ultra": 0
+  },
+  "captures": [
+    {
+      "ball": "poke",
+      "care": {
+        "fedAt": -300,
+        "petAt": -102,
+        "quietUntil": 0,
+        "seconds": 640
+      },
+      "caughtAt": 1234025,
+      "friendship": 20,
+      "id": 25,
+      "personality": {
+        "preference": "ball",
+        "version": 1
+      }
+    },
+    {
+      "ball": "poke",
+      "care": {
+        "fedAt": -270,
+        "petAt": -150,
+        "quietUntil": 0,
+        "seconds": 640
+      },
+      "caughtAt": 1234007,
+      "friendship": 20,
+      "id": 7,
+      "personality": {
+        "preference": "ball",
+        "version": 1
+      }
+    },
+    {
+      "ball": "poke",
+      "care": {
+        "fedAt": -240,
+        "petAt": -114,
+        "quietUntil": 0,
+        "seconds": 640
+      },
+      "caughtAt": 1234129,
+      "friendship": 20,
+      "id": 129,
+      "personality": {
+        "preference": "shade",
+        "version": 1
+      }
+    }
+  ],
+  "daily": {
+    "board": [
+      "listen",
+      "wordpic",
+      "repeat",
+      "trace"
+    ],
+    "boardDone": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "bonusGiven": false,
+    "caught": [],
+    "date": "2026-10-16",
+    "energyEarned": 2,
+    "extraSeconds": 0,
+    "goalDone": false,
+    "heard": 13,
+    "participated": [
+      "island"
+    ],
+    "playSeconds": 690,
+    "spoken": 0,
+    "tasksCompleted": 0,
+    "words": [
+      "My turn!",
+      "Your turn!",
+      "I need a rest."
+    ]
+  },
+  "energy": 2,
+  "history": [],
+  "islandLiving": {
+    "furniture": [
+      "basket",
+      "table",
+      "mat",
+      "bush",
+      "stones",
+      "track"
+    ],
+    "memories": [
+      {
+        "at": 1792129112358,
+        "context": "shade",
+        "id": "b7fb6d2d-471b-4f55-962c-cca7d03767a5",
+        "kind": "rest",
+        "partners": [
+          25
+        ]
+      },
+      {
+        "at": 1792128900190,
+        "context": "coast",
+        "id": "3e0ba936-c993-443c-bde5-67cb2ff4ad4a",
+        "kind": "rest",
+        "partners": [
+          25,
+          129
+        ]
+      },
+      {
+        "at": 1792128775312,
+        "context": "play",
+        "id": "57a00617-1da1-4861-aaeb-b53a0d54cba1",
+        "kind": "ball",
+        "partners": [
+          25,
+          7
+        ]
+      },
+      {
+        "at": 1792128601175,
+        "context": "play",
+        "id": "19cd064a-8431-433f-a9d2-583d6f1b9080",
+        "kind": "ball",
+        "partners": [
+          25,
+          7
+        ]
+      }
+    ],
+    "version": 1
+  },
+  "learning": {
+    "records": {
+      "I need a rest.": {
+        "actions": 2,
+        "attempts": 0,
+        "contexts": [
+          "home",
+          "island"
+        ],
+        "evidenceVersion": 2,
+        "independent": 0,
+        "lastSeen": 1792129106737,
+        "misses": 0,
+        "needsPractice": false,
+        "nextReview": 1792128894651,
+        "saved": false,
+        "seen": 4,
+        "spoken": 0,
+        "streak": 0,
+        "supported": 0
+      },
+      "My turn!": {
+        "actions": 4,
+        "attempts": 0,
+        "contexts": [
+          "home",
+          "island"
+        ],
+        "evidenceVersion": 2,
+        "independent": 0,
+        "lastSeen": 1792128771409,
+        "misses": 0,
+        "needsPractice": false,
+        "nextReview": 1792128559469,
+        "saved": false,
+        "seen": 8,
+        "spoken": 0,
+        "streak": 0,
+        "supported": 0
+      },
+      "Your turn!": {
+        "actions": 4,
+        "attempts": 0,
+        "contexts": [
+          "home",
+          "island"
+        ],
+        "evidenceVersion": 2,
+        "independent": 0,
+        "lastSeen": 1792128774161,
+        "misses": 0,
+        "needsPractice": false,
+        "nextReview": 1792128594393,
+        "saved": false,
+        "seen": 8,
+        "spoken": 0,
+        "streak": 0,
+        "supported": 0
+      }
+    },
+    "units": {},
+    "version": 1
+  },
+  "participation": {
+    "days": 0,
+    "gifts": 0,
+    "lastDate": "",
+    "version": 1
+  },
+  "settings": {
+    "ambientEnglish": "off",
+    "dailyMinutes": 60,
+    "favorites": [
+      25
+    ],
+    "level": 1,
+    "speechRate": 1,
+    "tasksPerDay": 4
+  },
+  "streak": {
+    "count": 0,
+    "lastDate": ""
+  },
+  "trainer": {
+    "name": "测试训练师",
+    "avatar": "avatar-red",
+    "createdAt": 1720000000000
+  },
+  "version": 1,
+  "wordStats": {
+    "I need a rest.": {
+      "correct": 0,
+      "heard": 2,
+      "spoken": 0
+    },
+    "My turn!": {
+      "correct": 0,
+      "heard": 4,
+      "spoken": 0
+    },
+    "Your turn!": {
+      "correct": 0,
+      "heard": 4,
+      "spoken": 0
+    }
+  }
+}

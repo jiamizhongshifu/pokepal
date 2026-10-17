@@ -1,0 +1,193 @@
+/* Generated environment paintings, with live characters and accessible HTML controls. */
+.screen.illustrated-welcome {
+  --text:#31563e; --muted:#52735a; --surface:#f3f7e6; --surface-strong:#fffbea; --surface-border:#c2d4a3;
+  isolation:isolate; background:#d5eadb; padding: max(24px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));
+  gap:20px; overflow-y:auto;
+}
+.screen.illustrated-welcome::before,.screen.illustrated-welcome::after { display:none; }
+.illustrated-welcome > img.welcome-landscape {
+  position:absolute; inset:0; width:100%; height:100%; max-width:none;
+  object-fit:cover; object-position:center; z-index:-1; pointer-events:none;
+}
+.illustrated-welcome .welcome-content {
+  display:flex; flex-direction:column; align-items:center; gap:16px; flex-shrink:0;
+  width:min(850px,100%); padding:24px 12px 30px; border-radius:48%;
+  background:radial-gradient(ellipse,#fffdf3dc 0%,#fffdf3a6 45%,#fffdf300 72%);
+}
+.illustrated-welcome .logo { color:#214c46; margin:0; font-size:clamp(29px,4.6vw,58px); line-height:1.3; text-shadow:0 2px 0 #fff9df; }
+.illustrated-welcome .logo-en { color:#30695d; margin:0 0 12px; font-size:clamp(12px,1.8vw,20px); }
+.illustrated-welcome .welcome-pokemon { align-items:flex-end; }
+.illustrated-welcome .welcome-pokemon img:not(.icon):not(.pokeball) { width:clamp(52px,11vw,120px); height:clamp(52px,11vw,120px); object-fit:contain; }
+.illustrated-welcome .welcome-enter {
+  background:linear-gradient(#fff9df,#f3e8ba); border-color:#fffbed; color:#305547;
+  box-shadow:0 6px 0 #729c72,0 12px 24px #244c4533; min-height:100px; width:320px;
+}
+.illustrated-welcome .enter-avatar { background:#e3edd2; border-color:#c0d6a7; }
+.illustrated-welcome .enter-arrow { background:#e2ad52; color:#fffbed; }
+.illustrated-welcome .avatar-pick { padding:16px 22px; border-radius:30px; background:#fffbeaeb; border:2px solid #fffaf0; box-shadow:0 5px 0 #7d9a6550; text-align:center; color:#31563e; }
+.illustrated-welcome .avatar-pick .hint { font-size:20px; margin-bottom:12px; }
+.illustrated-welcome .avatar-pick .hint small { display:block; font-size:13px; color:#52735a; }
+.illustrated-welcome .avatar-row { gap:12px; }
+.illustrated-welcome .avatar-choice { width:84px; height:84px; border-radius:24px; background:#eaf0d9; border:2px solid #ccdab3; box-shadow:0 3px 0 #a0b889; }
+.illustrated-welcome .avatar-choice .icon { width:68px; height:68px; }
+.illustrated-welcome .device-setup { margin:0 auto; width:min(620px,100%); }
+.illustrated-welcome .device-setup > summary { width:fit-content; margin:auto; background:#fffbeaeb; color:#355849; border:1px solid #e2daba; }
+.illustrated-welcome .device-setup[open] { background:#fffbea; color:#31563e; }
+.illustrated-welcome:has(.device-setup[open]) { justify-content:flex-start; }
+
+.illustrated-meadow { background:#a8c77d; overflow:hidden; }
+.illustrated-meadow > img { width:100%; height:100%; object-fit:cover; object-position:50% 52%; }
+.screen.wild-adventure::before,.screen.wild-adventure::after { display:none; }
+.wild-adventure .field-heading { top:8px; }
+.wild-adventure .field-heading h1 { background:#fffbe8ee; border:1px solid #fffef1; box-shadow:0 3px 12px #345c3820; }
+.wild-adventure .wish-button { background:#fff9e7; border-color:#c2d4a3; box-shadow:0 4px 0 #5b81493b; }
+.wild-adventure .wish-button.explore-again { background:#e8f1c9; border-color:#9cba79; }
+.wild-adventure .field { inset:180px 8% 165px; }
+.wild-adventure .wild { width:clamp(140px,17vw,220px); height:clamp(140px,17vw,220px); }
+.wild-adventure .wild:nth-child(1) { left:20%; top:38%; }
+.wild-adventure .wild:nth-child(2) { left:50%; top:65%; }
+.wild-adventure .wild:nth-child(3) { left:80%; top:38%; }
+.wild-adventure .wild > img:not(.icon):not(.bush-3d) { position:relative; z-index:1; object-fit:contain; }
+.wild-adventure .encounter-grass { z-index:2; bottom:-7%; height:40%; }
+.wild-adventure .encounter-grass > img { width:100%; height:100%; object-fit:contain; }
+.wild-adventure .wild-name { top:108%; padding:7px 18px; background:#fffbe8f5; border:1px solid #d3dfb6; box-shadow:0 3px 0 #3b643624; }
+.wild-adventure .field-kit { bottom:max(24px,env(safe-area-inset-bottom)); border-color:#d2ddb3; background:#fffbe8f5; }
+@media(max-width:600px) {
+  :is(.wild-adventure,.simple-ball-shop) .topbar { padding:12px; gap:6px; }
+  :is(.wild-adventure,.simple-ball-shop) .tb-left { gap:6px; flex-shrink:0; }
+  :is(.wild-adventure,.simple-ball-shop) .tb-title { white-space:nowrap; font-size:17px; padding:8px; }
+  :is(.wild-adventure,.simple-ball-shop) .btn-round.back { min-width:44px; width:44px; height:48px; padding:0; }
+  :is(.wild-adventure,.simple-ball-shop) .btn-round.back span { display:none; }
+  :is(.wild-adventure,.simple-ball-shop) .tb-right { gap:4px; }
+  :is(.wild-adventure,.simple-ball-shop) .energy-chip,:is(.wild-adventure,.simple-ball-shop) .balls-chip { padding:7px 9px; font-size:18px; min-height:44px; }
+  :is(.wild-adventure,.simple-ball-shop) .energy-chip .icon,:is(.wild-adventure,.simple-ball-shop) .balls-chip .pokeball { width:22px!important; height:22px!important; }
+  .illustrated-welcome .welcome-content { gap:12px; padding:20px 0; }
+  .illustrated-welcome .avatar-pick { padding:14px 12px; }
+  .illustrated-welcome .avatar-row { gap:8px; }
+  .illustrated-welcome .avatar-choice { width:60px; height:68px; border-radius:20px; }
+  .illustrated-welcome .avatar-choice .icon { width:52px; height:52px; }
+  .wild-adventure .field-heading { top:4px; width:calc(100% - 24px); }
+  .wild-adventure .field-heading h1 { font-size:18px; }
+  .wild-adventure .field-wish-actions .wish-button { flex:1; padding:6px; gap:5px; font-size:15px; }
+  .wild-adventure .field-wish-actions .wish-button small { font-size:11px; }
+  .wild-adventure .field { inset:170px 3% 150px; }
+  .wild-adventure .wild,.wild-adventure .field .wild:last-child:nth-child(odd) { width:clamp(104px,29vw,150px); height:clamp(104px,29vw,150px); }
+  .wild-adventure .wild:nth-child(1) { left:23%; top:25%; }
+  .wild-adventure .wild:nth-child(2) { left:77%; top:25%; }
+  .wild-adventure .wild:nth-child(3) { left:50%; top:80%; }
+  .wild-adventure .wild-name { font-size:16px; padding:6px 12px; }
+  .wild-adventure .field-kit { bottom:max(20px,env(safe-area-inset-bottom)); }
+}
+@media(max-height:600px) and (min-width:601px) {
+  .illustrated-welcome { gap:8px; }
+  .illustrated-welcome .welcome-content { gap:8px; padding:8px 0; }
+  .illustrated-welcome .welcome-pokemon img:not(.icon):not(.pokeball) { width:66px; height:66px; }
+  .illustrated-welcome .logo { font-size:32px; }
+  .illustrated-welcome .logo-en { margin:0; font-size:13px; }
+  .illustrated-welcome .welcome-enter { min-height:72px; padding:8px 16px; }
+  .illustrated-welcome .enter-avatar { width:54px; height:54px; }
+  .illustrated-welcome .avatar-pick { padding:8px 14px; }
+  .illustrated-welcome .avatar-choice { width:54px; height:54px; }
+  .illustrated-welcome .avatar-choice .icon { width:44px; height:44px; }
+  .illustrated-welcome .avatar-pick .hint { margin-bottom:6px; font-size:16px; }
+  .wild-adventure .field-heading { top:0; gap:10px; }
+  .wild-adventure .field { inset:90px 4% 100px; }
+  .wild-adventure .wild,.wild-adventure .field .wild:last-child:nth-child(odd) { width:86px; height:86px; }
+  .wild-adventure .wild-name { font-size:14px; padding:3px 12px; }
+  .wild-adventure .field-kit { bottom:10px; }
+}
+
+/* Keep character art, names and the ball kit in separate layout rows. */
+.screen.wild-adventure .field-wrap {
+  display:grid; grid-template-rows:auto minmax(0,1fr) auto;
+  gap:12px; padding:4px max(20px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));
+}
+.screen.wild-adventure .field-heading {
+  position:static; transform:none; width:100%; max-width:none; display:block;
+}
+.screen.wild-adventure .field-wish-actions { gap:16px; }
+.screen.wild-adventure .field-wish-actions .wish-button {
+  display:flex; flex-direction:column; gap:4px; padding:10px 24px;
+  min-width:128px; min-height:92px; font-size:18px; border-radius:26px;
+}
+.field-action-picture { display:block; position:relative; width:48px; height:42px; }
+.field-action-picture > .icon { width:40px; height:40px; }
+.field-action-picture > .field-action-corner { position:absolute; bottom:-3px; right:-6px; width:23px; height:23px; border:2px solid #fffbea; border-radius:50%; background:#3e7562; }
+.screen.wild-adventure .field {
+  position:relative; inset:auto; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:center; justify-items:center; align-content:center; gap:16px;
+  width:min(960px,100%); height:100%; min-height:0; margin:auto; padding:0 0 24px;
+}
+.screen.wild-adventure .field.encounters-1 { grid-template-columns:1fr; }
+.screen.wild-adventure .field .wild:nth-child(n) {
+  grid-column:auto; grid-row:auto;
+  position:relative; inset:auto; top:auto!important; transform:none; aspect-ratio:auto;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:100%; max-width:240px; height:auto; padding:6px; border-radius:28px;
+}
+.screen.wild-adventure .wild::before { display:none; }
+.encounter-portrait { position:relative; display:grid; place-items:center; width:100%; aspect-ratio:1; max-width:220px; }
+.encounter-portrait::before { content:""; position:absolute; bottom:3%; left:15%; width:70%; height:12%; background:#537d4440; border-radius:50%; filter:blur(6px); }
+.encounter-portrait > img { position:relative; width:90%; height:90%; object-fit:contain; filter:drop-shadow(0 6px 3px #42653530); }
+.screen.wild-adventure .encounter-grass { bottom:-2%; }
+.screen.wild-adventure .wild-name {
+  position:relative; inset:auto; transform:none; display:block; max-width:100%;
+  white-space:normal; overflow-wrap:anywhere; margin:0; font-size:20px; line-height:1.3; padding:7px 16px;
+}
+.screen.wild-adventure .wild-name small { font-size:13px; }
+.screen.wild-adventure .field-kit {
+  position:relative; inset:auto; transform:none; justify-self:center; width:max-content;
+  max-width:100%; margin:0; padding:10px 16px; gap:12px;
+}
+.screen.wild-adventure .field-kit > .pokeball { flex:none; }
+.screen.wild-adventure .field-kit button { flex-shrink:0; gap:8px; }
+.screen.wild-adventure .field-kit button > .icon { flex:none; }
+.screen.wild-adventure .back-field { display:flex; align-items:center; gap:8px; text-decoration:none; }
+.shop .shop-status { display:flex; align-items:center; justify-content:center; gap:8px; }
+.shop .shop-status > .icon { flex:none; }
+@media(max-width:600px) {
+  .screen.wild-adventure .field-wrap { gap:10px; padding:2px 12px max(16px,env(safe-area-inset-bottom)); }
+  .screen.wild-adventure .field-wish-actions { gap:12px; }
+  .screen.wild-adventure .field-wish-actions .wish-button { flex:none; min-width:118px; min-height:84px; font-size:16px; padding:8px 16px; }
+  .screen.wild-adventure .field { gap:4px; padding-bottom:16px; }
+  .screen.wild-adventure .field .wild:nth-child(n) { padding:2px; gap:6px; }
+  .screen.wild-adventure .wild-name { font-size:16px; padding:6px 8px; }
+  .screen.wild-adventure .wild-name small { font-size:11px; }
+  .screen.wild-adventure .field-kit { gap:8px; padding:10px; font-size:15px; }
+  .screen.wild-adventure .field-kit button { max-width:44%; padding:8px; font-size:15px; }
+  .screen.wild-adventure .field-kit-copy { min-width:0; }
+}
+@media(max-height:700px) and (min-width:601px) {
+  .screen.wild-adventure .field-wrap { gap:6px; padding-bottom:max(10px,env(safe-area-inset-bottom)); }
+  .screen.wild-adventure .field-wish-actions .wish-button { flex-direction:row; min-height:58px; padding:6px 18px; }
+  .screen.wild-adventure .encounter-portrait { max-width:clamp(64px,23vh,150px); }
+  .screen.wild-adventure .field { padding-bottom:8px; }
+  .screen.wild-adventure .wild-name { font-size:16px; padding:4px 12px; }
+  .screen.wild-adventure .field-kit { padding:6px 14px; }
+}
+
+/* One familiar ball, one clear exchange, then an invitation to meet a friend. */
+.simple-ball-shop { align-items:center; overflow-y:auto; }
+.simple-ball-shop > .topbar { align-self:stretch; }
+.simple-ball-shop .shop-energy { margin:8px 0 16px; }
+.single-ball-card { width:min(480px,calc(100% - 32px)); padding:24px; display:flex; flex-direction:column; align-items:center; gap:14px; border:2px solid #d2dfca; border-radius:32px; background:#fffbe8; color:#31563e; box-shadow:0 5px 0 #78986a30; text-align:center; }
+.single-ball-card h1 { margin:0; font-size:26px; }
+.single-ball-card p { margin:0; color:#52735a; }
+.ball-exchange-picture { display:flex; align-items:center; justify-content:center; gap:12px; padding:10px 24px; border-radius:20px; background:#edf2d5; font-size:28px; }
+.ball-exchange-picture > span { padding:0 10px; color:#60895b; }
+.single-ball-card .btn-big { width:100%; min-height:64px; padding:10px; font-size:22px; }
+.single-ball-card .btn-big:disabled { opacity:1; background:#d7ebcd; color:#31563e; box-shadow:none; }
+.ball-owned { display:flex; align-items:center; justify-content:center; gap:8px; font-size:18px; }
+.simple-ball-shop .shop-footer { margin:20px 0; padding:0 12px; flex-shrink:0; }
+.simple-ball-shop .shop-footer .btn-big { font-size:22px; padding:12px 24px; min-height:64px; }
+@media(max-height:800px){.single-ball-card{gap:10px;padding:16px}.single-ball-card>img{width:82px!important;height:82px!important}.single-ball-card h1{font-size:23px}.simple-ball-shop .shop-energy{margin:0 0 10px}.simple-ball-shop .shop-footer{margin:14px 0}}
+.screen.wild-adventure .field > .center-msg { grid-column:1/-1; width:100%; }
+
+@media(max-width:600px){.simple-ball-shop{gap:10px}.simple-ball-shop .shop-energy{font-size:20px;padding:6px;margin:0}.single-ball-card{gap:10px;padding:14px}.single-ball-card h1{font-size:22px}.simple-ball-shop .shop-footer{margin:4px 0 16px}.simple-ball-shop .shop-footer .btn-big{font-size:19px;min-height:56px}.single-ball-card .btn-big{min-height:56px;font-size:20px}}
+@media(max-width:380px) {
+ :is(.simple-ball-shop,.wild-adventure)>.topbar { display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px 8px; }
+ :is(.simple-ball-shop,.wild-adventure)>.topbar .tb-left { display:contents; }
+ :is(.simple-ball-shop,.wild-adventure)>.topbar .back { grid-column:1; grid-row:1; }
+ :is(.simple-ball-shop,.wild-adventure)>.topbar .tb-right { grid-column:2; grid-row:1; justify-self:end; }
+ :is(.simple-ball-shop,.wild-adventure)>.topbar .tb-title { grid-column:1/-1; grid-row:2; font-size:24px; padding:0; }
+}

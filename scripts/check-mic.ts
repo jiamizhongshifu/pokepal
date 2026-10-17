@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {VoiceActivity} from '../src/lib/voiceActivity';
+const run=(segments:[number,number][])=>{const v=new VoiceActivity();let endedAt=0,time=0;for(const [rms,ms]of segments)for(let i=0;i<ms;i+=40){time+=40;if(v.sample(rms,40).done&&!endedAt)endedAt=time;}return {...v.result(),endedAt};};
+assert.equal(run([[.002,1200]]).voiced,false,'silence cannot complete');
+assert.equal(run([[.004,2000]]).voiced,false,'quiet continuous background is not speech');
+assert.equal(run([[.1,80],[.002,1000]]).voiced,false,'short tap is not a word');
+assert.equal(run([[.009,240],[.001,840]]).voiced,true,'quiet short word counts');
+assert.equal(run([[.07,400],[.002,840]]).endedAt,1200,'speaking immediately is not calibrated away');
+assert.equal(run([[.002,320],[.03,800],[.002,840]]).voiced,true);
+assert.equal(run([[.004,1600],[.009,240],[.002,840]]).voiced,true,'quiet short word after background calibration counts');
+assert.equal(run([[.007,240],[.002,840]]).voiced,true,'very soft first syllable is not noise');
+console.log('PASS: silence, background, tap rejection, quiet short word, immediate speech, and stop after silence.');

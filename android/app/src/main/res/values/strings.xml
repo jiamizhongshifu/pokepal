@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">宝可梦小小训练师</string>
+    <string name="title_activity_main">宝可梦小小训练师</string>
+    <string name="package_name">com.pokepal.family</string>
+    <string name="custom_url_scheme">com.pokepal.family</string>
+</resources>

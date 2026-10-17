@@ -1,0 +1,13 @@
+import { TENT,FARM_PLOTS,PLAYGROUND } from './layout';
+import { terrainHeight } from './hq/Terrain';
+import type { UpgradeId } from '../lib/islandProgress';
+export function UpgradeDecor({levels}:{levels?:Record<UpgradeId,number>}){const camp=levels?.camp??0,garden=levels?.garden??0,play=levels?.play??0;return <group name="island-upgrades">
+ {camp>0&&<group name={`camp-upgrade-${camp}`} position={[TENT.x,terrainHeight(TENT.x,TENT.z),TENT.z]} rotation-y={.62}>
+ {[-1,1].map(x=><group key={x} position={[x*.95,.8,1.28]}><mesh><cylinderGeometry args={[.07,.07,1.6,8]}/><meshStandardMaterial color="#c49a60"/></mesh><mesh position-y={.85}><sphereGeometry args={[.15,12,8]}/><meshStandardMaterial color="#fff0aa" emissive="#e9ab43" emissiveIntensity={.3}/></mesh></group>)}
+ {[-.6,-.2,.2,.6].map((x,i)=><mesh key={x} position={[x,1.55,1.3]} rotation-z={Math.PI}><coneGeometry args={[.13,.28,3]}/><meshStandardMaterial color={['#e8b57c','#e1cc70','#8cbcaf','#c6a5bd'][i]}/></mesh>)}
+ {camp===2&&<><mesh position={[0,.035,1.35]} rotation-x={-Math.PI/2}><circleGeometry args={[.46,32]}/><meshStandardMaterial color="#cbd69b"/></mesh><mesh position={[0,1.77,.15]} rotation-x={-Math.PI/2}><torusGeometry args={[.23,.055,8,5]}/><meshStandardMaterial color="#efca6c"/></mesh></>}
+ </group>}
+ {garden>0&&<group name={`garden-upgrade-${garden}`}>{FARM_PLOTS.map((p,i)=><group key={i} position={[p.x,terrainHeight(p.x,p.z)+.03,p.z]}>{[-1,1].map(side=><mesh key={side} position={[0,.29,side*.65]}><boxGeometry args={[1.75,.07,.08]}/><meshStandardMaterial color="#72cba7"/></mesh>)}{garden===2&&<group position={[.7,.5,-.5]}><mesh><cylinderGeometry args={[.025,.025,.7,6]}/><meshStandardMaterial color="#2684bd"/></mesh><mesh position-y={.3}><sphereGeometry args={[.13,12,8]}/><meshStandardMaterial color="#ffe36d"/></mesh>{[0,1,2,3].map(j=><mesh key={j} position={[Math.sin(j*Math.PI/2)*.12,.55+Math.cos(j*Math.PI/2)*.12,0]} rotation-z={j*Math.PI/2}><coneGeometry args={[.09,.18,3]}/><meshStandardMaterial color={j%2?'#72cba7':'#2684bd'}/></mesh>)}</group>}</group>)}</group>}
+ {play>0&&<group name={`play-upgrade-${play}`} position={[PLAYGROUND.music.x,terrainHeight(PLAYGROUND.music.x,PLAYGROUND.music.z)+.158,PLAYGROUND.music.z]}><mesh rotation-x={-Math.PI/2}><ringGeometry args={[.82,play===2?1.02:1.08,40]}/><meshStandardMaterial color="#2684bd"/></mesh>{play===2&&<><mesh rotation-x={-Math.PI/2} position-y={0}><ringGeometry args={[1.02,1.1,40]}/><meshStandardMaterial color="#ffe36d"/></mesh>{[0,1,2,3,4].map(i=><mesh key={i} position={[Math.sin(i*Math.PI*.4)*.94,.015,Math.cos(i*Math.PI*.4)*.94]} rotation-x={-Math.PI/2}><circleGeometry args={[.07,5]}/><meshStandardMaterial color="#fffef7"/></mesh>)}</>}</group>}
+
+ </group>}

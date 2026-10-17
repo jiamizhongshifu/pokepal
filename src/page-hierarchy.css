@@ -1,0 +1,177 @@
+/* Page jobs: one primary action; optional tools stay reachable through disclosure. */
+#root .quiet-disclosure{margin:16px 0;color:var(--coast-muted);grid-column:1/-1}
+#root .quiet-disclosure>summary{display:flex;align-items:center;gap:10px;min-height:52px;cursor:pointer;font-size:16px;font-weight:700;list-style:none;border-top:1px solid var(--coast-line);padding:8px 0}
+#root .quiet-disclosure>summary::after{content:'⌄';margin-left:auto}
+#root .quiet-disclosure[open]>summary::after{content:'⌃'}
+#root .quiet-disclosure p{line-height:1.7;font-size:15px}
+#root .quiet-disclosure summary::-webkit-details-marker{display:none}
+#root .screen :is(.ball-ready,.ball-extra){width:min(560px,calc(100% - 32px));margin:18px auto;flex:none;box-sizing:border-box}
+#root .ball-ready{text-align:center;padding:28px;background:var(--coast-paper);border:2px solid var(--coast-line);border-radius:28px}
+#root .ball-ready h1{font-size:28px;margin:14px 0 8px}
+#root .ball-ready p{font-size:18px;line-height:1.6}
+#root .ball-ready .btn-big{width:100%;min-height:68px;font-size:24px}
+#root .ball-extra>summary{min-height:52px;cursor:pointer;text-align:center;padding:14px;font-size:17px;color:var(--coast-muted)}
+#root .ball-extra .single-ball-card{width:100%;max-width:none;margin:10px 0}
+#root .energy-focused .energy-page{width:min(740px,calc(100% - 32px))}
+#root .energy-next{text-align:center;padding:24px;background:var(--coast-paper);border:2px solid var(--coast-line);border-radius:28px}
+#root .energy-balance{display:flex;justify-content:center;align-items:center;gap:10px;font-size:18px;margin-bottom:18px}
+#root .energy-balance b{font-size:28px;color:var(--coast-gold-ink)}
+#root .energy-next h1{font-size:28px;line-height:1.4;margin:14px 0 10px}
+#root .energy-next p{font-size:18px;line-height:1.6}
+#root .energy-next .energy-course-hint{font-size:15px;color:var(--coast-muted)}
+#root .energy-next .btn-big{width:100%;min-height:68px;font-size:24px}
+#root .energy-other h2{font-size:18px;margin:24px 0 12px;color:var(--coast-muted)}
+#root .energy-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#root .energy-alternative{display:flex;align-items:center;justify-content:center;gap:12px;min-height:96px;padding:16px 12px;border:1px solid var(--coast-line);border-radius:20px;background:#ffffff80;color:var(--coast-ink);font:inherit;cursor:pointer;min-width:0}
+#root .energy-alternative strong{font-size:18px;display:block}
+#root .energy-alternative small{font-size:13px;color:var(--coast-muted);display:block;margin-top:6px;line-height:1.5}
+#root .route-focused .journey-wrap{max-width:780px;margin-top:8px}
+#root .route-heading{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+#root .route-heading h1{font-size:27px;line-height:1.4;margin:0 0 6px}
+#root .route-heading p{font-size:16px;margin:0;color:var(--coast-muted)}
+#root .route-focused .journey-chapter{margin:16px 0 24px}
+#root .route-focused .journey-chapter>header{padding:0;margin:0 0 12px}
+#root .route-focused .journey-chapter>header h2{font-size:22px}
+#root .route-focused .journey-chapter>header p{font-size:14px;margin:4px 0}
+#root .route-focused .journey-stops button{min-height:82px;padding:14px;gap:12px}
+#root .route-focused .journey-stops strong{font-size:20px}
+#root .route-focused .journey-stops small{font-size:14px;line-height:1.5}
+#root .route-focused .journey-stops .next button{background:#dff1e8;border:2px solid #659d87;box-shadow:0 4px 0 #99c2b0}
+#root .route-focused .journey-stops button:disabled{opacity:.65}
+#root .route-chapter .journey-stops{margin-top:12px}
+/* The reading rail is always visible; scrollable content has matching bottom space. */
+#root .story-reader{padding-bottom:calc(130px + env(safe-area-inset-bottom))}
+#root .story-primary-controls{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(620px,calc(100% - 28px));max-width:none;box-sizing:border-box;margin:0;padding:10px;background:#fffef5f5;border:1px solid var(--coast-line);border-radius:26px;box-shadow:0 4px 20px #224f6720;gap:10px}
+#root .story-primary-controls button{min-width:0;min-height:62px}
+#root .story-parent-options{margin:22px 0 4px}
+#root .story-parent-options .participation-note{flex-wrap:wrap;margin:10px 0;line-height:1.6}
+#root .story-word-disclosure{margin-top:12px}
+#root .story-word-disclosure>summary{display:flex;align-items:center;gap:8px;min-height:48px;font-size:15px;color:var(--coast-muted);cursor:pointer}
+#root .story-ending-primary{margin:24px auto;min-height:68px}
+#root .story-ending>.quiet-disclosure{text-align:left}
+#root .learning-notebook .notebook-entry{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:8px;padding:16px}
+#root .notebook-listen-card{grid-column:1;display:flex;align-items:center;gap:14px;text-align:left;border:0;background:transparent;color:var(--coast-ink);font:inherit;cursor:pointer;padding:4px;min-width:0;min-height:100px}
+#root .notebook-listen-card .notebook-definition{min-width:0;flex:1}
+#root .notebook-listen-card .notebook-definition strong{font-size:23px;line-height:1.4;display:block;overflow-wrap:anywhere}
+#root .notebook-listen-card .notebook-definition>span{display:block;margin-top:5px;font-size:17px}
+#root .notebook-listen-card>.icon{width:26px;height:26px;flex:none}
+#root .notebook-bookmark{border:0;border-radius:50%;background:transparent;min-width:48px;height:48px;cursor:pointer}
+#root .notebook-bookmark[aria-pressed=true]{background:#fff1d4}
+#root .notebook-word-more{grid-column:1/-1;border-top:1px solid var(--coast-line);padding-top:4px}
+#root .notebook-word-more>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--coast-muted)}
+#root .notebook-search-disclosure .notebook-search{margin:8px 0 16px}
+#root .notebook-parent .btn-small{min-height:48px}
+/* Three top actions replace five competing shortcuts; announcements keep their dot. */
+#root .home-more{position:relative}
+#root .home-more>summary{display:flex;align-items:center;gap:7px;min-height:48px;padding:8px 14px;background:var(--coast-paper);border:1px solid var(--coast-line);border-radius:18px;cursor:pointer;font-size:16px;font-weight:750;list-style:none;color:var(--coast-ink)}
+#root .home-more>summary::-webkit-details-marker{display:none}
+#root .home-more-menu{position:absolute;right:0;top:calc(100% + 8px);display:grid;gap:8px;min-width:180px;padding:10px;border:1px solid var(--coast-line);border-radius:22px;background:var(--coast-paper);box-shadow:0 10px 24px #214f6728;z-index:50}
+#root .home-more-menu button{width:100%;justify-content:flex-start;min-height:52px}
+#root .home .dock-btn.tasks{background:#fff5c9;border-radius:24px;border:1px solid #dfc77b}
+#root .upgrade-choice .upgrade-preview{background:transparent;color:var(--coast-ink);border:1px solid var(--coast-line);box-shadow:none}
+#root .upgrade-confirm{scroll-margin:18px;padding:20px;border:2px solid #91bdab;background:var(--coast-paper);border-radius:22px}
+#root .upgrade-confirm .upgrade-go{background:#39745f;color:#fffef5;min-height:60px}
+@media(max-width:600px){
+ #root .energy-next{padding:18px}
+ #root .energy-next h1{font-size:25px}
+ #root .energy-alternative{flex-direction:column;text-align:center;gap:8px}
+ #root .energy-alternative strong{font-size:17px}
+ #root .route-heading h1{font-size:23px}
+ #root .route-focused .journey-stops button{padding:12px 8px}
+ #root .route-focused .journey-stops strong{font-size:17px}
+ #root .route-focused .journey-stops button>b{font-size:12px}
+ #root .story-primary-controls{padding:8px;gap:6px;bottom:calc(8px + env(safe-area-inset-bottom))}
+ #root .story-primary-controls button{min-height:60px;padding:6px}
+ #root .story-primary-controls .story-listen span{font-size:15px}
+ #root .notebook-listen-card{gap:10px}
+ #root .notebook-listen-card .notebook-art{width:56px;height:70px;flex:none}
+ #root .notebook-listen-card .notebook-definition strong{font-size:21px}
+ #root .home-more>summary{padding:7px 10px;font-size:14px;min-height:46px}
+}
+
+/* Keep page chrome compact; the first useful choice follows the navigation. */
+#root .route-focused .journey-stops .next button{color:#234b46}
+#root .route-focused .journey-stops .next :is(strong,small,b){color:inherit}
+#root .route-focused .journey-wrap{margin-top:0}
+#root .route-focused .route-current{margin-top:8px}
+#root .route-focused .journey-stops{margin-top:12px}
+#root .route-complete{font-size:17px;line-height:1.6}
+#root .story-library .learning-heading{margin:8px auto 12px}
+#root .story-library .learning-heading h1{margin:0;font-size:24px}
+#root .story-library .story-themes{margin-bottom:16px}
+#root .story-library .book-summary{min-height:0}
+#root .dex .dex-toolbar{margin:4px auto 8px}
+#root .dex .dex-discovery-tools{margin-bottom:8px;gap:8px}
+#root .simple-ball-shop .first-ball>summary{display:none}
+#root .simple-ball-shop .ball-extra{margin:8px auto 16px}
+#root .simple-ball-shop .single-ball-card{margin:0;padding:20px;gap:12px}
+#root .simple-ball-shop .shop-energy{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:6px 12px;font-size:18px;box-shadow:none}
+#root .simple-ball-shop .shop-energy b{color:#624710;font-size:26px}
+#root .simple-ball-shop .single-ball-card h1{margin:0;font-size:26px;line-height:1.4}
+#root .simple-ball-shop .single-ball-card p{margin:0;line-height:1.6}
+#root .simple-ball-shop .ball-exchange-picture{margin:0}
+#root .simple-ball-shop .shop-footer{margin:4px auto 24px}
+#root .diary-screen .guided-diary{margin:8px auto 0}
+#root .diary-screen .diary-welcome{gap:12px;margin:0 0 12px;font-size:18px;font-weight:700}
+#root .diary-screen .diary-friend{width:48px;height:48px;flex:none}
+#root .diary-screen .diary-friend img{width:48px;height:48px;object-fit:contain}
+#root .diary-screen .diary-question{padding:20px}
+#root .diary-screen .diary-question-icon{width:56px;height:56px;border-radius:18px}
+#root .diary-screen .diary-question-icon .icon{width:44px;height:44px}
+#root .diary-screen .diary-question h2{margin:12px 0 8px}
+#root .diary-screen .diary-question>p{margin:8px 0 16px}
+.diary-question-count{color:var(--text);font-size:16px;font-weight:800;white-space:nowrap}
+#root .diary-screen>.child-page:empty{display:none}
+#root .guide-alternative{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:14px;line-height:1.5;border-top:1px solid #d7c69b;margin-top:8px;padding-top:8px}
+#root .guide-alternative .btn-small{min-height:48px;color:#234b46;background:#fffef5;margin-left:auto}
+#root .task-trace .trace-side{color:#234b46;padding:12px}
+#root .task-trace .trace-word,#root .task-trace .trace-zh{color:#234b46}
+#root .task-trace .trace-tools{display:flex;flex-direction:row;justify-content:center;max-width:none;gap:12px}
+#root .task-trace .trace-tools .replay{flex:1;flex-direction:row;min-height:48px;padding:8px;gap:6px;font-size:17px}
+#root .task-trace .trace-listen{margin:8px 0 0;min-height:48px;padding:8px 12px;font-size:17px}
+:root[data-theme="dark"] #root .round-progress{color:#f2fbff}
+@media(max-width:600px){
+ #root .story-library .learning-heading h1{font-size:22px}
+ #root .story-library .story-themes button{min-height:48px}
+ #root .simple-ball-shop .single-ball-card{padding:16px;gap:10px}
+ #root .simple-ball-shop .single-ball-card h1{font-size:23px}
+ #root .diary-screen .diary-question{padding:16px}
+ #root .task-trace .trace-round{gap:8px}
+ #root .task-trace .trace-example{grid-template-columns:56px minmax(0,1fr) auto;grid-template-rows:auto auto;gap:2px 8px}
+ #root .task-trace .trace-example>img{width:56px;height:56px;grid-row:1/3;grid-column:1}
+ #root .task-trace .trace-word{grid-column:2;grid-row:1;font-size:22px}
+ #root .task-trace .trace-word b{font-size:28px}
+ #root .task-trace .trace-zh{grid-column:2;grid-row:2;font-size:16px}
+ #root .task-trace .trace-listen{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;gap:2px;font-size:13px;margin:0;padding:6px;min-width:48px}
+ #root .task-trace .trace-listen .icon{width:26px;height:26px}
+ #root .task-trace .trace-instruction{margin:4px 0;min-height:52px;font-size:18px}
+}
+
+/* Recognition comes before optional search and partner management. */
+#root .learning-notebook .notebook-header{max-width:none;margin-bottom:16px}
+#root .learning-notebook .notebook-toolbar{display:flex;align-items:center;gap:8px}
+#root .learning-notebook .notebook-tabs{display:flex;flex:1;gap:8px;margin:0;min-width:0}
+#root .learning-notebook .notebook-tabs button{flex:1;flex-direction:row;gap:8px;min-height:56px;padding:8px;font-size:16px}
+#root .learning-notebook .notebook-tabs .icon{width:30px;height:30px;flex:none}
+#root .notebook-search-toggle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:48px;min-height:56px;border:1px solid var(--coast-line);border-radius:16px;background:var(--coast-paper);color:var(--coast-ink);font:inherit;font-size:12px;cursor:pointer}
+#root .learning-notebook .notebook-header p{margin:12px 0 0;font-size:15px;line-height:1.5}
+#root .learning-notebook .notebook-search{margin:12px 0 0}
+#root .learning-notebook .notebook-review{margin-bottom:16px}
+#root .finder-search-toggle{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;margin:8px 0;padding:8px 12px;border:1px solid var(--coast-line);border-radius:14px;background:transparent;color:var(--coast-ink);font:inherit;font-size:15px;cursor:pointer}
+#root .living-panel .living-selection{margin:4px 0 12px;padding:12px;gap:12px}
+#root .living-panel .living-selection>span{flex:1;min-width:0;font-size:16px}
+#root .living-panel .living-selection img{width:56px;height:56px;flex:none}
+#root .living-partner-tools{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
+#root .living-partner-tools>button{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;min-width:120px;min-height:48px;padding:8px;border:1px solid var(--coast-line);border-radius:14px;background:transparent;color:var(--coast-ink);font:inherit;font-size:15px;cursor:pointer}
+#root .living-partner-tools .icon{flex:none}
+@media(max-width:360px){
+ #root .learning-notebook .notebook-tabs button{gap:4px;font-size:14px}
+ #root .living-panel .living-selection>span{flex-direction:column;justify-content:center;text-align:center}
+}
+/* The meadow stays sunlit even when the island uses its night palette. */
+#root .screen.wild-adventure .tb-title{color:#234b46}
+/* A narrow viewport must constrain the meadow's intrinsic grid track. */
+#root .wild-adventure .field-wrap{grid-template-columns:minmax(0,1fr)}
+#root .wild-adventure :is(.field,.field-kit,.field .wild){min-width:0;box-sizing:border-box}
+#root .wild-adventure .field-kit-copy{min-width:0;white-space:normal;overflow-wrap:anywhere}
+#root .wild-adventure .wild-name{min-width:0;box-sizing:border-box}

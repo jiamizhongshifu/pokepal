@@ -1,0 +1,48 @@
+/* Keep characters, props and motion inside one quiet, readable stage. */
+.story-stage.story-theatre{isolation:isolate;background:#e8efcf;border:1px solid #b7c8ad80;container-type:inline-size}
+.theatre-picture{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
+.theatre-backdrop{position:absolute;inset:0;background:#f4edcf}
+.theatre-painted-background{display:block;width:100%;height:100%;object-fit:cover;object-position:center bottom;pointer-events:none}
+.theatre-actor{position:absolute;height:64%;transform:translateX(-50%);z-index:3;pointer-events:none}
+.theatre-actor-art{position:absolute;inset:0;transform-origin:50% 90%}
+.theatre-actor-art>img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;transform:rotate(var(--lean));filter:drop-shadow(0 3px 2px #5a62421a)}
+.actor-shadow{position:absolute;left:16%;bottom:-1%;width:68%;height:5%;background:#58684720;border-radius:50%}
+.theatre-item{position:absolute;transform:translateX(-50%);z-index:4;pointer-events:none}
+.theatre-item-art{width:100%;display:grid;place-items:center;transform:rotate(var(--prop-turn));transform-origin:center bottom}
+.theatre-painted-prop{display:block;width:100%;height:auto;max-width:100%;filter:drop-shadow(0 2px 2px #675a3820)}
+.theatre-item.item-heart{z-index:2}
+.theatre-place{position:absolute;left:12px;top:12px;padding:5px 10px;background:#fffbedce;border-radius:10px;font-size:12px;color:#48644d;z-index:5;pointer-events:none}
+.theatre-replay{position:absolute;right:8px;top:6px;z-index:6;display:flex;align-items:center;gap:5px;min-height:44px;padding:6px 10px;border:0;border-radius:14px;background:#fffbeddf;color:#42634f;font-size:12px}.theatre-replay:hover{background:#fffbed}.theatre-replay:active{transform:scale(.97)}
+.mood-quiet .theatre-painted-background,.mood-worried .theatre-painted-background{filter:saturate(.88)}
+.move-arrive{animation:story-walk-in 1.2s cubic-bezier(.22,1,.36,1) both}
+.move-roll{animation:story-ball-roll 1.6s cubic-bezier(.22,1,.36,1) both}
+.move-offer{animation:story-offer 1.5s cubic-bezier(.22,1,.36,1) both}
+.move-nod{animation:story-gentle-nod 1.2s ease-in-out both}
+.move-settle{animation:story-settle .9s cubic-bezier(.22,1,.36,1) both}
+.move-breathe{animation:story-breath 4.8s ease-in-out both}
+.move-water{animation:story-water-drop 1.3s ease-in-out 2 both}
+@keyframes story-walk-in{from{transform:translateX(var(--from-x));opacity:.65}to{transform:translateX(0);opacity:1}}
+@keyframes story-ball-roll{from{transform:translateX(var(--from-x)) rotate(-140deg)}to{transform:translateX(0) rotate(0)}}
+@keyframes story-offer{from{transform:translateX(var(--from-x)) translateY(-12%)}to{transform:translateX(0) translateY(0)}}
+@keyframes story-gentle-nod{0%,100%{transform:rotate(0)}45%{transform:rotate(3deg) translateY(2%)}}
+@keyframes story-settle{from{transform:translateY(-4%);opacity:.7}to{transform:translateY(0);opacity:1}}
+@keyframes story-breath{0%,100%{transform:scale(1)}45%{transform:scale(1.035)}}
+@keyframes story-water-drop{0%{transform:translateY(-12%);opacity:.4}65%,100%{transform:translateY(16%);opacity:1}}
+
+.cover-scene.story-theatre{border:0;border-radius:0}.cover-scene .theatre-actor{height:66%}.cover-scene [class*="move-"]{animation:none!important}
+.scene-offscreen [class*="move-"]{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.story-theatre [class*="move-"]{animation:none!important}.theatre-replay{display:none}}
+@media(max-width:600px){.theatre-place{top:8px;left:8px;font-size:11px}.theatre-replay{font-size:11px}}
+/* Preserve the painted horizon in the tablet's single-column book layout. */
+@media(min-width:601px) and (max-width:899px){.story-stage.story-theatre:not(.cover-scene){height:clamp(290px,52vw,400px)}}
+
+/* One optional listening target, attached to a matching pictured object. */
+.theatre-word{position:absolute;left:var(--word-layout-x,var(--word-anchor-x,50%));z-index:4;transform:translateX(-50%);display:flex;align-items:center;gap:6px;min-height:48px;min-width:48px;padding:8px 12px;border:2px solid #d6b85e;border-radius:18px;background:#fff3b2;color:#163d50;font:inherit;font-weight:800;box-shadow:0 3px 0 #c6a84d;max-width:70%;overflow-wrap:anywhere}
+.theatre-word:focus-visible{outline:3px solid #176eaa;outline-offset:3px}
+.story-language-label{grid-column:1/-1;text-align:center;color:var(--text-secondary,#516d79);font-size:14px;margin:0 0 10px}
+.story-language-options{border:0;padding:12px 0;margin:0;min-width:0}
+.story-language-options legend{font-weight:800}
+.story-language-options p,.story-language-options small{font-size:14px;line-height:1.6}
+.story-language-options>div{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.story-language-options button{min-height:48px;padding:10px 14px;border:2px solid #c4dce1;border-radius:16px;background:#fffef7;color:#163d50;font:inherit;font-weight:700}
+.story-language-options button[aria-pressed=true]{background:#fff0ac;border-color:#c2a13e}

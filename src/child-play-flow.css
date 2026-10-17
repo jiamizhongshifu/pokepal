@@ -1,0 +1,63 @@
+/* Explicit regions prevent legacy flex/grid rules from packing labels together. */
+.task-trace .task-stage{flex:none;padding:12px 20px 28px;}
+.task-trace>.participation-note{position:static;margin:4px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;}
+.participation-note .btn-small{display:inline-flex;align-items:center;gap:6px;}
+.trace-session .trace-round{display:grid;grid-template-columns:minmax(180px,240px) minmax(0,460px);align-items:center;justify-content:center;gap:24px;width:100%;height:auto;min-height:0;padding:8px 0;}
+.trace-round .trace-side{display:flex;flex-direction:column;gap:16px;width:100%;padding:0;min-width:0;}
+.trace-example{display:grid;justify-items:center;gap:4px;min-width:0;width:100%;}
+.trace-example>img.icon,.trace-example>img:not(.icon){width:112px;height:112px;object-fit:contain;}
+.trace-example .trace-word{grid-column:auto;font-size:32px;line-height:1.2;overflow-wrap:anywhere;text-align:center;}
+.trace-example .trace-word b{font-size:42px;}
+.trace-example .trace-zh{grid-column:auto;font-size:20px;line-height:1.4;}
+.trace-tools{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;max-width:210px;}
+.trace-tools .replay{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:8px 12px;font-size:19px;margin:0;}
+.trace-round .trace-workspace{width:100%;min-width:0;gap:10px;}
+.trace-round .trace-pad{width:100%;max-width:420px;height:auto;aspect-ratio:1;flex:none;}
+.trace-round .trace-instruction{font-size:20px;line-height:1.5;min-height:58px;max-width:100%;text-align:left;}
+.trace-round .trace-instruction small{font-size:14px;line-height:1.5;}
+.trace-round .trace-status{font-size:16px;line-height:1.5;min-height:24px;margin:0;}
+.trace-round .trace-steps{flex:none;}
+@media(max-width:760px){
+ .trace-session .trace-round{display:flex;flex-direction:column;gap:14px;}
+ .trace-round .trace-side{gap:10px;max-width:460px;}
+ .trace-example{grid-template-columns:64px minmax(0,1fr);grid-template-rows:auto auto;gap:0 10px;justify-items:start;align-items:center;}
+ .trace-example>img.icon,.trace-example>img:not(.icon){width:64px;height:64px;grid-row:1/3;}
+ .trace-example .trace-word{font-size:25px;text-align:left;}.trace-example .trace-word b{font-size:32px;}
+ .trace-example .trace-zh{font-size:17px;}
+ .trace-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:none;gap:8px;}
+ .trace-tools .replay{flex-direction:column;gap:3px;font-size:16px;padding:8px 2px;min-height:70px;white-space:nowrap;}
+ .trace-tools .replay .icon{width:28px;height:28px;}
+ .trace-round .trace-workspace{max-width:420px;}
+}
+@media(min-width:761px) and (max-height:820px){
+ .trace-session .trace-round{grid-template-columns:200px minmax(0,360px);gap:24px;}
+ .trace-round .trace-pad{max-width:360px;}
+}
+@media(min-width:601px) and (max-height:540px){
+ .trace-session .trace-round{display:grid;grid-template-columns:180px minmax(0,280px);align-items:start;}
+ .trace-example>img.icon,.trace-example>img:not(.icon){width:54px;height:54px;}
+ .trace-tools{display:flex;gap:6px;}.trace-tools .replay{flex-direction:row;min-height:44px;}
+}
+
+/* One invitation per area; crop buttons express the next real action. */
+.station-button{width:60px;height:60px;padding:9px;border-width:2px;box-shadow:0 3px 0 #537d6840;}
+.station-button .station-label{top:59px;min-width:54px;text-align:center;font-size:13px;line-height:1.3;padding:3px 7px;}
+.station-button.plot-empty{background:#e7f4d7;border-color:#80ab6b;}
+.station-button.plot-ripe{background:#ffe39b;border-color:#c59439;}
+.station-button.plot-growing,.station-button.plot-thirsty:disabled{opacity:1;cursor:default;background:#eff7eb;}
+.station-button.plot-growing{pointer-events:none;}
+.crop-clock{position:absolute;inset:-3px;width:64px;height:64px;transform:rotate(-90deg);pointer-events:none;}
+.crop-clock circle{fill:none;stroke:#528c55;stroke-width:4;stroke-linecap:round;}
+.plot-helper{position:absolute;width:32px;height:32px;right:-12px;bottom:-8px;object-fit:contain;background:#fffaf0;border-radius:50%;border:1px solid #a6c392;pointer-events:none;}
+.area-choices{position:absolute;z-index:25;left:max(16px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:360px;max-width:calc(100% - 32px);padding:14px;border:2px solid #b6cfbe;border-radius:24px;background:#fffaf0f5;color:#295347;box-shadow:0 8px 24px #254e3820;}
+.area-choices header{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:20px;}
+.area-choices header button{margin-left:auto;min-width:44px;min-height:44px;border:0;border-radius:50%;background:#e4eedf;display:grid;place-items:center;}
+.area-choices>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.area-choices>div>button{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;min-height:96px;padding:8px;border:2px solid #c8dbc4;border-radius:18px;background:#f0f6e8;color:#295347;font:inherit;font-size:16px;font-weight:800;cursor:pointer;}
+.farm-feedback{position:absolute;z-index:22;left:max(16px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;max-width:min(440px,calc(100% - 32px));padding:10px 12px;border:1px solid #b8cdb1;border-radius:20px;background:#fff9e9ed;color:#34553b;box-shadow:0 4px 14px #294b2920;font-size:15px;pointer-events:none;}
+.farm-feedback>span{flex:1;min-width:0;line-height:1.5;}
+.farm-feedback button{display:flex;align-items:center;gap:4px;min-width:44px;min-height:44px;border:0;border-radius:14px;background:#e4eed8;color:#34553b;white-space:nowrap;font:inherit;font-weight:800;pointer-events:auto;}
+.participation-links>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:86px;}
+.facility-next,.berry-menu-footer button{display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+@media(max-width:600px){.area-choices{bottom:110px;}.farm-feedback{bottom:112px;}}
+.trace-round .trace-tools .replay:nth-of-type(n){grid-column:auto;justify-self:stretch;}

@@ -1,0 +1,8 @@
+.music-toggle{position:relative;flex:none;display:grid;place-items:center;width:48px;height:48px;border:2px solid #c9e4dc;border-radius:50%;background:#fffaf0;color:#245a50;box-shadow:0 3px 0 #aacfc3;cursor:pointer;touch-action:manipulation}
+.music-toggle-state{position:absolute;right:-3px;bottom:-2px;padding:1px 4px;border-radius:9px;background:#287a60;color:#fff;font-size:11px;line-height:15px;font-weight:800}
+.music-toggle.is-muted .icon{opacity:.45}
+.music-toggle.is-muted .music-toggle-state{background:#596f75}
+.music-toggle:active{transform:translateY(2px);box-shadow:0 1px 0 #aacfc3}
+.music-toggle:focus-visible{outline:3px solid #087e91;outline-offset:4px}
+@media(max-width:440px){.home .tb-right{gap:5px}.home .music-toggle{width:44px;height:44px}}
+@media(max-width:380px){.home .tb-right :is(.energy-chip,.balls-chip){min-height:44px;font-size:18px;padding:4px 7px}.home .tb-right .parent-btn{width:44px;height:44px}.home .tb-right .pokeball{width:24px!important;height:24px!important}}

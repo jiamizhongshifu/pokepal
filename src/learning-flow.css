@@ -1,0 +1,80 @@
+/* Learning navigation: progress belongs to the task; help stays at the right edge. */
+#root .screen .topbar.has-learning-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;min-height:80px;padding-top:10px;padding-bottom:10px}
+#root .topbar.has-learning-tools .tb-left{display:flex;min-width:0;gap:12px;flex:1 1 auto}
+#root .topbar.has-learning-tools .tb-title{font-size:clamp(18px,2.2vw,26px);line-height:1.35;min-width:0;overflow-wrap:anywhere}
+.tb-learning-tools{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex:none;margin-left:auto}
+.tb-progress:empty{display:none}
+.round-progress{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--coast-ink,#234b46);white-space:nowrap;font-size:16px}
+.progress-beads{display:flex;align-items:center;gap:7px}
+.progress-beads i{width:10px;height:10px;border-radius:50%;background:#c4d9da}
+.progress-beads i.done{background:#3c8a71}
+.progress-beads i.current{width:20px;height:20px;background:#ffe574;border:2px solid #ab811f;box-shadow:inset 0 0 0 3px #fffbed}
+#root .feature-guide.guide-compact{position:relative;flex:none;width:auto;max-width:none;margin:0;padding:0;border:0;background:none;box-shadow:none;z-index:5}
+.guide-compact .guide-content{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 32px));padding:10px;border:2px solid #d7c69b;border-radius:20px;background:#fff8e7;box-shadow:0 6px 20px #234b4626;color:#234b46}
+.guide-compact .guide-picture{display:none}
+.guide-compact .guide-main strong{font-size:16px}
+.guide-compact .guide-main{gap:6px}
+#root .guide-compact .guide-reopen{min-height:46px}
+#root .learning-lesson .lesson-wrap{margin-top:8px;padding:18px 22px;max-width:820px;box-sizing:border-box}
+#root .learning-lesson .lesson-breadcrumb{font-size:14px;margin-bottom:10px;color:var(--muted)}
+#root .learning-lesson .lesson-world.buddy-strip{display:flex;align-items:center;gap:12px;height:64px;padding:4px 12px;background-image:none!important;background-color:#e8f3e9;border-radius:16px;box-sizing:border-box}
+#root .learning-lesson .buddy-strip>img{position:static;width:52px;height:56px;object-fit:contain;flex:none}
+#root .learning-lesson .buddy-strip>span{position:static;background:transparent;padding:0;font-size:14px;color:#315e4e}
+#root .learning-lesson .lesson-world.has-learning-item{height:156px}
+#root .learning-lesson .learning-round{padding-top:6px}
+#root .learning-lesson .learning-round h1{margin:12px 0;font-size:clamp(22px,2.5vw,30px)}
+#root .learning-lesson .learning-choices{margin-top:16px}
+.course-reward-preview{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 0 0;font-size:16px;font-weight:800;color:var(--coast-ink,#234b46)}
+.course-reward-result{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;margin:16px auto;padding:16px;border-radius:20px;background:#fff0b3;color:#624710}
+.course-reward-result strong{font-size:30px}.course-reward-result>span{flex-basis:100%;font-size:16px}
+#root .task .task-stage{padding-top:8px}
+#root .task :is(.listen-round,.picture-round,.repeat-round){padding-top:8px}
+.choice-audio-tools{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:4px 0 14px}
+#root .choice-audio-tools .replay:nth-of-type(n){margin:0;min-height:48px;padding:10px 16px;font-size:18px}
+#root .home .companion-toolbar{position:sticky;top:-14px;z-index:6;display:flex;align-items:center;gap:8px;background:var(--coast-paper,#fffbed);padding:4px 0 9px;margin:0 0 8px;color:var(--coast-ink,#234b46)}
+.companion-toolbar>span{font-size:13px;font-weight:800;flex:1}
+.companion-toolbar>button{display:flex;align-items:center;justify-content:center;gap:3px;min-width:44px;min-height:44px;border:0;border-radius:14px;background:#edf0df;color:#31533f;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
+.companion-toolbar .companion-back{margin-right:auto;padding:4px 8px}
+.companion-toolbar .companion-close{padding:4px}
+#root .home .companion-heading{padding-right:0}
+#root .home .companion-card .sheet-body{gap:10px}
+#root .home .companion-card .guide-compact .guide-content{right:-52px;width:min(300px,calc(100vw - 64px));box-sizing:border-box}
+#root .home .companion-card .berry-menu-footer{display:grid;grid-template-columns:1fr;gap:8px}
+#root .home .companion-card .berry-menu-footer>button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;font-size:16px}
+#root .home .companion-card .berry-menu-footer>button:first-child{background:#39745f;color:#fffbed;font-weight:800}
+@media(max-width:600px){
+ #root .screen .topbar.has-learning-tools{gap:8px;padding:10px 12px;min-height:70px}
+ #root .topbar.has-learning-tools .tb-left{gap:8px;flex:1;min-width:120px}
+ #root .topbar.has-learning-tools .tb-title>.icon{display:none}
+ .tb-learning-tools{gap:10px}.progress-beads{display:none}.round-progress{font-size:14px}
+ #root .guide-compact .guide-reopen{padding:6px 9px;gap:4px}
+ #root .topbar.has-learning-tools .guide-reopen span{display:none}
+ #root .learning-lesson .lesson-wrap{padding:14px;width:calc(100% - 24px)}
+ #root .learning-lesson .lesson-world.has-learning-item{height:132px}
+ #root .learning-lesson .lesson-world.buddy-strip{height:56px}
+ #root .learning-lesson .buddy-strip>img{height:48px;width:44px}
+ .course-reward-preview{font-size:14px}
+}
+@media(max-height:650px){#root .learning-lesson .lesson-wrap{margin-bottom:20px}#root .learning-lesson .lesson-world.buddy-strip{height:50px}#root .learning-lesson .buddy-strip>img{height:44px}#root .learning-lesson .lesson-world.has-learning-item{height:120px}}
+@media(max-width:600px){
+ #root .topbar.has-learning-tools .guide-reopen{flex-direction:column;justify-content:center;gap:0;width:48px;min-height:48px;padding:2px}
+ #root .topbar.has-learning-tools .guide-reopen span{display:block;font-size:10px;line-height:1.3}
+ #root .topbar.has-learning-tools .back{min-width:44px;width:44px;height:48px;padding:0}
+ #root .topbar.has-learning-tools .back span{display:none}
+}
+/* First-use guidance expands below the toolbar, never over the question. */
+#root .screen .topbar.has-learning-tools:has(.guide-compact.is-open){padding-bottom:calc(var(--guide-space,130px) + 12px)}
+#root .home .companion-toolbar:has(.guide-compact.is-open){padding-bottom:calc(var(--guide-space,125px) + 12px)}
+
+/* Local panel help shares its header and reserves its real expanded height. */
+#root .home :is(.picnic-panel,.companion-finder,.area-choices)>.panel-toolbar{position:relative;top:auto;display:flex;align-items:center;gap:8px;flex:none;min-height:48px;z-index:6}
+#root .home .panel-toolbar>div,#root .home .panel-toolbar>strong{flex:1;min-width:0}
+#root .home .panel-toolbar>button{flex:none;min-width:44px;min-height:48px;padding:4px}
+#root .home .panel-toolbar>.icon{display:none}
+#root .home .panel-toolbar .guide-compact{width:auto;margin:0}
+#root .home .panel-toolbar .guide-reopen{width:48px;min-height:48px;display:flex;flex-direction:column;justify-content:center;gap:0;padding:4px}
+#root .home .panel-toolbar .guide-reopen span{font-size:10px;line-height:1.3}
+#root .home .panel-toolbar .guide-content{right:-52px;width:min(300px,calc(100vw - 64px));box-sizing:border-box}
+#root .home .panel-toolbar:has(.guide-compact.is-open){padding-bottom:calc(var(--guide-space,130px) + 12px)}
+/* The meadow's old floating-help offsets must not move its toolbar button. */
+#root .wild-adventure .topbar .guide-compact{inset:auto}

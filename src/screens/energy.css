@@ -1,0 +1,55 @@
+/* Picture first: the same activity keeps its familiar icon across learning pages. */
+.screen.energy-guide{overflow-y:auto;color:#294f43}
+.energy-guide .energy-page{width:min(1040px,calc(100% - 40px));margin:12px auto 36px;padding:0 0 env(safe-area-inset-bottom);flex-shrink:0}
+.energy-pocket{display:flex;align-items:center;justify-content:space-between;gap:36px;padding:22px 28px;background:#fffbed;border:2px solid #dce7ce;border-radius:30px}
+.energy-pocket-total{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.energy-pocket-symbol{display:grid;place-items:center;width:88px;height:88px;border-radius:30px;background:#ffeaa1;box-shadow:inset 0 -5px 0 #eed17b}
+.energy-pocket-total h1{font-size:20px;margin:0 0 4px}
+.energy-pocket-total p{display:flex;align-items:baseline;gap:10px;margin:0;line-height:1.2}
+.energy-pocket-total b{font-size:42px;color:#6e4a13;font-variant-numeric:tabular-nums}
+.energy-pocket-total p>span{font-size:16px}
+.energy-today{width:min(360px,46%)}
+.energy-today>div:first-child{display:flex;justify-content:space-between;gap:12px;font-size:16px}
+.energy-today p{font-size:14px;margin:8px 0 0}
+.energy-fill{height:14px;border-radius:20px;background:#e3ead9;margin-top:12px;overflow:hidden}
+.energy-fill>span{display:block;height:100%;border-radius:inherit;background:#d7a531}
+.energy-choose{color:var(--text);font-size:25px;margin:24px 0 16px}
+.energy-guide .energy-activities{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.energy-guide .energy-activity{position:relative;min-width:0;min-height:190px;padding:18px 14px 14px;gap:10px;align-items:center;background:#fffdf5;border:2px solid #ceddc3;border-bottom-width:5px;border-radius:28px;transition:transform .16s,box-shadow .16s;-webkit-tap-highlight-color:transparent}
+.energy-guide .energy-activity-art{display:grid;place-items:center;position:relative;width:94px;height:86px;border-radius:30px;background:var(--activity-tint);flex-shrink:0}
+.energy-activity-art>.icon{width:76px;height:76px;object-fit:contain}
+.energy-activity-art>img:not(.icon){width:90px;height:90px;object-fit:contain}
+.energy-guide .energy-art-accent{position:absolute;right:-8px;bottom:-5px;width:40px;height:40px;border:3px solid #fffdf5;background:#fffdf5;border-radius:50%;display:grid;place-items:center}
+.energy-activity>strong{font-size:23px;line-height:1.3;color:#294f43}
+.energy-guide .energy-reward{display:flex;align-items:center;justify-content:center;gap:4px;min-height:34px;padding:3px 12px;border-radius:14px;background:#ffebae;color:#6d470b;font-size:17px}
+.energy-reward b{font-size:20px;line-height:1}
+.energy-reward small{font-size:12px;font-weight:700}
+.energy-guide .energy-reward.collected{background:#deedcf;color:#355a27}
+.energy-reward.collected b,.energy-reward.resting b{font-size:15px}
+.energy-guide .energy-reward.resting{background:#f0e9f3;color:#644967}
+.energy-guide .energy-card-arrow{position:absolute;right:12px;bottom:17px;font-size:26px;color:#6b8465;line-height:1}
+.energy-guide .energy-activity.is-collected{border-color:#afc79d}
+.energy-spend{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.energy-spend>button{display:flex;align-items:center;gap:16px;min-width:0;min-height:104px;border:2px solid #c8dbbe;border-bottom-width:4px;border-radius:25px;background:#f4f7e6;color:#294f43;padding:14px 20px;font:inherit;cursor:pointer;text-align:left}
+.energy-spend-art{display:grid;place-items:center;flex-shrink:0;width:70px;height:70px;background:#fffdf3;border-radius:22px}
+.energy-spend strong{display:block;font-size:22px}
+.energy-spend small{display:block;font-size:14px;margin-top:5px}
+.energy-spend>button>b{margin-left:auto;font-size:30px}
+.energy-parent-note{margin:18px 4px 0;font-size:14px;color:var(--text)}
+.energy-parent-note summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px}
+.energy-parent-note summary::before{content:'＋';font-size:20px}
+.energy-parent-note[open] summary::before{content:'−'}
+.energy-parent-note p{max-width:760px;margin:0 0 12px}
+.energy-guide button:focus-visible{outline:4px solid #217e73;outline-offset:4px}
+@media(hover:hover){.energy-guide .energy-activity:hover{transform:translateY(-3px);box-shadow:0 8px 15px #365c3f12}.energy-spend>button:hover{background:#eaf2d9}}
+.energy-guide .energy-activity:active,.energy-spend>button:active{transform:translateY(2px)}
+@media(max-width:700px){.energy-guide .energy-page{width:calc(100% - 28px);margin-top:8px}.energy-pocket{gap:18px;padding:16px;flex-wrap:wrap;border-radius:24px}.energy-pocket-total{gap:14px}.energy-pocket-symbol{width:66px;height:66px;border-radius:22px}.energy-pocket-symbol .icon{width:46px;height:46px}.energy-pocket-total h1{font-size:18px}.energy-pocket-total b{font-size:34px}.energy-today{width:100%}.energy-today p{font-size:13px}.energy-choose{font-size:22px;margin:20px 0 12px}.energy-guide .energy-activities{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.energy-guide .energy-activity{min-height:174px;padding:15px 9px 12px;border-radius:24px;gap:9px}.energy-activity>strong{font-size:21px}.energy-guide .energy-activity-art{height:76px;width:84px}.energy-activity-art>.icon{width:68px;height:68px}.energy-activity-art>img:not(.icon){width:80px;height:80px}.energy-guide .energy-card-arrow{right:8px;font-size:22px}.energy-guide .energy-reward{padding:3px 8px}.energy-spend{gap:12px}.energy-spend>button{flex-direction:column;justify-content:center;gap:8px;padding:14px 8px;text-align:center}.energy-spend strong{font-size:19px}.energy-spend small{font-size:13px}.energy-spend>button>b{display:none}}
+@media(prefers-reduced-motion:reduce){.energy-guide .energy-activity{transition:none}.energy-guide .energy-activity:hover,.energy-guide .energy-activity:active,.energy-spend>button:active{transform:none}}
+/* Keep the full activity grid visible on a landscape tablet. */
+.energy-guide .energy-pocket{padding:18px 24px}
+.energy-guide .energy-pocket-symbol{width:76px;height:76px;border-radius:26px}
+.energy-guide .energy-pocket-total h1{font-size:20px;margin:0 0 4px}
+.energy-guide .energy-pocket-total p{margin:0;line-height:1.1}
+.energy-guide .energy-activity{padding-top:14px;gap:8px}
+.energy-guide .energy-activity-art{height:80px}
+@media(max-width:700px){.energy-guide .energy-pocket{padding:16px}.energy-guide .energy-pocket-symbol{width:66px;height:66px;border-radius:22px}.energy-guide .energy-pocket-total h1{font-size:18px}.energy-guide .energy-activity-art{height:76px}}

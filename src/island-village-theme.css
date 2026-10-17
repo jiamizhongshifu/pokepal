@@ -1,0 +1,385 @@
+/* Island coast: 30th celebration colours, Winds / Waves mint and ocean blue.
+   Palette adapted for preschool reading; original painted icon silhouettes stay intact.
+   Scoped above lazy screen styles; teaching colours and character artwork stay intact. */
+:root {
+  --night-ink:#f2fbff; --night-muted:#bddae4;
+  --coast-ink:#173f55;
+  --coast-muted:#526e7d;
+  --coast-paper:#fffef7;
+  --coast-sky:#ecf8f8;
+  --coast-line:#c5dde1;
+  --coast-blue:#186ba6;
+  --coast-blue-deep:#12517c;
+  --coast-mint:#ddf4e8;
+  --coast-green:#287354;
+  --coast-yellow:#ffe36d;
+  --coast-yellow-soft:#fef1b9;
+  --coast-gold-ink:#614817;
+  --coast-coral-soft:#ffe3d6;
+  --coast-night:#102b42;
+  --activity-listen:#d9f1fa; --activity-wordpic:#ddf4e8;
+  --activity-repeat:#ffe3d6; --activity-trace:#fff0b5;
+}
+:root,:root[data-theme="light"] {
+  --page-bg:var(--coast-sky); --browser:var(--coast-sky);
+  --surface:var(--coast-paper); --surface-strong:var(--coast-paper); --surface-border:var(--coast-line);
+  --text:var(--coast-ink); --navy:var(--coast-ink); --ink:var(--coast-ink); --muted:var(--coast-muted);
+  --accent-en:#0e679e; --sea:#0e679e; --teal:#168fa2; --mint:#98d9c1;
+  --coral:#c86d51; --grad-primary:linear-gradient(#1c74aa,var(--coast-blue));
+  --soft-shadow:0 4px 0 #5198ae55,0 8px 20px #214f670c;
+  --village-paper:var(--coast-paper); --village-ink:var(--coast-ink); --village-line:var(--coast-line);
+  --village-shadow:0 4px 0 #5198ae66,0 9px 22px #214f670c;
+}
+:root[data-theme="dark"] {
+  --page-bg:var(--coast-night); --browser:var(--coast-night); --surface:#193e55; --surface-strong:#193e55;
+  --surface-border:#466a7e; --text:#f2fbff; --navy:#f2fbff; --ink:#f2fbff;
+  --muted:#bddae4; --accent-en:#99e1ce; --sea:#99e1ce; --mint:#98d9c1;
+  --soft-shadow:0 4px 0 #071c2e66,0 8px 20px #071c2e22;
+}
+#root .screen:not(.home):not(.welcome):not(.wild-adventure):not(.sleepy) {
+  background-color:var(--page-bg);
+  background-image:radial-gradient(ellipse at 0 100%,#70bacd12 0,transparent 48%),radial-gradient(#70bacd20 .7px,transparent .9px);
+  background-size:auto,12px 12px;
+}
+#root .screen.sleepy { background:radial-gradient(ellipse at 50% 30%,#2f6b9188,transparent 65%),var(--coast-night); color:#f2fbff; }
+#root .sleepy .sleepy-text { color:#f2fbff; }
+#root .sleepy .sleepy-en { color:#bddae4; }
+/* Existing ocean-wave pseudo-elements clash with the quiet stationery surfaces. */
+#root .screen:not(.home):not(.welcome)::before,
+#root .screen:not(.home):not(.welcome)::after { display:none; }
+#root .screen .topbar { background:transparent; box-shadow:none; border:0; }
+#root .screen .tb-title { color:var(--text); letter-spacing:.01em; }
+#root .screen .btn-round.back {
+  background:var(--village-paper); color:var(--village-ink); border:2px solid var(--coast-line);
+  border-radius:20px 23px 19px 24px; box-shadow:0 3px 0 #5198ae55;
+}
+#root .screen .energy-chip { background:var(--coast-yellow); border:2px solid #d8b64e; color:var(--coast-gold-ink); box-shadow:0 3px 0 #bc974c30; }
+#root .screen .energy-chip .num { color:var(--coast-gold-ink); text-shadow:none; }
+#root .screen .balls-chip { background:var(--coast-paper); color:var(--coast-ink); border:2px solid var(--coast-line); box-shadow:0 3px 0 #5198ae33; }
+#root .screen .parent-btn { background:#fffef7c9; border:1px solid var(--coast-line); border-radius:50%; }
+#root .screen button:focus-visible,#root .screen summary:focus-visible { outline:3px solid #1a73b4; outline-offset:4px; }
+#root .screen .btn-big:not(.alt),#root .screen .learning-trail-primary {
+  background:linear-gradient(#1c74aa,var(--coast-blue)); color:var(--coast-paper); border:2px solid var(--coast-blue-deep);
+  border-top-color:#76bed3; border-radius:24px 27px 23px 26px;
+  box-shadow:0 5px 0 var(--coast-blue-deep),0 8px 16px #214f6718; text-shadow:none;
+}
+#root .screen .btn-big.alt { background:var(--coast-paper); border:2px solid var(--coast-line); color:#0e679e; box-shadow:var(--village-shadow); border-radius:24px; }
+#root .screen :is(.learning-trail-primary,.journey-primary)>.icon {
+  background:var(--coast-yellow-soft); border-radius:12px; padding:4px; box-sizing:content-box;
+}
+#root .screen .btn-big:disabled { opacity:.58; box-shadow:0 2px 0 #7b796355; }
+#root .screen :is(.replay,.cry-btn,.wish-button,.task-rest) { background:var(--coast-paper); border:2px solid var(--coast-line); color:#0e679e; box-shadow:0 3px 0 #5198ae55; }
+#root .screen :is(.modal,.companion-card,.companion-finder,.farm-panel,.facility-panel,.garden-panel,.avatar-editor) {
+  --text:var(--coast-ink); --muted:var(--coast-muted); --surface:var(--coast-paper); --surface-border:var(--coast-line);
+  --navy:var(--coast-ink); --accent-en:#0e679e;
+  color:var(--coast-ink); background:var(--coast-paper); border:2px solid var(--coast-line);
+  border-radius:28px; box-shadow:0 5px 0 #5198ae44,0 18px 48px #214f6726;
+}
+#root .modal-backdrop { background:#214f675e; }
+#root .parent .parent-body section,#root .parent .stat { --text:var(--coast-ink); --muted:var(--coast-muted); --ink:var(--coast-ink); --accent-en:#0e679e; --sea:#0e679e; background:var(--coast-paper); color:var(--coast-ink); border:1px solid var(--coast-line); box-shadow:var(--village-shadow); }
+#root .parent .tabs button { background:#efe7cf; color:var(--coast-ink); }
+#root .parent .tabs button.on { background:var(--coast-blue); color:var(--coast-paper); }
+#root .screen .btn-big::after { display:none; }
+#root .screen .feature-guide { --guide-ink:var(--coast-ink); }
+#root .screen .feature-guide.is-open { background:var(--coast-yellow-soft); border-color:var(--coast-line); box-shadow:0 3px 0 #5198ae33; }
+#root .screen .guide-hear { background:var(--coast-mint); border-color:#b7d7c5; }
+#root .screen .guide-reopen { background:var(--coast-yellow-soft); border-color:var(--coast-line); }
+
+/* A sunlit sign with the original tactile grain and rounded silhouette. */
+#root .welcome-title-board {
+  position:relative; text-align:center; padding:24px 38px 19px; margin:8px 0 10px;
+  border:3px solid #a2d5df; border-top-color:#fffef7; border-radius:24px 29px 24px 30px;
+  background:repeating-linear-gradient(0deg,transparent 0 34px,#68b9c910 35px 37px),linear-gradient(110deg,#eff9dd,#fffef7 52%,#ddf4fa);
+  box-shadow:0 6px 0 #70b8ca,0 13px 22px #214f6729,inset 0 0 0 4px #ffffff66;
+}
+#root .welcome-title-board .logo { color:var(--coast-ink); font-size:clamp(27px,4.3vw,54px); text-shadow:0 2px #fff4d4; }
+#root .welcome-title-board .logo-en { color:var(--coast-muted); font-size:clamp(12px,1.6vw,18px); letter-spacing:.09em; margin:10px 0 0; }
+#root .welcome-title-leaf { position:absolute; left:calc(50% - 24px); top:-28px; width:48px; height:48px; transform:rotate(-16deg); }
+#root .illustrated-welcome .welcome-enter { background:linear-gradient(#ffed8a,var(--coast-yellow)); color:var(--coast-ink); border:3px solid var(--coast-paper); box-shadow:0 5px 0 #d1b044,0 10px 22px #214f6733; border-radius:29px; }
+#root .illustrated-welcome .enter-avatar { background:var(--coast-paper); border-color:#eac65a; }
+#root .illustrated-welcome .enter-copy>span { color:var(--coast-ink); opacity:1; }
+#root .illustrated-welcome .enter-arrow { background:#f5a188; color:var(--coast-ink); }
+#root .illustrated-welcome .avatar-choice { background:#f4e9cd; border-color:#d7c29b; box-shadow:0 3px 0 #b69d73; }
+
+/* Notebook pages: one clear next step, with little picture tiles to explore. */
+#root .tasks .learning-trail {
+  position:relative; color:var(--coast-ink); background:var(--coast-paper); border:2px solid var(--coast-line); border-top:9px solid #98d9c1;
+  border-radius:25px 25px 30px 30px; padding:24px; box-shadow:var(--village-shadow);
+}
+#root .learning-trail header { color:var(--coast-muted); }
+#root .learning-trail header small { background:#ddf4e8; color:var(--coast-green); padding:6px 10px; border-radius:12px; }
+#root .learning-trail h1 { color:var(--coast-ink); }
+#root .learning-trail .trail-discoveries button { background:#dff2f6; border:1.5px solid var(--coast-line); color:var(--coast-ink); border-radius:23px; box-shadow:inset 0 2px var(--coast-paper); }
+#root .learning-trail .trail-steps button { background:#dff2f6; border-color:#dfd5b8; color:var(--coast-muted); }
+#root .learning-trail .trail-steps [aria-current=step] { background:var(--coast-mint); border:2px solid #70b99b; color:var(--coast-green); box-shadow:0 3px 0 #5198ae55; }
+#root .learning-trail footer,#root .learning-trail footer button { color:var(--coast-muted); }
+#root .learning-tool-row button { background:var(--coast-paper); color:var(--coast-ink); border:2px solid var(--coast-line); box-shadow:0 3px 0 #5198ae44; }
+#root .tasks .task-games>summary { color:var(--text); }
+#root .tasks .task-card { background:var(--coast-paper); border-color:var(--coast-line); box-shadow:var(--village-shadow); border-radius:26px; }
+#root .tasks .tc-zh { color:var(--coast-ink); }
+#root .tasks .tc-en,#root .tasks .tc-action { color:var(--coast-muted); }
+#root .tasks .tc-icon { background:#dff2f6; border-radius:27px 23px 29px 22px; }
+#root .tasks .task-card.repeat .tc-icon { background:var(--coast-coral-soft); }
+#root .tasks .task-card.trace .tc-icon { background:#eee2c2; }
+#root .tasks .task-card.done { border-color:#70b99b; background:var(--coast-mint); }
+#root .tasks .task-card .stamp { background:var(--coast-mint); color:var(--coast-green); border:1px solid #70b99b; box-shadow:0 2px 0 #5198ae33; }
+#root .tasks .task-card .tc-energy { background:var(--coast-yellow); color:var(--coast-gold-ink); border-color:#d8b64e; }
+#root .screen .practice-option { border-color:var(--coast-line); box-shadow:var(--village-shadow); }
+#root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --leaf:var(--coast-blue); --ink:var(--coast-ink); --text:var(--coast-ink); color:var(--coast-ink); }
+#root .screen :is(.lesson-wrap,.notebook-entry,.journey-focus,.journey-family) { color:var(--coast-ink); background:var(--coast-paper); border:1px solid var(--coast-line); box-shadow:var(--village-shadow); }
+#root .screen .lesson-actions>button:not(.journey-primary),#root .screen .notebook-entry-actions button { color:#0e679e; background:#dff2f6; border-color:#b7d7c5; }
+#root .screen .learning-choices>div>button:not(.learning-choice-audio) { background:#dff2f6; border-color:var(--coast-line); color:var(--coast-ink); }
+#root .screen .notebook-tabs button[aria-pressed=true] { background:var(--coast-blue); color:var(--coast-paper); border-color:var(--coast-blue-deep); }
+#root .screen .choice { border-color:var(--coast-line); background:var(--coast-paper); color:var(--coast-ink); box-shadow:0 4px 0 #5198ae55; }
+#root .screen .choice.right { background:var(--coast-mint); border-color:#70b99b; box-shadow:0 4px 0 #70b99b55; }
+#root .screen .choice.shake { background:var(--coast-coral-soft); border-color:#c86d51; }
+#root .screen .choice.glow { border-color:#c18b35; }
+#root .screen .trace-side { border-color:var(--coast-line); background-color:var(--coast-paper); }
+
+/* A field journal, book shelf, and small exchange stall share the same materials. */
+#root .screen .single-ball-card { background:var(--coast-paper); border:2px solid #dccda9; border-top:9px solid #98d9c1; box-shadow:var(--village-shadow); border-radius:28px; color:var(--coast-ink); }
+#root .screen .shop-energy { background:var(--coast-yellow-soft); border-color:#d8b64e; color:var(--coast-gold-ink); }
+#root .screen .shop-energy b { color:var(--coast-gold-ink); }
+#root .screen .ball-exchange-picture { background:#dff2f6; border-radius:22px; color:var(--coast-muted); }
+#root .dex .dex-cell { background:var(--coast-paper); border:2px solid var(--coast-line); border-radius:23px 27px 23px 26px; box-shadow:var(--village-shadow); color:var(--coast-ink); }
+#root .dex .dex-cell.has { background:var(--coast-mint); border-color:#70b99b; }
+#root .dex .dex-name { color:var(--coast-ink); }
+#root .dex .dex-cell>small,#root .dex .dex-cell .dex-no { color:var(--coast-muted); }
+#root .dex .dex-meet-status { color:var(--coast-green); background:var(--coast-mint); }
+#root .screen .collection-tabs button { color:var(--coast-ink); background:var(--coast-paper); border-color:var(--coast-line); }
+#root .screen .collection-tabs button[aria-pressed=true] { color:var(--coast-paper); background:var(--coast-blue); border-color:var(--coast-blue-deep); box-shadow:inset 0 -3px var(--coast-blue-deep); }
+#root .screen .storybook { background:var(--coast-paper); border:2px solid var(--coast-line); box-shadow:4px 5px 0 #d4c5a0,0 9px 17px #214f670d; border-radius:12px 25px 25px 12px; }
+#root .screen .book-title { color:var(--coast-ink); background:var(--coast-paper); }
+#root .screen .book-title strong { color:var(--coast-ink); }
+#root .screen .book-footer b { background:var(--coast-mint); color:#0e679e; }
+#root .screen .open-storybook { background:var(--coast-paper); border-color:var(--coast-line); box-shadow:var(--village-shadow); }
+#root .screen .story-text-en { color:var(--coast-ink); }
+#root .screen .story-text-zh { color:var(--coast-muted); }
+#root .screen .energy-pocket { background:var(--coast-paper); border-color:var(--coast-line); box-shadow:var(--village-shadow); color:var(--coast-ink); }
+#root .energy-guide .energy-activity { background:var(--coast-paper); border-color:var(--coast-line); border-bottom-color:#5198ae; }
+#root .energy-guide .energy-activity>strong { color:var(--coast-ink); }
+#root .energy-guide .energy-spend>button { background:#dff2f6; color:var(--coast-ink); border-color:#b7d7c5; }
+#root .energy-guide .energy-reward { background:var(--coast-yellow); color:var(--coast-gold-ink); }
+#root .energy-guide .energy-reward.collected { background:var(--coast-mint); color:var(--coast-green); }
+
+/* Island tools remain small and unframed so the world stays visible. */
+#root .home .dock { background:transparent; border:0; box-shadow:none; }
+#root .home .dock .dock-btn { color:var(--coast-ink); text-shadow:0 1px 3px var(--coast-paper),0 0 5px var(--coast-paper); }
+#root .home .dock .dock-btn .ico { background:#fff8e4e8; border:1px solid #e8dbb8; box-shadow:0 3px 0 #5198ae40,0 5px 12px #214f6712; border-radius:19px 22px 18px 23px; padding:4px; }
+#root .home .home-actions button { background:#fffef7ee; color:var(--coast-ink); border-color:var(--coast-line); box-shadow:0 3px 0 #5198ae55; }
+#root .home :is(.companions-launch,.care-request,.follow-status) { background:#fffef7ee; color:var(--coast-ink); border-color:var(--coast-line); }
+#root .home .companion-card .act { background:#dff2f6; color:#0e679e; border-color:#b7d7c5; box-shadow:0 2px 0 #5198ae55; }
+#root .home .companion-card .act.following { background:var(--coast-blue); color:var(--coast-paper); border-color:var(--coast-blue-deep); }
+#root .home .companion-card .act.requested { background:var(--coast-yellow); color:var(--coast-gold-ink); border-color:#d8b64e; }
+#root .wild-adventure .wish-button { background:var(--coast-paper); color:#0e679e; border-color:var(--coast-line); }
+#root .wild-adventure .wild-name { background:#fffef7ed; color:var(--coast-ink); border-color:var(--coast-line); box-shadow:0 3px 0 #5198ae40; }
+#root .wild-adventure .field-kit { background:#fffef7f2; color:var(--coast-ink); border-color:var(--coast-line); box-shadow:var(--village-shadow); }
+#root .wild-adventure .field-kit button { background:var(--coast-mint); color:#0e679e; }
+#root .wild-adventure .field-kit-copy { display:flex; flex-direction:column; gap:4px; }
+#root .wild-adventure .field-kit-copy small { color:var(--coast-muted); font-size:13px; }
+
+/* Night ocean surroundings keep reading cards light, with explicit dark ink. */
+:root[data-theme="dark"] #root .screen :is(.practice-option,.energy-pocket,.storybook,.open-storybook,.single-ball-card) { --text:var(--coast-ink); --muted:var(--coast-muted); --accent-en:#0e679e; --navy:var(--coast-ink); --surface:var(--coast-paper); color:var(--coast-ink); background-color:var(--coast-paper); }
+:root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:#f2fbff; color:#f2fbff; }
+:root[data-theme="dark"] #root .screen .journey-invitation { color:var(--coast-ink); }
+:root[data-theme="dark"] #root .screen .btn-big.alt { color:#0e679e; }
+@media(max-width:600px) {
+  #root .welcome-title-board { padding:20px 15px 16px; width:100%; margin-top:10px; }
+  #root .welcome-title-board .logo { font-size:clamp(24px,6.5vw,34px); }
+  #root .welcome-title-board .logo-en { font-size:11px; letter-spacing:.04em; }
+  #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
+  #root .learning-trail header small { padding:5px 8px; white-space:nowrap; }
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference) {
+  #root .screen :is(.task-card,.energy-activity,.learning-tool-row button,.dex-cell):hover { translate:0 -2px; box-shadow:0 6px 0 #5198ae55,0 10px 18px #214f6712; }
+}
+@media(prefers-reduced-motion:reduce) {
+  #root .screen button { transition:none; }
+}
+
+/* Small island moments: a diary, a photo frame and a parcel on the same desk. */
+#root .screen :is(.picnic-panel,.living-panel) {
+  --text:var(--coast-ink); --muted:var(--coast-muted); --surface:var(--coast-paper);
+  color:var(--coast-ink); background:#fffef7f5; border:2px solid var(--coast-line);
+  box-shadow:0 5px 0 #5198ae44,0 16px 40px #214f6726; border-radius:27px;
+}
+#root .living-panel>header { padding-bottom:12px; border-bottom:1px dashed var(--coast-line); }
+#root .living-panel>header p,#root .living-panel .gift-note { color:var(--coast-muted); }
+#root .living-panel .guide-main { gap:6px; }
+#root .living-panel .guide-main strong { font-size:17px; }
+#root .living-panel .guide-picture { width:34px; }
+#root .living-panel .guide-hear { padding:6px; }
+#root .living-panel .guide-hear span { display:none; }
+#root .living-panel .living-main-action>.icon { background:var(--coast-yellow-soft); border-radius:10px; padding:3px; box-sizing:content-box; }
+#root .living-panel :is(.living-play-choices button,.picnic-friends button,.living-options button,.living-change-partner) { color:var(--coast-ink); background:#dff2f6; border-color:var(--coast-line); }
+#root .living-panel .living-play-choices button { box-shadow:0 3px 0 #5198ae66; }
+#root .living-panel .living-play-choices button:first-child { background:var(--coast-yellow-soft); border-color:#d8b64e; }
+#root .living-panel :is(.picnic-friends button,.living-options button)[aria-pressed=true] { background:var(--coast-mint); color:var(--coast-green); border:2px solid #70b99b; box-shadow:0 3px 0 #b7d7c566; }
+#root .living-panel .island-gift { background:var(--coast-yellow-soft); border:1px dashed #d8b64e; border-radius:23px; }
+#root .living-panel :is(.gift-open-picture,.gift-wait) { color:var(--coast-ink); }
+#root .living-panel .upgrade-heading { display:flex; align-items:center; gap:10px; margin:22px 0 8px; }
+#root .living-panel .upgrade-choice { padding:12px; margin:10px 0; background:#dff2f6; border:1px solid var(--coast-line); border-radius:20px; gap:10px; }
+#root .living-panel .upgrade-choice>div { min-width:0; }
+#root .living-panel .upgrade-choice small { color:var(--coast-muted); line-height:1.5; }
+#root .living-panel .upgrade-choice>button { flex:none; background:var(--coast-yellow); border:1px solid #d8b64e; color:var(--coast-gold-ink); min-width:80px; }
+#root .living-panel .upgrade-choice>button small { color:var(--coast-gold-ink); }
+#root .living-panel .upgrade-complete { color:var(--coast-green); }
+#root .living-panel .upgrade-confirm { background:var(--coast-yellow-soft); border-color:#d8b64e; }
+#root .screen :is(.living-main-action,.island-reward-result button,.avatar-save) { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--coast-blue); color:var(--coast-paper); border:2px solid var(--coast-blue-deep); box-shadow:0 3px 0 var(--coast-blue-deep); }
+
+#root .diary-screen .child-page { box-sizing:border-box; padding:0; }
+#root .diary-screen .guided-diary { --diary-ink:var(--coast-ink); }
+#root .diary-screen .diary-friend { background:var(--coast-mint); border:2px solid #b7d7c5; }
+#root .diary-screen .diary-steps { gap:clamp(16px,5vw,42px); }
+#root .diary-screen .diary-steps li { flex-direction:column; gap:6px; font-size:15px; }
+#root .diary-screen .diary-steps li span { width:46px; height:46px; border-radius:16px; background:#dff2f6; border:2px solid transparent; }
+#root .diary-screen .diary-steps li[aria-current=step] { color:var(--text); }
+#root .diary-screen .diary-steps li[aria-current=step] span { background:var(--coast-mint); border-color:#70b99b; box-shadow:0 3px 0 #b7d7c555; }
+#root .diary-screen .diary-question { color:var(--coast-ink); background:var(--coast-paper); border:2px solid var(--coast-line); border-top:7px solid #98d9c1; border-radius:23px 23px 29px 29px; box-shadow:var(--village-shadow); }
+#root .diary-screen .diary-question-icon { width:76px; height:76px; border-radius:24px; background:#f4e9cc; }
+#root .diary-screen :is(.diary-hear,.diary-return,.diary-answer-list button) { background:#dff2f6; border-color:var(--coast-line); color:var(--coast-ink); min-height:48px; }
+#root .diary-screen .diary-record { background:var(--coast-mint); border:2px solid #70b99b; color:var(--coast-green); box-shadow:0 4px 0 #b7d7c5; min-height:84px; }
+#root .diary-screen .diary-record[aria-pressed=true] { background:var(--coast-coral-soft); border-color:#c86d51; color:var(--coast-gold-ink); box-shadow:0 4px 0 #d8b888; }
+#root .diary-screen .diary-parent { color:var(--coast-muted); border-top:1px dashed var(--coast-line); }
+#root .diary-screen .diary-parent textarea { color:var(--coast-ink); border-color:#b7d7c5; background:#dff2f6; }
+#root .diary-screen .diary-guide-actions>button { display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 14px; }
+#root .diary-screen .diary-guide-actions>button:not(.farm-primary) { color:var(--coast-ink); background:#dff2f6; border-color:var(--coast-line); }
+#root .diary-screen .farm-primary { background:var(--coast-blue); color:var(--coast-paper); border-color:var(--coast-blue-deep); }
+#root .diary-screen .diary-paper { color:var(--coast-ink); background:var(--coast-paper); border-color:var(--coast-line); box-shadow:-7px 0 0 #98d9c1; }
+#root .screen :is(.diary-entry,.diary-books button) { color:var(--coast-ink); background:var(--coast-yellow-soft); border-color:#d8b64e; box-shadow:0 3px 0 #5198ae44; }
+
+#root .avatar-editor .avatar-preview { background:#dff2f6; border-color:#d8b64e; }
+#root .avatar-editor .avatar-save>.icon { background:var(--coast-yellow-soft); border-radius:10px; padding:3px; box-sizing:content-box; }
+#root .avatar-editor .avatar-photo-actions button { flex-direction:column; gap:5px; min-height:96px; border:2px solid var(--coast-line); background:#dff2f6; color:var(--coast-ink); box-shadow:0 3px 0 #5198ae55; }
+#root .avatar-editor :is(.avatar-photo-hint,.avatar-privacy) { color:var(--coast-muted); }
+#root .avatar-editor .avatar-presets button { background:#dff2f6; }
+#root .avatar-editor .avatar-presets button[aria-pressed=true] { border-color:#70b99b; background:var(--coast-mint); box-shadow:0 3px 0 #b7d7c555; }
+#root .parent .tabs button { display:flex; align-items:center; justify-content:center; gap:7px; min-height:50px; }
+#root .parent .parent-head { background:var(--page-bg); color:var(--text); border-bottom:1px solid var(--surface-border); }
+#root .parent .parent-head h2 { color:var(--text); }
+#root .parent .parent-body .seg button { color:var(--coast-ink); background:#dff2f6; border:1px solid var(--coast-line); }
+#root .parent .parent-body .seg button.on { color:var(--coast-paper); background:var(--coast-blue); border-color:var(--coast-blue-deep); }
+#root .parent .parent-body :is(select,input[type=number],input[type=text]) { color:var(--coast-ink); background:#dff2f6; border-color:var(--coast-line); }
+@media(max-width:600px) {
+  #root .diary-screen .diary-welcome { margin-bottom:18px; }
+  #root .diary-screen .diary-question { padding:18px 14px; }
+  #root .diary-screen .diary-question h2 { font-size:23px; }
+  #root .parent .tabs { gap:5px; }
+  #root .parent .tabs button { font-size:13px; padding:8px; gap:4px; }
+}
+@media(max-height:600px) and (min-width:601px) {
+  #root .avatar-editor .avatar-photo-actions button { flex-direction:row; min-height:50px; }
+  #root .avatar-editor .avatar-photo-actions .icon { width:30px; height:30px; }
+}
+
+/* A consistent role for each celebration colour; never recolour teaching art. */
+#root .screen { --leaf:var(--coast-blue); --honey:var(--coast-yellow); }
+#root .screen .journey-primary { --leaf:var(--coast-blue); box-shadow:0 4px 0 var(--coast-blue-deep); }
+#root .illustrated-welcome .avatar-pick { color:var(--coast-ink); background:#fffef7ef; border-color:var(--coast-line); box-shadow:0 5px 0 #70b8ca55; }
+#root .illustrated-welcome .avatar-pick .hint small { color:var(--coast-muted); }
+#root .illustrated-welcome .avatar-choice { background:#ddf4e8; border-color:#a4d6c3; box-shadow:0 3px 0 #70b99b; }
+#root .illustrated-welcome .device-setup>summary { color:var(--coast-ink); background:#fffef7ef; border-color:var(--coast-line); }
+#root .illustrated-welcome .device-setup[open] { --text:var(--coast-ink); --muted:var(--coast-muted); --surface:var(--coast-paper); --surface-strong:var(--coast-paper); color:var(--coast-ink); background:var(--coast-paper); }
+#root .home .dock .dock-btn .ico { background:#fffef7ee; border-color:var(--coast-line); }
+#root .home .dock .tasks .ico { background:#d9f1fa; }
+#root .home .dock .shop .ico { background:#fff0ac; }
+#root .home .dock .catch .ico { background:#d9f3e5; }
+#root .home .dock .stories .ico { background:#ffe4d8; }
+#root .home .dock .dex .ico { background:#dceafc; }
+#root .screen .feature-guide.is-open { background:#fff5cc; border-color:#e5cf83; }
+#root .screen .guide-hear { background:#dff2f6; border-color:#b7d6df; }
+#root .learning-trail header small { color:var(--coast-gold-ink); background:var(--coast-yellow-soft); }
+#root .tasks .task-card.listen .tc-icon { background:var(--activity-listen); }
+#root .tasks .task-card.repeat .tc-icon { background:var(--activity-repeat); }
+#root .tasks .task-card.wordpic .tc-icon { background:var(--activity-wordpic); }
+#root .tasks .task-card.trace .tc-icon { background:var(--activity-trace); }
+#root .screen :is(.story-next,.farm-primary) { background:var(--coast-blue); color:var(--coast-paper); border-color:var(--coast-blue-deep); }
+#root .screen :is(.journey-focus-words>button,.journey-transfer button,.learning-help,.guided-example,.story-word-saves button) { color:var(--coast-ink); background:#e5f3f7; border-color:var(--coast-line); }
+#root .screen .story-word-saves button[aria-pressed=true] { background:var(--coast-yellow-soft); }
+#root .screen .energy-pocket-symbol { background:var(--coast-yellow); box-shadow:inset 0 -5px #e7c956; }
+#root .screen .energy-pocket-total b { color:var(--coast-gold-ink); }
+#root .screen .energy-fill { background:#d9eced; }
+#root .screen .energy-fill>span { background:#e4b834; }
+#root .screen .energy-spend-art { background:var(--coast-paper); }
+#root .screen .energy-card-arrow { color:var(--coast-blue); }
+#root .screen .energy-activity.is-collected { border-color:#70b99b; }
+#root .screen .learning-stage-settings { --ink:var(--coast-ink); }
+#root .screen .stage-presets>button[aria-pressed=true] { background:var(--coast-mint); outline-color:#70b99b; }
+#root .screen .stage-controls button[aria-pressed=true] { background:var(--coast-blue); color:var(--coast-paper); border-color:var(--coast-blue-deep); }
+#root .screen .stage-current { color:var(--coast-green); background:var(--coast-mint); }
+#root .screen .stage-preview { background:#e5f3f7; border-color:#7db9ca; }
+#root .screen .guide-target { outline-color:#e6bc37!important; }
+#root .screen .diary-friend { background:var(--coast-mint); }
+#root .screen .diary-question-icon { background:#e5f3f7; }
+#root .wild-adventure .wish-button.explore-again { color:var(--coast-green); background:var(--coast-mint); border-color:#87cbb1; }
+
+/* Island mail and automatic dressing use the same coastal materials. */
+:root .device-setup>summary{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--coast-ink);background:var(--coast-paper);border:2px solid var(--coast-line);border-radius:20px}
+:root .device-setup[open]{border:2px solid var(--coast-line);background:var(--coast-paper);color:var(--coast-ink);box-shadow:0 7px 0 #a5c6cc55}
+:root .device-setup[open]>summary{border:0;border-radius:18px 18px 0 0;background:var(--coast-mint)}
+:root .device-setup .offline-update{border:2px solid var(--coast-line);border-radius:24px;background:#f2faff;color:var(--coast-ink)}
+:root .offline-update .offline-update-symbol{width:56px;height:56px;border-radius:18px;background:var(--coast-yellow);flex:none}
+:root .offline-update-heading strong{font-size:20px;color:var(--coast-ink)}
+:root .offline-update-heading small,:root .offline-update-detail,:root .offline-update-time,:root .device-capabilities,:root .device-setup-body>small{color:var(--coast-muted)}
+:root .offline-update .offline-update-steps{display:flex;align-items:stretch;margin:16px 0;gap:8px;font-size:13px}
+:root .offline-update-steps li{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column;text-align:center;padding:10px 4px;background:#e5eef1;border-radius:14px;color:#526e7d}
+:root .offline-update-steps li.current{background:var(--coast-yellow-soft);color:#614817}:root .offline-update-steps li.finished{background:var(--coast-mint);color:#205f47}
+:root .device-setup .offline-update progress{height:19px;background:#cce4ec}:root .offline-update progress::-webkit-progress-value{background:#278fc0}:root .offline-update progress::-moz-progress-bar{background:#278fc0}
+:root .offline-update-actions button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border:2px solid #a1c8da;background:var(--coast-paper);color:var(--coast-ink);border-radius:18px;box-shadow:0 3px 0 #b8d5df}
+:root .offline-update-actions .offline-update-reopen{background:var(--coast-yellow);color:var(--coast-ink);border-color:#e8cd64}
+:root .offline-update.is-ready,:root .offline-update.is-reload,:root .offline-update.is-latest{background:#effaf3;border-color:#99cdb4}:root .offline-update.is-error{background:#fff0e8;border-color:#e7bda9}
+:root .update-parent-notes>summary{font-size:14px;color:var(--coast-muted);padding:10px;min-height:44px;cursor:pointer}
+:root .island-rewards .dress-tabs{display:flex;gap:10px;margin:8px 0 14px}:root .dress-tabs>button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:62px;border:2px solid #c5dde1;border-radius:20px;background:#f3f8f8;color:#173f55;font:inherit;font-weight:800;cursor:pointer}:root .dress-tabs>button[aria-pressed=true]{background:#ffe36d;border-color:#dec464;box-shadow:0 3px 0 #d6c57b}
+:root .dress-feedback{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;margin:10px 0 14px;background:#ddf4e8;color:#205f47;border-radius:15px;font-size:14px}.dress-feedback>.icon{flex:none}
+:root .dress-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}:root .dress-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:12px 6px;min-width:0;border:2px solid #c5dde1;border-radius:22px;background:#fffef7;color:#173f55;font:inherit;cursor:pointer;box-shadow:0 3px 0 #c5dde166}:root .dress-item[aria-pressed=true]{background:#eefaf2;border-color:#79bca0}:root .dress-item-art{display:grid;place-items:center;position:relative;width:76px;height:76px;border-radius:26px;background:#d9f1fa}:root .dress-item:nth-child(3n+2) .dress-item-art{background:#fff0b5}:root .dress-item:nth-child(3n) .dress-item-art{background:#ffe3d6}.dress-check{position:absolute;right:-5px;top:-4px;display:grid;place-items:center;background:#ddf4e8;border:2px solid #fffef7;border-radius:50%;width:28px;height:28px}:root .dress-item strong{font-size:17px}:root .dress-item small{font-size:11px;color:#526e7d}.dress-item-action{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800}.dress-hint{font-size:13px;line-height:1.6;color:#526e7d}.dress-see{position:sticky;bottom:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;width:100%;background:#186ba6;color:#fffef7;border:2px solid #12517c;border-radius:19px;font:inherit;font-weight:800;cursor:pointer;margin:14px 0 2px;box-shadow:0 3px 0 #12517c}.dress-energy{display:flex;gap:6px;align-items:center;justify-content:center}.upgrade-level{display:flex;gap:3px;margin:4px 0}.island-rewards .upgrade-choice>div{min-width:0}:root .island-rewards .upgrade-choice{gap:10px}:root .island-rewards .upgrade-choice>button{min-width:78px}
+:root .dress-item:focus-visible,:root .dress-tabs button:focus-visible,:root .dress-see:focus-visible{outline:3px solid #186ba6;outline-offset:3px}:root .dress-item:active{transform:translateY(2px)}
+@media(max-width:600px){:root .dress-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}:root .home-actions{max-width:calc(100vw - 24px);gap:5px}:root .home-actions button{padding:6px 8px;font-size:12px;min-height:48px}:root .home-actions button>.icon{width:26px;height:26px}:root .offline-update-heading strong{font-size:17px}:root .offline-update .offline-update-symbol{width:44px;height:44px}}
+
+#root .living-panel.island-dressing{width:min(510px,calc(100% - 24px));max-height:calc(100% - 150px)}
+@media(max-width:600px){#root .living-panel.island-dressing{max-height:64%;width:calc(100% - 24px)}}
+
+#root .living-panel .dress-see{background:var(--coast-blue);color:var(--coast-paper);border-color:var(--coast-blue-deep)}
+@media(max-width:600px){
+ #root .home .home-actions{grid-template-columns:repeat(5,minmax(0,1fr));width:100%}
+ #root .home .home-actions button{flex-direction:column;gap:2px;padding:5px 2px;min-height:54px;font-size:12px;line-height:1.2}
+ #root .home .home-actions button>.icon{width:24px;height:24px}
+ #root .home :is(.companions-launch,.companion-finder){top:calc(var(--safe-top,0px) + 140px)}
+}
+
+/* Keep the exit visible; only panel content scrolls, never its heading. */
+#root .living-panel{display:flex;flex-direction:column;overflow:hidden}
+#root .living-panel>header{flex:none;gap:8px}
+#root .living-panel>header>div{min-width:0}
+#root .living-panel>header>button{flex:none;border-radius:50%;background:var(--coast-mint)}
+#root .living-scroll{min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px 4px 8px;scroll-padding-block:12px}
+#root .living-panel .dress-see{position:static;margin-bottom:5px}
+@media(max-width:600px){#root .living-panel.island-dressing{max-height:calc(100% - 160px)}#root .living-panel>header p{font-size:12px}}
+/* Island panels are narrow even on a wide iPad: fit hints to their container. */
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .feature-guide{width:100%;margin:8px 0 12px}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-main{gap:6px}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-main strong{min-width:0;font-size:16px;line-height:1.45;text-wrap:pretty}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-picture{width:30px}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-picture .icon{width:28px;height:28px}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-hear{flex:none;padding:5px;min-width:44px}
+#root :is(.area-choices,.picnic-panel,.companion-finder,.guided-diary) .guide-hear span{display:none}
+#root .area-choices{max-height:calc(100% - 150px);overflow:auto;overscroll-behavior:contain;background:#fffef7f5;color:var(--coast-ink);border-color:var(--coast-line)}
+#root .area-choices>header{position:sticky;top:-14px;z-index:3;padding:8px 0;background:var(--coast-paper)}
+@media(max-width:600px){#root .area-choices{max-height:calc(100% - 265px)}}
+@media(max-width:600px){#root .living-panel.island-dressing{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));width:auto}}
+/* The speaking round must grow below its optional-activity note, not center
+   an overflowing fixed-height round across that note on short tablets. */
+#root .task-repeat>.participation-note{flex:none;margin:4px auto 0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px}
+#root .task-repeat .task-stage{flex:none;padding:16px 20px 28px}
+#root .task-repeat .say-round{min-height:0;height:auto;padding:0;gap:22px}
+#root .task-repeat .round-dots{position:static;flex:none;min-height:34px}
+/* All quiz progress belongs in document flow, below the guide. A large choice
+   grid can then scroll instead of pushing its progress up behind that guide. */
+#root .task .task-stage{flex:1 0 auto;align-items:flex-start}
+#root .task .round{height:auto;min-height:0;padding:16px 0 20px}
+#root .task .round-dots{position:static;flex:none;min-height:34px}
+#root .task-repeat .say-round{padding:0}
+
+/* The activity picker needs room for its choices; active play stays compact. */
+@media(max-width:600px){
+ #root .living-panel:has(.living-play-choices){max-height:calc(100% - 150px);left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));width:auto}
+}

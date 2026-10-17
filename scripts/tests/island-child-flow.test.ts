@@ -1,0 +1,17 @@
+import { FURNITURE } from '../../src/lib/islandLiving';
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { ensureIslandProgress,tickIslandGift,useIslandGift,upgradeIsland,validIslandProgress } from '../../src/lib/islandProgress';
+import { validateSave } from '../../src/lib/saveValidation';
+import { diaryPages } from '../../src/lib/diary';
+import { configureIslandExpansion,islandK,onIsland,ISLAND } from '../../src/scene/layout';
+import { planWalk } from '../../src/scene/navigation';
+import type { SaveData } from '../../src/types';
+const make=()=>{const s=JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')) as SaveData;delete s.islandProgress;delete s.islandLiving;s.energy=30;return s;};
+test('gifts survive reload, cannot be farmed by repeated claiming, never spend currency',()=>{let s=make();ensureIslandProgress(s);for(let i=0;i<12;i++)tickIslandGift(s,10);assert.ok(s.islandProgress!.pending);s=validateSave(s);const id=useIslandGift(s);assert.ok(id);assert.deepEqual(s.islandLiving!.furniture,[id]);assert.equal(useIslandGift(s),false);assert.equal(s.energy,30);assert.equal(s.islandProgress!.owned.length,1);assert.ok(s.islandProgress!.nextGiftAt>0);});
+test('legacy furnishings stay owned; all gifts are unique and bounded',()=>{const s=make();s.islandLiving={version:1,memories:[],furniture:['basket']};ensureIslandProgress(s);for(let k=0;k<FURNITURE.length-1;k++){for(let i=0;i<40;i++)tickIslandGift(s,10);assert.ok(useIslandGift(s));}assert.equal(s.islandProgress!.owned.length,FURNITURE.length);for(let i=0;i<50;i++)tickIslandGift(s,10);assert.equal(s.islandProgress!.pending,undefined);assert.ok(validIslandProgress(s.islandProgress));});
+test('upgrade uses expected level to prevent double spending and refuses unaffordable/max upgrades',()=>{const s=make();assert.equal(upgradeIsland(s,'island',0),true);assert.equal(s.energy,20);assert.equal(upgradeIsland(s,'island',0),false);assert.equal(upgradeIsland(s,'island',1),true);assert.equal(s.energy,5);assert.equal(upgradeIsland(s,'island',2),false);assert.equal(upgradeIsland(s,'camp',0),true);assert.equal(s.energy,0);assert.equal(upgradeIsland(s,'picnic',0),false);assert.equal(validateSave(s).energy,0);});
+test('invalid imported upgrade and gift records rejected',()=>{const s=make();const p=ensureIslandProgress(s);p.levels.camp=3;assert.throws(()=>validateSave(s));p.levels.camp=0;p.owned=['basket'];p.pending='basket';assert.throws(()=>validateSave(s));});
+test('north expansion changes reachable land, leaves southern swimming shoreline unchanged',()=>{configureIslandExpansion(0);const water=onIsland(28,1.42);const goal={x:ISLAND.cx,z:ISLAND.cz-ISLAND.rz*1.7};assert.ok(islandK(goal.x,goal.z)>1.3);const before=planWalk({x:-2,z:0},goal,.6);configureIslandExpansion(2);assert.deepEqual(onIsland(28,1.42),water);assert.ok(islandK(goal.x,goal.z)<1.1);const after=planWalk({x:-2,z:0},goal,.6);assert.ok(Math.abs(after.at(-1)!.z-goal.z)<.7);assert.ok(Math.abs(before.at(-1)!.z-goal.z)>2);configureIslandExpansion(0);});
+test('diary pagination preserves original wording and punctuation without inventing events',()=>{for(const text of ['今天和皮卡丘玩球。然后我说：谢谢你！\n我有一点累。','今天我很难过……但是妈妈陪着我。', 'a'.repeat(1200)]){const pages=diaryPages(text);assert.equal(pages.map(p=>p.zh).join(''),text);assert.ok(pages.every(p=>p.zh.length<=160));}assert.deepEqual(diaryPages('  '),[]);assert.equal(diaryPages('我很难过。')[0].en,'I need a rest.');});

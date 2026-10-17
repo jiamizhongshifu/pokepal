@@ -1,0 +1,132 @@
+.living-panel{width:min(390px,calc(100% - 36px));max-height:calc(100% - 110px)}.living-tabs,.living-options{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.living-tabs button,.living-options button,.living-story button{min-height:48px;border:1px solid #bed9cc;border-radius:16px;background:#edf5e9;color:#254e46;padding:9px 12px;font:inherit;font-weight:700}.living-tabs button{flex:1}.living-tabs button[aria-pressed=true],.living-options button[aria-pressed=true]{background:#246e61;color:white}.living-options button{display:flex;align-items:center;justify-content:center;gap:7px;flex:1}.living-partners{display:flex;justify-content:center;gap:18px;margin:14px 0}.living-partners>div{display:flex;flex-direction:column;align-items:center}.living-partners img{width:75px;height:75px;object-fit:contain}.living-panel progress{width:100%;height:18px;accent-color:#378a71}.living-panel .picnic-friends small{font-size:11px}.living-chosen{font-weight:700}.living-furniture{display:flex;gap:10px;align-items:center;text-align:left;width:100%;min-height:70px;padding:10px;border:1px solid #bcd2c2;background:#fffdf1;border-radius:16px;color:#254e46;margin:8px 0}.living-furniture span{flex:1}.living-furniture small{display:block;font-size:12px;margin-top:5px}.living-furniture[aria-pressed=true]{background:#dfefda;border-color:#539579}.living-furniture b{font-size:13px;white-space:nowrap}.living-story{padding:12px;background:#f0eedc;border-radius:18px;margin:10px 0}.living-story button{margin:4px;font-size:14px}.living-story ol{list-style:none;padding:0;line-height:1.9}.living-entry{position:absolute;left:max(18px,env(safe-area-inset-left));top:85px;z-index:18;display:flex;align-items:center;gap:8px;min-height:50px;border:2px solid #b3ccbc;border-radius:22px;background:#f9f6e5e6;color:#264f46;padding:9px 14px;font-weight:800}.living-preference{font-size:13px;color:#476e62;margin:6px 0}.living-memory-images{display:flex}.living-memory-images img{width:48px}.living-memory-link{min-height:48px;margin:8px;border-radius:14px;border:1px solid #a7c2b3;background:#f8f7eb;color:#254e46;padding:10px}.living-panel button:focus-visible{outline:3px solid #167d73;outline-offset:3px}.living-panel button:disabled{opacity:.45}.living-panel small{line-height:1.5}.living-panel p{line-height:1.6}@media(max-width:600px){.living-panel{max-height:62%;width:calc(100% - 24px);left:12px}.living-entry{top:76px;font-size:13px;left:12px}}
+
+@media(orientation:portrait){.living-panel:has(.living-partners){max-height:40%;font-size:14px}.living-partners{margin:6px 0}.living-partners img{width:52px;height:52px}.living-panel:has(.living-partners) h3{margin:6px 0}}
+
+.living-panel .farm-primary{color:#fff;background:#2c7765}.living-partners>div{border:3px solid transparent;border-radius:18px;padding:4px}.living-partners>div.living-turn{border-color:#d2a444;background:#fff1b8}
+.child-page{width:min(720px,calc(100% - 32px));margin:20px auto 40px;color:#2c5549}.child-page h1{font-size:clamp(24px,4vw,34px)}.child-page p{line-height:1.7}.child-page progress{width:100%;accent-color:#d09d2f;height:20px}.energy-activities{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.energy-activities button{min-height:80px;display:flex;flex-direction:column;justify-content:center;gap:7px;background:#fff9e7;border:2px solid #dbe4c9;border-radius:20px;color:#305646;font:inherit;cursor:pointer}.energy-activities span{font-size:14px}.diary-entry{width:100%;display:flex;align-items:center;gap:12px;padding:14px;background:#fff1cd;border:1px solid #dbc995;border-radius:18px;color:#4d5e41;text-align:left;min-height:66px;font:inherit;margin-top:14px}.diary-entry span{flex:1}.diary-entry small,.upgrade-choice small{display:block;margin-top:5px;font-size:12px;line-height:1.6}.upgrade-choice{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #dbe2cb}.upgrade-choice>div{flex:1}.upgrade-choice button{min-height:48px;max-width:112px;border:0;border-radius:14px;background:#e5edce;color:#38543f;padding:8px;font:inherit;font-size:14px;font-weight:800}.upgrade-confirm{border:2px solid #bc9b4c;border-radius:18px;padding:12px;background:#fff2c6;margin:12px 0}.island-gift{padding:12px;background:#fff2cd;border-radius:18px}.gift-note{font-size:13px;color:#586c50}.energy-guide .topbar,.diary-screen .topbar{flex-shrink:0}.diary-screen{overflow-y:auto}.diary-record{min-height:96px;width:100%;display:flex;align-items:center;justify-content:center;gap:16px;font:inherit;font-size:23px;font-weight:800;border:2px solid #99b59a;border-radius:30px;background:#e4eed5;color:#315849}.diary-record[aria-pressed=true]{background:#fae0bc;border-color:#cf9262}.diary-screen textarea{width:100%;box-sizing:border-box;min-height:130px;font:inherit;line-height:1.8;padding:16px;border:2px solid #b2c6a7;border-radius:18px;background:#fffdf1;color:#294e43}.diary-screen audio{width:100%;margin:12px 0}.diary-paper{background:#fff8e5;border:1px solid #e3d6b3;border-radius:12px 28px 28px 12px;padding:clamp(20px,4vw,36px);box-shadow:-7px 0 0 #b5c7a1;color:#315747;min-height:240px}.diary-paper .diary-original{font-size:23px;line-height:1.8;white-space:pre-wrap}.diary-paper img{width:90px;height:90px;object-fit:contain;float:right}.diary-caption{font-size:12px;letter-spacing:2px;color:#6a745c}.diary-books{display:flex;gap:12px;flex-wrap:wrap}.diary-books button{min-height:80px;min-width:150px;padding:12px;border:2px solid #d8d7b6;border-radius:16px;background:#fff1cc;color:#365645;font:inherit}.diary-library{width:min(1000px,calc(100% - 32px));margin:18px auto}.diary-error{background:#fff0d4;padding:12px;border-radius:12px;color:#745222}.diary-screen button:disabled{opacity:.5}.diary-screen .living-options button{min-height:52px}.diary-screen .child-page>label{display:block;font-weight:700;margin:16px 0 6px}.child-page button:focus-visible{outline:3px solid #237b64;outline-offset:3px}
+.diary-paper .btn-small{display:inline-flex;align-items:center;gap:8px;width:auto;min-height:48px;padding:10px 16px;font-size:16px;border:1px solid #cbd7b7;background:#eaf0db;color:#315747;border-radius:16px}.diary-paper .btn-small .icon{width:24px;height:24px;flex:none}
+
+/* Actions follow the toolbar's real height and safe-area padding, never avatar coordinates. */
+.home .topbar.has-home-actions { display:grid; grid-template-columns:minmax(44px,1fr) auto; grid-template-rows:auto auto; align-items:start; row-gap:10px; }
+.home .has-home-actions .tb-left { justify-self:start; grid-column:1; grid-row:1; }
+.home .has-home-actions .tb-right { justify-self:end; grid-column:2; grid-row:1; }
+.home-actions { grid-column:1 / -1; grid-row:2; justify-self:end; display:flex; gap:8px; pointer-events:auto; }
+.home-actions button { position:relative; display:flex; align-items:center; gap:6px; min-height:48px; padding:9px 13px; border:1px solid #c9dfd2; border-radius:20px; background:rgba(255,252,240,.94); color:#244b40; box-shadow:0 3px 0 rgba(63,101,71,.15); font-size:15px; font-family:inherit; font-weight:800; cursor:pointer; }
+.home-actions button:active { transform:translateY(2px); box-shadow:none; }
+.home-actions button:focus-visible { outline:3px solid #21866c; outline-offset:3px; }
+.home-actions button.has-gift { background:#fff0bf; border-color:#e5c96d; }
+.home-actions i { position:absolute; top:1px; right:2px; width:10px; height:10px; background:#dd6555; border-radius:50%; border:2px solid #fff8df; }
+.guided-diary { --diary-ink:#294e45; color:var(--diary-ink); }
+.diary-welcome { display:flex; align-items:center; gap:18px; margin-bottom:24px; text-align:left; }
+.diary-welcome h1 { font-size:clamp(24px,3vw,32px); margin:4px 0 8px; }
+.diary-welcome p { margin:0; }
+.diary-friend { flex:none; width:100px; height:100px; display:grid; place-items:center; border-radius:50%; background:#e2efdf; }
+.diary-friend img { width:92px; height:92px; object-fit:contain; }
+.diary-steps { display:flex; list-style:none; justify-content:center; gap:24px; padding:0; margin:0 0 24px; }
+.diary-steps li { display:flex; align-items:center; gap:7px; color:#657870; font-size:15px; }
+.diary-steps li span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#e5ebe3; }
+.diary-steps li[aria-current=step] { color:#23654e; font-weight:800; }
+.diary-steps li[aria-current=step] span { background:#276f56; color:#fff; }
+.diary-question { padding:28px; border:1px solid #d9e4d4; border-radius:28px; background:#fffcf3; box-shadow:0 6px 0 #d6e5d5; text-align:center; }
+.diary-question h2 { margin:16px 0 10px; font-size:clamp(24px,3vw,30px); }
+.diary-question-heading { display:flex; align-items:center; justify-content:space-between; }
+.diary-question-icon { display:grid; place-items:center; width:48px; height:48px; background:#eef2df; border-radius:16px; }
+.diary-hear,.diary-return,.diary-answer-list button { min-height:44px; padding:8px 14px; border:1px solid #c8d8cb; border-radius:16px; background:#f1f5eb; color:#305b48; font:inherit; cursor:pointer; }
+.diary-hear { display:flex; align-items:center; gap:7px; }
+.guided-diary .diary-record { width:auto; min-width:200px; min-height:76px; border-radius:24px; display:flex; flex-direction:row; justify-content:center; gap:12px; margin:24px auto 12px; }
+.diary-guide-note,.diary-guide-status { font-size:15px; line-height:1.7; min-height:26px; }
+.diary-guide-status { text-align:center; }
+.diary-guide-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:24px; }
+.diary-guide-actions>button { min-height:50px; padding:10px 22px; border:1px solid #c9d9cc; border-radius:18px; font:inherit; font-weight:700; cursor:pointer; }
+.diary-guide-actions>button:not(.farm-primary) { background:#fffaf0; color:#476253; }
+.diary-parent { text-align:left; margin-top:20px; color:#5b7065; font-size:15px; }
+.diary-parent summary { min-height:44px; padding:12px 0; cursor:pointer; }
+.diary-parent label { display:block; }
+.diary-recordings audio,.guided-diary audio { max-width:100%; }
+.diary-recordings { margin:18px 0; }
+.diary-recordings p { font-size:15px; margin:12px 0 6px; }
+.diary-answer-list { margin:24px 0; text-align:left; }
+.diary-answer-list>div { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 0; border-bottom:1px solid #e1e6d8; }
+.diary-answer-list strong,.diary-answer-list small { display:block; }
+.diary-answer-list small { color:#657a6a; margin-top:5px; }
+.diary-answer-list button { flex:none; }
+.diary-screen .child-page { padding:0 20px; }
+@media(max-width:600px) { .home-actions{gap:6px}.home-actions button{padding:8px 10px;font-size:14px}.diary-welcome{gap:12px}.diary-friend{width:70px;height:70px}.diary-friend img{width:68px;height:68px}.diary-question{padding:20px 16px}.diary-steps{gap:15px}.diary-screen .child-page{padding:0 14px}.diary-welcome h1{font-size:23px} }
+
+.diary-guide-actions>button { white-space:nowrap; flex-shrink:0; min-width:90px; }
+.diary-guide-actions>.farm-primary { width:auto; flex:1; }
+
+/* A picture and a short verb for each real choice; no forced English response. */
+.living-real-choices button{flex-direction:column;min-height:76px;gap:5px;background:#fff8df;border:2px solid #d8dfbb;font-size:17px}
+.living-real-choices button:first-child{background:#e9f2d9;border-color:#bed3a9}
+.living-main-action{display:flex;align-items:center;justify-content:center;gap:12px;min-height:58px;width:100%;font-size:20px}
+.living-change-partner{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;margin:8px auto 0;border:0;border-radius:14px;background:#eef3e8;color:#365d4d;padding:8px 14px;font:inherit}
+
+/* Keep the diary's cream answer card dark-inked, and its outer text theme-aware. */
+.diary-screen .child-page { color:var(--text); }
+.diary-welcome,.diary-guide-status { color:var(--text); }
+.diary-welcome .diary-caption,.guided-diary > .diary-caption,.diary-screen .child-page > .diary-caption { color:var(--muted); }
+.diary-steps li { color:var(--muted); }
+.diary-steps li span { color:#36564b; }
+:root[data-theme="dark"] .diary-steps li[aria-current=step] { color:#a5e3c9; }
+/* Start with a friend and one picture; location is an optional choice. */
+.living-play-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:18px 0 10px; }
+.living-play-choices button { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; min-height:108px; padding:10px 4px; border:2px solid #bdcfa5; border-radius:22px; background:#f5f8df; color:#305747; font:inherit; font-size:17px; cursor:pointer; }
+.living-play-choices button:first-child { background:#fff0c7; border-color:#dfc47c; }
+.living-place summary,.reward-collection summary { min-height:48px; display:flex; align-items:center; gap:8px; cursor:pointer; font-size:14px; }
+.living-place .living-options button { display:flex; align-items:center; justify-content:center; gap:8px; }
+.partner-choice-mark { font-size:14px; font-weight:750; }
+.living-panel .picnic-pages button { min-width:48px; font-size:28px; }
+.gift-open-picture { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; width:100%; min-height:140px; background:transparent; color:#365645; border:0; font:inherit; font-size:23px; cursor:pointer; }
+.island-gift>p { text-align:center; margin:8px 0; font-size:14px; }
+.gift-wait { display:flex; align-items:center; gap:12px; color:#476653; }
+.gift-wait .icon { flex:none; }
+.island-reward-result { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:12px 0; padding:12px; border-radius:18px; background:#e4f1d8; }
+.island-reward-result button { width:100%; min-height:52px; display:flex; align-items:center; justify-content:center; gap:10px; background:#2c7765; color:#fff; border:0; border-radius:16px; font:inherit; font-weight:800; cursor:pointer; }
+.upgrade-picture { position:relative; flex:none; width:56px; }
+.upgrade-picture>.icon:last-child:not(:first-child) { position:absolute; right:-3px; top:-8px; }
+.upgrade-choice>button { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:86px; padding:8px; }
+.upgrade-choice>button small { margin:0; font-size:13px; }
+.upgrade-choice>div small { font-size:14px; }
+.upgrade-complete { display:flex; align-items:center; gap:4px; font-size:14px; }
+.upgrade-confirm-picture,.upgrade-cost { display:flex; align-items:center; justify-content:center; gap:12px; }
+.upgrade-confirm { text-align:center; }
+.upgrade-confirm .living-options button { display:flex; align-items:center; justify-content:center; gap:6px; }
+.reward-collection { font-size:14px; }
+.living-panel .island-reward-result button { color:#fff; }
+.living-panel .picnic-friends .partner-choice-mark { font-size:14px; }
+@media(max-width:600px) {
+ .living-choose>header p,.living-choose>h3+p { display:none; }
+ .living-choose .living-play-choices { margin:10px 0 6px; }
+ .living-choose .living-play-choices button { min-height:88px; gap:4px; padding:6px 4px; }
+ .living-choose .living-play-choices .icon { width:44px; height:44px; }
+}
+
+/* One current turn, two recognisable players, one action. Keep the island visible. */
+.living-session>header p{display:none}
+.living-turn-lane{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:52px;margin:10px 0}
+.living-player{display:flex;align-items:center;flex-direction:column;gap:4px;padding:6px 2px;border:3px solid transparent;border-radius:18px;font-size:14px;text-align:center}
+.living-player>img{width:48px;height:48px;object-fit:contain}
+.living-player.is-turn{background:#fff0b8;border-color:#dfa83b;color:#284c53}
+.living-turn-ball{position:absolute;left:calc(50% - 26px);top:18px;transform:translateX(-8px)}
+.living-turn-ball.toward-child{transform:translateX(8px)}
+.living-turn-status{margin:8px 0;text-align:center;font-size:17px;font-weight:750}
+.living-child-actions{display:flex;align-items:stretch;gap:8px}
+.living-child-actions>.living-main-action{flex:1;width:auto;min-height:64px;font-size:20px}
+.living-rehear{display:grid;place-items:center;min-width:48px;border:1px solid #bed9cc;border-radius:18px;background:#fff5ce;cursor:pointer}
+.living-session-exits{margin:10px 0 0}
+.living-session-exits button{min-height:48px;font-size:15px;padding:6px}
+#root .home>.living-session{width:min(350px,calc(100% - 32px));max-height:calc(100% - 100px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+.living-session .living-scroll{min-height:0}
+.living-finder .companion-finder,.picnic-finder .companion-finder{position:static!important;width:100%!important;max-height:none!important;box-sizing:border-box;box-shadow:none;margin:8px 0}
+
+/* Life situations stay in the existing corner card, with no new global entry. */
+.living-rest-scene,.living-tidy-picture{display:flex;align-items:center;justify-content:center;gap:18px;min-height:64px;margin:8px 0;background:#e9f2dc;border-radius:20px;padding:8px}
+.living-tidy-picture{background:#fff1cc}
+.living-tidy-picture.is-tidy{background:#e2f0db}
+.living-tidy-picture.is-tidy>span{display:none}
+.living-tidy-picture.is-tidy>.icon:first-child{margin-right:-34px;z-index:1;transform:translateY(-6px);width:28px;height:28px}
+.living-next-choices button{flex-direction:column;min-height:74px}
+.living-rest-scene>.icon:last-child{animation:living-leaf-once 5s ease-in-out 1}
+@keyframes living-leaf-once{0%,100%{transform:rotate(0)}50%{transform:translateY(-6px) rotate(12deg)}}
+@media(prefers-reduced-motion:reduce){.living-rest-scene>.icon:last-child{animation:none}}

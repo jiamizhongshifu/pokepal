@@ -1,0 +1,51 @@
+.learning-trail{width:min(740px,calc(100% - 32px));box-sizing:border-box;margin:8px auto 20px;padding:22px;border:2px solid #d5dfc4;border-radius:28px;background:#fffbed;color:#23493d;flex:none}.learning-trail header{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:15px}.learning-trail header small{font-size:13px;color:#54705d}.learning-trail h1{font-size:28px;line-height:1.3;margin:12px 0 16px}.trail-discoveries{display:flex;justify-content:center;gap:14px}.trail-discoveries button{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:6px;flex-direction:column;padding:10px;border:1px solid #c9d8c2;border-radius:20px;background:#edf3e4;color:#23493d;font-size:18px;font-weight:800}.trail-discoveries button>.icon:first-child{width:64px;height:64px}.trail-discoveries .learning-color{width:58px;height:58px}.trail-discoveries img{width:64px;height:64px;object-fit:contain}.trail-discoveries button>.icon:last-child{width:22px;height:22px}.trail-steps{display:flex;gap:10px;margin:16px 0}.trail-steps button{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;min-height:58px;border:1px solid #cedbc7;border-radius:16px;background:#f7f8ee;color:#315c46;font:inherit;font-weight:700}.trail-steps [aria-current=step]{border:2px solid #42816b;background:#e3f0df}.learning-trail-primary{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;width:100%;border:2px solid #3c725b;border-radius:22px;background:#487f60;color:#fffdf0;box-shadow:0 4px 0 #2c5e46;font:inherit;font-weight:850;font-size:23px}.learning-trail footer{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;font-size:14px;color:#546d58}.learning-trail footer button{display:flex;align-items:center;gap:5px;min-height:44px;border:0;background:transparent;color:#315c46;font:inherit;font-weight:700}.learning-trail button:focus-visible{outline:3px solid #d6a437;outline-offset:3px}.learning-tool-row{display:flex;justify-content:center;gap:12px;width:min(740px,calc(100% - 32px));margin:0 auto 16px}.learning-tool-row button{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;border:1px solid #c6d9cc;border-radius:18px;background:#fffbed;color:#23493d;font:inherit;font-weight:750}.tasks .task-games{width:min(900px,calc(100% - 32px));margin:0 auto 16px;flex:none}.task-games>.board{width:100%;margin:12px 0}.task-games>summary{display:flex;gap:10px;align-items:center;min-height:56px;cursor:pointer;color:#23493d;font-size:20px;font-weight:750}.task-games>summary span{margin-left:auto}.learning-reward .cel-energy{font-size:25px;margin:10px 0}.learning-reward .cel-energy .icon{width:36px;height:36px}.session-discoveries{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:12px 0}.session-discoveries>span{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:18px}.session-discoveries .icon{width:48px;height:48px}.session-discoveries img{width:48px;height:48px;object-fit:contain}.session-discoveries .learning-color{width:44px;height:44px}.learning-reward .cel-actions .btn-big{min-height:64px;font-size:19px}.learning-reward .cel-actions .icon{width:32px;height:32px}
+@media(max-width:600px){.learning-trail{padding:15px;width:calc(100% - 24px);margin-top:6px}.learning-trail header{font-size:13px;gap:8px}.learning-trail header small{font-size:12px}.learning-trail h1{font-size:24px}.trail-discoveries{gap:8px}.trail-discoveries button{padding:8px;font-size:17px}.trail-discoveries button>.icon:first-child{width:52px;height:52px}.trail-steps{gap:7px}.trail-steps button{flex-direction:column;gap:3px;padding:8px 3px;font-size:14px;position:relative}.trail-steps button>.icon:last-child:not(:first-child){position:absolute;top:3px;right:3px}.learning-trail footer{font-size:12px}.learning-trail-primary{font-size:21px}.learning-tool-row{gap:8px}.learning-tool-row button{font-size:15px;gap:6px}.learning-tool-row .icon{width:30px;height:30px}}
+
+/* One course invitation, then quieter tools; progress belongs to the adult. */
+.learning-home-content{width:min(780px,calc(100% - 40px));margin:4px auto 40px;flex:none}
+#root .learning-home .learning-home-hero{width:100%;margin:0;padding:24px 30px;border-top:7px solid #98d9c1}
+.learning-home-heading>div{min-width:0;flex:1}
+.learning-home-heading>img{width:112px;height:112px;object-fit:contain;flex:none;filter:drop-shadow(0 5px 4px #31554214)}
+.learning-home-eyebrow{font-size:15px;font-weight:800;color:#486a60}
+#root .learning-home-hero h1{font-size:clamp(26px,3vw,32px);margin:8px 0;line-height:1.4}
+.learning-home-heading p{font-size:17px;line-height:1.5;font-weight:500;margin:0}
+.learning-home-preview{display:flex;justify-content:center;gap:20px;margin:16px 0 22px}
+.learning-home-preview>div{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:5px;font-size:20px;font-weight:800;color:var(--coast-ink,#23493d)}
+.learning-home-preview>div>img,.learning-home-preview .learning-color{width:62px;height:62px;object-fit:contain}
+.learning-home-preview>div>span[lang]{overflow-wrap:anywhere;text-align:center}
+#root .screen.learning-home .learning-trail-primary{background:#39745f;border-color:#2c604e;box-shadow:0 4px 0 #234e40;color:#fffdf2;min-height:64px;font-size:24px}
+#root .screen.learning-home .learning-trail-primary:hover{background:#30664f}
+.learning-home-reassurance{text-align:center;font-size:14px;line-height:1.5;margin:14px 0 0;color:var(--coast-muted,#53746d)}
+.learning-home-tools{margin:26px 0 20px}
+.learning-home-tools h2{font-size:18px;font-weight:700;color:var(--coast-muted,#53746d);margin:0 0 12px}
+.learning-home-tools>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#root .learning-home-tools button{min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px;min-height:116px;border:1px solid var(--coast-line,#c8dcda);border-radius:20px;background:#ffffff80;box-shadow:none;color:var(--coast-ink,#23493d);font:inherit;cursor:pointer}
+.learning-home-tools strong{font-size:18px;line-height:1.4}
+.learning-home-tools small{font-size:14px;line-height:1.4;color:var(--coast-muted,#53746d)}
+.learning-home-tools .icon{width:38px;height:38px;object-fit:contain}
+#root .learning-home-content .task-parent-note{width:100%;margin:0;border:0;padding:0;background:transparent}
+.learning-home-extension{border-top:1px solid #bfd2ce;padding-top:6px;margin:0 0 4px;color:var(--coast-muted,#53746d)}
+.learning-home-extension summary{display:flex;align-items:center;gap:9px;min-height:52px;cursor:pointer;font-size:16px;font-weight:700;list-style:none}
+.learning-home-extension summary::-webkit-details-marker{display:none}
+.disclosure-arrow{margin-left:auto;transition:transform .15s}
+.learning-home-extension[open] .disclosure-arrow{transform:rotate(180deg)}
+.learning-home-extension p,.learning-home .task-parent-note p{font-size:15px;line-height:1.7;margin:8px 0 12px}
+.learning-home-extension>div{display:flex;gap:12px;flex-wrap:wrap;padding:4px 0 12px}
+.learning-home-extension button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:56px;padding:10px;border:1px solid #bfd2ce;border-radius:16px;background:#fffef5;color:var(--coast-ink,#23493d);font:inherit;font-weight:700;cursor:pointer}
+.learning-home :is(button,summary):focus-visible{outline:3px solid #b78b24;outline-offset:3px}
+@media(max-width:600px){
+ .learning-home-content{width:calc(100% - 28px);margin-top:4px}
+ #root .learning-home .learning-home-hero{padding:18px}
+ .learning-home-heading>img{width:72px;height:86px}
+ #root .learning-home-hero h1{font-size:25px}
+ .learning-home-heading p{font-size:15px}
+ .learning-home-preview{gap:12px;margin:18px 0}
+ .learning-home-preview>div{font-size:18px}
+ .learning-home-preview>div>img,.learning-home-preview .learning-color{width:54px;height:54px}
+ .learning-home-tools{margin:22px 0 16px}
+ .learning-home-tools>div{gap:8px}
+ .learning-home-tools strong{font-size:16px}
+ .learning-home-tools small{font-size:12px}
+ #root .learning-home-tools button{padding:12px 4px;gap:6px}
+ .learning-home-extension button{font-size:15px}
+}

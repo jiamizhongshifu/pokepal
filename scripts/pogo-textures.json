@@ -1,0 +1,1763 @@
+{
+  "1": {
+    "body": "pm0001_00_BodyAll1 #267.png",
+    "face": "pm0001_00_Eye1 #535.png"
+  },
+  "2": {
+    "body": "pm0002_00_BodyAll1 #661.png",
+    "face": "pm0002_00_Eye1 #610.png"
+  },
+  "3": {
+    "body": "pm0003_00_BodyAll1.png",
+    "face": "pm0003_00_Eye1 #65234.png"
+  },
+  "4": {
+    "body": "pm0004_00_Body1.png",
+    "face": "pm0004_00_Eye1.png"
+  },
+  "5": {
+    "body": "pm0005_00_Body1 #2187.png",
+    "face": "pm0005_00_Eye1.png"
+  },
+  "6": {
+    "body": "pm0006_00_BodyAll1 #2390.png",
+    "face": "pm0006_00_Eye1.png"
+  },
+  "7": {
+    "body": "pm0007_00_Body1.png",
+    "face": "pm0007_00_Eye1.png"
+  },
+  "8": {
+    "body": "pm0008_00_Body1 #3408.png",
+    "face": "pm0008_00_Eye1 #3550.png"
+  },
+  "9": {
+    "body": "pm0009_00_BodyAll1 #3748.png",
+    "face": "pm0009_00_Eye1.png"
+  },
+  "10": {
+    "body": "pm0010_00_Body1.png",
+    "face": null
+  },
+  "11": {
+    "body": "pm0011_00_Body1.png",
+    "face": "pm0011_00_Eye1.png"
+  },
+  "12": {
+    "body": "pm0012_00_BodyAll1.png",
+    "face": null
+  },
+  "16": {
+    "body": "pm0016_00_Body1.png",
+    "face": "pm0016_00_Eye1.png"
+  },
+  "17": {
+    "body": "pm0017_00_BodyAll1.png",
+    "face": "pm0017_00_Eye1.png"
+  },
+  "18": {
+    "body": "pm0018_00_BodyAll1.png",
+    "face": "pm0018_00_Eye1.png"
+  },
+  "25": {
+    "body": "pm0025_00_BodyA1 #457.png",
+    "face": "pm0025_00_Face1.png"
+  },
+  "26": {
+    "body": "pm0026_00_Body1.png",
+    "face": "pm0026_00_Face.png",
+    "cheek": "pm0026_00_BodyB1 #1066.png"
+  },
+  "35": {
+    "body": "pm0035_00_Body1.png",
+    "face": "pm0035_00_Face1.png"
+  },
+  "36": {
+    "body": "pm0036_00_Body1.png",
+    "face": "pm0036_00_Face1.png"
+  },
+  "37": {
+    "body": "pm0037_00_BodyAll1 #11275.png",
+    "face": "pm0037_00_Face1 #11292.png"
+  },
+  "38": {
+    "body": "pm0038_00_BodyAll1.png",
+    "face": "pm0038_00_Eye1.png"
+  },
+  "39": {
+    "body": "pm0039_00_Body1.png",
+    "face": "pm0039_00_Face1.png"
+  },
+  "40": {
+    "body": "pm0040_00_Body1.png",
+    "face": "pm0040_00_Face1.png"
+  },
+  "43": {
+    "body": "pm0043_00_Body1.png",
+    "face": "pm0043_00_Face1 #12519.png"
+  },
+  "44": {
+    "body": "pm0044_00_BodyAll1 #12758.png",
+    "face": "pm0044_00_Eye1 #12669.png"
+  },
+  "45": {
+    "body": "pm0045_00_BodyAll1.png",
+    "face": "pm0045_00_Face1 #12886.png"
+  },
+  "52": {
+    "body": "pm0052_00_Body1.png",
+    "face": "pm0052_00_Eye1.png"
+  },
+  "53": {
+    "body": "pm0053_00_Body1.png",
+    "face": "pm0053_00_Eye1.png"
+  },
+  "54": {
+    "body": "pm0054_00_Body1 #14494.png",
+    "face": "pm0054_00_Eye1.png"
+  },
+  "55": {
+    "body": "pm0055_00_Body1.png",
+    "face": "pm0055_00_Eye1.png"
+  },
+  "58": {
+    "body": "pm0058_00_BodyAll1 #15229.png",
+    "face": "pm0058_00_Eye1 #15234.png"
+  },
+  "59": {
+    "body": "pm0059_00_BodyAll1 #15428.png",
+    "face": "pm0059_00_Eye1 #15479.png"
+  },
+  "60": {
+    "body": "pm0060_00_Body1.png",
+    "face": "pm0060_00_Eye1.png"
+  },
+  "61": {
+    "body": "pm0061_00_Body1 #15728.png",
+    "face": "pm0061_00_Eye1.png"
+  },
+  "62": {
+    "body": "pm0062_00_Body1 #15890.png",
+    "face": "pm0062_00_Eye1.png"
+  },
+  "63": {
+    "body": "pm0063_00_Body1.png",
+    "face": null
+  },
+  "64": {
+    "body": "pm0064_00_BodyAll1.png",
+    "face": "pm0064_00_Eye1 #16338.png"
+  },
+  "65": {
+    "body": "pm0065_00_Body1.png",
+    "face": "pm0065_00_Eye1 #16595.png"
+  },
+  "79": {
+    "body": "pm0079_00_Body1 #19498.png",
+    "face": "pm0079_00_Eye1.png"
+  },
+  "80": {
+    "body": "pm0080_00_BodyAll1.png",
+    "face": "pm0080_00_EyeAll1 #19730.png"
+  },
+  "98": {
+    "body": "pm0098_00_Body1 #23458.png",
+    "face": "pm0098_00_Eye1 #23480.png"
+  },
+  "99": {
+    "body": "pm0099_00_BodyAll1 #23615.png",
+    "face": "pm0099_00_Eye1 #23563.png"
+  },
+  "104": {
+    "body": "pm0104_00_Body1 #24208.png",
+    "face": "pm0104_00_Eye1 #24323.png"
+  },
+  "105": {
+    "body": "pm0105_00_Body1.png",
+    "face": "pm0105_00_Eye1.png"
+  },
+  "116": {
+    "body": "pm0116_00_Body1.png",
+    "face": "pm0116_00_Eye1.png"
+  },
+  "117": {
+    "body": "pm0117_00_Body1.png",
+    "face": "pm0117_00_Eye1.png"
+  },
+  "120": {
+    "body": "pm0120_00_Body1.png",
+    "face": null
+  },
+  "121": {
+    "body": "pm0121_00_BodyAll1.png",
+    "face": null
+  },
+  "129": {
+    "body": "pm0129_00_Body1 #29857.png",
+    "face": "pm0129_00_Eye1 #29880.png"
+  },
+  "130": {
+    "body": "pm0130_00_BodyAll1.png",
+    "face": "pm0130_00_Eye1.png"
+  },
+  "131": {
+    "body": "pm0131_00_BodyAll1 #30189.png",
+    "face": "pm0131_00_Eye1.png"
+  },
+  "133": {
+    "body": "pm0133_00_Body1.png",
+    "face": "pm0133_00_Face1.png"
+  },
+  "134": {
+    "body": "pm0134_00_Body1.png",
+    "face": "pm0134_00_Face1.png"
+  },
+  "135": {
+    "body": "pm0135_00_Body1.png",
+    "face": "pm0135_00_Eye1.png"
+  },
+  "136": {
+    "body": "pm0136_00_BodyAll1.png",
+    "face": "pm0136_00_Face1.png"
+  },
+  "143": {
+    "body": "pm0143_00_Body1 #32439.png",
+    "face": "pm0143_00_Face1 #32488.png"
+  },
+  "147": {
+    "body": "pm0147_00_Body1 #33436.png",
+    "face": "pm0147_00_Face1.png"
+  },
+  "148": {
+    "body": "pm0148_00_Body1.png",
+    "face": "pm0148_00_Face1.png"
+  },
+  "149": {
+    "body": "pm0149_00_BodyAll1 #33791.png",
+    "face": "pm0149_00_Eye1 #33771.png"
+  },
+  "150": {
+    "body": "pm0150_00_Body1 #33916.png",
+    "face": "pm0150_00_Eye1.png"
+  },
+  "151": {
+    "body": "pm0151_00_Body1.png",
+    "face": "pm0151_00_Face1.png"
+  },
+  "182": {
+    "body": "pm0182_00_BodyAll1 #40166.png",
+    "face": "pm0182_00_Face1.png"
+  },
+  "186": {
+    "body": "pm0186_00_BodyAll #40989.png",
+    "face": "pm0186_00_Eye1 #40992.png"
+  },
+  "196": {
+    "body": "pm0196_00_Body1.png",
+    "face": "pm0196_00_Face1.png"
+  },
+  "197": {
+    "body": "pm0197_00_Body1.png",
+    "face": "pm0197_00_Face1.png"
+  },
+  "199": {
+    "body": "pm0199_00_BodyAll1.png",
+    "face": "pm0199_00_Face1 #43171.png"
+  },
+  "230": {
+    "body": "pm0230_00_Body1.png",
+    "face": "pm0230_00_Eye1.png"
+  },
+  "13": {
+    "body": "pm0013_00_Body1 #4755.png",
+    "face": "pm0013_00_Eye1.png"
+  },
+  "14": {
+    "body": "pm0014_00_Body1.png",
+    "face": "pm0014_00_Eye1 #4862.png"
+  },
+  "15": {
+    "body": "pm0015_00_BodyAll1.png",
+    "face": null
+  },
+  "19": {
+    "body": "pm0019_00_Body1.png",
+    "face": "pm0019_00_Eye1.png"
+  },
+  "20": {
+    "body": "pm0020_00_Body1 #6637.png",
+    "face": "pm0020_00_Eye1 #6555.png"
+  },
+  "21": {
+    "body": "pm0021_00_BodyAll1.png",
+    "face": "pm0021_00_Eye1.png"
+  },
+  "22": {
+    "body": "pm0022_00_BodyAll1.png",
+    "face": "pm0022_00_Eye1.png"
+  },
+  "23": {
+    "body": "pm0023_00_Body1.png",
+    "face": "pm0023_00_Eye1 #7288.png"
+  },
+  "24": {
+    "body": "pm0024_00_BodyAll1 #7377.png",
+    "face": "pm0024_00_Eye1 #7394.png"
+  },
+  "27": {
+    "body": "pm0027_00_BodyAll1 #9528.png",
+    "face": "pm0027_00_Eye1 #9477.png",
+    "removeMeshes": [
+      "pm0027_00_RollSkin"
+    ]
+  },
+  "28": {
+    "body": "pm0028_00_BodyAll1.png",
+    "face": "pm0028_00_Eye1.png",
+    "removeMeshes": [
+      "pm0028_00_BallSkin"
+    ]
+  },
+  "29": {
+    "body": "pm0029_00_Body1.png",
+    "face": "pm0029_00_Eye1.png"
+  },
+  "30": {
+    "body": "pm0030_00_Body1 #10145.png",
+    "face": "pm0030_00_Eye1 #10148.png"
+  },
+  "31": {
+    "body": "pm0031_00_Body1.png",
+    "face": "pm0031_00_Eye1 #10291.png"
+  },
+  "32": {
+    "body": "pm0032_00_Body1 #10418.png",
+    "face": "pm0032_00_Eye1.png"
+  },
+  "33": {
+    "body": "pm0033_00_Body1.png",
+    "face": "pm0033_00_Eye1 #10654.png"
+  },
+  "34": {
+    "body": "pm0034_00_BodyAll1 #10780.png",
+    "face": "pm0034_00_Eye1 #10714.png"
+  },
+  "41": {
+    "body": "pm0041_00_Body1 #12248.png",
+    "face": null
+  },
+  "42": {
+    "body": "pm0042_00_Body1.png",
+    "face": "pm0042_00_Eye1.png"
+  },
+  "46": {
+    "body": "pm0046_00_BodyA1.png",
+    "face": null,
+    "materialTextures": {
+      "Body03_Niantic": "pm0046_00_BodyB1.png"
+    },
+    "alphaMaterials": [
+      "Body03_Niantic"
+    ],
+    "materialOpacity": {
+      "Body02_Niantic": 0.1
+    }
+  },
+  "47": {
+    "body": "pm0047_00_BodyAll1.png",
+    "face": null
+  },
+  "48": {
+    "body": "pm0048_00_BodyA1 #13437.png",
+    "face": null,
+    "materialTextures": {
+      "Body01": "pm0048_00_BodyB1.png"
+    }
+  },
+  "49": {
+    "body": "pm0049_00_BodyAll1.png",
+    "face": null,
+    "materialTextures": {
+      "Eye02_Niantic": "pm0049_00_BodyC1.png"
+    },
+    "alphaMaterials": [
+      "Eye02_Niantic"
+    ],
+    "materialOpacity": {
+      "Eye01_Niantic": 0.1
+    }
+  },
+  "50": {
+    "body": "pm0050_00_Body1 #13712.png",
+    "face": "pm0050_00_Eye1.png"
+  },
+  "51": {
+    "body": "pm0051_00_BodyAll1.png",
+    "face": "pm0051_00_EyeA1 #13843.png"
+  },
+  "56": {
+    "body": "pm0056_00_Body1.png",
+    "face": "pm0056_00_Eye1.png"
+  },
+  "57": {
+    "body": "pm0057_00_Body1.png",
+    "face": "pm0057_00_Eye1.png"
+  },
+  "66": {
+    "body": "pm0066_00_Body1 #16831.png",
+    "face": "pm0066_00_Eye1.png"
+  },
+  "67": {
+    "body": "pm0067_00_Body1.png",
+    "face": "pm0067_00_Eye1 #17032.png"
+  },
+  "68": {
+    "body": "pm0068_00_BodyAll1.png",
+    "face": "pm0068_00_Eye1 #17140.png"
+  },
+  "69": {
+    "body": "pm0069_00_Body1.png",
+    "face": "pm0069_00_Eye1 #17482.png"
+  },
+  "70": {
+    "body": "pm0070_00_Body1 #17720.png",
+    "face": "pm0070_00_Eye1.png"
+  },
+  "71": {
+    "body": "pm0071_00_Body1.png",
+    "face": "pm0071_00_Eye1 #17903.png"
+  },
+  "72": {
+    "body": "pm0072_00_Body1.png",
+    "face": "pm0072_00_Eye1.png"
+  },
+  "73": {
+    "body": "pm0073_00_BodyAll.png",
+    "face": "pm0073_00_Eye1.png"
+  },
+  "74": {
+    "body": "pm0074_00_Body1 #18440.png",
+    "face": "pm0074_00_Eye1 #18403.png"
+  },
+  "75": {
+    "body": "pm0075_00_BodyAll1.png",
+    "face": "pm0075_00_Eye1 #18513.png"
+  },
+  "76": {
+    "body": "pm0076_00_BodyAll1 #18853.png",
+    "face": "pm0076_00_Eye1 #18863.png"
+  },
+  "77": {
+    "body": "pm0077_00_BodyA1.png",
+    "face": "pm0077_00_Eye1.png"
+  },
+  "78": {
+    "body": "pm0078_00_Body1.png",
+    "face": "pm0078_00_Eye1.png"
+  },
+  "81": {
+    "body": "pm0081_00_Body1.png",
+    "face": "pm0081_00_Eye1 #20003.png"
+  },
+  "82": {
+    "body": "pm0082_00_Body1 #20113.png",
+    "face": "pm0082_00_Eye1.png"
+  },
+  "83": {
+    "body": "pm0083_00_Body1.png",
+    "face": "pm0083_00_Eye1.png"
+  },
+  "84": {
+    "body": "pm0084_00_Body1.png",
+    "face": "pm0084_00_Eye1.png"
+  },
+  "85": {
+    "body": "pm0085_00_Body1.png",
+    "face": "pm0085_00_Eye1.png"
+  },
+  "86": {
+    "body": "pm0086_00_Body1.png",
+    "face": "pm0086_00_Eye1.png"
+  },
+  "87": {
+    "body": "pm0087_00_Body1.png",
+    "face": "pm0087_00_Eye1.png"
+  },
+  "88": {
+    "body": "pm0088_00_BodyAll1 #21311.png",
+    "face": "pm0088_00_Eye1.png",
+    "removeMaterials": [
+      "Beto"
+    ]
+  },
+  "89": {
+    "body": "pm0089_00_BodyAll1.png",
+    "face": "pm0089_00_Eye1.png",
+    "removeMaterials": [
+      "Beto"
+    ]
+  },
+  "90": {
+    "body": "pm0090_00_Body1 #21759.png",
+    "face": "pm0090_00_Eye1.png"
+  },
+  "91": {
+    "body": "pm0091_00_BodyAll1 #21863.png",
+    "face": "pm0091_00_face1.png"
+  },
+  "92": {
+    "body": "pm0092_00_Body1.png",
+    "face": "pm0092_00_Eye1.png"
+  },
+  "93": {
+    "body": "pm0093_00_Body1.png",
+    "face": "pm0093_00_Eye1.png"
+  },
+  "94": {
+    "body": "pm0094_00_Body1.png",
+    "face": "pm0094_00_Eye1.png"
+  },
+  "95": {
+    "body": "pm0095_00_Bodyall1 #22826.png",
+    "face": "pm0095_00_Eye1 #22861.png",
+    "geometryTranslation": [
+      0,
+      0.7736458778381348,
+      -2.8799643516540527
+    ]
+  },
+  "96": {
+    "body": "pm0096_00_Body1.png",
+    "face": "pm0096_00_Eye1 #23033.png"
+  },
+  "97": {
+    "body": "pm0097_00_BodyAll1.png",
+    "face": "pm0097_00_Eye1.png"
+  },
+  "100": {
+    "body": "pm0100_00_Body1.png",
+    "face": "pm0100_00_Eye1.png"
+  },
+  "101": {
+    "body": "pm0101_00_Body1.png",
+    "face": "pm0101_00_Face1.png"
+  },
+  "102": {
+    "body": "pm0102_00_Body1.png",
+    "face": "pm0102_00_Face1.png"
+  },
+  "103": {
+    "body": "pm0103_00_BodyAll1.png",
+    "face": "pm0103_00_FaceA1.png",
+    "materialTextures": {
+      "EyeC": "pm0103_00_FaceB1.png"
+    }
+  },
+  "106": {
+    "body": "pm0106_00_Body1.png",
+    "face": "pm0106_00_Eye1.png"
+  },
+  "107": {
+    "body": "pm0107_00_Body1 #24767.png",
+    "face": "pm0107_00_Eye1 #24844.png"
+  },
+  "108": {
+    "body": "pm0108_00_Body1.png",
+    "face": "pm0108_00_Eye1.png"
+  },
+  "109": {
+    "body": "pm0109_00_Body1 #25697.png",
+    "face": "pm0109_00_Face1.png"
+  },
+  "110": {
+    "body": "pm0110_00_BodyAll1 #25971.png",
+    "face": "pm0110_00_Eye1 #26121.png"
+  },
+  "111": {
+    "body": "pm0111_00_BodyAll1 #26437.png",
+    "face": "pm0111_00_Eye1.png"
+  },
+  "112": {
+    "body": "pm0112_00_BodyAll1.png",
+    "face": "pm0112_00_Eye1.png"
+  },
+  "113": {
+    "body": "pm0113_00_Body1.png",
+    "face": "pm0113_00_Face1.png"
+  },
+  "114": {
+    "body": "pm0114_00_BodyAll1.png",
+    "face": "pm0114_00_Eye1.png"
+  },
+  "115": {
+    "body": "pm0115_00_BodyAll1.png",
+    "face": "pm0115_00_Face1.png"
+  },
+  "118": {
+    "body": "pm0118_00_BodyAll1.png",
+    "face": "pm0118_00_Eye1.png"
+  },
+  "119": {
+    "body": "pm0119_00_Body1.png",
+    "face": "pm0119_00_Eye1.png"
+  },
+  "122": {
+    "body": "pm0122_00_Body1.png",
+    "face": "pm0122_00_Face1.png"
+  },
+  "123": {
+    "body": "pm0123_00_Body1.png",
+    "face": "pm0123_00_Eye1.png"
+  },
+  "124": {
+    "body": "pm0124_00_Body1.png",
+    "face": "pm0124_00_Eye1.png"
+  },
+  "125": {
+    "body": "pm0125_00_Body1.png",
+    "face": "pm0125_00_Eye1.png"
+  },
+  "126": {
+    "body": "pm0126_00_BodyAll1 #29064.png",
+    "face": "pm0126_00_Eye1.png"
+  },
+  "127": {
+    "body": "pm0127_00_Body1.png",
+    "face": "pm0127_00_Eye1 #29421.png"
+  },
+  "128": {
+    "body": "pm0128_00_Body1.png",
+    "face": "pm0128_00_Eye1.png"
+  },
+  "132": {
+    "body": "pm0132_00_Body1.png",
+    "face": "pm0132_00_Face1.png"
+  },
+  "137": {
+    "body": "pm0137_00_Body1 #31258.png",
+    "face": "pm0137_00_Eye1 #31224.png"
+  },
+  "138": {
+    "body": "pm0138_00_Body1.png",
+    "face": "pm0138_00_Eye1 #31391.png"
+  },
+  "139": {
+    "body": "pm0139_00_Body1 #31631.png",
+    "face": "pm0139_00_Eye1.png"
+  },
+  "140": {
+    "body": "pm0140_00_BodyA1.png",
+    "face": null,
+    "materialTextures": {
+      "BodyB": "pm0140_00_BodyB1.png"
+    }
+  },
+  "141": {
+    "body": "pm0141_00_Body1 #31898.png",
+    "face": "pm0141_00_Eye1.png"
+  },
+  "142": {
+    "body": "pm0142_00_Body_All1.png",
+    "face": "pm0142_00_Eye1 #32068.png"
+  },
+  "144": {
+    "body": "pm0144_00_BodyAll1 #32690.png",
+    "face": "pm0144_00_Eye1 #32622.png"
+  },
+  "145": {
+    "body": "pm0145_00_BodyAll1.png",
+    "face": "pm0145_00_Eye1 #32974.png"
+  },
+  "146": {
+    "body": "pm0146_00_Body1.png",
+    "face": "pm0146_00_Eye1.png"
+  },
+  "152": {
+    "body": "pm0152_00_Body1.png",
+    "face": "pm0152_00_Face1.png",
+    "removeMeshes": [
+      "pm0152_00_LFeelerSkin",
+      "pm0152_00_LVineSkin",
+      "pm0152_00_RFeelerSkin",
+      "pm0152_00_RVineSkin"
+    ]
+  },
+  "153": {
+    "body": "pm0153_00_BodyA1.png",
+    "face": "pm0153_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0153_00_BodyB1.png",
+      "BodyBKurumiruVco_Lan": "pm0153_00_BodyB1.png"
+    }
+  },
+  "154": {
+    "body": "pm0154_00_BodyA1.png",
+    "face": "pm0154_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0154_00_BodyB1.png",
+      "BodyBKurumiruVco_Lan": "pm0154_00_BodyB1.png"
+    }
+  },
+  "155": {
+    "body": "pm0155_00_BodyA1.png",
+    "face": "pm0155_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0155_00_BodyB1.png",
+      "Body01": "pm0155_00_BodyB1.png",
+      "Body02": "pm0155_00_BodyB1.png"
+    },
+    "alphaMaterials": [
+      "Body01",
+      "Body02"
+    ]
+  },
+  "156": {
+    "body": "pm0156_00_BodyA1.png",
+    "face": "pm0156_00_Face.png",
+    "materialTextures": {
+      "BodyB": "pm0156_00_BodyB1.png",
+      "Body01": "pm0156_00_BodyB1.png",
+      "Body03": "pm0156_00_BodyB1.png"
+    }
+  },
+  "157": {
+    "body": "pm0157_00_BodyAll1.png",
+    "face": "pm0157_00_Eye1.png",
+    "materialTextures": {
+      "BodyC": "pm0157_00_BodyC1.png",
+      "BodyB": "pm0157_00_BodyC1.png"
+    }
+  },
+  "158": {
+    "body": "pm0158_00_Body1.png",
+    "face": "pm0158_00_Eye1.png"
+  },
+  "159": {
+    "body": "pm0159_00_Body1.png",
+    "face": "pm0159_00_Eye1.png"
+  },
+  "160": {
+    "body": "pm0160_00_BodyA1.png",
+    "face": "pm0160_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0160_00_BodyB1.png",
+      "BodyB00_Lan": "pm0160_00_BodyB1.png"
+    }
+  },
+  "161": {
+    "body": "pm0161_00_Body1.png",
+    "face": "pm0161_00_Face1.png"
+  },
+  "162": {
+    "body": "pm0162_00_Body1.png",
+    "face": "pm0162_00_Face1.png"
+  },
+  "163": {
+    "body": "pm0163_00_Body1.png",
+    "face": "pm0163_00_Eye1.png"
+  },
+  "164": {
+    "body": "pm0164_00_BodyAll1.png",
+    "face": "pm0164_00_Eye1.png"
+  },
+  "165": {
+    "body": "pm0165_00_Body1.png",
+    "face": "pm0165_00_Eye1.png"
+  },
+  "166": {
+    "body": "pm0166_00_Body1.png",
+    "face": "pm0166_00_Mouth1.png"
+  },
+  "167": {
+    "body": "pm0167_00_Body1.png",
+    "face": "pm0167_00_Face1.png"
+  },
+  "168": {
+    "body": "pm0168_00_BodyA1.png",
+    "face": "pm0168_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0168_00_BodyB1.png",
+      "BodyBSpc_Lan": "pm0168_00_BodyB1.png"
+    }
+  },
+  "169": {
+    "body": "pm0169_00_Body1.png",
+    "face": "pm0169_00_Eye1 #37958.png"
+  },
+  "170": {
+    "body": "pm0170_00_Body1.png",
+    "face": "pm0170_00_Mouth1.png"
+  },
+  "171": {
+    "body": "pm0171_00_Body1.png",
+    "face": "pm0171_00_Face.png"
+  },
+  "172": {
+    "body": "pm0172_00_BodyA1.png",
+    "face": "pm0172_00_Face.png",
+    "materialTextures": {
+      "BodyB": "pm0172_00_BodyB1.png"
+    }
+  },
+  "173": {
+    "body": "pm0173_00_Body1.png",
+    "face": "pm0173_00_Face1.png"
+  },
+  "174": {
+    "body": "pm0174_00_Body1.png",
+    "face": "pm0174_00_Face.png"
+  },
+  "175": {
+    "body": "pm0175_00_Body1.png",
+    "face": "pm0175_00_Face.png"
+  },
+  "176": {
+    "body": "pm0176_00_Body1.png",
+    "face": "pm0176_00_Face.png"
+  },
+  "177": {
+    "body": "pm0177_Body1.png",
+    "face": "pm0177_Eye1.png"
+  },
+  "178": {
+    "body": "pm0178_00_BodyA1.png",
+    "face": "pm0178_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0178_00_BodyB1.png",
+      "BodyC": "pm0178_01_BodyC1.png",
+      "BodyB_Lan": "pm0178_00_BodyB1.png",
+      "BodyC01_Lan": "pm0178_01_BodyC1.png"
+    }
+  },
+  "179": {
+    "body": "pm0179_00_Body1 #39542.png",
+    "face": "pm0179_00_Face1.png"
+  },
+  "180": {
+    "body": "pm0180_00_Body1.png",
+    "face": "pm0180_00_Face.png"
+  },
+  "181": {
+    "body": "pm0181_00_Body1 #39966.png",
+    "face": "pm0181_00_Face #40014.png"
+  },
+  "183": {
+    "body": "pm0183_00_Body1.png",
+    "face": "pm0183_00_Face.png"
+  },
+  "184": {
+    "body": "pm0184_00_Body1.png",
+    "face": "pm0184_00_Face.png"
+  },
+  "185": {
+    "body": "pm0185_00_Body1.png",
+    "face": "pm0185_00_Face1.png"
+  },
+  "187": {
+    "body": "pm0187_00_Body1.png",
+    "face": "pm0187_00_Face1.png"
+  },
+  "188": {
+    "body": "pm0188_00_Body1 #2324.png",
+    "face": "pm0188_00_Face1.png"
+  },
+  "189": {
+    "body": "pm0189_00_BodyA1 #2373.png",
+    "face": "pm0189_00_Face1 #2447.png",
+    "materialTextures": {
+      "BodyB": "pm0189_00_BodyB1 #2435.png"
+    }
+  },
+  "190": {
+    "body": "pm0190_00_Body1.png",
+    "face": "pm0190_00_Face #41623.png"
+  },
+  "191": {
+    "body": "pm0191_00_Body1.png",
+    "face": "pm0191_00_Face.png"
+  },
+  "192": {
+    "body": "pm0192_00_Body1.png",
+    "face": "pm0192_00_Face.png"
+  },
+  "193": {
+    "body": "pm0193_00_BodyA1.png",
+    "face": "pm0193_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0193_00_BodyB1.png"
+    }
+  },
+  "194": {
+    "body": "pm0194_00_Body1.png",
+    "face": "pm0194_00_Face1.png"
+  },
+  "195": {
+    "body": "pm0195_00_Body1.png",
+    "face": "pm0195_00_Eye.png"
+  },
+  "198": {
+    "body": "pm0198_00_BodyA1.png",
+    "face": "pm0198_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0198_00_BodyB1.png",
+      "BodyC": "pm0198_00_BodyC1.png",
+      "BodyB_Lan": "pm0198_00_BodyB1 #42994.png",
+      "BodyC_Lan": "pm0198_00_BodyC1.png"
+    },
+    "alphaMaterials": [
+      "BodyC_Lan"
+    ]
+  },
+  "200": {
+    "body": "pm0200_00_BodyA1.png",
+    "face": "pm0200_00_Face #43355.png"
+  },
+  "201": {
+    "body": "pm0201_11_BodyA1.png",
+    "face": "pm0201_11_Eye1.png",
+    "sourceStem": "pm0201_11_Rig"
+  },
+  "202": {
+    "body": "pm0202_00_Body1 #43456.png",
+    "face": "pm0202_00_Eye1.png"
+  },
+  "203": {
+    "body": "pm0203_00_Body1.png",
+    "face": "pm0203_00_Eye1.png"
+  },
+  "204": {
+    "body": "pm0204_00_Body1.png",
+    "face": "pm0204_00_Eye1 #43929.png"
+  },
+  "205": {
+    "body": "pm0205_00_BodyAll1.png",
+    "face": "pm0205_00_Eye1.png"
+  },
+  "206": {
+    "body": "pm0206_00_Body1.png",
+    "face": null
+  },
+  "207": {
+    "body": "pm0207_00_Body1.png",
+    "face": "pm0207_00_Eye1.png"
+  },
+  "208": {
+    "body": "pm0208_00_BodyA1.png",
+    "face": "pm0208_00_Eye1 #44527.png",
+    "materialTextures": {
+      "BodyB": "pm0208_00_BodyB1.png",
+      "BodyC": "pm0208_00_BodyC1.png",
+      "BodyBNutrey_Lan": "pm0208_00_BodyB1 #44615.png",
+      "BodyCNutrey_Lan": "pm0208_00_BodyC1.png"
+    },
+    "followParentBones": [
+      "Head",
+      "Feeler",
+      "SpineB1",
+      "SpineB2",
+      "SpineB3",
+      "SpineB4",
+      "TailB1",
+      "TailB2",
+      "TailB3"
+    ]
+  },
+  "209": {
+    "body": "pm0209_00_Body1.png",
+    "face": "pm0209_00_Eye1.png"
+  },
+  "210": {
+    "body": "pm0210_00_BodyA1.png",
+    "face": "pm0210_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0210_00_BodyB1.png",
+      "BodyB_Lan": "pm0210_00_BodyB1.png"
+    }
+  },
+  "211": {
+    "body": "pm0211_00_Body1.png",
+    "face": "pm0211_00_Eye1.png"
+  },
+  "212": {
+    "body": "pm0212_00_BodyA1.png",
+    "face": "pm0212_00_Face1 #45381.png",
+    "materialTextures": {
+      "BodyB": "pm0212_00_BodyB1.png",
+      "BodyB_Lan": "pm0212_00_BodyB1 #45261.png"
+    }
+  },
+  "213": {
+    "body": "pm0213_00_Body1 #45469.png",
+    "face": "pm0213_00_Face1.png"
+  },
+  "214": {
+    "body": "pm0214_00_BodyA1.png",
+    "face": "pm0214_00_Face.png",
+    "materialTextures": {
+      "BodyB": "pm0214_00_BodyB1.png",
+      "BodyBRedibaVco00_Lan": "pm0214_00_BodyB1.png",
+      "BodyBSpc00_Lan": "pm0214_00_BodyB1.png"
+    },
+    "alphaMaterials": [
+      "BodyBRedibaVco00_Lan",
+      "BodyBSpc00_Lan"
+    ]
+  },
+  "215": {
+    "body": "pm0215_00_Body1.png",
+    "face": "pm0215_00_Face #45864.png"
+  },
+  "216": {
+    "body": "pm0216_00_Body1 #2764.png",
+    "face": "pm0216_00_Face #2754.png"
+  },
+  "217": {
+    "body": "pm0217_00_Body1 #2971.png",
+    "face": "pm0217_00_Eye1 #3008.png"
+  },
+  "218": {
+    "body": "pm0218_00_Body1.png",
+    "face": "pm0218_00_Eye1.png"
+  },
+  "219": {
+    "body": "pm0219_00_BodyAll1.png",
+    "face": "pm0219_00_Eye1.png"
+  },
+  "220": {
+    "body": "pm0220_00_Body1.png",
+    "face": "pm0220_00_Face1.png"
+  },
+  "221": {
+    "body": "pm0221_00_Body1.png",
+    "face": "pm0221_00_Face1.png"
+  },
+  "222": {
+    "body": "pm0222_00_BodyA1.png",
+    "face": "pm0222_00_Face1.png",
+    "materialTextures": {
+      "BodyB": "pm0222_00_BodyB1.png",
+      "BodyBSpc_Lan": "pm0222_00_BodyB1.png"
+    }
+  },
+  "223": {
+    "body": "pm0223_00_Body1.png",
+    "face": "pm0223_00_Eye1.png"
+  },
+  "224": {
+    "body": "pm0224_00_Body1.png",
+    "face": "pm0224_00_Eye1.png"
+  },
+  "225": {
+    "body": "pm0225_00_BodyA1.png",
+    "face": "pm0225_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0225_00_BodyB1.png",
+      "BodyBVco_Lan": "pm0225_00_BodyB1.png"
+    }
+  },
+  "226": {
+    "body": "pm0226_00_Body1.png",
+    "face": "pm0226_00_Face.png"
+  },
+  "227": {
+    "body": "pm0227_00_BodyA1 #3187.png",
+    "face": "pm0227_00_Eye1 #3195.png",
+    "materialTextures": {
+      "BodyB": "pm0227_00_BodyB1.png",
+      "BodyBArceus00_Lan": "pm0227_00_BodyB1.png"
+    }
+  },
+  "228": {
+    "body": "pm0228_00_Body1 #48161.png",
+    "face": "pm0228_00_Eye1.png"
+  },
+  "229": {
+    "body": "pm0229_00_Body1.png",
+    "face": "pm0229_00_Eye1.png"
+  },
+  "231": {
+    "body": "pm0231_00_Body1.png",
+    "face": "pm0231_00_Face.png"
+  },
+  "232": {
+    "body": "pm0232_00_BodyA1.png",
+    "face": "pm0232_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0232_00_BodyB1.png",
+      "BodyB_Lan": "pm0232_00_BodyB1.png"
+    }
+  },
+  "233": {
+    "body": "pm0233_00_Body1.png",
+    "face": "pm0233_00_Eye1 #49175.png"
+  },
+  "234": {
+    "body": "pm0234_00_BodyA1.png",
+    "face": "pm0234_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0234_00_BodyB1.png",
+      "BodyB00_Lan": "pm0234_00_BodyB1.png"
+    }
+  },
+  "235": {
+    "body": "pm0235_00_Body1.png",
+    "face": "pm0235_00_Face.png"
+  },
+  "236": {
+    "body": "pm0236_00_Body1.png",
+    "face": "pm0236_00_Face.png"
+  },
+  "237": {
+    "body": "pm0237_00_Body1.png",
+    "face": "pm0237_00_Face.png"
+  },
+  "238": {
+    "body": "pm0238_00_Body1 #1253.png",
+    "face": "pm0238_00_Eye1 #1182.png"
+  },
+  "239": {
+    "body": "pm0239_00_Body1.png",
+    "face": "pm0239_00_Face.png",
+    "removeMeshes": [
+      "pm0239_00_ThunderASkin",
+      "pm0239_00_ThunderBSkin"
+    ]
+  },
+  "240": {
+    "body": "pm0240_00_Body1.png",
+    "face": "pm0240_00_Eye1.png"
+  },
+  "241": {
+    "body": "pm0241_00_Body1.png",
+    "face": "pm0241_00_Eye1.png"
+  },
+  "242": {
+    "body": "pm0242_00_Body1.png",
+    "face": "pm0242_00_Face1.png"
+  },
+  "243": {
+    "body": "pm0243_00_BodyAll1.png",
+    "face": "pm0243_00_Eye1.png"
+  },
+  "244": {
+    "body": "pm0244_00_Body1.png",
+    "face": "pm0244_00_Eye1.png"
+  },
+  "245": {
+    "body": "pm0245_00_BodyA1.png",
+    "face": "pm0245_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0245_00_BodyB1.png"
+    }
+  },
+  "246": {
+    "body": "pm0246_00_Body1 #51783.png",
+    "face": "pm0246_00_Face1 #51748.png"
+  },
+  "247": {
+    "body": "pm0247_00_Body1 #51807.png",
+    "face": "pm0247_00_Eye1.png"
+  },
+  "248": {
+    "body": "pm0248_00_BodyAll1 #51916.png",
+    "face": "pm0248_00_Eye1.png"
+  },
+  "249": {
+    "body": "pm0249_00_Body1.png",
+    "face": "pm0249_00_Eye1.png"
+  },
+  "250": {
+    "body": "pm0250_00_BodyAll1.png",
+    "face": "pm0250_00_Eye1.png"
+  },
+  "251": {
+    "body": "pm0251_00_Body1.png",
+    "face": "pm0251_00_Face1.png"
+  },
+  "252": {
+    "body": "pm0252_00_Body1.png",
+    "face": "pm0252_00_Eye1.png"
+  },
+  "253": {
+    "body": "pm0253_00_Body1.png",
+    "face": "pm0253_00_Eye1.png"
+  },
+  "254": {
+    "body": "pm0254_00_BodyAll1.png",
+    "face": "pm0254_00_Eye1.png"
+  },
+  "255": {
+    "body": "pm0255_00_BodyAll1.png",
+    "face": "pm0255_00_Eye1.png"
+  },
+  "256": {
+    "body": "pm0256_00_Body1.png",
+    "face": "pm0256_00_Eye1.png"
+  },
+  "257": {
+    "body": "pm0257_00_BodyAll1.png",
+    "face": "pm0257_00_Eye1.png"
+  },
+  "258": {
+    "body": "pm0258_00_Body1 #54495.png",
+    "face": "pm0258_00_Eye1.png"
+  },
+  "259": {
+    "body": "pm0259_00_Body1 #54730.png",
+    "face": "pm0259_00_Eye1.png"
+  },
+  "260": {
+    "body": "pm0260_00_BodyAll1.png",
+    "face": "pm0260_00_Eye1 #54843.png"
+  },
+  "261": {
+    "body": "pm0261_00_Body1.png",
+    "face": "pm0261_00_Eye1.png"
+  },
+  "262": {
+    "body": "pm0262_00_BodyAll1.png",
+    "face": "pm0262_00_Eye1.png"
+  },
+  "263": {
+    "body": "pm0263_00_Body1.png",
+    "face": "pm0263_00_Eye1.png"
+  },
+  "264": {
+    "body": "pm0264_00_BodyAll1.png",
+    "face": "pm0264_00_Eye1.png"
+  },
+  "265": {
+    "body": "pm0265_00_Body1.png",
+    "face": "pm0265_00_Eye1.png"
+  },
+  "266": {
+    "body": "pm0266_00_Body1.png",
+    "face": "pm0266_00_Eye1.png"
+  },
+  "267": {
+    "body": "pm0267_00_BodyAll1.png",
+    "face": null
+  },
+  "268": {
+    "body": "pm0268_00_Body1.png",
+    "face": "pm0268_00_Eye1.png"
+  },
+  "269": {
+    "body": "pm0269_00_BodyAll1.png",
+    "face": "pm0269_00_Mouth1.png"
+  },
+  "270": {
+    "body": "pm0270_00_Body1.png",
+    "face": "pm0270_00_Face1.png"
+  },
+  "271": {
+    "body": "pm0271_00_Body1.png",
+    "face": "pm0271_00_Eye1.png"
+  },
+  "272": {
+    "body": "pm0272_00_BodyAll1.png",
+    "face": "pm0272_00_Eye1.png"
+  },
+  "273": {
+    "body": "pm0273_00_Body1 #57372.png",
+    "face": "pm0273_00_Eye1.png"
+  },
+  "274": {
+    "body": "pm0274_00_Body1.png",
+    "face": "pm0274_00_Face1 #57521.png"
+  },
+  "275": {
+    "body": "pm0275_00_BodyAll1.png",
+    "face": "pm0275_00_Eye1.png"
+  },
+  "276": {
+    "body": "pm0276_00_BodyAll1.png",
+    "face": "pm0276_00_Eye1.png"
+  },
+  "277": {
+    "body": "pm0277_00_BodyAll1.png",
+    "face": "pm0277_00_Eye1.png"
+  },
+  "278": {
+    "body": "pm0278_00_Body1.png",
+    "face": "pm0278_00_Eye1.png"
+  },
+  "279": {
+    "body": "pm0279_00_Body1.png",
+    "face": "pm0279_00_Eye1.png"
+  },
+  "280": {
+    "body": "pm0280_00_Body1 #58646.png",
+    "face": "pm0280_00_Face1 #58670.png"
+  },
+  "281": {
+    "body": "pm0281_00_Body1 #1447.png",
+    "face": "pm0281_00_Face1 #1451.png"
+  },
+  "282": {
+    "body": "pm0282_00_BodyAll1.png",
+    "face": "pm0282_00_Face1 #59039.png"
+  },
+  "283": {
+    "body": "pm0283_00_Body1.png",
+    "face": "pm0283_00_Eye1.png"
+  },
+  "284": {
+    "body": "pm0284_00_Body1.png",
+    "face": "pm0284_00_Eye1.png"
+  },
+  "285": {
+    "body": "pm0285_00_Body1.png",
+    "face": "pm0285_00_Face.png"
+  },
+  "286": {
+    "body": "pm0286_00_Body1.png",
+    "face": "pm0286_00_Eye1.png"
+  },
+  "287": {
+    "body": "pm0287_00_Body1.png",
+    "face": "pm0287_00_Face1.png"
+  },
+  "288": {
+    "body": "pm0288_00_Body1.png",
+    "face": "pm0288_00_Eye1.png"
+  },
+  "289": {
+    "body": "pm0289_00_Body1.png",
+    "face": "pm0289_00_Eye1.png"
+  },
+  "290": {
+    "body": "pm0290_00_Body1.png",
+    "face": "pm0290_00_Face1.png"
+  },
+  "291": {
+    "body": "pm0291_00_BodyA1.png",
+    "face": null,
+    "materialTextures": {
+      "BodyB": "pm0291_00_BodyB1.png"
+    }
+  },
+  "292": {
+    "body": "pm0292_00_Body1.png",
+    "face": null
+  },
+  "293": {
+    "body": "pm0293_00_Body1.png",
+    "face": "pm0293_00_Mouth1.png"
+  },
+  "294": {
+    "body": "pm0294_00_Body1.png",
+    "face": "pm0294_00_Eye1.png"
+  },
+  "295": {
+    "body": "pm0295_00_BodyAll1.png",
+    "face": "pm0295_00_Eye1.png"
+  },
+  "296": {
+    "body": "pm0296_00_Body1.png",
+    "face": null
+  },
+  "297": {
+    "body": "pm0297_00_BodyAll1.png",
+    "face": "pm0297_00_Eye1.png"
+  },
+  "298": {
+    "body": "pm0298_00_Body1.png",
+    "face": "pm0298_00_Face1.png"
+  },
+  "299": {
+    "body": "pm0299_00_Body1.png",
+    "face": "pm0299_00_Eye1.png"
+  },
+  "300": {
+    "body": "pm0300_00_Body1.png",
+    "face": "pm0300_00_Face1.png"
+  },
+  "301": {
+    "body": "pm0301_00_Body1.png",
+    "face": "pm0301_00_Face1.png"
+  },
+  "302": {
+    "body": "pm0302_00_Body1.png",
+    "face": "pm0302_00_Mouth1.png"
+  },
+  "303": {
+    "body": "pm0303_00_Body1.png",
+    "face": "pm0303_00_Eye1.png"
+  },
+  "304": {
+    "body": "pm0304_00_Body1.png",
+    "face": "pm0304_00_Face1.png"
+  },
+  "305": {
+    "body": "pm0305_00_Body1.png",
+    "face": "pm0305_00_Eye1.png"
+  },
+  "306": {
+    "body": "pm0306_00_BodyAll1.png",
+    "face": "pm0306_00_Eye1.png"
+  },
+  "307": {
+    "body": "pm0307_00_Body1.png",
+    "face": "pm0307_00_Face1.png"
+  },
+  "308": {
+    "body": "pm0308_00_Body1.png",
+    "face": "pm0308_00_Eye1.png"
+  },
+  "309": {
+    "body": "pm0309_00_Body1.png",
+    "face": "pm0309_00_Eye1.png"
+  },
+  "310": {
+    "body": "pm0310_00_Body1.png",
+    "face": "pm0310_00_Eye1.png"
+  },
+  "311": {
+    "body": "pm0311_00_Body1.png",
+    "face": "pm0311_00_Face1.png"
+  },
+  "312": {
+    "body": "pm0312_00_Body1.png",
+    "face": "pm0312_00_Face1.png"
+  },
+  "313": {
+    "body": "pm0313_00_Body1.png",
+    "face": "pm0313_00_Face1.png",
+    "materialTextures": {
+      "BodyB": "pm0313_00_BodyB1.png",
+      "BodyInc": "pm0313_00_BodyB1.png"
+    }
+  },
+  "314": {
+    "body": "pm0314_00_Body1.png",
+    "face": "pm0314_00_Face1.png"
+  },
+  "315": {
+    "body": "pm0315_00_Body1.png",
+    "face": "pm0315_00_Face1.png"
+  },
+  "316": {
+    "body": "pm0316_00_Body1.png",
+    "face": "pm0316_00_Eye1.png"
+  },
+  "317": {
+    "body": "pm0317_00_Body1.png",
+    "face": "pm0317_00_Eye1.png"
+  },
+  "318": {
+    "body": "pm0318_00_Body1.png",
+    "face": "pm0318_00_Eye1 #65910.png"
+  },
+  "319": {
+    "body": "pm0319_00_Body1.png",
+    "face": null
+  },
+  "320": {
+    "body": "pm0320_00_Body1.png",
+    "face": "pm0320_00_Eye1.png"
+  },
+  "321": {
+    "body": "pm0321_00_Body1.png",
+    "face": "pm0321_00_Eye1.png"
+  },
+  "322": {
+    "body": "pm0322_00_Body1.png",
+    "face": "pm0322_00_Face1.png"
+  },
+  "323": {
+    "body": "pm0323_00_BodyAll1.png",
+    "face": "pm0323_00_Eye1.png"
+  },
+  "324": {
+    "body": "pm0324_00_BodyAll1.png",
+    "face": "pm0324_00_Eye1.png",
+    "materialTextures": {
+      "BodyC": "pm0324_00_BodyC1.png",
+      "BodyCInc": "pm0324_00_BodyC1.png"
+    }
+  },
+  "325": {
+    "body": "pm0325_00_Body1.png",
+    "face": "pm0325_00_Eye1.png"
+  },
+  "326": {
+    "body": "pm0326_00_Body1.png",
+    "face": "pm0326_00_Face1.png"
+  },
+  "327": {
+    "body": "pm0327_00_Body1.png",
+    "face": "pm0327_00_Mouth1.png",
+    "materialTextures": {
+      "Line": "pm0327_00_Line1.png",
+      "APatch_11": "pm0327_00_PachiAA.png",
+      "BPatch_11": "pm0327_00_PachiAB.png",
+      "CPatch_11": "pm0327_00_PachiBC.png",
+      "DPatch_11": "pm0327_00_PachiBD.png"
+    },
+    "alphaMaterials": [
+      "Line",
+      "APatch_11",
+      "BPatch_11",
+      "CPatch_11",
+      "DPatch_11"
+    ]
+  },
+  "328": {
+    "body": "pm0328_00_Body1.png",
+    "face": "pm0328_00_Eye1 #67245.png"
+  },
+  "329": {
+    "body": "pm0329_00_BodyA1.png",
+    "face": "pm0329_00_Mouth1.png",
+    "materialTextures": {
+      "BodyB": "pm0329_00_BodyB1.png"
+    }
+  },
+  "330": {
+    "body": "pm0330_00_BodyAll1.png",
+    "face": "pm0330_00_Face1 #67626.png"
+  },
+  "331": {
+    "body": "pm0331_00_Body1.png",
+    "face": "pm0331_00_Eye1.png"
+  },
+  "332": {
+    "body": "pm0332_00_BodyAll1 #68011.png",
+    "face": "pm0332_00_Eye1.png"
+  },
+  "333": {
+    "body": "pm0333_00_Body1.png",
+    "face": "pm0333_00_Eye1.png"
+  },
+  "334": {
+    "body": "pm0334_00_BodyAll1.png",
+    "face": "pm0334_00_Eye1.png"
+  },
+  "335": {
+    "body": "pm0335_00_BodyAll1.png",
+    "face": null
+  },
+  "336": {
+    "body": "pm0336_00_Body1.png",
+    "face": "pm0336_00_Eye1.png"
+  },
+  "337": {
+    "body": "pm0337_00_Body1.png",
+    "face": "pm0337_00_Eye1.png"
+  },
+  "338": {
+    "body": "pm0338_00_BodyAll1.png",
+    "face": "pm0338_00_Eye1.png"
+  },
+  "339": {
+    "body": "pm0339_00_Body1.png",
+    "face": "pm0339_00_Face1.png"
+  },
+  "340": {
+    "body": "pm0340_00_Body1.png",
+    "face": "pm0340_00_Eye1.png"
+  },
+  "341": {
+    "body": "pm0341_00_Body1.png",
+    "face": "pm0341_00_Eye1.png"
+  },
+  "342": {
+    "body": "pm0342_00_BodyAll1.png",
+    "face": "pm0342_00_Eye1.png"
+  },
+  "343": {
+    "body": "pm0343_00_Body1.png",
+    "face": "pm0343_00_Eye1.png"
+  },
+  "344": {
+    "body": "pm0344_00_Body1.png",
+    "face": "pm0344_00_Eye1.png"
+  },
+  "345": {
+    "body": "pm0345_00_Body1.png",
+    "face": "pm0345_00_Eye1.png"
+  },
+  "346": {
+    "body": "pm0346_00_BodyAll1.png",
+    "face": "pm0346_00_Face1.png"
+  },
+  "347": {
+    "body": "pm0347_00_BodyA1.png",
+    "face": null,
+    "materialTextures": {
+      "BodyB": "pm0347_00_BodyB1.png"
+    }
+  },
+  "348": {
+    "body": "pm0348_00_BodyAll1.png",
+    "face": "pm0348_00_Eye1.png"
+  },
+  "349": {
+    "body": "pm0349_00_Body1.png",
+    "face": "pm0349_00_Eye1.png"
+  },
+  "350": {
+    "body": "pm0350_00_BodyAll1.png",
+    "face": "pm0350_00_Face1.png"
+  },
+  "351": {
+    "body": "pm0351_11_Body1.png",
+    "face": "pm0351_11_Face1.png",
+    "sourceStem": "pm0351_11_Rig"
+  },
+  "352": {
+    "body": "pm0352_00_Body1.png",
+    "face": "pm0352_00_Eye1.png"
+  },
+  "353": {
+    "body": "pm0353_00_Body1 #71534.png",
+    "face": "pm0353_00_Face1.png"
+  },
+  "354": {
+    "body": "pm0354_00_Body1 #71753.png",
+    "face": "pm0354_00_Eye1.png"
+  },
+  "355": {
+    "body": "pm0355_00_BodyA1.png",
+    "face": null,
+    "materialTextures": {
+      "BodyB": "pm0355_00_BodyB1.png"
+    }
+  },
+  "356": {
+    "body": "pm0356_00_Body1 #72025.png",
+    "face": "pm0356_00_Eye1.png"
+  },
+  "357": {
+    "body": "pm0357_00_BodyAll1.png",
+    "face": "pm0357_00_Eye1.png"
+  },
+  "358": {
+    "body": "pm0358_00_Body1.png",
+    "face": "pm0358_00_Face1.png"
+  },
+  "359": {
+    "body": "pm0359_00_Body1.png",
+    "face": "pm0359_00_Face1.png"
+  },
+  "360": {
+    "body": "pm0360_00_Body1.png",
+    "face": "pm0360_00_Eye1.png"
+  },
+  "361": {
+    "body": "pm0361_00_Body1 #72932.png",
+    "face": "pm0361_00_Face1 #72903.png"
+  },
+  "362": {
+    "body": "pm0362_00_BodyA1.png",
+    "face": "pm0362_00_Eye1.png",
+    "materialTextures": {
+      "BodyB": "pm0362_00_BodyB1.png",
+      "Body01": "pm0362_00_BodyB1.png"
+    }
+  },
+  "363": {
+    "body": "pm0363_00_Body1.png",
+    "face": "pm0363_00_Eye1.png"
+  },
+  "364": {
+    "body": "pm0364_00_Body1.png",
+    "face": "pm0364_00_Eye1.png"
+  },
+  "365": {
+    "body": "pm0365_00_BodyAll1.png",
+    "face": "pm0365_00_Eye1.png"
+  },
+  "366": {
+    "body": "pm0366_00_BodyAll1.png",
+    "face": "pm0366_00_Mouth1.png"
+  },
+  "367": {
+    "body": "pm0367_00_BodyAll1.png",
+    "face": "pm0367_00_Eye1.png"
+  },
+  "368": {
+    "body": "pm0368_00_Body1.png",
+    "face": "pm0368_00_Eye1.png"
+  },
+  "369": {
+    "body": "pm0369_00_Body1.png",
+    "face": null
+  },
+  "370": {
+    "body": "pm0370_00_Body1.png",
+    "face": "pm0370_00_Eye1.png"
+  },
+  "371": {
+    "body": "pm0371_00_Body1.png",
+    "face": "pm0371_00_Eye1.png"
+  },
+  "372": {
+    "body": "pm0372_00_Body1 #74366.png",
+    "face": "pm0372_00_Eye1 #74376.png"
+  },
+  "373": {
+    "body": "pm0373_00_BodyAll1.png",
+    "face": "pm0373_00_Eye1 #74546.png"
+  },
+  "374": {
+    "body": "pm0374_00_Body1 #74659.png",
+    "face": "pm0374_00_Eye1.png"
+  },
+  "375": {
+    "body": "pm0375_00_BodyAll1.png",
+    "face": "pm0375_00_Eye1.png"
+  },
+  "376": {
+    "body": "pm0376_00_BodyAll1.png",
+    "face": "pm0376_00_Eye1.png"
+  },
+  "377": {
+    "body": "pm0377_00_BodyAll1.png",
+    "face": null,
+    "materialTextures": {
+      "Face": "pm0377_00_BodyD1.png"
+    }
+  },
+  "378": {
+    "body": "pm0378_00_All1.png",
+    "face": "pm0378_00_EyeEnv.png"
+  },
+  "379": {
+    "body": "pm0379_00_BodyAll1.png",
+    "face": "pm0379_00_BodyC1.png",
+    "materialTextures": {
+      "BodyC": "pm0379_00_BodyC1.png"
+    }
+  },
+  "380": {
+    "body": "pm0380_00_Body1.png",
+    "face": "pm0380_00_Face1.png"
+  },
+  "381": {
+    "body": "pm0381_00_BodyAll1.png",
+    "face": "pm0381_00_Face1.png"
+  },
+  "382": {
+    "body": "pm0382_00_BodyAll1.png",
+    "face": "pm0382_00_Eye1.png"
+  },
+  "383": {
+    "body": "pm0383_00_BodyAll1.png",
+    "face": "pm0383_00_Eye1.png"
+  },
+  "384": {
+    "body": "pm0384_00_BodyAll1.png",
+    "face": "pm0384_00_Eye1.png"
+  },
+  "385": {
+    "body": "pm0385_00_BodyA1.png",
+    "face": "pm0385_00_Face1.png"
+  },
+  "386": {
+    "body": "pm0386_11_BodyAll1.png",
+    "face": "pm0386_11_Eye1.png",
+    "sourceStem": "pm0386_11_Rig"
+  }
+}

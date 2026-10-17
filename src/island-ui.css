@@ -1,0 +1,125 @@
+/* Compact, unframed island tools. The hit targets remain generous for young children. */
+.home .dock {
+  left:auto; right:max(18px,env(safe-area-inset-right));
+  bottom:max(18px,env(safe-area-inset-bottom)); transform:none;
+  width:auto; padding:0; gap:8px; border:0; border-radius:0;
+  background:transparent; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.home .dock .dock-btn {
+  flex:none; width:64px; min-width:64px; height:80px; padding:4px;
+  background:transparent; border:0; box-shadow:none; gap:4px;
+  color:#163f42; font-size:17px; line-height:1.2;
+  text-shadow:0 1px 3px #fffdf5,0 0 5px #fffdf5;
+}
+.home .dock .dock-btn .ico {
+  width:48px; height:48px; padding:7px; margin:0;
+  background:#f4f8e8d9; border:1px solid #fffdf5b3;
+  box-shadow:0 3px 7px #18494c20; filter:none;
+}
+.home .dock .badge { top:0; right:0; min-width:22px; height:22px; font-size:13px; text-shadow:none; }
+.home .dock button:focus-visible { outline:3px solid #246b57; outline-offset:3px; }
+.home .garden-panel,.home .facility-panel {
+  bottom:max(18px,env(safe-area-inset-bottom)); max-height:calc(100dvh - 150px); overflow:auto;
+}
+.home .garden-panel { flex-wrap:wrap; }
+
+@media(max-width:700px) {
+  .home .dock { right:max(12px,env(safe-area-inset-right)); bottom:max(12px,env(safe-area-inset-bottom)); gap:4px; }
+  .home .dock .dock-btn { width:56px; min-width:56px; height:72px; font-size:15px; }
+  .home .dock .dock-btn .ico { width:44px; height:44px; padding:6px; }
+}
+
+/* A small companion card leaves the island in view, with child-sized tap targets. */
+.home .companion-card {
+  left:auto; right:max(16px,env(safe-area-inset-right)); bottom:max(16px,env(safe-area-inset-bottom));
+  transform:none; width:min(344px,calc(100% - 32px)); padding:14px; display:block;
+  border:2px solid #e0e8ce; border-radius:26px; background:#fffbed;
+  box-shadow:0 5px 0 #a6bfa06b,0 12px 28px #214c4429;
+  max-height:calc(100% - 100px - env(safe-area-inset-top)); overflow-y:auto;
+  animation:companion-arrive .2s ease-out; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.home .companion-card .sheet-body { gap:12px; width:100%; min-width:0; }
+.companion-heading { display:flex; align-items:center; gap:12px; padding-right:40px; }
+.home .companion-card .sheet-art { width:60px; height:60px; flex:none; filter:none; background:#eaf1d9; border-radius:20px; }
+.home .companion-card .sheet-name { margin:0 0 4px; padding:0; font-size:23px; line-height:1.25; text-align:left; color:#254e42; }
+.companion-friendship { display:flex; }
+.companion-friendship .hearts .icon { width:19px; height:19px; }
+.home .companion-card .sheet-close { top:10px; right:10px; width:44px; height:44px; background:#edf0df; color:#436750; border:0; }
+.home .companion-card .sheet-close .icon { width:24px; height:24px; }
+.home .companion-card .actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.home .companion-card .act {
+  width:100%; height:66px; min-width:0; min-height:0; gap:3px; padding:6px 2px;
+  border:1px solid #d4e2c4; border-radius:17px; background:#edf3df; color:#2f5947;
+  box-shadow:0 2px 0 #ceddbb; font-size:17px; line-height:1.25;
+}
+.home .companion-card .act .icon { width:29px; height:29px; margin:0; }
+.home .companion-card .act.following { background:#30745a; color:#fffbed; border-color:#246048; box-shadow:0 2px 0 #21533e; }
+.home .companion-card .act.evolve { grid-column:1/-1; height:48px; flex-direction:row; gap:10px; background:#f9e9a8; border-color:#ddc575; }
+.home .companion-card button:focus-visible { outline:3px solid #35856b; outline-offset:2px; }
+.home .companion-card .say-back { display:flex; justify-content:space-around; gap:8px; flex-wrap:wrap; }
+.companion-listen { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-width:84px; min-height:64px; padding:8px; border-radius:16px; background:#edf3df; color:#2f5947; font-size:16px; }
+.home .companion-card .say-back .link { min-width:44px; min-height:44px; font-size:16px; }
+.home .companion-card .mic-label { font-size:14px; }
+.home .companion-card .said { padding:8px 12px; min-height:52px; font-size:17px; }
+@keyframes companion-arrive { from { opacity:0; translate:0 10px; } to { opacity:1; translate:0 0; } }
+@media(prefers-reduced-motion:reduce) { .home .companion-card { animation:none; } }
+
+.camera-gesture-hint{position:absolute;left:max(16px,env(safe-area-inset-left));bottom:112px;display:flex;align-items:center;gap:8px;padding:4px 6px 4px 14px;border-radius:18px;background:#fffbedc7;color:#31594e;font-size:13px;z-index:9;pointer-events:auto}.camera-gesture-hint button{width:44px;height:44px;border:0;background:transparent;color:inherit;font-size:24px}.home canvas{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+/* One gentle invitation at a time; never covers the island's main controls. */
+.care-request {position:absolute;left:max(16px,env(safe-area-inset-left));top:96px;z-index:10;max-width:min(360px,calc(100% - 32px));display:flex;align-items:center;gap:4px;padding:6px;border:2px solid #e5d3a7;border-radius:24px;background:#fff7e4f2;box-shadow:0 4px 0 #6e694329;color:#31594c;}
+.care-open {display:flex;align-items:center;gap:8px;padding:4px;border:0;background:none;color:inherit;text-align:left;min-height:56px;}
+.care-open img:not(.icon){width:52px;height:52px;object-fit:contain;}
+.care-open span,.follow-status span{display:flex;flex-direction:column;gap:4px;}
+.care-open strong{font-size:17px;}.care-open small{font-size:13px;}.care-later{font-size:13px;color:#65796b;min-width:48px;min-height:48px;padding:4px;background:none;}
+.companion-wish{display:flex;align-items:center;gap:8px;padding:10px;border-radius:16px;background:#fff0bc;color:#59613c;font-size:16px;line-height:1.5;}
+.home .companion-card .act.requested{background:#ffe3a0;border:2px solid #dba856;color:#594616;}
+.follow-status{position:absolute;left:max(16px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));display:flex;gap:6px;padding:6px;border-radius:22px;background:#fffbeded;color:#31594e;z-index:10;box-shadow:0 3px 0 #78977f40;}
+.follow-status button{display:flex;align-items:center;gap:10px;min-height:50px;padding:6px 10px;background:none;color:inherit;text-align:left;}.follow-status strong{font-size:17px;}.follow-status small{font-size:13px;}.follow-status button:last-child{border-radius:16px;background:#e3edda;}
+@media(max-width:700px){.care-request{top:85px;left:12px;max-width:calc(100% - 24px);}.care-open strong{font-size:15px;}.care-open img:not(.icon){width:40px;height:40px;}.follow-status{bottom:100px;left:12px;}.camera-gesture-hint{bottom:190px;}}
+
+/* Orchard cards share the island's warm paper, sage wood and rounded touch targets. */
+.home .farm-panel{position:absolute;z-index:24;right:max(18px,env(safe-area-inset-right));top:max(90px,calc(env(safe-area-inset-top) + 74px));width:340px;max-width:calc(100% - 24px);max-height:calc(100% - 112px - env(safe-area-inset-bottom));overflow:auto;overscroll-behavior:contain;padding:18px;border:2px solid #cad6b7;border-radius:26px;background:#fff9edee;box-shadow:0 8px 28px #244a3624;color:#304e40;touch-action:pan-y;}
+.farm-panel header{display:flex;align-items:center;gap:10px;margin-bottom:14px}.farm-panel h2{margin:0;font-size:21px}.farm-panel p{font-size:14px;line-height:1.5;margin:4px 0 12px}.farm-panel header p{margin:2px 0 0;color:#63715c}.farm-emblem{display:grid;place-items:center;width:46px;height:46px;border-radius:16px;background:#e1ebd2}.farm-panel header>button{margin-left:auto;min-width:44px;min-height:44px;border:0;border-radius:50%;background:#e9eddf;color:#425e49;cursor:pointer}
+.farm-plots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.farm-plots button{display:flex;align-items:center;flex-direction:column;gap:5px;min-height:94px;padding:9px 3px;border:2px solid #dce3cc;border-radius:16px;background:#f6f3e7;color:#526348;cursor:pointer}.farm-plots button[aria-pressed=true]{border-color:#628b66;background:#e1edce;box-shadow:0 3px 0 #71946933}.farm-plots strong{font-size:15px}.farm-plots small{font-size:12px}.farm-work{padding:15px 0 13px;border-bottom:1px solid #d9dfce}.farm-work h3{font-size:18px;margin:0 0 12px}.farm-work>small{font-size:12px;color:#62705a;display:block;margin-top:7px}.farm-work progress{appearance:none;width:100%;height:14px;border:0;border-radius:20px;overflow:hidden;background:#e5e3ce}.farm-work progress::-webkit-progress-bar{background:#e5e3ce}.farm-work progress::-webkit-progress-value{background:#78a570;border-radius:20px}.farm-work progress::-moz-progress-bar{background:#78a570}
+.farm-seeds{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.farm-seeds button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 3px;background:#fffdf5;border:1.5px solid #d6d9bf;border-radius:16px;cursor:pointer;color:#385843;min-height:100px}.farm-seeds b{font-size:14px}.farm-seeds small{font-size:13px;color:#5d764c}.berry-badge{display:inline-block;position:relative;width:27px;height:27px;border-radius:45% 48% 48% 46%;box-shadow:inset -4px -3px 0 #00000014,inset 3px 3px 0 #ffffff38;flex:none}.berry-badge i{position:absolute;top:-5px;left:15px;width:12px;height:7px;border-radius:2px 90% 2px 90%;background:#628857;transform:rotate(-25deg)}.berry-pecha{border-radius:45% 45% 55% 55%;transform:rotate(-10deg)}.berry-cheri{border-radius:50% 50% 42% 42%}
+.farm-primary,.farm-share{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;width:100%;border:0;border-radius:16px;background:#527c5b;color:#fffbea;font-size:17px;font-weight:750;box-shadow:0 3px 0 #36563e;cursor:pointer}.farm-primary.harvest{background:#e6b552;color:#4b421e;box-shadow:0 3px 0 #b58e42}.farm-primary:disabled{background:#dce4d2;color:#57664d;box-shadow:none;cursor:default}.farm-basket{display:flex;justify-content:space-between;gap:6px;margin:16px 0}.farm-basket>span{display:flex;align-items:center;gap:6px;font-size:11px}.farm-basket b{display:block;font-size:16px;color:#3d5d48}.farm-basket .berry-badge{width:21px;height:21px}.farm-message{font-size:13px;line-height:1.5;min-height:20px;color:#526747}.farm-share{background:#e7eed8;box-shadow:none;color:#456241;font-size:15px;margin-top:12px}.farm-friends{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:175px;overflow:auto;margin-top:12px}.farm-friends button{display:flex;flex-direction:column;align-items:center;padding:8px 3px;border:1px solid #cbd9bb;border-radius:14px;background:#fffcf2;font-size:12px;color:#395641;cursor:pointer}.farm-friends img{width:50px;height:50px;object-fit:contain}.station-label{position:absolute;top:57px;left:50%;transform:translateX(-50%);padding:4px 9px;border-radius:12px;background:#fff8e7;color:#3e624b;font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 2px 6px #29482b22;pointer-events:none}.station-button:has(.station-label)::after{display:none}
+.berry-menu{width:100%;color:#365542}.berry-menu h3{font-size:18px;margin:0 0 4px}.berry-menu p{font-size:12px;margin:0 0 10px;color:#63705e}.berry-menu>button{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;margin:7px 0;padding:8px 13px;text-align:left;border:1px solid #c9d6b8;border-radius:14px;background:#f1f4df;color:#365542;cursor:pointer}.berry-menu>button>span:nth-child(2){flex:1;font-size:16px;font-weight:700}.berry-menu small{display:block;font-size:12px;font-weight:400;margin-top:2px}.berry-menu>button:disabled{opacity:.5;cursor:default}.berry-menu-footer{display:flex;gap:6px;margin-top:10px}.berry-menu-footer button{flex:1;min-height:46px;padding:4px;border:0;border-radius:12px;background:#e7ead9;color:#446048;font-size:13px;cursor:pointer}
+.farm-panel button:focus-visible,.berry-menu button:focus-visible{outline:3px solid #bd8b2a;outline-offset:2px}
+@media(max-width:600px){.home .farm-panel{top:auto;bottom:max(10px,env(safe-area-inset-bottom));right:12px;width:calc(100% - 24px);max-height:56%;padding:14px;border-radius:22px}.farm-panel header{margin-bottom:10px}.farm-plots button{min-height:80px;padding:7px 2px;gap:3px}.farm-work{padding:12px 0}.farm-basket{margin:12px 0}.farm-seeds button{min-height:90px}}
+@media(prefers-reduced-motion:no-preference){.farm-primary.harvest .icon{animation:orchard-ready 2.5s ease-in-out infinite}@keyframes orchard-ready{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}}
+@media(min-width:601px) and (max-aspect-ratio:4/5){.home .farm-panel{top:auto;bottom:max(12px,env(safe-area-inset-bottom));right:16px;width:calc(100% - 32px);max-height:46%;}.farm-panel header{margin-bottom:10px}.farm-plots button{min-height:76px}.farm-work{padding:12px 0}.farm-seeds button{min-height:82px}.farm-basket{margin:12px 0}}
+
+/* A quiet camera status, outside the lower-right controls and left companion request. */
+.home .idle-observe-status{position:absolute;top:calc(var(--safe-top,0px) + 76px);right:20px;z-index:12;pointer-events:none;padding:9px 14px;border:1px solid #ffffff80;border-radius:20px;background:#edf8f0c9;color:#18483d;box-shadow:0 3px 14px #164b3920;font-size:14px;font-weight:800;backdrop-filter:blur(8px)}
+.home .idle-observe-status small{display:block;margin-top:2px;font-size:11px;font-weight:600;color:#426b5f}
+@media(max-width:600px){.home .idle-observe-status{right:auto;left:12px;top:auto;bottom:max(108px,calc(env(safe-area-inset-bottom) + 100px));max-width:170px;font-size:12px;padding:7px 11px}}
+
+/* Keep the invitation and selected companion away from the upper-left island entry. */
+.home .companion-card{left:max(16px,env(safe-area-inset-left));right:auto;top:auto;bottom:max(16px,env(safe-area-inset-bottom));}
+.home .care-request{top:auto;bottom:max(24px,env(safe-area-inset-bottom));left:max(16px,env(safe-area-inset-left));max-width:min(340px,calc(100% - 32px));}
+.home:has(.care-request) .camera-gesture-hint{display:none}
+@media(max-width:800px){.home .care-request{bottom:108px}}
+.tb-right button.energy-chip,.tb-right button.balls-chip{cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}.tb-right button.energy-chip{color:#674009}.tb-right button:focus-visible{outline:3px solid #2c8063;outline-offset:3px}
+
+/* A small portrait directory: one tap locates an owned friend without moving them. */
+.home .companions-launch{position:absolute;z-index:12;left:max(16px,env(safe-area-inset-left));top:calc(var(--safe-top,0px) + 80px);display:flex;align-items:center;gap:7px;min-height:54px;padding:4px 13px 4px 5px;border:2px solid #e1e7cd;border-radius:24px;background:#fffbeded;color:#31594c;box-shadow:0 3px 0 #6c8c5833;font-size:16px;font-weight:800}
+.companions-launch img{width:43px;height:43px;object-fit:contain}
+.home .companion-finder{position:absolute;z-index:24;left:max(16px,env(safe-area-inset-left));top:calc(var(--safe-top,0px) + 80px);width:min(340px,calc(100% - 32px));max-height:calc(100% - 110px - var(--safe-top,0px));overflow:auto;overscroll-behavior:contain;padding:14px;border:2px solid #d9e3c7;border-radius:25px;background:#fffbedf5;color:#31594c;box-shadow:0 5px 0 #a6bfa06b,0 12px 28px #214c4429}
+.companion-finder header{display:flex;align-items:center;justify-content:space-between;gap:8px}.companion-finder header strong{font-size:22px}.companion-finder header small{display:block;font-size:13px;margin-top:3px;color:#5f7460}.companion-finder header button{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:#e9eedb;color:inherit;flex:none}
+.companion-finder input{box-sizing:border-box;width:100%;height:44px;border:1px solid #bacaad;border-radius:14px;background:#fffef7;color:#31594c;padding:0 12px;margin:12px 0;font-size:16px}
+.companion-portraits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.companion-portraits button{min-height:99px;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px 2px;border:2px solid transparent;border-radius:18px;background:#ecf2dd;color:#31594c;font-size:14px;line-height:1.3;font-weight:750}.companion-portraits img{width:64px;height:64px;object-fit:contain}.companion-portraits button[aria-pressed=true]{border-color:#397a5b;background:#dcebc7}.companion-finder footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px}.companion-finder footer button{width:52px;min-height:46px;border-radius:15px;background:#e4ecd5;color:#31594c;font-size:28px}.companion-finder button:disabled{opacity:.35}.companion-finder button:focus-visible,.companions-launch:focus-visible{outline:3px solid #35856b;outline-offset:2px}.companion-no-match{font-size:15px;padding:12px 0}
+.home .companion-switch{display:flex;align-items:center;gap:8px;width:100%}.home .companion-switch button{display:flex;align-items:center;justify-content:center;gap:4px;min-height:48px;padding:4px 8px;border-radius:15px;background:#edf3df;color:#31594c;font-size:17px;flex:1}.home .companion-switch button:first-child,.home .companion-switch button:last-child{flex:0 0 68px;font-size:25px}.companion-switch img{width:36px;height:36px;object-fit:contain}
+@media(max-width:600px){.home .companions-launch{left:12px;top:calc(var(--safe-top,0px) + 128px);min-height:48px;font-size:14px}.home .companion-finder{top:calc(var(--safe-top,0px) + 128px);max-height:calc(100% - 144px - var(--safe-top,0px));left:12px;width:calc(100% - 24px)}}
+@media(max-width:600px){
+  .home .companion-card{padding:10px;bottom:12px;max-height:52%;}
+  .home .companion-card .sheet-body{gap:7px}
+  .home .companion-card .sheet-art{width:42px;height:42px;border-radius:14px}
+  .home .companion-card .sheet-name{font-size:20px}
+  .home .companion-card .living-preference{margin:0;font-size:12px}
+  .home .companion-card .companion-wish{padding:7px;font-size:13px;line-height:1.4}
+  .home .companion-card .actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .home .companion-card .act{height:54px;font-size:14px;border-radius:13px}
+  .home .companion-card .act .icon{width:25px;height:25px}
+  .home .companion-switch button{min-height:44px}
+}

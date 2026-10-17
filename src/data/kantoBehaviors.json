@@ -1,0 +1,4351 @@
+{
+  "13": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "独角虫慢慢地移动。",
+      "en": "Weedle moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "14": {
+    "locomotion": "crawl",
+    "speed": 0,
+    "trait": {
+      "zh": "铁壳蛹慢慢地移动。",
+      "en": "Kakuna moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "nap",
+        "zone": "bushes",
+        "path": "stay"
+      }
+    ]
+  },
+  "15": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "大针蜂会在天空中飞翔。",
+      "en": "Beedrill flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "19": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "小拉达喜欢跑来跑去。",
+      "en": "Rattata likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "20": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "拉达喜欢跑来跑去。",
+      "en": "Raticate likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "21": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "烈雀会在天空中飞翔。",
+      "en": "Spearow flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "22": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "大嘴雀会在天空中飞翔。",
+      "en": "Fearow flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "23": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "阿柏蛇慢慢地移动。",
+      "en": "Ekans moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "24": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "阿柏怪慢慢地移动。",
+      "en": "Arbok moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "27": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "穿山鼠喜欢跑来跑去。",
+      "en": "Sandshrew likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "28": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "穿山王喜欢跑来跑去。",
+      "en": "Sandslash likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "29": {
+    "locomotion": "hop",
+    "speed": 0.6,
+    "trait": {
+      "zh": "尼多兰喜欢在草地上走走看看。",
+      "en": "Nidoran♀ likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "30": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "尼多娜喜欢在草地上走走看看。",
+      "en": "Nidorina likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "31": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "尼多后喜欢在草地上走走看看。",
+      "en": "Nidoqueen likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "32": {
+    "locomotion": "hop",
+    "speed": 0.6,
+    "trait": {
+      "zh": "尼多朗喜欢在草地上走走看看。",
+      "en": "Nidoran♂ likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "33": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "尼多力诺喜欢在草地上走走看看。",
+      "en": "Nidorino likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "34": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "尼多王喜欢在草地上走走看看。",
+      "en": "Nidoking likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "41": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "超音蝠会在天空中飞翔。",
+      "en": "Zubat flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "42": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "大嘴蝠会在天空中飞翔。",
+      "en": "Golbat flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "46": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "派拉斯慢慢地移动。",
+      "en": "Paras moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "47": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "派拉斯特慢慢地移动。",
+      "en": "Parasect moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "48": {
+    "locomotion": "hop",
+    "speed": 0.6,
+    "trait": {
+      "zh": "毛球喜欢在草地上走走看看。",
+      "en": "Venonat likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "49": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "摩鲁蛾会在天空中飞翔。",
+      "en": "Venomoth flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "50": {
+    "locomotion": "walk",
+    "speed": 0,
+    "trait": {
+      "zh": "地鼠喜欢钻进地里。",
+      "en": "Diglett likes to dig."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "buried",
+        "zone": "meadow",
+        "path": "stay"
+      }
+    ]
+  },
+  "51": {
+    "locomotion": "walk",
+    "speed": 0,
+    "trait": {
+      "zh": "三地鼠喜欢钻进地里。",
+      "en": "Dugtrio likes to dig."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "buried",
+        "zone": "meadow",
+        "path": "stay"
+      }
+    ]
+  },
+  "56": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "猴怪喜欢跑来跑去。",
+      "en": "Mankey likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "57": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "火暴猴喜欢跑来跑去。",
+      "en": "Primeape likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "66": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "腕力喜欢在草地上走走看看。",
+      "en": "Machop likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "67": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "豪力喜欢在草地上走走看看。",
+      "en": "Machoke likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "68": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "怪力喜欢在草地上走走看看。",
+      "en": "Machamp likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "69": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "喇叭芽喜欢在草地上走走看看。",
+      "en": "Bellsprout likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "70": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "口呆花喜欢在草地上走走看看。",
+      "en": "Weepinbell likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "71": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "大食花喜欢在草地上走走看看。",
+      "en": "Victreebel likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "72": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "玛瑙水母喜欢在海水里游动。",
+      "en": "Tentacool swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "73": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "毒刺水母喜欢在海水里游动。",
+      "en": "Tentacruel swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "74": {
+    "locomotion": "float",
+    "speed": 0.75,
+    "trait": {
+      "zh": "小拳石会轻轻地飘在岩石旁。",
+      "en": "Geodude floats by the rocks."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ],
+    "altitude": 0.4
+  },
+  "75": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "隆隆石喜欢在草地上走走看看。",
+      "en": "Graveler likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ]
+  },
+  "76": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "隆隆岩喜欢在草地上走走看看。",
+      "en": "Golem likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ]
+  },
+  "77": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "小火马喜欢跑来跑去。",
+      "en": "Ponyta likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 17,
+        "activity": "play",
+        "zone": "sunny",
+        "path": "roam"
+      },
+      {
+        "from": 17,
+        "to": 21,
+        "activity": "warm",
+        "zone": "campfire",
+        "path": "stay"
+      }
+    ]
+  },
+  "78": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "烈焰马喜欢跑来跑去。",
+      "en": "Rapidash likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 17,
+        "activity": "play",
+        "zone": "sunny",
+        "path": "roam"
+      },
+      {
+        "from": 17,
+        "to": 21,
+        "activity": "warm",
+        "zone": "campfire",
+        "path": "stay"
+      }
+    ]
+  },
+  "81": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "小磁怪能轻轻地飘在空中。",
+      "en": "Magnemite floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "82": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "三合一磁怪能轻轻地飘在空中。",
+      "en": "Magneton floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "83": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "大葱鸭喜欢在草地上走走看看。",
+      "en": "Farfetch’d likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "84": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "嘟嘟喜欢跑来跑去。",
+      "en": "Doduo likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "85": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "嘟嘟利喜欢跑来跑去。",
+      "en": "Dodrio likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "86": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "小海狮喜欢在草地上走走看看。",
+      "en": "Seel likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "shore",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "shore",
+        "path": "shoreline"
+      }
+    ]
+  },
+  "87": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "白海狮喜欢在草地上走走看看。",
+      "en": "Dewgong likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "shore",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "shore",
+        "path": "shoreline"
+      }
+    ]
+  },
+  "88": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "臭泥慢慢地移动。",
+      "en": "Grimer moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "89": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "臭臭泥慢慢地移动。",
+      "en": "Muk moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "90": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "大舌贝喜欢在海水里游动。",
+      "en": "Shellder swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "91": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "刺甲贝喜欢在海水里游动。",
+      "en": "Cloyster swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "92": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "鬼斯能轻轻地飘在空中。",
+      "en": "Gastly floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "explore",
+        "zone": "moonlit",
+        "path": "circle"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "93": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "鬼斯通能轻轻地飘在空中。",
+      "en": "Haunter floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "explore",
+        "zone": "moonlit",
+        "path": "circle"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "94": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "耿鬼喜欢在草地上走走看看。",
+      "en": "Gengar likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "explore",
+        "zone": "moonlit",
+        "path": "circle"
+      }
+    ]
+  },
+  "95": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "大岩蛇慢慢地移动。",
+      "en": "Onix moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ]
+  },
+  "96": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "催眠貘喜欢在草地上走走看看。",
+      "en": "Drowzee likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "97": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "引梦貘人喜欢在草地上走走看看。",
+      "en": "Hypno likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "100": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "霹雳电球喜欢在草地上走走看看。",
+      "en": "Voltorb likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "101": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "顽皮雷弹喜欢在草地上走走看看。",
+      "en": "Electrode likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "102": {
+    "locomotion": "hop",
+    "speed": 0.6,
+    "trait": {
+      "zh": "蛋蛋喜欢在草地上走走看看。",
+      "en": "Exeggcute likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "103": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "椰蛋树喜欢在草地上走走看看。",
+      "en": "Exeggutor likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "106": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "飞腿郎喜欢在草地上走走看看。",
+      "en": "Hitmonlee likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "107": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "快拳郎喜欢在草地上走走看看。",
+      "en": "Hitmonchan likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "108": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "大舌头喜欢在草地上走走看看。",
+      "en": "Lickitung likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "109": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "瓦斯弹能轻轻地飘在空中。",
+      "en": "Koffing floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "explore",
+        "zone": "moonlit",
+        "path": "circle"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "110": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "双弹瓦斯能轻轻地飘在空中。",
+      "en": "Weezing floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 6,
+        "to": 18,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 18,
+        "to": 6,
+        "activity": "explore",
+        "zone": "moonlit",
+        "path": "circle"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "111": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "独角犀牛喜欢在草地上走走看看。",
+      "en": "Rhyhorn likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ]
+  },
+  "112": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "钻角犀兽喜欢在草地上走走看看。",
+      "en": "Rhydon likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "rocks",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "rocks",
+        "path": "roam"
+      }
+    ]
+  },
+  "113": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "吉利蛋喜欢在草地上走走看看。",
+      "en": "Chansey likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "114": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "蔓藤怪慢慢地移动。",
+      "en": "Tangela moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "115": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "袋兽喜欢在草地上走走看看。",
+      "en": "Kangaskhan likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "118": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "角金鱼喜欢在海水里游动。",
+      "en": "Goldeen swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "119": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "金鱼王喜欢在海水里游动。",
+      "en": "Seaking swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "122": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "魔墙人偶喜欢在草地上走走看看。",
+      "en": "Mr. Mime likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "123": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "飞天螳螂会在天空中飞翔。",
+      "en": "Scyther flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "124": {
+    "locomotion": "waddle",
+    "speed": 0.55,
+    "trait": {
+      "zh": "迷唇姐喜欢在草地上走走看看。",
+      "en": "Jynx likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "125": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "电击兽喜欢在草地上走走看看。",
+      "en": "Electabuzz likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "126": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "鸭嘴火兽喜欢在草地上走走看看。",
+      "en": "Magmar likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 17,
+        "activity": "play",
+        "zone": "sunny",
+        "path": "roam"
+      },
+      {
+        "from": 17,
+        "to": 21,
+        "activity": "warm",
+        "zone": "campfire",
+        "path": "stay"
+      }
+    ]
+  },
+  "127": {
+    "locomotion": "walk",
+    "speed": 0.75,
+    "trait": {
+      "zh": "凯罗斯喜欢在草地上走走看看。",
+      "en": "Pinsir likes to explore."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "128": {
+    "locomotion": "dash",
+    "speed": 1.4,
+    "trait": {
+      "zh": "肯泰罗喜欢跑来跑去。",
+      "en": "Tauros likes to run."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "132": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "百变怪慢慢地移动。",
+      "en": "Ditto moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ]
+  },
+  "137": {
+    "locomotion": "float",
+    "speed": 0.55,
+    "trait": {
+      "zh": "多边兽能轻轻地飘在空中。",
+      "en": "Porygon floats in the air."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 12,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 12,
+        "to": 13,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 13,
+        "to": 14,
+        "activity": "nap",
+        "zone": "beds",
+        "path": "stay"
+      },
+      {
+        "from": 14,
+        "to": 18,
+        "activity": "explore",
+        "zone": "meadow",
+        "path": "roam"
+      },
+      {
+        "from": 18,
+        "to": 19,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 19,
+        "to": 21,
+        "activity": "play",
+        "zone": "meadow",
+        "path": "roam"
+      }
+    ],
+    "altitude": 0.65
+  },
+  "138": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "菊石兽喜欢在海水里游动。",
+      "en": "Omanyte swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "139": {
+    "locomotion": "swim",
+    "speed": 0.7,
+    "trait": {
+      "zh": "多刺菊石兽喜欢在海水里游动。",
+      "en": "Omastar swims in the sea."
+    },
+    "schedule": [
+      {
+        "from": 0,
+        "to": 24,
+        "activity": "swim",
+        "zone": "sea",
+        "path": "roam"
+      }
+    ]
+  },
+  "140": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "化石盔慢慢地移动。",
+      "en": "Kabuto moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "shore",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "shore",
+        "path": "shoreline"
+      }
+    ]
+  },
+  "141": {
+    "locomotion": "crawl",
+    "speed": 0.3,
+    "trait": {
+      "zh": "镰刀盔慢慢地移动。",
+      "en": "Kabutops moves slowly."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "shore",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 21,
+        "activity": "explore",
+        "zone": "shore",
+        "path": "shoreline"
+      }
+    ]
+  },
+  "142": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "化石翼龙会在天空中飞翔。",
+      "en": "Aerodactyl flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 2.4
+  },
+  "144": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "急冻鸟会在天空中飞翔。",
+      "en": "Articuno flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 3.2
+  },
+  "145": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "闪电鸟会在天空中飞翔。",
+      "en": "Zapdos flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 3.2
+  },
+  "146": {
+    "locomotion": "fly",
+    "speed": 1.5,
+    "trait": {
+      "zh": "火焰鸟会在天空中飞翔。",
+      "en": "Moltres flies in the sky."
+    },
+    "schedule": [
+      {
+        "from": 21,
+        "to": 7,
+        "activity": "sleep",
+        "zone": "palms",
+        "path": "stay"
+      },
+      {
+        "from": 7,
+        "to": 8,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      },
+      {
+        "from": 8,
+        "to": 18,
+        "activity": "fly",
+        "zone": "sky",
+        "path": "circle"
+      },
+      {
+        "from": 18,
+        "to": 21,
+        "activity": "eat",
+        "zone": "campfire",
+        "path": "roam"
+      }
+    ],
+    "altitude": 3.2
+  }
+}

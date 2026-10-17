@@ -1,0 +1,68 @@
+{
+  "name": "pokepal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "dev:http": "NO_SSL=1 vite --port 5180",
+    "build": "npm run build:online",
+    "preview": "npm run preview:online",
+    "fetch:pokemon": "node scripts/fetch-pokemon.mjs",
+    "tripo": "node scripts/tripo-generate.mjs",
+    "models": "/Applications/Blender.app/Contents/MacOS/Blender -b -P scripts/convert-models.py -- models-src",
+    "voice:collect": "tsx scripts/voice/collect-lines.ts",
+    "voice:verify": "python3 scripts/voice/verify-pack.py",
+    "voice:pack": "python3 scripts/voice/pack.py",
+    "voice:coverage": "tsx scripts/voice/check-coverage.ts",
+    "android:prepare": "npm run build:ipad && node scripts/mobile/prepare-web.mjs && cap sync android",
+    "android:apk": "node scripts/mobile/build-apk.mjs",
+    "preview:usb": "NO_SSL=1 vite preview --host 127.0.0.1 --port 4188 --strictPort",
+    "build:online": "node scripts/online/build.mjs",
+    "preview:online": "NO_SSL=1 vite preview --mode online --host 127.0.0.1 --port 4190 --strictPort",
+    "test": "node scripts/run-tests.mjs",
+    "check": "npm run test && tsc --noEmit",
+    "build:ipad": "node scripts/build.mjs",
+    "prebuild:ipad": "npm run voice:collect && npm run voice:coverage && npm run voice:verify && npm run voice:pack",
+    "preview:ipad": "vite preview --host"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@fontsource/m-plus-1": "^5.1.0",
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/postprocessing": "^2.16.3",
+    "dexie": "^4.0.11",
+    "postprocessing": "^6.36.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0",
+    "three-stdlib": "^2.36.1",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vite-plugin-pwa": "^0.21.1"
+  },
+  "overrides": {
+    "@react-three/drei": {
+      "uuid": "11.1.1"
+    }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiamizhongshifu/pokepal.git"
+  }
+}

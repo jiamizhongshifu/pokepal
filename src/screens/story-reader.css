@@ -1,0 +1,44 @@
+/* Reading has three regions: navigation, a scrollable book, and unobscured controls. */
+#root .screen.story-reader { overflow:hidden; padding-bottom:env(safe-area-inset-bottom); }
+#root .story-reader > .topbar { flex:none; }
+#root .story-reader > .topbar.has-learning-tools { flex-wrap:nowrap; min-height:72px; padding:8px 24px; }
+#root .story-reader .tb-learning-tools { gap:16px; }
+#root .story-reader .story-page-count { display:block; padding:8px 12px; font-size:16px; }
+#root .story-reader .story-pages { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; scroll-padding:16px; }
+#root .story-reader .open-storybook { box-sizing:border-box; width:min(1200px,calc(100% - 32px)); margin:0 auto 16px; padding:16px 24px; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:16px 24px; align-content:start; }
+#root .story-reader .story-page-header { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+#root .story-reader .story-beat { margin:0; font-size:22px; }
+#root .story-reader .story-mode { margin:0; gap:8px; flex-wrap:nowrap; flex:none; }
+#root .story-reader .story-mode button { min-height:48px; padding:8px 12px; gap:6px; }
+#root .story-reader .story-mode small { display:none; }
+#root .story-reader .open-storybook > .story-stage { height:clamp(280px,46vh,480px); align-self:start; }
+#root .story-reader .story-reading-text { padding:0; }
+#root .story-reader .story-text-en { font-size:clamp(22px,2.4vw,28px); }
+#root .story-reader .story-parent-options { grid-column:1/-1; margin:0; }
+#root .story-reader .story-context { font-size:14px; color:var(--coast-muted); }
+#root .story-reader .story-primary-controls { position:static; flex:none; transform:none; width:min(620px,calc(100% - 32px)); margin:0 auto; padding:8px; box-shadow:none; background:transparent; border:0; border-radius:0; }
+#root .story-reader .story-primary-controls button { min-height:56px; }
+#root .story-reader .story-pause-note, #root .story-reader .story-audio-note { grid-column:1/-1; margin:0; }
+@media(min-width:701px) and (max-width:900px) {
+ #root .story-reader .open-storybook { grid-template-columns:minmax(0,1fr); }
+ #root .story-reader .open-storybook > .story-stage { height:clamp(280px,32vh,340px); }
+}
+@media(max-width:700px) {
+ #root .story-reader > .topbar.has-learning-tools { min-height:68px; padding:8px 12px; gap:8px; }
+ #root .story-reader .topbar.has-learning-tools .tb-left { min-width:0; gap:8px; }
+ #root .story-reader .topbar.has-learning-tools .tb-title { font-size:17px; }
+ #root .story-reader .tb-learning-tools { gap:8px; }
+ #root .story-reader .story-page-count { padding:6px; font-size:14px; }
+ #root .story-reader .open-storybook { width:calc(100% - 24px); padding:12px; grid-template-columns:minmax(0,1fr); gap:12px; }
+ #root .story-reader .story-page-header { flex-wrap:wrap; gap:8px; }
+ #root .story-reader .story-beat { font-size:20px; }
+ #root .story-reader .story-mode { margin-left:auto; }
+ #root .story-reader .story-mode button { padding:6px 8px; font-size:14px; }
+ #root .story-reader .story-mode .icon { width:24px; height:24px; }
+ #root .story-reader .open-storybook > .story-stage { height:clamp(220px,32vh,340px); }
+ #root .story-reader .story-primary-controls { width:calc(100% - 16px); padding:8px 0; }
+ #root .story-reader .story-primary-controls .story-listen small { display:none; }
+}
+@media(max-height:500px) and (min-width:701px) {
+ #root .story-reader .open-storybook > .story-stage { height:240px; }
+}

@@ -1,0 +1,42 @@
+.learning-stage-settings { color:#244c3c; }
+.learning-stage-settings header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.learning-stage-settings header h3 { font-size:24px; margin:0 0 8px; }
+.learning-stage-settings p { line-height:1.7; margin:8px 0; }
+.stage-current { padding:8px 12px; background:#e7f0dd; color:#31583d; border-radius:12px; font-weight:800; }
+.learning-stage-settings fieldset { min-width:0; border:0; padding:0; margin:0; }
+.stage-presets>legend,.stage-controls>legend { padding:20px 0 10px; font-size:16px; font-weight:800; }
+.stage-presets>button { display:flex; align-items:center; width:100%; gap:16px; padding:18px 12px; border:0; border-bottom:1px solid #d6e1ce; background:transparent; text-align:left; color:inherit; cursor:pointer; }
+.stage-presets>button[aria-pressed=true] { background:#edf4e6; border-radius:16px; outline:2px solid #537a50; outline-offset:-2px; }
+.stage-presets .icon { flex-shrink:0; }
+.stage-presets>button>span:nth-child(2) { flex:1; min-width:0; }
+.stage-presets strong,.stage-presets small,.stage-presets>button>span>span { display:block; }
+.stage-presets strong { font-size:21px; margin-bottom:6px; }
+.stage-presets>button>span>span { font-size:16px; font-weight:500; line-height:1.6; }
+.stage-presets small { color:#536a50; font-size:14px; font-weight:500; margin-top:6px; line-height:1.6; }
+.stage-check { color:#38744d; font-size:26px; flex-shrink:0; }
+.stage-custom { margin-top:18px; }
+.stage-custom summary { min-height:54px; display:flex; align-items:center; gap:8px; padding:10px 0; font-weight:800; cursor:pointer; }
+.stage-custom summary:after { content:'＋'; margin-left:auto; font-size:24px; }
+.stage-custom[open] summary:after { content:'−'; }
+.stage-custom summary b { font-size:13px; background:#e7f0dd; padding:4px 8px; border-radius:8px; }
+.stage-custom>p,.stage-controls small,.stage-footnote { color:#536a50; font-size:14px; }
+.stage-controls>fieldset { padding:14px 0; border-bottom:1px solid #d6e1ce; }
+.stage-controls>fieldset>legend { font-weight:800; font-size:17px; padding-top:12px; }
+.stage-controls>fieldset>div { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.stage-controls button { min-height:50px; padding:10px 16px; border:1px solid #becdb3; border-radius:14px; background:#f4f7ed; color:#244c3c; font-weight:700; cursor:pointer; }
+.stage-controls button[aria-pressed=true] { background:#397459; color:#fffbed; border-color:#397459; }
+.stage-controls small { display:block; line-height:1.6; }
+.stage-preview { margin-top:20px; padding:14px 16px; border-left:3px solid #799967; background:#f1f5e9; }
+.stage-preview strong { font-size:16px; }
+.stage-preview p { font-size:15px; }
+.stage-status { min-height:26px; color:#316346; font-size:15px; }
+.learning-stage-settings button:focus-visible,.stage-custom summary:focus-visible { outline:3px solid #997521; outline-offset:3px; }
+.learning-stage-settings button:disabled { opacity:.55; cursor:default; }
+@media(max-width:600px){
+ .stage-presets>button { gap:10px; padding:16px 8px; }
+ .stage-presets .icon { width:34px; height:34px; }
+ .stage-presets strong { font-size:19px; }
+ .stage-controls button { flex:1 1 120px; }
+ .stage-check { font-size:21px; }
+ .learning-stage-settings header h3 { font-size:22px; }
+}

@@ -1,0 +1,1942 @@
+{
+  "1": {
+    "file": "1.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "2": {
+    "file": "2.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "3": {
+    "file": "3.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "4": {
+    "file": "4.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "5": {
+    "file": "5.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "6": {
+    "file": "6.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "7": {
+    "file": "7.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "8": {
+    "file": "8.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "9": {
+    "file": "9.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "10": {
+    "file": "10.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "11": {
+    "file": "11.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "12": {
+    "file": "12.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "13": {
+    "file": "13.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "14": {
+    "file": "14.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "15": {
+    "file": "15.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "16": {
+    "file": "16.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "17": {
+    "file": "17.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "18": {
+    "file": "18.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "19": {
+    "file": "19.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "20": {
+    "file": "20.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "21": {
+    "file": "21.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "22": {
+    "file": "22.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "23": {
+    "file": "23.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "24": {
+    "file": "24.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "25": {
+    "file": "25.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "26": {
+    "file": "26.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "27": {
+    "file": "27.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "28": {
+    "file": "28.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "29": {
+    "file": "29.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "30": {
+    "file": "30.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "31": {
+    "file": "31.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "32": {
+    "file": "32.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "33": {
+    "file": "33.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "34": {
+    "file": "34.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "35": {
+    "file": "35.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "36": {
+    "file": "36.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "37": {
+    "file": "37.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "38": {
+    "file": "38.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "39": {
+    "file": "39.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "40": {
+    "file": "40.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "41": {
+    "file": "41.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "42": {
+    "file": "42.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "43": {
+    "file": "43.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "44": {
+    "file": "44.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "45": {
+    "file": "45.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "46": {
+    "file": "46.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "47": {
+    "file": "47.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "48": {
+    "file": "48.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "49": {
+    "file": "49.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "50": {
+    "file": "50.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "51": {
+    "file": "51.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "52": {
+    "file": "52.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "53": {
+    "file": "53.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "54": {
+    "file": "54.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "55": {
+    "file": "55.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "56": {
+    "file": "56.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "57": {
+    "file": "57.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "58": {
+    "file": "58.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "59": {
+    "file": "59.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "60": {
+    "file": "60.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "61": {
+    "file": "61.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "62": {
+    "file": "62.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "63": {
+    "file": "63.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "64": {
+    "file": "64.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "65": {
+    "file": "65.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "66": {
+    "file": "66.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "67": {
+    "file": "67.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "68": {
+    "file": "68.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "69": {
+    "file": "69.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "70": {
+    "file": "70.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "71": {
+    "file": "71.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "72": {
+    "file": "72.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "73": {
+    "file": "73.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "74": {
+    "file": "74.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "75": {
+    "file": "75.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "76": {
+    "file": "76.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "77": {
+    "file": "77.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "78": {
+    "file": "78.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "79": {
+    "file": "79.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "80": {
+    "file": "80.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "81": {
+    "file": "81.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "82": {
+    "file": "82.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "83": {
+    "file": "83.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "84": {
+    "file": "84.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "85": {
+    "file": "85.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "86": {
+    "file": "86.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "87": {
+    "file": "87.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "88": {
+    "file": "88.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "89": {
+    "file": "89.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "90": {
+    "file": "90.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "91": {
+    "file": "91.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "92": {
+    "file": "92.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "93": {
+    "file": "93.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "94": {
+    "file": "94.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "95": {
+    "file": "95.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "96": {
+    "file": "96.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "97": {
+    "file": "97.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "98": {
+    "file": "98.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "99": {
+    "file": "99.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "100": {
+    "file": "100.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "101": {
+    "file": "101.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "102": {
+    "file": "102.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "103": {
+    "file": "103.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "104": {
+    "file": "104.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "105": {
+    "file": "105.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "106": {
+    "file": "106.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "107": {
+    "file": "107.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "108": {
+    "file": "108.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "109": {
+    "file": "109.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "110": {
+    "file": "110.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "111": {
+    "file": "111.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "112": {
+    "file": "112.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "113": {
+    "file": "113.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "114": {
+    "file": "114.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "115": {
+    "file": "115.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "116": {
+    "file": "116.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "117": {
+    "file": "117.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "118": {
+    "file": "118.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "119": {
+    "file": "119.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "120": {
+    "file": "120.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "121": {
+    "file": "121.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "122": {
+    "file": "122.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "123": {
+    "file": "123.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "124": {
+    "file": "124.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "125": {
+    "file": "125.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "126": {
+    "file": "126.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "127": {
+    "file": "127.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "128": {
+    "file": "128.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "129": {
+    "file": "129.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "130": {
+    "file": "130.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "131": {
+    "file": "131.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "132": {
+    "file": "132.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "133": {
+    "file": "133.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "134": {
+    "file": "134.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "135": {
+    "file": "135.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "136": {
+    "file": "136.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "137": {
+    "file": "137.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "138": {
+    "file": "138.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "139": {
+    "file": "139.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "140": {
+    "file": "140.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "141": {
+    "file": "141.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "142": {
+    "file": "142.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "143": {
+    "file": "143.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "144": {
+    "file": "144.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "145": {
+    "file": "145.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "146": {
+    "file": "146.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "147": {
+    "file": "147.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "148": {
+    "file": "148.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "149": {
+    "file": "149.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "150": {
+    "file": "150.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "151": {
+    "file": "151.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "152": {
+    "file": "152.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "153": {
+    "file": "153.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "154": {
+    "file": "154.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "155": {
+    "file": "155.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "156": {
+    "file": "156.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "157": {
+    "file": "157.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "158": {
+    "file": "158.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "159": {
+    "file": "159.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "160": {
+    "file": "160.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "161": {
+    "file": "161.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "162": {
+    "file": "162.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "163": {
+    "file": "163.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "164": {
+    "file": "164.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "165": {
+    "file": "165.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "166": {
+    "file": "166.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "167": {
+    "file": "167.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "168": {
+    "file": "168.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "169": {
+    "file": "169.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "170": {
+    "file": "170.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "171": {
+    "file": "171.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "172": {
+    "file": "172.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "173": {
+    "file": "173.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "174": {
+    "file": "174.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "175": {
+    "file": "175.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "176": {
+    "file": "176.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "177": {
+    "file": "177.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "178": {
+    "file": "178.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "179": {
+    "file": "179.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "180": {
+    "file": "180.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "181": {
+    "file": "181.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "182": {
+    "file": "182.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "183": {
+    "file": "183.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "184": {
+    "file": "184.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "185": {
+    "file": "185.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "186": {
+    "file": "186.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "187": {
+    "file": "187.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "188": {
+    "file": "188.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "189": {
+    "file": "189.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "190": {
+    "file": "190.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "191": {
+    "file": "191.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "192": {
+    "file": "192.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "193": {
+    "file": "193.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "194": {
+    "file": "194.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "195": {
+    "file": "195.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "196": {
+    "file": "196.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "197": {
+    "file": "197.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "198": {
+    "file": "198.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "199": {
+    "file": "199.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "200": {
+    "file": "200.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "201": {
+    "file": "201.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "202": {
+    "file": "202.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "203": {
+    "file": "203.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "204": {
+    "file": "204.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "205": {
+    "file": "205.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "206": {
+    "file": "206.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "207": {
+    "file": "207.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "208": {
+    "file": "208.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "209": {
+    "file": "209.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "210": {
+    "file": "210.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "211": {
+    "file": "211.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "212": {
+    "file": "212.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "213": {
+    "file": "213.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "214": {
+    "file": "214.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "215": {
+    "file": "215.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "216": {
+    "file": "216.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "217": {
+    "file": "217.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "218": {
+    "file": "218.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "219": {
+    "file": "219.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "220": {
+    "file": "220.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "221": {
+    "file": "221.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "222": {
+    "file": "222.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "223": {
+    "file": "223.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "224": {
+    "file": "224.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "225": {
+    "file": "225.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "226": {
+    "file": "226.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "227": {
+    "file": "227.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "228": {
+    "file": "228.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "229": {
+    "file": "229.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "230": {
+    "file": "230.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "231": {
+    "file": "231.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "232": {
+    "file": "232.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "233": {
+    "file": "233.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "234": {
+    "file": "234.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "235": {
+    "file": "235.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "236": {
+    "file": "236.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "237": {
+    "file": "237.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "238": {
+    "file": "238.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "239": {
+    "file": "239.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "240": {
+    "file": "240.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "241": {
+    "file": "241.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "242": {
+    "file": "242.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "243": {
+    "file": "243.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "244": {
+    "file": "244.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "245": {
+    "file": "245.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "246": {
+    "file": "246.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "247": {
+    "file": "247.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "248": {
+    "file": "248.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "249": {
+    "file": "249.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "250": {
+    "file": "250.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "251": {
+    "file": "251.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "252": {
+    "file": "252.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "253": {
+    "file": "253.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "254": {
+    "file": "254.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "255": {
+    "file": "255.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "256": {
+    "file": "256.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "257": {
+    "file": "257.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "258": {
+    "file": "258.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "259": {
+    "file": "259.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "260": {
+    "file": "260.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "261": {
+    "file": "261.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "262": {
+    "file": "262.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "263": {
+    "file": "263.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "264": {
+    "file": "264.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "265": {
+    "file": "265.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "266": {
+    "file": "266.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "267": {
+    "file": "267.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "268": {
+    "file": "268.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "269": {
+    "file": "269.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "270": {
+    "file": "270.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "271": {
+    "file": "271.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "272": {
+    "file": "272.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "273": {
+    "file": "273.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "274": {
+    "file": "274.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "275": {
+    "file": "275.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "276": {
+    "file": "276.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "277": {
+    "file": "277.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "278": {
+    "file": "278.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "279": {
+    "file": "279.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "280": {
+    "file": "280.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "281": {
+    "file": "281.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "282": {
+    "file": "282.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "283": {
+    "file": "283.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "284": {
+    "file": "284.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "285": {
+    "file": "285.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "286": {
+    "file": "286.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "287": {
+    "file": "287.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "288": {
+    "file": "288.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "289": {
+    "file": "289.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "290": {
+    "file": "290.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "291": {
+    "file": "291.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "292": {
+    "file": "292.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "293": {
+    "file": "293.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "294": {
+    "file": "294.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "295": {
+    "file": "295.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "296": {
+    "file": "296.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "297": {
+    "file": "297.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "298": {
+    "file": "298.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "299": {
+    "file": "299.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "300": {
+    "file": "300.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "301": {
+    "file": "301.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "302": {
+    "file": "302.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "303": {
+    "file": "303.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "304": {
+    "file": "304.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "305": {
+    "file": "305.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "306": {
+    "file": "306.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "307": {
+    "file": "307.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "308": {
+    "file": "308.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "309": {
+    "file": "309.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "310": {
+    "file": "310.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "311": {
+    "file": "311.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "312": {
+    "file": "312.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "313": {
+    "file": "313.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "314": {
+    "file": "314.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "315": {
+    "file": "315.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "316": {
+    "file": "316.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "317": {
+    "file": "317.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "318": {
+    "file": "318.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "319": {
+    "file": "319.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "320": {
+    "file": "320.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "321": {
+    "file": "321.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "322": {
+    "file": "322.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "323": {
+    "file": "323.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "324": {
+    "file": "324.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "325": {
+    "file": "325.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "326": {
+    "file": "326.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "327": {
+    "file": "327.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "328": {
+    "file": "328.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "329": {
+    "file": "329.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "330": {
+    "file": "330.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "331": {
+    "file": "331.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "332": {
+    "file": "332.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "333": {
+    "file": "333.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "334": {
+    "file": "334.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "335": {
+    "file": "335.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "336": {
+    "file": "336.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "337": {
+    "file": "337.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "338": {
+    "file": "338.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "339": {
+    "file": "339.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "340": {
+    "file": "340.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "341": {
+    "file": "341.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "342": {
+    "file": "342.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "343": {
+    "file": "343.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "344": {
+    "file": "344.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "345": {
+    "file": "345.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "346": {
+    "file": "346.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "347": {
+    "file": "347.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "348": {
+    "file": "348.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "349": {
+    "file": "349.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "350": {
+    "file": "350.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "351": {
+    "file": "351.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "352": {
+    "file": "352.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "353": {
+    "file": "353.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "354": {
+    "file": "354.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "355": {
+    "file": "355.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "356": {
+    "file": "356.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "357": {
+    "file": "357.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "358": {
+    "file": "358.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "359": {
+    "file": "359.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "360": {
+    "file": "360.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "361": {
+    "file": "361.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "362": {
+    "file": "362.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "363": {
+    "file": "363.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "364": {
+    "file": "364.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "365": {
+    "file": "365.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "366": {
+    "file": "366.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "367": {
+    "file": "367.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "368": {
+    "file": "368.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "369": {
+    "file": "369.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "370": {
+    "file": "370.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "371": {
+    "file": "371.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "372": {
+    "file": "372.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "373": {
+    "file": "373.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "374": {
+    "file": "374.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "375": {
+    "file": "375.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "376": {
+    "file": "376.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "377": {
+    "file": "377.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "378": {
+    "file": "378.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "379": {
+    "file": "379.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "380": {
+    "file": "380.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "381": {
+    "file": "381.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "382": {
+    "file": "382.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "383": {
+    "file": "383.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "384": {
+    "file": "384.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "385": {
+    "file": "385.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "386": {
+    "file": "386.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "999": {
+    "file": "999.glb",
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "1000": {
+    "file": "1000.glb",
+    "idle": "idle",
+    "walk": "walk"
+  }
+}

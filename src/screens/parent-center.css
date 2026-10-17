@@ -1,0 +1,102 @@
+/* Parent tools share the island palette, with quieter, adult-readable hierarchy. */
+#root .parent-organized{background:var(--page-bg);color:var(--coast-ink);padding-bottom:0;overflow:hidden;min-height:0}
+#root .parent-organized .parent-head{flex:none;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) 14px max(24px,env(safe-area-inset-left));backdrop-filter:none;box-shadow:none;z-index:2}
+#root .parent-title-row{display:flex;align-items:center;gap:14px}
+#root .parent-title-row .back{width:48px;height:48px;min-width:48px}
+#root .parent-title-row h2{font-size:24px}
+#root .parent-organized .tabs{margin:0;gap:8px}
+#root .parent-organized .tabs button{border:1px solid var(--coast-line);background:transparent;font-size:16px;padding:10px 18px;border-radius:14px;box-shadow:none}
+#root .parent-organized .tabs button.on{background:var(--coast-blue);color:var(--coast-paper)}
+#root .parent-organized .parent-body{min-height:0;flex:1;width:min(940px,100%);padding:24px 28px calc(36px + env(safe-area-inset-bottom));overscroll-behavior:contain;scroll-padding-top:20px;overflow-y:auto;overflow-x:hidden}
+#root .parent-page-intro{margin:0 0 24px}
+#root .parent-page-intro h2{font-size:26px;line-height:1.4;margin:0 0 6px;color:var(--coast-ink)}
+#root .parent-page-intro h2:focus{outline:none}
+#root .parent-page-intro p{font-size:15px;color:var(--coast-muted);margin:0;line-height:1.65}
+#root .parent-organized .parent-body section{padding:22px;margin:0 0 20px;box-shadow:none;border-radius:20px;overflow:visible}
+#root .parent-organized :is(p,small){line-height:1.65}
+#root .parent-organized p{font-size:16px}
+#root .parent-organized .muted{color:var(--coast-muted);font-size:14px;line-height:1.7}
+#root .parent-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+#root .parent-eyebrow{font-size:14px;color:var(--coast-muted)}
+#root .parent-section-heading h3{font-size:25px;margin:8px 0 0}
+#root .parent-inline-action{display:flex;align-items:center;gap:6px;flex:none;border:1px solid var(--coast-line);background:transparent;color:var(--coast-ink);padding:10px 12px;border-radius:12px;min-height:44px;font-size:14px}
+#root .parent-course-progress{color:var(--coast-muted);font-size:14px;margin:10px 0 20px}
+#root .parent-home-idea{display:flex;align-items:flex-start;gap:12px;padding:16px 0;border-top:1px solid var(--coast-line);border-bottom:1px solid var(--coast-line)}
+#root .parent-home-idea>.icon{flex:none}
+#root .parent-home-idea strong{font-size:16px}
+#root .parent-home-idea p{margin:6px 0 0;line-height:1.7}
+#root .parent-review-note{font-size:14px;color:var(--coast-muted);margin:16px 0 12px}
+#root .parent-organized .btn-small{font-size:15px;min-height:46px;padding:10px 16px;box-shadow:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px}
+#root .parent-today h3{margin:0 0 18px}
+#root .parent-today dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;gap:16px}
+#root .parent-today dl>div+div{border-left:1px solid var(--coast-line);padding-left:20px}
+#root .parent-today dt{font-size:14px;color:var(--coast-muted)}
+#root .parent-today dd{margin:8px 0 0;font-size:28px;font-weight:750}
+#root .parent-today dd small{font-size:14px;font-weight:500;white-space:nowrap}
+#root .parent-today>p{font-size:13px;color:var(--coast-muted);margin:16px 0 0}
+#root .parent-detail-heading{font-size:16px;color:var(--coast-muted);margin:24px 0 6px}
+#root .parent-fold{margin:0;border-bottom:1px solid var(--coast-line);color:var(--coast-ink)}
+#root .parent-fold>summary{display:flex;align-items:center;gap:14px;list-style:none;min-height:80px;padding:16px 4px;cursor:pointer;font-size:17px;font-weight:700}
+#root .parent-fold>summary::-webkit-details-marker{display:none}
+#root .parent-fold>summary>.icon{flex:none}
+#root .parent-fold>summary>span{flex:1;min-width:0}
+#root .parent-fold>summary small{display:block;font-weight:400;color:var(--coast-muted);font-size:14px;margin-top:4px}
+#root .parent-fold>summary::after{content:'＋';font-size:22px;color:var(--coast-muted);flex:none}
+#root .parent-fold[open]>summary::after{content:'−'}
+#root .parent-fold-content{padding:4px 4px 22px;min-width:0}
+#root .parent-fold-content>section{background:transparent;border:0;padding:0;box-shadow:none}
+#root .parent-organized .parent-stage-fold .learning-stage-settings{margin:0}
+#root .parent-organized .parent-stage-fold .stage-footnote{font-size:13px}
+#root .parent-organized .parent-routine{margin:16px 0 0}
+#root .parent-organized .form label{font-size:16px;line-height:1.6}
+#root .parent-organized .form{gap:20px}
+#root .parent-organized .seg{gap:8px;flex-wrap:wrap}
+#root .parent-organized .seg button{font-size:15px;padding:10px 16px;min-height:46px}
+#root .parent-inner-fold{margin:8px 0;font-size:14px;border-top:1px solid var(--coast-line)}
+#root .parent-inner-fold>summary{padding:14px 0;min-height:48px;cursor:pointer;font-weight:600}
+#root .parent-inner-fold p{font-size:14px;color:var(--coast-muted)}
+#root .parent-organized .parent-voice-preview{align-self:flex-start}
+#root .parent-table-scroll{max-width:100%;overflow-x:auto}
+#root .parent-table-scroll table{min-width:620px}
+#root .parent-table-scroll th{font-size:14px;color:var(--coast-muted)}
+#root .parent-table-scroll td{font-size:16px}
+#root .parent-table-hint{font-size:13px;color:var(--coast-muted)}
+#root .parent-organized .chip{min-height:44px;border:1px solid var(--coast-line);background:#e7f2ee;color:var(--coast-ink);font:inherit}
+#root .parent-organized .recs{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+#root .parent-organized .rec{overflow-wrap:anywhere;color:var(--coast-ink);background:var(--coast-paper)}
+#root .parent-record-definitions{margin:12px 0}
+#root .parent-record-definitions>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--coast-line);font-size:15px}
+#root .parent-record-definitions dd{margin:0;flex:none}
+#root .parent-search{display:flex;flex-direction:column;gap:8px;font-size:15px}
+#root .parent-search input{width:100%;max-width:440px;min-height:46px;border:1px solid var(--coast-line);background:var(--coast-paper);color:var(--coast-ink);border-radius:12px;padding:10px 12px;font:inherit}
+#root .parent-fav-filter{display:flex;gap:10px;align-items:center;min-height:48px;margin:8px 0 12px;font-size:15px}
+#root .parent-fav-filter input{width:20px;height:20px}
+#root .parent-organized .fav-grid{margin-bottom:14px}
+#root .parent-organized .fav small{font-size:12px}
+#root .parent-organized .device-setup{width:100%;max-width:none;margin:0 0 20px}
+#root .parent-organized .parent-danger>summary{color:#8c463c}
+#root .parent-organized .parent-danger .danger{background:#f7e6df;color:#8c3027;border:1px solid #cb9c91}
+#root .parent-organized .toast{z-index:100;pointer-events:none;max-width:calc(100% - 32px);overflow-wrap:anywhere}
+@media(max-width:680px){
+ #root .parent-organized .parent-head{gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+ #root .parent-organized .tabs{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #root .parent-organized .tabs button{padding:8px 4px;gap:5px;font-size:14px;min-height:48px}
+ #root .parent-organized .tabs .icon{width:20px!important;height:20px!important}
+ #root .parent-organized .parent-body{padding:20px 16px calc(32px + env(safe-area-inset-bottom))}
+ #root .parent-page-intro h2{font-size:23px}
+ #root .parent-organized .parent-body section{padding:18px}
+ #root .parent-fold-content>section{padding:0!important}
+ #root .parent-section-heading{flex-wrap:wrap;gap:12px}
+ #root .parent-section-heading h3{font-size:23px}
+ #root .parent-today dl{gap:10px}
+ #root .parent-today dl>div+div{padding-left:10px}
+ #root .parent-today dd{font-size:23px}
+ #root .parent-today dd small{display:block;font-size:12px}
+ #root .parent-fold>summary{gap:10px;font-size:16px}
+ #root .parent-organized .row{flex-wrap:wrap}
+ #root .parent-organized .fav-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+#root .parent-organized .parent-routine{gap:14px}
+#root .parent-organized .parent-routine h3,#root .parent-organized .parent-routine>p{margin:0}
+#root .parent-organized .parent-routine .parent-inner-fold{margin:0}
+#root .parent-organized .parent-routine .parent-inner-fold>summary{padding:12px 0}
