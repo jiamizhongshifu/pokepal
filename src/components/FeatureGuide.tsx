@@ -1,6 +1,7 @@
 import {modalIsOpen} from '../lib/modalLayer';
+import {holdGuide} from '../lib/guidePause';
 import {useEffect,useLayoutEffect,useRef,useState,useId,type ReactNode} from 'react';
-import {GUIDES,type GuideId} from '../data/onboarding';
+import {GUIDES,guideVoiceState,type GuideId} from '../data/onboarding';
 import {useGame} from '../store';
 import {Icon} from '../icons';
 import {isForegroundAudioActive,sayCancellableWhile,unlockAudio} from '../lib/speech';
@@ -8,23 +9,25 @@ import {isMicActive} from '../lib/mic';
 import './feature-guide.css';
 
 /** Contextual, non-modal help: one real action, no rewards, no focus stealing. */
-export function FeatureGuide({id,enabled=true,autoVoice=true,floating=false,topics,compact=true,onVoiceStart,children}:{children?:ReactNode;id:GuideId;enabled?:boolean;autoVoice?:boolean;floating?:boolean;topics?:GuideId[];compact?:boolean;onVoiceStart?:()=>void}){
+export function FeatureGuide({id,enabled=true,autoVoice=true,autoOpen=true,floating=false,topics,compact=true,onVoiceStart,children}:{children?:ReactNode;id:GuideId;enabled?:boolean;autoVoice?:boolean;autoOpen?:boolean;floating?:boolean;topics?:GuideId[];compact?:boolean;onVoiceStart?:()=>void}){
  const [topic,setTopic]=useState(id),[manual,setManual]=useState(false);
  useEffect(()=>{setTopic(id);setManual(false);},[id]);
  if(!enabled)return null;
- return <Guide key={topic} onVoiceStart={onVoiceStart} compact={compact} id={topic} autoVoice={autoVoice} floating={floating} topics={topics} manual={manual} children={children} onTopic={next=>{setManual(true);setTopic(next);}}/>;
+ return <Guide key={topic} onVoiceStart={onVoiceStart} compact={compact} id={topic} autoVoice={autoVoice} autoOpen={autoOpen} floating={floating} topics={topics} manual={manual} children={children} onTopic={next=>{setManual(true);setTopic(next);}}/>;
 }
-function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart,children}:{children?:ReactNode;onVoiceStart?:()=>void;compact:boolean;id:GuideId;autoVoice:boolean;floating:boolean;manual:boolean;topics?:GuideId[];onTopic:(id:GuideId)=>void}){
+function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onVoiceStart,children}:{children?:ReactNode;onVoiceStart?:()=>void;compact:boolean;id:GuideId;autoVoice:boolean;autoOpen:boolean;floating:boolean;manual:boolean;topics?:GuideId[];onTopic:(id:GuideId)=>void}){
  const panelId=useId();
  const guide=GUIDES[id];
  const seen=useGame(s=>!!s.save.onboarding?.seen[id]);
+ const completed=useGame(s=>!!s.save.onboarding?.completed?.[id]);
  const automatic=useGame(s=>s.save.onboarding?.automatic!==false);
  const mark=useGame(s=>s.markGuideSeen);
- const [open,setOpen]=useState(()=>manual||(automatic&&!seen)),[speaking,setSpeaking]=useState(false),[unavailable,setUnavailable]=useState(false),[more,setMore]=useState(false),[hasTarget,setHasTarget]=useState(false);
+ const [open,setOpen]=useState(()=>manual||(autoOpen&&automatic&&!seen&&!completed)),[speaking,setSpeaking]=useState(false),[unavailable,setUnavailable]=useState(false),[more,setMore]=useState(false),[hasTarget,setHasTarget]=useState(false);
  const targetRef=useRef<HTMLElement|null>(null);
  const root=useRef<HTMLElement>(null),live=useRef(true),autoCancelled=useRef(false),sequence=useRef(0);
  const run=useRef<ReturnType<typeof sayCancellableWhile>|null>(null);
  const scope=useRef(useGame.getState().screen);
+ useLayoutEffect(()=>open?holdGuide():undefined,[open]);
  useLayoutEffect(()=>{
   if(!compact||!open)return;
   const host=root.current?.closest<HTMLElement>('.topbar,.companion-toolbar,.panel-toolbar,.help-heading');
@@ -47,6 +50,11 @@ function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart
   run.current=null;setSpeaking(false);
   if(manual&&!ok&&allowed()&&!isForegroundAudioActive())setUnavailable(true);
  };
+ const previousCompletion=useRef(completed);
+ useEffect(()=>{
+  if(completed&&!previousCompletion.current)close();
+  previousCompletion.current=completed;
+ },[completed]);
  const close=()=>{autoCancelled.current=true;cancel();setOpen(false);setMore(false);};
  useEffect(()=>{
   live.current=true;
@@ -55,19 +63,25 @@ function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart
    // Keep the pressed target in place until its click lands, especially in bottom-anchored panels.
    autoCancelled.current=true;cancel();if(compact&&event.type!=='pointerdown')setOpen(false);
   };
+  const otherGuide=(event:Event)=>{if((event as CustomEvent).detail!==root.current)close();};
+  window.addEventListener('pokepal:guide-open',otherGuide);
   const hidden=()=>{if(document.hidden){autoCancelled.current=true;cancel();}};
   window.addEventListener('pointerdown',outside,true);window.addEventListener('click',outside,true);window.addEventListener('keydown',outside,true);document.addEventListener('visibilitychange',hidden);
-  return()=>{live.current=false;cancel();window.removeEventListener('pointerdown',outside,true);window.removeEventListener('click',outside,true);window.removeEventListener('keydown',outside,true);document.removeEventListener('visibilitychange',hidden);};
+  return()=>{live.current=false;cancel();window.removeEventListener('pokepal:guide-open',otherGuide);window.removeEventListener('pointerdown',outside,true);window.removeEventListener('click',outside,true);window.removeEventListener('keydown',outside,true);document.removeEventListener('visibilitychange',hidden);};
  },[]);
  useEffect(()=>{
   if(!open)return;
+  window.dispatchEvent(new CustomEvent('pokepal:guide-open',{detail:root.current}));
   mark(id);
-  let quietSince=Date.now(),timer:ReturnType<typeof setInterval>|undefined;
+  const queuedAt=Date.now();
+  let quietSince=queuedAt,timer:ReturnType<typeof setInterval>|undefined;
   // Existing welcome / teaching narration always goes first. Any child action cancels the queued hint.
   if((autoVoice||manual)&&!autoCancelled.current){timer=setInterval(()=>{
-   if(!allowed()||autoCancelled.current){clearInterval(timer);return;}
-   if(isForegroundAudioActive()){quietSince=Date.now();return;}
-   if(Date.now()-quietSince>=900){clearInterval(timer);void hear();}
+   const now=Date.now(),busy=isForegroundAudioActive();
+   if(busy)quietSince=now;
+   const state=guideVoiceState(now-queuedAt,now-quietSince,allowed()&&!autoCancelled.current,busy);
+   if(state==='drop'){clearInterval(timer);autoCancelled.current=true;return;}
+   if(state==='play'){clearInterval(timer);void hear();}
   },200);}
   return()=>{clearInterval(timer);cancel();};
  },[open]);

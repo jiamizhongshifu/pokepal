@@ -1,3 +1,4 @@
+import {completeGuide} from '../data/onboarding';
 import { STORIES,storyProgressKey } from '../data/stories';
 import type { Capture, SaveData } from '../types';
 export const PREFERENCES=['ball','shade','company'] as const;
@@ -20,7 +21,8 @@ export const FURNITURE=[
  {id:'track',name:'滚球轨道',area:'浅水与游乐角',icon:'balloon',use:'喜欢小球的伙伴更常来轮流玩',station:'ball',word:'Your turn!'}
 ] as const;
 export type FurnitureId=typeof FURNITURE[number]['id'];
-export type TogetherKind='ball'|'rest';
+export const TOGETHER_KINDS=['ball','rest','bubbles','jump'] as const;
+export type TogetherKind=typeof TOGETHER_KINDS[number];
 export interface LivingMemory {id:string;kind:TogetherKind;partners:number[];at:number;context:'play'|'shade'|'coast';}
 export interface IslandLiving {version:1;furniture:FurnitureId[];memories:LivingMemory[];}
 export function livingState(s:SaveData):IslandLiving{return s.islandLiving??{version:1,furniture:[],memories:[]};}
@@ -31,10 +33,10 @@ export function setFurniture(s:SaveData,id:FurnitureId,enabled:boolean){
  if(enabled)s.islandLiving.furniture.push(id);return true;
 }
 export function rememberTogether(s:SaveData,m:LivingMemory){
- if(!m.id||!['ball','rest'].includes(m.kind)||!['play','shade','coast'].includes(m.context)||m.partners.length<1||m.partners.length>2||new Set(m.partners).size!==m.partners.length||!m.partners.every(id=>s.captures.some(c=>c.id===id)))return false;
+ if(!m.id||!TOGETHER_KINDS.includes(m.kind)||!['play','shade','coast'].includes(m.context)||m.partners.length<1||m.partners.length>2||new Set(m.partners).size!==m.partners.length||!m.partners.every(id=>s.captures.some(c=>c.id===id)))return false;
  s.islandLiving??={version:1,furniture:[],memories:[]};
  if(s.islandLiving.memories.some(x=>x.id===m.id))return false;
- s.islandLiving.memories=[m,...s.islandLiving.memories].slice(0,18);return true;
+ s.islandLiving.memories=[m,...s.islandLiving.memories].slice(0,18);completeGuide(s,'play');return true;
 }
 export function furnitureAffinity(c:Capture,station:string,furniture:readonly FurnitureId[]){
  const pref=preference(c);let score=0;
@@ -58,5 +60,5 @@ export function storyTrail(s:SaveData,id:string){
 }
 export function validLiving(v:unknown,ids:Set<number>):v is IslandLiving {
  if(!v||typeof v!=='object')return false;const s=v as IslandLiving;
- return s.version===1&&Array.isArray(s.furniture)&&s.furniture.length<=FURNITURE.length&&new Set(s.furniture).size===s.furniture.length&&s.furniture.every(x=>FURNITURE.some(f=>f.id===x))&&Array.isArray(s.memories)&&s.memories.length<=18&&new Set(s.memories.map(m=>m?.id)).size===s.memories.length&&s.memories.every(m=>m&&typeof m.id==='string'&&m.id.length>0&&m.id.length<=80&&['ball','rest'].includes(m.kind)&&['play','shade','coast'].includes(m.context)&&Number.isSafeInteger(m.at)&&m.at>0&&Array.isArray(m.partners)&&m.partners.length>=1&&m.partners.length<=2&&new Set(m.partners).size===m.partners.length&&m.partners.every(id=>ids.has(id)));
+ return s.version===1&&Array.isArray(s.furniture)&&s.furniture.length<=FURNITURE.length&&new Set(s.furniture).size===s.furniture.length&&s.furniture.every(x=>FURNITURE.some(f=>f.id===x))&&Array.isArray(s.memories)&&s.memories.length<=18&&new Set(s.memories.map(m=>m?.id)).size===s.memories.length&&s.memories.every(m=>m&&typeof m.id==='string'&&m.id.length>0&&m.id.length<=80&&TOGETHER_KINDS.includes(m.kind)&&['play','shade','coast'].includes(m.context)&&Number.isSafeInteger(m.at)&&m.at>0&&Array.isArray(m.partners)&&m.partners.length>=1&&m.partners.length<=2&&new Set(m.partners).size===m.partners.length&&m.partners.every(id=>ids.has(id)));
 }

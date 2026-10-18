@@ -1,3 +1,4 @@
+import {TogetherBubbles} from './TogetherBubbles';
 import {terrainHeight} from './hq/Terrain';
 import type {IslandWeather} from '../lib/weather';
 import {WeatherRain} from './WeatherScene';
@@ -220,7 +221,8 @@ export function HomeScene({
         <BerryGarden {...farm} />
         <DistrictDetails table={livingItems.includes("table")} level={upgrades?.picnic??0}/>
         <LivingProps items={livingItems} playing={!!together}/>
-        {together&&<TogetherBall {...together}/>}
+        {together?.session.kind==='ball'&&<TogetherBall {...together}/>}
+        {together?.session.kind==='bubbles'&&<TogetherBubbles {...together}/>}
         {picnic&&<PicnicSnack session={picnic} ready={activeVisits.some(v=>v.manual&&v.pokemonId===picnic.pokemonId)}/>}
         <IslandFacilities showButtons={showInterface && selected === null && !farm.open} active={activeVisits} farm={farm} onTap={onStation}/>
         <Outdoor night={sky === "night" || sky === "evening"} />
@@ -243,7 +245,7 @@ export function HomeScene({
         <Campfire3D lit={weather.rain<.5&&(sky === "night" || sky === "evening" || someoneEating)}/>
         <WeatherRain weather={weather} lite={lite}/>
         {residents.map(({ p, habit, slot }) => (
-          <Resident previewFrozen={previewing} weather={weather.kind} key={p.id} showInterface={showInterface} need={need?.id===p.id?need.kind:undefined} visit={visits.find(v=>v.pokemonId===p.id)} onArrival={onArrival} p={p} habit={habit} slot={slot} selected={selected === p.id} facingCamera={!!together&&together.session.partners.length===1&&together.session.partners[0]===p.id} effect={effect} tint={tint} glow={L.glow} sunYaw={Math.atan2(L.sunPos[0], L.sunPos[2])} onSelect={previewing?()=>{}:onSelect} />
+          <Resident campAction={together&&together.session.partners.includes(p.id)&&(together.session.kind==='jump'||together.session.kind==='bubbles')?{kind:together.session.kind,progress:together.progress,acting:together.acting}:undefined} previewFrozen={previewing} weather={weather.kind} key={p.id} showInterface={showInterface} need={need?.id===p.id?need.kind:undefined} visit={visits.find(v=>v.pokemonId===p.id)} onArrival={onArrival} p={p} habit={habit} slot={slot} selected={selected === p.id} facingCamera={!!together&&together.session.partners.length===1&&together.session.partners[0]===p.id} effect={effect} tint={tint} glow={L.glow} sunYaw={Math.atan2(L.sunPos[0], L.sunPos[2])} onSelect={previewing?()=>{}:onSelect} />
         ))}
       </Suspense>
       {/* 高画质光影：实时环境光遮蔽（半分辨率），家长中心可开关 */}

@@ -18,6 +18,7 @@ import { PokeImg } from "../components/PokeImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { LEARNING_UNITS,learningEntry,selectedUnit } from '../data/curriculum';
 import { reviewKeys } from '../lib/learningProgress';
+import {familyLearning} from '../lib/familyLearning';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -76,6 +77,7 @@ export function Parent() {
 
   useEffect(()=>{bodyRef.current?.scrollTo({top:0});headingRef.current?.focus({preventScroll:true});},[tab]);
   const current=selectedUnit(save);
+  const family=familyLearning(save);
   const todayWords=d.words.filter(w=>!w.startsWith('letter:'));
   const completed=LEARNING_UNITS.filter(u=>save.learning?.units[u.id]?.completedAt).length;
   const due=reviewKeys(save).length,retry=reviewKeys(save,'retry').length;
@@ -94,15 +96,16 @@ export function Parent() {
    {tab==='report'&&<><section className="parent-learning-focus">
  <div className="parent-section-heading"><div><span className="parent-eyebrow">当前学习阶段 · {learningStageTitle(s)}</span><h3>{current.title}</h3></div><button className="parent-inline-action" onClick={()=>{setStageOpen(true);setTab('settings');}}><Icon name="gear" size={22}/>调整阶段</button></div>
  <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 站，不代表已经掌握。</p>
- <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>今天可以这样陪伴</strong><p>{current.homePlay}</p></div></div>
- <p className="parent-review-note">{due?`${due} 个词可以再遇见，${retry} 个词上次需要帮助。`:'暂时没有到期的复习，轻松听一听、玩一玩就好。'}</p>
+ <div className="parent-family-facts"><strong>今天留下的小发现</strong><p>{family.completed.length?`首次走完了「${family.completed[0].title}」${family.completed.length>1?`等 ${family.completed.length} 站`:''}。`:'今天还没有首次走完的新一站，听听、看看也可以。'}{family.words.length?`接触过 ${family.words.map(e=>e.en).join('、')}。`:''}</p><small>记录来自应用操作，无法判断是否由宝宝独自完成。</small></div>
+ <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>下次生活里，可以一起试试</strong><p>{family.focus.homePlay}</p><small>让宝宝选，你来回应。中文也很好，不用考一考或回来打卡。</small></div></div>
+ <p className="parent-review-note">{due?`${due} 个词可以再遇见，${retry} 个词可以再试试。`:'暂时没有到期的复习，轻松听一听、玩一玩就好。'}</p>
  <button className="btn-small" onClick={()=>go({name:'notebook',mode:retry?'retry':'all',returnTo:'parent'})}><Icon name="book" size={24}/>查看词汇与复习</button>
 </section>
 <section className="parent-today"><h3>今天的小足迹</h3><dl><div><dt>接触的词</dt><dd>{todayWords.length}<small> 个</small></dd></div><div><dt>开口尝试</dt><dd>{d.spoken}<small> 次</small></dd></div><div><dt>游玩时间</dt><dd>{Math.round(d.playSeconds/60)}<small> / {Math.round(playLimitSeconds(save)/60)} 分钟</small></dd></div></dl><p>开口包含手动确认，不作为发音评分。轻松参与比完成数量更重要。</p></section>
 <h3 className="parent-detail-heading">需要时，再看看</h3>
 <details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与书写记录<small>今天接触 {todayWords.length} 个词 · 熟悉 {learned.length} 个词</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{d.words.filter((w) => !w.startsWith("letter:")).length}）</h3>
               <div className="chips">{d.words.filter((w) => !w.startsWith("letter:")).map((w) => <button key={w} className="chip" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
-              <h3>渐渐熟悉的词（不同日期独立选对，共 {learned.length}）</h3>
+              <h3>渐渐熟悉的词（不同日期未用应用提示选对，共 {learned.length}）</h3>
               <div className="chips">{learned.map((w) => <button key={w} className="chip ok" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
               <h3>写过的字母（{letters.length} / 26）</h3>
               <div className="chips">{letters.map((l) => <span key={l} className="chip letter">{l}</span>)}</div>
@@ -125,7 +128,7 @@ export function Parent() {
                 ))}
               </div>
             </div></details>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、熟悉与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“熟悉”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>累计独立指认</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>帮助下参与</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {POKEMON.length}</dd></div></dl></div></details></>}
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、熟悉与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“熟悉”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，这些记录不代表孩子独立完成。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {POKEMON.length}</dd></div></dl></div></details></>}
    {tab==='settings'&&<><details className="parent-fold parent-stage-fold" open={stageOpen} onToggle={e=>setStageOpen(e.currentTarget.open)}><summary><Icon name="sign" size={28}/><span>英语学习阶段<small>当前：{learningStageTitle(s)}</small></span></summary><div className="parent-fold-content"><LearningStageSettings/></div></details>
 <section className="form parent-routine"><h3>游玩与休息</h3><label><span>每日游玩时长：<b>{s.dailyMinutes} 分钟</b></span>
                 <input type="range" min={5} max={60} step={5} value={s.dailyMinutes} onChange={(e) => updateSettings({ dailyMinutes: Number(e.target.value) })} />

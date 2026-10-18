@@ -1,0 +1,15 @@
+.farm-harvest-picture{display:flex;align-items:center;gap:1px;flex:none;animation:harvest-arrived .4s cubic-bezier(.22,1,.36,1) both}
+.farm-harvest-picture .berry-badge{width:30px;height:30px;margin:0}
+.farm-feedback strong{display:block;font-size:16px;line-height:1.4}
+.farm-feedback small{display:block;font-size:13px;line-height:1.5;color:inherit}
+#root .home .farm-feedback.has-harvest>span{min-width:120px}
+@keyframes harvest-arrived{from{opacity:.2;transform:translateY(6px) scale(.9)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.farm-harvest-picture{animation:none}}
+/* Keep the receipt, follow-up and dismiss control on the same compact row. */
+#root .home .farm-feedback.has-harvest{display:grid;grid-template-columns:48px minmax(0,1fr) 54px 44px;gap:6px;width:370px;padding:10px}
+#root .home .farm-feedback.has-harvest>span{min-width:0}
+.has-harvest .farm-harvest-picture{position:relative;height:48px;gap:0}
+.has-harvest .farm-harvest-picture .berry-badge{width:24px;height:24px}
+.has-harvest .farm-harvest-picture>.icon{position:absolute;right:0;bottom:0;width:18px!important;height:18px!important}
+#root .home .farm-feedback.has-harvest button{flex-direction:column;justify-content:center;font-size:12px;gap:1px;padding:4px;min-width:44px}
+.farm-feedback.has-harvest strong{font-size:14px}.farm-feedback.has-harvest small{font-size:12px}

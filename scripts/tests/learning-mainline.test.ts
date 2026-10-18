@@ -8,6 +8,15 @@ import {dailyLearningPlan,lessonWords} from '../../src/data/learning';
 import {WEATHER,CLEAR_NIGHT} from '../../src/lib/weather';
 const fresh=()=>({version:1,settings:{level:1},wordStats:{},learning:{version:1,records:{},units:{}}} as unknown as SaveData);
 const first=LEARNING_UNITS[0],second=LEARNING_UNITS[1];
+test('snack lesson reconnects to an actual picnic without claiming speech or independent understanding',()=>{
+ const s=fresh(),unit=LEARNING_UNITS.find(u=>u.id==='snack-discovery')!;
+ for(const u of LEARNING_UNITS.slice(0,3))progressUnit(s,u.id,unitRoundCount(u),100);
+ applyStation(s,'picnic',200,'Yummy!',true);
+ assert.equal(s.learning!.units[unit.id].encounteredAt,200);
+ assert.equal(s.learning!.records['Yummy!'].actions,1);
+ assert.equal(s.learning!.records['Yummy!'].spoken,0);
+ assert.equal(s.learning!.records['Yummy!'].independent,0);
+});
 test('learning theme survives course completion until related island and story experiences',()=>{
  const s=fresh();assert.equal(learningTrail(s).phase,'lesson');
  progressUnit(s,first.id,1,100);assert.equal(learningTrail(s).phase,'lesson');

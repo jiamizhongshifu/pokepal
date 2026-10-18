@@ -1,3 +1,4 @@
+import {completeGuide} from '../data/onboarding';
 import type { SaveData } from '../types';
 import { comfortCompanion } from './companionCare';
 
@@ -45,7 +46,7 @@ export function harvestCrop(s:SaveData,index:number,now=Date.now()) {
   if(!plotIndex(index)||!timestamp(now))return false;
   const f=s.farm,c=f?.plots[index];
   if(!f||!c||cropStage(c,now)!=='ripe'||f.basket[c.berry]+HARVEST_COUNT>BASKET_CAP)return false;
-  f.basket[c.berry]+=HARVEST_COUNT;f.plots[index]=null;return true;
+  f.basket[c.berry]+=HARVEST_COUNT;f.plots[index]=null;completeGuide(s,'farm');return true;
 }
 export function feedBerry(s:SaveData,id:number,berry:BerryKind) {
   if(!isBerry(berry))return false;

@@ -12,7 +12,7 @@ export const GUIDES = {
  wordpic:{icon:'picture',title:'听一听，找一找',voice:'听听这个词，再点对应的图片。想再听一次，就点喇叭。慢慢找，不着急。',target:'.task-wordpic .choices',sequence:['ear','picture','hand']},
  trace:{icon:'pencil',title:'从小圆点出发',voice:'看看小圆点怎么走，再从圆点出发，跟着箭头画。一次画一笔。抬起手指，还可以接着画。',target:'.trace-pad',sequence:['eye','pencil']},
  practice:{icon:'star',title:'再玩一小组就好',voice:'还想玩的话，点一个喜欢的小游戏，再玩一小组。累了就回小岛休息。',target:'.practice-option',sequence:['picture','hand']},
- journey:{icon:'island',title:'跟着小路，一点点学',voice:'点亮着的小路入口，和伙伴开始一个小冒险。每次学一点，再回小岛用一用。',target:'.journey-stops .next button',sequence:['sign','play']},
+ journey:{icon:'island',title:'跟着小路，一点点学',voice:'这是我们的冒险地图。伙伴站着的地方，就是现在这一关。点一下，一起出发吧！每天玩一小关，慢慢走到徽章那里。其他地点也能点开看看，学过的内容在再回顾里。',target:'.adventure-stop.is-current',sequence:['sign','play']},
  lesson:{icon:'ear',title:'听听伙伴，试一试',voice:'先听听伙伴说什么。你可以再听一次，再点图片试一试。不想说也没关系。',target:'.learning-choices, .guided-example',sequence:['ear','picture']},
  notebook:{icon:'book',title:'和认识的词再见面',voice:'这里住着你遇见的词。点小喇叭听一听，喜欢的词可以留下来。我们慢慢认识它们。',target:'.notebook-listen-card, .learning-empty .journey-primary',sequence:['book','speaker']},
  review:{icon:'heart',title:'和老朋友再玩一次',voice:'听听这个老朋友，再试着找一找。忘记了也没关系，我们一起再听一次。',target:'.learning-choices, .guided-example',sequence:['ear','picture']},
@@ -26,7 +26,7 @@ export const GUIDES = {
  ownedDetail:{icon:'heart',title:'点爱心，回家陪它玩',voice:'这位已经是你的伙伴啦。点爱心，回家就能找到它。点它的名字，还能听听名字怎么说。',target:'.detail-wish .wish-button',sequence:['heart','island']},
  detail:{icon:'heart',title:'听名字，再去找它',voice:'点喇叭，听听伙伴的名字。还没有它的话，可以点我想找这只，再去草丛认识它。',target:'.detail-wish .wish-button',sequence:['speaker','grass']},
  friends:{icon:'search',title:'点头像，马上见面',voice:'点一点伙伴的头像，镜头就会带你找到它。',target:'.companion-portraits button',sequence:['search','hand']},
- care:{icon:'hand',title:'陪伙伴玩一玩',voice:'点小手，摸摸伙伴。点食物，给它一点点心。想跟着它散步，就点跟着走。',target:'.companion-card .actions .pet-action',sequence:['hand','apple']},
+ care:{icon:'hand',title:'陪伙伴玩一玩',voice:'点小手，摸摸伙伴。点食物，给它一点点心。想跟着它散步，就点跟着走。',target:'.camp-controls .pet-action',sequence:['hand','apple']},
  feed:{icon:'apple',title:'分享一点好吃的',voice:'点一颗还有的树果，分享给伙伴。没有树果也没关系，可以给它普通点心。',target:'.berry-menu button:not(:disabled)',sequence:['apple','heart']},
  play:{icon:'ball',title:'点图片，就开始玩',voice:'点一张想玩的图片，伙伴就会自己走过去。你可以陪它玩，也可以安静看看。',target:'.living-play-choices button',sequence:['ball','hand']},
  gifts:{icon:'gift',title:'点装饰，看看小岛的新样子',voice:'点喜欢的装饰，它会自己摆好。我们一起看看它放在哪里。想升级，可以先看看升级后的样子，再请大人一起决定。',target:'.dress-catalog, .upgrade-choice',sequence:['gift','island']},
@@ -37,9 +37,21 @@ export const GUIDES = {
  diary:{icon:'mic',title:'今天的你，值得被听见',voice:'先听一个小问题，再点麦克风，说一点今天的事。说完再点一下。开心、难过都可以，不想说也可以跳过。',target:'.diary-record',sequence:['ear','mic','check']},
 } as const;
 export type GuideId=keyof typeof GUIDES;
-export interface Onboarding {version:1;seen:Partial<Record<GuideId,boolean>>;automatic:boolean;}
+export interface Onboarding {version:1;seen:Partial<Record<GuideId,boolean>>;completed?:Partial<Record<GuideId,boolean>>;automatic:boolean;}
+/** Operation success is separate from seeing/dismissing help, and is not language mastery. */
+export function completeGuide(s:{onboarding?:Onboarding},id:GuideId){
+ s.onboarding??={version:1,seen:{},automatic:true};
+ (s.onboarding.completed??={})[id]=true;
+}
 export function validOnboarding(value:unknown):value is Onboarding {
  if(!value||typeof value!=='object')return false;
  const v=value as Onboarding;
- return v.version===1&&typeof v.automatic==='boolean'&&!!v.seen&&typeof v.seen==='object'&&!Array.isArray(v.seen)&&Object.entries(v.seen).every(([k,x])=>Object.prototype.hasOwnProperty.call(GUIDES,k)&&typeof x==='boolean');
+ const flags=(x:unknown)=>!!x&&typeof x==='object'&&!Array.isArray(x)&&Object.entries(x).every(([k,b])=>Object.prototype.hasOwnProperty.call(GUIDES,k)&&typeof b==='boolean');
+ return v.version===1&&typeof v.automatic==='boolean'&&flags(v.seen)&&(v.completed===undefined||flags(v.completed));
+}
+
+/** An old invitation must not interrupt an activity much later. Manual replay stays available. */
+export function guideVoiceState(elapsed:number,quiet:number,allowed:boolean,busy:boolean):'wait'|'play'|'drop'{
+ if(!allowed||elapsed>=8000)return 'drop';
+ return !busy&&quiet>=900?'play':'wait';
 }

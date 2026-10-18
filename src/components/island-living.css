@@ -130,3 +130,10 @@
 .living-rest-scene>.icon:last-child{animation:living-leaf-once 5s ease-in-out 1}
 @keyframes living-leaf-once{0%,100%{transform:rotate(0)}50%{transform:translateY(-6px) rotate(12deg)}}
 @media(prefers-reduced-motion:reduce){.living-rest-scene>.icon:last-child{animation:none}}
+
+.living-jump-picture{position:relative;display:block;width:58px;height:58px}
+.living-jump-picture img{width:50px;height:50px;object-fit:contain;transform:translateY(-4px)}
+.living-jump-picture:after{content:"";position:absolute;bottom:1px;left:8px;width:34px;height:5px;border-radius:50%;background:#30574730}
+.living-jump-picture>span{position:absolute;right:-4px;top:0;color:#236ca2;font-size:30px;font-weight:900}
+.living-quiet-choices{display:flex;gap:8px;margin:6px 0 12px}
+.living-quiet-choices button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;min-height:48px;border:1px solid var(--coast-line);border-radius:16px;background:var(--coast-paper);color:var(--coast-ink);font:inherit;font-weight:700;cursor:pointer}

@@ -3,7 +3,7 @@ import {markReviewAudio,settleUnitRound} from './lib/learningProgress';
 import type {EnergyGoal} from './lib/energyGoal';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
-import { type GuideId } from './data/onboarding';
+import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergePokeballs, exchangePokeball, capturePartner } from "./lib/pokeballs";
 import { ensureIslandProgress,useIslandGift,upgradeIsland,placeIslandDecoration,type UpgradeId } from './lib/islandProgress';
@@ -41,7 +41,7 @@ export interface DexBrowseState { onlyOwned:boolean; query:string; page:number; 
 export type Screen =
   | { name: "welcome" }
   | { name: "home"; station?:string; companion?:number }
-  | { name: "journey" }
+  | { name: "journey"; completedUnit?:string }
   | { name: "lesson"; returnGoal?:EnergyGoal; id:string }
   | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'energy'|'tasks'|'parent' }
   | { name: "review"; keys:string[]; returnTo?:'energy'|'tasks'|'parent' }
@@ -150,7 +150,7 @@ interface State {
   evolve: (from: number, to: number) => void;
   /** 选择保持现在的样子（不再提醒，之后仍可进化） */
   stayAsIs: (id: number) => void;
-  interact: (id: number, kind: InteractKind) => void;
+  interact: (id: number, kind: InteractKind) => boolean;
   noteHeard: (count?: number) => void;
   plantCrop: (index:number,berry:BerryKind)=>boolean;
   waterCrop: (index:number,plantedAt:number,pokemonId:number)=>boolean;
@@ -287,6 +287,7 @@ export const useGame = create<State>((set, get) => {
         // Capture legacy claims before progressUnit changes activeUnit / completedAt.
         s.daily.courseUnits??=courseClaims(s);
         if(!settleUnitRound(s,id,round,skipped))return;
+        completeGuide(s,'lesson');
         return rewardCourse(s,id);
       });
     },
@@ -310,7 +311,7 @@ export const useGame = create<State>((set, get) => {
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
-    feedBerry(id,berry) {return mut(s=>feedBerry(s,id,berry))??false;},
+    feedBerry(id,berry) {return mut(s=>{const ok=feedBerry(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
     useIslandGift(){return !!mut(s=>useIslandGift(s));},
     upgradeIsland(id,level){return mut(s=>upgradeIsland(s,id,level))??false;},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
@@ -381,13 +382,15 @@ export const useGame = create<State>((set, get) => {
     deferCare(id) { mut(s=>{const c=s.captures.find(c=>c.id===id);if(c)deferCare(c);}); },
 
     interact(id, kind) {
-      mut((s) => {
+      return mut((s) => {
         const c = s.captures.find((x) => x.id === id);
         if (!c) return;
         comfortCompanion(c,kind);
+        completeGuide(s,kind==='feed'?'feed':'care');
         const gain = kind === "feed" ? 4 : kind === "pet" ? 2 : 3;
         c.friendship = Math.min(100, c.friendship + gain);
-      });
+        return true;
+      })??false;
     },
 
     noteHeard(count = 1) {

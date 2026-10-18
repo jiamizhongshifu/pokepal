@@ -7,9 +7,9 @@ import {togetherSession,togetherHelpTarget,type TogetherSession} from '../scene/
 import type {Visit} from '../scene/islandLife';
 import {useGame} from '../store';
 import {islandAudioAllowed} from './islandSpeech';
-import {sayCancellableWhile,unlockAudio} from './speech';
+import {sayCancellableWhile,unlockAudio,sfx} from './speech';
 import {bi} from './bi';
-import {togetherVoice,togetherFinishedVoice,togetherEvidence} from './togetherTurn';
+import {togetherVoice,togetherFinishedVoice,togetherEvidence,togetherRounds,togetherDuration,togetherLearningStation} from './togetherTurn';
 import type {TogetherKind} from './islandLiving';
 /** Foreground-only play. Requests are heard BEFORE movement; child turns never time out. */
 export function useTogether(active:boolean,captures:Capture[]){
@@ -37,6 +37,7 @@ export function useTogether(active:boolean,captures:Capture[]){
   const s=current.current;
   if(!s.active||s.blocked||!s.session||s.phase!=='ready'||!s.arrived||running.current||document.hidden)return;
   running.current=true;stopVoice();progress.current=0;setPhase('acting');
+  if(s.session.kind==='bubbles')sfx('pop');
  };
  const hear=async()=>{
   const s=current.current,owner=run.current;
@@ -52,7 +53,7 @@ export function useTogether(active:boolean,captures:Capture[]){
   const ok=await Promise.race([next.done,new Promise<false>(resolve=>{timer=setTimeout(()=>{next.cancel();resolve(false);},12000);})]);
   clearTimeout(timer);
   if(voice.current!==next||!allowed())return;
-  voice.current=null;setSpeaking(false);if(ok){if(s.phase==='ready')heard.current.add(key);else if(!recorded.current.has(key+':thanks')){recorded.current.add(key+':thanks');useGame.getState().noteStationLearning(s.session.kind==='rest'?'parasol':'ball','Thank you!',false);}}
+  voice.current=null;setSpeaking(false);if(ok){if(s.phase==='ready')heard.current.add(key);else if(!recorded.current.has(key+':thanks')){recorded.current.add(key+':thanks');useGame.getState().noteStationLearning(togetherLearningStation(s.session.kind),'Thank you!',false);}}
  };
  useEffect(()=>{live.current=true;return()=>{live.current=false;run.current++;voice.current?.cancel();};},[]);
  useEffect(()=>{if(session&&phase==='arriving'&&arrived){progress.current=0;setPhase('ready');}},[arrived,session,phase]);
@@ -75,7 +76,7 @@ export function useTogether(active:boolean,captures:Capture[]){
    const now=performance.now(),dt=Math.min(500,now-previous);previous=now;
    if(ticket!==run.current||!current.current.active||current.current.blocked||document.hidden)return;
    if(!arrived){running.current=false;setPhase('arriving');progress.current=0;return;}
-   elapsed+=dt;const p=Math.min(1,elapsed/(session.kind==='rest'?8000:2500));progress.current=p;
+   elapsed+=dt;const p=Math.min(1,elapsed/togetherDuration(session.kind));progress.current=p;
    if(p>=1){clearInterval(timer);running.current=false;
     const key=`${session.id}:${turn}`;
     if(heard.current.has(key)&&!recorded.current.has(key)){
@@ -84,7 +85,7 @@ export function useTogether(active:boolean,captures:Capture[]){
      const evidence=togetherEvidence(session.kind,session.partners,turn,!!session.help);
      useGame.getState().noteStationLearning(evidence.station,evidence.word,evidence.action);
     }
-    if(session.help||session.kind==='rest'||turn>=3){if(!session.help)useGame.getState().rememberTogether({id:session.id,kind:session.kind,partners:session.partners,context:session.context,at:Date.now()});markInteresting(session.partners);setPhase('done');}
+    if(session.help||turn>=togetherRounds(session.kind)-1){if(!session.help)useGame.getState().rememberTogether({id:session.id,kind:session.kind,partners:session.partners,context:session.context,at:Date.now()});markInteresting(session.partners);setPhase('done');}
     else{progress.current=0;setTurn(n=>n+1);setPhase('ready');}
    }
   },80);return()=>clearInterval(timer);

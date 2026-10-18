@@ -1,3 +1,5 @@
+import {togetherChildTurn} from '../lib/togetherTurn';
+import {FarmFeedback,type FarmNotice} from '../components/FarmFeedback';
 import {CompanionStrip} from '../components/CompanionStrip';
 import {previewLevels,type DecorPreview} from '../lib/decorPreview';
 import {DECOR_LAYOUT} from '../scene/decorationLayout';
@@ -18,7 +20,7 @@ import { preference, PREFERENCE_LABEL, type TogetherKind } from '../lib/islandLi
 import { markInteresting } from '../scene/observationInterest';
 import { BerryBadge } from '../components/FarmPanel';
 import { PicnicPanel } from '../components/PicnicPanel';
-import { BERRIES, BERRY_KINDS, newFarm, cropStage, type BerryKind } from '../lib/farm';
+import { BERRIES, BERRY_KINDS, newFarm, cropStage, HARVEST_COUNT, BASKET_CAP, type BerryKind } from '../lib/farm';
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
@@ -88,7 +90,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   },[immersive,leaveImmersive]);
   const [selected, setSelectedState] = useState<number | null>(null);
   const setSelected=(id:number|null)=>{setSelectedState(id);if(id!==null)activatePanel('companion');else closePanel('companion');};
-  const [quickCare,setQuickCare]=useState<{id:number;kind:'feed'|'pet'}|null>(null);
+  const [quickCare,setQuickCare]=useState<{id:number;kind:'feed'|'pet';station?:string}|null>(null);
   const selectedRef=useRef(selected);selectedRef.current=selected;
   const activeRef=useRef(active);
   useEffect(()=>{activeRef.current=active;return()=>{activeRef.current=false;};},[active]);
@@ -135,7 +137,9 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   },[active,followId]);
   const [showGestureHint,setShowGestureHint]=useState(navigator.maxTouchPoints>0);
   const [farmClock,setFarmClock]=useState(Date.now());
-  const [farmMessage,setFarmMessage]=useState('');
+  const [farmNotice,setFarmNotice]=useState<FarmNotice>({text:''});
+  const farmMessage=farmNotice.text;
+  const setFarmMessage=(text:string,harvest?:FarmNotice['harvest'])=>setFarmNotice({text,harvest});
   const picnicOpen=panel==='picnic';
   const setPicnicOpen=(open:boolean)=>open?activatePanel('picnic'):closePanel('picnic');
   const [picnicInitialId,setPicnicInitialId]=useState<number>();
@@ -185,9 +189,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       const harvested=await useGame.getState().harvestCrop(index);
       if(!activeRef.current||useGame.getState().saveIssue)return;
       if(harvested){
-        setFarmMessage('收获 2 颗树果，装进果篮啦！');sfx('ding');
+        setFarmMessage('树果装进果篮啦！',{berry:crop!.berry,count:HARVEST_COUNT,total:useGame.getState().save.farm!.basket[crop!.berry]});sfx('ding');
         void say(['en','Two!'],['en','I did it!']).then(ok=>{if(ok&&activeRef.current){noteWord('count:2','heard');useGame.getState().noteStationLearning('farm','I did it!',true);}});
-      }else {setFarmMessage('果篮满啦，先给伙伴吃一点吧。');openPicnic();}
+      }else if(crop&&useGame.getState().save.farm!.basket[crop.berry]+HARVEST_COUNT>BASKET_CAP){setFarmMessage('果篮满啦，先给伙伴吃一点吧。');openPicnic();}
+      else setFarmMessage('这块田已经变化啦，看看现在的小芽吧。');
     }else if(stage==='thirsty'){
       farmRetryAt.current=0;
       if(!useGame.getState().save.captures.some(c=>!isAquatic(getPokemon(c.id))))go({name:'catch'});
@@ -370,10 +375,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     }
   };
 
-  const doInteract = async (p: Pokemon, kind: InteractKind) => {
+  const doInteract = async (p: Pokemon, kind: InteractKind,station='companion') => {
     const run = ++interactionRun.current;
     setFeedPicker(false);ambient.poke();
-    interact(p.id, kind);
+    if(!interact(p.id, kind))return;
     setCareThanks({id:p.id,text:kind==='feed'?'吃饱啦，谢谢你！':kind==='pet'?'有你陪我，真开心！':'晚安，陪我安静休息吧。'});
     const icon = kind === "feed" ? favoriteFood(p).icon : kind === "pet" ? "heart" : "moon";
     setEffect({ id: p.id, kind, icon, at: performance.now() });
@@ -393,16 +398,17 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     }
     if (run !== interactionRun.current) return;
     setLastPhrase({id:p.id,...phrase});
-    if(heard){useGame.getState().noteStationLearning('companion',phrase.en,true);}
+    if(heard){useGame.getState().noteStationLearning(station,phrase.en,true);}
   };
 
   const shareBerry=(p:Pokemon,berry:BerryKind)=>{
+    const run=++interactionRun.current;
     const before=useGame.getState().save.captures.find(c=>c.id===p.id)?.friendship??0;
     if(!useGame.getState().feedBerry(p.id,berry))return;
     const after=useGame.getState().save.captures.find(c=>c.id===p.id)!.friendship;
     setFeedPicker(false);ambient.poke();setEffect({id:p.id,kind:'feed',icon:'heart',at:performance.now()});
     setCareThanks({id:p.id,text:`吃到你种的${BERRIES[berry].name}啦！${after>before?`好感 +${after-before}`:'好感已满'}`});
-    sfx('sparkle');void say(['en','Yummy! Thank you!']).then(ok=>{if(ok){noteWord('Yummy!','heard');useGame.getState().noteStationLearning('farm','Thank you!',true);}});
+    sfx('sparkle');void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&run===interactionRun.current&&activeRef.current){noteWord('Yummy!','heard');useGame.getState().noteStationLearning('farm','Thank you!',true);}});
   };
   const openPicnic=(id?:number)=>{
     setAreaId(null);setLivingOpen(false);together.cancel();
@@ -468,7 +474,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(!quickCare)return;
     if(!active||selected!==quickCare.id){setQuickCare(null);return;}
     if(blocked)return;
-    setQuickCare(null);void doInteract(getPokemon(quickCare.id),quickCare.kind);
+    setQuickCare(null);void doInteract(getPokemon(quickCare.id),quickCare.kind,quickCare.station);
   },[quickCare,active,blocked,selected]);
   useEffect(()=>{
     const escape=(event:KeyboardEvent)=>{
@@ -506,7 +512,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       </div>
       <div className="meadow">
         <Suspense fallback={<div className="scene-loading"><div className="sl-ball" /><div>正在布置家园…</div></div>}>
-          <HomeScene interactionId={panel==='facility'?life.manual?.pokemonId:picnicOpen?picnic?.pokemonId:undefined} spotlight={decorFocus} upgrades={displayedLevels} livingItems={save.islandLiving?.furniture??[]} together={together.session?{session:together.session,turn:together.turn,progress:together.progress,acting:together.phase==='acting',ready:together.arrived,childReady:together.phase==='ready'&&(together.session.help||together.session.partners.length===1&&together.turn%2===1),onRoll:together.act}:undefined} active={active} previewing={!!decorPreview} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session} need={hint==='care'?need:null} followId={followId}
+          <HomeScene interactionId={panel==='facility'?life.manual?.pokemonId:picnicOpen?picnic?.pokemonId:undefined} spotlight={decorFocus} upgrades={displayedLevels} livingItems={save.islandLiving?.furniture??[]} together={together.session?{session:together.session,turn:together.turn,progress:together.progress,acting:together.phase==='acting',ready:together.arrived,childReady:together.phase==='ready'&&togetherChildTurn(together.session.kind,together.session.partners,together.turn,!!together.session.help),onRoll:together.act}:undefined} active={active} previewing={!!decorPreview} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session} need={hint==='care'?need:null} followId={followId}
             idleBlockReason={blocked?"全局弹窗打开":area?"选择小岛活动":finderOpen?"伙伴册打开":livingOpen?"小岛生活互动":save.settings.idleCamera===false?"家长已关闭闲置观察":selected!==null?"宝可梦卡片打开":stationId!==null?"场景互动打开":evolving!==null?"进化中":picnicOpen?"野餐面板打开":""}
             idleAllowed={!blocked&&panel===null&&save.settings.idleCamera!==false&&evolving===null} onObserve={onObserve}
             picnic={picnicOpen?picnic:undefined}
@@ -516,7 +522,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             sky={sky} weather={weather}
             selected={selected}
             effect={immersive?null:effect}
-            onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id))void doInteract(getPokemon(id),'pet');}else tapPokemon(getPokemon(id));}}
+            onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getPokemon(id),'pet');}}else tapPokemon(getPokemon(id));}}
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
             view={view}
             viewNonce={viewNonce}
@@ -549,14 +555,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <header className="panel-toolbar"><Icon name={area.icon} size={28}/><strong>{area.label}</strong><FeatureGuide compact id="area" autoVoice={false}/><button onClick={()=>{setAreaId(null);closePanel('area');}} aria-label="关闭活动选择"><Icon name="close" size={24}/></button></header>
         <div>{area.choices.map(id=>{const s=stationById(id);return <button key={id} onClick={()=>inviteStation(id)}><Icon name={id==='picnic'?'bowl':id==='farm'?'grass':id==='pier'?'eye':id==='sea'?'fish':s.icon} size={48}/><span>{id==='farm'?'种树果':s.name}</span></button>;})}</div>
       </section>}
-      {hint==='farm'&&<aside className="farm-feedback" role="status">
-        <Icon name={farmMessage.includes('收获')?'apple':'grass'} size={30}/><span>{farmMessage}</span>
-        {BERRY_KINDS.some(k=>farm.basket[k]>0)&&<button onClick={()=>openPicnic()}><Icon name="bowl" size={28}/>喂伙伴</button>}
-        <button onClick={()=>setFarmMessage('')} aria-label="收起种植提示"><Icon name="close" size={22}/></button>
-      </aside>}
+      {hint==='farm'&&<FarmFeedback notice={farmNotice} canShare={BERRY_KINDS.some(k=>farm.basket[k]>0)} onShare={()=>openPicnic()} onClose={()=>setFarmMessage('')}/>}
       {active&&picnicOpen&&<PicnicPanel captures={captures} farm={farm} session={picnic} initialId={picnicInitialId} ready={picnicReady} unreachable={life.timedOut} message={picnicMessage}
         onBegin={(id,berry)=>{if(!useGame.getState().beginPicnic(id,berry))setPicnicMessage('请重新选一颗还有的树果。');}}
-        onSnack={id=>{closePicnic();tapPokemon(getPokemon(id),false);setQuickCare({id,kind:'feed'});}} onFind={()=>{closePicnic();go({name:'catch'});}}
+        onSnack={id=>{closePicnic();tapPokemon(getPokemon(id),false);setQuickCare({id,kind:'feed',station:'picnic'});}} onFind={()=>{closePicnic();go({name:'catch'});}}
         onServe={servePicnic} onClose={closePicnic} onFarm={()=>openFarm()} onRetry={invitePicnic} onHear={hearPicnic}
         onStory={()=>{closePicnic();go({name:'story',id:'magic-words'});}}
         onNotebook={()=>{closePicnic();go({name:'notebook'});}}/>}

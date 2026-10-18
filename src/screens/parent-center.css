@@ -100,3 +100,6 @@
 #root .parent-organized .parent-routine h3,#root .parent-organized .parent-routine>p{margin:0}
 #root .parent-organized .parent-routine .parent-inner-fold{margin:0}
 #root .parent-organized .parent-routine .parent-inner-fold>summary{padding:12px 0}
+#root .parent-family-facts{border-top:1px solid var(--coast-line);padding-top:14px;margin:14px 0;color:var(--coast-ink);line-height:1.6}
+#root .parent-family-facts p{margin:6px 0}
+#root .parent-family-facts small,#root .parent-home-idea small{font-size:13px;color:var(--coast-muted);line-height:1.6}

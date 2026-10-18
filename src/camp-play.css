@@ -10,3 +10,17 @@
 #root .home .dock .friend-portrait>img{width:100%;height:100%;object-fit:contain}
 #root .home .dock .friend-portrait>.icon{position:absolute;right:-5px;bottom:-2px;width:22px;height:22px;background:var(--coast-paper);border-radius:50%;padding:2px}
 @media(max-width:600px){#root .home .dock{max-width:calc(100% - 24px);gap:4px}#root .home .dock .dock-btn{min-width:48px;width:52px;font-size:12px}#root .home .dock .dock-btn .ico{width:44px;height:44px}.camp-play-header{gap:5px}.camp-play-header>img{width:34px;height:34px}.camp-play-header strong{font-size:15px}.camp-play-header button{font-size:12px}.camp-play-tools{max-width:100%}.camp-play-tools button{padding:8px;font-size:14px}.camp-play-status{font-size:14px}}
+
+.camp-play-status{display:flex;align-items:center;justify-content:center;gap:8px}
+.camp-play-status>.icon{flex:none}
+.camp-play-status.phase-done{background:#e3f2da;color:#28563e;animation:camp-result .4s cubic-bezier(.22,1,.36,1) both}
+.camp-play-rounds{display:flex;align-self:center;gap:7px;margin-top:7px;padding:5px 9px;border-radius:20px;background:#fff9e9ed}
+.camp-play-rounds>span{display:grid;place-items:center;width:24px;height:24px;border:1px solid #a6bfc0;border-radius:50%;background:#e4ece9;opacity:.65}
+.camp-play-rounds>.is-current{background:#ffe677;border:2px solid #98752d;opacity:1}
+.camp-play-rounds>.is-done{background:#d6edcd;border-color:#477d52;opacity:1}
+@keyframes camp-result{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.camp-play-status.phase-done{animation:none}}
+
+.camp-bubble-touch{width:96px;height:96px;border-color:#fffdf4;box-shadow:0 0 0 5px #7bc9df60;background:radial-gradient(circle at 30% 25%,#ffffffd9 0 8%,transparent 12%),radial-gradient(transparent 40%,#b9e7ef66)}
+
+.camp-play-header{color:var(--coast-ink)}

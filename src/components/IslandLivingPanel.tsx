@@ -1,6 +1,6 @@
 import type {DecorPreview} from '../lib/decorPreview';
 import {CompanionFinder} from './CompanionFinder';
-import {togetherTurn} from '../lib/togetherTurn';
+import {togetherTurn,togetherStatus,togetherRounds,togetherChildTurn,TOGETHER_LABELS,TOGETHER_ICONS} from '../lib/togetherTurn';
 import type {UpgradeId} from '../lib/islandProgress';
 import { FeatureGuide } from './FeatureGuide';
 import { useGame } from '../store';
@@ -25,14 +25,18 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
  const session=together.session;
  const partners=session?.partners??[];
  const actor=togetherTurn(partners,together.turn);
- const childReady=session?.kind==='ball'&&together.phase==='ready'&&(actor.child||session.help);
+ const childReady=!!session&&together.phase==='ready'&&togetherChildTurn(session.kind,partners,together.turn,!!session.help);
+ const rounds=session?togetherRounds(session.kind):0;
  if(session&&tab==='play')return <section className="camp-play-hud" aria-label="一起玩">
-  <header className="camp-play-header"><button aria-label="结束一起玩，回小岛" onClick={onClose}><Icon name="back" size={28}/><span>小岛</span></button><PokeImg src={artUrl(partners[0])} alt=""/><strong>{getPokemon(partners[0]).nameZh}<small>{session.kind==='ball'?'一起玩球':'一起歇歇'}</small></strong><button aria-label="再听一次伙伴的话" disabled={!['ready','done'].includes(together.phase)} onClick={()=>void together.hear()}><Icon name="speaker" size={28}/></button></header>
-  <div className="camp-play-status" role="status">{together.phase==='arriving'?'伙伴正在走过来':together.phase==='timeout'?'这条路有点挤，换个机会吧':together.phase==='done'?'谢谢你陪我！':together.phase==='acting'?(session.kind==='rest'?'摸摸伙伴，陪它歇一歇':session.help?'收好啦！':'接住啦！'):childReady?(session.help?'点小球，收进篮子':'轮到你啦，点小球'):'看看伙伴的小球'}</div>
+  <header className="camp-play-header"><button aria-label="结束一起玩，回小岛" onClick={onClose}><Icon name="back" size={28}/><span>小岛</span></button><PokeImg src={artUrl(partners[0])} alt=""/><strong>{getPokemon(partners[0]).nameZh}<small>{TOGETHER_LABELS[session.kind]}</small></strong><button aria-label="再听一次伙伴的话" disabled={!['ready','done'].includes(together.phase)} onClick={()=>void together.hear()}><Icon name="speaker" size={28}/></button></header>
+  <div className={`camp-play-status phase-${together.phase}`} role="status"><Icon name={together.phase==='done'?'heart':together.phase==='timeout'?'sign':session.help?'hand':TOGETHER_ICONS[session.kind]} size={28}/><span>{togetherStatus(session.kind,together.phase,actor.child,!!session.help,partners.length===2)}</span></div>
+  {session.kind!=='rest'&&!session.help&&<div className="camp-play-rounds" aria-label={`已经完成 ${together.phase==='done'?rounds:together.turn} 轮，共 ${rounds} 轮`}>
+   {Array.from({length:rounds},(_,i)=><span key={i} className={together.phase==='done'||i<together.turn?'is-done':i===together.turn?'is-current':''} aria-hidden="true"><Icon name={together.phase==='done'||i<together.turn?'check':TOGETHER_ICONS[session.kind]} size={19}/></span>)}
+  </div>}
   <footer className="camp-play-tools">
-   {childReady&&<button className="camp-play-primary" onClick={together.act}><Icon name={session.help?'hand':'ball'} size={38}/>{session.help?'收好小球':'滚给伙伴'}</button>}
+   {childReady&&<button className="camp-play-primary" onClick={together.act}><Icon name={session.help?'hand':TOGETHER_ICONS[session.kind]} size={38}/>{session.help?'收好小球':session.kind==='bubbles'?'戳泡泡':session.kind==='jump'?'跳一跳':'滚给伙伴'}</button>}
    {together.phase==='timeout'&&<button onClick={together.retry}><Icon name="refresh" size={30}/>再试一次</button>}
-   {together.phase==='done'&&<><button className="camp-play-primary" onClick={()=>onBegin(session.kind,partners,session.context==='coast')}><Icon name="refresh" size={34}/>再玩一次</button><button onClick={onClose}><Icon name="island" size={30}/>回小岛</button>{together.canHelp&&<button onClick={together.askHelp}><Icon name="hand" size={30}/>收好小球</button>}</>}
+   {together.phase==='done'&&<><button className="camp-play-primary" onClick={()=>onBegin(session.kind,partners,session.context==='coast')}><Icon name="refresh" size={34}/>再玩一次</button><button onClick={together.cancel}><Icon name="picture" size={30}/>换个玩法</button>{together.canHelp&&<button onClick={together.askHelp}><Icon name="hand" size={30}/>收好小球</button>}</>}
   </footer>
  </section>;
  return <section className={`picnic-panel living-panel ${tab==='build'?'island-dressing':session?'living-session':''} ${!session&&tab==='play'?'living-choose':''}`} aria-label={tab==='play'?'一起玩':'装扮小岛'}>
@@ -48,8 +52,12 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
    {!!save.captures.length&&<>
    <div className="living-play-choices" aria-label="选一个一起玩的活动">
     <button disabled={!selected.length} onClick={()=>onBegin('ball',selected,coast)}><Icon name="ball" size={58}/><strong>玩球</strong></button>
-    <button disabled={!selected.length} onClick={()=>onBegin('rest',selected,coast)}><Icon name="rest" size={58}/><strong>歇一歇</strong></button>
-    <button onClick={()=>onPicnic(selected[0])}><Icon name="apple" size={58}/><strong>喂{getPokemon(selected[0]).nameZh}</strong></button>
+    <button onClick={()=>onBegin('bubbles',selected,coast)}><Icon name="bubbles" size={58}/><strong>戳泡泡</strong></button>
+    <button onClick={()=>onBegin('jump',selected,coast)}><span className="living-jump-picture" aria-hidden="true"><PokeImg src={artUrl(selected[0])} alt=""/><span>↑</span></span><strong>一起跳</strong></button>
+   </div>
+   <div className="living-quiet-choices">
+    <button onClick={()=>onBegin('rest',selected,coast)}><Icon name="rest" size={28}/>歇一歇</button>
+    <button onClick={()=>onPicnic(selected[0])}><Icon name="apple" size={28}/>喂点心</button>
    </div>
    <div className="living-partner-tools">
     <button aria-expanded={finding} onClick={e=>{partnerTrigger.current=e.currentTarget;setFinding(true);}}><Icon name="search" size={26}/>换个伙伴</button>

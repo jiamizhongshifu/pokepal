@@ -1,3 +1,4 @@
+import {togetherResponse} from '../lib/togetherTurn';
 import type {WeatherKind} from '../lib/weather';
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -59,8 +60,9 @@ const tmp = new THREE.Vector3();
 const camRight = new THREE.Vector3();
 
 export function Resident({
-  previewFrozen=false,facingCamera=false,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true
+  previewFrozen=false,facingCamera=false,campAction,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true
 }: {
+  campAction?:{kind:'bubbles'|'jump';progress:import('react').MutableRefObject<number>;acting:boolean};
   previewFrozen?:boolean;
   facingCamera?:boolean;
   weather?:WeatherKind;
@@ -80,6 +82,7 @@ export function Resident({
   sunYaw: number;
   onSelect: (id: number) => void;
 }) {
+  const reducedMotion=useMemo(()=>window.matchMedia('(prefers-reduced-motion: reduce)'),[]);
   const b = BEHAVIORS[p.id] ?? FALLBACK;
   const [atStation,setAtStation] = useState(false);
   const activity = visit && atStation ? visit.station.activity : visit ? "explore" : habit.activity;
@@ -418,6 +421,10 @@ export function Resident({
           else if(response==='sniff')rz+=Math.sin(k*3)*.07*fade;
           else sy-=Math.abs(Math.sin(k*4))*.06*fade;
         }else if (k < 1.4) y += Math.abs(Math.sin(k * Math.PI * 2.2)) * 0.35 * (1 - k / 1.4);
+      }
+      if(campAction&&atStation&&!mm.moving){
+        const response=togetherResponse(campAction.kind,campAction.acting?campAction.progress.current:0,reducedMotion.matches);
+        x=0;y=response.lift;sx=1;sy=1-response.squash;rz=0;scaleAll=1;
       }
       bd.position.set(x, y, 0);
       const fl = glb ? 1 : mm.facing;

@@ -18,7 +18,7 @@ test('furniture is reversible and alters automatic station ranking',()=>{
 test('cooperative completion rejects strangers and duplicates, caps memories, never grants mastery or currency',()=>{
  const s=make();const m={id:'one',kind:'ball' as const,partners:[25,7],context:'play' as const,at:100};
  assert.equal(rememberTogether(s,{...m,partners:[25,999999]}),false);assert.equal(rememberTogether(s,{...m,partners:[25,25]}),false);
- assert.equal(rememberTogether(s,m),true);assert.equal(rememberTogether(s,m),false);
+ assert.equal(s.onboarding?.completed?.play,undefined);assert.equal(rememberTogether(s,m),true);assert.equal(s.onboarding?.completed?.play,true);assert.equal(rememberTogether(s,m),false);
  for(let i=0;i<30;i++)rememberTogether(s,{...m,id:`event${i}`});
  assert.equal(s.islandLiving!.memories.length,18);assert.equal(s.learning,undefined);assert.equal(s.energy,undefined);
  assert.equal(validLiving(s.islandLiving,new Set([25,7])),true);s.islandLiving!.furniture=['bad' as any];assert.equal(validLiving(s.islandLiving,new Set([25,7])),false);
@@ -31,7 +31,7 @@ test('life story distinguishes doing, reading and a changed context',()=>{
  assert.deepEqual(storyTrail(s,'rest'),{played:true,read:true,revisited:true});
 });
 test('two residents have separate endpoints, including mixed water-land and large partners',()=>{
- for(const ids of [[25,7],[95,143],[129,25],[129,118]])for(const kind of ['ball','rest'] as const){
+ for(const ids of [[25,7],[95,143],[129,25],[129,118]])for(const kind of ['ball','rest','bubbles','jump'] as const){
   const s=togetherSession(kind,ids);const [a,b]=s.visits.map(v=>v.station.target);
   assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>2.5,`${ids} ${kind}: overlapping spots`);
   assert.notEqual(s.visits[0].key,s.visits[1].key);
@@ -43,4 +43,16 @@ test('recent events get one priority shot, then ordinary partners remain visible
  const d=new IdleDirector(0),c=[{id:1,activity:'explore',moving:true},{id:25,activity:'play',moving:false,eventAt:5},{id:7,activity:'play',moving:false,eventAt:5}];
  assert.equal(d.tick(IDLE_DELAY,true,c),7);assert.equal(d.tick(IDLE_DELAY+OBSERVE_SHOT,true,c),25);assert.equal(d.tick(IDLE_DELAY+OBSERVE_SHOT*2,true,c),1);
  d.interrupt(100000);assert.equal(d.tick(100001,true,c),null);
+});
+
+test('new play memories survive serialization and cannot claim unrelated story completion',()=>{
+ const s=make();
+ for(const kind of ['bubbles','jump'] as const){
+  const memory={id:kind,kind,partners:[25],context:'play' as const,at:100};
+  assert.equal(rememberTogether(s,memory),true);assert.equal(rememberTogether(s,memory),false);
+  assert.equal(validLiving(JSON.parse(JSON.stringify(s.islandLiving)),new Set([25,7])),true);
+  assert.equal(togetherSession(kind,[25]).visits[0].station.activity,'play');
+ }
+ assert.equal(s.islandLiving!.memories.length,2);assert.equal(s.energy,undefined);assert.equal(s.learning,undefined);
+ assert.equal(storyTrail(s,'ball').played,false);assert.equal(storyTrail(s,'rest').played,false);
 });
