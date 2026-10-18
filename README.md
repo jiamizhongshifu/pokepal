@@ -339,3 +339,5 @@ docs/                       需求、资源处理和历史设计记录
 ### 首批试用发布准备
 
 发布前执行 `npm run build`、`npm run release:prepare`；后者核对真实生产资源，不部署。明确发布后使用 `npm run release:publish`，并另做线上验收。当前执行状态、授权与真机待办见[发布准备执行记录](docs/trial/execution-20261018.md)。家长介绍和私密问题台账模板位于 `docs/trial/`，未向外发送。
+
+本轮试用准备与首次存档修复已部署，线上版本 `10/18 12:34`；提交、部署及正式站点证据见[发布记录](docs/releases/trial-preparation-20261018.md)。素材依据与目标设备实测仍为独立待办。
