@@ -1,3 +1,4 @@
+import {campShot} from './campShot';
 import { companionShot } from './companionShot';
 import { observationInterest } from './observationInterest';
 import { useEffect, useRef } from "react";
@@ -30,7 +31,7 @@ export const CAMERA_VIEWS: Record<Exclude<CameraView, "follow" | "free" | "toget
  * 镜头控制：切换机位时平滑飞过去；跟随模式下持续追着选中的宝可梦。
  * 孩子用手指拖动时立刻停止自动飞行，交给手势控制。
  */
-export function CameraRig({ spotlight,selectedId=null,active=true,meeting, view, followId, nonce, idleAllowed=false, idleBlockReason="", followPaused=false, onObserve }: { spotlight?:{x:number;z:number;wide?:boolean};selectedId?:number|null;active?:boolean;meeting?:{x:number;z:number}; view: CameraView; followId: number | null; nonce: number; idleAllowed?:boolean; idleBlockReason?:string; followPaused?:boolean; onObserve?:(id:number|null,ready?:boolean)=>void }) {
+export function CameraRig({ spotlight,selectedId=null,active=true,campIds=[], view, followId, nonce, idleAllowed=false, idleBlockReason="", followPaused=false, onObserve }: { spotlight?:{x:number;z:number;wide?:boolean};selectedId?:number|null;active?:boolean;campIds?:number[]; view: CameraView; followId: number | null; nonce: number; idleAllowed?:boolean; idleBlockReason?:string; followPaused?:boolean; onObserve?:(id:number|null,ready?:boolean)=>void }) {
   const { camera, controls, scene, size } = useThree() as unknown as { camera: THREE.PerspectiveCamera; controls: OrbitControlsImpl | null;scene:THREE.Scene;size:{width:number;height:number} };
   const portrait = useThree((s) => s.size.width / s.size.height < 0.8);
   const flying = useRef(true);
@@ -91,15 +92,12 @@ export function CameraRig({ spotlight,selectedId=null,active=true,meeting, view,
   // 选新机位（或再次点同一个机位）时开始飞
   useEffect(() => {
     manualOffset.current=false;yaw.current=null;
-    if (!spotlight&&view === "free" || view==='together'&&!meeting) { flying.current = false; return; }
+    if (!spotlight&&view === "free" || view==='together') { flying.current = false; return; }
     if(spotlight){
       goalTarget.current.set(spotlight.x,terrainHeight(spotlight.x,spotlight.z)+.3,spotlight.z);
       goalPos.current.copy(goalTarget.current).add(new THREE.Vector3(0,spotlight.wide?22:5,spotlight.wide?26:6));
       if(portrait){goalTarget.current.y-=.7;goalPos.current.y-=.7;}
-    }else if(view==='together'&&meeting){
-      goalTarget.current.set(meeting.x-(portrait?0:2),portrait?-3:0,meeting.z);
-      goalPos.current.copy(goalTarget.current).add(new THREE.Vector3(0,portrait?23:16,portrait?24:17));
-    } else if (view !== "follow" && view!=='together' && view!=="free") {
+    } else if (view !== "follow" && view!=="free") {
       const v = CAMERA_VIEWS[view];
       goalPos.current.fromArray(v.pos);
       goalTarget.current.fromArray(v.target);
@@ -113,7 +111,7 @@ export function CameraRig({ spotlight,selectedId=null,active=true,meeting, view,
       controls.update();
       flying.current = false;
     }
-  }, [view, nonce, portrait, camera, controls, followId, meeting?.x, meeting?.z,spotlight?.x,spotlight?.z,spotlight?.wide]);
+  }, [view, nonce, portrait, camera, controls, followId, spotlight?.x,spotlight?.z,spotlight?.wide]);
 
   // 手指拖动 → 停止自动飞行（跟随模式下只停止调整距离，继续追踪目标）
   useEffect(() => {
@@ -167,10 +165,12 @@ export function CameraRig({ spotlight,selectedId=null,active=true,meeting, view,
       if(!shot.measured){
         const body=scene.getObjectByName(`resident-${selectedId}`)?.getObjectByName('resident-body');
         if(body&&body.children.length){
-          body.updateWorldMatrix(true,true);
-          const bounds=new THREE.Box3().setFromObject(body,true),span=bounds.getSize(new THREE.Vector3());
-          if(span.y>.1){
-            shot.height=Math.max(pose.height,span.y);shot.width=Math.hypot(span.x,span.z);shot.measured=true;
+          // A skinned mesh may still carry pre-normalization bone matrices on its
+          // first frame. Use the stable size recorded when the model was normalized.
+          let frame:{height:number;width:number}|undefined;
+          body.traverse(object=>{if(object.userData.cameraFrame)frame=object.userData.cameraFrame;});
+          if(frame||pose.width){
+            shot.height=Math.max(pose.height,frame?.height??pose.height);shot.width=frame?.width??pose.width!;shot.measured=true;
             // Prefer the current side, but avoid placing the lens inside a tree or facility.
             let best=shot.angle,bestScore=Infinity;
             for(const delta of [0,.65,-.65,1.3,-1.3,2.2,-2.2,Math.PI]){
@@ -194,6 +194,22 @@ export function CameraRig({ spotlight,selectedId=null,active=true,meeting, view,
       camera.userData.closeup={id:selectedId,manual:false,distance:camera.position.distanceTo(pose.position),height:shot.height};
       return;
     }
+
+    if(campIds.length&&view!=='free'&&view!=='follow'){
+      if(!active||document.hidden||modalOpen||pointers.current.size||gesturing.current)return;
+      const actors=campIds.flatMap(id=>{
+        const pose=residentPoses.get(id);if(!pose)return [];
+        return [{position:pose.position,height:pose.height,width:pose.width??pose.height*1.2}];
+      });
+      if(!actors.length)return;
+      const framed=campShot(actors,size.width/size.height,camera.fov);
+      framed.position.y=Math.max(framed.position.y,terrainHeight(framed.position.x,framed.position.z)+.7);
+      const ease=reducedNow?1:1-Math.exp(-Math.min(dt,.05)*2.5);
+      camera.position.lerp(framed.position,ease);controls.target.lerp(framed.target,ease);controls.update();
+      camera.userData.camp={ids:campIds,position:camera.position.toArray(),target:controls.target.toArray()};
+      return;
+    }
+    camera.userData.camp=null;
 
     if (view === "follow" && followId !== null) {
       if(followPaused||document.hidden||modalOpen||gesturing.current||pointers.current.size){director.current.interrupt(performance.now());return;}

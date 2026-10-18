@@ -7,7 +7,7 @@ import type { FurnitureId } from '../lib/islandLiving';
 import { DECOR_LAYOUT } from './decorationLayout';
 import { terrainHeight } from './hq/Terrain';
 import { residentPoses } from './residentRuntime';
-import {togetherHelpTarget,type TogetherSession} from './together';
+import {CAMP_PLAYER_DISTANCE,togetherHelpTarget,type TogetherSession} from './together';
 /** Low, fixed footprint additions; no large new obstacle in the walking lanes. */
 export function LivingProps({items,playing=false}:{items:readonly FurnitureId[];playing?:boolean}){
  return <group name="living-furniture">{items.map(id=>{const {x,z}=DECOR_LAYOUT[id];return <group key={id} name={`living-${id}`} position={[x,id==='stones'?-.08:terrainHeight(x,z)+.04,z]}>
@@ -39,11 +39,16 @@ export function TogetherBall({session,turn,progress,ready}:{session:TogetherSess
  useFrame(()=>{
   if(!ball.current)return;const a=residentPoses.get(session.partners[0]),b=residentPoses.get(session.partners[1]);
   ball.current.visible=ready&&session.kind==='ball'&&!!a;if(basket.current)basket.current.visible=!!basketSpot&&ready;if(!a)return;
-  const start=a.position.clone(),end=b?.position.clone()??start.clone().add(new THREE.Vector3(4,0,0));
+  const start=a.position.clone(),end=b?.position.clone()??start.clone().add(new THREE.Vector3(CAMP_PLAYER_DISTANCE,0,0));
   const delta=end.clone().sub(start).normalize();start.addScaledVector(delta,.8);end.addScaledVector(delta,-.8);
+  // Hold the toy beside the child's sightline, so a small partner's face stays visible.
+  if(!b)end.z+=.45;
+  const radius=THREE.MathUtils.clamp(Math.min(a.height,b?.height??a.height)*.16,.09,.22);
+  ball.current.scale.setScalar(radius/.25);
   if(basketSpot){end.set(basketSpot.x,Math.max(.04,terrainHeight(basketSpot.x,basketSpot.z)),basketSpot.z);basket.current.position.copy(end);}
   const p=session.help?progress.current:togetherBallFraction(turn,progress.current);
-  ball.current.position.lerpVectors(start,end,p);ball.current.position.y=Math.max(.23,ball.current.position.y+.25)+(session.help?Math.sin(Math.PI*p)*1.2:0);
+  ball.current.position.lerpVectors(start,end,p);
+  ball.current.position.y=Math.max(-.12,terrainHeight(ball.current.position.x,ball.current.position.z))+radius+(session.help?Math.sin(Math.PI*p)*1.2:0);
   ball.current.rotation.z=-p*8;
  });
  return <group><group ref={basket} name="together-help-basket" visible={false}><mesh position-y={.18} castShadow><cylinderGeometry args={[.48,.35,.36,16,1,true]}/><meshStandardMaterial color="#d7b67e" map={surfaceTexture('wicker')} side={THREE.DoubleSide}/></mesh><mesh rotation-x={-Math.PI/2} position-y={.36}><torusGeometry args={[.48,.04,8,24]}/><meshStandardMaterial color="#b58c56"/></mesh><mesh position-y={.025}><cylinderGeometry args={[.35,.35,.05,16]}/><meshStandardMaterial color="#947449"/></mesh></group><mesh ref={ball} name="together-ball" visible={false} castShadow><sphereGeometry args={[.25,20,14]}/><meshStandardMaterial color="#f3ca5c" roughness={.65}/></mesh></group>;

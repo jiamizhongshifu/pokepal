@@ -67,6 +67,7 @@ export function normalizeModel(scene: THREE.Object3D, entry: ModelEntry, target:
   const k = s * (entry.scale ?? 1);
   c.position.set(-((box.min.x + box.max.x) / 2) * k, -box.min.y * k, -((box.min.z + box.max.z) / 2) * k);
   // Rotation-independent footprint for turning, tails and broad bodies. Measured once, not per frame.
+  c.userData.cameraFrame = {height:size.y*k,width:Math.hypot(size.x,size.z)*k};
   c.userData.collisionRadius = Math.hypot(size.x, size.z) * k / 2 + .10;
   return c;
 }

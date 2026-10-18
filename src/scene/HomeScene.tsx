@@ -94,12 +94,13 @@ function AdaptiveQuality({ onDecline }: { onDecline: (level: number) => void }) 
 installHeightFog();
 
 export function HomeScene({
-  previewing=false,spotlight,upgrades,livingItems=[],together,active = true, showInterface=true, idleAllowed=false, idleBlockReason="", onObserve, picnic, need, followId, captures, now, sky, weather, selected, effect, onSelect, onDeselect, farm, visits, activeVisits, onArrival, onStation, onManualPan, view = "overview", viewNonce = 0, hqLighting = false
+  previewing=false,interactionId,spotlight,upgrades,livingItems=[],together,active = true, showInterface=true, idleAllowed=false, idleBlockReason="", onObserve, picnic, need, followId, captures, now, sky, weather, selected, effect, onSelect, onDeselect, farm, visits, activeVisits, onArrival, onStation, onManualPan, view = "overview", viewNonce = 0, hqLighting = false
 }: {
   previewing?:boolean;
   spotlight?:{x:number;z:number;wide?:boolean};
   upgrades?:Record<UpgradeId,number>;
   livingItems?:readonly FurnitureId[];
+  interactionId?:number;
   together?:{session:TogetherSession;turn:number;progress:import("react").MutableRefObject<number>;acting:boolean;ready:boolean};
   active?: boolean;
   showInterface?: boolean;
@@ -242,7 +243,7 @@ export function HomeScene({
         <Campfire3D lit={weather.rain<.5&&(sky === "night" || sky === "evening" || someoneEating)}/>
         <WeatherRain weather={weather} lite={lite}/>
         {residents.map(({ p, habit, slot }) => (
-          <Resident previewFrozen={previewing} weather={weather.kind} key={p.id} showInterface={showInterface} need={need?.id===p.id?need.kind:undefined} visit={visits.find(v=>v.pokemonId===p.id)} onArrival={onArrival} p={p} habit={habit} slot={slot} selected={selected === p.id} effect={effect} tint={tint} glow={L.glow} sunYaw={Math.atan2(L.sunPos[0], L.sunPos[2])} onSelect={previewing?()=>{}:onSelect} />
+          <Resident previewFrozen={previewing} weather={weather.kind} key={p.id} showInterface={showInterface} need={need?.id===p.id?need.kind:undefined} visit={visits.find(v=>v.pokemonId===p.id)} onArrival={onArrival} p={p} habit={habit} slot={slot} selected={selected === p.id} facingCamera={!!together&&together.session.partners.length===1&&together.session.partners[0]===p.id} effect={effect} tint={tint} glow={L.glow} sunYaw={Math.atan2(L.sunPos[0], L.sunPos[2])} onSelect={previewing?()=>{}:onSelect} />
         ))}
       </Suspense>
       {/* 高画质光影：实时环境光遮蔽（半分辨率），家长中心可开关 */}
@@ -257,7 +258,7 @@ export function HomeScene({
       {/* 镜头对焦：中心清晰、四角渐虚（高画质模式下由后期管线里的同款效果代替） */}
       {!(hqLighting && !lite) && <FocusBlur samples={lite ? 0 : 4} />}
       {spotlight&&!spotlight.wide&&<mesh position={[spotlight.x,terrainHeight(spotlight.x,spotlight.z)+.07,spotlight.z]} rotation-x={-Math.PI/2}><ringGeometry args={[1.1,1.22,48]}/><meshBasicMaterial color="#ffe36d" transparent opacity={.8} depthWrite={false}/></mesh>}
-      <CameraRig spotlight={spotlight} selectedId={selected} active={active} meeting={together?{x:together.session.visits.reduce((n,v)=>n+v.station.target.x,0)/together.session.visits.length,z:together.session.visits.reduce((n,v)=>n+v.station.target.z,0)/together.session.visits.length}:undefined} idleBlockReason={active?idleBlockReason:"页面未显示"} view={view} followId={followId} nonce={viewNonce} idleAllowed={active&&idleAllowed} followPaused={!active||selected!==null||farm.open} onObserve={onObserve} />
+      <CameraRig spotlight={spotlight} selectedId={selected} active={active} campIds={together?.session.partners??(interactionId===undefined?[]:[interactionId])} idleBlockReason={active?idleBlockReason:"页面未显示"} view={view} followId={followId} nonce={viewNonce} idleAllowed={active&&idleAllowed} followPaused={!active||selected!==null||farm.open} onObserve={onObserve} />
       <OrbitControls
         makeDefault
         target={CAMERA_VIEWS.overview.target}
@@ -274,7 +275,7 @@ export function HomeScene({
         rotateSpeed={0.5}
         zoomSpeed={0.6}
       />
-      <IslandPanBounds disabled={selected!==null} />
+      <IslandPanBounds disabled={selected!==null||!!together||interactionId!==undefined} />
 
     </Canvas>
     <SceneLoading />

@@ -8,7 +8,7 @@ test('small, tall and wide residents fit the close-up in portrait and landscape'
   const camera=new PerspectiveCamera(44,aspect,.1,320);camera.position.copy(shot.position);camera.lookAt(shot.target);camera.updateMatrixWorld();
   for(const x of [-width/2,width/2])for(const y of [0,height]){const p=anchor.clone().add(new Vector3(x,y,0)).project(camera);assert.ok(Math.abs(p.x)<.95,`horizontal clip ${aspect} ${height} ${width}`);assert.ok(Math.abs(p.y)<.95,`vertical clip ${aspect} ${height} ${width}`);}
   const face=anchor.clone().add(new Vector3(0,height*.7,0)).project(camera);
-  if(aspect<1.05)assert.ok(face.y>.1,'face must stay above the bottom interaction card');else assert.ok(face.x>.1,'face must stay right of the left card');
+  if(aspect<1.05)assert.ok(face.y>.1,'face must stay above the bottom interaction card');else assert.ok(Math.abs(face.x)<.1,'face must stay between the corner controls');
  }
 });
 test('composition follows elevation and bearing without moving the resident',()=>{

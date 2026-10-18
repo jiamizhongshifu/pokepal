@@ -1,3 +1,4 @@
+import {CompanionStrip} from '../components/CompanionStrip';
 import {previewLevels,type DecorPreview} from '../lib/decorPreview';
 import {DECOR_LAYOUT} from '../scene/decorationLayout';
 import {TENT,PICNIC,PLAYGROUND,FARM_ENTRY} from '../scene/layout';
@@ -482,7 +483,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
   return (
     <div className={`screen home sky-${sky}${immersive?" is-immersive":""}`} data-home-panel={panel??undefined} data-hint={hint??undefined} data-modal-blocked={blocked||undefined}>
-      <TopBar title={`${save.trainer?.name ?? ""}的家园`} homeActions={active&&!livingOpen&&!sel&&!station&&!picnicOpen?<>
+      {panel!=='companion'&&<TopBar title={`${save.trainer?.name ?? ""}的家园`} homeActions={active&&!livingOpen&&!sel&&!station&&!picnicOpen?<>
         <Announcements active={active}/>
         <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
         <details className="home-more" open={panel==='menu'}><summary onClick={e=>{e.preventDefault();if(panel==='menu')closePanel('menu');else activatePanel('menu');}}><Icon name="island" size={30}/><span>小岛生活</span><span aria-hidden="true">⌄</span></summary><div className="home-more-menu" onClick={()=>closePanel('menu')}>
@@ -490,7 +491,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <button onClick={()=>{stopSpeech();go({name:'diary'});}}><Icon name="diary" size={30}/><span>小日记</span></button>
         {evolving===null&&<button ref={immersiveEntry} aria-label="隐藏界面，观赏小岛" onClick={()=>{stopSpeech();ambient.poke();setFinderOpen(false);setAreaId(null);setShowGestureHint(false);setImmersive(true);}}><Icon name="eye" size={28}/><span>看风景</span></button>}
         </div></details>
-      </>:undefined} />
+      </>:undefined} />}
       {immersive&&<button autoFocus className="immersive-exit" onClick={leaveImmersive} aria-label="退出沉浸模式，显示界面"><Icon name="back" size={24}/><span>显示界面</span></button>}
       {active&&!immersive&&(panel===null||weatherOpen)&&<WeatherBadge weather={weather} open={weatherOpen} onOpen={setWeatherOpen}/>}
       <FeatureGuide id={captures.length?(view==='farm'?'farm':'home'):'firstFriend'} floating enabled={hint==='guide'} topics={captures.length?['home','farm','camera','music']:undefined}/>
@@ -498,7 +499,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       </div>
       <div className="meadow">
         <Suspense fallback={<div className="scene-loading"><div className="sl-ball" /><div>正在布置家园…</div></div>}>
-          <HomeScene spotlight={decorFocus} upgrades={displayedLevels} livingItems={save.islandLiving?.furniture??[]} together={together.session?{session:together.session,turn:together.turn,progress:together.progress,acting:together.phase==='acting',ready:together.arrived}:undefined} active={active} previewing={!!decorPreview} showInterface={!immersive&&!blocked&&!decorPreview} need={hint==='care'?need:null} followId={followId}
+          <HomeScene interactionId={panel==='facility'?life.manual?.pokemonId:picnicOpen?picnic?.pokemonId:undefined} spotlight={decorFocus} upgrades={displayedLevels} livingItems={save.islandLiving?.furniture??[]} together={together.session?{session:together.session,turn:together.turn,progress:together.progress,acting:together.phase==='acting',ready:together.arrived}:undefined} active={active} previewing={!!decorPreview} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session} need={hint==='care'?need:null} followId={followId}
             idleBlockReason={blocked?"全局弹窗打开":area?"选择小岛活动":finderOpen?"伙伴册打开":livingOpen?"小岛生活互动":save.settings.idleCamera===false?"家长已关闭闲置观察":selected!==null?"宝可梦卡片打开":stationId!==null?"场景互动打开":evolving!==null?"进化中":picnicOpen?"野餐面板打开":""}
             idleAllowed={!blocked&&panel===null&&save.settings.idleCamera!==false&&evolving===null} onObserve={onObserve}
             picnic={picnicOpen?picnic:undefined}
@@ -532,7 +533,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         {finderOpen&&<CompanionFinder ids={captures.map(c=>c.id)} selected={selected} onSelect={id=>tapPokemon(getPokemon(id))} onClose={()=>{setFinderOpen(false);ambient.poke();}}/>}
       </>}
       {active&&livingOpen&&<IslandLivingPanel onPreview={setDecorPreview} save={save} together={together} initialId={livingInitialId} initialTab={livingTab} initialUpgrade={livingUpgrade} onBegin={beginTogether}
-        onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();}}
+        onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();pickView('overview');}}
         onPicnic={id=>openPicnic(id)}
         onStory={id=>{together.cancel();go({name:'story',id});}} onNotebook={()=>{together.cancel();go({name:'notebook'});}} onHear={hearLiving}/>}
       {hint==='observe'&&observing!==null&&<div className="idle-observe-status" role="status">正在看{getPokemon(observing).nameZh}<small>轻触屏幕，自己逛逛</small></div>}
@@ -558,7 +559,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         onNotebook={()=>{closePicnic();go({name:'notebook'});}}/>}
       {hint==='picnic'&&picnic&&<button className="picnic-resume" onClick={()=>openPicnic()}>{picnic.servedAt?'看看野餐回忆':'继续伙伴野餐'}</button>}
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
-        <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
+        <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();pickView('overview');}}><Icon name="close" size={26}/></button>
         <Icon name={station.icon} size={40}/>
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getPokemon(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? station.water ? '需要喜欢水的小伙伴来这里玩' : '这里适合在陆地活动的小伙伴':'先去草丛认识宝可梦'}</span></div>
@@ -582,17 +583,19 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       )}
 
       {active && panel==='companion' && sel && selCap && (
-        <section className="sheet companion-card" aria-label={`${sel.nameZh}的互动卡片`}>
+        <>
+        <CompanionStrip ids={captures.map(c=>c.id)} selected={sel.id} onSelect={id=>tapPokemon(getPokemon(id))} onClose={()=>{setSelected(null);setPrompt(null);stopSpeech();}}/>
+        <section className={`sheet companion-card camp-summary ${feedPicker||prompt?'camp-detail':''}`} aria-label={`${sel.nameZh}的互动卡片`}>
           <nav className="companion-toolbar" aria-label="伙伴互动导航">
             {(feedPicker||prompt)?<button className="companion-back" aria-label="返回伙伴互动" onClick={()=>{setFeedPicker(false);setPrompt(null);stopSpeech();}}><Icon name="back" size={24}/>返回</button>:<span>和伙伴一起</span>}
             <FeatureGuide compact id={feedPicker?"feed":"care"} enabled={!prompt} autoVoice={false}/>
-            <button className="companion-close" onClick={()=>{setSelected(null);setPrompt(null);stopSpeech();}} aria-label="关闭"><Icon name="close" size={26}/></button>
+
           </nav>
           <div className="sheet-body">
             <header className="companion-heading">
               <PokeImg className="sheet-art" src={artUrl(sel.id)} alt="" />
               <div><h2 className="sheet-name">{sel.nameZh}</h2><div className="companion-friendship" aria-label={`友好度 ${friendshipLevel(selCap.friendship)} 颗心`}><Hearts n={friendshipLevel(selCap.friendship)} /></div></div>
-              {!feedPicker&&!prompt&&captures.length>1&&<button className="companion-find" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><Icon name="search" size={24}/></button>}
+
             </header>
 
             {!feedPicker&&!prompt&&<p className="living-preference">{PREFERENCE_LABEL[preference(selCap)]}{save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='ball'?' · 上次我们一起玩了球':save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='rest'?' · 记得我们一起休息过':''}</p>}
@@ -619,7 +622,12 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
               </div>
             ) : (
-              <div className="actions">
+              null
+            )}
+
+          </div>
+        </section>
+        {!feedPicker&&!prompt&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions">
                 {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
                 <button className={`act follow-action ${followId === sel.id ? "following" : ""}`} aria-pressed={followId === sel.id} onClick={() => { const starting=followId!==sel.id; pickView(starting ? "follow" : "free"); if(starting){setFollowId(sel.id);setSelected(null);setPrompt(null);} if(starting) say(...bi(["en","Follow me!",{en:"Follow me!",zh:"跟着我走吧！"}],["zh","跟着我走吧！"])); }}><Icon name="target" size={32} />{followId === sel.id ? "停止跟随" : "跟着走"}</button>
                 <button className={`act pet-action ${selNeed?.kind==='pet'?'requested':''}`} onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
@@ -631,20 +639,14 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
                     <Icon name="sparkle" size={28} />可以进化啦
                   </button>
                 )}
-              </div>
-            )}
-            {!feedPicker&&!prompt&&<details className="companion-more"><summary><Icon name="heart" size={22}/>更多陪伴<span aria-hidden="true">⌄</span></summary><div className="actions">
+              </div>            {!feedPicker&&!prompt&&<details className="companion-more"><summary><Icon name="heart" size={22}/>更多陪伴<span aria-hidden="true">⌄</span></summary><div className="actions">
                 <button className="act" onClick={() => doInteract(sel, "night")}><Icon name="moon" size={32} />晚安</button>
                 <button className="act" onClick={() => playCry(sel.id)}><Icon name="speaker" size={32} />叫声</button>
                 <button className="act" onClick={() => go({ name: "dexDetail", id: sel.id })}><Icon name="dex" size={32} />图鉴</button>
               </div>
-            {!feedPicker&&!prompt&&captures.length>1&&<nav className="companion-switch" aria-label="切换伙伴">
-              <button aria-label="上一个伙伴" onClick={()=>tapPokemon(residents[(residents.findIndex(p=>p.id===sel.id)+residents.length-1)%residents.length])}>‹<PokeImg src={artUrl(residents[(residents.findIndex(p=>p.id===sel.id)+residents.length-1)%residents.length].id)} alt=""/></button>
-              <button aria-label="下一个伙伴" onClick={()=>tapPokemon(residents[(residents.findIndex(p=>p.id===sel.id)+1)%residents.length])}><PokeImg src={artUrl(residents[(residents.findIndex(p=>p.id===sel.id)+1)%residents.length].id)} alt=""/>›</button>
-            </nav>}
-            </details>}
-          </div>
-        </section>
+
+            </details>}</section>}
+        </>
       )}
 
       {hint==='gesture' && <div className="camera-gesture-hint">单指转一转 · 双指拖动 · 捏合缩放<button aria-label="关闭镜头操作提示" onClick={()=>setShowGestureHint(false)}>×</button></div>}

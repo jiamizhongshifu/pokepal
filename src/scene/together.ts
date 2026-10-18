@@ -3,6 +3,7 @@ import type { TogetherKind } from '../lib/islandLiving';
 import { isAquatic, stationById, type Visit } from './islandLife';
 import { planWalk,clearSpot } from './navigation';
 import { onIsland } from './layout';
+export const CAMP_PLAYER_DISTANCE=2.6;
 export interface TogetherSession {id:string;kind:TogetherKind;help?:true;partners:number[];context:'play'|'shade'|'coast';visits:Visit[];}
 /** Separate route endpoints, never two models at a shared station target. */
 export function togetherSession(kind:TogetherKind,partners:number[],coast=false):TogetherSession{
@@ -14,7 +15,7 @@ export function togetherSession(kind:TogetherKind,partners:number[],coast=false)
   const desired=water?onIsland(23+i*19,1.08):{x:(kind==='ball'?0:-2)+(i===0?-2.6:2.6),z:kind==='ball'?0:7.5};
   const path=planWalk({x:0,z:4},desired,1.15);return path[path.length-1]??desired;
  });
- return {id,kind,partners,context:water?'coast':kind==='ball'?'play':'shade',visits:partners.map((pokemonId,i)=>({pokemonId,manual:true,key:`together-${id}-${i}`,faceTo:points[1-i]??{x:points[i].x+4,z:points[i].z},station:{...base,id:`together-${id}-${i}`,target:points[i],water:isAquatic(getPokemon(pokemonId)),activity:kind==='ball'?'play':'nap',name:kind==='ball'?'轮流玩球':'一起休息'}}))};
+ return {id,kind,partners,context:water?'coast':kind==='ball'?'play':'shade',visits:partners.map((pokemonId,i)=>({pokemonId,manual:true,key:`together-${id}-${i}`,faceTo:points[1-i]??{x:points[i].x+CAMP_PLAYER_DISTANCE,z:points[i].z},station:{...base,x:points[i].x,z:points[i].z,id:`together-${id}-${i}`,target:points[i],water:isAquatic(getPokemon(pokemonId)),activity:kind==='ball'?'play':'nap',name:kind==='ball'?'轮流玩球':'一起休息'}}))};
 }
 
 /** A temporary, small basket uses a clear spot away from both resting bodies. */

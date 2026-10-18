@@ -1,3 +1,4 @@
+import {EnergyToast} from '../components/EnergyToast';
 import { EnergyReturn } from '../components/EnergyReturn';
 import {ProgressHost,RoundProgress} from '../components/RoundProgress';
 import { learningProfile } from '../lib/learningStage';
@@ -15,7 +16,6 @@ import { ListenTask } from "./tasks/ListenTask";
 import { RepeatTask } from "./tasks/RepeatTask";
 import { WordPicTask } from "./tasks/WordPicTask";
 import { TraceTask } from "./tasks/TraceTask";
-import { PokeBall } from "../components/PokeBall";
 import type { TaskKind } from "../types";
 import { Icon } from "../icons";
 
@@ -76,16 +76,11 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
           <div className="learning-reward">
           <div className="cel-title">这一小段完成啦！</div>
           {!!discoveries.length&&<><p>刚才一起遇见了</p><div className="session-discoveries">{discoveries.map(key=>{const entry=learningEntry(key)!;return <span key={key}><LearningArt entry={entry}/><b lang="en">{entry.en}</b><small>{entry.zh}</small></span>;})}</div></>}
-          {reward.gained+reward.bonus>0?<div className="cel-energy"><Icon name="bolt" size={84} />+{reward.gained + reward.bonus}</div>:<p>又一起练习了一次！</p>}
-          <p className="participation-note">{reward.repeated?"这类今天已记下，不重复发能量。":"听、指认、共读也能收集能量。"}{reward.boardComplete?" 今天已体验三类，自由玩吧！":""}</p>
-          {reward.capped && reward.gained === 0 && <div className="cel-note">今天的能量满啦</div>}
-          {reward.ballGranted && (
-            <div className="cel-master"><PokeBall type="poke" size={80} className="spin-in" /> 精灵球！</div>
-          )}
-          <EnergyReturn/><div className="cel-actions">
-            <button className="btn-big" onClick={() => go({name:"home",station:sessionStart.unit.station})}><Icon name="island" size={40} /> 去岛上用一用</button>
-            <button className="btn-big alt" onClick={back}><Icon name="ear" size={40} /> {practice ? "选其他练习" : "回学习小路"}</button>
-          </div>
+          <EnergyToast reward={reward}/>
+          <div className="cel-actions completion-next">
+            <button className="btn-big" onClick={()=>go({name:'journey'})}><Icon name="sign" size={36}/>看看下一站</button>
+            <button className="btn-big alt" onClick={()=>go({name:'home',station:sessionStart.unit.station})}><Icon name="island" size={28}/>回小岛玩</button>
+          </div><EnergyReturn/>
           </div>
         </Celebration>
       )}

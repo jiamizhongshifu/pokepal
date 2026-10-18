@@ -60,9 +60,10 @@ const tmp = new THREE.Vector3();
 const camRight = new THREE.Vector3();
 
 export function Resident({
-  previewFrozen=false,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true, weather="sunny"
+  previewFrozen=false,facingCamera=false,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true, weather="sunny"
 }: {
   previewFrozen?:boolean;
+  facingCamera?:boolean;
   weather?:WeatherKind;
   need?: CareKind;
   showInterface?: boolean;
@@ -329,7 +330,7 @@ export function Resident({
     }
     }else{mm.moving=false;}
     crowd.set(p.id,{x:g.position.x,z:g.position.z,r:radius,layer,moving:mm.moving,vx:(g.position.x-startX)/Math.max(dt,.001),vz:(g.position.z-startZ)/Math.max(dt,.001)});
-    residentPoses.set(p.id, {position:g.position,heading:mm.heading,height,moving:mm.moving,activity,weather:visit?.station.id.startsWith("weather-")?visit.station.name:undefined});
+    residentPoses.set(p.id, {position:g.position,heading:mm.heading,height,width:collisionRadius.current*2,moving:mm.moving,activity,weather:visit?.station.id.startsWith("weather-")?visit.station.name:undefined});
     if(import.meta.env.DEV){g.userData.destination={x:mm.target.x,z:mm.target.z};g.userData.avoidance=avoidance.current.blocker;}
     g.userData.weatherReaction=visit?.station.id.startsWith("weather-")?visit.station.name:null;g.userData.interacting=selected;g.userData.activity=activity;g.userData.moving=mm.moving;
     if(visit){
@@ -352,7 +353,7 @@ export function Resident({
     // ---------- 3. 朝向 ----------
     if (facingGroup.current) {
       const toCam = Math.atan2(state.camera.position.x - g.position.x, state.camera.position.z - g.position.z);
-      const desired=selected||responding||(need&&!mm.moving)?toCam:mm.moving?mm.heading:visit?Math.atan2((visit.faceTo?.x??visit.station.x)-g.position.x,(visit.faceTo?.z??visit.station.z)-g.position.z):toCam;
+      const desired=selected||(facingCamera&&atStation)||responding||(need&&!mm.moving)?toCam:mm.moving?mm.heading:visit?Math.atan2((visit.faceTo?.x??visit.station.x)-g.position.x,(visit.faceTo?.z??visit.station.z)-g.position.z):toCam;
       facingGroup.current.rotation.y=glb?facingGroup.current.rotation.y+angleDelta(facingGroup.current.rotation.y,desired)*(1-Math.exp(-dt*6)):toCam;
     }
 

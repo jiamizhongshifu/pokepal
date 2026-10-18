@@ -35,6 +35,7 @@ test('two residents have separate endpoints, including mixed water-land and larg
   const s=togetherSession(kind,ids);const [a,b]=s.visits.map(v=>v.station.target);
   assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>2.5,`${ids} ${kind}: overlapping spots`);
   assert.notEqual(s.visits[0].key,s.visits[1].key);
+  for(const {station} of s.visits)assert.ok(Math.hypot(station.x-station.target.x,station.z-station.target.z)<.01,"arrival uses the actual temporary play spot, not the old facility center");
   if(ids[0]===129)assert.equal(s.visits[0].station.water,true);
  }
 });

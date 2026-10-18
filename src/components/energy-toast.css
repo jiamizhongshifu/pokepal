@@ -1,0 +1,4 @@
+#root .energy-receipt{position:fixed;z-index:300;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);box-sizing:border-box;pointer-events:none}
+#root .energy-receipt.is-visible{display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:24px;background:#fff0ae;color:#624515;border:2px solid #e3c557;box-shadow:0 4px 12px #273e4620;font-weight:800;font-size:16px}
+#root .energy-receipt .icon{flex-shrink:0}
+@media(max-height:500px){#root .energy-receipt{top:calc(64px + env(safe-area-inset-top));font-size:14px}}
