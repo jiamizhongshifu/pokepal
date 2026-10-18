@@ -7,7 +7,7 @@ function filesIn(dir){return readdirSync(dir,{withFileTypes:true}).flatMap(e=>{
  const path=`${dir}/${e.name}`;return e.isDirectory()?filesIn(path):extensions.test(e.name)?[path]:[];
 });}
 export function sourceSnapshot(){
- const files=[...filesIn('src'),...filesIn('scripts'),'package.json','package-lock.json','vite.config.ts','tsconfig.json','index.html'].sort();
+ const files=[...filesIn('src'),...filesIn('scripts'),...filesIn('privacy'),...filesIn('terms'),...filesIn('feedback'),'package.json','package-lock.json','vite.config.ts','tsconfig.json','index.html'].sort();
  const hashes=Object.fromEntries(files.map(f=>[f,createHash('sha256').update(readFileSync(f)).digest('hex')]));
  const hash=createHash('sha256').update(JSON.stringify(hashes)).digest('hex');
  const dir=`.build/releases/${hash}`;mkdirSync(dir,{recursive:true});

@@ -54,7 +54,7 @@ function OnlineSetup({initiallyOpen}:{initiallyOpen:boolean}){
    <p className="offline-update-detail">{phase==='error'?'请确认网络后再试，宝可梦和学习进度还在。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的宝可梦、学习进度和日记。'}</p>
    <div className="offline-update-actions">{phase==='ready'?<button className="offline-update-reopen" onClick={()=>location.reload()}><Icon name="play" size={28}/>打开新版本</button>:<button disabled={busy} onClick={()=>void check()}><Icon name="refresh" size={28}/>{busy?'正在准备…':phase==='error'?'再试一次':'检查更新'}</button>}</div>
   </section>
-  <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。网页版不提供完整离线安装。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心导出存档。</p></details>
+  <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。网页版不提供完整离线安装。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心分别导出游戏存档、备份日记与原声，并另存需要保留的跟读录音。</p></details>
  </div></details>;
 }
 function OfflineSetup({initiallyOpen,compactTools}:{initiallyOpen:boolean;compactTools:boolean}) {

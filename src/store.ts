@@ -17,6 +17,7 @@ import { create } from "zustand";
 import type { Daily, DaySummary, InteractKind, SaveData, Settings, TaskKind } from "./types";
 import { todayStr } from "./lib/date";
 import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictError } from "./lib/db";
+import {clearParentNotice} from './lib/parentNotice';
 import { validateSave } from "./lib/saveValidation";
 import { acquireSaveSession } from "./lib/saveSession";
 import { POKEMON } from "./data/pokemon";
@@ -469,6 +470,7 @@ export const useGame = create<State>((set, get) => {
       try{
         await flushSave();const s=newSave();
         revision=await resetSave(s,revision);
+        try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}
         set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
       }catch(error){set({saveIssue:error instanceof SaveConflictError?'conflict':'write'});}
       finally{set({saveBusy:false});}

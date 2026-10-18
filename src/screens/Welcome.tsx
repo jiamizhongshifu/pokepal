@@ -8,12 +8,18 @@ import { AVATARS, Icon } from "../icons";
 import { PokeImg } from "../components/PokeImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { TrainerAvatar } from "../components/TrainerAvatar";
+import {useState} from 'react';
+import {ParentLinks, ParentNotice} from '../components/ParentSupport';
+import {hasReadParentNotice} from '../lib/parentNotice';
 
 
 export function Welcome() {
   const trainer = useGame((s) => s.save.trainer);
   const createTrainer = useGame((s) => s.createTrainer);
   const go = useGame((s) => s.go);
+  const [notice,setNotice]=useState<{avatar?:string}|null>(null);
+  const [noticeRead,setNoticeRead]=useState(()=>{try{return hasReadParentNotice(localStorage);}catch{return false;}});
+  const requestBegin=(avatar?:string)=>{if(!noticeRead)setNotice({avatar});else void begin(avatar);};
 
   const begin = async (avatar?: string) => {
     unlockAudio();
@@ -47,7 +53,7 @@ export function Welcome() {
         <div className="logo-en">Little Pokémon Trainer</div>
       </div>
       {trainer ? (
-        <button className="start welcome-enter" onClick={() => begin()} aria-label="一起出发 Let’s play!">
+        <button className="start welcome-enter" onClick={() => requestBegin()} aria-label="一起出发 Let’s play!">
           <span className="enter-avatar"><TrainerAvatar avatar={trainer.avatar} photo={trainer.avatarPhoto} size={64}/></span>
           <span className="enter-copy"><strong>一起出发</strong><span lang="en">Let’s play!</span></span>
           <span className="enter-arrow" aria-hidden="true">›</span>
@@ -58,13 +64,15 @@ export function Welcome() {
           <FeatureGuide id="welcome" autoVoice={false}/>
           <div className="avatar-row">
             {AVATARS.map((a) => (
-              <button key={a} className="avatar-choice" onClick={() => begin(a)} aria-label="选择这个训练师"><Icon name={a} size={120} /></button>
+              <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label="选择这个训练师"><Icon name={a} size={120} /></button>
             ))}
           </div>
         </div>
       )}
       </div>
       <DeviceSetup />
+      <ParentLinks/>
+      {notice&&<ParentNotice onClose={()=>setNotice(null)} onContinue={()=>{const avatar=notice.avatar;setNoticeRead(true);setNotice(null);void begin(avatar);}}/>}
     </div>
   );
 }

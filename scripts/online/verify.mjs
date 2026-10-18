@@ -18,4 +18,11 @@ const files=[];async function walk(dir){for(const d of await readdir(dir,{withFi
 assert.ok(files.length<20000);assert.ok(!files.some(f=>/^(voice\/|certs\/|__ipad\/)|\.(pem|key|py)$|^\.env/.test(f)));
 const sw=await readFile(resolve(root,'sw.js'),'utf8');assert.ok(!sw.includes('voice-cache-sw'));assert.ok(!sw.includes('offline-release'));assert.ok(!sw.includes('.glb'));assert.ok(!sw.includes('/packs/'));
 const release=JSON.parse(await readFile(resolve(root,'release.json'),'utf8'));assert.equal(release.mode,'online');
+for(const route of ['privacy','terms','feedback']){
+ const html=await readFile(resolve(root,route,'index.html'),'utf8');
+ assert.ok(html.includes('id="root"'),`Missing parent page: ${route}`);
+ const assets=[...html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)"/g)].map(m=>m[1]);
+ assert.ok(assets.some(f=>f.endsWith('.js')),`Missing parent entry: ${route}`);
+ for(const asset of assets)await stat(resolve(root,asset.slice(1)));
+}
 console.log(JSON.stringify({release:release.id,files:files.length,verifiedRecordings:checked,packs:packNames.size,precacheOnlyShell:true},null,2));
