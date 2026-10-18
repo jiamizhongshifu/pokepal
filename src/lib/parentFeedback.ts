@@ -16,3 +16,12 @@ export function makeFeedbackReport(input:{version:string;mode:string;topic:strin
   lines.push('', '家长填写的说明：', input.details.trim().slice(0,1500)||'（请补充：在哪一步、发生了什么、希望怎样）', '', '此报告不自动附带孩子姓名、头像、录音、日记、存档、网址参数或设备标识。请在发送前检查手写内容。');
   return lines.join('\n');
 }
+
+// Keep long Chinese feedback out of mailto URLs; copying/downloading preserves the full report.
+export function feedbackMailDraft(email:string,topic:string,report:string){
+  const subject=`PokéPal 家长反馈：${topic}`;
+  const base=`mailto:${email}?subject=${encodeURIComponent(subject)}`;
+  const full=`${base}&body=${encodeURIComponent(report)}`;
+  const needsPaste=full.length>1800;
+  return {href:needsPaste?base:full,needsPaste};
+}

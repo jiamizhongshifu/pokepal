@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {PARENT_CONTACT, parentContactReady} from '../data/parentContact';
 import {PARENT_NOTICE_VERSION, recordParentNotice} from '../lib/parentNotice';
-import {FEEDBACK_TOPICS, feedbackEnvironment, makeFeedbackReport} from '../lib/parentFeedback';
+import {FEEDBACK_TOPICS, feedbackEnvironment, makeFeedbackReport, feedbackMailDraft} from '../lib/parentFeedback';
 import {useModalLayer} from '../lib/modalLayer';
 import './parent-support.css';
 
@@ -63,7 +63,7 @@ function Privacy() {
       <div><dt>小日记</dt><dd>孩子主动录制的声音、家长填写的文字及生成的故事页留在本机，直到主动删除或浏览器清理。{import.meta.env.VITE_ONLINE?'此网页版没有云端转写，不会把日记录音发给火山。':'本地家庭版只有在另行点击“上传录音，转成文字”时，才经家庭服务发送给火山；请先阅读该功能的上传提示。'}</dd></div>
       <div><dt>阅读确认与资源缓存</dt><dd>localStorage 保存已阅读的说明版本和公告已读状态，帮助避免重复提示；图片、配音和页面缓存用于再次加载。阅读确认不代表验证了家长身份，也不是上传授权。</dd></div>
     </dl><p>除跟读原声的 60 段上限外，本机进度和日记没有自动到期删除。清除网站数据、空间不足或浏览器策略可能导致丢失；持久保存请求不是备份保证。</p></section>
-    <section><h2>联网时发生什么</h2><p>{import.meta.env.VITE_ONLINE?'网页版由 Cloudflare Pages 托管。':'此说明也覆盖使用 Cloudflare Pages 的联网体验。'}打开页面、播放已生成的配音、加载模型及检查更新时，会向托管服务请求文件；服务可能处理 IP 地址、请求路径、时间和浏览器信息，用于传输与安全防护。其服务可能在不同国家或地区处理请求。</p><p>应用当前不接入广告、行为回放或用于营销的用户画像；没有账号注册或跨设备自动同步。预先生成的火山配音是供播放的资源，不需要上传孩子声音来播放。</p><p>托管服务的日志保留和处理适用其服务安排，不等同于本机存档的保存规则。具体运营配置仍需在对外试用前核实；我们不承诺服务器完全不留日志。</p><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">查看 Cloudflare 隐私说明（外部网站）</a></section>
+    <section><h2>联网时发生什么</h2><p>{import.meta.env.VITE_ONLINE?'网页版由 Cloudflare Pages 托管。':'此说明也覆盖使用 Cloudflare Pages 的联网体验。'}打开页面、播放已生成的配音、加载模型及检查更新时，会向托管服务请求文件；服务可能处理 IP 地址、请求路径、时间和浏览器信息，用于传输与安全防护。其服务可能在不同国家或地区处理请求。</p><p>应用当前不接入广告、行为回放或用于营销的用户画像；没有账号注册或跨设备自动同步。预先生成的火山配音是供播放的资源，不需要上传孩子声音来播放。</p><p>2026-10-18 核对的站点配置未启用 Cloudflare Web Analytics，当前发布不运行 Pages Functions。托管服务仍可能为传输、安全及维护处理请求信息，保存与处理依其服务安排；项目配置不能证明平台完全不留日志，也未确认一个适用于全部平台日志的统一保存天数。</p><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">查看 Cloudflare 隐私说明（外部网站）</a></section>
     <section><h2>不提供照片或录音，也能体验</h2><p>相册和拍照仅在主动选择头像时调用；可以一直使用预设头像。麦克风仅在点击录音/跟读时请求，拒绝后可以继续听故事、选择图片，并使用页面上的替代确认或由家长填写文字。</p><p>可以在浏览器的网站权限中撤回相机或麦克风权限。系统键盘听写属于设备或输入法服务，是否联网由该服务决定；不希望使用时可手动输入。</p></section>
     <section><h2>查看、更正、备份和删除</h2><ol>
       <li>修改昵称：家长中心 → 陪伴设置 → 训练师名字。更换/移除照片：点击头像，选择预设训练师并保存。</li>
@@ -71,7 +71,7 @@ function Privacy() {
       <li>清空：家长中心 → 应用维护 → 清空本机数据。确认后删除当前本机的存档、跟读录音和小日记，无法撤销；先导出需要保留的内容。</li>
       <li>撤回阅读确认、停止试用：家长中心的“暂停试用”会回到首页，下次开始时重新展示须知，不删除进度。若要连同资源缓存清除，可使用浏览器“清除该网站数据”；已经下载的备份需自行删除。</li>
     </ol><p>没有云端存档副本，运营者不能远程找回或读取你的本机内容。收到隐私或数据处理请求时，会通过家长联系渠道核对具体问题；请勿直接发送孩子原声或完整备份。</p></section>
-    <section><h2>反馈与说明更新</h2><p>反馈草稿在当前页面生成，不自动保存或上传。只有你主动复制、下载或用邮件/微信发送时，内容才离开该页面。发送后所用邮箱或通信服务也会处理内容；联系记录仅用于回复和排查问题，不用于孩子画像或营销。反馈渠道的保存期限需要在开放试用前确认。</p><p>若增加云端存储、转写或其他数据用途，会先更新说明，再按需要单独告知并征求家长决定；不会用本次阅读确认代替未来的新授权。</p><a href="/feedback/">联系家长支持</a></section>
+    <section><h2>反馈与说明更新</h2><p>反馈草稿在当前页面生成，不自动保存或上传。主动复制会写入剪贴板，下载会生成本地文件；只有家长自行发送后，运营者才会收到。联系记录仅用于回复和排查问题，不用于孩子画像或营销。</p><h3>谁处理反馈、保存多久</h3><ul><li>项目收到的反馈仅由{PARENT_CONTACT.operator}处理。</li><li>问题关闭后保留 30 天，每周检查并清理到期记录；未关闭的问题每 30 天复核一次。</li><li>家长可通过原邮件或微信渠道申请更正或删除，请说明对应的问题，无需提供孩子证件或原始录音。</li></ul><p>上述规则适用于运营者管理的反馈记录。邮箱、微信等服务商也会处理通信内容，其系统备份、安全日志及其他留存依各自规则处理；运营者清理记录不代表服务商所有副本即时删除。</p><p>若增加云端存储、转写或其他数据用途，会先更新说明，再按需要单独告知并征求家长决定；不会用本次阅读确认代替未来的新授权。</p><a href="/feedback/">联系家长支持</a></section>
   </>;
 }
 function Trial() {
@@ -89,6 +89,7 @@ function Feedback() {
   const [details,setDetails]=useState(''),[includeDevice,setIncludeDevice]=useState(false),[status,setStatus]=useState('');
   const preview=useRef<HTMLTextAreaElement>(null);
   const report=makeFeedbackReport({version:import.meta.env.VITE_APP_BUILD_ID,mode:import.meta.env.VITE_ONLINE?'联网网页版':'本地家庭版',topic,details,environment:includeDevice?feedbackEnvironment(navigator.userAgent,innerWidth,navigator.onLine):undefined});
+  const mail=feedbackMailDraft(PARENT_CONTACT.email,topic,report);
   const download=()=>{const url=URL.createObjectURL(new Blob([report],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='pokepal-parent-feedback.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('已准备文本文件，请在下载中查看；尚未发送。');};
   return <><Contact/><p className="ps-lead">先在这里整理，再由家长决定是否发送。不会自动上传。</p>
     <section className="ps-feedback-form"><h2>1. 简单说说发生了什么</h2><label>问题类型<select value={topic} onChange={e=>{setTopic(e.target.value);setStatus('');}}>{FEEDBACK_TOPICS.map(t=><option key={t}>{t}</option>)}</select></label>
@@ -97,7 +98,7 @@ function Feedback() {
     <label className="ps-confirm"><input type="checkbox" checked={includeDevice} onChange={e=>{setIncludeDevice(e.target.checked);setStatus('');}}/><span>附上简化设备信息（浏览器及主版本、屏幕档位、联网状态，可选）</span></label></section>
     <section><h2>2. 检查将要分享的文字</h2><textarea className="ps-report" ref={preview} readOnly rows={10} aria-label="反馈文本预览" value={report}/><p className="ps-muted">自动部分只包含本页版本、运行方式和你勾选的信息；不会读取游戏数据或附带错误堆栈。若从旧页面遇到问题，请补充当时“网页体验与更新”显示的版本。</p>
     <div className="ps-actions"><button onClick={async()=>{try{await navigator.clipboard.writeText(report);setStatus('已复制，尚未发送。请通过上方私密联系方式分享。');}catch{preview.current?.focus();preview.current?.select();setStatus('未能自动复制，已选中文字，可手动复制或下载文本。');}}}>复制反馈</button><button onClick={download}>下载文本</button>
-    {PARENT_CONTACT.email&&<a className="ps-primary" href={`mailto:${PARENT_CONTACT.email}?subject=${encodeURIComponent(`PokéPal 家长反馈：${topic}`)}&body=${encodeURIComponent(report)}`} onClick={()=>setStatus('请在邮件应用中再次检查并自行发送。本页不能确认邮件是否发出。')}>用邮件联系</a>}</div><p role="status" className="ps-status">{status}</p></section>
+    {PARENT_CONTACT.email&&<a className="ps-primary" href={mail.href} onClick={()=>setStatus(mail.needsPaste?'邮件仅填写收件人和主题。请粘贴已复制的完整反馈，或添加下载的文本，再自行发送。':'请在邮件应用中再次检查并自行发送。本页不能确认邮件是否发出。')}>{mail.needsPaste?'打开空白邮件':'用邮件联系'}</a>}</div>{PARENT_CONTACT.email&&mail.needsPaste&&<p className="ps-muted">这段反馈较长，请先“复制反馈”或“下载文本”，再打开邮件粘贴或添加文件，避免内容被邮件应用截断。未设置邮件应用时，也可通过上方微信私密发送。</p>}<p role="status" className="ps-status">{status}</p></section>
     <section><h2>数据问题怎么处理</h2><p>本机进度的更正、导出、删除路径见<a href="/privacy/">隐私与数据说明</a>。若你曾通过邮箱或微信发送反馈，可通过同一渠道提出更正或删除请求；不要为证明身份发送孩子证件或原始录音。</p></section>
   </>;
 }

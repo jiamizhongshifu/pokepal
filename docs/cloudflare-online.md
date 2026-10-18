@@ -8,16 +8,17 @@
 
 ```sh
 npm run build:online
-node scripts/online/verify.mjs
-npx tsx scripts/online/residents.test.ts
+npm run release:prepare
 npm run preview:online
-# 通过验收后发布到已创建的独立项目
-wrangler pages deploy dist-online --project-name pokepal-online --branch main
+# 通过验收并明确授权发布后，在干净的 main 上执行
+npm run release:publish
 ```
+
+`release:prepare` 只进行只读线上核对和本地产物准备，不发布。`release:publish` 会再次准备、确认工作区与提交未变化后上传；仍需单独验证线上版本、资源与用户流程。回退演练见 [试用操作手册](trial/operations-and-device-checks.md)。
 
 环境：Node、项目依赖、`cwebp`（macOS 可通过 Homebrew 安装）。使用现有 `public/voice/manifest.json` 及其指向的火山 MP3，不调用收费生音接口。新台词仍须先按照家庭版既有流程生成并验证。
 
-构建先生成 `.build/online-时间戳`，通过类型检查与 Vite 构建后才切换 `dist-online`。上一份 online 产物移到 `.build/online-previous-时间戳`，可以用于回滚；不会修改 `dist`。不要向公网发布仓库根目录、`.build`、`certs` 或完整 `public/voice`。
+构建先生成 `.build/online-时间戳`，通过测试、类型检查、Vite 构建和完整资源校验后才切换 `dist-online`。上一份 online 产物移到 `.build/online-previous-时间戳`，可以用于回滚；不会修改 `dist`。不要向公网发布仓库根目录、`.build`、`certs` 或完整 `public/voice`。
 
 初次试运行使用 **Cloudflare Pages 静态托管**，包含模型、图片及约 4,096 个小语音包，约 6,100 个文件，低于 Pages 免费文件数限制。它无需 R2 或每次资源请求调用 Worker。与评估中的 R2 拆分方案相比，这一步减少了首轮验证所需的基础设施；大规模发布或区域分发时仍可迁移资源。
 
@@ -27,7 +28,7 @@ wrangler pages deploy dist-online --project-name pokepal-online --branch main
 - Service Worker 只预缓存应用壳（HTML、主 JS、CSS、字体及安装图标），不预取 3D 场景 chunk、宝可梦模型、故事画面或任何语音包。
 - 56,108 条台词（2026-10-17 清单）分为 256 份索引，构建将索引的内容哈希写入 JS。每次播放只获取相关索引和对应的小语音包，提取其中原始 MP3 字节播放。
 - 小包按录音文件前三位哈希划分，共 4,096 组。本次平均约 199 KB，最大 460 KB；单条录音变化仅影响所属小包、关联索引及版本 JS。不是逐条实时合成，也不需要重下 256 个旧大包。
-- 发布目录兼容保留上一版的哈希 JS、语音索引和小包，避免旧页面停留期间遇到资源 404；通过当前版本文件清单控制，只保留相邻两版，不无限堆积。跨越更多版本或网络失败时，可用错误页“重新打开小岛”恢复。
+- 构建保留上一份本地产物的哈希资源；发布准备另外读取真实生产清单，从版本 ID 与源码指纹完全匹配的本地产物中保留生产 JS、语音索引与小包，避免连续本地构建遗漏线上旧资源。缺少生产产物、同名哈希文件冲突或构建后源码变化都会阻止发布；范围为当前版本、上一份本地构建及当时生产清单，不递归保留全部历史。跨越更多版本或网络失败时，可用错误页“重新打开小岛”恢复。
 - 索引和小包使用内容哈希与 `immutable` 缓存。未带哈希的模型、图片采用平台默认重新校验策略，避免更新后长期看到旧贴图。
 - “网页体验与更新”检查版本清单和应用壳更新；新资源准备完成后再提示重新打开。该版本需要联网，不承诺完整离线可用。
 - 前端内存仅保留最近 12 个语音小包、最近 120 条已解码录音，失败请求可以重试。

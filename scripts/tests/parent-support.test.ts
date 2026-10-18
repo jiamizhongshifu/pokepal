@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {hasReadParentNotice,recordParentNotice,clearParentNotice,PARENT_NOTICE_KEY} from '../../src/lib/parentNotice';
-import {feedbackEnvironment,makeFeedbackReport} from '../../src/lib/parentFeedback';
+import {feedbackEnvironment,makeFeedbackReport,feedbackMailDraft} from '../../src/lib/parentFeedback';
 
 test('notice accepts only current local acknowledgement and can be withdrawn without touching game data',()=>{
   const data=new Map([['game-progress','keep'],[PARENT_NOTICE_KEY,'broken json']]);
@@ -32,4 +32,15 @@ test('feedback permits only coarse opt-in environment and does not serialize unr
   const noDevice=makeFeedbackReport({...input,environment:undefined});
   assert.ok(!noDevice.includes('Chrome 142'));
   assert.ok(!noDevice.includes('屏幕：'));
+});
+
+test('short mail draft round-trips special characters; long report remains intact outside mail URI',()=>{
+ const report='按钮 & ? + 没声音';
+ const short=feedbackMailDraft('test@example.com','声音与配音',report);
+ assert.equal(short.needsPaste,false);assert.equal(new URL(short.href).searchParams.get('body'),report);
+ const longReport=makeFeedbackReport({version:'test',mode:'online',topic:'其他建议',details:'测'.repeat(1500)});
+ const long=feedbackMailDraft('test@example.com','其他建议',longReport);
+ assert.equal(long.needsPaste,true);assert.ok(long.href.length<1800);
+ assert.equal(new URL(long.href).searchParams.has('body'),false);
+ assert.ok(longReport.includes('测'.repeat(1500)));
 });

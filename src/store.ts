@@ -140,7 +140,7 @@ interface State {
   energyGoal?: EnergyGoal;
   load: () => Promise<void>;
   go: (s: Screen) => void;
-  createTrainer: (avatar: string) => void;
+  createTrainer: (avatar: string) => Promise<boolean>;
   completeTask: (kind: TaskKind, boardIndex: number | null) => Promise<TaskReward | undefined>;
   noteStoryPage: (id:string,page:number) => void;
   buyBall: () => Promise<boolean>;
@@ -319,11 +319,14 @@ export const useGame = create<State>((set, get) => {
     servePicnic(id) {return mut(s=>servePicnic(s,id))??false;},
     endPicnic(id) {mut(s=>endPicnic(s,id));},
 
-    createTrainer(avatar) {
-      mut((s) => {
+    async createTrainer(avatar) {
+      if(get().saveBusy||get().saveIssue)return false;
+      if(get().save.trainer)return true;
+      return await commit((s) => {
         s.trainer = { name: "小训练师", avatar, createdAt: Date.now() };
-        s.balls.poke += 1; // 见面礼：一个精灵球，第一天就能抓到第一只
-      });
+        s.balls.poke += 1; // 见面礼只在成功创建时发放一次。
+        return true;
+      })===true;
     },
 
     completeTask(kind, boardIndex) {

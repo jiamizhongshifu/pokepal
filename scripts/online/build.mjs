@@ -20,6 +20,8 @@ if(existsSync('dist-online')){
   if(!existsSync(resolve(stage,asset)))copyFileSync(resolve('dist-online',asset),resolve(stage,asset));
  }
 }
+// Reject incomplete or private artifacts before replacing the local preview.
+execFileSync(process.execPath,['scripts/online/verify.mjs',stage],{stdio:'inherit'});
 if(existsSync('dist-online'))renameSync('dist-online',resolve(`.build/online-previous-${Date.now()}`));
 renameSync(stage,'dist-online');
 writeFileSync('.build/online-last-build.json',JSON.stringify({dir:resolve('dist-online'),...JSON.parse(readFileSync('dist-online/build-inventory.json'))},null,2));

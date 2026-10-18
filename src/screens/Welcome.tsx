@@ -26,7 +26,7 @@ export function Welcome() {
     requestPersist();
     sfx("sparkle");
     if (!trainer && avatar) {
-      createTrainer(avatar);
+      if(!await createTrainer(avatar))return;
       go({ name: "home" });
       await wait(300);
       say(["zh", "欢迎你，小训练师！"], ["en", "Welcome, Trainer!"], ["zh", "送你一个精灵球，去草丛里抓第一只宝可梦吧！"], ["en", "Here is a Poké Ball for you!"]);
