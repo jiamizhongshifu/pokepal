@@ -1,3 +1,5 @@
+import {Html} from '@react-three/drei';
+import {Icon} from '../icons';
 import {togetherBallFraction} from '../lib/togetherTurn';
 import { surfaceTexture } from './surfaceTextures';
 import { useRef,useMemo, type MutableRefObject } from 'react';
@@ -33,8 +35,8 @@ export function LivingProps({items,playing=false}:{items:readonly FurnitureId[];
   {id==='track'&&[-.42,.42].map(z=><mesh key={z} position={[0,.05,z]}><boxGeometry args={[4,.04,.1]}/><meshStandardMaterial color="#e5ca8c"/></mesh>)}
  </group>;})}</group>;
 }
-export function TogetherBall({session,turn,progress,ready}:{session:TogetherSession;turn:number;progress:MutableRefObject<number>;acting:boolean;ready:boolean}){
- const ball=useRef<THREE.Mesh>(null!),basket=useRef<THREE.Group>(null!);
+export function TogetherBall({session,turn,progress,ready,childReady=false,onRoll}:{session:TogetherSession;turn:number;progress:MutableRefObject<number>;acting:boolean;ready:boolean;childReady?:boolean;onRoll?:()=>void}){
+ const ball=useRef<THREE.Group>(null!),basket=useRef<THREE.Group>(null!);
  const basketSpot=useMemo(()=>session.help?togetherHelpTarget(session):null,[session]);
  useFrame(()=>{
   if(!ball.current)return;const a=residentPoses.get(session.partners[0]),b=residentPoses.get(session.partners[1]);
@@ -42,14 +44,14 @@ export function TogetherBall({session,turn,progress,ready}:{session:TogetherSess
   const start=a.position.clone(),end=b?.position.clone()??start.clone().add(new THREE.Vector3(CAMP_PLAYER_DISTANCE,0,0));
   const delta=end.clone().sub(start).normalize();start.addScaledVector(delta,.8);end.addScaledVector(delta,-.8);
   // Hold the toy beside the child's sightline, so a small partner's face stays visible.
-  if(!b)end.z+=.45;
+  if(!b)end.z+=.15;
   const radius=THREE.MathUtils.clamp(Math.min(a.height,b?.height??a.height)*.16,.09,.22);
-  ball.current.scale.setScalar(radius/.25);
+
   if(basketSpot){end.set(basketSpot.x,Math.max(.04,terrainHeight(basketSpot.x,basketSpot.z)),basketSpot.z);basket.current.position.copy(end);}
   const p=session.help?progress.current:togetherBallFraction(turn,progress.current);
   ball.current.position.lerpVectors(start,end,p);
   ball.current.position.y=Math.max(-.12,terrainHeight(ball.current.position.x,ball.current.position.z))+radius+(session.help?Math.sin(Math.PI*p)*1.2:0);
-  ball.current.rotation.z=-p*8;
+  const mesh=ball.current.getObjectByName('rolling-toy');if(mesh){mesh.scale.setScalar(radius/.25);mesh.rotation.z=-p*8;}
  });
- return <group><group ref={basket} name="together-help-basket" visible={false}><mesh position-y={.18} castShadow><cylinderGeometry args={[.48,.35,.36,16,1,true]}/><meshStandardMaterial color="#d7b67e" map={surfaceTexture('wicker')} side={THREE.DoubleSide}/></mesh><mesh rotation-x={-Math.PI/2} position-y={.36}><torusGeometry args={[.48,.04,8,24]}/><meshStandardMaterial color="#b58c56"/></mesh><mesh position-y={.025}><cylinderGeometry args={[.35,.35,.05,16]}/><meshStandardMaterial color="#947449"/></mesh></group><mesh ref={ball} name="together-ball" visible={false} castShadow><sphereGeometry args={[.25,20,14]}/><meshStandardMaterial color="#f3ca5c" roughness={.65}/></mesh></group>;
+ return <group><group ref={basket} name="together-help-basket" visible={false}><mesh position-y={.18} castShadow><cylinderGeometry args={[.48,.35,.36,16,1,true]}/><meshStandardMaterial color="#d7b67e" map={surfaceTexture('wicker')} side={THREE.DoubleSide}/></mesh><mesh rotation-x={-Math.PI/2} position-y={.36}><torusGeometry args={[.48,.04,8,24]}/><meshStandardMaterial color="#b58c56"/></mesh><mesh position-y={.025}><cylinderGeometry args={[.35,.35,.05,16]}/><meshStandardMaterial color="#947449"/></mesh></group><group ref={ball} name="together-ball" visible={false}><mesh name="rolling-toy" castShadow><sphereGeometry args={[.25,20,14]}/><meshStandardMaterial color="#f3ca5c" roughness={.65}/></mesh>{childReady&&<Html center zIndexRange={[40,30]}><button className="camp-toy-touch" aria-label={session.help?'把小球收进篮子':'把小球滚给伙伴'} onPointerDown={e=>e.stopPropagation()} onClick={e=>{e.stopPropagation();onRoll?.();}}><span className="camp-touch-hand"><Icon name="hand" size={28}/></span></button></Html>}</group></group>;
 }

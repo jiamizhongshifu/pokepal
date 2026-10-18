@@ -15,7 +15,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
   const [editingAvatar,setEditingAvatar] = useState(false);
   return (
     <>
-    <div className={`topbar ${homeActions ? "has-home-actions" : ""} ${help||progress ? "has-learning-tools" : ""}`}>
+    <div className={`topbar ${homeActions ? "has-home-actions" : ""} ${!home&&(help||progress) ? "has-learning-tools" : ""}`}>
       <div className={`tb-left ${home ? "home-profile" : ""}`}>
         {onBack ? (
           <button className="btn-round back" onClick={() => { sfx("click"); onBack(); }} aria-label="返回"><Icon name="back" size={32} /><span>返回</span></button>
@@ -25,7 +25,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
         )}
         {title && !home && <div className="tb-title">{icon && <Icon name={icon} size={34} />}{title}</div>}
       </div>
-      {(help||progress)&&<div className="tb-learning-tools">{progress&&<div className="tb-progress">{progress}</div>}{help}</div>}
+      {!home&&(help||progress)&&<div className="tb-learning-tools">{progress&&<div className="tb-progress">{progress}</div>}{help}</div>}
       {!focused && <div className="tb-right">
         <button className="energy-chip" aria-label={`能量 ${save.energy}，看看怎样获得能量`} onClick={()=>{sfx("click");go({name:"energy"});}}>
           <Icon name="bolt" size={30} className="bolt" />
@@ -39,7 +39,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
         {home && <button className={`music-toggle ${save.settings.backgroundMusic==='off'?'is-muted':''}`} aria-label={save.settings.backgroundMusic==='off'?'打开背景音乐':'关闭背景音乐'} aria-pressed={save.settings.backgroundMusic!=='off'} onClick={()=>useGame.getState().updateSettings({backgroundMusic:save.settings.backgroundMusic==='off'?'soft':'off'})}><Icon name="music" size={26}/><span className="music-toggle-state" aria-hidden="true">{save.settings.backgroundMusic==='off'?'关':'开'}</span></button>}
         <ParentButton onOpen={() => go({ name: "parent" })} />
       </div>}
-      {homeActions && <nav className="home-actions" aria-label="小岛陪伴">{homeActions}</nav>}
+      {homeActions && <nav className="home-actions" aria-label="小岛陪伴">{homeActions}{home&&help}</nav>}
     </div>
     {editingAvatar && <AvatarEditor onClose={()=>setEditingAvatar(false)}/>}
     </>

@@ -8,7 +8,7 @@ import {isMicActive} from '../lib/mic';
 import './feature-guide.css';
 
 /** Contextual, non-modal help: one real action, no rewards, no focus stealing. */
-export function FeatureGuide({id,enabled=true,autoVoice=true,floating=false,topics,compact=false,onVoiceStart,children}:{children?:ReactNode;id:GuideId;enabled?:boolean;autoVoice?:boolean;floating?:boolean;topics?:GuideId[];compact?:boolean;onVoiceStart?:()=>void}){
+export function FeatureGuide({id,enabled=true,autoVoice=true,floating=false,topics,compact=true,onVoiceStart,children}:{children?:ReactNode;id:GuideId;enabled?:boolean;autoVoice?:boolean;floating?:boolean;topics?:GuideId[];compact?:boolean;onVoiceStart?:()=>void}){
  const [topic,setTopic]=useState(id),[manual,setManual]=useState(false);
  useEffect(()=>{setTopic(id);setManual(false);},[id]);
  if(!enabled)return null;
@@ -27,7 +27,7 @@ function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart
  const scope=useRef(useGame.getState().screen);
  useLayoutEffect(()=>{
   if(!compact||!open)return;
-  const host=root.current?.closest<HTMLElement>('.topbar,.companion-toolbar,.panel-toolbar');
+  const host=root.current?.closest<HTMLElement>('.topbar,.companion-toolbar,.panel-toolbar,.help-heading');
   const panel=root.current?.querySelector<HTMLElement>('.guide-content');
   if(!host||!panel)return;
   const measure=()=>host.style.setProperty('--guide-space',`${Math.ceil(panel.getBoundingClientRect().height)}px`);
@@ -85,7 +85,7 @@ function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart
   return()=>{target?.classList.remove('guide-target');targetRef.current=null;observer.disconnect();document.removeEventListener('click',act,true);};
  },[open,id]);
  return <aside ref={root} className={`feature-guide ${floating?'guide-floating':''} ${compact?'guide-compact':''} ${open?'is-open':'is-closed'}`} aria-label="操作小帮手" data-guide={id}>
-  {(!open||compact)&&<button className="guide-reopen" onClick={()=>{if(open){close();return;}autoCancelled.current=true;setOpen(true);void hear(true);}} aria-label="听听怎么玩" aria-expanded={open} aria-controls={panelId}><Icon name="speaker" size={24}/><span>怎么玩</span></button>}
+  {(!open||compact)&&<button className="guide-reopen" onClick={()=>{if(open){close();return;}autoCancelled.current=true;setOpen(true);void hear(true);}} aria-label="帮助" aria-expanded={open} aria-controls={panelId}><span className="help-symbol" aria-hidden="true">?</span><span>帮助</span></button>}
   {open&&<div id={panelId} className="guide-content" onKeyDown={e=>{if(e.key==='Escape'){close();root.current?.querySelector<HTMLButtonElement>('.guide-reopen')?.focus();}}}>
    <div className="guide-main"><span className="guide-picture" aria-hidden="true"><Icon name={guide.icon} size={38}/></span><strong>{guide.title}</strong>
     <button className="guide-hear" aria-pressed={speaking} onClick={()=>{autoCancelled.current=true;if(speaking){cancel();return;}void hear(true);}} aria-label={speaking?'停止操作提示':'听操作提示'}><Icon name="speaker" size={26}/><span>{speaking?'停一下':'听一听'}</span></button>
@@ -94,7 +94,7 @@ function Guide({id,autoVoice,floating,topics,onTopic,manual,compact,onVoiceStart
    {'sequence' in guide&&<div className="guide-visual-row"><div className="guide-sequence" aria-hidden="true">{guide.sequence.map((icon,i)=><span key={`${icon}-${i}`}>{i>0&&<b>›</b>}<Icon name={icon} size={32}/></span>)}</div>{hasTarget&&<button className="guide-locate" onClick={()=>{const target=targetRef.current;if(target)target.scrollIntoView({block:'center',inline:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}} aria-label="看看要点哪里"><Icon name="search" size={24}/><span>找一找</span></button>}</div>}
    {unavailable&&<p className="guide-status" role="status">声音暂时没来，点喇叭再试试</p>}
    {children&&<div className="guide-extra">{children}</div>}
-   {topics&&<><button className="guide-more" aria-expanded={more} onClick={()=>setMore(!more)}><Icon name="search" size={20}/>其他怎么玩</button>{more&&<nav className="guide-topics" aria-label="选择想了解的玩法">{topics.map(key=><button key={key} aria-label={GUIDES[key].title} onClick={()=>{setMore(false);if(key===id){void hear(true);}else{cancel();onTopic(key);}}}><Icon name={GUIDES[key].icon} size={28}/><span>{GUIDES[key].title}</span></button>)}</nav>}</>}
+   {topics&&<><button className="guide-more" aria-expanded={more} onClick={()=>setMore(!more)}><Icon name="search" size={20}/>更多帮助</button>{more&&<nav className="guide-topics" aria-label="选择想了解的玩法">{topics.map(key=><button key={key} aria-label={GUIDES[key].title} onClick={()=>{setMore(false);if(key===id){void hear(true);}else{cancel();onTopic(key);}}}><Icon name={GUIDES[key].icon} size={28}/><span>{GUIDES[key].title}</span></button>)}</nav>}</>}
   </div>}
  </aside>;
 }

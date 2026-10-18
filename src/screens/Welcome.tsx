@@ -60,8 +60,7 @@ export function Welcome() {
         </button>
       ) : (
         <div className="avatar-pick">
-          <div className="hint">选一个你喜欢的训练师<small lang="en">Choose your trainer</small></div>
-          <FeatureGuide id="welcome" autoVoice={false}/>
+          <header className="help-heading avatar-heading"><div className="hint">选一个你喜欢的训练师<small lang="en">Choose your trainer</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
           <div className="avatar-row">
             {AVATARS.map((a) => (
               <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label="选择这个训练师"><Icon name={a} size={120} /></button>

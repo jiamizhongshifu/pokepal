@@ -4,6 +4,8 @@ import App from "./App";
 import "./ui.css";
 import "./learning-next.css";
 import "./camp-interaction.css";
+import "./help-layout.css";
+import "./camp-play.css";
 import "@fontsource/m-plus-1/latin-500.css";
 import "@fontsource/m-plus-1/latin-800.css";
 import "@fontsource/m-plus-1/latin-900.css";

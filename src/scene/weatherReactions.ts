@@ -1,3 +1,5 @@
+import {rainShelter} from './rainShelter';
+import {sceneHeight} from './zones';
 import type {Pokemon} from '../types';
 import type {Habit} from '../data/behaviors';
 import type {WeatherKind} from '../lib/weather';
@@ -12,13 +14,15 @@ export function weatherReaction(p:Pokemon,habit:Habit,weather:WeatherKind):'shel
  if(weather==='cloudy'&&habit.activity==='sunbathe')return 'shade';
  return null;
 }
-export function weatherVisit(p:Pokemon,habit:Habit,weather:WeatherKind,neighbor=0):Visit|null{
+export function weatherVisit(p:Pokemon,habit:Habit,weather:WeatherKind,neighbor=0,occupied:readonly {x:number;z:number}[]=[]):Visit|null{
  const reaction=weatherReaction(p,habit,weather);if(!reaction)return null;
- const base=stationById(reaction==='splash'?(isAquatic(p)?(p.id%2?'shore':'sea'):'shells'):reaction==='leaves'?'tree':reaction==='perch'?'tree':p.id%2?'parasol':'tent');
+ const base=stationById(reaction==='splash'?(isAquatic(p)?(p.id%2?'shore':'sea'):'shells'):reaction==='shelter'?'tree':reaction==='leaves'?'tree':reaction==='perch'?'tree':p.id%2?'parasol':'tent');
  const angle=neighbor*2.3999632297,radius=neighbor?2.1*Math.sqrt(neighbor):0;
- const target=base.water?{...onIsland(10+(neighbor*7)%60,1.45),y:-.16}:{...base.target,x:base.target.x+Math.cos(angle)*radius,z:base.target.z+Math.sin(angle)*radius};
+ const shelter=reaction==='shelter'?rainShelter(sceneHeight(p),neighbor,occupied):null;
+ if(reaction==='shelter'&&!shelter)return null;
+ const target=shelter??(base.water?{...onIsland(10+(neighbor*7)%60,1.45),y:-.16}:{...base.target,x:base.target.x+Math.cos(angle)*radius,z:base.target.z+Math.sin(angle)*radius});
  const sleeping=['sleep','nap','buried'].includes(habit.activity);
  const activity=sleeping?'nap':reaction==='splash'?'splash':reaction==='leaves'?'guard':reaction==='perch'?'guard':'meditate';
- const name={shelter:'撑着叶伞歇歇',splash:'在小雨里玩水',leaves:'在雨里看看叶子',perch:'停下来听听风',shade:'在柔光里歇歇'}[reaction];
- return {pokemonId:p.id,manual:false,key:`weather-${weather}-${p.id}`,station:{...base,id:`weather-${reaction}`,name,activity,action:name,target}};
+ const name={shelter:'在树下躲雨',splash:'在小雨里玩水',leaves:'在雨里看看叶子',perch:'停下来听听风',shade:'在柔光里歇歇'}[reaction];
+ return {pokemonId:p.id,manual:false,key:`weather-${weather}-${p.id}-${target.x.toFixed(2)}-${target.z.toFixed(2)}`,station:{...base,x:target.x,z:target.z,id:`weather-${reaction}`,name,activity,action:name,target}};
 }

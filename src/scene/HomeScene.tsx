@@ -101,7 +101,7 @@ export function HomeScene({
   upgrades?:Record<UpgradeId,number>;
   livingItems?:readonly FurnitureId[];
   interactionId?:number;
-  together?:{session:TogetherSession;turn:number;progress:import("react").MutableRefObject<number>;acting:boolean;ready:boolean};
+  together?:{session:TogetherSession;turn:number;progress:import("react").MutableRefObject<number>;acting:boolean;ready:boolean;childReady?:boolean;onRoll?:()=>void};
   active?: boolean;
   showInterface?: boolean;
   idleAllowed?:boolean;
@@ -261,6 +261,7 @@ export function HomeScene({
       <CameraRig spotlight={spotlight} selectedId={selected} active={active} campIds={together?.session.partners??(interactionId===undefined?[]:[interactionId])} idleBlockReason={active?idleBlockReason:"页面未显示"} view={view} followId={followId} nonce={viewNonce} idleAllowed={active&&idleAllowed} followPaused={!active||selected!==null||farm.open} onObserve={onObserve} />
       <OrbitControls
         makeDefault
+        enabled={!together}
         target={CAMERA_VIEWS.overview.target}
         enablePan
         screenSpacePanning={false}

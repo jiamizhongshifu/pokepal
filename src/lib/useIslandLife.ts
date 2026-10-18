@@ -41,7 +41,7 @@ export function useIslandLife(captures: Capture[], now: Date, paused: boolean, c
       if(result.some(v=>v.pokemonId===c.id)) continue;
       const p=getPokemon(c.id), habit=habitAt(p,now);
       const sameWeather=residents.findIndex(other=>other.id===c.id);
-      const weatherPlan=weatherVisit(p,habit,weather,sameWeather);
+      const weatherPlan=weatherVisit(p,habit,weather,sameWeather,result.map(v=>v.station.target));
       if(weatherPlan){result.push(weatherPlan);continue;}
       const resting=habit.activity==='sleep'||habit.activity==='nap'||habit.activity==='buried';
       const eating=habit.activity==='eat';

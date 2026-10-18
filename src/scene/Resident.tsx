@@ -1,4 +1,3 @@
-import {WeatherUmbrella} from './WeatherScene';
 import type {WeatherKind} from '../lib/weather';
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -60,7 +59,7 @@ const tmp = new THREE.Vector3();
 const camRight = new THREE.Vector3();
 
 export function Resident({
-  previewFrozen=false,facingCamera=false,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true, weather="sunny"
+  previewFrozen=false,facingCamera=false,p, habit, slot, selected, effect, tint, glow, sunYaw, onSelect, visit, onArrival, need, showInterface=true
 }: {
   previewFrozen?:boolean;
   facingCamera?:boolean;
@@ -481,7 +480,6 @@ export function Resident({
 
   return (
     <group ref={root} name={`resident-${p.id}`} userData={{pokemonId:p.id}}> 
-      {weather==="rain"&&!selected&&!p.types.includes("water")&&!p.types.includes("grass")&&b.locomotion!=="swim"&&<WeatherUmbrella height={height}/>}
       {/* 接触影子：按脚底实际宽度缩放的深色椭圆 */}
       <mesh ref={shadow} rotation-x={-Math.PI / 2} renderOrder={1}>
         <planeGeometry args={contactSize(height, footprint)} key={footprint ? "fp" : "est"} />

@@ -1,0 +1,40 @@
+/* Help is a header action; a closed guide never creates a content row. */
+#root .help-heading{position:relative;display:flex;align-items:center;gap:12px;min-width:0}
+#root .help-heading>.feature-guide{margin-left:auto;align-self:center}
+#root .help-heading:has(.feature-guide.is-open){padding-bottom:calc(var(--guide-space,130px) + 12px)}
+#root .avatar-pick .avatar-heading{margin-bottom:14px;text-align:left}
+#root .avatar-pick .avatar-heading .hint{margin:0;flex:1;min-width:0;line-height:1.4}
+#root .avatar-pick .avatar-heading .hint small{margin-top:4px}
+#root .avatar-heading .guide-content{width:min(372px,calc(100vw - 128px))}
+#root .help-symbol{display:grid;place-items:center;flex:none;width:26px;height:26px;border:2px solid currentColor;border-radius:50%;font-size:20px;font-weight:900;line-height:1;color:var(--coast-blue,#22668a);box-sizing:border-box}
+#root .feature-guide .guide-reopen{white-space:nowrap;min-width:48px;min-height:48px;justify-content:center;flex-shrink:0}
+#root .feature-guide .guide-reopen .help-symbol{font-size:20px;line-height:1}
+#root .feature-guide.guide-compact .guide-content{box-sizing:border-box}
+#root .home .home-actions>.feature-guide{align-self:center}
+#root .home .home-actions .guide-reopen{width:48px;padding:2px;gap:0;flex-direction:column}
+#root .home .home-actions .guide-reopen>span:last-child{font-size:10px;line-height:1.3}
+#root .home .home-actions .guide-content{max-height:calc(100dvh - 110px);overflow-y:auto}
+#root .home .home-actions .guide-content button{flex-direction:row;gap:6px;min-height:48px;font-size:14px;padding:6px 8px;white-space:normal}
+#root .home .home-actions .guide-content .icon{width:26px;height:26px}
+#root .home .home-actions .guide-content .guide-more{margin-left:0;background:transparent;border:0;box-shadow:none}
+#root .home .home-actions .guide-content .guide-dismiss{padding:0;min-width:44px;background:transparent;border:0;box-shadow:none}
+#root .home .camp-summary .companion-heading.help-heading{padding-right:0}
+#root .home .companion-heading.help-heading>div{min-width:0;flex:1}
+#root .home .companion-heading.help-heading .sheet-name{overflow-wrap:anywhere}
+#root .home .companion-heading.help-heading .guide-reopen{width:48px;padding:2px;gap:0;flex-direction:column}
+#root .home .companion-heading.help-heading .guide-reopen>span:last-child{font-size:10px;line-height:1.3}
+#root .home .companion-card .companion-heading.help-heading .guide-content{right:0;width:min(240px,calc(100vw - 64px))}
+#root .home .camp-summary:has(.help-heading .is-open){max-height:calc(100% - 120px)}
+@media(max-width:600px){
+ #root .avatar-pick .avatar-heading{gap:8px}
+ #root .avatar-pick .avatar-heading .hint{font-size:17px}
+ #root .avatar-pick .avatar-heading .hint small{font-size:12px}
+ #root .help-heading .guide-reopen{width:48px;padding:2px;gap:0;flex-direction:column}
+ #root .help-heading .guide-reopen>span:last-child{font-size:10px;line-height:1.3}
+}
+
+@media(max-width:600px){
+ #root .home .home-actions:has(.feature-guide){grid-template-columns:repeat(3,minmax(0,1fr)) 48px}
+ #root .home .home-actions>.feature-guide{justify-self:end}
+ #root .home .home-actions .guide-reopen{min-height:52px}
+}

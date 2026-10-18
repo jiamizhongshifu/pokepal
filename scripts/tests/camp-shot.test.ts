@@ -7,7 +7,7 @@ test('camp camera keeps a small or tall partner and the rolling-ball endpoint in
   const anchor=new Vector3(2,.2,-3),actor={position:anchor,height,width:height};
   const shot=campShot([actor],aspect,44),camera=new PerspectiveCamera(44,aspect,.1,320);
   camera.position.copy(shot.position);camera.lookAt(shot.target);camera.updateMatrixWorld();
-  for(const point of [anchor.clone().add(new Vector3(0,height*.7,0)),anchor.clone().add(new Vector3(1.8,.25,0))]){
+  for(const point of [anchor.clone().add(new Vector3(0,height*.7,0)),anchor.clone().add(new Vector3(1.8,.25,.15))]){
    const screen=point.project(camera);assert.ok(Math.abs(screen.x)<1&&Math.abs(screen.y)<1,`subject or toy clipped ${aspect} ${height}`);
   }
   assert.ok(shot.position.x>anchor.x+2.6,'child is opposite the ball receiver');

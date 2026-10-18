@@ -20,9 +20,8 @@ export function PicnicPanel({captures,farm,session,initialId,ready,unreachable,m
  const p=session?getPokemon(session.pokemonId):null;
 
  return <section className="picnic-panel" aria-label="伙伴野餐">
-  <header><Icon name="bowl" size={30}/><div><h2>伙伴野餐</h2><p>把自己种的树果，分给好朋友</p></div><button aria-label="结束野餐" onClick={onClose}><Icon name="close" size={25}/></button></header>
+  <header className="panel-toolbar"><Icon name="bowl" size={30}/><div><h2>伙伴野餐</h2><p>把自己种的树果，分给好朋友</p></div><FeatureGuide id="picnic" autoVoice={false} enabled={!session&&!!available.length&&!!captures.length}/><button aria-label="结束野餐" onClick={onClose}><Icon name="close" size={25}/></button></header>
   {!session ? <>
-   <FeatureGuide id="picnic" autoVoice={false} enabled={!!available.length&&!!captures.length}/>
    {chosen!==undefined&&<div className="picnic-selected"><PokeImg src={artUrl(chosen)} alt=""/><strong>和{getPokemon(chosen).nameZh}分享</strong><button aria-label="换个野餐伙伴" onClick={()=>setFinding(v=>!v)}><Icon name="refresh" size={26}/><span>换伙伴</span></button></div>}
    {finding&&<div className="picnic-finder"><CompanionFinder purpose="choose" ids={captures.map(c=>c.id)} selected={chosen??null} onSelect={id=>{setChosen(id);setFinding(false);}} onClose={()=>setFinding(false)}/></div>}
    {!captures.length?<div className="picnic-empty"><Icon name="grass" size={42}/><strong>先认识一个小伙伴吧</strong><button className="farm-primary" onClick={onFind}>去找伙伴</button></div>:!available.length?<div className="picnic-empty"><Icon name="grass" size={42}/><strong>果篮还空着，点心也很好吃</strong><p>可以先分享点心，再去种树果。</p><button className="farm-primary" onClick={()=>onSnack(chosen??captures[0].id)}><Icon name="apple" size={30}/>给{getPokemon(chosen??captures[0].id).nameZh}点心</button><button className="farm-primary" onClick={onFarm}><Icon name="grass" size={30}/>去种树果</button></div>:<>

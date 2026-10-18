@@ -6,7 +6,7 @@ import {weatherReaction,weatherVisit} from '../../src/scene/weatherReactions';
 import type {SaveData,Pokemon} from '../../src/types';
 import type {Habit} from '../../src/data/behaviors';
 const habit:Habit={from:0,to:24,activity:'explore',zone:'meadow'};
-const pokemon=(id:number,types:string[])=>({id,types} as Pokemon);
+const pokemon=(id:number,types:string[])=>({id,types,heightCm:60} as Pokemon);
 test('offline weather survives reload, transitions continuously, and bounds consecutive rain',()=>{
  let run=0;const kinds=new Set();
  for(let slot=1000000;slot<1001000;slot++){
@@ -42,4 +42,23 @@ test('weather reactions distinguish water, grass, fire, flight and sleeping rout
  assert.equal(weatherVisit(pokemon(1,['grass']),habit,'rain')!.station.activity,'guard');
  assert.notDeepEqual(weatherVisit(pokemon(4,['fire']),habit,'rain',0)!.station.target,weatherVisit(pokemon(4,['fire']),habit,'rain',1)!.station.target);
  assert.deepEqual(weatherVisit(pokemon(4,['fire']),habit,'rain'),weatherVisit(pokemon(4,['fire']),habit,'rain'));
+});
+
+test('rain shelters are distinct clear positions under real tree canopies with reachable approaches',async()=>{
+ const {RAIN_CANOPIES}=await import('../../src/scene/rainShelter');
+ const {clearSpot}=await import('../../src/scene/navigation');
+ const {planStationWalk}=await import('../../src/scene/islandLife');
+ const {getPokemon}=await import('../../src/data/pokemon');
+ const {sceneHeight}=await import('../../src/scene/zones');
+ const occupied:{x:number;z:number}[]=[];
+ for(const [i,id] of [25,4,6,133,59].entries()){
+  const p=getPokemon(id),h=sceneHeight(p),v=weatherVisit(p,habit,'rain',i,occupied);
+  assert.ok(v,`missing shelter for ${id}`);const target=v.station.target,r=Math.max(.82,h*.5);
+  assert.equal(v.station.name,'在树下躲雨');assert.ok(clearSpot(target,r,h));
+  assert.ok(RAIN_CANOPIES.some(t=>Math.hypot(target.x-t.x,target.z-t.z)<=t.radius&&h+.15<=t.bottom));
+  assert.ok(occupied.every(o=>Math.hypot(target.x-o.x,target.z-o.z)>r*2+.3));
+  const path=planStationWalk({x:0,z:4},v.station,r,[],h);
+  assert.ok(path.length);const end=path.at(-1)!;assert.ok(Math.hypot(end.x-target.x,end.z-target.z)<.4,`unreachable tree for ${id}`);
+  occupied.push(target);
+ }
 });
