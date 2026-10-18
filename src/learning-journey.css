@@ -131,3 +131,11 @@
  .learning-guided .guided-example>img{width:96px;height:96px}
  .learning-guided>p{margin:8px 0}
 }
+
+/* Optional help stays on the answer card, without a separate introduction page. */
+#root .learning-choices>div{display:flex;flex-direction:column;min-width:0}
+#root .learning-choices>div>button:not(.learning-choice-audio){position:relative;flex:1}
+#root .learning-choices .is-explained{border-color:#be852e;box-shadow:0 0 0 4px #ffe475}
+#root .learning-explanation-label{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 10px;max-width:100%;overflow-wrap:anywhere}
+#root .learning-explanation-pointer{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:38px;height:38px;background:#fff0a8;border-radius:50%}
+#root .learning-explanation-pointer>.icon{width:28px;height:28px;max-width:none;margin:0;position:static;transform:none}

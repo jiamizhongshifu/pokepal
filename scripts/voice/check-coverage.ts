@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 import { POKEMON } from '../../src/data/pokemon';
 import { STORIES } from '../../src/data/stories';
 import { LEARNING_UNITS,unitSituations,learningEntry } from '../../src/data/curriculum';
-import { learningVoice } from '../../src/lib/learningVoice';
+import { learningVoice,learningExplanation } from '../../src/lib/learningVoice';
 import { PIC_WORDS, PHRASES, LETTERS } from '../../src/data/words';
 import { nameNo, picNo, feedbackParts, traceIntro, traceSuccess } from '../../src/data/taskEnglish';
 import { facilityLesson } from '../../src/data/learning';
@@ -36,6 +36,9 @@ for(const station of STATIONS){
   }
   check('en',`${p.nameEn} ${A.en}.`);check('zh',`${p.nameZh}${A.zh}。`);
  }
+}
+for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...POKEMON.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
+ const entry=learningEntry(key);if(entry)parts(learningExplanation(entry));
 }
 for(const entry of EXTRA_LEARNING)parts(learningVoice(entry));
 for(const p of PHRASES){check('en',p.en);check('zh',p.zh);}

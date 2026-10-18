@@ -11,7 +11,8 @@ import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "n
 import path from "node:path";
 import ts from "typescript";
 import { STORIES } from "../../src/data/stories";
-import { LEARNING_UNITS, unitSituations } from '../../src/data/curriculum';
+import { learningExplanation } from '../../src/lib/learningVoice';
+import { LEARNING_UNITS, unitSituations, learningEntry } from '../../src/data/curriculum';
 import { facilityLesson } from "../../src/data/learning";
 import { STATIONS, compatible } from "../../src/scene/islandLife";
 import { POKEMON, COLORS, TYPES, BALLS, kidDescription, hobby, favoriteFood } from "../../src/data/pokemon";
@@ -195,8 +196,14 @@ for (const p of POKEMON) {
   en(`Let’s meet ${p.nameEn}!`); zh(`${p.nameZh}在等你，轻轻点一下它吧！`);
 }
 
-const lines = [...out.values()];
 mkdirSync(path.join(ROOT, "voice"), { recursive: true });
+// Optional in-question explanations share exactly the runtime wording.
+for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...POKEMON.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
+ const entry=learningEntry(key);if(!entry)continue;
+ for(const part of learningExplanation(entry))if(typeof part!=='number')add(part[0],part[1]);
+}
+
+const lines = [...out.values()];
 writeFileSync(path.join(ROOT, "voice/lines.json"), JSON.stringify(lines, null, 1));
 const chars = lines.reduce((s, l) => s + l.text.length, 0);
 console.log(`台词 ${lines.length} 条（中文 ${lines.filter((l) => l.lang === "zh").length}，英文 ${lines.filter((l) => l.lang === "en").length}），约 ${chars} 字符`);
