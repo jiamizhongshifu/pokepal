@@ -1,3 +1,4 @@
+import {AnalyticsPreferences} from './AnalyticsPreferences';
 import {useEffect, useRef, useState} from 'react';
 import {PARENT_CONTACT, parentContactReady} from '../data/parentContact';
 import {PARENT_NOTICE_VERSION, recordParentNotice} from '../lib/parentNotice';
@@ -28,8 +29,9 @@ export function ParentNotice({onContinue,onClose}:{onContinue:()=>void;onClose:(
     </ul>
     <p className="ps-muted">联网加载会产生必要的请求信息。数据用途、保管、删除和反馈方式见下方说明。</p>
     <ParentLinks/>
+    <AnalyticsPreferences/>
     <label className="ps-confirm"><input type="checkbox" checked={checked} onChange={e=>setChecked(e.target.checked)}/><span>我是陪伴的家长，已阅读试用与隐私说明，了解上述限制。</span></label>
-    <p className="ps-muted">仅保存本机阅读状态，不会开启麦克风、相机或上传。</p>
+    <p className="ps-muted">阅读确认仅保存本机阅读状态，不会开启麦克风、相机；可选访问统计需在上方另行开启。</p>
     <div className="ps-actions"><button onClick={onClose}>暂不开始</button><button className="ps-primary" disabled={!checked} onClick={()=>{try{recordParentNotice(localStorage);}catch{/* Continue only for this session if storage is blocked. */}onContinue();}}>了解了，一起开始</button></div>
   </dialog>;
 }
@@ -64,12 +66,13 @@ function Privacy() {
       <div><dt>阅读确认与资源缓存</dt><dd>localStorage 保存已阅读的说明版本和公告已读状态，帮助避免重复提示；图片、配音和页面缓存用于再次加载。阅读确认不代表验证了家长身份，也不是上传授权。</dd></div>
     </dl><p>除跟读原声的 60 段上限外，本机进度和日记没有自动到期删除。清除网站数据、空间不足或浏览器策略可能导致丢失；持久保存请求不是备份保证。</p></section>
     <section><h2>联网时发生什么</h2><p>{import.meta.env.VITE_ONLINE?'网页版由 Cloudflare Pages 托管。':'此说明也覆盖使用 Cloudflare Pages 的联网体验。'}打开页面、播放已生成的配音、加载模型及检查更新时，会向托管服务请求文件；服务可能处理 IP 地址、请求路径、时间和浏览器信息，用于传输与安全防护。其服务可能在不同国家或地区处理请求。</p><p>应用当前不接入广告、行为回放或用于营销的用户画像；没有账号注册或跨设备自动同步。预先生成的火山配音是供播放的资源，不需要上传孩子声音来播放。</p><p>2026-10-18 核对的站点配置未启用 Cloudflare Web Analytics，当前发布不运行 Pages Functions。托管服务仍可能为传输、安全及维护处理请求信息，保存与处理依其服务安排；项目配置不能证明平台完全不留日志，也未确认一个适用于全部平台日志的统一保存天数。</p><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">查看 Cloudflare 隐私说明（外部网站）</a></section>
+    <section><h2>可选的 Google Analytics 访问统计</h2><p>默认关闭；只有家长单独同意后才加载 Google 统计脚本。统计固定的页面名称、页面访问、来源网站域名、基本浏览器与设备信息，以及 Google 自动产生的会话与互动时间信息，用于观察哪些页面被使用。统计不读取存档、输入内容、照片或录音，也不发送昵称、学习阶段、题目答案或日记内容；页面地址不携带查询参数或片段。</p><p>Google 会收到 IP 地址等网络传输信息并可能在境外处理。统计使用带有 pokepal 前缀的会话 Cookie，不设置 User-ID，不启用 Google signals、广告个性化、表单内容采集或行为回放。此类统计仍涉及设备与访问数据，不应理解为完全匿名。</p><p>本机同意选择最多保留 180 天，到期需重新选择。Google 中事件与用户数据的保留期设为 2 个月，不因新活动延长；汇总报表不受这一期限限制。关闭后停止后续统计并清除当前站点可访问的统计 Cookie，已经发送或进入发送队列的数据不能撤回。可联系作者提出数据处理请求；不要求提供孩子身份资料。浏览器阻止 Google 请求或没有同意统计时，不会影响游玩，但访问报表不会覆盖所有用户。</p><AnalyticsPreferences/></section>
     <section><h2>不提供照片或录音，也能体验</h2><p>相册和拍照仅在主动选择头像时调用；可以一直使用预设头像。麦克风仅在点击录音/跟读时请求，拒绝后可以继续听故事、选择图片，并使用页面上的替代确认或由家长填写文字。</p><p>可以在浏览器的网站权限中撤回相机或麦克风权限。系统键盘听写属于设备或输入法服务，是否联网由该服务决定；不希望使用时可手动输入。</p></section>
     <section><h2>查看、更正、备份和删除</h2><ol>
       <li>修改昵称：家长中心 → 陪伴设置 → 训练师名字。更换/移除照片：点击头像，选择预设训练师并保存。</li>
       <li>备份：家长中心 → 应用维护 → 备份与恢复。游戏存档不包含录音和日记，需另行“备份全部日记与原声”；需要保留的跟读原声在学习概况中另存。</li>
       <li>清空：家长中心 → 应用维护 → 清空本机数据。确认后删除当前本机的存档、跟读录音和小日记，无法撤销；先导出需要保留的内容。</li>
-      <li>撤回阅读确认、停止试用：家长中心的“暂停试用”会回到首页，下次开始时重新展示须知，不删除进度。若要连同资源缓存清除，可使用浏览器“清除该网站数据”；已经下载的备份需自行删除。</li>
+      <li>撤回阅读确认、停止试用：家长中心的“暂停试用”会回到首页，关闭访问统计，下次开始时重新展示须知，不删除进度。若要连同资源缓存清除，可使用浏览器“清除该网站数据”；已经下载的备份需自行删除。</li>
     </ol><p>没有云端存档副本，运营者不能远程找回或读取你的本机内容。收到隐私或数据处理请求时，会通过家长联系渠道核对具体问题；请勿直接发送孩子原声或完整备份。</p></section>
     <section><h2>反馈与说明更新</h2><p>反馈草稿在当前页面生成，不自动保存或上传。主动复制会写入剪贴板，下载会生成本地文件；只有家长自行发送后，运营者才会收到。联系记录仅用于回复和排查问题，不用于孩子画像或营销。</p><h3>谁处理反馈、保存多久</h3><ul><li>项目收到的反馈仅由{PARENT_CONTACT.operator}处理。</li><li>问题关闭后保留 30 天，每周检查并清理到期记录；未关闭的问题每 30 天复核一次。</li><li>家长可通过原邮件或微信渠道申请更正或删除，请说明对应的问题，无需提供孩子证件或原始录音。</li></ul><p>上述规则适用于运营者管理的反馈记录。邮箱、微信等服务商也会处理通信内容，其系统备份、安全日志及其他留存依各自规则处理；运营者清理记录不代表服务商所有副本即时删除。</p><p>若增加云端存储、转写或其他数据用途，会先更新说明，再按需要单独告知并征求家长决定；不会用本次阅读确认代替未来的新授权。</p><a href="/feedback/">联系家长支持</a></section>
   </>;

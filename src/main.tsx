@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import {initializeAnalytics,recordTrafficPage} from "./lib/analytics";
+import {playLimitSeconds} from "./store";
 import "./ui.css";
 import "./learning-next.css";
 import "./camp-interaction.css";
@@ -13,6 +15,13 @@ import { installViewportSizing } from "./lib/viewport";
 import { useGame } from "./store";
 import { preloadPokemonImages } from "./lib/imageCache";
 import { setupNative } from "./lib/native";
+
+// Only fixed page names enter analytics; no save fields or lesson IDs leave the app.
+const stopAnalytics=initializeAnalytics();
+const reportPage=()=>{const {loaded,screen,save,saveIssue}=useGame.getState();if(loaded&&!saveIssue)recordTrafficPage(save.trainer&&screen.name!=="parent"&&screen.name!=="welcome"&&save.daily.playSeconds>=playLimitSeconds(save)?"rest":screen.name);};
+const stopTraffic=useGame.subscribe(reportPage);
+reportPage();
+if(import.meta.hot)import.meta.hot.dispose(()=>{stopTraffic();stopAnalytics();});
 
 // 仅开发模式：暴露状态便于调试，生产构建会被移除
 if (import.meta.env.DEV) (window as unknown as { __game: typeof useGame }).__game = useGame;

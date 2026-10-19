@@ -11,6 +11,7 @@ import { TrainerAvatar } from "../components/TrainerAvatar";
 import {useState} from 'react';
 import {ParentLinks, ParentNotice} from '../components/ParentSupport';
 import {hasReadParentNotice} from '../lib/parentNotice';
+import {AuthorContact, SourceRepositoryLink} from '../components/AuthorContact';
 
 
 export function Welcome() {
@@ -40,7 +41,7 @@ export function Welcome() {
   return (
     <div className="screen welcome illustrated-welcome">
       <img className="welcome-landscape" src={import.meta.env.VITE_ONLINE?"/art/world/welcome-island-v1.webp":"/art/world/welcome-island-v1.png"} alt="" aria-hidden="true" {...{fetchpriority:"high"}} draggable={false}/>
-      <Announcements welcome/>
+      <nav className="welcome-tools" aria-label="项目与作者"><Announcements/><SourceRepositoryLink/><AuthorContact/></nav>
       <div className="welcome-content">
       <div className="welcome-pokemon">
         {[25, 1, 4, 7, 133].map((id, i) => (

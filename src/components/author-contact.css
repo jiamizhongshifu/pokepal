@@ -1,0 +1,20 @@
+#root .screen.illustrated-welcome{padding-top:max(88px,calc(env(safe-area-inset-top) + 76px));justify-content:flex-start;justify-content:safe center}
+#root .welcome>.welcome-tools{position:absolute;top:max(14px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));left:max(16px,env(safe-area-inset-left));z-index:4;display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.author-entry{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:7px 13px;border:2px solid #c5dde1;border-radius:20px;background:#fffef7;color:#173f55;font:inherit;font-size:14px;font-weight:800;text-decoration:none;cursor:pointer}
+.source-symbol{font-family:ui-monospace,monospace;font-weight:800;font-size:22px;line-height:1}
+.author-entry:focus-visible,.author-dialog :focus-visible{outline:3px solid #186ba6;outline-offset:3px}
+.author-dialog{box-sizing:border-box;width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;margin:auto;padding:22px;border:2px solid #c5dde1;border-radius:26px;background:#fffef7;color:#173f55;text-align:left;font:500 16px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;box-shadow:0 16px 60px #102b4255;color-scheme:light}
+.author-dialog::backdrop{background:#102b4266;backdrop-filter:blur(3px)}
+.author-dialog header{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:14px}
+.author-dialog header small{color:#526e7d}.author-dialog h2{margin:0;font-size:23px;line-height:1.4}.author-dialog p{margin:12px 0}
+.author-dialog button,.author-contact-actions a{display:inline-flex;justify-content:center;align-items:center;min-height:48px;box-sizing:border-box;border:1px solid #b5d5d9;border-radius:14px;padding:8px 12px;background:#ddf4e8;color:#173f55;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.author-dialog header>button{width:48px;padding:0;flex:none}
+.author-contact-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #c5dde1}
+.author-contact-row label{flex:1;min-width:0;font-size:14px;font-weight:700}
+.author-contact-row input{box-sizing:border-box;display:block;width:100%;min-width:0;background:transparent;border:0;padding:6px 0;color:inherit;font:500 16px/1.4 system-ui,sans-serif;user-select:text}
+.author-contact-row button{flex:none;font-size:14px}
+.author-dialog .author-copy-status{font-size:14px;min-height:1.6em;color:#315e4c}
+.author-contact-actions{display:flex;gap:10px;flex-wrap:wrap}.author-contact-actions a:first-child{background:#186ba6;color:#fff;border-color:#186ba6}
+.author-dialog .author-contact-note{margin:16px 0 0;font-size:13px;color:#526e7d}
+@media(max-width:440px){#root .welcome>.welcome-tools{left:12px;right:12px;gap:6px}.welcome-tools .author-entry,.welcome-tools .notice-entry{padding:6px 8px;font-size:12px;gap:4px}.welcome-tools .icon{width:24px;height:24px}.welcome-tools .source-symbol{font-size:20px}.author-dialog{padding:16px}.author-dialog h2{font-size:20px}.author-contact-row{flex-wrap:wrap}.author-contact-row label{flex-basis:100%}.author-contact-row button{min-height:44px}}
+:root[data-theme="dark"] .author-dialog{color:#e6f0ed;background:#203b43;border-color:#4b656b;color-scheme:dark}:root[data-theme="dark"] .author-dialog header small,:root[data-theme="dark"] .author-dialog .author-contact-note{color:#b4c6c3}:root[data-theme="dark"] .author-dialog .author-copy-status{color:#b6ebcb}:root[data-theme="dark"] .author-dialog button,:root[data-theme="dark"] .author-contact-actions a{background:#2c4b50;color:#e6f0ed;border-color:#4b656b}:root[data-theme="dark"] .author-contact-row{border-color:#4b656b}

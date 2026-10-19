@@ -1,3 +1,5 @@
+import {setAnalyticsConsent} from '../lib/analytics';
+import {AnalyticsPreferences} from '../components/AnalyticsPreferences';
 import {DiaryBackup} from '../components/DiaryBackup';
 import {ParentLinks} from '../components/ParentSupport';
 import {clearParentNotice} from '../lib/parentNotice';
@@ -92,7 +94,7 @@ export function Parent() {
    <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={()=>go({name:'home'})} aria-label="返回"><Icon name="back" size={30}/></button><h2>家长中心</h2></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
    {msg&&<div className="toast" role="status">{msg}</div>}
    <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看看最近在接触什么，再决定怎样陪伴。':tab==='settings'?'常用设置优先，其余按需要展开。修改后自动保存。':'更新保留学习进度。备份和数据清理分开管理。'}</p></div>
-   <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/>{tab==='data'&&<><p>暂停试用会回到首页并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
+   <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/>{tab==='data'&&<AnalyticsPreferences/>}{tab==='data'&&<><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
    {tab==='report'&&<><section className="parent-learning-focus">
  <div className="parent-section-heading"><div><span className="parent-eyebrow">当前学习阶段 · {learningStageTitle(s)}</span><h3>{current.title}</h3></div><button className="parent-inline-action" onClick={()=>{setStageOpen(true);setTab('settings');}}><Icon name="gear" size={22}/>调整阶段</button></div>
  <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 站，不代表已经掌握。</p>
@@ -183,7 +185,7 @@ export function Parent() {
               </div>
               <div className="muted">存档、录音和小日记保存在当前设备。{import.meta.env.VITE_ONLINE?'网页版暂不提供云端日记转写，不会把日记录音发送到火山。':'另行点击日记转写时，会把所选录音发送到火山，需要联网。'}游戏存档不包含录音和日记。请同时使用下方的日记备份；跟读录音可在学习记录中另存。</div>
             <DiaryBackup/></div></details>
-<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) resetAll(); }}>清空全部数据</button></div></details></>}
+<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) {setAnalyticsConsent(false);void resetAll();} }}>清空全部数据</button></div></details></>}
    </div>
   </div>;
 }

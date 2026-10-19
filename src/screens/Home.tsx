@@ -44,6 +44,7 @@ import { useIslandLife } from "../lib/useIslandLife";
 import { careRequest, nextCareRequest } from "../lib/companionCare";
 import { residentPoses } from "../scene/residentRuntime";
 import { stationById, compatible, isAquatic } from "../scene/islandLife";
+import {AuthorContact} from '../components/AuthorContact';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -503,6 +504,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <details className="home-more" open={panel==='menu'}><summary onClick={e=>{e.preventDefault();if(panel==='menu')closePanel('menu');else activatePanel('menu');}}><Icon name="island" size={30}/><span>小岛生活</span><span aria-hidden="true">⌄</span></summary><div className="home-more-menu" onClick={()=>closePanel('menu')}>
         <button onClick={()=>openLiving(undefined,'build')}><Icon name="island" size={30}/><span>装扮</span></button>
         <button onClick={()=>{stopSpeech();go({name:'diary'});}}><Icon name="diary" size={30}/><span>小日记</span></button>
+        <AuthorContact active={active&&!immersive}/>
         {evolving===null&&<button ref={immersiveEntry} aria-label="隐藏界面，观赏小岛" onClick={()=>{stopSpeech();ambient.poke();setFinderOpen(false);setAreaId(null);setShowGestureHint(false);setImmersive(true);}}><Icon name="eye" size={28}/><span>看风景</span></button>}
         </div></details>
       </>:undefined} />}

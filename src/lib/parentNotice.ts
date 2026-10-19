@@ -1,5 +1,5 @@
 // A local record of reading the notice, not verified parental identity or cloud-upload consent.
-export const PARENT_NOTICE_VERSION = '2026-10-18.3';
+export const PARENT_NOTICE_VERSION = '2026-10-19.1';
 export const PARENT_NOTICE_KEY = 'pokepal-parent-notice';
 type NoticeStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 export function hasReadParentNotice(storage: NoticeStorage): boolean {
