@@ -503,7 +503,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
         <details className="home-more" open={panel==='menu'}><summary onClick={e=>{e.preventDefault();if(panel==='menu')closePanel('menu');else activatePanel('menu');}}><Icon name="island" size={30}/><span>小岛生活</span><span aria-hidden="true">⌄</span></summary><div className="home-more-menu" onClick={()=>closePanel('menu')}>
         <button onClick={()=>openLiving(undefined,'build')}><Icon name="island" size={30}/><span>装扮</span></button>
-        <button onClick={()=>{stopSpeech();go({name:'diary'});}}><Icon name="diary" size={30}/><span>小日记</span></button>
         <AuthorContact active={active&&!immersive}/>
         {evolving===null&&<button ref={immersiveEntry} aria-label="隐藏界面，观赏小岛" onClick={()=>{stopSpeech();ambient.poke();setFinderOpen(false);setAreaId(null);setShowGestureHint(false);setImmersive(true);}}><Icon name="eye" size={28}/><span>看风景</span></button>}
         </div></details>
@@ -667,6 +666,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             <Icon name="grass" size={62} className="ico" />草丛{ballsTotal > 0 && <span className="badge">{ballsTotal}</span>}
           </button>
           <button className="dock-btn stories" onClick={() => go({ name: "stories" })}><Icon name="book" size={62} className="ico" />故事屋</button>
+          <button className="dock-btn diary" onClick={()=>{stopSpeech();go({name:"diary"});}}><Icon name="diary" size={62} className="ico"/>小日记</button>
           {captures.length>0&&<button className="dock-btn friends" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><span className="ico friend-portrait"><PokeImg src={artUrl((following??residents[0]).id)} alt=""/><Icon name="search" size={20}/></span>找伙伴</button>}
           <button className="dock-btn dex" onClick={() => go({ name: "dex" })}>
             <Icon name="dex" size={62} className="ico" />图鉴

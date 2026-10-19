@@ -1,9 +1,7 @@
 import {TopBar} from './TopBar';
 import { FeatureGuide } from './FeatureGuide';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {Icon} from '../icons';
-import {PokeImg} from './PokeImg';
-import {artUrl} from '../data/pokemon';
 import {DIARY_PROMPTS} from '../data/diaryPrompts';
 import {diaryAnswerText,pendingDiaryAnswers,toDiaryWav,type DiaryAnswer,type DiaryEntry} from '../lib/diary';
 import {say,stopSpeech} from '../lib/speech';
@@ -13,7 +11,7 @@ function AnswerAudio({audio}:{audio?:Blob}){
  return url?<><audio controls src={url} onPlay={stopSpeech} aria-label="听听我的回答"/><details className="diary-parent"><summary>给大人：保存这段原声</summary><a className="btn-small" href={url} download={`我的回答.${audio?.type.includes("mp4")?"m4a":audio?.type.includes("mpeg")?"mp3":audio?.type.includes("wav")?"wav":"webm"}`}>下载原声备份</a></details></>:null;
 }
 export function DiaryRecordings({answers}:{answers:DiaryAnswer[]}){return <div className="diary-recordings">{DIARY_PROMPTS.map(p=>{const a=answers.find(a=>a.question===p.id);return a?.audio&&!a.skipped?<div key={p.id}><p>{p.title}</p><AnswerAudio audio={a.audio}/></div>:null;})}</div>;}
-export function GuidedDiary({entry,onSave,onLeave}:{entry:DiaryEntry;onSave:(entry:DiaryEntry)=>Promise<void>;onLeave:()=>void}){
+export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:DiaryEntry;onSave:(entry:DiaryEntry)=>Promise<void>;onLeave:()=>void;onLibrary:()=>void;footer?:ReactNode}){
  const [step,setStep]=useState(Math.min(entry.guidedStep??0,DIARY_PROMPTS.length));
  const [busy,setBusy]=useState(false),[recording,setRecording]=useState(false),[seconds,setSeconds]=useState(0),[error,setError]=useState(''),[status,setStatus]=useState(''),[speaking,setSpeaking]=useState(false);
  const current=useRef(entry);current.current=entry;
@@ -67,16 +65,16 @@ export function GuidedDiary({entry,onSave,onLeave}:{entry:DiaryEntry;onSave:(ent
  };
  const hasAnswers=(entry.answers??[]).some(a=>!a.skipped&&(a.audio||a.text?.trim()));
  return <><TopBar title="我的小日记" onBack={onLeave} focused
-  help={<FeatureGuide id="diary" compact enabled={!recording&&!busy&&!!prompt} autoVoice={false} onVoiceStart={silence}/>}
-  progress={<span className="diary-question-count" aria-label={prompt?`第 ${step+1} 个问题，共 ${DIARY_PROMPTS.length} 个`:'分享完成'}>{Math.min(step+1,DIARY_PROMPTS.length)} / {DIARY_PROMPTS.length}</span>}/>
+  help={<FeatureGuide id="diary" compact autoOpen={false} enabled={!recording&&!busy&&!!prompt} autoVoice={false} onVoiceStart={silence}/>}
+  progress={<><button className="diary-shelf-toggle" disabled={busy||recording} onClick={()=>{silence();onLibrary();}}><Icon name="book" size={22}/>翻看日记</button><span className="diary-question-count" aria-label={prompt?`第 ${step+1} 个问题，共 ${DIARY_PROMPTS.length} 个`:'分享完成'}>{Math.min(step+1,DIARY_PROMPTS.length)} / {DIARY_PROMPTS.length}</span></>}/>
  <main className="guided-diary child-page" aria-label="陪我聊聊今天">
-  <div className="diary-welcome"><span className="diary-friend">{entry.companion?<PokeImg src={artUrl(entry.companion)} alt="伙伴陪你记日记"/>:<Icon name="heart" size={48}/>}</span><p>你的一天，我想听听</p></div>
+  <div className="diary-welcome"><time dateTime={new Date(entry.createdAt).toISOString()}><small>我的一天</small><b>{new Date(entry.createdAt).getMonth()+1}<span>月</span>{new Date(entry.createdAt).getDate()}<span>日</span></b></time><p>你的一天，我想听听</p></div>
   {prompt?<article className="diary-question" key={prompt.id}><div className="diary-question-heading"><span className="diary-question-icon"><Icon name={prompt.icon} size={58}/></span><button className="diary-hear" disabled={busy||recording} onClick={hear} aria-label="听听这个问题"><Icon name="speaker" size={22}/>{speaking?'正在读…':'听一听'}</button></div><h2>{prompt.title}</h2><p>{prompt.hint}</p>
    <button className="diary-record" disabled={busy} aria-pressed={recording} onClick={recording?stop:start}><Icon name={recording?'check':'mic'} size={44}/><span>{recording?`说完啦 · ${seconds} 秒`:answer?.audio?'再录一次':'我来说一说'}</span></button>
    <p className="diary-guide-note">{recording?'最多 45 秒，到了会帮你保存。':'每次说一点点就好。也可以跳过这个问题。'}</p>
    <AnswerAudio audio={answer?.audio}/>
    <details className="diary-parent"><summary>请大人帮我写下来</summary><p>录好就能保存声音日记。文字和小故事可以以后和大人一起做。</p><label htmlFor="guided-words">保留孩子自己的话</label><textarea id="guided-words" maxLength={650} disabled={busy||recording} value={answer?.text??''} onChange={e=>{const a={...answer,question:prompt.id,text:e.target.value,skipped:false,transcribedRevision:answer?.audioRevision};const next={...current.current,answers:[...(current.current.answers??[]).filter(a=>a.question!==prompt.id),a]};current.current=next;void onSave(next).catch(fail);}} placeholder="把孩子想分享的话写在这里……"/></details>
-   <div className="diary-guide-actions"><button disabled={busy||recording||step===0} onClick={()=>move(step-1)}><Icon name="back" size={24}/>上一个</button><button className="farm-primary" disabled={busy||recording} onClick={()=>move(step+1,!answer?.audio&&!answer?.text?.trim())}>{answer?.audio||answer?.text?.trim()?step===2?'分享完啦':'下一个':'先跳过'}</button></div>
+   <div className="diary-guide-actions"><button disabled={busy||recording||step===0} onClick={()=>move(step-1)}><Icon name="back" size={24}/>上一个</button><button className={answer?.audio||answer?.text?.trim()?"farm-primary":"diary-skip"} disabled={busy||recording} onClick={()=>move(step+1,!answer?.audio&&!answer?.text?.trim())}>{answer?.audio||answer?.text?.trim()?step===2?'分享完啦':'下一个':'先跳过'}</button></div>
   </article>:<article className="diary-question diary-wrapup"><Icon name="heart" size={42}/><h2>{hasAnswers?'谢谢你，让我走进你的一天':'今天安静待一会儿，也很好'}</h2><p>{hasAnswers?'我们把刚才的声音珍藏起来，想听的时候就来这里。':'不用一定说点什么。等你想分享了，再来找伙伴。'}</p><div className="diary-answer-list">{DIARY_PROMPTS.map((p,i)=>{const a=entry.answers?.find(a=>a.question===p.id);return <div key={p.id}><div><strong>{p.title}</strong><small>{a?.skipped||!a?'这次先不说':a.audio?'声音已保存':'文字已保存'}</small></div><button disabled={busy} onClick={()=>move(i)}>回去看看</button></div>;})}</div>
    {hasAnswers?<button className="farm-primary" disabled={busy} onClick={()=>finish()}>{busy?'正在整理…':'保存我的日记'}</button>:<button className="farm-primary" onClick={onLeave}>回小岛，和伙伴待一会儿</button>}
    {hasAnswers&&!import.meta.env.VITE_ONLINE&&pendingDiaryAnswers(entry.answers??[]).length>0&&<details className="diary-parent"><summary>和大人一起转成文字（可选）</summary><p>把本次录音上传到火山转写，需要联网。</p><button disabled={busy} onClick={()=>finish(true)}>上传录音，转成文字</button></details>}
@@ -84,5 +82,6 @@ export function GuidedDiary({entry,onSave,onLeave}:{entry:DiaryEntry;onSave:(ent
   </article>}
   <p role="status" className="diary-guide-status">{status}</p>{error&&<p role="alert" className="diary-error">{error}</p>}
   <p className="diary-caption">没有标准答案，也没有分数。想停下来，随时可以返回。回答只保存在这台设备上。</p>
+  {footer&&<footer className="diary-page-footer">{footer}</footer>}
  </main></>;
 }

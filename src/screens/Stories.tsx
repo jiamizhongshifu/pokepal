@@ -4,7 +4,6 @@ import { SHORT_STORY_LINES, storyLanguage, storyEdition, storyBookmarkKey, story
 import { learningProfile } from '../lib/learningStage';
 import { EnergyReturn } from '../components/EnergyReturn';
 import { FeatureGuide } from '../components/FeatureGuide';
-import { DiaryShelf } from './Diary';
 import { LIFE_STORIES } from '../lib/islandLiving';
 import { learningEntry, selectedUnit } from '../data/curriculum';
 import { ParticipationNote } from '../components/ParticipationNote';
@@ -56,7 +55,6 @@ export function StoryLibrary(){
       <div className="book-title">{unit.story===story.id&&<span className="story-learning-link">和「{unit.title}」一起读</span>}<h2>{story.title}</h2><span lang="en">{story.titleEn}</span><p className="book-summary">{story.summary}</p><div className="book-footer"><small>{story.pages.length} 页 · 约 {story.pages.length<=4?1:3} 分钟</small><b>{seen>story.pages.length?'再读一次':seen?'接着读':'翻开看看'} <span aria-hidden="true">›</span></b></div></div>
     </button>;
   })}</div>
-  <DiaryShelf/>
   <p className="story-parent-note">陪读小提示：不用考宝宝。听完后，聊一聊他自己的小经历。</p>
  </div>;
 }
@@ -129,7 +127,10 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <span className="section-eyebrow">THE END · 故事读完啦</span><h1>把温柔的话，带到生活里</h1>
      <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><PokeImg key={id} src={artUrl(id)} alt={getPokemon(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
-     <button className="btn-big story-ending-primary" onClick={()=>go({name:'home',station:story.activity?.station})}><Icon name="island" size={36}/>回小岛玩</button>
+     <nav className="story-ending-destinations" aria-label="故事读完后去哪里">
+       <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'stories'});}}><Icon name="book" size={32}/>回到故事屋</button>
+       <button className="btn-small story-ending-island" onClick={()=>{pause();go({name:'home'});}}><Icon name="island" size={28}/>回小岛上玩</button>
+     </nav>
      <details className="quiet-disclosure"><summary>还想一起做点什么？</summary><button className="btn-small" onClick={()=>useGame.getState().saveLearningWord(story.phrase.en)}>把这句话放进手册</button><div className="story-talk"><b>和大人聊一聊</b><p>{story.question.zh}</p><span lang="en">{story.question.en}</span><button className="replay" onClick={()=>readPair(story.question)}><Icon name="speaker" size={24}/>听一听</button></div>
      <div className="story-family"><h2>今天一起试试</h2><p>{story.practice}</p><details onToggle={e=>{if(e.currentTarget.open)trackInteraction('family_tip_opened');}}><summary>给陪读大人的小提示</summary><p>{story.parentTip}</p></details></div>
      <div className="story-ending-actions">

@@ -24,3 +24,7 @@
 .camp-bubble-touch{width:96px;height:96px;border-color:#fffdf4;box-shadow:0 0 0 5px #7bc9df60;background:radial-gradient(circle at 30% 25%,#ffffffd9 0 8%,transparent 12%),radial-gradient(transparent 40%,#b9e7ef66)}
 
 .camp-play-header{color:var(--coast-ink)}
+
+/* Six destinations fit within the safe area without overlapping the companion hint. */
+#root .home .dock .diary .ico{background:#f8e9c6}
+@media(max-width:600px){#root .home .dock{gap:2px;padding:4px;right:max(8px,env(safe-area-inset-right));max-width:calc(100% - 16px)}#root .home .dock .dock-btn{width:clamp(44px,14vw,52px);min-width:44px}}
