@@ -30,4 +30,4 @@ console.log(JSON.stringify({release:release.id,files:files.length,verifiedRecord
 // Recovery must stay outside old workers' navigation fallback and retain the current entry.
 assert.deepEqual(await readFile(resolve(root,'release-entry.html')),await readFile(resolve(root,'index.html')));
 assert.ok((await readFile(resolve(root,'release-recovery.html'),'utf8')).includes('/release-entry.html'));
-for(const path of ['/release-entry.html','/release-recovery.html'])assert.ok((await readFile(resolve(root,'_headers'),'utf8')).includes(`${path}\n  Cache-Control: no-store`));
+for(const path of ['/release-entry','/release-recovery','/release-entry.html','/release-recovery.html'])assert.ok((await readFile(resolve(root,'_headers'),'utf8')).includes(`${path}\n  Cache-Control: no-store`));
