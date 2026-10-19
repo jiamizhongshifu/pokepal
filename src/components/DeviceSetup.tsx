@@ -1,3 +1,4 @@
+import {checkOnlineUpdate,onlineUpdateEntry} from '../lib/onlineUpdate';
 import { Icon } from '../icons';
 import { useEffect, useRef, useState } from 'react';
 import { say, unlockAudio } from '../lib/speech';
@@ -25,34 +26,27 @@ export function DeviceSetup({initiallyOpen=false,compactTools=false}:{initiallyO
 function OnlineSetup({initiallyOpen}:{initiallyOpen:boolean}){
  const [phase,setPhase]=useState<'idle'|'checking'|'preparing'|'ready'|'latest'|'error'>('idle');
  const [target,setTarget]=useState('');
- const inFlight=useRef(false);
+ const inFlight=useRef(false),pending=useRef<AbortController>();
+ useEffect(()=>()=>pending.current?.abort(),[]);
  const busy=phase==='checking'||phase==='preparing';
  const titles={idle:'让小岛准备好',checking:'正在寻找新版本',preparing:'正在整理新页面',ready:'准备好啦，重新出发',latest:'已经是最新版本',error:'这次没连上，再试一次'};
  const check=async()=>{
   if(inFlight.current)return;inFlight.current=true;setPhase('checking');
   try{
-   const r=await fetch('/release.json',{cache:'no-store',signal:AbortSignal.timeout(12000)});if(!r.ok)throw new Error();
-   const release=await r.json();if(!release.id||release.mode!=='online'||!Number.isFinite(Date.parse(release.id)))throw new Error();
-   setTarget(versionLabel(release.id));
-   const changed=Date.parse(release.id)>Date.parse(import.meta.env.VITE_APP_BUILD_ID);
-   const reg=await navigator.serviceWorker?.getRegistration();
-   if(changed)setPhase('preparing');
-   if(reg){let timer:ReturnType<typeof setTimeout>|undefined;try{await Promise.race([reg.update(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Update timeout')),30000);})]);}finally{clearTimeout(timer);}}
-   if(changed&&reg){const worker=reg.installing??reg.waiting;if(worker&&worker.state!=='activated')await new Promise<void>((resolve,reject)=>{
-    const timer=setTimeout(()=>{worker.removeEventListener('statechange',done);reject(new Error('Update timeout'));},30000);
-    const done=()=>{if(worker.state==='activated'||worker.state==='redundant'){clearTimeout(timer);worker.removeEventListener('statechange',done);worker.state==='activated'?resolve():reject(new Error('Update failed'));}};
-    worker.addEventListener('statechange',done);worker.postMessage({type:'SKIP_WAITING'});done();
-   });}
+   const controller=new AbortController();pending.current=controller;
+   const {id,changed}=await checkOnlineUpdate({loadedBuild:import.meta.env.VITE_APP_BUILD_ID,workers:navigator.serviceWorker,signal:controller.signal,onPreparing:id=>{setTarget(versionLabel(id));setPhase('preparing');}});
+   if(controller.signal.aborted)return;
+   setTarget(versionLabel(id));
    setPhase(changed?'ready':'latest');
-  }catch{setPhase('error');}finally{inFlight.current=false;}
+  }catch{if(!pending.current?.signal.aborted)setPhase('error');}finally{inFlight.current=false;}
  };
  return <details className="device-setup" open={initiallyOpen||undefined}><summary><Icon name="refresh" size={28}/>网页体验与更新 <small>家长使用</small></summary><div className="device-setup-body">
   <section className={`offline-update online-update is-${phase}`} aria-label="更新进度" aria-busy={busy}>
    <div className="offline-update-heading"><span className="offline-update-symbol"><Icon name={phase==='ready'||phase==='latest'?'check':phase==='error'?'cloud':'island'} size={48}/></span><div><strong role="status">{titles[phase]}</strong><small>当前版本 {loadedVersion}{target&&target!==loadedVersion?` → ${target}`:''}</small></div></div>
    {busy&&<progress aria-label={titles[phase]}/>}
    <ol className="offline-update-steps"><li className={phase==='checking'?'current':phase==='idle'||phase==='error'?'':'finished'}><Icon name="search" size={28}/>找一找</li><li className={phase==='preparing'?'current':phase==='ready'||phase==='latest'?'finished':''}><Icon name="island" size={28}/>准备小岛</li><li className={phase==='ready'||phase==='latest'?'finished':''}><Icon name="check" size={28}/>准备好了</li></ol>
-   <p className="offline-update-detail">{phase==='error'?'请确认网络后再试，宝可梦和学习进度还在。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的宝可梦、学习进度和日记。'}</p>
-   <div className="offline-update-actions">{phase==='ready'?<button className="offline-update-reopen" onClick={()=>location.reload()}><Icon name="play" size={28}/>打开新版本</button>:<button disabled={busy} onClick={()=>void check()}><Icon name="refresh" size={28}/>{busy?'正在准备…':phase==='error'?'再试一次':'检查更新'}</button>}</div>
+   <p className="offline-update-detail">{phase==='error'?'检查未完成，可能是网络或浏览器更新服务暂时无响应。可重试，或点“打开新版入口”；不会清除本机存档。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的宝可梦、学习进度和日记。'}</p>
+   <div className="offline-update-actions">{phase==='ready'?<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}><Icon name="play" size={28}/>打开新版本</button>:<button disabled={busy} onClick={()=>void check()}><Icon name="refresh" size={28}/>{busy?'正在准备…':phase==='error'?'再试一次':'检查更新'}</button>}{phase==='error'&&<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}>打开新版入口</button>}</div>
   </section>
   <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。网页版不提供完整离线安装。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心分别导出游戏存档、备份日记与原声，并另存需要保留的跟读录音。</p></details>
  </div></details>;

@@ -8,6 +8,9 @@ const stage=resolve(`.build/online-${Date.now()}`);mkdirSync(stage,{recursive:tr
 const env={...process.env,ONLINE_STAGE:stage,SOURCE_HASH:sourceHash};
 execFileSync('node',['scripts/online/prepare.mjs'],{stdio:'inherit',env});
 execFileSync('node',['node_modules/vite/bin/vite.js','build','--mode','online'],{stdio:'inherit',env});
+// Network-only entry for older online workers; keep it outside their cached index route.
+copyFileSync(resolve(stage,'index.html'),resolve(stage,'release-entry.html'));
+copyFileSync(resolve('scripts/online/release-recovery.html'),resolve(stage,'release-recovery.html'));
 // Retain only the previous release's current hashed assets, not an accumulating history.
 // A still-open tab may request its old lazy chunk or voice shard after deployment.
 const currentAssets=['assets','voice-online/index','voice-online/packs'].flatMap(dir=>readdirSync(resolve(stage,dir)).map(name=>`${dir}/${name}`));
