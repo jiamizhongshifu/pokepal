@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ParentButton } from "../components/TopBar";
 import { useGame } from "../store";
@@ -12,6 +13,8 @@ import './sleepy.css';
 const localClock=()=>new Date();
 /** A gentle, finite ending. Every owned companion remains visible, including the newest. */
 export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
+ const trackedStart=useRef(false);
+ useEffect(()=>{if(!trackedStart.current){trackedStart.current=true;trackInteraction('rest_shown');}},[]);
   const captures=useGame(s=>s.save.captures),go=useGame(s=>s.go);
   const [period,setPeriod]=useState(()=>restPeriod(clock()));
   const [resting,setResting]=useState(false),[speaking,setSpeaking]=useState(false),[unavailable,setUnavailable]=useState(false);

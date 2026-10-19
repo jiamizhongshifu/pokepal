@@ -1,4 +1,4 @@
-import './music.css';
+import {MusicToggle} from './MusicToggle';
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useGame } from "../store";
 import { PokeBall } from "./PokeBall";
@@ -36,7 +36,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
             <PokeBall type="poke" size={30} />×{Object.values(save.balls).reduce((a, b) => a + b, 0)}
           </span>
         </button>
-        {home && <button className={`music-toggle ${save.settings.backgroundMusic==='off'?'is-muted':''}`} aria-label={save.settings.backgroundMusic==='off'?'打开背景音乐':'关闭背景音乐'} aria-pressed={save.settings.backgroundMusic!=='off'} onClick={()=>useGame.getState().updateSettings({backgroundMusic:save.settings.backgroundMusic==='off'?'soft':'off'})}><Icon name="music" size={26}/><span className="music-toggle-state" aria-hidden="true">{save.settings.backgroundMusic==='off'?'关':'开'}</span></button>}
+        {home && <MusicToggle/>}
         <ParentButton onOpen={() => go({ name: "parent" })} />
       </div>}
       {homeActions && <nav className="home-actions" aria-label="小岛陪伴">{homeActions}{home&&help}</nav>}

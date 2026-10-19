@@ -1,3 +1,4 @@
+import {trackInteraction,trackLearningCompletion} from './lib/interaction';
 import {advancePlayClock,advanceCareClock} from './lib/playClock';
 import {markReviewAudio,settleUnitRound} from './lib/learningProgress';
 import type {EnergyGoal} from './lib/energyGoal';
@@ -283,30 +284,42 @@ export const useGame = create<State>((set, get) => {
     async advanceUnit(id,round,skipped=false) {
       const u=unitById(id);if(!u||!unitUnlocked(get().save,id))return;
       if(round!==unitRoundCount(u)){mut(s=>{settleUnitRound(s,id,round,skipped);});return;}
-      return commit(s=>{
+      const result=await commit(s=>{
         // Capture legacy claims before progressUnit changes activeUnit / completedAt.
         s.daily.courseUnits??=courseClaims(s);
         if(!settleUnitRound(s,id,round,skipped))return;
         completeGuide(s,'lesson');
         return rewardCourse(s,id);
       });
+      trackLearningCompletion('lesson_completed',result);return result;
     },
     markReviewAudio(key,pending){mut(s=>markReviewAudio(s,key,pending));},
-    finishReview(){return mut(s=>rewardParticipation(s,'review'));},
-    noteStoryRead(id,page){mut(s=>{const story=STORIES.find(st=>storyProgressKey(st)===id);if(!story||!Number.isInteger(page)||page<1||page>story.pages.length)return;const pages=(s.daily.storyReadPages??={})[id]??=[];if(!pages.includes(page))pages.push(page);if(pages.length===story.pages.length){rewardParticipation(s,'story');noteLearningStory(s,story.id);}});},
+    finishReview(){const reward=mut(s=>rewardParticipation(s,'review'));if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
+    noteStoryRead(id,page){
+      const reward=mut(s=>{
+        const story=STORIES.find(st=>storyProgressKey(st)===id);
+        if(!story||!Number.isInteger(page)||page<1||page>story.pages.length)return;
+        const pages=(s.daily.storyReadPages??={})[id]??=[];
+        const wasComplete=pages.length===story.pages.length;
+        if(!pages.includes(page))pages.push(page);
+        if(wasComplete||pages.length!==story.pages.length)return;
+        noteLearningStory(s,story.id);return rewardParticipation(s,'story');
+      });
+      if(reward)void flushSave().then(()=>{trackLearningCompletion('story_completed',reward);}).catch(()=>{});
+    },
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
-    noteStationLearning(station,key,action=false) {mut(s=>{
+    noteStationLearning(station,key,action=false) {const reward=mut(s=>{
       const entry=key?learningEntry(key):undefined;
       applyStation(s,station,Date.now(),entry?.key,action);
       // One heard sequence, one exposure record. Action and recognition stay separate.
       if(entry){
         (s.wordStats[entry.key]??={heard:0,spoken:0,correct:0}).heard++;
         if(!s.daily.words.includes(entry.key))s.daily.words.push(entry.key);
-        if(action)rewardParticipation(s,'island');
+        if(action)return rewardParticipation(s,'island');
       }
-    });},
+    });if(reward&&reward.gained+reward.bonus>0)void flushSave().then(()=>trackInteraction('energy_earned')).catch(()=>{});},
 
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
@@ -323,27 +336,29 @@ export const useGame = create<State>((set, get) => {
     async createTrainer(avatar) {
       if(get().saveBusy||get().saveIssue)return false;
       if(get().save.trainer)return true;
-      return await commit((s) => {
+      const created=await commit((s) => {
         s.trainer = { name: "小训练师", avatar, createdAt: Date.now() };
         s.balls.poke += 1; // 见面礼只在成功创建时发放一次。
         return true;
       })===true;
+      if(created)trackInteraction('trainer_created');return created;
     },
 
-    completeTask(kind, boardIndex) {
-      return commit((s) => {
+    async completeTask(kind, boardIndex) {
+      const reward=await commit((s) => {
         const d=s.daily;
         if(boardIndex!==null&&Number.isInteger(boardIndex)&&boardIndex>=0&&d.board[boardIndex]===kind)d.boardDone[boardIndex]=true;
         d.tasksCompleted++;
         return rewardParticipation(s,kind);
       });
+      trackLearningCompletion('practice_completed',reward);return reward;
     },
 
     noteStoryPage(id,page) {
       mut(s=>{ s.storyProgress ??= {}; s.storyProgress[id]=Math.max(s.storyProgress[id]??0,page); });
     },
 
-    async buyBall() { return !!await commit(exchangePokeball); },
+    async buyBall() {const ok=!!await commit(exchangePokeball);if(ok)trackInteraction('ball_exchanged');return ok;},
 
     setCatchWish(id) {
       mut((s) => {
@@ -353,7 +368,7 @@ export const useGame = create<State>((set, get) => {
       });
     },
 
-    async catchPokemon(id) { return !!await commit(s=>capturePartner(s,id)); },
+    async catchPokemon(id) {const ok=!!await commit(s=>capturePartner(s,id));if(ok)trackInteraction('capture_succeeded');return ok;},
 
     evolve(from, to) {
       mut((s) => {
@@ -382,7 +397,7 @@ export const useGame = create<State>((set, get) => {
     deferCare(id) { mut(s=>{const c=s.captures.find(c=>c.id===id);if(c)deferCare(c);}); },
 
     interact(id, kind) {
-      return mut((s) => {
+      const ok=mut((s) => {
         const c = s.captures.find((x) => x.id === id);
         if (!c) return;
         comfortCompanion(c,kind);
@@ -391,6 +406,7 @@ export const useGame = create<State>((set, get) => {
         c.friendship = Math.min(100, c.friendship + gain);
         return true;
       })??false;
+      if(ok)trackInteraction('companion_interacted');return ok;
     },
 
     noteHeard(count = 1) {
@@ -435,7 +451,7 @@ export const useGame = create<State>((set, get) => {
     async setLearningProfile(profile) {
       if(!validLearningProfile(profile)||!get().loaded||get().saveBusy||get().saveIssue)return false;
       mut(s=>{s.settings=applyLearningSettings(s.settings,{learningProfile:profile});});
-      try{await flushSave();return true;}catch{return false;}
+      try{await flushSave();trackInteraction('learning_settings_saved');return true;}catch{return false;}
     },
 
     rainWaterCrops(){const s=get().save,now=Date.now();if(weatherAt(now,s.settings.islandWeather??'auto').rain<.65||!s.farm?.plots.some(c=>c&&c.wateredAt===undefined&&now-c.plantedAt>=12000))return 0;return mut(s=>waterCropsWithRain(s,now));},

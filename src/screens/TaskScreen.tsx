@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import {EnergyToast} from '../components/EnergyToast';
 import { EnergyReturn } from '../components/EnergyReturn';
 import {ProgressHost,RoundProgress} from '../components/RoundProgress';
@@ -20,6 +21,8 @@ import type { TaskKind } from "../types";
 import { Icon } from "../icons";
 
 export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKind; boardIndex: number | null; practice?:boolean }) {
+ const trackedStart=useRef(false);
+ useEffect(()=>{if(!trackedStart.current){trackedStart.current=true;trackInteraction('practice_started');}},[]);
   const [progressHost,setProgressHost]=useState<HTMLDivElement|null>(null);
   const go = useGame((s) => s.go);
   const completeTask = useGame((s) => s.completeTask);

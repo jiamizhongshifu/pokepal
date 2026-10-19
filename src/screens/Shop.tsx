@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
@@ -25,7 +26,7 @@ export function Shop() {
   const buy=async()=>{
     if(exchanging.current)return;
     if(!affordable){go({name:'energy',goal:'ball'});return;}
-    exchanging.current=true;setSaving(true);
+    exchanging.current=true;setSaving(true);trackInteraction('ball_exchange_started');
     const ok=await buyBall();
     if(!mounted.current)return;
     setSaving(false);

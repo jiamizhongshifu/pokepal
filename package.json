@@ -26,7 +26,8 @@
     "check": "npm run test && tsc --noEmit",
     "build:ipad": "node scripts/build.mjs",
     "prebuild:ipad": "npm run voice:collect && npm run voice:coverage && npm run voice:verify && npm run voice:pack",
-    "preview:ipad": "vite preview --host"
+    "preview:ipad": "vite preview --host",
+    "analytics:report": "node scripts/online/traffic-report.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",

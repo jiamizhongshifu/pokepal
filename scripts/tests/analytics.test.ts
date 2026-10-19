@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ANALYTICS_HOST,ANALYTICS_CONSENT_DAYS,readAnalyticsConsent,analyticsPermitted,trafficPage,trafficReferrer} from '../../src/lib/analyticsPolicy';
+import {ANALYTICS_CONSENT_VERSION,ANALYTICS_HOST,ANALYTICS_CONSENT_DAYS,readAnalyticsConsent,analyticsPermitted,trafficPage,trafficReferrer} from '../../src/lib/analyticsPolicy';
 
 test('traffic requires fresh explicit consent, never missing, malformed or future consent',()=>{
  const now=1800000000000;
  const read=(v:unknown)=>readAnalyticsConsent({getItem:()=>JSON.stringify(v)},now);
- for(const v of [null,{}, {version:1,allowed:false,at:now},{version:0,allowed:true,at:now},{version:1,allowed:true,at:now+1},{version:1,allowed:true,at:now-ANALYTICS_CONSENT_DAYS*86400000}])assert.equal(read(v),false);
- assert.equal(read({version:1,allowed:true,at:now}),true);
+ for(const v of [null,{}, {version:ANALYTICS_CONSENT_VERSION,allowed:false,at:now},{version:1,allowed:true,at:now},{version:ANALYTICS_CONSENT_VERSION,allowed:true,at:now+1},{version:ANALYTICS_CONSENT_VERSION,allowed:true,at:now-ANALYTICS_CONSENT_DAYS*86400000}])assert.equal(read(v),false);
+ assert.equal(read({version:ANALYTICS_CONSENT_VERSION,allowed:true,at:now}),true);
  assert.equal(readAnalyticsConsent({getItem:()=>'{broken'}),false);
  assert.equal(readAnalyticsConsent({getItem:()=>{throw Error('storage blocked');}}),false);
 });

@@ -6,5 +6,7 @@ if(git(['branch','--show-current'])!=='main')throw new Error('Production release
 const commit=git(['rev-parse','HEAD']);
 execFileSync(process.execPath,['scripts/online/release-prepare.mjs'],{stdio:'inherit'});
 if(git(['status','--porcelain'])||git(['rev-parse','HEAD'])!==commit)throw new Error('Source changed during preparation.');
+// Additive counter schema must exist before a release can accept traffic.
+execFileSync('wrangler',['d1','migrations','apply','TRAFFIC_DB','--remote'],{stdio:'inherit'});
 execFileSync('wrangler',['pages','deploy','dist-online','--project-name','pokepal-online','--branch','main','--commit-hash',commit],{stdio:'inherit'});
 console.log('Upload finished. Verify production release.json, resources and user flows before reporting acceptance.');

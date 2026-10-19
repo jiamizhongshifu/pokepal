@@ -1,0 +1,11 @@
+{
+  "name": "pokepal-online",
+  "pages_build_output_dir": "./dist-online",
+  "compatibility_date": "2026-03-17",
+  "d1_databases": [{
+    "binding": "TRAFFIC_DB",
+    "database_name": "pokepal-traffic",
+    "database_id": "1be6b41d-7c44-4454-8a22-125e4ad52534",
+    "migrations_dir": "migrations"
+  }]
+}

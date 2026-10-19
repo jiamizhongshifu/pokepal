@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import {modalIsOpen} from '../lib/modalLayer';
 import {holdGuide} from '../lib/guidePause';
 import {useEffect,useLayoutEffect,useRef,useState,useId,type ReactNode} from 'react';
@@ -99,7 +100,7 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   return()=>{target?.classList.remove('guide-target');targetRef.current=null;observer.disconnect();document.removeEventListener('click',act,true);};
  },[open,id]);
  return <aside ref={root} className={`feature-guide ${floating?'guide-floating':''} ${compact?'guide-compact':''} ${open?'is-open':'is-closed'}`} aria-label="操作小帮手" data-guide={id}>
-  {(!open||compact)&&<button className="guide-reopen" onClick={()=>{if(open){close();return;}autoCancelled.current=true;setOpen(true);void hear(true);}} aria-label="帮助" aria-expanded={open} aria-controls={panelId}><span className="help-symbol" aria-hidden="true">?</span><span>帮助</span></button>}
+  {(!open||compact)&&<button className="guide-reopen" onClick={()=>{if(open){close();return;}autoCancelled.current=true;trackInteraction('help_opened');setOpen(true);void hear(true);}} aria-label="帮助" aria-expanded={open} aria-controls={panelId}><span className="help-symbol" aria-hidden="true">?</span><span>帮助</span></button>}
   {open&&<div id={panelId} className="guide-content" onKeyDown={e=>{if(e.key==='Escape'){close();root.current?.querySelector<HTMLButtonElement>('.guide-reopen')?.focus();}}}>
    <div className="guide-main"><span className="guide-picture" aria-hidden="true"><Icon name={guide.icon} size={38}/></span><strong>{guide.title}</strong>
     <button className="guide-hear" aria-pressed={speaking} onClick={()=>{autoCancelled.current=true;if(speaking){cancel();return;}void hear(true);}} aria-label={speaking?'停止操作提示':'听操作提示'}><Icon name="speaker" size={26}/><span>{speaking?'停一下':'听一听'}</span></button>

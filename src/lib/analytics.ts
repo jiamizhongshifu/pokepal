@@ -1,4 +1,6 @@
 import {GA_MEASUREMENT_ID} from '../data/analytics';
+import {connectInteractions} from './interaction';
+import {initializeAggregate,recordAggregatePage} from './traffic';
 import {ANALYTICS_CONSENT_KEY,ANALYTICS_CONSENT_VERSION,analyticsPermitted,readAnalyticsConsent,trafficPage,trafficReferrer} from './analyticsPolicy';
 const CHANGE='pokepal-analytics-change';
 const win=window as unknown as Record<string,unknown>;
@@ -36,7 +38,7 @@ function sync(){
  granted=true;
  if(currentPage!==lastPage){command('event','page_view',{...trafficPage(currentPage),page_referrer:trafficReferrer(document.referrer),send_to:GA_MEASUREMENT_ID});lastPage=currentPage;}
 }
-export function recordTrafficPage(name:string){currentPage=trafficPage(name)?name:'';sync();}
+export function recordTrafficPage(name:string){currentPage=trafficPage(name)?name:'';recordAggregatePage(currentPage);sync();}
 export function setAnalyticsConsent(allowed:boolean){
  if(!allowed)blockedHere=true;
  try{localStorage.setItem(ANALYTICS_CONSENT_KEY,JSON.stringify({version:ANALYTICS_CONSENT_VERSION,allowed,at:Date.now()}));}
@@ -47,7 +49,14 @@ export function setAnalyticsConsent(allowed:boolean){
 }
 export function subscribeAnalytics(listener:()=>void){window.addEventListener(CHANGE,listener);const storage=(e:StorageEvent)=>{if(e.key===null||e.key===ANALYTICS_CONSENT_KEY)listener();};window.addEventListener('storage',storage);return()=>{window.removeEventListener(CHANGE,listener);window.removeEventListener('storage',storage);};}
 export function initializeAnalytics(){
+ const stopAggregate=initializeAggregate();
+ const stopInteractions=connectInteractions(event=>{
+  // Check current consent on every action, including expiration and cross-tab withdrawal.
+  if(!analyticsAvailable()||!analyticsConsent()||!trafficPage(currentPage))return;
+  sync();
+  command('event',event,{...trafficPage(currentPage),page_referrer:trafficReferrer(document.referrer),send_to:GA_MEASUREMENT_ID});
+ });
  const unsubscribe=subscribeAnalytics(sync);
  const focus=()=>{if(!document.hidden)sync();};document.addEventListener('visibilitychange',focus);
- sync();return()=>{unsubscribe();document.removeEventListener('visibilitychange',focus);};
+ sync();return()=>{stopInteractions();stopAggregate();unsubscribe();document.removeEventListener('visibilitychange',focus);};
 }

@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import { BlockingDialog } from "../components/BlockingDialog";
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -95,7 +96,7 @@ export function Catch() {
 
   const throwBall = async () => {
     if (busy.current || !target || save.captures.some(c=>c.id===target.id) || save.balls[ball] < 1 || phase !== "aim") return;
-    busy.current = true;selectionRun.current++;
+    busy.current = true;selectionRun.current++;trackInteraction('capture_started');
     const arena=arenaRef.current!,image=arena.querySelector('.arena-target')!.getBoundingClientRect(),ballBox=arena.querySelector('.throw-ball')!.getBoundingClientRect(),stage=arena.getBoundingClientRect();
     const dx=image.left+image.width/2-(ballBox.left+ballBox.width/2);
     const dy=image.top+image.height/2-(ballBox.top+ballBox.height/2-dragDy);

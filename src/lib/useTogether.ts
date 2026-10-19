@@ -1,3 +1,4 @@
+import {trackInteraction} from './interaction';
 import {automaticTogetherTurn} from './homeOverlay';
 import {useModalBlocked} from './modalLayer';
 import {markInteresting} from '../scene/observationInterest';
@@ -26,7 +27,7 @@ export function useTogether(active:boolean,captures:Capture[]){
  const cancel=()=>{run.current++;running.current=false;current.current.session=null;stopVoice();setSession(null);setArrived(false);progress.current=0;};
  const begin=(kind:TogetherKind,ids:number[],coast=false,help=false)=>{
   if(!active||blocked||!ids.length||ids.length>2||new Set(ids).size!==ids.length||!ids.every(id=>captures.some(c=>c.id===id)))return;
-  cancel();heard.current.clear();recorded.current.clear();unlockAudio();
+  cancel();trackInteraction('together_started');heard.current.clear();recorded.current.clear();unlockAudio();
   setSession({...togetherSession(kind,ids,coast),...(help&&kind==='ball'?{help:true as const}:{})});setTurn(0);setPhase('arriving');
  };
  const syncArrivals=(visits:Visit[])=>{
@@ -59,7 +60,7 @@ export function useTogether(active:boolean,captures:Capture[]){
  useEffect(()=>{if(session&&phase==='arriving'&&arrived){progress.current=0;setPhase('ready');}},[arrived,session,phase]);
  useEffect(()=>{
   if(!session||phase!=='arriving')return;
-  const t=setTimeout(()=>setPhase('timeout'),90000);return()=>clearTimeout(t);
+  const t=setTimeout(()=>{trackInteraction('together_timeout');setPhase('timeout');},90000);return()=>clearTimeout(t);
  },[session,phase]);
  useEffect(()=>{const hide=()=>{if(document.hidden)cancel();};document.addEventListener('visibilitychange',hide);return()=>document.removeEventListener('visibilitychange',hide);},[]);
  useEffect(()=>{if(!active||session?.partners.some(id=>!captures.some(c=>c.id===id)))cancel();},[active,captures.map(c=>c.id).join(',')]);
@@ -85,7 +86,7 @@ export function useTogether(active:boolean,captures:Capture[]){
      const evidence=togetherEvidence(session.kind,session.partners,turn,!!session.help);
      useGame.getState().noteStationLearning(evidence.station,evidence.word,evidence.action);
     }
-    if(session.help||turn>=togetherRounds(session.kind)-1){if(!session.help)useGame.getState().rememberTogether({id:session.id,kind:session.kind,partners:session.partners,context:session.context,at:Date.now()});markInteresting(session.partners);setPhase('done');}
+    if(session.help||turn>=togetherRounds(session.kind)-1){if(!session.help)useGame.getState().rememberTogether({id:session.id,kind:session.kind,partners:session.partners,context:session.context,at:Date.now()});markInteresting(session.partners);trackInteraction('together_completed');setPhase('done');}
     else{progress.current=0;setTurn(n=>n+1);setPhase('ready');}
    }
   },80);return()=>clearInterval(timer);

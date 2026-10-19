@@ -50,3 +50,5 @@ npm run preview
 
 目前以网页为主，GitHub 不自动部署 Cloudflare。发布者应使用自己的 Cloudflare 项目及资源授权；不要把源码根目录作为静态站点上传。
 iPad / 安卓发布暂停。需要恢复时显式执行 `npm run build:ipad` 或对应移动端命令；这些平台仍须单独真机验收。
+
+基础访问量后端位于 `functions/api/traffic.ts`，数据表迁移位于 `migrations/`。Fork 部署应使用自己的 Cloudflare D1，并替换 `wrangler.jsonc` 中项目名和数据库标识；原项目的标识不授予数据库访问权限。访问量与 GA4 的正式域名白名单也需自行配置。源码预览不会向原项目采集统计。

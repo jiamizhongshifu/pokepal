@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import './story-reader.css';
 import { SHORT_STORY_LINES, storyLanguage, storyEdition, storyBookmarkKey, storyInitialPage, type StoryLanguage } from '../data/storyLevels';
 import { learningProfile } from '../lib/learningStage';
@@ -69,6 +70,8 @@ export function StoryReader({id}:{id:string}){
  return <Book key={`${id}:${language}`} story={storyEdition(story,language)} language={language}/>;
 }
 function Book({story,language}:{story:Story;language:StoryLanguage}){
+ const trackedStart=useRef(false);
+ useEffect(()=>{if(!trackedStart.current){trackedStart.current=true;trackInteraction('story_started');}},[]);
  const settings=useGame(s=>s.save.settings);
  const bookmark=storyBookmarkKey(story,language);
  const hasLevels=!!SHORT_STORY_LINES[story.id];
@@ -128,7 +131,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
      <button className="btn-big story-ending-primary" onClick={()=>go({name:'home',station:story.activity?.station})}><Icon name="island" size={36}/>回小岛玩</button>
      <details className="quiet-disclosure"><summary>还想一起做点什么？</summary><button className="btn-small" onClick={()=>useGame.getState().saveLearningWord(story.phrase.en)}>把这句话放进手册</button><div className="story-talk"><b>和大人聊一聊</b><p>{story.question.zh}</p><span lang="en">{story.question.en}</span><button className="replay" onClick={()=>readPair(story.question)}><Icon name="speaker" size={24}/>听一听</button></div>
-     <div className="story-family"><h2>今天一起试试</h2><p>{story.practice}</p><details><summary>给陪读大人的小提示</summary><p>{story.parentTip}</p></details></div>
+     <div className="story-family"><h2>今天一起试试</h2><p>{story.practice}</p><details onToggle={e=>{if(e.currentTarget.open)trackInteraction('family_tip_opened');}}><summary>给陪读大人的小提示</summary><p>{story.parentTip}</p></details></div>
      <div className="story-ending-actions">
        {story.activity&&<button className="btn-small" onClick={()=>go({name:'home',station:story.activity!.station})}><Icon name={story.activity.icon} size={24}/>{story.activity.label}</button>}
        {story.id==='keep-promise'&&<button className="btn-small" onClick={()=>go({name:'home',station:'farm'})}>陪伙伴照顾一颗小种子</button>}

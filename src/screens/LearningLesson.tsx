@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import {guideIsOpen,subscribeGuides} from '../lib/guidePause';
 import {LessonPicnic} from '../components/LessonPicnic';
 import {EnergyToast} from '../components/EnergyToast';
@@ -26,6 +27,8 @@ import '../learning-journey.css';
 
 export function LearningLesson({id}:{id:string}){
  const s=useGame(v=>v.save),go=useGame(v=>v.go),advance=useGame(v=>v.advanceUnit);
+ const trackedStart=useRef(false);
+ useEffect(()=>{if(!trackedStart.current&&unitById(id)&&unitUnlocked(s,id)){trackedStart.current=true;trackInteraction('lesson_started');}},[]);
  const saveIssue=useGame(v=>v.saveIssue);
  const u=unitById(id);
  const [round,setRound]=useState(()=>s.learning?.units[id]?.pendingAudio?.length?s.learning.units[id].pendingAudio![0]:s.learning?.units[id]?.completedAt?0:Math.min(s.learning?.units[id]?.round??0,u?unitRoundCount(u)-1:0));

@@ -5,6 +5,7 @@ import {resolve} from 'node:path';
 const root=resolve('.');
 const target=resolve(process.env.ONLINE_STAGE || `.build/online-${Date.now()}`);
 await mkdir(target,{recursive:true});
+await cp(resolve('public/_routes.json'),resolve(target,'_routes.json'));
 const hash=b=>createHash('sha256').update(b).digest('hex').slice(0,24);
 // Only runtime media is admitted. Never copy public/voice wholesale or local server/config files.
 for(const dir of ['art','env','icons','models','pokemon','story-art','textures','music','environment'])await cp(resolve('public',dir),resolve(target,dir),{recursive:true});

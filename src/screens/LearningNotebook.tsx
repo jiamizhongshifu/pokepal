@@ -1,3 +1,4 @@
+import {trackInteraction} from '../lib/interaction';
 import {RoundProgress} from '../components/RoundProgress';
 import { FeatureGuide } from '../components/FeatureGuide';
 import '../components/island-living.css';
@@ -6,7 +7,7 @@ import { artUrl,getPokemon } from '../data/pokemon';
 import { BERRIES } from '../lib/farm';
 import { PokeImg } from '../components/PokeImg';
 import '../components/picnic.css';
-import { useMemo,useState,useRef } from 'react';
+import { useMemo,useState,useRef,useEffect } from 'react';
 import { useGame } from '../store';
 import { learningEntry,reviewSituation,recommendedUnit } from '../data/curriculum';
 import { reviewKeys,recommendedReviewKeys,reviewGroupSize } from '../lib/learningProgress';
@@ -48,6 +49,8 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
 }
 
 export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'energy'|'tasks'|'parent'}){
+ const trackedStart=useRef(false);
+ useEffect(()=>{if(!trackedStart.current&&keys.some(k=>learningEntry(k))){trackedStart.current=true;trackInteraction('review_started');}},[]);
  const go=useGame(s=>s.go),records=useGame(s=>s.save.learning?.records);
  const groupSize=useGame(s=>reviewGroupSize(s.save));
  const entries=useMemo(()=>[...new Set(keys)].map(learningEntry).filter((e):e is NonNullable<typeof e>=>!!e).slice(0,groupSize),[]);

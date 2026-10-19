@@ -58,7 +58,7 @@ return {
         globIgnores: ["**/HomeScene-*.js"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: "/index.html",
-        navigateFallbackDenylist: [/^\/(voice|models|pokemon|art|story-art|env|icons|textures|music|__ipad|release|privacy|terms|feedback)/],
+        navigateFallbackDenylist: [/^\/(api|voice|models|pokemon|art|story-art|env|icons|textures|music|__ipad|release|privacy|terms|feedback)/],
         runtimeCaching: [{urlPattern:/\/environment\/[a-z-]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-nature-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:6,maxAgeSeconds:365*24*60*60}}},{urlPattern:/\/music\/[a-z]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-music-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:8,maxAgeSeconds:365*24*60*60}}}],
         cleanupOutdatedCaches: true
       } : {
