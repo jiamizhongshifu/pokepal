@@ -18,3 +18,20 @@ Chatwoot 处理；页面已说明用途、30 天聊天记录保留、同浏览�
 桌面与手机尺寸通过，SDK 加载失败重试、键盘关闭和焦点返回通过，类型检查通过。
 证据保存在 SiSkill 工作区 `private/support/2026-10-22/cloud-products-result.json`
 与 `cloud-products-ui-result.json`。未代表完整项目 CI 或生产环境验收。
+
+## 网页生产发布 · 2026-10-22
+
+用户批准发布后，源码 `7948ba6029e13adeb0c54aa5e877ecd67a124f1b` 已推送 main。
+Cloudflare Pages 部署 `c20b3e33`，正式入口 https://pokepal-online.pages.dev/feedback/ 。
+网页 release id `2026-10-22T13:35:24.146Z`，sourceHash
+`30d3aaddbee2db262ee8d319829011e2bd15e3995cf9b552e4c841690c01c8b4`。
+
+- 157 项测试和 TypeScript 检查通过；6,363 个网页文件、56,156 条录音、4,096 个音频包验证通过。
+- 发布准备保留当前线上 4,395 个旧版资源，无待执行数据库迁移。
+- 生产 release 和 16 个关键资源哈希一致，恢复入口 no-store 检查通过。
+- 实际会话 #6：家长页面发送、后台回复、桌面与 390px 手机尺寸收取通过；附件入口关闭。
+- 游戏入口不请求 Chatwoot；没有修改 iPad/Android 包或 `dist/`。
+- 回滚部署：`870e0dd8-067c-4c2a-95c8-f41eca3b45a9`。
+
+证据保存在 SiSkill 工作区 `private/support/2026-10-22/pokepal-*`。
+手机系统推送需单独真机验收，不由网页尺寸测试推断。
