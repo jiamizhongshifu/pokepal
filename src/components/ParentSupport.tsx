@@ -1,4 +1,5 @@
 import {TrafficPreferences} from './TrafficPreferences';
+import {ParentLiveChat} from './ParentLiveChat';
 import {trackInteraction} from '../lib/interaction';
 import {AnalyticsPreferences} from './AnalyticsPreferences';
 import {useEffect, useRef, useState} from 'react';
@@ -60,6 +61,7 @@ function Contact() {
 }
 function Privacy() {
   return <>
+    {!!import.meta.env.VITE_CHATWOOT_WEBSITE_TOKEN&&<section><h2>家长在线客服</h2><p>仅在家长反馈页主动点击“联系在线客服”后加载 Chatwoot Cloud。它处理家长主动发送的文字、会话标识、页面网址和连接信息，并使用浏览器存储恢复聊天；当前免费方案的聊天记录保留 30 天。不会自动读取或发送孩子的存档、学习记录、照片和录音。聊天不提供附件入口，请勿发送孩子个人信息。更正或删除请求可使用本页家长联系方式。</p><a href="https://www.chatwoot.com/privacy-policy" target="_blank" rel="noopener noreferrer">Chatwoot 隐私说明</a></section>}
     <p className="ps-lead">照片、学习记录和录音默认留在当前浏览器。我们把“设备内保存”和“联网请求”分别说明，不将它们笼统称作“全部不联网”。</p>
     <section><h2>谁提供这个试用</h2><Contact/><p>本说明面向家长及监护人。请使用昵称和预设头像，不必填写孩子真实姓名、生日、学校或其他身份信息。</p></section>
     <section><h2>哪些内容保存在本机</h2><dl className="ps-data-list">
@@ -98,7 +100,7 @@ function Feedback() {
   const report=makeFeedbackReport({version:import.meta.env.VITE_APP_BUILD_ID,mode:import.meta.env.VITE_ONLINE?'联网网页版':'本地家庭版',topic,details,environment:includeDevice?feedbackEnvironment(navigator.userAgent,innerWidth,navigator.onLine):undefined});
   const mail=feedbackMailDraft(PARENT_CONTACT.email,topic,report);
   const download=()=>{const url=URL.createObjectURL(new Blob([report],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='pokepal-parent-feedback.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('已准备文本文件，请在下载中查看；尚未发送。');};
-  return <><Contact/><p className="ps-lead">先在这里整理，再由家长决定是否发送。不会自动上传。</p>
+  return <><Contact/><ParentLiveChat/><p className="ps-lead">先在这里整理，再由家长决定是否发送。下方反馈表单不会自动上传。</p>
     <section className="ps-feedback-form"><h2>1. 简单说说发生了什么</h2><label>问题类型<select value={topic} onChange={e=>{setTopic(e.target.value);setStatus('');}}>{FEEDBACK_TOPICS.map(t=><option key={t}>{t}</option>)}</select></label>
     <label>问题说明<textarea value={details} maxLength={1500} rows={5} onChange={e=>{setDetails(e.target.value);setStatus('');}} placeholder="例如：点了再听一次，没有声音。其他页面正常。" aria-describedby="feedback-private-hint"/></label>
     <p id="feedback-private-hint" className="ps-muted">请只描述操作步骤，不写孩子真实姓名、学校或日记内容；这里不接收照片、录音和存档附件。离开页面后草稿不会保留。</p>
