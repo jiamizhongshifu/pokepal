@@ -45,6 +45,7 @@ export interface Capture {
 }
 
 export interface Daily {
+  adventureReward?: number; // Shared daily story reward, separate from checkpoint.
   participated?: import("./lib/participation").ParticipationKind[];
   goalDone?: boolean;
   courseUnits?: string[]; // Themes rewarded today; reset with the daily record.
@@ -129,6 +130,8 @@ export interface SaveData {
   catchWish?: number;
   /** 绘本已读页数；可选以兼容旧存档。 */
   storyProgress?: Record<string,number>;
+  careStory?: import("./lib/careStory").CareStory;
+  storyAdventure?: import("./lib/storyPlayer").StoryPlayback;
   /** 可选字段兼容旧存档；花园不消耗能量，不绑定每日任务。 */
   /** Legacy flower-care save; retained for import compatibility, no longer used by gameplay. */
   garden?: { bloomed: boolean };

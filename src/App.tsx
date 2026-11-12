@@ -25,6 +25,9 @@ const LearningLesson=lazy(()=>import("./screens/LearningLesson").then(m=>({defau
 const LearningNotebook=lazy(()=>import("./screens/LearningNotebook").then(m=>({default:m.LearningNotebook})));
 const LearningReview=lazy(()=>import("./screens/LearningNotebook").then(m=>({default:m.LearningReview})));
 
+const StoryHome=lazy(()=>import("./screens/StoryHome").then(m=>({default:m.StoryHome})));
+const CareStoryScreen=lazy(()=>import("./screens/CareStory").then(m=>({default:m.CareStoryScreen})));
+const StoryAdventure=lazy(()=>import("./screens/StoryAdventure").then(m=>({default:m.StoryAdventure})));
 const StoryLibrary=lazy(()=>import("./screens/Stories").then(m=>({default:m.StoryLibrary})));
 const StoryReader=lazy(()=>import("./screens/Stories").then(m=>({default:m.StoryReader})));
 
@@ -58,11 +61,12 @@ export default function App() {
   const load = useGame((s) => s.load);
   const addPlaySeconds = useGame((s) => s.addPlaySeconds);
   const noteHeard = useGame((s) => s.noteHeard);
-  useSceneMusic({screen:screen.name,level:settings.backgroundMusic??'soft',blocked:!loaded||!!saveIssue||timeUp});
-  useEnvironmentAudio({screen:screen.name,level:settings.environmentSound??'soft',mode:settings.islandWeather??'auto',blocked:!loaded||!!saveIssue||timeUp});
+  const islandView=screen.name==='home'&&(screen.view==='island'||!!screen.station);
+  useSceneMusic({screen:screen.name,level:settings.backgroundMusic??'soft',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
+  useEnvironmentAudio({screen:screen.name,level:settings.environmentSound??'soft',mode:settings.islandWeather??'auto',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
   const homeSeen = useRef(false);
   if (!trainer) homeSeen.current = false;
-  if (loaded && screen.name === 'home') homeSeen.current = true;
+  if (loaded && islandView) homeSeen.current = true;
 
   useEffect(() => {
     load();
@@ -106,7 +110,7 @@ export default function App() {
   if (!loaded) return <div className="screen loading"><div className="sl-ball" /></div>;
 
   const resting = !!timeUp && screen.name !== "parent" && screen.name !== "welcome";
-  const homeActive = screen.name === 'home' && !resting;
+  const homeActive = islandView && !resting;
 
   return (
     <>
@@ -126,7 +130,7 @@ export default function App() {
   function renderScreen() {
   switch (screen.name) {
     case "welcome": return <Welcome />;
-    case "home": return null;
+    case "home": return <StoryHome companion={screen.companion}/>;
     case "journey": return <LearningJourney/>;
     case "lesson": return <LearningLesson key={screen.id} id={screen.id}/>;
     case "notebook": return <LearningNotebook key={screen.mode} mode={screen.mode} returnTo={screen.returnTo}/>;
@@ -135,6 +139,8 @@ export default function App() {
     case "practice": return <Practice />;
     case "energy": return <Energy/>;
     case "diary": return <Diary key={screen.id??"new"} id={screen.id}/>;
+    case "careStory": return <CareStoryScreen />;
+    case "adventure": return <StoryAdventure />;
     case "stories": return <StoryLibrary />;
     case "story": return <StoryReader key={screen.id} id={screen.id} />;
     case "task": return <TaskScreen key={`${screen.kind}-${screen.boardIndex}-${screen.session ?? 0}`} kind={screen.kind} boardIndex={screen.boardIndex} practice={screen.practice} />;

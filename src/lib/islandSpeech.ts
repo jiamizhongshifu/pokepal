@@ -5,7 +5,7 @@ import { playCry, sayWhile, sayCancellableWhile, type Part } from './speech';
 /** The island stays mounted between screens; its audio belongs only to home. */
 export function islandAudioAllowed() {
   const { screen, save, loaded, saveIssue } = useGame.getState();
-  return loaded && !saveIssue && screen.name === 'home' && !document.hidden
+  return loaded && !saveIssue && screen.name === 'home' && (screen.view==='island'||!!screen.station) && !document.hidden
     && !modalIsOpen() && !document.querySelector('dialog[open]') && !!save.trainer && save.daily.playSeconds < playLimitSeconds(save);
 }
 

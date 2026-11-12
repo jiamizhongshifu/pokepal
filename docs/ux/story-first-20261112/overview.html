@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>让每一次相遇，都成为一个小故事 · PokéPal 重构提案</title>
+  <style>
+    :root { --paper: #f6f1e8; --surface: #fbf8f2; --ink: #292e2a; --muted: #676b64; --line: #d6d3c9; --accent: #49684f; --accent-soft: #e6ece2; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.8 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-underline-offset: .23em; text-decoration-thickness: 1px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+    .skip { position: absolute; left: 20px; top: -80px; padding: 8px 16px; background: var(--surface); }
+    .skip:focus { top: 12px; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+    .masthead { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 27px 0; border-bottom: 1px solid var(--line); font-size: 12px; letter-spacing: .08em; }
+    .brand { font-size: 15px; font-weight: 750; letter-spacing: .13em; }
+    .meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 20px; }
+    .status { color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 100px; font-weight: 650; letter-spacing: .02em; }
+    .hero { padding: 62px 0 40px; }
+    .eyebrow, .section-label { margin: 0 0 14px; color: var(--muted); font-size: 11px; font-weight: 650; letter-spacing: .16em; }
+    h1, h2, h3, p, blockquote { margin-top: 0; }
+    h1 { max-width: 840px; margin-bottom: 28px; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: clamp(34px, 5vw, 58px); line-height: 1.35; letter-spacing: -.035em; font-weight: 650; }
+    .summary { max-width: 760px; margin: 0; color: var(--muted); font-size: 17px; }
+    .summary strong { color: var(--ink); font-weight: 650; }
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-top: 38px; }
+    .quote { margin: 0; padding-left: 18px; border-left: 2px solid var(--line); font-size: 15px; }
+    .quote p { margin: 0 0 3px; }
+    .quote footer { font-size: 12px; color: var(--muted); }
+    .doc-link { flex-shrink: 0; font-size: 14px; }
+    main > section { padding: 36px 0; border-top: 1px solid var(--line); }
+    h2 { margin-bottom: 19px; font-size: 25px; line-height: 1.45; letter-spacing: -.025em; }
+    h3 { margin-bottom: 9px; font-size: 17px; line-height: 1.55; }
+    p:last-child { margin-bottom: 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .two-col p, .compact { font-size: 14px; }
+    .muted { color: var(--muted); }
+    .plain-list { list-style: none; margin: 0; padding: 0; }
+    .plain-list li + li { margin-top: 10px; }
+    .plain-list li { padding-left: 16px; position: relative; font-size: 14px; }
+    .plain-list li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+    .section-head { display: flex; justify-content: space-between; gap: 24px; align-items: baseline; }
+    .section-head p { max-width: 430px; font-size: 13px; color: var(--muted); }
+    .flow { display: grid; grid-template-columns: repeat(7, 1fr); gap: 16px; margin: 5px 0 20px; padding: 0; list-style: none; }
+    .flow li { position: relative; padding: 16px 12px; min-height: 125px; background: var(--surface); border: 1px solid var(--line); }
+    .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -15px; top: 43px; color: var(--muted); font-size: 14px; }
+    .flow .number { display: block; margin-bottom: 11px; font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .1em; }
+    .flow strong { display: block; font-size: 14px; line-height: 1.5; }
+    .flow small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .note { margin-bottom: 0; font-size: 13px; color: var(--muted); }
+    .note-spaced { margin-top: 20px; }
+    .entry-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin: 24px 0 0; }
+    .entry { border-top: 1px solid var(--line); padding-top: 17px; }
+    .entry p { font-size: 13px; color: var(--muted); }
+    .entry small { display: block; margin-bottom: 7px; color: var(--muted); font-size: 10px; letter-spacing: .12em; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    caption { text-align: left; margin-bottom: 12px; color: var(--muted); font-size: 13px; }
+    th, td { padding: 13px 16px 13px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 11px; font-weight: 650; color: var(--muted); letter-spacing: .04em; }
+    td:first-child { width: 18%; font-weight: 650; }
+    td:nth-child(2) { width: 43%; }
+    tr:last-child td { border-bottom: 0; }
+    .pilot { margin: 12px 0 0; padding: 27px 30px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); }
+    .pilot-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 19px; }
+    .pilot-head h3 { font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 29px; font-weight: 650; }
+    .pilot-head p { font-size: 12px; color: var(--muted); }
+    .pilot-duration { white-space: nowrap; font-size: 28px; line-height: 1.3; font-weight: 600; letter-spacing: -.04em; }
+    .pilot-duration small { display: block; font-size: 10px; letter-spacing: .06em; font-weight: 400; color: var(--muted); }
+    .beats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 22px; list-style: none; margin: 0; padding: 0; }
+    .beats li { padding-top: 13px; border-top: 1px solid var(--line); font-size: 13px; }
+    .beats time { display: block; margin-bottom: 6px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .beats strong { display: block; margin-bottom: 5px; }
+    .pilot-foot { margin-top: 21px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; }
+    .rule { margin-top: 21px; padding: 20px 24px; border: 1px solid var(--line); background: var(--surface); }
+    .rule h3 { font-size: 15px; }
+    .rule p { font-size: 13px; }
+    .rule .proposal { font-weight: 400; color: var(--muted); }
+    .stories { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; margin: 22px 0 0; padding: 0; list-style: none; }
+    .stories li { font-size: 13px; }
+    .stories strong { display: block; margin-bottom: 6px; font-size: 14px; }
+    .phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 27px; margin: 0; padding: 0; list-style: none; }
+    .phases li { border-top: 2px solid var(--ink); padding-top: 14px; }
+    .phase-no { font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+    .phases h3 { margin-top: 10px; font-size: 16px; }
+    .phases p { font-size: 13px; color: var(--muted); }
+    .review-row { display: flex; gap: 18px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+    .review-row:last-child { border-bottom: 0; }
+    .owner { flex-shrink: 0; border: 1px solid var(--line); border-radius: 100px; padding: 1px 10px; color: var(--muted); font-size: 11px; }
+    .sources { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 25px; list-style: none; padding: 0; margin: 18px 0 0; font-size: 12px; }
+    .sources li { display: flex; gap: 10px; }
+    .sources span { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .page-footer { display: flex; justify-content: space-between; gap: 24px; padding: 25px 0 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    @media (max-width: 940px) {
+      .page { padding: 0 30px; }
+      .flow { grid-template-columns: repeat(4, 1fr); }
+      .flow li:nth-child(4)::after { content: none; }
+      .flow li { min-height: 112px; }
+      .two-col { gap: 30px; }
+      .beats, .phases { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .page { padding: 0 22px; }
+      .masthead { align-items: flex-start; padding: 21px 0; }
+      .meta { gap: 8px; font-size: 10px; }
+      .brand { font-size: 12px; white-space: nowrap; }
+      .status { padding: 3px 9px; }
+      .hero { padding: 37px 0 30px; }
+      .summary { font-size: 15px; }
+      .hero-bottom, .section-head { display: block; }
+      .doc-link { display: inline-block; margin-top: 22px; }
+      .two-col, .entry-grid, .stories, .sources { grid-template-columns: 1fr; gap: 23px; }
+      .flow { grid-template-columns: 1fr; gap: 14px; }
+      .flow li { display: grid; grid-template-columns: 30px 1fr; column-gap: 10px; min-height: 0; padding: 13px 17px; }
+      .flow .number { grid-row: 1 / 3; margin: 1px 0 0; }
+      .flow small { grid-column: 2; margin-top: 2px; }
+      .flow li:not(:last-child)::after, .flow li:nth-child(4)::after { content: "↓"; right: auto; left: 25px; top: auto; bottom: -18px; }
+      h2 { font-size: 22px; }
+      main > section { padding: 28px 0; }
+      .pilot { padding: 22px 19px; }
+      .pilot-head h3 { font-size: 23px; }
+      .pilot-duration { font-size: 22px; }
+      .beats { grid-template-columns: 1fr; gap: 16px; }
+      .phases { gap: 24px 20px; }
+      .rule { padding: 17px 19px; }
+      table { min-width: 550px; }
+      .review-row { align-items: flex-start; gap: 12px; }
+      .page-footer { display: block; }
+      .page-footer p + p { margin-top: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: white; font-size: 11px; }
+      .page { max-width: none; padding: 0; }
+      .hero { padding-top: 25px; }
+      h1 { font-size: 34px; }
+      main > section { padding: 20px 0; }
+      .pilot, .rule, .phases li, tr { break-inside: avoid; }
+      .skip { display: none; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">跳到产品规格</a>
+  <div class="page">
+    <header>
+      <div class="masthead">
+        <a class="brand" href="README.md" aria-label="PokéPal 完整重构方案">POKÉPAL</a>
+        <div class="meta"><span class="status">重构提案 · 尚未实现</span><time datetime="2026-11-12">2026.11.12</time><span>产品主张 / 钟师傅</span></div>
+      </div>
+      <div class="hero">
+        <p class="eyebrow">STORY FIRST · 给 3–6 岁的小训练师</p>
+        <h1>让每一次相遇，<br>都成为一个小故事</h1>
+        <p class="summary"><strong>用连续的动态故事，承载学习与陪伴。</strong><br>让 4 岁宝宝看懂发生了什么，愿意听，也能自然地帮一下。<br>保留收集宝可梦的快乐，让爱、习惯、品德和英语在故事里发生。</p>
+        <div class="hero-bottom">
+          <blockquote class="quote"><p>“我更希望传达给宝宝的还是一个个动人的故事。”</p><footer>用户原话 · 本次重构的出发点</footer></blockquote>
+          <a class="doc-link" href="README.md">阅读完整方案与迁移细节 ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <section aria-labelledby="why-title">
+        <p class="section-label">01 / 为什么改变</p>
+        <h2 id="why-title">宝宝需要理解故事，才能走进这座岛</h2>
+        <div class="two-col">
+          <div><h3>当前问题</h3><p>喂食、种植、游戏、学习和捕捉分布在多个页面与面板。宝宝需要先理解入口、功能按钮和下一步选项，才能把这些体验连起来。故事已有基础，但逐页阅读、选择和离开故事去做活动，仍打断了情绪与情境。</p></div>
+          <div><h3>这次要做到</h3><ul class="plain-list"><li>每次打开，有一个清楚、温柔的故事邀请。</li><li>用角色的行动和回应表达意义，非必要不做题。</li><li>减少导航与选择，保留帮忙、表达喜欢和投球的主动权。</li><li>完成任务 → 获得积分 → 兑换精灵球 → 捕捉伙伴，核心循环继续保留。</li></ul></div>
+        </div>
+        <p class="note note-spaced">本轮范围：网页端交互与内容重构。首集完成后再扩展其他场景；不恢复 iPad / 安卓打包，不清空原有训练师存档。</p>
+      </section>
+
+      <section aria-labelledby="loop-title">
+        <p class="section-label">02 / 宝宝的一次旅程</p>
+        <div class="section-head"><h2 id="loop-title">一个故事，带着体验往前走</h2><p>自动讲述与可选参与相接；涉及积分消费和伙伴选择时，保留宝宝明确的操作。</p></div>
+        <ol class="flow" aria-label="核心体验流程">
+          <li><span class="number">01</span><strong>开始</strong><small>点一下故事邀请</small></li>
+          <li><span class="number">02</span><strong>进入故事</strong><small>听、看，可选帮一下</small></li>
+          <li><span class="number">03</span><strong>获得积分</strong><small>完整任务完成后记账</small></li>
+          <li><span class="number">04</span><strong>明确兑换</strong><small>5 分换 1 个球<br>点球才消费</small></li>
+          <li><span class="number">05</span><strong>挑喜欢的伙伴</strong><small>宝宝自己决定</small></li>
+          <li><span class="number">06</span><strong>投出精灵球</strong><small>轻轻一点或上滑</small></li>
+          <li><span class="number">07</span><strong>一起回家</strong><small>陪伴或安心休息</small></li>
+        </ol>
+        <p class="note">没有操作时，故事仍会继续；到兑换或选伙伴时安静等待，也可以离开。不会自动消费积分、自动选择宝可梦或自动投球。</p>
+        <div class="entry-grid" aria-label="三个主要入口">
+          <article class="entry"><small>主要邀请</small><h3>今天的故事</h3><p>接着上次听，或进入一个适合今天的小故事。开始前不必挑难度、词汇或任务类型。</p></article>
+          <article class="entry"><small>熟悉的陪伴</small><h3>我的伙伴</h3><p>看到已经认识的朋友，在具体生活情境里喂食、玩耍、种植和休息。</p></article>
+          <article class="entry"><small>收集的乐趣</small><h3>找新伙伴</h3><p>保留选择喜欢的宝可梦和捕捉的期待。积分、精灵球与兑换关系清楚可见。</p></article>
+        </div>
+      </section>
+
+      <section aria-labelledby="map-title">
+        <p class="section-label">03 / 功能如何进入故事</p>
+        <h2 id="map-title">把每一次操作，放回有意义的情境</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">现有功能</th><th scope="col">新的呈现方式</th><th scope="col">保留的主动参与</th></tr></thead>
+          <tbody>
+            <tr><td>喂食</td><td>朋友有点饿，洗好果实，递过去，收到真实的回应。</td><td>可选点果实帮忙；朋友也能自行示范。</td></tr>
+            <tr><td>一起游戏</td><td>小球滚过来，朋友邀请你加入，故事演出轮流与等待。</td><td>可选点球回应，不必先选玩法和地点。</td></tr>
+            <tr><td>种植蔬果</td><td>埋下种子、照顾它、见证成长，再与朋友分享收获。</td><td>可选点种子或水壶；一镜头只邀请一个动作。</td></tr>
+            <tr><td>英语学习</td><td>让单词和短句在动作发生时出现，并在后续情境再次遇见。</td><td>愿意时跟说、指一指；默认无答案判定。</td></tr>
+            <tr><td>积分与兑换</td><td>完整任务结束，积分收好；5 点积分换成一个精灵球。</td><td>兑换需明确点击，不把计分弹窗插进情绪高潮。</td></tr>
+            <tr><td>捕捉与收藏</td><td>遇见、打招呼、选喜欢的朋友，投球后一起回家。</td><td>选伙伴与投球由宝宝决定，保留已有收藏。</td></tr>
+          </tbody>
+        </table></div>
+        <ul class="stories" aria-label="用户故事">
+          <li><strong>作为小训练师</strong>我想点一下就听见故事，这样不用记住很多按钮，也能知道发生了什么。</li>
+          <li><strong>作为喜欢伙伴的宝宝</strong>我想轻轻帮一下，让朋友回应我，这样我能感受到自己在故事里。</li>
+          <li><strong>作为陪伴的家长</strong>我想知道孩子听过、参与过什么，方便把一句话带回生活，而非把观看次数当作掌握。</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="pilot-title">
+        <p class="section-label">04 / 第一集完整样片</p>
+        <h2 id="pilot-title">先让一个小故事成立</h2>
+        <article class="pilot" aria-label="留给你的一颗苹果样片提案">
+          <div class="pilot-head"><div><h3>《留给你的一颗苹果》</h3><p>皮卡丘 × 伊布 · 从看见需要，到温柔分享 · 英语：<span lang="en">Apple / Thank you</span></p></div><div class="pilot-duration">3′20″<small>故事目标时长</small></div></div>
+          <ol class="beats">
+            <li><time>00:00—00:45</time><strong>这里有你的座位</strong>皮卡丘铺好三个座位，伊布带来三颗苹果，邀请小训练师一起野餐。</li>
+            <li><time>00:45—01:40</time><strong>一起帮个忙</strong>水壶有点重，伊布开口求助。伙伴共同倒水，把苹果上的泥点洗去。</li>
+            <li><time>01:40—02:35</time><strong>留一颗给你</strong>伊布认真擦干小苹果，把它放到宝宝面前。皮卡丘将第三个座垫推近一点。</li>
+            <li><time>02:35—03:20</time><strong>我也被惦记着</strong>朋友自然说出 <span lang="en">Thank you</span>，一起吃点心、挥手告别。故事完整收尾后，再收好任务积分。</li>
+          </ol>
+          <p class="pilot-foot"><strong>全程最多两次可选点物：</strong>点水壶帮忙倒水、点近处苹果帮忙擦干。无人操作时，角色自然完成，故事不断；宝宝不说英语也拥有完整体验。故事结束后可选择兑换与找伙伴，也可以离开；不自动连播。</p>
+        </article>
+        <aside class="rule" aria-labelledby="reward-title"><h3 id="reward-title">故事奖励 <span class="proposal">/ 新规则建议，尚未实现</span></h3><p>一集完整故事任务 <strong>5 分</strong>；同一集每天只奖励一次，每日最多 <strong>15 分</strong>。重看不重复领奖，可选动作与跟说不影响奖励。<strong>5 分兑换 1 个精灵球</strong>，兑换仍需明确点击。</p><p class="muted">保留旧积分余额、精灵球库存、已拥有伙伴与图鉴收藏；七日赠球累计不清零。旧奖励记录与新故事记录的迁移、同日去重和持久化规则，见<a href="README.md">完整方案</a>。</p></aside>
+      </section>
+
+      <section aria-labelledby="metrics-title">
+        <p class="section-label">05 / 怎样判断有效</p>
+        <h2 id="metrics-title">验证宝宝能否顺畅进入，而非点了多少次</h2>
+        <div class="table-wrap"><table>
+          <caption>以下均为首轮验收目标，尚无样片实测或儿童观察数据。</caption>
+          <thead><tr><th scope="col">指标</th><th scope="col">目标</th><th scope="col">验证方式</th></tr></thead>
+          <tbody>
+            <tr><td>开始负担</td><td>主入口 1 次点击开始；故事中 0 次必需点击。</td><td>从已进入产品的首页走查，同时验证开始手势能解锁音频。</td></tr>
+            <tr><td>连续体验</td><td>无操作也能看完 3 分 20 秒故事；最多两次可选点物。</td><td>无人操作播放；逐一核验动作等待与自动继续。</td></tr>
+            <tr><td>自主权</td><td>未明确操作时，0 次积分消费、选宠和投球。</td><td>在故事结尾与兑换、捕捉环节停留观察。</td></tr>
+            <tr><td>理解与情绪</td><td>宝宝能从画面与声音跟上“一起准备—得到帮助—被朋友惦记”的关系。</td><td>亲子观察与自然交流；不要求英文复述或设置理解考试。</td></tr>
+            <tr><td>可靠性</td><td>重播、刷新和中断不重复发奖；旧收藏与库存完整。</td><td>重复播放、断点恢复、存档迁移和奖励事务测试。</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section aria-labelledby="phases-title">
+        <p class="section-label">06 / 分四步推进</p>
+        <h2 id="phases-title">先做出完整体验，再扩展故事世界</h2>
+        <ol class="phases">
+          <li><span class="phase-no">PHASE 01</span><h3>研究与规格</h3><p>本轮完成资料与源码核查、功能重构映射和首集文字分镜；视觉与节奏仍待样片。</p></li>
+          <li><span class="phase-no">PHASE 02</span><h3>首集与播放器</h3><p>制作角色与动作样片，接入连续播放、两次可选动作和断点恢复，先让一集完整成立。</p></li>
+          <li><span class="phase-no">PHASE 03</span><h3>收集与三个场景</h3><p>接通积分、明确兑换、捕捉与回家；用点心、种植、游戏三集验证核心行为。</p></li>
+          <li><span class="phase-no">PHASE 04</span><h3>扩展与替换入口</h3><p>扩展角色动作库，迁移旧功能；结合亲子观察验收，明确尚未覆盖项，再发布网页。</p></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="review-title">
+        <p class="section-label">07 / 样片中待确认</p>
+        <h2 id="review-title">用看得见、听得到的样片作判断</h2>
+        <div class="review-row"><span class="owner">产品 × 视觉</span><div><strong>画风与角色表演。</strong>确认绘本质感、角色一致性、动作幅度与表情，是否能让宝宝看懂需要和回应。</div></div>
+        <div class="review-row"><span class="owner">产品 × 内容</span><div><strong>旁白与停留节奏。</strong>确认 3 分 20 秒是否合适，英语出现是否自然，情绪落点是否留有呼吸。</div></div>
+        <div class="review-row"><span class="owner">产品 × 交互</span><div><strong>邀请与自动帮助。</strong>确认两次可选动作的等待长度，让想帮忙的孩子来得及，也让只想看的孩子顺畅继续。</div></div>
+        <p class="note note-spaced">以 GPT Image 2.6 制作视觉资产是本提案的生产方向；动态图像仍需要分镜、动作设计、声音与播放器共同完成。本页不代表媒体已经生成或重构已经上线。</p>
+      </section>
+
+      <section aria-labelledby="sources-title">
+        <p class="section-label">资料与依据</p>
+        <h2 id="sources-title">资源负责角色，故事负责意义</h2>
+        <p class="compact muted">PokeAPI 用于角色资料与素材索引；绘本案例用于观察叙事与画面表达；模型能力以官方资料为准。现有产品代码分析、边界与实施细节收录在<a href="README.md">完整方案</a>。</p>
+        <ul class="sources">
+          <li><span>01</span><a href="https://github.com/pokeapi/pokeapi" target="_blank" rel="noopener noreferrer">PokeAPI · 项目仓库</a></li>
+          <li><span>02</span><a href="https://x.com/lemomo_ai/status/2120042751509332310" target="_blank" rel="noopener noreferrer">用户提供的绘本案例 · lemomo_ai</a></li>
+          <li><span>03</span><a href="https://x.com/ni_chubby04/status/2119998798852423698" target="_blank" rel="noopener noreferrer">用户提供的绘本案例 · ni_chubby04</a></li>
+          <li><span>04</span><a href="https://openai.com/index/introducing-images-2-6/" target="_blank" rel="noopener noreferrer">OpenAI · Introducing Images 2.6</a></li>
+        </ul>
+      </section>
+    </main>
+    <footer class="page-footer"><p>PokéPal · 故事驱动产品重构 · 2026 年 11 月 12 日</p><p>提案可审阅；产品、媒体和验收目标尚待实现。</p></footer>
+  </div>
+</body>
+</html>

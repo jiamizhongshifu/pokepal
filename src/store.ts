@@ -1,3 +1,6 @@
+import {startCareStory,actCareStory,type CareStory,type CareAction} from './lib/careStory';
+import {advanceAdventure,PICNIC_ADVENTURE} from './lib/storyAdventure';
+import {restoreStory,type StoryEvent} from './lib/storyPlayer';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
 import {advancePlayClock,advanceCareClock} from './lib/playClock';
 import {markReviewAudio,settleUnitRound} from './lib/learningProgress';
@@ -41,7 +44,7 @@ export interface DexBrowseState { onlyOwned:boolean; query:string; page:number; 
 
 export type Screen =
   | { name: "welcome" }
-  | { name: "home"; station?:string; companion?:number }
+  | { name: "home"; view?:"island"; station?:string; companion?:number }
   | { name: "journey"; completedUnit?:string }
   | { name: "lesson"; returnGoal?:EnergyGoal; id:string }
   | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'energy'|'tasks'|'parent' }
@@ -50,6 +53,8 @@ export type Screen =
   | { name: "practice" }
   | { name: "energy"; goal?:EnergyGoal }
   | { name: "diary"; id?:string }
+  | { name: "adventure"; autoplay?:boolean }
+  | { name: "careStory"; companion?:number; autoplay?:boolean }
   | { name: "stories"; returnGoal?:EnergyGoal }
   | { name: "story"; returnGoal?:EnergyGoal; id:string }
   | { name: "task"; returnGoal?:EnergyGoal; kind: TaskKind; boardIndex: number | null; practice?:boolean; session?:number }
@@ -119,6 +124,10 @@ function rollover(s: SaveData) {
 export type TaskReward = Reward;
 
 interface State {
+  startCareStory:(pokemonId?:number)=>Promise<boolean>;
+  actCareStory:(id:string,phase:CareStory["phase"],action:CareAction,expectedPlot?:string)=>Promise<boolean>;
+  restoreAdventure:()=>void;
+  advanceAdventure:(event:StoryEvent)=>Promise<void>;
   useIslandGift:()=>boolean;
   upgradeIsland:(id:UpgradeId,expectedLevel:number)=>boolean;
   finishReview: () => Reward;
@@ -295,6 +304,10 @@ export const useGame = create<State>((set, get) => {
     },
     markReviewAudio(key,pending){mut(s=>markReviewAudio(s,key,pending));},
     finishReview(){const reward=mut(s=>rewardParticipation(s,'review'));if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
+    async startCareStory(pokemonId){return await commit(s=>startCareStory(s,crypto.randomUUID(),pokemonId))??false;},
+    async actCareStory(id,phase,action,expectedPlot){return await commit(s=>actCareStory(s,id,phase,action,Date.now(),expectedPlot))??false;},
+    restoreAdventure(){mut(s=>{s.storyAdventure=restoreStory(PICNIC_ADVENTURE,s.storyAdventure);});},
+    async advanceAdventure(event){await commit(s=>advanceAdventure(s,event));},
     noteStoryRead(id,page){
       const reward=mut(s=>{
         const story=STORIES.find(st=>storyProgressKey(st)===id);

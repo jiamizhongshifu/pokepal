@@ -32,7 +32,7 @@ try{
  const island=await import('/src/lib/islandSpeech.ts');
  const {useGame}=await import('/src/store.ts');
  useGame.setState(s=>({loaded:true,saveIssue:null,save:{...s.save,trainer:{name:'Audio test',avatar:'avatar-red',createdAt:Date.now()}}}));
- const go=name=>useGame.getState().go({name});
+ const go=name=>useGame.getState().go({name,...(name==='home'?{view:'island'}:{})});
  go('home');
  const delayed=island.sayOnIsland(['en','pending']);await until(()=>pendingDownload);assert(pendingDownload,'download started');
  go('tasks');pendingDownload();assert(await delayed===false,'pending island recording must be rejected after navigation');assert(sources.length===0,'no late audio start');
@@ -46,6 +46,8 @@ try{
  result.push('Leaving during a pause suppresses later bilingual lines');
  go('home');const resumed=island.sayOnIsland(['en','island']);await until(()=>sources.length===count+1);assert(sources.length===count+1,'returning home allows new speech');sources.at(-1).finish();assert(await resumed===true,'home speech completes');
  result.push('Returning home restores island speech');
+ useGame.getState().go({name:'home'});assert(await island.sayOnIsland(['en','island'])===false,'story homepage blocks hidden island narration');
+ result.push('Story homepage keeps hidden island quiet');
  Object.defineProperty(document,'hidden',{configurable:true,value:true});assert(await island.sayOnIsland(['en','island'])===false,'background tab muted');
  result.push('Hidden tab cannot start island speech');
  Object.defineProperty(document,'hidden',{configurable:true,value:false});

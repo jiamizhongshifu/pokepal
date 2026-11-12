@@ -1,3 +1,5 @@
+import {validCareStory} from './careStory';
+import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
 import { validOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
@@ -65,6 +67,9 @@ export function validateSave(value:unknown):SaveData {
  if(s.islandLiving!==undefined)requireValue(validLiving(s.islandLiving,ids),'小岛生活');
  if(s.picnic!==undefined)requireValue(validPicnic(s.picnic,s.captures.map((c:any)=>c.id))&&s.picnic.memories.every((m:any)=>ids.has(m.pokemonId)),'野餐回忆');
  if(s.garden!==undefined)requireValue(object(s.garden)&&typeof s.garden.bloomed==='boolean','花园');
+ if(s.careStory!==undefined)requireValue(validCareStory(s.careStory),'伙伴生活故事');
+ if(s.storyAdventure!==undefined)requireValue(validAdventure(s.storyAdventure),'故事旅程');
+ if(d.adventureReward!==undefined)requireValue(integer(d.adventureReward)&&d.adventureReward<=5,'故事奖励');
  if(s.storyProgress!==undefined)requireValue(object(s.storyProgress)&&Object.values(s.storyProgress).every(integer),'故事进度');
  if(s.learning!==undefined){
   const l=s.learning;requireValue(object(l)&&l.version===1&&object(l.records)&&object(l.units)&&(l.activeUnit===undefined||typeof l.activeUnit==='string'),'学习手册');

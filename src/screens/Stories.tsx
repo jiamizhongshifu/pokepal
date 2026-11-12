@@ -46,6 +46,8 @@ export function StoryLibrary(){
  return <div className="screen story-library">
   <TopBar title="宝可梦故事屋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="stories" compact/>}/>
   <header className="learning-heading"><h1>今天想听哪个故事？</h1></header>
+   <button className="story-resume" onClick={()=>go({name:'adventure'})}><Icon name="book" size={36}/><span><b>一起听故事，去认识新伙伴</b><small>苹果野餐 · 自动播放 · 今日故事共 5 能量</small></span><span aria-hidden="true">›</span></button>
+   <button className="story-resume" onClick={()=>go({name:'careStory'})}><Icon name="heart" size={36}/><span><b>和我的伙伴过一个小下午</b><small>分享点心 · 照顾小苗 · 一起滚球</small></span><span aria-hidden="true">›</span></button>
   <nav className="story-themes" aria-label="故事主题"><button aria-pressed={theme==='all'} onClick={()=>setTheme('all')}><Icon name="book" size={32}/>全部故事</button>{STORY_THEMES.map(t=><button key={t.id} aria-pressed={theme===t.id} onClick={()=>setTheme(t.id)}><Icon name={t.icon} size={32}/>{t.name}</button>)}</nav>
   {resume&&(theme==='all'||resume.group===theme)&&<button className="story-resume" onClick={()=>go({name:'story',id:resume.id,returnGoal})}><Icon name="book" size={30}/><span><b>接着读：{resume.title}</b><small>停在第 {progress?.[bookmark(resume)]} 页 · 随时可以重读</small></span><span aria-hidden="true">›</span></button>}
   <div className="story-shelf">{books.map((story)=>{const i=STORIES.indexOf(story);

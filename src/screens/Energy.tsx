@@ -35,18 +35,18 @@ export function Energy() {
     }
     const routes:Record<'course'|'review'|'story'|'island',Screen> = {
       course:{name:'lesson',id:course.id}, review:due.length?{name:'review',keys:due,returnTo:'energy'}:{name:'notebook',mode:'all',returnTo:'energy'},
-      story:{name:'stories',returnGoal:goal.goal}, island:{name:'home'},
+      story:goal.goal==='ball'?{name:'adventure'}:{name:'stories',returnGoal:goal.goal}, island:{name:'home'},
     };
     if(kind==='course'){useGame.getState().startUnit(course.id,goal.goal);return;}
     go(routes[kind]);
   };
-  const isDone=(kind:ParticipationKind)=>kind==='course'?!courseRewardAvailable(save,course.id):done.includes(kind);
-  const choices:ParticipationKind[]=['course','story','island','listen','wordpic','repeat','trace','review'];
+  const isDone=(kind:ParticipationKind)=>kind==='story'&&goal.goal==='ball'?save.daily.adventureReward!==undefined:kind==='course'?!courseRewardAvailable(save,course.id):done.includes(kind);
+  const choices:ParticipationKind[]=['story','course','island','listen','wordpic','repeat','trace','review'];
   const recommended=choices.find(k=>!isDone(k)&&(k!=='review'||due.length>0))??'course';
   const others=choices.filter(k=>k!==recommended);
   const destination=()=>go(goal.goal==='ball'?(goal.hasBall?{name:'catch'}:{name:'shop'}):{name:'home',station:`upgrades:${goal.goal}`});
-  const label=(kind:ParticipationKind)=>kind==='course'?'接着学英语':kind==='review'&&!due.length?'发现手册':ACTIVITIES[kind].label;
-  const card=(kind:ParticipationKind)=><button key={kind} className="energy-alternative" onClick={()=>open(kind)}><Icon name={ACTIVITIES[kind].icon} size={40}/><span><strong>{label(kind)}</strong><small>{kind==='review'&&!due.length?'看看认识的词':isDone(kind)?'今天玩过啦':reward?`小发现 +${reward} 能量`:'自在玩，不再增加能量'}</small></span></button>;
+  const label=(kind:ParticipationKind)=>kind==='story'&&goal.goal==='ball'?'一起去苹果野餐':kind==='course'?'接着学英语':kind==='review'&&!due.length?'发现手册':ACTIVITIES[kind].label;
+  const card=(kind:ParticipationKind)=><button key={kind} className="energy-alternative" onClick={()=>open(kind)}><Icon name={ACTIVITIES[kind].icon} size={40}/><span><strong>{label(kind)}</strong><small>{kind==='review'&&!due.length?'看看认识的词':isDone(kind)?'今天玩过啦':reward?`小发现 +${kind==='story'&&goal.goal==='ball'?Math.min(done.includes('story')?3:5,DAILY_CAP-earned):reward} 能量`:'自在玩，不再增加能量'}</small></span></button>;
   return <div className="screen energy-guide energy-focused">
     <TopBar title="能量小口袋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="energy" compact enabled={!goal.ready}/>}/>
     <main className="child-page energy-page">
@@ -62,7 +62,7 @@ export function Energy() {
        <details className="quiet-disclosure"><summary>换个玩法</summary><div className="energy-alternatives">{(goal.ready?choices.filter(k=>k!=='course'&&k!=='story'):others.slice(2)).map(card)}</div></details>
       </section>
       <details className="quiet-disclosure"><summary>能量还能做什么？</summary><div className="energy-alternatives"><button className="energy-alternative" onClick={()=>go({name:'shop'})}><Icon name="pokeball" size={38}/>换精灵球</button><button className="energy-alternative" onClick={()=>go({name:'home',station:'upgrades'})}><Icon name="island" size={38}/>装扮小岛</button></div></details>
-      <details className="energy-parent-note"><summary>给家长：今天的小收获</summary><p>今天收集 {earned} / {DAILY_CAP} 点。英语主线每个主题每天首次完成可收集 2 点能量，其他活动每类每天首次完成可收集 2 点，体验三种再得 1 点。照顾伙伴时听见一句英语也算参与，不需要开口或答题。玩过的活动可继续玩，不重复发放能量。</p></details>
+      <details className="energy-parent-note"><summary>给家长：今天的小收获</summary><p>今天收集 {earned} / {DAILY_CAP} 点。苹果野餐与旧版共读合计每天 5 点能量。英语主题及其他活动每天首次完成得 2 点，体验三种再得 1 点。照顾伙伴时听见一句英语也算参与，不需要开口或答题。玩过的活动可继续玩，不重复发放能量。</p></details>
     </main>
   </div>;
 }

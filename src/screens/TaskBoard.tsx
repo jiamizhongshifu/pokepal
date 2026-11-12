@@ -15,6 +15,7 @@ export function TaskBoard(){
  return <div className="screen tasks learning-home">
   <TopBar title="小岛学英语" onBack={()=>go({name:'home'})} focused help={<FeatureGuide compact id="tasks"/>}/>
   <main className="learning-home-content">
+   <button className="story-resume" onClick={()=>go({name:'adventure'})}><Icon name="book" size={36}/><span><b>一起听故事，去认识新伙伴</b><small>苹果野餐 · 自动播放 · 今日故事共 5 能量</small></span><span aria-hidden="true">›</span></button>
    <LearningTrail/>
    <nav className="learning-home-tools" aria-label="其他学习方式">
     <h2>也可以自己选</h2>
@@ -31,7 +32,7 @@ export function TaskBoard(){
    <details className="task-parent-note"><summary>给陪伴的大人 · 学习记录</summary>
     <p>当前阶段：{learningStageTitle(save.settings)}。按学习小路逐站前进，听说认写可以自由选择；不用把每种活动都做完。</p>
     <p>今天参与 {participated} 类活动{d.participated?.length?`：${d.participated.map(k=>PARTICIPATION_LABELS[k]).join(' · ')}`:'，愿意听和一起玩也很好'}。</p>
-    <div className="energy-progress"><div className="ep-label"><Icon name="bolt" size={28}/>今天收集 <span className="num">{d.energyEarned} / {DAILY_ENERGY_CAP}</span></div><div className="ep-bar"><div style={{width:`${Math.min(100,d.energyEarned/DAILY_ENERGY_CAP*100)}%`}}/></div><div className="ep-note">{capped?'能量满啦，还可以继续玩':'每个主题每天首次完成 +2，其他活动每类每天 +2；体验三类再 +1'}</div></div>
+    <div className="energy-progress"><div className="ep-label"><Icon name="bolt" size={28}/>今天收集 <span className="num">{d.energyEarned} / {DAILY_ENERGY_CAP}</span></div><div className="ep-bar"><div style={{width:`${Math.min(100,d.energyEarned/DAILY_ENERGY_CAP*100)}%`}}/></div><div className="ep-note">{capped?'能量满啦，还可以继续玩':'苹果野餐与旧版共读每天合计 +5；英语主题及其他活动 +2，体验三类再 +1'}</div></div>
    </details>
   </main>
  </div>;

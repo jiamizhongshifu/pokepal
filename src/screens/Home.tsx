@@ -499,6 +499,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   return (
     <div className={`screen home sky-${sky}${immersive?" is-immersive":""}`} data-home-panel={panel??undefined} data-hint={hint??undefined} data-modal-blocked={blocked||undefined}>
       {panel!=='companion'&&!together.session&&<TopBar title={`${save.trainer?.name ?? ""}的家园`} help={<FeatureGuide id={captures.length?(view==='farm'?'farm':'home'):'firstFriend'} enabled={active&&!immersive&&!blocked&&panel===null} topics={captures.length?['home','farm','camera','music']:undefined}/>} homeActions={active&&!livingOpen&&!sel&&!station&&!picnicOpen?<>
+        <button onClick={()=>{stopSpeech();go({name:"home"});}}><Icon name="book" size={30}/><span>今天的故事</span></button>
         <Announcements active={active}/>
         <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
         <details className="home-more" open={panel==='menu'}><summary onClick={e=>{e.preventDefault();if(panel==='menu')closePanel('menu');else activatePanel('menu');}}><Icon name="island" size={30}/><span>小岛生活</span><span aria-hidden="true">⌄</span></summary><div className="home-more-menu" onClick={()=>closePanel('menu')}>
@@ -634,7 +635,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
           </div>
         </section>
-        {!feedPicker&&!prompt&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions">
+        {!feedPicker&&!prompt&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions"><button className="act" onClick={()=>{stopSpeech();go({name:"careStory",companion:sel.id});}}><Icon name="book" size={32}/>一起过个小下午</button>
                 {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
                 <button className={`act follow-action ${followId === sel.id ? "following" : ""}`} aria-pressed={followId === sel.id} onClick={() => { const starting=followId!==sel.id; pickView(starting ? "follow" : "free"); if(starting){setFollowId(sel.id);setSelected(null);setPrompt(null);} if(starting) say(...bi(["en","Follow me!",{en:"Follow me!",zh:"跟着我走吧！"}],["zh","跟着我走吧！"])); }}><Icon name="target" size={32} />{followId === sel.id ? "停止跟随" : "跟着走"}</button>
                 <button className={`act pet-action ${selNeed?.kind==='pet'?'requested':''}`} onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
