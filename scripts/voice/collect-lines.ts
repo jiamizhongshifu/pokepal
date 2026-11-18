@@ -16,7 +16,7 @@ import { LEARNING_UNITS, unitSituations, learningEntry } from '../../src/data/cu
 import { facilityLesson } from "../../src/data/learning";
 import { STATIONS, compatible } from "../../src/scene/islandLife";
 import { POKEMON, COLORS, TYPES, BALLS, kidDescription, hobby, favoriteFood } from "../../src/data/pokemon";
-import { PIC_WORDS, PHRASES, LETTERS, PRAISE, withArticle } from "../../src/data/words";
+import { PIC_WORDS, PHRASES, LETTERS, PRAISE } from "../../src/data/words";
 import { BEHAVIORS, DEFAULT_SCHEDULE } from "../../src/data/behaviors";
 import { ACTIVITY, type Activity } from "../../src/lib/routine";
 import { COUNT_ITEMS, SAY, traceIntro, traceSuccess, colorAsk, colorNo, colorYes, countAsk, countNo, countYes, cryAsk, cryNo, cryYes, letterChant, nameAsk, nameNo, nameYes, picAsk, picNo, picYes, sizeAsk, sizeNo, sizeYes, type Lines } from "../../src/data/taskEnglish";

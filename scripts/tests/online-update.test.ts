@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {checkOnlineUpdate} from '../../src/lib/onlineUpdate';
 const old='2026-10-18T00:00:00.000Z',id='2026-10-19T00:00:00.000Z';
-const fetcher=(async()=>({ok:true,json:async()=>({id,mode:'online'})})) as typeof fetch;
+const fetcher=(async()=>({ok:true,json:async()=>({id,mode:'online'})})) as unknown as typeof fetch;
 const stuck=()=>new Promise<any>(()=>{});
 const run=(extra:Record<string,unknown>={})=>checkOnlineUpdate({loadedBuild:old,fetcher,timeoutMs:30,...extra});
 test('update finishes even when no worker exists, without AbortSignal.timeout',async()=>{assert.deepEqual(await run(),{id,changed:true});});

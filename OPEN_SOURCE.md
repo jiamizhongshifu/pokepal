@@ -23,7 +23,7 @@
 
 ```sh
 npm ci
-npm exec tsc -- --noEmit
+npm run typecheck
 ```
 
 完整开发与构建还需要下列资源目录，结构可从源代码引用和 `scripts/online/prepare.mjs` 核对：

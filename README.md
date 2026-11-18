@@ -23,7 +23,7 @@
 
 ```sh
 npm ci
-npm exec tsc -- --noEmit  # 仅源码类型检查，无需媒体资源
+npm run typecheck  # 仅源码类型检查，无需媒体资源
 # 准备好自己有权使用的本地媒体与配音后：
 npm run dev:http
 npm run build           # 默认网页构建，输出 dist-online/
@@ -281,7 +281,7 @@ npm run build  # 网页构建不需要另做家庭离线配音包
 按改动范围选择检查；文档改动无需重新生成语音或安装包。
 
 ```bash
-npx tsc --noEmit
+npm run typecheck
 npx tsx scripts/check-learning-system.ts
 npx tsx scripts/check-save-data.ts
 npx tsx scripts/check-companion-care.ts

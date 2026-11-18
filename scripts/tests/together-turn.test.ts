@@ -11,7 +11,9 @@ test('single companion gives the child two genuine, untimed turns',()=>{
   assert.equal(state.child,turn%2===1);
   assert.equal(automaticTogetherTurn('ball',1,turn),!state.child);
   assert.equal(state.pokemonId,state.child?null:25);
-  assert.equal(togetherVoice('ball',[25],turn)[0]?.[1],state.child?'Your turn!':'My turn!');
+  const line=togetherVoice('ball',[25],turn)[0];
+  assert.ok(Array.isArray(line));
+  assert.equal(line[1],state.child?'Your turn!':'My turn!');
  }
 });
 test('two companions never label their automated turn as the child action',()=>{
