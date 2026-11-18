@@ -32,6 +32,20 @@
 5. **配音**：按新角色重新收集台词并合成（先统计条数与费用，再确认执行）。
 6. **验收与发布**：测试、真机、隐私与开源说明更新；正式站发布需单独确认。
 
+## 美术流程与进度（2026-11-18）
+
+```bash
+CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs line         # 三阶段进化线（设定图）
+CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs stage        # 每个阶段的透明底立绘，以进化线为造型参考
+CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs expressions  # 宝宝期 8 个表情，以宝宝期立绘为参考
+node scripts/art/check.mjs --sheet                               # 自动检查透明底、裁切，并拼出审图总览
+node scripts/art/package.mjs                                     # 整理到 public/sprites/（立绘、头像、表情、清单）
+```
+
+- 已完成：16 种 × 3 阶段进化线、48 张阶段立绘、16 份宝宝期表情表，整理为 224 个 WebP 素材（约 9 MB）与 `public/sprites/manifest.json`。
+- `CODEX_MODEL` 需填当前账号可用的模型；生成记录（提示词、参考图、模型、时间）保存在 `output/rebrand/sprites/<id>/`。
+- 下一批：小岛插画场景、绘本插画、界面图标、长大与成年期的表情。
+
 ## 风险与建议
 
 - **线上站点**目前仍在提供宝可梦角色图、3D 模型与叫声。原创版本上线前，是否先下线相关资源由你决定。

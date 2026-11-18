@@ -30,7 +30,7 @@ npm run typecheck
 
 ```text
 public/art/  public/env/  public/icons/  public/models/
-public/pokemon/  public/story-art/  public/textures/
+public/pokemon/  public/sprites/  public/story-art/  public/textures/
 public/music/  public/environment/
 public/voice/manifest.json  public/voice/timings.json  public/voice/<hash>.mp3
 ```
