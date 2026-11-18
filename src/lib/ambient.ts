@@ -132,7 +132,6 @@ export function useAmbientEnglish(opts: {
       if (optsRef.current.enabled && !optsRef.current.busy && optsRef.current.focusId == null && !isSpeaking()) speak(GREETINGS[skyFor()]);
     }, 1200);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -161,7 +160,6 @@ export function useAmbientEnglish(opts: {
       }
     }, 1000);
     return () => clearInterval(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { caption, poke };

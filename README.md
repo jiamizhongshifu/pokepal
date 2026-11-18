@@ -30,7 +30,7 @@ npm run build           # 默认网页构建，输出 dist-online/
 npm run preview         # 预览网页构建
 ```
 
-`npm run check` 含配音资源完整性测试，完整构建同样需要未随源码发布的媒体。当前不自动构建或更新 iPad；将来恢复时显式使用 `npm run build:ipad` / `npm run preview:ipad`。已有 `dist/` 最后版本保留。28 份历史 iPad 发布包已按确认清理，实际回收约 72.6 GiB 磁盘空间；媒体原件、当前发布包和源码归档保留。
+`npm run check` 含配音资源完整性测试，并包含类型检查和 ESLint，完整构建同样需要未随源码发布的媒体。当前不自动构建或更新 iPad；将来恢复时显式使用 `npm run build:ipad` / `npm run preview:ipad`。已有 `dist/` 最后版本保留。28 份历史 iPad 发布包已按确认清理，实际回收约 72.6 GiB 磁盘空间；媒体原件、当前发布包和源码归档保留。
 
 ### 最近完成
 
@@ -282,6 +282,7 @@ npm run build  # 网页构建不需要另做家庭离线配音包
 
 ```bash
 npm run typecheck
+npm run lint  # 不允许新增 error；警告上限只降不升
 npx tsx scripts/check-learning-system.ts
 npx tsx scripts/check-save-data.ts
 npx tsx scripts/check-companion-care.ts

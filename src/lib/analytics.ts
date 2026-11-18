@@ -9,6 +9,8 @@ let installed=false,granted=false,blockedHere=false,currentPage='',lastPage='';
 const denied={analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'};
 export function analyticsConsent(){try{return !blockedHere&&readAnalyticsConsent(localStorage);}catch{return false;}}
 export function analyticsAvailable(){return analyticsPermitted(!!import.meta.env.VITE_ONLINE,location.hostname,GA_MEASUREMENT_ID,true);}
+// gtag only accepts the Arguments object, not an array copy.
+// eslint-disable-next-line prefer-rest-params
 function command(...args:unknown[]){void args;queue.push(arguments);}
 function clearAnalyticsCookies(){
  for(const cookie of document.cookie.split(';')){

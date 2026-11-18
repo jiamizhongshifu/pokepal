@@ -10,7 +10,7 @@ import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergePokeballs, exchangePokeball, capturePartner } from "./lib/pokeballs";
-import { ensureIslandProgress,useIslandGift,upgradeIsland,placeIslandDecoration,type UpgradeId } from './lib/islandProgress';
+import { ensureIslandProgress,claimIslandGift,upgradeIsland,placeIslandDecoration,type UpgradeId } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
@@ -128,7 +128,7 @@ interface State {
   actCareStory:(id:string,phase:CareStory["phase"],action:CareAction,expectedPlot?:string)=>Promise<boolean>;
   restoreAdventure:()=>void;
   advanceAdventure:(event:StoryEvent)=>Promise<void>;
-  useIslandGift:()=>boolean;
+  claimIslandGift:()=>boolean;
   upgradeIsland:(id:UpgradeId,expectedLevel:number)=>boolean;
   finishReview: () => Reward;
   markReviewAudio: (key:string,pending:boolean)=>void;
@@ -338,7 +338,7 @@ export const useGame = create<State>((set, get) => {
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
     feedBerry(id,berry) {return mut(s=>{const ok=feedBerry(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
-    useIslandGift(){return !!mut(s=>useIslandGift(s));},
+    claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
     upgradeIsland(id,level){return mut(s=>upgradeIsland(s,id,level))??false;},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
     rememberTogether(memory){return mut(s=>rememberTogether(s,memory))??false;},

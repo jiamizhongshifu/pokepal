@@ -49,7 +49,7 @@ export function loadSupport(config: EnabledConfig, locale: string): Promise<Widg
     if (window.$chatwoot) {
       // Retry an iframe whose first network load failed, without a second SDK.
       const frame = document.getElementById('chatwoot_live_chat_widget') as HTMLIFrameElement | null;
-      if (frame) frame.src = frame.src;
+      if (frame) frame.setAttribute('src', frame.src);
       else fail();
     } else if (window.chatwootSDK) run();
     else {

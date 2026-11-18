@@ -1,5 +1,5 @@
 import { ANNOUNCEMENTS } from './src/data/announcements';
-// @ts-ignore Local Node middleware, never bundled into the client.
+// @ts-expect-error Local Node middleware, never bundled into the client.
 import { diaryApi } from './scripts/mobile/diary-api.mjs';
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";

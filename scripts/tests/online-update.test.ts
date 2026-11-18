@@ -15,7 +15,7 @@ test('all asynchronous stages have an overall deadline',async()=>{
  ])await assert.rejects(run(extra),/update-timeout/);
 });
 test('a late registration cannot start updating after timeout; next attempt can retry',async()=>{
- let resolve!:Function,updates=0;
+ let resolve!:(value:unknown)=>void,updates=0;
  await assert.rejects(run({workers:{getRegistration:()=>new Promise(r=>{resolve=r;})}}),/update-timeout/);
  resolve({update:async()=>{updates++;}});await new Promise(r=>setTimeout(r,0));assert.equal(updates,0);
  assert.equal((await run()).changed,true);
