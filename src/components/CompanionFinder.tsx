@@ -1,6 +1,6 @@
 import { FeatureGuide } from './FeatureGuide';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { artUrl, getPokemon } from '../data/pokemon';
+import { creatureArt, getCreature } from '../data/creatures';
 import { Icon } from '../icons';
 import { PokeImg } from './PokeImg';
 
@@ -10,7 +10,7 @@ export function CompanionFinder({ids, selected, onSelect, onClose,purpose='visit
   const [page,setPage]=useState(Math.max(0,Math.floor(ids.indexOf(selected??-1)/9)));
   const close=useRef<HTMLButtonElement>(null);
   useEffect(()=>{close.current?.focus();},[]);
-  const matches=useMemo(()=>ids.map(getPokemon).filter(p=>`${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase())),[ids.join(','),query]);
+  const matches=useMemo(()=>ids.map(getCreature).filter(p=>`${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase())),[ids.join(','),query]);
   const pages=Math.max(1,Math.ceil(matches.length/9)), current=Math.min(page,pages-1);
   return <section className="companion-finder" aria-label="找伙伴" onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();onClose();}}}>
     <header className="panel-toolbar"><div><strong>找伙伴</strong></div>{purpose==='visit'&&<FeatureGuide compact id="friends"/>}<button ref={close} onClick={onClose} aria-label="收起伙伴册"><Icon name="close" size={23}/></button></header>
@@ -18,7 +18,7 @@ export function CompanionFinder({ids, selected, onSelect, onClose,purpose='visit
     {searching&&<input autoFocus type="search" value={query} onChange={e=>{setQuery(e.target.value);setPage(0);}} placeholder="输入名字找一找" aria-label="按名字找伙伴（家长帮忙）"/>}
     <div className="companion-portraits">
       {matches.slice(current*9,current*9+9).map(p=><button key={p.id} aria-label={`${purpose==='choose'?'选择':'找到'}${p.nameZh}`} aria-pressed={p.id===selected} onClick={()=>onSelect(p.id)}>
-        <PokeImg src={artUrl(p.id)} alt=""/><span>{p.nameZh}</span>
+        <PokeImg src={creatureArt(p.id)} alt=""/><span>{p.nameZh}</span>
       </button>)}
     </div>
     {!matches.length&&<p className="companion-no-match">还没找到，试试别的名字吧</p>}

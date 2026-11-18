@@ -1,5 +1,5 @@
 import { STORY_GLOSSARY } from '../data/storyGlossary';
-import { POKEMON } from '../data/pokemon';
+import { CREATURES } from '../data/creatures';
 import { learningEntry } from '../data/curriculum';
 
 /** Word-level reading support for picture-book sentences: tokens, single-word voice text, meaning and timing. */
@@ -18,7 +18,7 @@ export function storyTokens(en:string):StoryToken[]{
  });
 }
 
-const NAMES=new Map(POKEMON.map(p=>[p.nameEn.toLowerCase(),p]));
+const NAMES=new Map(CREATURES.map(p=>[p.nameEn.toLowerCase(),p]));
 const owner=(word:string)=>word.endsWith("'s")?NAMES.get(word.slice(0,-2)):undefined;
 
 /** Exact text of the single-word recording: names and "I" keep their capital letter. */

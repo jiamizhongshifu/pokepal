@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {weatherAt,soundscape,WEATHER_PERIOD,WEATHER_TRANSITION,validWeatherMode} from '../../src/lib/weather';
 import {waterCropsWithRain,newFarm,harvestCrop,GROW_MS,validFarm} from '../../src/lib/farm';
 import {weatherReaction,weatherVisit} from '../../src/scene/weatherReactions';
-import type {SaveData,Pokemon} from '../../src/types';
+import type {SaveData,Creature} from '../../src/types';
 import type {Habit} from '../../src/data/behaviors';
 const habit:Habit={from:0,to:24,activity:'explore',zone:'meadow'};
-const pokemon=(id:number,types:string[])=>({id,types,heightCm:60} as Pokemon);
+const pokemon=(id:number,types:string[])=>({id,types,heightCm:60} as Creature);
 test('offline weather survives reload, transitions continuously, and bounds consecutive rain',()=>{
  let run=0;const kinds=new Set();
  for(let slot=1000000;slot<1001000;slot++){
@@ -48,11 +48,11 @@ test('rain shelters are distinct clear positions under real tree canopies with r
  const {RAIN_CANOPIES}=await import('../../src/scene/rainShelter');
  const {clearSpot}=await import('../../src/scene/navigation');
  const {planStationWalk}=await import('../../src/scene/islandLife');
- const {getPokemon}=await import('../../src/data/pokemon');
+ const {getCreature}=await import('../../src/data/creatures');
  const {sceneHeight}=await import('../../src/scene/zones');
  const occupied:{x:number;z:number}[]=[];
  for(const [i,id] of [25,4,6,133,59].entries()){
-  const p=getPokemon(id),h=sceneHeight(p),v=weatherVisit(p,habit,'rain',i,occupied);
+  const p=getCreature(id),h=sceneHeight(p),v=weatherVisit(p,habit,'rain',i,occupied);
   assert.ok(v,`missing shelter for ${id}`);const target=v.station.target,r=Math.max(.82,h*.5);
   assert.equal(v.station.name,'在树下躲雨');assert.ok(clearSpot(target,r,h));
   assert.ok(RAIN_CANOPIES.some(t=>Math.hypot(target.x-t.x,target.z-t.z)<=t.radius&&h+.15<=t.bottom));

@@ -1,4 +1,4 @@
-// A closed vocabulary: never accept lesson/Pokemon IDs, results, words or free text.
+// A closed vocabulary: never accept lesson/Creature IDs, results, words or free text.
 export const INTERACTION_EVENTS=[
  'trainer_created','lesson_started','lesson_completed','practice_started','practice_completed',
  'review_started','review_completed','energy_earned','ball_exchange_started','ball_exchanged',

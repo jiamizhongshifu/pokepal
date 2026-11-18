@@ -2,25 +2,24 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect } from "react";
 import { useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
-import { BALLS, COLORS, RARITY, TYPES, artUrl, favoriteFood, friendshipLevel, getPokemon, hobby, kidDescription } from "../data/pokemon";
+import { COLORS, RARITY, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, friendshipLevel, getCreature, hobby, kidDescription } from "../data/creatures";
+import { INVITE_KINDS } from "../data/invites";
 import { say, playCry, stopSpeech } from "../lib/speech";
 import { PokeBall } from "../components/PokeBall";
 import { Icon, Stars, Hearts } from "../icons";
 import { PokeImg } from "../components/PokeImg";
 
 const KID_HEIGHT = 105;
-const KID_WEIGHT = 17;
 
 export function DexDetail({ id, picking = false, browse }: { id: number; picking?: boolean; browse?:DexBrowseState }) {
   const go = useGame((s) => s.go);
   const cap = useGame((s) => s.save.captures.find((c) => c.id === id));
-  const p = getPokemon(id);
+  const p = getCreature(id);
   const setCatchWish = useGame((s) => s.setCatchWish);
   const desc = kidDescription(p);
   const h = hobby(p);
   const f = favoriteFood(p);
   const taller = p.heightCm > KID_HEIGHT;
-  const heavier = p.weightKg > KID_WEIGHT;
 
   useEffect(() => {
     let active=true;
@@ -40,7 +39,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
       <TopBar title="宝可梦资料" onBack={() => go({ name: "dex", picking, browse })} focused help={<FeatureGuide id={cap?"ownedDetail":"detail"} compact/>}/>
       <div className="detail">
         <div className="detail-art">
-          <PokeImg src={artUrl(p.id)} alt="" />
+          <PokeImg src={creatureArt(p.id)} alt="" />
           <button className="cry-btn" onClick={() => playCry(p.id)}><Icon name="speaker" size={30} /> 听听叫声</button>
         </div>
         <div className="detail-info">
@@ -54,8 +53,8 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">
             {p.types.map((t) => (
-              <Speak key={t} en={TYPES[t]?.en ?? t} zh={`${TYPES[t]?.zh ?? t}属性`}>
-                <span className="type-chip" style={{ background: TYPES[t]?.color }}><Icon name={TYPES[t]?.icon ?? "normal"} size={26} /> {TYPES[t]?.zh} {TYPES[t]?.en}</span>
+              <Speak key={t} en={CREATURE_TYPES[t as CreatureType]?.en ?? t} zh={`${CREATURE_TYPES[t as CreatureType]?.zh ?? t}属性`}>
+                <span className="type-chip" style={{ background: CREATURE_TYPES[t as CreatureType]?.color }}><Icon name={CREATURE_TYPES[t as CreatureType]?.icon ?? "normal"} size={26} /> {CREATURE_TYPES[t as CreatureType]?.zh} {CREATURE_TYPES[t as CreatureType]?.en}</span>
               </Speak>
             ))}
             {COLORS[p.color] && (
@@ -74,22 +73,19 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <Speak en={taller ? "Taller than you!" : "Smaller than you!"} zh={taller ? "它比你还高！" : "它比你矮！"}>
               <div className="fact"><Icon name="ruler" size={44} />{p.heightCm} 厘米<small>{taller ? "比你还高！" : "比你矮"}</small></div>
             </Speak>
-            <Speak en={heavier ? "Heavier than you!" : "Lighter than you!"} zh={heavier ? "它比你还重！" : "它比你轻！"}>
-              <div className="fact"><Icon name="weight" size={44} />{p.weightKg} 公斤<small>{heavier ? "比你还重！" : "比你轻"}</small></div>
-            </Speak>
             <Speak en={h.en} zh={h.zh}><div className="fact"><Icon name={h.icon} size={44} />爱好<small>{h.zh}</small></div></Speak>
             <Speak en={`It likes ${f.en}.`} zh={`它爱吃${f.zh}。`}><div className="fact"><Icon name={f.icon} size={44} />爱吃<small>{f.zh} {f.en}</small></div></Speak>
           </div>
           {cap && (
             <div className="bond">
               <Hearts n={friendshipLevel(cap.friendship)} />
-              <span className="bond-meta"><PokeBall type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 用{BALLS[cap.ball].zh}抓到</span>
+              <span className="bond-meta"><PokeBall type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>
             </div>
           )}
           <details className="official">
-            <summary>官方图鉴（给爸爸妈妈读）</summary>
-            <p>{p.flavorZh}</p>
-            <p className="en">{p.flavorEn}</p>
+            <summary>给爸爸妈妈读</summary>
+            <p>{p.nameZh}是一只{speciesOf(p).genusZh}，{CREATURE_TYPES[p.types[0] as CreatureType].zh}属性。{p.isFinal ? "它已经长大成年。" : "多陪它学英语、照顾它，它会慢慢长大。"}</p>
+            <p className="en">{p.nameEn} is a {speciesOf(p).genusEn.toLowerCase()}.</p>
           </details>
         </div>
       </div>

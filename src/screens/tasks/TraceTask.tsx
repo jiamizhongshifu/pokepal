@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { dailyLearningPlan } from "../../data/learning";
 import { useGame } from "../../store";
 import { LETTERS, PIC_WORDS, pickOne } from "../../data/words";
-import { artUrl } from "../../data/pokemon";
+import { creatureArt } from "../../data/creatures";
 import { say, sfx, stopSpeech } from "../../lib/speech";
 import { Icon } from "../../icons";
 import { bi } from "../../lib/bi";
@@ -143,7 +143,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
     <div className="round trace-round">
       <div className="trace-side">
         <div className="trace-example">
-        {item.pokemonId ? <PokeImg src={artUrl(item.pokemonId)} alt="" /> : <Icon name={item.icon ?? "star"} size={170} className="trace-icon" />}
+        {item.pokemonId ? <PokeImg src={creatureArt(item.pokemonId)} alt="" /> : <Icon name={item.icon ?? "star"} size={170} className="trace-icon" />}
         <div className="trace-word"><b>{item.letter}</b>{item.en.slice(1)}</div>
         <div className="trace-zh">{item.zh}</div>
         <button className="replay trace-listen" onClick={intro} disabled={completed}><Icon name="speaker" size={32} /> 听一听</button>

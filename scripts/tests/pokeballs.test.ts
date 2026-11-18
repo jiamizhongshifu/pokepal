@@ -4,7 +4,8 @@ import {readFileSync} from 'node:fs';
 import {validateSave} from '../../src/lib/saveValidation';
 import {exchangePokeball,capturePartner} from '../../src/lib/pokeballs';
 import {rewardParticipation} from '../../src/lib/participation';
-import {POKEMON} from '../../src/data/pokemon';
+import {CREATURES} from '../../src/data/creatures';
+const grown=CREATURES.find(c=>c.isFinal)!.id;
 import type {SaveData} from '../../src/types';
 const make=():SaveData=>JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8'));
 test('legacy inventory merges once on load/import, preserves records and original backup',()=>{
@@ -19,18 +20,18 @@ test('reject negative or overflowing legacy inventory instead of losing balls',(
  s.balls={poke:Number.MAX_SAFE_INTEGER,great:1,ultra:0,master:0};assert.throws(()=>validateSave(s));
 });
 test('one ball captures every catalog entry including evolution-only and legendary, replay cannot spend twice',()=>{
- for(const p of POKEMON){const s=make();s.captures=[];s.daily.caught=[];s.dex=[];s.catchWish=p.id;s.balls={poke:2,great:0,ultra:0,master:0};
+ for(const p of CREATURES){const s=make();s.captures=[];s.daily.caught=[];s.dex=[];s.catchWish=p.id;s.balls={poke:2,great:0,ultra:0,master:0};
  assert.equal(capturePartner(s,p.id),true,p.nameEn);assert.equal(s.balls.poke,1);assert.equal(s.catchWish,undefined);assert.ok(s.dex!.includes(p.id));
  assert.equal(capturePartner(s,p.id),false);assert.equal(s.balls.poke,1);assert.equal(s.captures.length,1);assert.deepEqual(s.daily.caught,[p.id]);
  }
 });
 test('empty inventory and invalid targets never create a companion or consume a ball',()=>{
- const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};assert.equal(capturePartner(s,150),false);
+ const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};assert.equal(capturePartner(s,grown),false);
  s.balls.poke=1;assert.equal(capturePartner(s,-1),false);assert.equal(s.balls.poke,1);assert.equal(s.captures.length,0);
 });
-test('exchange spends exactly five energy and allows immediate chosen legendary capture',()=>{
+test('exchange spends exactly five energy and allows an immediate invite of a chosen grown creature',()=>{
  const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};s.energy=4;assert.equal(exchangePokeball(s),false);assert.equal(s.energy,4);
- s.energy=5;assert.equal(exchangePokeball(s),true);assert.equal(s.energy,0);assert.equal(capturePartner(s,150),true);assert.equal(s.balls.poke,0);assert.equal(exchangePokeball(s),false);
+ s.energy=5;assert.equal(exchangePokeball(s),true);assert.equal(s.energy,0);assert.equal(capturePartner(s,grown),true);assert.equal(s.balls.poke,0);assert.equal(exchangePokeball(s),false);
 });
 test('seventh participation day gives the same ball once',()=>{
  const s=make();s.balls={poke:0,great:0,ultra:0,master:0};s.participation={version:1,days:6,gifts:0,lastDate:'2020-01-01'};

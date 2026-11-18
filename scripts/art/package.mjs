@@ -17,7 +17,7 @@ import { EXPRESSION_KEYS } from './expressions.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
-const sprites = JSON.parse(readFileSync(resolve(here, 'sprites.json'), 'utf8'));
+const sprites = JSON.parse(readFileSync(resolve(root, 'src/data/creatures.json'), 'utf8'));
 const source = resolve(root, 'output/rebrand/sprites');
 const target = resolve(root, 'public/sprites');
 const magick = (...args) => execFileSync('magick', args, { encoding: 'utf8' }).trim();

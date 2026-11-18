@@ -6,11 +6,11 @@ import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
 import { PokeBall } from "../components/PokeBall";
 import { Confetti } from "../components/Celebration";
-import { POKEMON, RARITY, artUrl, spriteUrl } from "../data/pokemon";
+import { CREATURES, RARITY, creatureArt, creatureAvatar } from "../data/creatures";
 import { pickRandom } from "../data/words";
 import { say, playCry, sfx, wait, stopSpeech } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import { Icon, Stars } from "../icons";
 import { PokeImg } from "../components/PokeImg";
 function EncounterGrass() {
@@ -26,10 +26,10 @@ export function Catch() {
   const go = useGame((s) => s.go);
   const catchPokemon = useGame((s) => s.catchPokemon);
   const setCatchWish = useGame((s) => s.setCatchWish);
-  const wish = POKEMON.find((p) => p.id === save.catchWish && !save.captures.some(c=>c.id===p.id));
+  const wish = CREATURES.find((p) => p.id === save.catchWish && !save.captures.some(c=>c.id===p.id));
   const ball = "poke" as const;
   const [phase, setPhase] = useState<Phase>("field");
-  const [target, setTarget] = useState<Pokemon | null>(null);
+  const [target, setTarget] = useState<Creature | null>(null);
   const [exploration, setExploration] = useState({ round: 0, previousIds: [] as number[] });
   const busy = useRef(false);
   const arenaRef=useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export function Catch() {
   // Every unowned partner is available, including evolved and legendary Pokémon.
   const encounters = useMemo(() => {
     if (wish) return [wish];
-    const allowed = POKEMON.filter(p => !caughtIds.has(p.id));
+    const allowed = CREATURES.filter(p => !caughtIds.has(p.id));
     if (exploration.round > 0) {
       const fresh = pickRandom(allowed.filter(p => !exploration.previousIds.includes(p.id)), 3);
       return [...fresh, ...pickRandom(allowed.filter(p => !fresh.includes(p)), 3 - fresh.length)];
@@ -68,7 +68,7 @@ export function Catch() {
   }, [phase, wish?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const exploreAgain = () => {
-    const available = POKEMON.filter(p => !caughtIds.has(p.id));
+    const available = CREATURES.filter(p => !caughtIds.has(p.id));
     const previousIds = encounters.map(p => p.id);
     const freshCount = available.filter(p => !previousIds.includes(p.id)).length;
     if (wish) setCatchWish(null);
@@ -79,7 +79,7 @@ export function Catch() {
     else say(["en", "Let's meet new friends!"], ["zh", "发现新伙伴啦！你想和谁打招呼？"]);
   };
 
-  const chooseTarget = async (p: Pokemon) => {
+  const chooseTarget = async (p: Creature) => {
     const ticket=++selectionRun.current;
     if (!ready) {
       setCatchWish(p.id);
@@ -171,7 +171,7 @@ export function Catch() {
           ) : (
             encounters.map((p, i) => (
               <button key={p.id} aria-label={`${p.nameZh} ${p.nameEn}`} className="wild" style={{"--spot":i} as React.CSSProperties} onClick={() => chooseTarget(p)}>
-                <span className="encounter-portrait"><PokeImg src={spriteUrl(p.id)} alt="" draggable={false} /><EncounterGrass /></span>
+                <span className="encounter-portrait"><PokeImg src={creatureAvatar(p.id)} alt="" draggable={false} /><EncounterGrass /></span>
                 <span className="wild-name">{p.nameZh}<small lang="en">{p.nameEn}</small></span>
               </button>
             ))
@@ -191,7 +191,7 @@ export function Catch() {
         <div className="arena capture-arena" ref={arenaRef} style={captureMotion}>
           <PokeImg
             className={`arena-target ${phase === "absorbing" ? "capture-absorbing" : phase === "landing" || phase === "shaking" ? "capture-hidden" : ""}`}
-            src={artUrl(target.id)}
+            src={creatureArt(target.id)}
             alt=""
           />
           <div className="arena-name">{target.nameZh} · {target.nameEn} <Stars n={RARITY[target.rarity].stars} size={22} /></div>
@@ -220,7 +220,7 @@ export function Catch() {
           <Confetti />
           <div className="modal caught-card">
             <div className="cel-title">抓到啦！Gotcha!</div>
-            <PokeImg className="caught-art" src={artUrl(target.id)} alt="" />
+            <PokeImg className="caught-art" src={creatureArt(target.id)} alt="" />
             <div className="caught-name">{target.nameZh}<span>{target.nameEn}</span></div>
             <div className="caught-rarity"><Stars n={RARITY[target.rarity].stars} size={28} /> {RARITY[target.rarity].zh}</div>
             <div className="cel-actions">

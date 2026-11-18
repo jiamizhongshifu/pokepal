@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { StoryStage } from '../components/StoryStage';
 import { STORY_COVER_PAGE } from '../data/storyScenes';
 import { STORIES, STORY_THEMES, storyProgressKey, type StoryTheme, type Story, type StoryPage } from '../data/stories';
-import { artUrl, getPokemon } from '../data/pokemon';
+import { creatureArt, getCreature } from '../data/creatures';
 import { PokeImg } from '../components/PokeImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
@@ -142,7 +142,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
    <div ref={reader} className="story-pages">
    {ended ? <main className="story-ending">
      <span className="section-eyebrow">THE END · 故事读完啦</span><h1>把温柔的话，带到生活里</h1>
-     <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><PokeImg key={id} src={artUrl(id)} alt={getPokemon(id).nameZh}/>)}</div>
+     <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><PokeImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
      <nav className="story-ending-destinations" aria-label="故事读完后去哪里">
        <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'stories'});}}><Icon name="book" size={32}/>回到故事屋</button>

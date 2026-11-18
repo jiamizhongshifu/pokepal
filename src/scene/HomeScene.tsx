@@ -44,7 +44,7 @@ import type { Visit } from "./islandLife";
 import { Resident } from "./Resident";
 import { PilotGarden } from "./PilotGarden";
 import type { Effect } from "./zones";
-import { getPokemon } from "../data/pokemon";
+import { getCreature } from "../data/creatures";
 import { habitAt } from "../lib/routine";
 import type { Capture } from "../types";
 
@@ -136,7 +136,7 @@ export function HomeScene({
   const residents = useMemo(() => {
     const counters: Record<string, number> = {};
     return captures.map((c) => {
-      const p = getPokemon(c.id);
+      const p = getCreature(c.id);
       const habit = habitAt(p, now);
       const slot = counters[habit.zone] ?? 0;
       counters[habit.zone] = slot + 1;

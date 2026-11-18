@@ -15,7 +15,8 @@ import { learningExplanation } from '../../src/lib/learningVoice';
 import { LEARNING_UNITS, unitSituations, learningEntry } from '../../src/data/curriculum';
 import { facilityLesson } from "../../src/data/learning";
 import { STATIONS, compatible } from "../../src/scene/islandLife";
-import { POKEMON, COLORS, TYPES, BALLS, kidDescription, hobby, favoriteFood } from "../../src/data/pokemon";
+import { CREATURES, COLORS, CREATURE_TYPES, kidDescription, hobby, favoriteFood } from "../../src/data/creatures";
+import { INVITE_KINDS } from "../../src/data/invites";
 import { PIC_WORDS, PHRASES, LETTERS, PRAISE } from "../../src/data/words";
 import { BEHAVIORS, DEFAULT_SCHEDULE } from "../../src/data/behaviors";
 import { ACTIVITY, type Activity } from "../../src/lib/routine";
@@ -84,9 +85,9 @@ for (const story of allStoryEditions(STORIES)) {
 }
 
 // ---------- 2. 带变量的模板 ----------
-const activitiesOf = (id: number): Activity[] => [...new Set([...((BEHAVIORS[id]?.schedule ?? DEFAULT_SCHEDULE).map(h=>h.activity)), "explore" as Activity, ...STATIONS.filter(s=>compatible(POKEMON.find(p=>p.id===id)!,s)).map(s=>s.activity)])];
+const activitiesOf = (id: number): Activity[] => [...new Set([...((BEHAVIORS[id]?.schedule ?? DEFAULT_SCHEDULE).map(h=>h.activity)), "explore" as Activity, ...STATIONS.filter(s=>compatible(CREATURES.find(p=>p.id===id)!,s)).map(s=>s.activity)])];
 
-for (const p of POKEMON) {
+for (const p of CREATURES) {
   const pz = pokemonVoice(p.id, "zh"), pe = pokemonVoice(p.id, "en");
   // 宝可梦自己说的话
   en(`Hi! I'm ${p.nameEn}!`, pe);
@@ -118,7 +119,7 @@ for (const p of POKEMON) {
   // 说一说
   zh(`跟${p.nameZh}一起说：`); en(`${p.nameEn}!`);
 }
-for (const t of Object.values(TYPES)) { en(t.en); zh(`${t.zh}属性`); }
+for (const t of Object.values(CREATURE_TYPES)) { en(t.en); zh(`${t.zh}属性`); }
 for (const c of Object.values(COLORS)) { en(c.en); zh(c.zh); }
 for (const pr of PRAISE) { en(pr.en); zh(pr.zh); }
 for (const ph of PHRASES) { en(ph.en); zh(ph.zh); }
@@ -126,8 +127,8 @@ for(const unit of LEARNING_UNITS){for(const scene of unitSituations(unit))zh(sce
 for (const station of STATIONS) for (const level of [1,2] as const) { const l = facilityLesson(station,level); en(l.en); zh(l.zh); }
 en("big"); en("small");
 ["One!", "Two!", "Three!", "Four!", "Five!"].forEach(t=>en(t));
-for (let n = 0; n <= POKEMON.length; n++) { en(`You have ${n} Pokémon!`); zh(`训练师图鉴。你已经有${n}只宝可梦啦！`); }
-for (const b of Object.values(BALLS)) { zh(`你换到了一个${b.zh}！`); en(`You got a ${b.en}!`); }
+for (let n = 0; n <= CREATURES.length; n++) { en(`You have ${n} Pokémon!`); zh(`训练师图鉴。你已经有${n}只宝可梦啦！`); }
+for (const b of Object.values(INVITE_KINDS)) { zh(`你换到了一个${b.zh}！`); en(`You got a ${b.en}!`); }
 for (let n = 1; n <= 20; n++) zh(`能量还不够哦，还差${n}点。去做任务吧！`);
 for (let n = 1; n <= 4; n++) zh(`你得到了${n}点能量！`);
 zh(`连续7天完成全部任务，就能得到大师球！`);
@@ -149,7 +150,7 @@ const addNarration = (n: Narration | null) => {
   zh(n.zh);
   if (n.echo && n.echo !== n.me) en(n.echo);
 };
-for (const p of POKEMON) {
+for (const p of CREATURES) {
   for (const a of activitiesOf(p.id)) {
     addNarration(lookLine(p, a));
     addNarration(whereLine(p, a));
@@ -171,7 +172,7 @@ const addLines = (l: Lines) => {
 };
 for (const c of Object.values(COLORS)) addLines(colorAsk(c.en, c.zh));
 addLines(cryAsk);
-for (const p of POKEMON) {
+for (const p of CREATURES) {
   if (COLORS[p.color]) {
     addLines(colorYes(p));
     for (const c of Object.values(COLORS)) addLines(colorNo(p, c.en));
@@ -194,21 +195,21 @@ for (const ph of PHRASES) zh(`意思是：${ph.zh}`);
 for (const l of LETTERS) en(letterChant(l.letter, l.en));
 
 // 进化
-const byIdMap = new Map(POKEMON.map((p) => [p.id, p]));
-for (const p of POKEMON) {
+const byIdMap = new Map(CREATURES.map((p) => [p.id, p]));
+for (const p of CREATURES) {
   if (!p.evolvesTo.length) continue;
   for (const l of [evoReady(p), evoStart(p), evoStay(p)]) { l.en.forEach((t) => en(t)); zh(l.zh); }
   for (const id of p.evolvesTo) { const to = byIdMap.get(id); if (!to) continue; const l = evoDone(p, to); l.en.forEach((t) => en(t)); zh(l.zh); }
 }
 
 // Every catalog entry can now be selected, including evolved partners.
-for (const p of POKEMON) {
+for (const p of CREATURES) {
   en(`Let’s meet ${p.nameEn}!`); zh(`${p.nameZh}在等你，轻轻点一下它吧！`);
 }
 
 mkdirSync(path.join(ROOT, "voice"), { recursive: true });
 // Optional in-question explanations share exactly the runtime wording.
-for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...POKEMON.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
+for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...CREATURES.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
  const entry=learningEntry(key);if(!entry)continue;
  for(const part of learningExplanation(entry))if(typeof part!=='number')add(part[0],part[1]);
 }

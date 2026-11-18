@@ -19,7 +19,7 @@ import { EXPRESSION_PROMPTS } from './expressions.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
 const style = readFileSync(resolve(here, 'style.txt'), 'utf8');
-const sprites = JSON.parse(readFileSync(resolve(here, 'sprites.json'), 'utf8'));
+const sprites = JSON.parse(readFileSync(resolve(root, 'src/data/creatures.json'), 'utf8'));
 const styleReference = resolve(root, 'output/rebrand/style-reference.png');
 const outRoot = resolve(root, 'output/rebrand/sprites');
 const sceneCatalog = JSON.parse(readFileSync(resolve(here, 'scenes.json'), 'utf8'));

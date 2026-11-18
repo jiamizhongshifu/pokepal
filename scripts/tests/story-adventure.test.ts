@@ -7,13 +7,14 @@ import {restoreStory} from '../../src/lib/storyPlayer';
 import {rewardParticipation} from '../../src/lib/participation';
 import {exchangePokeball,capturePartner} from '../../src/lib/pokeballs';
 import type {SaveData} from '../../src/types';
+import {BABY_CREATURES} from '../../src/data/creatures';
 const make=()=>{const s=validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));s.energy=0;s.balls={poke:0,great:0,ultra:0,master:0};s.daily.energyEarned=0;s.daily.participated=[];s.daily.goalDone=false;return s;};
 function finish(s:SaveData){advanceAdventure(s,{type:s.storyAdventure?.phase==='completed'?'restart':s.storyAdventure?.phase==='paused'?'resume':'start'});if(s.storyAdventure?.phase==='ready')advanceAdventure(s,{type:'start'});for(let i=0;i<30&&s.storyAdventure?.phase!=='completed';i++){const p=s.storyAdventure!;advanceAdventure(s,{type:p.phase==='invitation'?'invitation-ended':p.phase==='reacting'?'reaction-ended':'media-ended',token:p.token});}assert.equal(s.storyAdventure?.phase,'completed');}
 test('old save → story → exchange → capture preserves partners and progress across serialization',()=>{
  const s=make(),old=structuredClone(s);finish(s);assert.equal(s.energy,5);assert.equal(s.daily.adventureReward,5);
  assert.deepEqual(s.captures,old.captures);assert.deepEqual(s.storyProgress,old.storyProgress);assert.deepEqual(s.wordStats,old.wordStats);
  const restored=validateSave(JSON.parse(JSON.stringify(s)));assert.equal(exchangePokeball(restored),true);assert.equal(restored.energy,0);assert.equal(restored.balls.poke,1);
- const id=[25,133,1,4,7].find(id=>!restored.captures.some(p=>p.id===id))!;
+ const id=BABY_CREATURES.map(c=>c.id).find(id=>!restored.captures.some(p=>p.id===id))!;
  assert.equal(capturePartner(restored,id),true);assert.equal(capturePartner(restored,id),false);assert.equal(restored.balls.poke,0);assert.deepEqual(restored.captures.slice(0,old.captures.length),old.captures);
  finish(restored);assert.equal(restored.energy,0);assert.equal(restored.daily.adventureReward,5);
 });

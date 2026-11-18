@@ -2,7 +2,7 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useLayoutEffect, useRef, useState } from "react";
 import { dexOwned, useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
-import { POKEMON, spriteUrl } from "../data/pokemon";
+import { CREATURES, creatureAvatar } from "../data/creatures";
 import { say } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
 import { PokeImg } from "../components/PokeImg";
@@ -40,7 +40,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
     previousFilters.current=filtersKey;
   }, [filtersKey]);
   const region = REGIONS[generation];
-  const list = POKEMON.filter((p) => (!onlyOwned || caught.has(p.id)) && p.id >= region.min && p.id <= region.max && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const list = CREATURES.filter((p) => (!onlyOwned || caught.has(p.id)) && p.id >= region.min && p.id <= region.max && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
   const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
   const currentPage = Math.min(page, pages - 1);
   useIntro(() => picking ? say(["zh", "挑一只你喜欢的宝可梦吧！"], ["en", "Pick a Pokémon you love!", {en:"Pick a Pokémon you love!",zh:"挑一只你喜欢的宝可梦吧！"}]) : say(["zh", `训练师图鉴。你已经有${caught.size}只宝可梦啦！`], ["en", `You have ${caught.size} Pokémon!`]));
@@ -62,7 +62,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
           <div className="collection-tabs dex-generations" aria-label="宝可梦地区">
             {REGIONS.map(({name},i)=><button key={name} aria-pressed={generation===i} onClick={()=>{setGeneration(i);setPage(0);}}>{name}</button>)}
           </div>
-          <p className="dex-filter-count" role="status">找到 {list.length} 位伙伴 · 图鉴共 {POKEMON.length} 位</p>
+          <p className="dex-filter-count" role="status">找到 {list.length} 位伙伴 · 图鉴共 {CREATURES.length} 位</p>
         </details>
       </div>
       
@@ -79,7 +79,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
               onClick={() => go({ name: "dexDetail", id: p.id, picking, browse:{onlyOwned,query,page:currentPage,generation,scrollTop:screenRef.current?.scrollTop??0,filtersOpen:!!screenRef.current?.querySelector('details')?.open,focusId:p.id} })}
             >
               <span className="dex-no">#{String(p.id).padStart(3, "0")}</span>
-              <PokeImg src={spriteUrl(p.id)} alt="" draggable={false} />
+              <PokeImg src={creatureAvatar(p.id)} alt="" draggable={false} />
               <span className="dex-name">{p.nameZh}</span><small lang="en">{p.nameEn}</small>
               <span className="dex-meet-status">{save.captures.some(c=>c.id===p.id) ? "已经是伙伴" : "可以去找它"}</span>
             </button>

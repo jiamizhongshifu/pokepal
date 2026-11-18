@@ -1,4 +1,4 @@
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import { BEHAVIORS, DEFAULT_SCHEDULE, type Habit, type ZoneKey } from "../data/behaviors";
 
 export type Activity =
@@ -43,14 +43,14 @@ function hourOf(date: Date) {
 const inRange = (h: number, a: number, b: number) => (a <= b ? h >= a && h < b : h >= a || h < b);
 
 /** 当前习性：按每只宝可梦自己的作息表（找不到就用通用作息） */
-export function habitAt(p: Pokemon, date = new Date()): Habit {
+export function habitAt(p: Creature, date = new Date()): Habit {
   const sched = BEHAVIORS[p.id]?.schedule ?? DEFAULT_SCHEDULE;
   const h = hourOf(date);
   for (const s of sched) if (inRange(h, s.from, s.to)) return s;
   return { from: 0, to: 24, activity: "play", zone: "meadow" as ZoneKey };
 }
 
-export function activityAt(p: Pokemon, date = new Date()): Activity {
+export function activityAt(p: Creature, date = new Date()): Activity {
   return habitAt(p, date).activity;
 }
 

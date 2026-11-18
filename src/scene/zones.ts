@@ -1,4 +1,4 @@
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import type { ZoneKey } from "../data/behaviors";
 import { BERRY_BUSHES, CAMPFIRE, CUSHIONS, HIGH_ROCK, ISLAND, OBSTACLES, PALMS, TENT, islandK, obstacleDist, onIsland } from "./layout";
 
@@ -6,7 +6,7 @@ export interface Spot { x: number; z: number; y?: number }
 export interface Effect { id: number; kind: "pet" | "feed" | "night"; icon: string; at: number }
 
 /** 场景里的身高（米）：按真实身高轻度压缩，大小差异明显但小宝可梦也够大、好点 */
-export function sceneHeight(p: Pokemon) {
+export function sceneHeight(p: Creature) {
   return Math.min(2.3, Math.max(0.62, 0.5 + (p.heightCm / 100) * 0.62));
 }
 

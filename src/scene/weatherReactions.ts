@@ -1,20 +1,20 @@
 import {rainShelter} from './rainShelter';
 import {sceneHeight} from './zones';
-import type {Pokemon} from '../types';
+import type {Creature} from '../types';
 import type {Habit} from '../data/behaviors';
 import type {WeatherKind} from '../lib/weather';
 import {onIsland} from './layout';
 import {BEHAVIORS} from '../data/behaviors';
 import {stationById,isAquatic,type Visit} from './islandLife';
 
-export function weatherReaction(p:Pokemon,habit:Habit,weather:WeatherKind):'shelter'|'splash'|'leaves'|'perch'|'shade'|null{
+export function weatherReaction(p:Creature,habit:Habit,weather:WeatherKind):'shelter'|'splash'|'leaves'|'perch'|'shade'|null{
  if(['sleep','nap','buried'].includes(habit.activity))return weather==='rain'&&!p.types.includes('water')&&!p.types.includes('grass')&&BEHAVIORS[p.id]?.locomotion!=='swim'?'shelter':null;
  if(weather==='rain')return p.types.includes('water')?'splash':p.types.includes('grass')?'leaves':'shelter';
  if(weather==='breezy'&&['fly','float'].includes(BEHAVIORS[p.id]?.locomotion))return 'perch';
  if(weather==='cloudy'&&habit.activity==='sunbathe')return 'shade';
  return null;
 }
-export function weatherVisit(p:Pokemon,habit:Habit,weather:WeatherKind,neighbor=0,occupied:readonly {x:number;z:number}[]=[]):Visit|null{
+export function weatherVisit(p:Creature,habit:Habit,weather:WeatherKind,neighbor=0,occupied:readonly {x:number;z:number}[]=[]):Visit|null{
  const reaction=weatherReaction(p,habit,weather);if(!reaction)return null;
  const base=stationById(reaction==='splash'?(isAquatic(p)?(p.id%2?'shore':'sea'):'shells'):reaction==='shelter'?'tree':reaction==='leaves'?'tree':reaction==='perch'?'tree':p.id%2?'parasol':'tent');
  const angle=neighbor*2.3999632297,radius=neighbor?2.1*Math.sqrt(neighbor):0;

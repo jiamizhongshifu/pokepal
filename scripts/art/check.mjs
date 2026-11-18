@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
-const sprites = JSON.parse(readFileSync(resolve(here, 'sprites.json'), 'utf8'));
+const sprites = JSON.parse(readFileSync(resolve(root, 'src/data/creatures.json'), 'utf8'));
 const dir = resolve(root, 'output/rebrand/sprites');
 const magick = (...args) => execFileSync('magick', args, { encoding: 'utf8' }).trim();
 

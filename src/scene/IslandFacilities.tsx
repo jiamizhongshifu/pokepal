@@ -11,7 +11,7 @@ import { FACILITY_GROUPS } from './facilityControls';
 import { cropStage, growth, GROW_MS } from '../lib/farm';
 import type { BerryGardenProps } from './BerryGarden';
 import { residentPoses } from './residentRuntime';
-import { artUrl } from '../data/pokemon';
+import { creatureArt } from '../data/creatures';
 
 const at=(p:{x:number;z:number}):[number,number,number]=>[p.x,terrainHeight(p.x,p.z)+.04,p.z];
 function Token({icon,color='#ffffff'}:{icon:string;color?:string}){
@@ -62,7 +62,7 @@ function StationButtons({farm,onTap}:{farm:BerryGardenProps;onTap:(id:string)=>v
       return <button key={i} hidden data-station={`farm-${i}`} data-stage={stage} className={`station-button plot-action plot-${stage}`} aria-label={`${i+1}号田，${label}`} disabled={stage==='growing'||busy} onPointerDown={e=>e.stopPropagation()} onClick={e=>{e.stopPropagation();farm.onPlot(i);}}>
         <Icon name={stage==='empty'?'seed':stage==='ripe'?'harvest':stage==='growing'?'sun':'watering-can'} size={36}/>
         {stage==='growing'&&<svg className="crop-clock" viewBox="0 0 64 64" aria-hidden><circle cx="32" cy="32" r="28" pathLength="100" strokeDasharray={`${growth(crop,farm.clock)*100} 100`}/></svg>}
-        {busy&&farm.helperId&&<img className="plot-helper" src={artUrl(farm.helperId)} alt=""/>}
+        {busy&&farm.helperId&&<img className="plot-helper" src={creatureArt(farm.helperId)} alt=""/>}
         <span className="station-label">{label}</span>
       </button>;
     })}

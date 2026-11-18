@@ -3,7 +3,7 @@ import { learningProfile } from '../../lib/learningStage';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { dailyLearningPlan } from "../../data/learning";
 import { useGame } from "../../store";
-import { getPokemon, artUrl } from "../../data/pokemon";
+import { getCreature, creatureArt } from "../../data/creatures";
 import { pickOne, PRAISE, type SayPhrase } from "../../data/words";
 import { say, playCry, playUrl, sfx, wait, stopSpeech } from "../../lib/speech";
 import { MicButton } from "../../components/MicButton";
@@ -12,7 +12,7 @@ import { bi } from "../../lib/bi";
 import { addRecording } from "../../lib/db";
 import { todayStr } from "../../lib/date";
 import type { RecordResult } from "../../lib/mic";
-import type { Pokemon } from "../../types";
+import type { Creature } from "../../types";
 import { Icon } from "../../icons";
 import { PokeImg } from "../../components/PokeImg";
 
@@ -21,7 +21,7 @@ export function RepeatTask({ onFinish, practice=false }: { onFinish: () => void;
   const noteWord = useGame((s) => s.noteWord);
   const { buddy, phrases } = useMemo(() => {
     const ids = save.captures.map((c) => c.id);
-    const buddy = getPokemon(ids.length ? pickOne(ids) : 25);
+    const buddy = getCreature(ids.length ? pickOne(ids) : 25);
     const picked = dailyLearningPlan(save,practice).phrases;
     // 第三句说宝可梦的名字
     const nameP: SayPhrase = { en: `${buddy.nameEn}!`, zh: `${buddy.nameZh}！`, level: 1 };
@@ -41,7 +41,7 @@ export function RepeatTask({ onFinish, practice=false }: { onFinish: () => void;
   );
 }
 
-function SayRound({ buddy, phrase, idx, total, onNext, onSpoken }: { buddy: Pokemon; phrase: SayPhrase; idx: number; total: number; onNext: () => void; onSpoken: (w: string) => void }) {
+function SayRound({ buddy, phrase, idx, total, onNext, onSpoken }: { buddy: Creature; phrase: SayPhrase; idx: number; total: number; onNext: () => void; onSpoken: (w: string) => void }) {
   const [ready, setReady] = useState(false);
   const [recording,setRecording]=useState(false);
   const active=useRef(true), processing=useRef(false),run=useRef(0);
@@ -102,7 +102,7 @@ function SayRound({ buddy, phrase, idx, total, onNext, onSpoken }: { buddy: Poke
     <div className="round say-round">
       <RoundProgress index={idx} total={total} unit="句"/>
       <div className="buddy">
-        <PokeImg src={artUrl(buddy.id)} alt="" className={busy ? "bounce" : ""} />
+        <PokeImg src={creatureArt(buddy.id)} alt="" className={busy ? "bounce" : ""} />
         <button className="bubble" disabled={busy||recording} onClick={model} aria-label={`再听一次：${phrase.en}`}>
           <div className="bubble-en">{phrase.en}</div>
           <div className="bubble-zh">{phrase.zh}</div>

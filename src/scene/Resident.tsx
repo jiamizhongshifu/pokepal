@@ -5,8 +5,8 @@ import * as THREE from "three";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useAnimations } from "@react-three/drei";
 import { modelUrl, useModel, normalizeModel, type ModelEntry } from "./modelUtil";
-import type { Pokemon } from "../types";
-import { spriteUrl } from "../data/pokemon";
+import type { Creature } from "../types";
+import { creatureAvatar } from "../data/creatures";
 import { ACTIVITY } from "../lib/routine";
 import { BEHAVIORS, type Behavior, type Habit, type Trajectory } from "../data/behaviors";
 import { contactShadowTexture, iconTexture, loadSprite, type SpriteInfo } from "./textures";
@@ -70,7 +70,7 @@ export function Resident({
   showInterface?: boolean;
   visit?: Visit;
   onArrival?: (id:number,key:string,ready:boolean)=>void;
-  p: Pokemon;
+  p: Creature;
   habit: Habit;
   slot: number;
   selected: boolean;
@@ -496,7 +496,7 @@ export function Resident({
       {!glb && (
         <group rotation-y={sunYaw}>
           <group ref={casterBody}>
-            <SpriteCaster url={spriteUrl(p.id)} height={height} onInfo={info=>{setFootprint(info);collisionRadius.current=Math.max(.28,height*info.aspect/2+.1);footprintChanged.current=true;}} />
+            <SpriteCaster url={creatureAvatar(p.id)} height={height} onInfo={info=>{setFootprint(info);collisionRadius.current=Math.max(.28,height*info.aspect/2+.1);footprintChanged.current=true;}} />
           </group>
         </group>
       )}
@@ -511,7 +511,7 @@ export function Resident({
               <GlbBody entry={glb} height={height} moving={m} onClick={click} onRadius={r=>{if(Math.abs(collisionRadius.current-r)>.01){collisionRadius.current=r;footprintChanged.current=true;}}} />
             </Suspense>
           ) : (
-            <SpriteBody url={spriteUrl(p.id)} height={height} tint={tint} onClick={click} matRef={spriteMat} />
+            <SpriteBody url={creatureAvatar(p.id)} height={height} tint={tint} onClick={click} matRef={spriteMat} />
           )}
         </group>
       </group>

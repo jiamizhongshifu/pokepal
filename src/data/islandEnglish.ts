@@ -1,6 +1,6 @@
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import { ACTIVITY, type Activity } from "../lib/routine";
-import { COLORS } from "./pokemon";
+import { COLORS } from "./creatures";
 
 /**
  * 家园的环境英语（磨耳朵）：适合 3–6 岁幼儿的可理解输入。
@@ -28,25 +28,25 @@ export interface Narration {
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 /** 看一看：Look! Pikachu is eating. Yum yum! */
-export function lookLine(p: Pokemon, a: Activity): Narration {
+export function lookLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`Look! ${p.nameEn} ${A.en}.`, A.sound], zh: `看！${p.nameZh}${A.zh}。`, echo: `${p.nameEn} ${A.en}.`, focus: p.id };
 }
 
 /** 找一找：Where is Pikachu? … There it is! */
-export function whereLine(p: Pokemon, a: Activity): Narration {
+export function whereLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`Where is ${p.nameEn}?`, "There it is!", `${p.nameEn} ${A.en}.`], zh: `${p.nameZh}在哪里？在这里！`, echo: A.sound, focus: p.id };
 }
 
 /** 问答：Pikachu, Pikachu, what are you doing? — I'm eating! */
-export function whatLine(p: Pokemon, a: Activity): Narration {
+export function whatLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`${p.nameEn}, ${p.nameEn}, what are you doing?`], me: A.me, zh: `${p.nameZh}，你在做什么呀？${A.zhSound}`, echo: A.me, focus: p.id };
 }
 
 /** 颜色：Pikachu is yellow. Yellow, yellow! */
-export function colorLine(p: Pokemon): Narration | null {
+export function colorLine(p: Creature): Narration | null {
   const c = COLORS[p.color];
   if (!c) return null;
   return { en: [`${p.nameEn} is ${c.en}.`, `${cap(c.en)}, ${c.en}!`], zh: `${p.nameZh}是${c.zh}的。`, echo: cap(c.en) + "!", focus: p.id };

@@ -42,7 +42,7 @@
 | 15 | Nutty | 栗栗 | chipmunk 花栗鼠 | acorn 橡果 | earth | 戴着橡果帽，大蓬尾巴 |
 | 16 | Carro | 萝萝 | guinea pig 豚鼠 | carrot 胡萝卜 | plant | 胡萝卜叶子一样的头毛 |
 
-16 种的三阶段名称与外形描述都在 `scripts/art/sprites.json`。
+16 种的三阶段名称与外形描述都在 `src/data/creatures.json`。
 
 试点后的修正（避免与第四至六代宝可梦相近）：刺猬改为小熊猫（背上长叶开花的刺猬接近「谢米」）；水獭避开蓝身奶白肚的配色；星星小鹿成年期去掉满角发光与藏青长鬃。
 

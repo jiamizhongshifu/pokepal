@@ -33,7 +33,7 @@ test('old saves remain valid; memory list bounded; full friendship still consume
  for(let i=0;i<15;i++){assert.ok(beginPicnic(s,25,'oran',`meal-${i}`,100+i));assert.ok(servePicnic(s,`meal-${i}`,200+i));endPicnic(s,`meal-${i}`);}
  assert.equal(s.picnic!.memories.length,12);assert.equal(s.farm.basket.oran,5);assert.equal(s.captures[0].friendship,100);validateSave(s);
 });
-test('corrupt picnic memory is rejected before a renderer reads the Pokemon',()=>{
+test('corrupt picnic memory is rejected before a renderer reads the Creature',()=>{
  const s=fixture();s.picnic={version:1,memories:[{id:'bad',pokemonId:999999,berry:'oran',at:100}]};
  assert.throws(()=>validateSave(s),/野餐回忆/);
 });

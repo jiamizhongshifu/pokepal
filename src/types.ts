@@ -4,31 +4,22 @@ export type BallType = "poke" | "great" | "ultra" | "master";
 export type TaskKind = "listen" | "repeat" | "wordpic" | "trace";
 export type InteractKind = "pet" | "feed" | "night";
 
-export interface PokemonRaw {
+/** One growth stage of an original island creature (see src/data/creatures.ts). */
+export interface Creature {
   id: number;
+  species: string;
+  stage: number;
   nameEn: string;
   nameZh: string;
   genusEn: string;
   genusZh: string;
   types: string[];
   color: string;
-  habitat: string;
   heightCm: number;
-  weightKg: number;
-  captureRate: number;
-  isBaby: boolean;
-  isLegendary: boolean;
-  isMythical: boolean;
   isFinal: boolean;
-  flavorEn: string;
-  flavorZh: string;
-  /** 直接进化成的形态（可能有多种，如伊布） */
   evolvesTo: number[];
-  /** 只能靠进化得到，不出现在草丛里 */
+  /** Grown-up stages come only from growing up, never from a first meeting. */
   evoOnly?: boolean;
-}
-
-export interface Pokemon extends PokemonRaw {
   rarity: Rarity;
 }
 

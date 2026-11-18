@@ -5,12 +5,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../../store";
 import { dailyLearningPlan } from '../../data/learning';
 import { learningLevel } from '../../data/curriculum';
-import { POKEMON, COLORS, getPokemon, spriteUrl } from "../../data/pokemon";
+import { CREATURES, COLORS, getCreature, creatureAvatar } from "../../data/creatures";
 import { PIC_WORDS, type PicWord, pickOne, pickRandom } from "../../data/words";
 import { say, playCry, wait, stopSpeech } from "../../lib/speech";
 import { useChoice } from "./useChoice";
 import { Icon } from "../../icons";
-import type { Pokemon } from "../../types";
+import type { Creature } from "../../types";
 import { PokeImg } from "../../components/PokeImg";
 import {
   picAsk, picYes, picNo, COUNT_ITEMS, askParts, feedbackParts, colorAsk, colorNo, colorYes, countAsk, countNo, countYes, cryAsk, cryNo, cryYes,
@@ -21,20 +21,20 @@ import {
  * 听一听（3–6 岁）：颜色、名字、叫声、数一数（1–5）、大小（big / small）五种小题，每次抽 3 道。
  * 指令先说英文、再给中文提示、最后英文复述；答错时说出孩子点的是什么，再重复指令。永不失败。
  */
-type Opt = { key: string; pokemon?: Pokemon; count?: number; big?: boolean; word?:PicWord };
+type Opt = { key: string; pokemon?: Creature; count?: number; big?: boolean; word?:PicWord };
 type Round =
   | {kind:"word";options:Opt[];target:Opt}
   | { kind: "color" | "name" | "cry"; options: Opt[]; target: Opt }
   | { kind: "count"; options: Opt[]; target: Opt; item: CountItem }
-  | { kind: "size"; options: Opt[]; target: Opt; pokemon: Pokemon };
+  | { kind: "size"; options: Opt[]; target: Opt; pokemon: Creature };
 
 const bilingual = () => (useGame.getState().save.settings.englishMode ?? "bilingual") === "bilingual";
 
 function makeRounds(caughtIds: number[], level: 1 | 2, practice:boolean): Round[] {
-  const caught = caughtIds.map(getPokemon);
-  const familiar = [...new Set([...caughtIds,25,1,4,7,133])].map(getPokemon);
+  const caught = caughtIds.map(getCreature);
+  const familiar = [...new Set([...caughtIds,25,1,4,7,133])].map(getCreature);
   const choices = learningProfile(useGame.getState().save.settings).choices;
-  const fav = caught.length ? caught : [getPokemon(25)];
+  const fav = caught.length ? caught : [getCreature(25)];
   const pool:Round["kind"][]=level === 1 ? ["color", "name", "count", "size"] : caught.length >= 3 ? ["color", "name", "cry", "count", "size"] : ["color", "name", "count", "size"];
   // Keep one playful concept round alongside the current theme, not two unrelated quizzes.
   const kinds = [...pickRandom(pool,pool.length),...pickRandom(pool,pool.length)].slice(0,practice?6:3);
@@ -57,7 +57,7 @@ function makeRounds(caughtIds: number[], level: 1 | 2, practice:boolean): Round[
       const options = pickRandom([{ key: "big", big: true }, { key: "small", big: false }], 2);
       return { kind, options, target: pickOne(options), pokemon };
     }
-    const pool = kind === "cry" ? caught : (level === 1 ? familiar : POKEMON).filter((p) => !p.evoOnly || caughtIds.includes(p.id));
+    const pool = kind === "cry" ? caught : (level === 1 ? familiar : CREATURES).filter((p) => !p.evoOnly || caughtIds.includes(p.id));
     const opts = pickRandom(pool, choices).map((p) => ({ key: `p${p.id}`, pokemon: p }));
     const mine = opts.filter((o) => caughtIds.includes(o.pokemon!.id));
     return { kind, options: opts, target: mine.length ? pickOne(mine) : pickOne(opts) };
@@ -117,8 +117,8 @@ function OptionView({ round, o }: { round: Round; o: Opt }) {
       </span>
     );
   }
-  if (round.kind === "size") return <span className="size-stage"><PokeImg src={spriteUrl(round.pokemon.id)} alt="" draggable={false} className={o.big ? "size-big" : "size-small"} /></span>;
-  return <PokeImg src={spriteUrl(o.pokemon!.id)} alt="" draggable={false} />;
+  if (round.kind === "size") return <span className="size-stage"><PokeImg src={creatureAvatar(round.pokemon.id)} alt="" draggable={false} className={o.big ? "size-big" : "size-small"} /></span>;
+  return <PokeImg src={creatureAvatar(o.pokemon!.id)} alt="" draggable={false} />;
 }
 
 function ListenRound({ round, idx, total, onNext, noteWord }: { round: Round; idx: number; total: number; onNext: () => void; noteWord: (w: string, k: "heard" | "spoken" | "correct") => void }) {

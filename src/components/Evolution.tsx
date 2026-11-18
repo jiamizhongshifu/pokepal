@@ -1,7 +1,7 @@
 import { BlockingDialog } from "./BlockingDialog";
 import { useEffect, useRef, useState } from "react";
-import type { Pokemon } from "../types";
-import { artUrl } from "../data/pokemon";
+import type { Creature } from "../types";
+import { creatureArt } from "../data/creatures";
 import { PokeImg } from "./PokeImg";
 import { Icon } from "../icons";
 import { playCry, say, sfx, stopSpeech, wait, type Part } from "../lib/speech";
@@ -14,9 +14,9 @@ const lines = (l: { en: string[]; zh: string }): Part[] => bi(...l.en.flatMap((t
  * 进化：满友好度时，孩子可以选择进化成下一阶段（有分支时可以挑），也可以保持现在的样子。
  * 进化动画：剪影缓慢交替，再揭晓新伙伴；减弱动态时直接揭晓。
  */
-export function Evolution({ from, options, onDone }: { from: Pokemon; options: Pokemon[]; onDone: (to: number | null) => void }) {
+export function Evolution({ from, options, onDone }: { from: Creature; options: Creature[]; onDone: (to: number | null) => void }) {
   const [phase, setPhase] = useState<"choose" | "evolving" | "flash" | "done">("choose");
-  const [to, setTo] = useState<Pokemon | null>(null);
+  const [to, setTo] = useState<Creature | null>(null);
   const [showNew, setShowNew] = useState(false);
   const alive = useRef(true);
 
@@ -26,7 +26,7 @@ export function Evolution({ from, options, onDone }: { from: Pokemon; options: P
     return () => { alive.current = false; clearTimeout(t); stopSpeech(); };
   }, [from]);
 
-  const start = async (target: Pokemon) => {
+  const start = async (target: Creature) => {
     sfx("sparkle");
     setTo(target);
     setPhase("evolving");
@@ -63,12 +63,12 @@ export function Evolution({ from, options, onDone }: { from: Pokemon; options: P
         <div className="evo-card">
           <div className="evo-title">{from.nameZh}可以进化啦！ <span>Evolve?</span></div>
           <div className="evo-row">
-            <div className="evo-mon"><PokeImg src={artUrl(from.id)} alt="" /><b>{from.nameZh}</b></div>
+            <div className="evo-mon"><PokeImg src={creatureArt(from.id)} alt="" /><b>{from.nameZh}</b></div>
             <Icon name="sparkle" size={56} className="evo-arrow" />
             <div className="evo-options">
               {options.map((o) => (
                 <button key={o.id} className="evo-mon option" onClick={() => start(o)}>
-                  <PokeImg src={artUrl(o.id)} alt="" />
+                  <PokeImg src={creatureArt(o.id)} alt="" />
                   <b>进化成{o.nameZh}</b>
                   <small>{o.nameEn}</small>
                 </button>
@@ -81,7 +81,7 @@ export function Evolution({ from, options, onDone }: { from: Pokemon; options: P
       {phase !== "choose" && to && (
         <div className="evo-stage">
           <div className="evo-rings" />
-          <PokeImg key={showNew ? "to" : "from"} className={`evo-art ${phase === "done" ? "reveal" : "silhouette"}`} src={artUrl(showNew ? to.id : from.id)} alt="" />
+          <PokeImg key={showNew ? "to" : "from"} className={`evo-art ${phase === "done" ? "reveal" : "silhouette"}`} src={creatureArt(showNew ? to.id : from.id)} alt="" />
           {phase === "done" && (
             <>
               <div className="evo-sparkles">{Array.from({ length: 10 }, (_, i) => <Icon key={i} name="sparkle" size={36} style={{ ["--i" as string]: i }} />)}</div>

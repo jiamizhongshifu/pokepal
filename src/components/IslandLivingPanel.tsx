@@ -8,7 +8,7 @@ import { IslandRewards } from './IslandRewards';
 import { useRef,useState } from 'react';
 import { Icon } from '../icons';
 import { PokeImg } from './PokeImg';
-import { artUrl,getPokemon } from '../data/pokemon';
+import { creatureArt,getCreature } from '../data/creatures';
 import { type TogetherKind } from '../lib/islandLiving';
 import type { SaveData } from '../types';
 import type { useTogether } from '../lib/useTogether';
@@ -28,7 +28,7 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
  const childReady=!!session&&together.phase==='ready'&&togetherChildTurn(session.kind,partners,together.turn,!!session.help);
  const rounds=session?togetherRounds(session.kind):0;
  if(session&&tab==='play')return <section className="camp-play-hud" aria-label="一起玩">
-  <header className="camp-play-header"><button aria-label="结束一起玩，回小岛" onClick={onClose}><Icon name="back" size={28}/><span>小岛</span></button><PokeImg src={artUrl(partners[0])} alt=""/><strong>{getPokemon(partners[0]).nameZh}<small>{TOGETHER_LABELS[session.kind]}</small></strong><button aria-label="再听一次伙伴的话" disabled={!['ready','done'].includes(together.phase)} onClick={()=>void together.hear()}><Icon name="speaker" size={28}/></button></header>
+  <header className="camp-play-header"><button aria-label="结束一起玩，回小岛" onClick={onClose}><Icon name="back" size={28}/><span>小岛</span></button><PokeImg src={creatureArt(partners[0])} alt=""/><strong>{getCreature(partners[0]).nameZh}<small>{TOGETHER_LABELS[session.kind]}</small></strong><button aria-label="再听一次伙伴的话" disabled={!['ready','done'].includes(together.phase)} onClick={()=>void together.hear()}><Icon name="speaker" size={28}/></button></header>
   <div className={`camp-play-status phase-${together.phase}`} role="status"><Icon name={together.phase==='done'?'heart':together.phase==='timeout'?'sign':session.help?'hand':TOGETHER_ICONS[session.kind]} size={28}/><span>{togetherStatus(session.kind,together.phase,actor.child,!!session.help,partners.length===2)}</span></div>
   {session.kind!=='rest'&&!session.help&&<div className="camp-play-rounds" aria-label={`已经完成 ${together.phase==='done'?rounds:together.turn} 轮，共 ${rounds} 轮`}>
    {Array.from({length:rounds},(_,i)=><span key={i} className={together.phase==='done'||i<together.turn?'is-done':i===together.turn?'is-current':''} aria-hidden="true"><Icon name={together.phase==='done'||i<together.turn?'check':TOGETHER_ICONS[session.kind]} size={19}/></span>)}
@@ -46,14 +46,14 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
 
   {tab==='play'?<>
    {!save.captures.length&&<h3>先认识一个新伙伴吧</h3>}
-   {!!selected.length&&<div className="living-selection" aria-label="当前伙伴">{selected.map(id=><span key={id}><PokeImg src={artUrl(id)} alt=""/><strong>{getPokemon(id).nameZh}</strong></span>)}</div>}
+   {!!selected.length&&<div className="living-selection" aria-label="当前伙伴">{selected.map(id=><span key={id}><PokeImg src={creatureArt(id)} alt=""/><strong>{getCreature(id).nameZh}</strong></span>)}</div>}
    {finding&&<div className="living-finder"><CompanionFinder purpose="choose" ids={save.captures.map(c=>c.id)} selected={selected[0]??null} onSelect={choose} onClose={closeFinder}/></div>}
    {!save.captures.length&&<button className="farm-primary living-main-action" onClick={()=>useGame.getState().go({name:'catch'})}><Icon name="grass" size={30}/>认识新伙伴</button>}
    {!!save.captures.length&&<>
    <div className="living-play-choices" aria-label="选一个一起玩的活动">
     <button disabled={!selected.length} onClick={()=>onBegin('ball',selected,coast)}><Icon name="ball" size={58}/><strong>玩球</strong></button>
     <button onClick={()=>onBegin('bubbles',selected,coast)}><Icon name="bubbles" size={58}/><strong>戳泡泡</strong></button>
-    <button onClick={()=>onBegin('jump',selected,coast)}><span className="living-jump-picture" aria-hidden="true"><PokeImg src={artUrl(selected[0])} alt=""/><span>↑</span></span><strong>一起跳</strong></button>
+    <button onClick={()=>onBegin('jump',selected,coast)}><span className="living-jump-picture" aria-hidden="true"><PokeImg src={creatureArt(selected[0])} alt=""/><span>↑</span></span><strong>一起跳</strong></button>
    </div>
    <div className="living-quiet-choices">
     <button onClick={()=>onBegin('rest',selected,coast)}><Icon name="rest" size={28}/>歇一歇</button>

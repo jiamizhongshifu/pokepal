@@ -5,7 +5,7 @@ import { DIARY_PROMPTS } from '../../src/data/diaryPrompts';
 import { EXTRA_LEARNING } from '../../src/data/learningLexicon';
 /** Exercise actual cross-choice feedback and island narration, not only self-pairs. */
 import { readFileSync } from 'node:fs';
-import { POKEMON } from '../../src/data/pokemon';
+import { CREATURES } from '../../src/data/creatures';
 import { STORIES } from '../../src/data/stories';
 import { LEARNING_UNITS,unitSituations,learningEntry } from '../../src/data/curriculum';
 import { learningVoice,learningExplanation } from '../../src/lib/learningVoice';
@@ -28,11 +28,11 @@ const parts = (ps:Part[]) => ps.forEach(p=>{if(typeof p!=='number')check(p[0],p[
 for(const w of [...Object.values(WEATHER),CLEAR_NIGHT]){check('en',w.en);check('zh',w.voice);}
 for(const guide of Object.values(GUIDES))check('zh',guide.voice);
 for(const prompt of DIARY_PROMPTS)check('zh',prompt.voice);
-for(const actual of POKEMON)for(const target of POKEMON)parts(feedbackParts(nameNo(actual,target),true));
+for(const actual of CREATURES)for(const target of CREATURES)parts(feedbackParts(nameNo(actual,target),true));
 for(const actual of PIC_WORDS)for(const target of PIC_WORDS)parts(feedbackParts(picNo(actual,target),true));
 for(const station of STATIONS){
  for(const level of [1,2] as const){const l=facilityLesson(station,level);check('en',l.en);check('zh',l.zh);}
- for(const p of POKEMON.filter(p=>compatible(p,station))){
+ for(const p of CREATURES.filter(p=>compatible(p,station))){
   const a=station.activity,A=ACTIVITY[a];
   for(const n of [lookLine(p,a),whereLine(p,a),whatLine(p,a)]){
    n.en.forEach(t=>check('en',t));check('zh',n.zh);if(n.echo)check('en',n.echo);if(n.me)check('en',n.me);
@@ -40,7 +40,7 @@ for(const station of STATIONS){
   check('en',`${p.nameEn} ${A.en}.`);check('zh',`${p.nameZh}${A.zh}。`);
  }
 }
-for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...POKEMON.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
+for(const key of [...PIC_WORDS.map(w=>w.en),...PHRASES.map(p=>p.en),...CREATURES.map(p=>p.nameEn),'big','small',...Array.from({length:5},(_,i)=>`count:${i+1}`)]){
  const entry=learningEntry(key);if(entry)parts(learningExplanation(entry));
 }
 for(const entry of EXTRA_LEARNING)parts(learningVoice(entry));

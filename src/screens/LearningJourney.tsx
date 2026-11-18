@@ -5,7 +5,7 @@ import {useGame} from '../store';
 import {TopBar} from '../components/TopBar';
 import {Icon} from '../icons';
 import {PokeImg} from '../components/PokeImg';
-import {artUrl} from '../data/pokemon';
+import {creatureArt} from '../data/creatures';
 import {lessonWords} from '../data/learning';
 import {learningProfile} from '../lib/learningStage';
 import {LearningArt,hearEntry} from '../components/LearningItem';
@@ -71,7 +71,7 @@ export function LearningJourney(){
        <ol className="adventure-stops" aria-label="本阶段全部关卡">{units.map((u,i)=>{
         const done=!!s.learning?.units[u.id]?.completedAt,now=u.id===current.id&&!allDone;
         return <li key={u.id} style={{'--stop-x':`${positions[i].x}%`,'--stop-y':`${positions[i].y}%`} as CSSProperties}>
-         {now&&<span className="adventure-companion"><PokeImg src={artUrl(s.captures[0]?.id??25)} alt=""/><span>我们在这里</span></span>}
+         {now&&<span className="adventure-companion"><PokeImg src={creatureArt(s.captures[0]?.id??25)} alt=""/><span>我们在这里</span></span>}
          <button className={`adventure-stop ${done?'is-done':now?'is-current':'is-future'} ${celebrating&&u.id===arrival?.id?'just-lit':''}`} aria-pressed={selected.id===u.id} aria-label={`第${i+1}关，${u.title}，${done?'已完成，可回顾':now?'开始冒险':'尚未解锁，可以预览'}`} onClick={()=>select(u)}>
           <span className="adventure-stop-pin"><Icon name={done?'pokeball':destinationIcon(u)} size={48}/><b>{i+1}</b><span className={`pin-state ${done?'pin-complete':now?'pin-play':'pin-locked'}`} aria-hidden="true"><Icon name={done?'check':now?'play':'lock'} size={done?22:25}/></span></span>
           <strong>{u.title}</strong><span className="adventure-stop-status">{done?'已点亮':now?'点这里出发':'未点亮'}</span>

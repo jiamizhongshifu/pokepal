@@ -3,7 +3,7 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useGame } from "../store";
 import { say, unlockAudio, sfx, wait } from "../lib/speech";
 import { requestPersist } from "../lib/db";
-import { spriteUrl } from "../data/pokemon";
+import { creatureAvatar } from "../data/creatures";
 import { AVATARS, Icon } from "../icons";
 import { PokeImg } from "../components/PokeImg";
 import { DeviceSetup } from "../components/DeviceSetup";
@@ -48,7 +48,7 @@ export function Welcome() {
       <div className="welcome-content">
       <div className="welcome-pokemon">
         {[25, 1, 4, 7, 133].map((id, i) => (
-          <PokeImg key={id} src={spriteUrl(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
+          <PokeImg key={id} src={creatureAvatar(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
         ))}
       </div>
       <div className="welcome-title-board">

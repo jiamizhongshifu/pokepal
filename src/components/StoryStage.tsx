@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Story, StoryPage, StoryLine } from '../data/stories';
 import { STORY_SCENES, type SceneItem } from '../data/storyScenes';
-import { artUrl } from '../data/pokemon';
+import { creatureArt } from '../data/creatures';
 import { Icon } from '../icons';
 import { PokeImg } from './PokeImg';
 import './story-stage.css';
@@ -47,7 +47,7 @@ export function StoryStage({story,page,cover=false,onWord}:{story:Story;page:Sto
    </div>
    {scene.actors.map((actor,i)=><div key={i} className="theatre-actor" aria-hidden="true" style={{left:`${actor.x}%`,bottom:`${actor.y}%`,width:`${actor.size}%`,'--from-x':`${((actor.fromX??actor.x)-actor.x)/actor.size*100}%`,'--lean':`${actor.lean??0}deg`} as CSSProperties}>
     <span className="actor-shadow"/>
-    <div className={`theatre-actor-art move-${actor.motion??'none'}`}><PokeImg src={artUrl(story.cast[i])} alt=""/></div>
+    <div className={`theatre-actor-art move-${actor.motion??'none'}`}><PokeImg src={creatureArt(story.cast[i])} alt=""/></div>
    </div>)}
    {scene.items.map((item,i)=><div key={i} className={`theatre-item item-${item.kind}`} aria-hidden="true" style={{left:`${item.x}%`,bottom:`${item.y}%`,width:`${item.size}%`,'--from-x':`${((item.fromX??item.x)-item.x)/item.size*100}%`,'--prop-turn':`${item.rotate??0}deg`} as CSSProperties}><div className={`theatre-item-art move-${item.motion??'none'}`}><Prop item={item} castle={scene.castle} pot={scene.pot}/></div></div>)}
   </div>

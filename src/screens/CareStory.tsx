@@ -5,7 +5,7 @@ import {useGame} from '../store';
 import {BERRIES,GROW_MS,cropStage} from '../lib/farm';
 import {gardenPlan,gardenPlanKey,type CareAction} from '../lib/careStory';
 import {PHRASES} from '../data/words';
-import {artUrl,getPokemon} from '../data/pokemon';
+import {creatureArt,getCreature} from '../data/creatures';
 import {say,stopSpeech} from '../lib/speech';
 import {TopBar} from '../components/TopBar';
 import {BerryBadge} from '../components/FarmPanel';
@@ -16,7 +16,7 @@ export function CareStoryScreen(){
  const requested=useGame(s=>s.screen.name==='careStory'?s.screen.companion:undefined);
  const [running,setRunning]=useState(()=>{const screen=useGame.getState().screen;return screen.name==='careStory'&&!!screen.autoplay;}),[failed,setFailed]=useState(false),[assetFailed,setAssetFailed]=useState(false),[heard,setHeard]=useState(''),[now,setNow]=useState(Date.now());
  const locked=useRef(false),session=save.careStory,phase=session?.phase;
- const partner=save.captures.find(c=>c.id===session?.pokemonId),pokemon=partner?getPokemon(partner.id):undefined;
+ const partner=save.captures.find(c=>c.id===session?.pokemonId),pokemon=partner?getCreature(partner.id):undefined;
  const p=gardenPlan(save,now),key=gardenPlanKey(save,now);
  const phrase=session?(phase==='shared'&&session.meal==='skipped'?"Let's go!":phase==='garden'&&p.stage==='ripe'?'Wow!':phrases[session.phase]):'Hello!';
  const act=async(action:CareAction,expected?:string)=>{
@@ -59,11 +59,11 @@ export function CareStoryScreen(){
  const text=phase==='snack'?`${pokemon?.nameZh}带来了小碗。一起分享一点${food}，再去花园看看。`:phase==='shared'?(session?.meal==='fed'?'小点心吃好了，谢谢你惦记着我。我们去看看小苗吧。':'点心先留着。我们一起去看看小苗。'):phase==='garden'?(p.stage==='empty'?'这里有一块空地。种下小种子，浇一点水，给它时间慢慢长大。':p.stage==='ripe'?'还记得照顾过的小苗吗？树果已经成熟，我们把它收进果篮。':p.stage==='thirsty'?'小苗的泥土有点干，我们给它浇一点水。':'小苗正在慢慢长大。我们先去玩一会儿，让它安心晒太阳。'):phase==='watered'?(session?.gardenResult==='harvested'?'树果已经放进真实果篮啦。现在一起玩吧。':session?.gardenResult==='full'?'果篮装满了，树果先留在枝头。我们一起去玩吧。':'小苗有水，也有阳光。等待的时候，我们一起玩吧。'):phase==='play'?'小球轻轻滚过来。你可以推一下，也可以看伙伴把球滚回去。':phase==='rolled'?'小球滚回来，快乐也回到我们身边。谢谢你陪我玩。':phase==='growing'?'我们陪小苗再待一会儿。果子长好了，就一起放进果篮。':session?.harvest==='collected'?'树果收好了，今天的小下午也记住了。下次再一起分享吧。':session?.harvest==='full'?'果篮满满的，成熟的树果还在原来的地里。下次再来。':'今天的小下午已经记住了。田地有了新的变化，我们把它留在原处。';
  return <div className="screen care-story"><TopBar title="和伙伴的小下午" onBack={()=>{stopSpeech();go({name:'home',companion:partner?.id});}} focused/>
  <main>
- {!session||!partner?<section className="care-story-cover"><h1>点心、小苗，还有你</h1><p>带上已有的伙伴，过一个不用赶时间的小下午。</p>{save.captures.length?<><div className="care-cast">{save.captures.slice(0,4).map(c=><img key={c.id} src={artUrl(c.id)} alt={getPokemon(c.id).nameZh}/>)}</div><button disabled={busy} onClick={()=>void begin()}>一起出发</button></>:<button onClick={()=>go({name:'catch'})}>去认识第一个伙伴</button>}</section>:<>
+ {!session||!partner?<section className="care-story-cover"><h1>点心、小苗，还有你</h1><p>带上已有的伙伴，过一个不用赶时间的小下午。</p>{save.captures.length?<><div className="care-cast">{save.captures.slice(0,4).map(c=><img key={c.id} src={creatureArt(c.id)} alt={getCreature(c.id).nameZh}/>)}</div><button disabled={busy} onClick={()=>void begin()}>一起出发</button></>:<button onClick={()=>go({name:'catch'})}>去认识第一个伙伴</button>}</section>:<>
  <header><p>和 {pokemon!.nameZh} 一起</p><h1>{phase==='snack'||phase==='shared'?'留给你的一份点心':phase==='garden'||phase==='watered'||phase==='growing'?'给小苗一点时间':phase==='ending'?'把快乐带回家':'小球又滚回来啦'}</h1></header>
  <div className={`care-story-stage phase-${phase} ${running?'':'paused'}`} onErrorCapture={()=>{setAssetFailed(true);setRunning(false);stopSpeech();}}>
  <img className="care-backdrop" alt="" src={`/story-art/painted-v1/backgrounds/${phase==='play'||phase==='rolled'?'playground':phase==='garden'||phase==='watered'||phase==='growing'?'garden-path':'orchard'}.png`}/>
- <img className="care-actor" alt={pokemon!.nameZh} src={artUrl(partner.id)}/>
+ <img className="care-actor" alt={pokemon!.nameZh} src={creatureArt(partner.id)}/>
  {(phase==='snack'||phase==='shared')&&<div className="care-meal"><img alt="小碗" src="/story-art/painted-v1/props/bowl.png"/><div className={`care-food ${session.meal==='fed'?'eaten':''}`}>{session.food==='plain'?<img alt="普通点心" src="/story-art/painted-v1/props/cookie.png"/>:<BerryBadge kind={session.food}/>}</div></div>}
  {(phase==='garden'||phase==='watered'||phase==='growing'||phase==='ending')&&<div className="care-plots" aria-label="我的三块田地">{(save.farm?.plots??[null,null,null]).map((c,i)=><div key={i} className={`care-plot stage-${cropStage(c,now)}`}><img src={`/story-art/painted-v1/props/${c?'flower':'soil'}.png`} alt=""/>{c&&cropStage(c,now)==='ripe'&&<BerryBadge kind={c.berry}/>}<span>{i+1} · {!c?'空地':cropStage(c,now)==='ripe'?'成熟':cropStage(c,now)==='thirsty'?'待浇水':'生长中'}</span></div>)}</div>}
  {phase==='watered'&&['planted','watered'].includes(session.gardenResult??'')&&<img className="care-water" src="/story-art/painted-v1/props/watering-can.png" alt="给小苗浇水"/>}

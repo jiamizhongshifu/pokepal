@@ -4,7 +4,7 @@ import { activeResidentIds } from "./activeResidents";
 import { furnitureAffinity, type FurnitureId } from './islandLiving';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Capture } from '../types';
-import { getPokemon } from '../data/pokemon';
+import { getCreature } from '../data/creatures';
 import { habitAt } from './routine';
 import { affinity, compatible, isAquatic, furnishedStation, STATIONS, stationById, type Visit } from '../scene/islandLife';
 
@@ -28,18 +28,18 @@ export function useIslandLife(captures: Capture[], now: Date, paused: boolean, c
     const stations=STATIONS.map(s=>furnishedStation(s,furniture));
     if(!group.length && request && captures.some(c=>c.id===request.pokemonId)) {
       const s=furnishedStation(stationById(request.stationId),furniture);
-      if(compatible(getPokemon(request.pokemonId),s)) {
+      if(compatible(getCreature(request.pokemonId),s)) {
         result.push({station:s,pokemonId:request.pokemonId,manual:true,key:`manual-${request.nonce}`}); occupied.add(s.id);
       }
     }
     if(careId && !result.some(v=>v.pokemonId===careId)) {
-      const p=getPokemon(careId),water=isAquatic(p);
+      const p=getCreature(careId),water=isAquatic(p);
       const base=stationById(water?'shore':'sign');
       result.push({pokemonId:careId,manual:false,key:`care-${careId}`,station:{...base,id:'care-user',name:'等你来陪我',activity:'lonely',target:water?base.target:{x:1.2,z:5.4},action:'等你来陪我'}});
     }
     for(const c of residents) {
       if(result.some(v=>v.pokemonId===c.id)) continue;
-      const p=getPokemon(c.id), habit=habitAt(p,now);
+      const p=getCreature(c.id), habit=habitAt(p,now);
       const sameWeather=residents.findIndex(other=>other.id===c.id);
       const weatherPlan=weatherVisit(p,habit,weather,sameWeather,result.map(v=>v.station.target));
       if(weatherPlan){result.push(weatherPlan);continue;}
@@ -73,7 +73,7 @@ export function useIslandLife(captures: Capture[], now: Date, paused: boolean, c
   const invite=(stationId:string,cyclePartner=false,preferredId?:number)=>{
     const station=furnishedStation(stationById(stationId),furniture);
     if(!station)return null;
-    const available=captures.map(c=>getPokemon(c.id)).filter(p=>compatible(p,station))
+    const available=captures.map(c=>getCreature(c.id)).filter(p=>compatible(p,station))
       .sort((a,b)=>affinity(b,station)-affinity(a,station));
     const i=cyclePartner&&request ? available.findIndex(p=>p.id===request.pokemonId)+1:0;
     const p=preferredId===undefined?available[i%available.length]:available.find(p=>p.id===preferredId);

@@ -24,14 +24,14 @@ import { BERRIES, BERRY_KINDS, newFarm, cropStage, HARVEST_COUNT, BASKET_CAP, ty
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
-import { getPokemon, favoriteFood, friendshipLevel, artUrl } from "../data/pokemon";
+import { getCreature, favoriteFood, friendshipLevel, creatureArt } from "../data/creatures";
 import { ACTIVITY, activityAt, skyFor } from "../lib/routine";
 import { BEHAVIORS } from "../data/behaviors";
 import { sfx, stopSpeech, type Part } from "../lib/speech";
 import { sayOnIsland as say, cryOnIsland as playCry, islandAudioAllowed } from '../lib/islandSpeech';
 import { useAmbientEnglish } from "../lib/ambient";
 import { MicButton } from "../components/MicButton";
-import type { InteractKind, Pokemon } from "../types";
+import type { InteractKind, Creature } from "../types";
 import { Hearts, Icon } from "../icons";
 import type { Effect } from "../scene/zones";
 import type { CameraView } from "../scene/CameraRig";
@@ -196,7 +196,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       else setFarmMessage('这块田已经变化啦，看看现在的小芽吧。');
     }else if(stage==='thirsty'){
       farmRetryAt.current=0;
-      if(!useGame.getState().save.captures.some(c=>!isAquatic(getPokemon(c.id))))go({name:'catch'});
+      if(!useGame.getState().save.captures.some(c=>!isAquatic(getCreature(c.id))))go({name:'catch'});
       else {setFarmClock(Date.now());setFarmMessage('伙伴会按顺序照顾小芽，不用再点啦。');}
     }
   };
@@ -254,7 +254,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(weather.rain>.65||!active||document.hidden||watering||selected!==null||stationId!==null||livingOpen||picnicOpen||together.session||Date.now()<farmRetryAt.current)return;
     const index=farm.plots.findIndex(c=>c&&cropStage(c)==='thirsty');
     if(index<0)return;
-    const helpers=captures.filter(c=>!isAquatic(getPokemon(c.id)));
+    const helpers=captures.filter(c=>!isAquatic(getCreature(c.id)));
     if(!helpers.length)return;
     const helper=helpers[Math.floor(Math.random()*helpers.length)];
     const request=life.invite(`farm-${index}`,false,helper.id);
@@ -267,7 +267,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const mode = save.settings.englishMode ?? "bilingual";
   /** 纯英文模式下去掉中文提示 */
   const bi = (...parts: Part[]) => captionParts(parts).filter((p) => mode === "bilingual" || typeof p === "number" || p[0] === "en");
-  const residents = life.residents.map((c) => getPokemon(c.id));
+  const residents = life.residents.map((c) => getCreature(c.id));
   // 家园环境英语（磨耳朵）：空闲时旁白描述宝可梦正在做的事
   const ambient = useAmbientEnglish({
     pokemon: residents,
@@ -334,13 +334,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
   useEffect(()=>{
     if(!active||initialCompanion===undefined)return;
-    if(save.captures.some(c=>c.id===initialCompanion))tapPokemon(getPokemon(initialCompanion),false);
+    if(save.captures.some(c=>c.id===initialCompanion))tapPokemon(getCreature(initialCompanion),false);
     // Consume the handoff. Reopening another panel must not select it again.
     useGame.getState().go({name:'home'});
   },[active,initialCompanion]);
   useEffect(()=>{if(!careThanks)return;const timer=setTimeout(()=>setCareThanks(null),5000);return()=>clearTimeout(timer);},[careThanks]);
 
-  const tapPokemon = (p: Pokemon, greet=true) => {
+  const tapPokemon = (p: Creature, greet=true) => {
     setQuickCare(null);setCareThanks(null);setAreaId(null);
     selectedRef.current=p.id;
     stopSpeech();setFinderOpen(false);
@@ -376,7 +376,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     }
   };
 
-  const doInteract = async (p: Pokemon, kind: InteractKind,station='companion') => {
+  const doInteract = async (p: Creature, kind: InteractKind,station='companion') => {
     const run = ++interactionRun.current;
     setFeedPicker(false);ambient.poke();
     if(!interact(p.id, kind))return;
@@ -402,7 +402,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(heard){useGame.getState().noteStationLearning(station,phrase.en,true);}
   };
 
-  const shareBerry=(p:Pokemon,berry:BerryKind)=>{
+  const shareBerry=(p:Creature,berry:BerryKind)=>{
     const run=++interactionRun.current;
     const before=useGame.getState().save.captures.find(c=>c.id===p.id)?.friendship??0;
     if(!useGame.getState().feedBerry(p.id,berry))return;
@@ -418,7 +418,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   };
   const invitePicnic=()=>{
     if(!picnic||picnic.servedAt)return;
-    const water=isAquatic(getPokemon(picnic.pokemonId));
+    const water=isAquatic(getCreature(picnic.pokemonId));
     const request=life.invite(water?'shore':'picnic',false,picnic.pokemonId);
     picnicKey.current=request?`manual-${request.nonce}`:null;
     pickView(water?'beach':'leisure');
@@ -455,14 +455,14 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const beginTogether=(kind:TogetherKind,ids:number[],coast:boolean)=>{
     stopSpeech();life.cancel();together.begin(kind,ids,coast);pickView('together');
   };
-  const sel = selected ? getPokemon(selected) : null;
+  const sel = selected ? getCreature(selected) : null;
   const evolve = useGame((s) => s.evolve);
   const stayAsIs = useGame((s) => s.stayAsIs);
   const [evolving, setEvolving] = useState<number | null>(null);
   /** 满友好度、还有下一阶段（且那个形态还不在伙伴里）才能进化 */
-  const evoOptions = (p: Pokemon) => p.evolvesTo.filter((id) => !captures.some((c) => c.id === id)).map(getPokemon);
+  const evoOptions = (p: Creature) => p.evolvesTo.filter((id) => !captures.some((c) => c.id === id)).map(getCreature);
   const selNeed = selected ? careRequest(save.captures.find(c=>c.id===selected)!) : null;
-  const following = followId ? getPokemon(followId) : null;
+  const following = followId ? getCreature(followId) : null;
   const selCap = selected ? captures.find((c) => c.id === selected) : null;
 
   const hint=homeHint({active,immersive,blocked:blocked||evolving!==null,panel,farm:!!farmMessage,follow:!!following,picnic:!!picnic,care:!!need,observe:observing!==null,gesture:showGestureHint});
@@ -475,7 +475,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(!quickCare)return;
     if(!active||selected!==quickCare.id){setQuickCare(null);return;}
     if(blocked)return;
-    setQuickCare(null);void doInteract(getPokemon(quickCare.id),quickCare.kind,quickCare.station);
+    setQuickCare(null);void doInteract(getCreature(quickCare.id),quickCare.kind,quickCare.station);
   },[quickCare,active,blocked,selected]);
   useEffect(()=>{
     const escape=(event:KeyboardEvent)=>{
@@ -524,13 +524,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             sky={sky} weather={weather}
             selected={selected}
             effect={immersive?null:effect}
-            onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getPokemon(id),'pet');}}else tapPokemon(getPokemon(id));}}
+            onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getCreature(id),'pet');}}else tapPokemon(getCreature(id));}}
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
             view={view}
             viewNonce={viewNonce}
             onManualPan={() => {setDecorFocus(undefined);if(view!=="follow")setView("free");setShowGestureHint(false);}}
             hqLighting={!!save.settings.hqLighting}
-            farm={{open:panel!==null||blocked,farm:save.farm,clock:farmClock,watering:waterVisit&&typeof watering?.index==='number'?watering.index:null,gardenerId:watering?.id,onPlot:tapPlot,working:watering?.index??null,helperId:watering?.id,canWater:captures.some(c=>!isAquatic(getPokemon(c.id)))}}
+            farm={{open:panel!==null||blocked,farm:save.farm,clock:farmClock,watering:waterVisit&&typeof watering?.index==='number'?watering.index:null,gardenerId:watering?.id,onPlot:tapPlot,working:watering?.index??null,helperId:watering?.id,canWater:captures.some(c=>!isAquatic(getCreature(c.id)))}}
           />
         </Suspense>
         {active && !blocked && !immersive && captures.length === 0 && panel===null && (
@@ -542,14 +542,14 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       </div>
 
       {active&&!livingOpen&&!station&&!picnicOpen&&evolving===null&&captures.length>0&&<>
-        {finderOpen&&<CompanionFinder ids={captures.map(c=>c.id)} selected={selected} onSelect={id=>tapPokemon(getPokemon(id))} onClose={()=>{setFinderOpen(false);ambient.poke();}}/>}
+        {finderOpen&&<CompanionFinder ids={captures.map(c=>c.id)} selected={selected} onSelect={id=>tapPokemon(getCreature(id))} onClose={()=>{setFinderOpen(false);ambient.poke();}}/>}
       </>}
       {active&&livingOpen&&<IslandLivingPanel onPreview={setDecorPreview} save={save} together={together} initialId={livingInitialId} initialTab={livingTab} initialUpgrade={livingUpgrade} onBegin={beginTogether}
         onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();pickView('overview');}}
         onPicnic={id=>openPicnic(id)}/>}
-      {hint==='observe'&&observing!==null&&<div className="idle-observe-status" role="status">正在看{getPokemon(observing).nameZh}<small>轻触屏幕，自己逛逛</small></div>}
+      {hint==='observe'&&observing!==null&&<div className="idle-observe-status" role="status">正在看{getCreature(observing).nameZh}<small>轻触屏幕，自己逛逛</small></div>}
       {hint==='care' && need && <aside className="care-request" aria-label="伙伴的小心愿">
-        <button className="care-open" onClick={()=>{setCareThanks(null);tapPokemon(getPokemon(need.id),false);setQuickCare({id:need.id,kind:need.kind});}}><PokeImg src={artUrl(need.id)} alt=""/><span><strong>{getPokemon(need.id).nameZh}{need.kind==='feed'?'肚子饿啦':'想让你摸摸'}</strong><small>{need.kind==='feed'?'点一下，喂我小点心':'点一下，摸摸我'}</small></span><Icon name={need.kind==='feed'?'apple':'heart'} size={32}/></button>
+        <button className="care-open" onClick={()=>{setCareThanks(null);tapPokemon(getCreature(need.id),false);setQuickCare({id:need.id,kind:need.kind});}}><PokeImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}{need.kind==='feed'?'肚子饿啦':'想让你摸摸'}</strong><small>{need.kind==='feed'?'点一下，喂我小点心':'点一下，摸摸我'}</small></span><Icon name={need.kind==='feed'?'apple':'heart'} size={32}/></button>
         <button className="care-later" aria-label="等一会再陪它" onClick={()=>useGame.getState().deferCare(need.id)}>等一会</button>
       </aside>}
       {hint==='follow' && following && <aside className="follow-status" aria-label="跟随状态"><button onClick={()=>tapPokemon(following)}><Icon name="target" size={25}/><span><strong>跟着{following.nameZh}</strong><small>{need?.id===followId?(need.kind==='feed'?'想吃点心':'想让你摸摸'):followStatus}</small></span></button><button onClick={()=>pickView('free')} aria-label="停止跟随">结束</button></aside>}
@@ -560,7 +560,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {hint==='farm'&&<FarmFeedback notice={farmNotice} canShare={BERRY_KINDS.some(k=>farm.basket[k]>0)} onShare={()=>openPicnic()} onClose={()=>setFarmMessage('')}/>}
       {active&&picnicOpen&&<PicnicPanel captures={captures} farm={farm} session={picnic} initialId={picnicInitialId} ready={picnicReady} unreachable={life.timedOut} message={picnicMessage}
         onBegin={(id,berry)=>{if(!useGame.getState().beginPicnic(id,berry))setPicnicMessage('请重新选一颗还有的树果。');}}
-        onSnack={id=>{closePicnic();tapPokemon(getPokemon(id),false);setQuickCare({id,kind:'feed',station:'picnic'});}} onFind={()=>{closePicnic();go({name:'catch'});}}
+        onSnack={id=>{closePicnic();tapPokemon(getCreature(id),false);setQuickCare({id,kind:'feed',station:'picnic'});}} onFind={()=>{closePicnic();go({name:'catch'});}}
         onServe={servePicnic} onClose={closePicnic} onFarm={()=>openFarm()} onRetry={invitePicnic} onHear={hearPicnic}
         onStory={()=>{closePicnic();go({name:'story',id:'magic-words'});}}
         onNotebook={()=>{closePicnic();go({name:'notebook'});}}/>}
@@ -568,16 +568,16 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();pickView('overview');}}><Icon name="close" size={26}/></button>
         <Icon name={station.icon} size={40}/>
-        <div role="status" aria-live="polite"><strong>{life.manual ? `${getPokemon(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
+        <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? station.water ? '需要喜欢水的小伙伴来这里玩' : '这里适合在陆地活动的小伙伴':'先去草丛认识宝可梦'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'journey'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回冒险路线'}</button>}
-        {captures.filter(c=>compatible(getPokemon(c.id),station)).length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
+        {captures.filter(c=>compatible(getCreature(c.id),station)).length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
       </section>}
       {active && evolving !== null && (
         <Evolution
-          from={getPokemon(evolving)}
-          options={evoOptions(getPokemon(evolving))}
+          from={getCreature(evolving)}
+          options={evoOptions(getCreature(evolving))}
           onDone={(to) => {
             const from = evolving;
             setEvolving(null);
@@ -591,7 +591,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
       {active && panel==='companion' && sel && selCap && (
         <>
-        <CompanionStrip ids={captures.map(c=>c.id)} selected={sel.id} onSelect={id=>tapPokemon(getPokemon(id))} onClose={()=>{setSelected(null);setPrompt(null);stopSpeech();}}/>
+        <CompanionStrip ids={captures.map(c=>c.id)} selected={sel.id} onSelect={id=>tapPokemon(getCreature(id))} onClose={()=>{setSelected(null);setPrompt(null);stopSpeech();}}/>
         <section className={`sheet companion-card camp-summary ${feedPicker||prompt?'camp-detail':''}`} aria-label={`${sel.nameZh}的互动卡片`}>
           {(feedPicker||prompt)&&<nav className="companion-toolbar" aria-label="伙伴互动导航">
             {<button className="companion-back" aria-label="返回伙伴互动" onClick={()=>{setFeedPicker(false);setPrompt(null);stopSpeech();}}><Icon name="back" size={24}/>返回</button>}
@@ -600,7 +600,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
           </nav>}
           <div className="sheet-body">
             <header className="companion-heading help-heading">
-              <PokeImg className="sheet-art" src={artUrl(sel.id)} alt="" />
+              <PokeImg className="sheet-art" src={creatureArt(sel.id)} alt="" />
               <div><h2 className="sheet-name">{sel.nameZh}</h2><div className="companion-friendship" aria-label={`友好度 ${friendshipLevel(selCap.friendship)} 颗心`}><Hearts n={friendshipLevel(selCap.friendship)} /></div></div>
               {!feedPicker&&!prompt&&<FeatureGuide id="care" autoVoice={false}/>}
 
@@ -668,7 +668,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
           </button>
           <button className="dock-btn stories" onClick={() => go({ name: "stories" })}><Icon name="book" size={62} className="ico" />故事屋</button>
           <button className="dock-btn diary" onClick={()=>{stopSpeech();go({name:"diary"});}}><Icon name="diary" size={62} className="ico"/>小日记</button>
-          {captures.length>0&&<button className="dock-btn friends" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><span className="ico friend-portrait"><PokeImg src={artUrl((following??residents[0]).id)} alt=""/><Icon name="search" size={20}/></span>找伙伴</button>}
+          {captures.length>0&&<button className="dock-btn friends" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><span className="ico friend-portrait"><PokeImg src={creatureArt((following??residents[0]).id)} alt=""/><Icon name="search" size={20}/></span>找伙伴</button>}
           <button className="dock-btn dex" onClick={() => go({ name: "dex" })}>
             <Icon name="dex" size={62} className="ico" />图鉴
           </button>

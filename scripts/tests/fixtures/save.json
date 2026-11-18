@@ -16,7 +16,7 @@
       },
       "caughtAt": 1234025,
       "friendship": 20,
-      "id": 25,
+      "id": 1042,
       "personality": {
         "preference": "ball",
         "version": 1
@@ -32,7 +32,7 @@
       },
       "caughtAt": 1234007,
       "friendship": 20,
-      "id": 7,
+      "id": 1061,
       "personality": {
         "preference": "ball",
         "version": 1
@@ -48,7 +48,7 @@
       },
       "caughtAt": 1234129,
       "friendship": 20,
-      "id": 129,
+      "id": 1001,
       "personality": {
         "preference": "shade",
         "version": 1
@@ -105,7 +105,7 @@
         "id": "b7fb6d2d-471b-4f55-962c-cca7d03767a5",
         "kind": "rest",
         "partners": [
-          25
+          1042
         ]
       },
       {
@@ -114,8 +114,8 @@
         "id": "3e0ba936-c993-443c-bde5-67cb2ff4ad4a",
         "kind": "rest",
         "partners": [
-          25,
-          129
+          1042,
+          1001
         ]
       },
       {
@@ -124,8 +124,8 @@
         "id": "57a00617-1da1-4861-aaeb-b53a0d54cba1",
         "kind": "ball",
         "partners": [
-          25,
-          7
+          1042,
+          1061
         ]
       },
       {
@@ -134,8 +134,8 @@
         "id": "19cd064a-8431-433f-a9d2-583d6f1b9080",
         "kind": "ball",
         "partners": [
-          25,
-          7
+          1042,
+          1061
         ]
       }
     ],
@@ -214,7 +214,7 @@
     "ambientEnglish": "off",
     "dailyMinutes": 60,
     "favorites": [
-      25
+      1042
     ],
     "level": 1,
     "speechRate": 1,

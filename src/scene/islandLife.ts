@@ -1,5 +1,5 @@
 import {planWalk} from './navigation';
-import type { Pokemon } from '../types';
+import type { Creature } from '../types';
 import type { Activity } from '../lib/routine';
 import { BEHAVIORS, type Habit } from '../data/behaviors';
 import { PICNIC, FARM_ENTRY, FARM_PLOTS, BERRY_BUSHES, BOWLS, COAST_ROCKS, HAMMOCK_PALMS, FENCE, PIER, CAMPFIRE, CUSHIONS, HQ_PROPS, LAMPS, PALMS, PARASOL, PILOT_GARDEN, PLAYGROUND, SIGN, TENT, onIsland } from './layout';
@@ -53,9 +53,9 @@ export const STATIONS: Station[] = [
 // Keep the facility anchor unchanged. Each resident plans from its actual position
 // with its own body size and the current decorations/expansion.
 export const stationById = (id:string) => STATIONS.find(s=>s.id===id)!;
-export const isAquatic = (p:Pokemon) => BEHAVIORS[p.id]?.locomotion === 'swim';
-export function compatible(p:Pokemon,s:Station) { return isAquatic(p) ? !!s.water : !s.water || p.types.includes('water'); }
-export function affinity(p:Pokemon,s:Station,habit?:Habit) {
+export const isAquatic = (p:Creature) => BEHAVIORS[p.id]?.locomotion === 'swim';
+export function compatible(p:Creature,s:Station) { return isAquatic(p) ? !!s.water : !s.water || p.types.includes('water'); }
+export function affinity(p:Creature,s:Station,habit?:Habit) {
   if (!compatible(p,s)) return -1000;
   return p.types.reduce((n,t)=>n+(s.likes.includes(t)?12:0),0)
     + (habit?.activity===s.activity?22:0) + (s.id==='music'&&[35,36,39,40,124].includes(p.id)?30:0)

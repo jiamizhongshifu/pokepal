@@ -10,23 +10,28 @@ import { PARTICIPATION_KINDS } from './participation';
 import { validFarm } from './farm';
 import { validPicnic } from './picnic';
 import type { SaveData } from '../types';
-import { POKEMON } from '../data/pokemon';
+import { CREATURES } from '../data/creatures';
+import { migrateCreatureIds } from './creatureMigration';
 import { unitById, unitRoundCount } from '../data/curriculum';
 
-const ids=new Set(POKEMON.map(p=>p.id));
+const ids=new Set(CREATURES.map(p=>p.id));
 const object=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const number=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)&&v>=0;
 const integer=(v:unknown)=>number(v)&&Number.isSafeInteger(v);
 const strings=(v:unknown)=>Array.isArray(v)&&v.every(x=>typeof x==='string');
-const pokemonIds=(v:unknown)=>Array.isArray(v)&&v.every(x=>ids.has(x))&&new Set(v).size===v.length;
+const creatureIds=(v:unknown)=>Array.isArray(v)&&v.every(x=>ids.has(x))&&new Set(v).size===v.length;
 function requireValue(ok:unknown,label:string):asserts ok {if(!ok)throw new Error(`存档中的${label}无效，原存档未被替换。`);}
 
-/** Validate before migration or any write, including optional fields used by renderers. */
-export function validateSave(value:unknown):SaveData {
+/**
+ * Validate before any write, including optional fields used by renderers. Stored character ids from before the
+ * original-creature rebrand are first rewritten on a copy, so the caller's object (an imported backup) stays intact.
+ */
+export function validateSave(input:unknown):SaveData {
+ const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);
  requireValue(object(value)&&value.version===1,'版本');const s=value;
  requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'训练师');
- requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或精灵球');
- requireValue(Array.isArray(s.captures)&&pokemonIds(s.captures.map((c:any)=>c?.id)),'宝可梦编号');
+ requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');
+ requireValue(Array.isArray(s.captures)&&creatureIds(s.captures.map((c:any)=>c?.id)),'伙伴编号');
  for(const c of s.captures){
   requireValue(object(c)&&number(c.caughtAt)&&['poke','great','ultra','master'].includes(c.ball)&&number(c.friendship)&&c.friendship<=100&&(c.stay===undefined||typeof c.stay==='boolean'),'伙伴记录');
   if(c.personality!==undefined)requireValue(object(c.personality)&&c.personality.version===1&&PREFERENCES.includes(c.personality.preference),'伙伴喜好');
@@ -48,7 +53,7 @@ export function validateSave(value:unknown):SaveData {
  if(cfg.tasksPerDay!==undefined)requireValue([3,4].includes(cfg.tasksPerDay),'任务数量');
  if(cfg.learningProfile!==undefined)requireValue(validLearningProfile(cfg.learningProfile),'英语学习阶段');
  if(cfg.level!==undefined)requireValue([1,2].includes(cfg.level),'学习等级');
- if(cfg.favorites!==undefined)requireValue(pokemonIds(cfg.favorites),'置顶伙伴');
+ if(cfg.favorites!==undefined)requireValue(creatureIds(cfg.favorites),'置顶伙伴');
  if(cfg.islandWeather!==undefined)requireValue(validWeatherMode(cfg.islandWeather),'小岛天气');
  if(cfg.environmentSound!==undefined)requireValue(['off','soft','normal'].includes(cfg.environmentSound),'环境声音');
  if(cfg.backgroundMusic!==undefined)requireValue(['off','soft','normal'].includes(cfg.backgroundMusic),'背景音乐');
@@ -61,7 +66,7 @@ export function validateSave(value:unknown):SaveData {
  if(cfg.hqLighting!==undefined)requireValue(typeof cfg.hqLighting==='boolean','画质设置');
  requireValue(Array.isArray(s.history)&&s.history.every((h:any)=>object(h)&&typeof h.date==='string'&&['energyEarned','tasksCompleted','heard','spoken','words','caught','playMinutes'].every(k=>number(h[k]))),'历史记录');
  if(s.onboarding!==undefined)requireValue(validOnboarding(s.onboarding),'新手引导');
- if(s.dex!==undefined)requireValue(pokemonIds(s.dex),'图鉴');
+ if(s.dex!==undefined)requireValue(creatureIds(s.dex),'图鉴');
  if(s.catchWish!==undefined)requireValue(ids.has(s.catchWish),'捕捉愿望');
  if(s.farm!==undefined)requireValue(validFarm(s.farm),'树果园');
  if(s.islandProgress!==undefined)requireValue(validIslandProgress(s.islandProgress),'岛屿礼物和升级');

@@ -1,7 +1,7 @@
 import { learningProfile } from '../lib/learningStage';
 import { EXTRA_LEARNING, normalizeLearningText } from './learningLexicon';
 import { PHRASES, PIC_WORDS } from './words';
-import { POKEMON } from './pokemon';
+import { CREATURES } from './creatures';
 import type { SaveData } from '../types';
 
 export const LEARNING_CHAPTERS=[
@@ -71,6 +71,6 @@ export function learningEntry(key:string):LearningEntry|undefined {
  if(key==='big'||key==='small')return{key,en:key,zh:key==='big'?'大的':'小的',kind:'concept',icon:'ball'};
  if(/^count:[1-5]$/.test(key)){const n=Number(key.slice(6));return{key,en:['one','two','three','four','five'][n-1],zh:['一','二','三','四','五'][n-1],kind:'concept',icon:'apple'};}
  const extra=EXTRA_LEARNING.find(e=>e.key===key||normalizeLearningText(e.en)===normalized);if(extra)return extra;
- const mon=POKEMON.find(p=>normalizeLearningText(p.nameEn)===normalized);if(mon)return{key:mon.nameEn,en:mon.nameEn,zh:mon.nameZh,kind:'name',pokemonId:mon.id};
+ const mon=CREATURES.find(p=>normalizeLearningText(p.nameEn)===normalized);if(mon)return{key:mon.nameEn,en:mon.nameEn,zh:mon.nameZh,kind:'name',pokemonId:mon.id};
  return undefined;
 }

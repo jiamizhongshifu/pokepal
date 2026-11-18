@@ -1,7 +1,7 @@
 import { knownCaption } from "../lib/captions";
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import type { Part } from "../lib/speech";
-import { COLORS } from "./pokemon";
+import { COLORS } from "./creatures";
 import { withArticle, type PicWord } from "./words";
 import { NUMBERS, countChant } from "./islandEnglish";
 
@@ -18,18 +18,18 @@ export interface Lines { en: string[]; zh?: string; zhAudio?: string[] }
 
 // ---------- 听一听：颜色 ----------
 export const colorAsk = (c: string, zh: string): Lines => ({ en: [`${cap(c)}!`, `Find the ${c} Pokémon!`], zh: `找一找${zh}的宝可梦。` });
-export const colorYes = (p: Pokemon): Lines => ({ en: [`Yes! ${p.nameEn} is ${COLORS[p.color].en}!`, `${cap(COLORS[p.color].en)}!`], zh: `${p.nameZh}是${COLORS[p.color].zh}的！` });
-export const colorNo = (p: Pokemon, target: string): Lines => ({ en: [`Oops! ${p.nameEn} is ${COLORS[p.color].en}.`, `Find ${target}!`], zh: `这是${COLORS[p.color].zh}的。再找找${Object.values(COLORS).find(c=>c.en===target)?.zh ?? target}的！` });
+export const colorYes = (p: Creature): Lines => ({ en: [`Yes! ${p.nameEn} is ${COLORS[p.color].en}!`, `${cap(COLORS[p.color].en)}!`], zh: `${p.nameZh}是${COLORS[p.color].zh}的！` });
+export const colorNo = (p: Creature, target: string): Lines => ({ en: [`Oops! ${p.nameEn} is ${COLORS[p.color].en}.`, `Find ${target}!`], zh: `这是${COLORS[p.color].zh}的。再找找${Object.values(COLORS).find(c=>c.en===target)?.zh ?? target}的！` });
 
 // ---------- 听一听：名字 ----------
-export const nameAsk = (p: Pokemon): Lines => ({ en: [`Where is ${p.nameEn}?`, `Find ${p.nameEn}!`], zh: `${p.nameZh}在哪里？` });
-export const nameYes = (p: Pokemon): Lines => ({ en: [`Yes! It's ${p.nameEn}!`, `Hello, ${p.nameEn}!`], zh: `是${p.nameZh}！你好呀！` });
-export const nameNo = (p: Pokemon, target: Pokemon): Lines => ({ en: [`This is ${p.nameEn}.`, `Find ${target.nameEn}!`], zh: `这是${p.nameZh}，再找找${target.nameZh}！`, zhAudio: [`这是${p.nameZh}。`, `再找找${target.nameZh}！`] });
+export const nameAsk = (p: Creature): Lines => ({ en: [`Where is ${p.nameEn}?`, `Find ${p.nameEn}!`], zh: `${p.nameZh}在哪里？` });
+export const nameYes = (p: Creature): Lines => ({ en: [`Yes! It's ${p.nameEn}!`, `Hello, ${p.nameEn}!`], zh: `是${p.nameZh}！你好呀！` });
+export const nameNo = (p: Creature, target: Creature): Lines => ({ en: [`This is ${p.nameEn}.`, `Find ${target.nameEn}!`], zh: `这是${p.nameZh}，再找找${target.nameZh}！`, zhAudio: [`这是${p.nameZh}。`, `再找找${target.nameZh}！`] });
 
 // ---------- 听一听：叫声 ----------
 export const cryAsk: Lines = { en: ["Listen! Who is it?"], zh: "听，是谁在叫？" };
-export const cryYes = (p: Pokemon): Lines => ({ en: [`Yes! It's ${p.nameEn}!`], zh: `对啦，是${p.nameZh}！` });
-export const cryNo = (p: Pokemon): Lines => ({ en: [`This is ${p.nameEn}.`, "Listen again!"], zh: "再听一听！" });
+export const cryYes = (p: Creature): Lines => ({ en: [`Yes! It's ${p.nameEn}!`], zh: `对啦，是${p.nameZh}！` });
+export const cryNo = (p: Creature): Lines => ({ en: [`This is ${p.nameEn}.`, "Listen again!"], zh: "再听一听！" });
 
 // ---------- 听一听：数一数 ----------
 export interface CountItem { icon: string; one: string; many: string; zh: string; m: string }
@@ -49,8 +49,8 @@ export const countYes = (n: number, it: CountItem): Lines => ({ en: [countChant(
 export const countNo = (n: number, it: CountItem, target: number): Lines => ({ en: [`${n === 1 ? "This is" : "These are"} ${countNoun(n, it)}.`, `Find ${NUMBERS[target - 1]}!`], zh: `这里有${NUM_ZH[n-1]}${it.m}${it.zh}，找找${NUM_ZH[target-1]}${it.m}的！` });
 
 // ---------- 听一听：大小 ----------
-export const sizeAsk = (p: Pokemon, big: boolean): Lines => ({ en: [`Touch the ${big ? "big" : "small"} ${p.nameEn}!`], zh: `点一点${big ? "大大的" : "小小的"}${p.nameZh}。` });
-export const sizeYes = (p: Pokemon, big: boolean): Lines => ({ en: [`Yes! ${big ? "Big" : "Small"} ${p.nameEn}!`, big ? "Big, big!" : "Small, small!"], zh: `${big ? "大大的" : "小小的"}${p.nameZh}！` });
+export const sizeAsk = (p: Creature, big: boolean): Lines => ({ en: [`Touch the ${big ? "big" : "small"} ${p.nameEn}!`], zh: `点一点${big ? "大大的" : "小小的"}${p.nameZh}。` });
+export const sizeYes = (p: Creature, big: boolean): Lines => ({ en: [`Yes! ${big ? "Big" : "Small"} ${p.nameEn}!`, big ? "Big, big!" : "Small, small!"], zh: `${big ? "大大的" : "小小的"}${p.nameZh}！` });
 export const sizeNo = (big: boolean): Lines => ({ en: [`This is ${big ? "small" : "big"}.`, `Find ${big ? "big" : "small"}!`], zh: `这是${big ? "小小的" : "大大的"}，再找找${big ? "大大的" : "小小的"}！` });
 
 // ---------- 认一认 ----------

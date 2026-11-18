@@ -24,7 +24,7 @@ import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictErr
 import {clearParentNotice} from './lib/parentNotice';
 import { validateSave } from "./lib/saveValidation";
 import { acquireSaveSession } from "./lib/saveSession";
-import { POKEMON } from "./data/pokemon";
+import { CREATURES } from "./data/creatures";
 import { setSpeechRate } from "./lib/speech";
 import { isAvatarPhoto } from "./lib/avatar";
 import { migrateLearning,ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
@@ -376,7 +376,7 @@ export const useGame = create<State>((set, get) => {
     setCatchWish(id) {
       mut((s) => {
         if (id === null) { delete s.catchWish; return; }
-        const p = POKEMON.find((p) => p.id === id);
+        const p = CREATURES.find((p) => p.id === id);
         if (p && !s.captures.some((c) => c.id === id)) s.catchWish = id;
       });
     },

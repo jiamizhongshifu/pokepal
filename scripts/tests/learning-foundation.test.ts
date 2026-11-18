@@ -31,15 +31,15 @@ test('all course slots respect beginner readiness without changing completion or
 });
 test('automatic review excludes advanced and name items but manual notebooks retain them',()=>{
  const s=fresh();
- for(const key of ['apple','Pikachu','rainbow','count:4','count:2','big','Hello!','Can I have an apple, please?','Look at the tree.'])encounter(s,key,'story',now-DAY);
+ for(const key of ['apple','Bubbo','rainbow','count:4','count:2','big','Hello!','Can I have an apple, please?','Look at the tree.'])encounter(s,key,'story',now-DAY);
  assert.deepEqual(new Set(recommendedReviewKeys(s,now)),new Set(['apple','count:2','big','Hello!']));
- assert(reviewKeys(s,'due',now).includes('Pikachu'));
+ assert(reviewKeys(s,'due',now).includes('Bubbo'));
  assert(reviewKeys(s,'due',now).includes('Can I have an apple, please?'));
  assert.equal(reviewGroupSize(s),2);
  s.settings.level=2;
  assert(recommendedReviewKeys(s,now).includes('rainbow'));
  assert(recommendedReviewKeys(s,now).includes('count:4'));
- assert(!recommendedReviewKeys(s,now).includes('Pikachu'));
+ assert(!recommendedReviewKeys(s,now).includes('Bubbo'));
  assert.equal(reviewGroupSize(s),3);
 });
 test('supported repair rests for a day without erasing the need for later independent review',()=>{

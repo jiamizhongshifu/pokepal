@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
 import { PokeBall } from "../components/PokeBall";
-import { BALLS, POKEMON } from "../data/pokemon";
+import { CREATURES } from "../data/creatures";
+import { INVITE_KINDS } from "../data/invites";
 import { say, sfx } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
 import { Icon } from "../icons";
@@ -19,8 +20,8 @@ export function Shop() {
   const exchanging=useRef(false);
   const timer=useRef<ReturnType<typeof setTimeout>>();
   useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;clearTimeout(timer.current);};},[]);
-  const wish=POKEMON.find(p=>p.id===save.catchWish&&!save.captures.some(c=>c.id===p.id));
-  const cost=BALLS.poke.cost;
+  const wish=CREATURES.find(p=>p.id===save.catchWish&&!save.captures.some(c=>c.id===p.id));
+  const cost=INVITE_KINDS.poke.cost;
   const affordable=save.energy>=cost;
   useIntro(()=>save.balls.poke>0?Promise.resolve(false):say(["zh","用五点能量，换一个精灵球，邀请你喜欢的伙伴回家吧！"],["en","Let's get a Poké Ball!"]));
   const buy=async()=>{

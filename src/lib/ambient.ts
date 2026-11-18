@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Pokemon } from "../types";
+import type { Creature } from "../types";
 import { activityAt, skyFor, type Activity } from "./routine";
 import { isSpeaking, type Part } from "./speech";
 import { narrateOnIsland as sayCancellable, islandAudioAllowed } from './islandSpeech';
@@ -20,8 +20,8 @@ export function narrationParts(n: Narration, mode: "bilingual" | "english"): Par
 
 let rr = 0;
 /** 挑下一句：几种句型轮流出现，宝可梦优先挑醒着的 */
-function nextNarration(pokemon: Pokemon[], now: Date, facilities: Record<number,Activity> = {}): Narration {
-  const action=(p:Pokemon)=>facilities[p.id] ?? activityAt(p,now);
+function nextNarration(pokemon: Creature[], now: Date, facilities: Record<number,Activity> = {}): Narration {
+  const action=(p:Creature)=>facilities[p.id] ?? activityAt(p,now);
   const sky = skyFor(now);
   const awake = pokemon.filter((p) => !["sleep", "nap"].includes(action(p)));
   const pool = awake.length ? awake : pokemon;
@@ -57,7 +57,7 @@ function nextNarration(pokemon: Pokemon[], now: Date, facilities: Record<number,
  * 或者描述看得见的风景、数一数。孩子正在互动、或者正在朗读别的内容时不插话。
  */
 export function useAmbientEnglish(opts: {
-  pokemon: Pokemon[];
+  pokemon: Creature[];
   facilityActivities?: Record<number,Activity>;
   enabled: boolean;
   level: "off" | "some" | "more";

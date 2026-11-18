@@ -7,7 +7,7 @@ import { learningChoices } from '../../src/lib/learningChoices';
 import { recommendedReviewKeys,reviewGroupSize,encounter } from '../../src/lib/learningProgress';
 import { validateSave } from '../../src/lib/saveValidation';
 import type { SaveData,Settings } from '../../src/types';
-const baseSettings=(level:1|2=1):Settings=>({dailyMinutes:15,tasksPerDay:4,level,favorites:[25],speechRate:1});
+const baseSettings=(level:1|2=1):Settings=>({dailyMinutes:15,tasksPerDay:4,level,favorites:[1042],speechRate:1});
 const fixture=():SaveData=>({version:1,trainer:{name:'小训练师',avatar:'avatar-red',createdAt:1},energy:7,balls:{poke:2,great:0,ultra:0,master:0},captures:[],settings:baseSettings(),daily:{date:'2026-10-16',board:['listen','wordpic','repeat','trace'],boardDone:[true,false,false,false],bonusGiven:false,energyEarned:2,tasksCompleted:1,heard:3,spoken:0,words:['apple'],caught:[],playSeconds:100,extraSeconds:0},wordStats:{apple:{heard:2,spoken:0,correct:1}},history:[],streak:{lastDate:'2026-10-16',count:1},learning:{version:1,activeUnit:'color-orchard',records:{},units:{'hello-island':{round:4,completedAt:1},'color-orchard':{round:1}}}});
 
 test('legacy levels preserve existing participation and review defaults without mutating input',()=>{
