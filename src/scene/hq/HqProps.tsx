@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-import { useGLTF } from "@react-three/drei";
+import { preloadModel, useModel } from "../modelUtil";
 import { HQ_DIR, HQ_PROPS, type Placement } from "../layout";
 import { terrainHeight } from "./Terrain";
 import { PALETTE, stylize } from "./stylize";
@@ -14,10 +14,10 @@ import { PALETTE, stylize } from "./stylize";
 const PROCEDURAL = new Set(["log_seat", "shrub", "cedar", "starfish"]);
 const GLB_PROPS = HQ_PROPS.filter((p) => !PROCEDURAL.has(p.m));
 const NAMES = [...new Set(GLB_PROPS.map((p) => p.m))];
-NAMES.forEach((n) => useGLTF.preload(HQ_DIR + n + ".glb", false));
+NAMES.forEach((n) => preloadModel(HQ_DIR + n + ".glb"));
 
 function Prop({ p }: { p: Placement }) {
-  const { scene } = useGLTF(HQ_DIR + p.m + ".glb", false);
+  const { scene } = useModel(HQ_DIR + p.m + ".glb");
   const { obj, minY } = useMemo(() => {
     const c = scene.clone(true);
     c.traverse((o) => {

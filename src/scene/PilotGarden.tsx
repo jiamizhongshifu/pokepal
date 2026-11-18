@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-import { useGLTF } from "@react-three/drei";
+import { useModel } from "./modelUtil";
 import { PILOT_GARDEN as G } from "./layout";
 import { terrainHeight } from "./hq/Terrain";
 import { BerryBush } from './hq/PokeProps';
@@ -10,7 +10,7 @@ const at = (p: { x: number; z: number }): [number, number, number] => [p.x, terr
 
 /** Resting spot only; wildflowers are distributed by Grass. */
 export function PilotGarden() {
-  const assets = useGLTF([path("bench")], false);
+  const assets = useModel([path("bench")]);
   const objects = useMemo(() => assets.map(({ scene }) => {
     const copy = scene.clone(true);
     copy.traverse((o) => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { SkeletonUtils } from "three-stdlib";
+import { useGLTF } from "@react-three/drei";
 
 /**
  * 3D 模型清单项。
@@ -16,8 +17,11 @@ export interface ModelEntry {
   pose?: string;
 }
 
-/** 不启用 Draco：Tripo 和 Blender 脚本产出的模型都未做 Draco 压缩，也避免从外网加载解码器 */
-export const DRACO_PATH = false;
+/** 模型均未做 Draco / Meshopt 压缩：关闭两种解码器，不从外网加载解码器，也不实例化 WASM（CSP 不放行 wasm-unsafe-eval）。 */
+export function useModel<T extends string | string[]>(path: T) {
+  return useGLTF(path, false, false);
+}
+export const preloadModel = (path: string) => useGLTF.preload(path, false, false);
 export const modelUrl = (e: ModelEntry) => `/models/pokemon/${e.file}`;
 
 /** 统一材质：透明混合改为透明度裁剪，避免半透明和排序问题；开启阴影 */

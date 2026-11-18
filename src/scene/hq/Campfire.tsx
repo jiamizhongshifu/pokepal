@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { preloadModel, useModel } from "../modelUtil";
 import { CAMPFIRE, HQ_DIR } from "../layout";
 import { terrainHeight } from "./Terrain";
 import { PALETTE, stylize } from "./stylize";
@@ -10,7 +10,7 @@ import { PALETTE, stylize } from "./stylize";
  * 立体篝火：圆石火塘（CoastalRocks 里放置）+ 枯枝搭成的锥形柴堆 + 着色器火焰 + 上升的火星 + 闪烁的火光。
  * 火焰是三层旋转体外壳，用滚动的分形噪声裁出跳动的火舌，叠加混合，从任何角度看都是立体的。
  */
-useGLTF.preload(HQ_DIR + "dry_branches.glb", false);
+preloadModel(HQ_DIR + "dry_branches.glb");
 
 const FLAME_VERT = /* glsl */ `
   uniform float uTime;
@@ -168,7 +168,7 @@ function Flames({ lit }: { lit: boolean }) {
 
 /** 枯枝锥形柴堆：从 dry_branches 模型里取 3 根枯枝，复用 6 次斜靠成一圈 */
 function Teepee() {
-  const { scene } = useGLTF(HQ_DIR + "dry_branches.glb", false);
+  const { scene } = useModel(HQ_DIR + "dry_branches.glb");
   const sticks = useMemo(() => {
     const geos: { geo: THREE.BufferGeometry; mat: THREE.Material; len: number }[] = [];
     scene.updateMatrixWorld(true);

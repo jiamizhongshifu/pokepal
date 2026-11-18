@@ -3,8 +3,8 @@ import type {WeatherKind} from '../lib/weather';
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useAnimations, useGLTF } from "@react-three/drei";
-import { DRACO_PATH, modelUrl, normalizeModel, type ModelEntry } from "./modelUtil";
+import { useAnimations } from "@react-three/drei";
+import { modelUrl, useModel, normalizeModel, type ModelEntry } from "./modelUtil";
 import type { Pokemon } from "../types";
 import { spriteUrl } from "../data/pokemon";
 import { ACTIVITY } from "../lib/routine";
@@ -622,7 +622,7 @@ const WALK_RE = /walk|run(?!_?away)/i;
 const BAD_RE = /fight|attack|damage|down|dizzy|faint|impact|trueno|battle|turn|sleep_end|jump/i;
 
 function GlbBody({ entry, height, moving, onClick, onRadius }: { onRadius:(r:number)=>void; entry: ModelEntry; height: number; moving: React.MutableRefObject<{ moving: boolean }>; onClick: (e: ThreeEvent<MouseEvent>) => void }) {
-  const { scene, animations } = useGLTF(modelUrl(entry), DRACO_PATH);
+  const { scene, animations } = useModel(modelUrl(entry));
   const clone = useMemo(() => normalizeModel(scene, entry, { height }, animations), [scene, height, entry, animations]);
   const onRadiusRef=useRef(onRadius);onRadiusRef.current=onRadius;
   useEffect(()=>{onRadiusRef.current(clone.userData.collisionRadius);},[clone]);
