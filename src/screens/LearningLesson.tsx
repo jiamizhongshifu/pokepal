@@ -17,7 +17,7 @@ import { learningChoices } from '../lib/learningChoices';
 import { TopBar } from '../components/TopBar';
 import { LearningArt,hearEntry,learningVoice } from '../components/LearningItem';
 import { CreatureImg } from '../components/CreatureImg';
-import { creatureArt,getCreature } from '../data/creatures';
+import { creatureArt,getCreature, FIRST_FRIEND } from '../data/creatures';
 import { Icon } from '../icons';
 import { say,sayCancellableWhile,stopSpeech,isForegroundAudioActive } from '../lib/speech';
 import { learningExplanation } from '../lib/learningVoice';
@@ -42,7 +42,7 @@ export function LearningLesson({id}:{id:string}){
  const situation=unitSituations(u)[Math.max(0,round-u.words.length)];
  const target=learningEntry(phraseRound?situation.phrase:wordKeys[round])!;
  const listenFirst=startsWithListening(profile,target.kind,PHRASES.find(p=>p.en===target.en)?.level);
- const buddy=getCreature(s.captures[0]?.id??25);
+ const buddy=getCreature(s.captures[0]?.id??FIRST_FRIEND);
  const picnicLesson=u.id==='snack-discovery';
  const packed=wordKeys.filter((_,i)=>(i<round||i===resolvedRound)&&!s.learning?.units[id]?.pendingAudio?.includes(i));
  const next=async(skipped=false)=>{

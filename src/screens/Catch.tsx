@@ -1,3 +1,4 @@
+import { worldArt } from '../data/sceneArt';
 import {trackInteraction} from '../lib/interaction';
 import { BlockingDialog } from "../components/BlockingDialog";
 import { FeatureGuide } from '../components/FeatureGuide';
@@ -14,7 +15,7 @@ import type { Creature } from "../types";
 import { Icon, Stars } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
 function EncounterGrass() {
-  return <span className="encounter-grass" aria-hidden="true"><img src="/art/world/meadow-tuft-v2.png" alt="" draggable={false}/></span>;
+  return <span className="encounter-grass" aria-hidden="true"><img src={worldArt('meadow-tuft')} alt="" draggable={false}/></span>;
 }
 
 import WildMeadow from "../components/WildMeadow";

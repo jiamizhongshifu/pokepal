@@ -183,6 +183,7 @@
 :root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:#f2fbff; color:#f2fbff; }
 :root[data-theme="dark"] #root .screen .journey-invitation { color:var(--coast-ink); }
 :root[data-theme="dark"] #root .screen .btn-big.alt { color:#0e679e; }
+:root[data-theme="dark"] #root .parent .tabs button:not(.on) { color:var(--text); border:1px solid var(--surface-border); }
 @media(max-width:600px) {
   #root .welcome-title-board { padding:20px 15px 16px; width:100%; margin-top:10px; }
   #root .welcome-title-board .logo { font-size:clamp(24px,6.5vw,34px); }

@@ -8,6 +8,7 @@ import { learningTheme,themePhrases,themeWords } from '../src/data/learning';
 import { learningChoices } from '../src/lib/learningChoices';
 import { learningVoice } from '../src/lib/learningVoice';
 import type { SaveData } from '../src/types';
+import { storyBackground } from '../src/data/sceneArt';
 
 const fixture=()=>({version:1,settings:{level:2},wordStats:{apple:{heard:4,correct:80,spoken:9}},captures:[{id:25,friendship:45}],energy:6} as unknown as SaveData);
 const s=fixture();migrateLearning(s);
@@ -48,7 +49,7 @@ for(const unit of LEARNING_UNITS){
  const theme=learningTheme(journey);
  assert.equal(themeWords(theme,2,{}).length,3,`daily picture round: ${unit.id}`);
  assert(themePhrases(theme,2,{}).some(p=>p.en===selectedUnit(journey).phrase),`daily speaking: ${unit.id}`);
- assert(existsSync(`public/story-art/painted-v1/backgrounds/${unit.scene}.png`),unit.scene);
+ assert(existsSync(`public${storyBackground(unit.scene)}`),unit.scene);
  for(const scene of unitSituations(unit)){
   const choices=learningChoices(learningEntry(scene.phrase)!,[scene.phrase,scene.alternative],3);
   assert.equal(choices.length,2);assert.equal(choices.filter(c=>c.key===learningEntry(scene.phrase)!.key).length,1);

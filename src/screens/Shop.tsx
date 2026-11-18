@@ -23,7 +23,7 @@ export function Shop() {
   const wish=CREATURES.find(p=>p.id===save.catchWish&&!save.captures.some(c=>c.id===p.id));
   const cost=INVITE_KINDS.poke.cost;
   const affordable=save.energy>=cost;
-  useIntro(()=>save.balls.poke>0?Promise.resolve(false):say(["zh","用五点能量，换一个邀请果，邀请你喜欢的伙伴回家吧！"],["en","Let's get a Poké Ball!"]));
+  useIntro(()=>save.balls.poke>0?Promise.resolve(false):say(["zh","用五点能量，换一个邀请果，邀请你喜欢的伙伴回家吧！"],["en","Let's get an invite berry!"]));
   const buy=async()=>{
     if(exchanging.current)return;
     if(!affordable){go({name:'energy',goal:'ball'});return;}

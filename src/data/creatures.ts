@@ -41,6 +41,10 @@ export const getCreature = (id: number): Creature => (CREATURE_BY_ID.get(id) ?? 
 export const speciesOf = (c: Creature) => SPECIES.find(s => s.id === c.species)!;
 /** Creatures that can be met as babies; later stages only come from growing up. */
 export const BABY_CREATURES = CREATURES.filter(c => c.stage === 1);
+/** Bubbo, the friend who greets every new island owner. */
+export const FIRST_FRIEND = 1001;
+/** The welcome cast shown before a child has met anyone: Bubbo, Carro, Sunny, Shelly and Berry. */
+export const WELCOME_CAST = [1001, 1151, 1041, 1101, 1011];
 /** Who can still be met in the meadow: unmet babies first; once every species is a friend, the other stages open up. */
 export function meetableCreatures(owned: ReadonlySet<number>): Creature[] {
  const babies = BABY_CREATURES.filter(c => !owned.has(c.id));

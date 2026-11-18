@@ -40,7 +40,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
   const list = CREATURES.filter((p) => (!onlyOwned || caught.has(p.id)) && (!region.type || p.types.includes(region.type)) && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
   const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
   const currentPage = Math.min(page, pages - 1);
-  useIntro(() => picking ? say(["zh", "挑一只你喜欢的小精灵吧！"], ["en", "Pick a friend you love!", {en:"Pick a friend you love!",zh:"挑一只你喜欢的小精灵吧！"}]) : say(["zh", `好朋友相册。你已经有${caught.size}只小精灵啦！`], ["en", `You have ${caught.size} Pokémon!`]));
+  useIntro(() => picking ? say(["zh", "挑一只你喜欢的小精灵吧！"], ["en", "Pick a friend you love!", {en:"Pick a friend you love!",zh:"挑一只你喜欢的小精灵吧！"}]) : say(["zh", `好朋友相册。你已经有${caught.size}只小精灵啦！`], ["en", `You have ${caught.size} friends!`]));
 
   return (
     <div className="screen dex" ref={screenRef}>

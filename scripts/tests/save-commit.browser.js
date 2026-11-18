@@ -21,8 +21,8 @@
   check((await readSaveSnapshot()).save.balls.poke===3,'success exchange already on disk');
   evidence.push('delayed exchange: no premature balance, repeat rejected, disk committed');
  }finally{db.transaction=originalTransaction;}
- check(await g.getState().catchPokemon(25),'capture succeeds');
- check(!await g.getState().catchPokemon(25),'repeat capture rejected');
+ check(await g.getState().inviteFriend(1001),'invite succeeds');
+ check(!await g.getState().inviteFriend(1001),'repeat invite rejected');
  let disk=(await readSaveSnapshot()).save;
  check(disk.captures.length===1&&disk.balls.poke===2,'capture is atomic and durable');
  const reward=await g.getState().completeTask('listen',0);

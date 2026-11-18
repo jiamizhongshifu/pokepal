@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import { ICON_ASSETS } from "./generated";
 
-export { TYPE_ICON } from "./nature";
 export { AVATARS } from "./avatars";
 
 /** imagegen 绘制、按清单切图的透明 PNG。原 SVG 源稿保留供回溯。 */

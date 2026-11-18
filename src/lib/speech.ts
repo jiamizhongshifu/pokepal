@@ -1,3 +1,4 @@
+import { playCreatureVoice } from "./creatureVoice";
 import { onlineVoiceBytes } from "./onlineVoice";
 import { type CaptionPart } from "./captions";
 import { onlineVoiceAvailable, onlineVoiceTiming } from "./onlineVoice";
@@ -221,7 +222,15 @@ export function getAudioContext(): AudioContext {
 let cancelCry:(()=>void)|null=null;
 /** Music ducks for teaching speech, cries and recorded playback. */
 export const isForegroundAudioActive = () => busy || cancelCry !== null;
-export function playCry(id:number,volume=.55):Promise<void>{return playUrl(`/pokemon/cry/${id}.m4a`,volume);}
+export function playCry(id:number,volume=.55):Promise<void>{
+  cancelCry?.();
+  const ac=getAudioContext();
+  if(ac.state!=="running")ac.resume().catch(()=>{});
+  const voice=playCreatureVoice(ac,id,volume);
+  const finish=()=>{voice.stop();if(cancelCry===finish)cancelCry=null;};
+  cancelCry=finish;
+  return voice.done.then(()=>{if(cancelCry===finish)cancelCry=null;});
+}
 export function playUrl(url:string,volume=1):Promise<void>{
   cancelCry?.();
   return new Promise(resolve=>{

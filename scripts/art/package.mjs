@@ -5,7 +5,7 @@
  *   avatar-<n>.webp     每个阶段的 256px 头像
  *   expr-<k>.webp       宝宝期 8 个表情（从 4x2 表情表切出，顺序同 generate.mjs 的 EXPRESSIONS）
  *   public/sprites/manifest.json  文件清单
- * 以及场景：public/scenes/flat-v1/<group>/<id>.webp（world 世界插画、story-bg 绘本背景、prop 透明底道具）与 manifest.json
+ * 以及场景：public/scenes/flat-v1/<group>/<id>.webp（world 世界插画、story-bg 绘本背景、prop 透明底道具、icon 界面图标、app 应用图标，另写 public/icons/icon-192/512.png）与 manifest.json
  * 用法：node scripts/art/package.mjs
  * 依赖 ImageMagick。public/sprites/ 与 public/scenes/ 属于本地媒体，不入库（见 .gitignore 与 OPEN_SOURCE.md）。
  */
@@ -93,11 +93,16 @@ const sceneManifest = { version: 1, scenes: {} };
 for (const sc of scenes) {
  const input = resolve(root, 'output/rebrand/scenes', sc.id, `${sc.id}.png`);
  if (!existsSync(input)) { warnings.push(`场景 ${sc.id} 缺少`); continue; }
- const transparent = sc.group === 'prop' || sc.transparent;
+ const transparent = sc.group === 'prop' || sc.group === 'icon' || sc.transparent;
  if (transparent && magick(input, '-format', '%[opaque]', 'info:') === 'True') { warnings.push(`场景 ${sc.id} 应为透明底`); continue; }
  mkdirSync(resolve(sceneTarget, sc.group), { recursive: true });
  const output = resolve(sceneTarget, sc.group, `${sc.id}.webp`);
  if (sc.group === 'prop') fit(input, output, 512);
+ else if (sc.group === 'icon') fit(input, output, 256);
+ else if (sc.group === 'app') {
+  magick(input, '-resize', '512x512', '-quality', '90', output);
+  for (const px of [192, 512]) magick(input, '-resize', `${px}x${px}`, '-strip', resolve(root, `public/icons/icon-${px}.png`));
+ }
  else if (transparent) magick(input, '-crop', magick(input, '-alpha', 'extract', '-threshold', '8%', '-format', '%@', 'info:'), '+repage', '-quality', '88', output);
  else magick(input, '-resize', '1536x1536>', '-quality', '85', output);
  sceneManifest.scenes[sc.id] = { group: sc.group, file: `${sc.group}/${sc.id}.webp` };

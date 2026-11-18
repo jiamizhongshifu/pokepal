@@ -2,7 +2,7 @@
  * 配音阵容（豆包语音合成 2.0 音色，构建期使用）。
  * - 中文旁白：儿童绘本音色，像带孩子冒险的向导
  * - 英文旁白：Allison（美式英语），放慢一点，适合幼儿磨耳朵
- * - 宝可梦自己说话的台词：按体型和性格选音色、调音高
+ * - 小精灵自己说话的台词：按体型和性格选音色、调音高
  */
 export interface Voice { voice: string; pitch?: number; rate?: number; context?: string }
 

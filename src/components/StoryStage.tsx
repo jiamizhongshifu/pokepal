@@ -1,3 +1,4 @@
+import { storyBackground, storyProp } from '../data/sceneArt';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Story, StoryPage, StoryLine } from '../data/stories';
 import { STORY_SCENES, type SceneItem } from '../data/storyScenes';
@@ -9,7 +10,7 @@ import './story-stage.css';
 const places:Record<Story['scene'],string>={orchard:'苹果树下',playground:'小小游乐场',beach:'柔软的沙滩',meadow:'花儿小路',garden:'朋友的小花园'};
 function Prop({item,castle,pot}:{item:SceneItem;castle?:string;pot?:string}){
  const asset=item.kind==='castle'?`castle-${castle??'tall'}`:item.kind==='pot'?`pot-${pot??'upright'}`:item.kind;
- return <img className="theatre-painted-prop" src={`/story-art/painted-v1/props/${asset}.png`} alt="" draggable={false}/>;
+ return <img className="theatre-painted-prop" src={storyProp(asset)} alt="" draggable={false}/>;
 }
 
 /** Generated scenery and transparent props, composed with existing character art. */
@@ -43,7 +44,7 @@ export function StoryStage({story,page,cover=false,onWord}:{story:Story;page:Sto
  return <div ref={element} className={`story-stage story-theatre scene-${story.scene} mood-${scene.mood??'day'} ${cover?'cover-scene':''} ${visible&&active?'':'scene-offscreen'}`} data-story={story.id} data-page={index+1}>
   <div key={`${index}-${replay}`} className="theatre-picture" role="img" aria-label={scene.description}>
    <div className="theatre-backdrop" aria-hidden="true">
-    <img className="theatre-painted-background" src={`/story-art/painted-v1/backgrounds/${background}.png`} alt="" draggable={false}/>
+    <img className="theatre-painted-background" src={storyBackground(background)} alt="" draggable={false}/>
    </div>
    {scene.actors.map((actor,i)=><div key={i} className="theatre-actor" aria-hidden="true" style={{left:`${actor.x}%`,bottom:`${actor.y}%`,width:`${actor.size}%`,'--from-x':`${((actor.fromX??actor.x)-actor.x)/actor.size*100}%`,'--lean':`${actor.lean??0}deg`} as CSSProperties}>
     <span className="actor-shadow"/>

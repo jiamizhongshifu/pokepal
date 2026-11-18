@@ -104,7 +104,7 @@
       const cache = await caches.open(cacheName);
       const previous = await cache.match(indexUrl).then(r=>r?.json());
       // Keep the installed release and all incoming packs. Only obsolete downloadable
-      // bundles are removed; IndexedDB (Pokémon, learning, recordings) is untouched.
+      // bundles are removed; IndexedDB (island friends, learning, recordings) is untouched.
       const keep = new Set([...(previous?.packs || []),...index.packs].map(p=>new URL(`packs/${p.file}`,base).href));
       for (const key of await cache.keys()) if (key.url.startsWith(new URL('packs/',base).href) && !keep.has(key.url)) await cache.delete(key);
       let cursor = 0, firstError;

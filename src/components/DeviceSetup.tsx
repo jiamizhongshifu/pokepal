@@ -5,7 +5,6 @@ import { say, unlockAudio } from '../lib/speech';
 import './device-setup.css';
 import { viewportReport, requestGameFullscreen } from '../lib/viewport';
 import { useOfflineUpdate, loadedVersion, versionLabel } from '../lib/offlineUpdate';
-import { cameraReport, cameraSummary } from '../lib/cameraDiagnostics';
 import { Capacitor } from '@capacitor/core';
 
 type InstallPrompt = Event & { prompt(): Promise<unknown>; userChoice: Promise<{outcome:string}> };
@@ -100,12 +99,6 @@ function OfflineSetup({initiallyOpen,compactTools}:{initiallyOpen:boolean;compac
             setNote(response.ok?'屏幕诊断已发送到这台 Mac，可继续排查白边。':'诊断已显示在下方，请把数值发给我。');
           } catch {setNote('诊断已显示在下方，请把数值发给我。');}
         }}>检查屏幕适配</button>}
-        {!native&&<button onClick={async()=>{
-          const report=cameraReport();setDisplayReport(JSON.stringify(report,null,2));
-          const summary=cameraSummary();
-          try{const response=await fetch('/__ipad/camera-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(report),signal:AbortSignal.timeout(8000)});setNote(summary+(response.ok?' 镜头诊断已发送到 Mac。':' 诊断显示在下方，尚未发送。'));}
-          catch{setNote(summary+' 诊断显示在下方，未连接到 Mac。');}
-        }}>检查观察镜头</button>}
         {canInstall&&!standalone&&!native&&<button onClick={install}>安装到主屏幕</button>}
         <button onClick={async()=>{unlockAudio();const ok=await say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！']);setNote(ok?'配音播放已完成，请确认设备扬声器能听到中英文。':'配音未播放成功，请等待下载完成后重试。');}}>试听中英配音</button>
         {!native&&<button onClick={keep}>保留离线资料</button>}

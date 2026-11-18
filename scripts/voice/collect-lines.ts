@@ -89,7 +89,7 @@ const activitiesOf = (id: number): Activity[] => [...new Set([...((BEHAVIORS[id]
 
 for (const p of CREATURES) {
   const pz = pokemonVoice(p.id, "zh"), pe = pokemonVoice(p.id, "en");
-  // 宝可梦自己说的话
+  // 小精灵自己说的话
   en(`Hi! I'm ${p.nameEn}!`, pe);
   zh(`我是${p.nameZh}！`, pz);
   // 捕捉
@@ -127,12 +127,11 @@ for(const unit of LEARNING_UNITS){for(const scene of unitSituations(unit))zh(sce
 for (const station of STATIONS) for (const level of [1,2] as const) { const l = facilityLesson(station,level); en(l.en); zh(l.zh); }
 en("big"); en("small");
 ["One!", "Two!", "Three!", "Four!", "Five!"].forEach(t=>en(t));
-for (let n = 0; n <= CREATURES.length; n++) { en(`You have ${n} Pokémon!`); zh(`训练师图鉴。你已经有${n}只宝可梦啦！`); }
+for (let n = 0; n <= CREATURES.length; n++) { en(`You have ${n} friends!`); zh(`好朋友相册。你已经有${n}只小精灵啦！`); }
 for (const b of Object.values(INVITE_KINDS)) { zh(`你换到了一个${b.zh}！`); en(`You got a ${b.en}!`); }
 for (let n = 1; n <= 20; n++) zh(`能量还不够哦，还差${n}点。去做任务吧！`);
 for (let n = 1; n <= 4; n++) zh(`你得到了${n}点能量！`);
-zh(`连续7天完成全部任务，就能得到大师球！`);
-// Both Pokémon letters and picture-word letters used by the beginner trace game.
+// Both creature letters and picture-word letters used by the beginner trace game.
 for (const item of [...LETTERS,...PIC_WORDS.filter(w=>w.icon).map(w=>({...w,letter:w.en[0].toUpperCase()}))]) {
  for(const part of [...traceIntro(item),...traceSuccess(item)]) if(typeof part!=="number") add(part[0],part[1]);
 }
@@ -162,7 +161,7 @@ for (const a of COUNTABLE) for (let n = 1; n <= 8; n++) addNarration(countLine(n
 for (const l of SCENE_LINES) addNarration({ en: l.en, zh: l.zh, echo: l.echo });
 for (const g of Object.values(GREETINGS)) addNarration(g);
 GOODNIGHT_TAIL.forEach((t) => en(t));
-// 点宝可梦时的拟声词和第一人称回答
+// 点小精灵时的拟声词和第一人称回答
 for (const A of Object.values(ACTIVITY)) { en(A.sound); en(A.me, kidVoice); }
 
 // 任务页（3–6 岁）：与 src/data/taskEnglish.ts 用同一套函数穷举；每句独立配音，组合不会爆炸

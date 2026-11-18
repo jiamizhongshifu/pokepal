@@ -1,3 +1,5 @@
+import { creatureArt, getCreature } from '../data/creatures';
+import { storyBackground, storyProp } from '../data/sceneArt';
 import {useEffect,useReducer,useState} from 'react';
 import {APPLE_PICNIC as story} from '../data/adventures/applePicnic';
 import {beginStory,restoreStory,storyPlayback,type StoryEvent,type StoryPlayback} from '../lib/storyPlayer';
@@ -36,7 +38,7 @@ export function StoryAdventurePreview(){
   {storageFailed&&<p role="status">浏览器暂时无法保存预览位置，关闭页面后可能需要重新开始。</p>}
   {!entered?<main className="adventure-lobby">
    <p>今天，和朋友一起</p><h1>{story.title}</h1><p>有一颗认真洗净的苹果，特意留给你。</p>
-   <div className="preview-friends">{story.cast.map(id=><img key={id} src={`/pokemon/art/${id}.png`} alt={id===25?'啵啵':'莓莓'}/>)}</div>
+   <div className="preview-friends">{story.cast.map(id=><img key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
    {state.phase==='completed'?<><p>今天的野餐已经结束啦。</p><button className="main-action" onClick={restart}>再看这个故事</button></>:<button className="main-action" onClick={start}>{state.phase==='paused'?'接着上次的故事':'一起出发'}</button>}
    <small>这是供大人审阅流程的静音排演，正式动画与旁白尚未接入。</small>
   </main>:<main className="adventure-reader" data-phase={state.phase} data-beat={beat.id}>
@@ -44,12 +46,12 @@ export function StoryAdventurePreview(){
     {state.phase!=='completed'&&<button onClick={()=>dispatch({type:active?'pause':'resume'})}>{active?'暂停':'继续'}</button>}
    </div>
    <div className={`adventure-stage beat-${beat.id} ${reacting?'is-reacting':''}`}>
-    <img className="adventure-background" src="/story-art/painted-v1/backgrounds/orchard.png" alt="安静的苹果园" onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>
-    {story.cast.map((id,i)=><img key={id} className={`adventure-actor actor-${i}`} src={`/pokemon/art/${id}.png`} alt={id===25?'啵啵':'莓莓'} onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>)}
-    <img className="adventure-basket" src="/story-art/painted-v1/props/basket-apples.png" alt="装着苹果的篮子"/>
-    {['help','wash'].includes(beat.id)&&<div className="pouring-prop"><img src="/story-art/painted-v1/props/watering-can.png" alt="水壶"/><span className="water-stream"/></div>}
-    {['help','wash'].includes(beat.id)&&<img className="wash-bowl" src="/story-art/painted-v1/props/bowl.png" alt="接水的盆"/>}
-    {['dry','for-you','thanks'].includes(beat.id)&&<img className="offered-apple" src="/story-art/painted-v1/props/apple.png" alt="留给你的苹果"/>}
+    <img className="adventure-background" src={storyBackground('orchard')} alt="安静的苹果园" onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>
+    {story.cast.map((id,i)=><img key={id} className={`adventure-actor actor-${i}`} src={creatureArt(id)} alt={getCreature(id).nameZh} onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>)}
+    <img className="adventure-basket" src={storyProp('basket-apples')} alt="装着苹果的篮子"/>
+    {['help','wash'].includes(beat.id)&&<div className="pouring-prop"><img src={storyProp('watering-can')} alt="水壶"/><span className="water-stream"/></div>}
+    {['help','wash'].includes(beat.id)&&<img className="wash-bowl" src={storyProp('bowl')} alt="接水的盆"/>}
+    {['dry','for-you','thanks'].includes(beat.id)&&<img className="offered-apple" src={storyProp('apple')} alt="留给你的苹果"/>}
     {state.phase==='invitation'&&<button className={`scene-invitation target-${invitation?.target}`} onClick={()=>dispatch({type:'participate',token:state.token})}>{invitation?.target==='watering-can'?'帮忙倒一点水':'帮忙擦干苹果'}<small>也可以看朋友来做</small></button>}
     {reacting&&<span className="action-response" role="status">{beat.id==='help'?'水慢慢倒进盆里……':'苹果擦干净啦。'}</span>}
     {state.phase==='paused'&&<div className="pause-curtain"><p>故事在这里等你</p><button onClick={()=>dispatch({type:'resume'})}>继续</button></div>}

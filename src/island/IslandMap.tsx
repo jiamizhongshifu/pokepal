@@ -1,3 +1,4 @@
+import { worldArt } from '../data/sceneArt';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
 import type { Capture } from '../types';
@@ -92,7 +93,7 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
  const interactive = active && showInterface;
 
  return <div className={`island-map sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`} onClick={background} role="group" aria-label="我的小岛">
-  <img className="island-map-art" src="/scenes/flat-v1/world/island-map.webp" alt="" draggable={false} onClick={onDeselect} />
+  <img className="island-map-art" src={worldArt('island-map')} alt="" draggable={false} onClick={onDeselect} />
   {interactive && STATIONS.filter(s => STATION_SPOTS[s.id]).map(s => <button key={s.id} type="button" className="island-station" style={{ left: `${STATION_SPOTS[s.id][0]}%`, top: `${STATION_SPOTS[s.id][1]}%` }} aria-label={s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }} />)}
   {interactive && !farm.open && PLOT_SPOTS.map((spot, i) => {
    const stage = cropStage(farm.farm?.plots[i] ?? null, farm.clock);

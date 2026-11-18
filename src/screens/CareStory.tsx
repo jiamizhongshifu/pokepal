@@ -1,3 +1,4 @@
+import { storyBackground, storyProp } from '../data/sceneArt';
 import {StoryNextButton} from '../components/StoryNextButton';
 import {collectionStep} from '../lib/storyHome';
 import {useEffect,useRef,useState} from 'react';
@@ -62,12 +63,12 @@ export function CareStoryScreen(){
  {!session||!partner?<section className="care-story-cover"><h1>点心、小苗，还有你</h1><p>带上已有的伙伴，过一个不用赶时间的小下午。</p>{save.captures.length?<><div className="care-cast">{save.captures.slice(0,4).map(c=><img key={c.id} src={creatureArt(c.id)} alt={getCreature(c.id).nameZh}/>)}</div><button disabled={busy} onClick={()=>void begin()}>一起出发</button></>:<button onClick={()=>go({name:'catch'})}>去认识第一个伙伴</button>}</section>:<>
  <header><p>和 {pokemon!.nameZh} 一起</p><h1>{phase==='snack'||phase==='shared'?'留给你的一份点心':phase==='garden'||phase==='watered'||phase==='growing'?'给小苗一点时间':phase==='ending'?'把快乐带回家':'小球又滚回来啦'}</h1></header>
  <div className={`care-story-stage phase-${phase} ${running?'':'paused'}`} onErrorCapture={()=>{setAssetFailed(true);setRunning(false);stopSpeech();}}>
- <img className="care-backdrop" alt="" src={`/story-art/painted-v1/backgrounds/${phase==='play'||phase==='rolled'?'playground':phase==='garden'||phase==='watered'||phase==='growing'?'garden-path':'orchard'}.png`}/>
+ <img className="care-backdrop" alt="" src={storyBackground(phase==='play'||phase==='rolled'?'playground':phase==='garden'||phase==='watered'||phase==='growing'?'garden-path':'orchard')}/>
  <img className="care-actor" alt={pokemon!.nameZh} src={creatureArt(partner.id)}/>
- {(phase==='snack'||phase==='shared')&&<div className="care-meal"><img alt="小碗" src="/story-art/painted-v1/props/bowl.png"/><div className={`care-food ${session.meal==='fed'?'eaten':''}`}>{session.food==='plain'?<img alt="普通点心" src="/story-art/painted-v1/props/cookie.png"/>:<BerryBadge kind={session.food}/>}</div></div>}
- {(phase==='garden'||phase==='watered'||phase==='growing'||phase==='ending')&&<div className="care-plots" aria-label="我的三块田地">{(save.farm?.plots??[null,null,null]).map((c,i)=><div key={i} className={`care-plot stage-${cropStage(c,now)}`}><img src={`/story-art/painted-v1/props/${c?'flower':'soil'}.png`} alt=""/>{c&&cropStage(c,now)==='ripe'&&<BerryBadge kind={c.berry}/>}<span>{i+1} · {!c?'空地':cropStage(c,now)==='ripe'?'成熟':cropStage(c,now)==='thirsty'?'待浇水':'生长中'}</span></div>)}</div>}
- {phase==='watered'&&['planted','watered'].includes(session.gardenResult??'')&&<img className="care-water" src="/story-art/painted-v1/props/watering-can.png" alt="给小苗浇水"/>}
- {(phase==='play'||phase==='rolled')&&<img className="care-ball" src="/story-art/painted-v1/props/ball.png" alt="轻轻滚动的小球"/>}
+ {(phase==='snack'||phase==='shared')&&<div className="care-meal"><img alt="小碗" src={storyProp('bowl')}/><div className={`care-food ${session.meal==='fed'?'eaten':''}`}>{session.food==='plain'?<img alt="普通点心" src={storyProp('cookie')}/>:<BerryBadge kind={session.food}/>}</div></div>}
+ {(phase==='garden'||phase==='watered'||phase==='growing'||phase==='ending')&&<div className="care-plots" aria-label="我的三块田地">{(save.farm?.plots??[null,null,null]).map((c,i)=><div key={i} className={`care-plot stage-${cropStage(c,now)}`}><img src={storyProp(c?'flower':'soil')} alt=""/>{c&&cropStage(c,now)==='ripe'&&<BerryBadge kind={c.berry}/>}<span>{i+1} · {!c?'空地':cropStage(c,now)==='ripe'?'成熟':cropStage(c,now)==='thirsty'?'待浇水':'生长中'}</span></div>)}</div>}
+ {phase==='watered'&&['planted','watered'].includes(session.gardenResult??'')&&<img className="care-water" src={storyProp('watering-can')} alt="给小苗浇水"/>}
+ {(phase==='play'||phase==='rolled')&&<img className="care-ball" src={storyProp('ball')} alt="轻轻滚动的小球"/>}
  </div>
  <p className="care-narrative">{text}</p><p className="care-english" lang="en">{phrase}</p>
  {assetFailed?<p role="alert">画面没有加载好，请返回后重试。已经完成的照顾不会重复扣除。</p>:<div className="care-story-controls">

@@ -18,8 +18,8 @@
   {
    "id": "learning-path",
    "group": "world",
-   "size": "portrait 1024x1536",
-   "prompt": "Tall vertical scenery for a learning path: a wide sandy path zig-zags from the bottom to the top, passing a meadow at the bottom, then a fruit garden, then a beach edge, then a hill with a small windmill at the top. Along the path there are five wide, empty, round, flat clearings evenly spaced from bottom to top, left empty for level buttons. Small trees, flowers and rocks decorate the far sides; soft sky with clouds at the very top."
+   "size": "landscape 1536x1024",
+   "prompt": "A wide bird's-eye three-quarter view of an island adventure path for a level map, seen from above the sea. One wide sandy path winds left to right in a gentle zig-zag and connects exactly four large, empty, round, flat sandy clearings: (1) lower left at about 20% from the left and 60% from the top, next to a small triangle tent and a wooden pier with a rowboat; (2) upper middle-left at about 42% from the left and 28% from the top, beside a small fruit orchard, reached over a little wooden bridge across a stream; (3) lower middle-right at about 65% from the left and 60% from the top, beside a checkered picnic blanket and a round tree; (4) upper right at about 84% from the left and 30% from the top, on a grassy hill top with a small windmill. The clearings stay completely empty for level buttons. Turquoise sea with a few rounded rocks around the island, a sandy beach along the bottom edge, soft hills and a few clouds along the top edge."
   },
   {
    "id": "meadow-clearing",
@@ -180,6 +180,218 @@
    "id": "invite-berry",
    "group": "prop",
    "prompt": "An invite berry: one plump round glossy coral-red berry with a small green leaf on top and a little pale-yellow ribbon bow tied around its stem, like a cheerful gift. It must not look like a ball, capsule or sphere split in two halves."
+  },
+  {
+   "id": "avatar-sun",
+   "group": "icon",
+   "prompt": "Head-and-shoulders portrait of one cheerful young child (about 5 years old) smiling with a small open mouth and big friendly eyes, simple round face, warm light-brown skin, short dark curly hair, wearing a pale-yellow round sun hat with a small green leaf on the band and a teal t-shirt. No cap, no logo."
+  },
+  {
+   "id": "avatar-shell",
+   "group": "icon",
+   "prompt": "Head-and-shoulders portrait of one cheerful young child (about 5 years old) smiling with a small open mouth and big friendly eyes, simple round face, light skin, black hair in two small round buns, a small coral seashell hair clip, and a coral-pink t-shirt. No hat, no logo."
+  },
+  {
+   "id": "avatar-wave",
+   "group": "icon",
+   "prompt": "Head-and-shoulders portrait of one cheerful young child (about 5 years old) smiling with a small open mouth and big friendly eyes, simple round face, light-tan skin, short brown hair with a little tuft, round sky-blue swim goggles pushed up on the forehead, and a sky-blue striped t-shirt. No cap, no logo."
+  },
+  {
+   "id": "avatar-leaf",
+   "group": "icon",
+   "prompt": "Head-and-shoulders portrait of one cheerful young child (about 5 years old) smiling with a small open mouth and big friendly eyes, simple round face, deep brown skin, short black hair, a soft green knitted beanie with a tiny leaf-shaped pompom, and a sunny-yellow t-shirt. No cap, no logo."
+  },
+  {
+   "id": "album",
+   "group": "icon",
+   "prompt": "A closed chunky photo album book with a teal cover and a small round photo window on the cover showing a little pink heart, with a ribbon bookmark."
+  },
+  {
+   "id": "juice",
+   "group": "icon",
+   "prompt": "A glass of orange juice with a striped bendy straw and a small orange slice on the rim."
+  },
+  {
+   "id": "kite",
+   "group": "icon",
+   "prompt": "A diamond-shaped kite in coral and yellow quarters with a wavy tail of three small bows."
+  },
+  {
+   "id": "violin",
+   "group": "icon",
+   "prompt": "A small warm-brown violin with its bow lying diagonally across it."
+  },
+  {
+   "id": "app-icon",
+   "group": "app",
+   "prompt": "Background: bright teal-turquoise (#19B3A6). Subject: a small round green island with one palm tree and a sandy beach, and a plump coral-red berry with a green leaf and a pale-yellow bow sitting on the beach like a gift, a few small white wave shapes around the island."
+  },
+  {
+   "id": "weight",
+   "group": "icon",
+   "prompt": "A small rounded kettlebell weight in dark slate grey with a yellow highlight stripe."
+  },
+  {
+   "id": "backspace",
+   "group": "icon",
+   "prompt": "A delete key shape: a rounded rectangle pointing left like an arrow tag, dark slate, with a white X in the middle."
+  },
+  {
+   "id": "zz",
+   "group": "icon",
+   "prompt": "Three blue sleepy Z shapes of different sizes rising diagonally, drawn as solid chunky shapes (a sleep symbol, not text)."
+  },
+  {
+   "id": "dizzy",
+   "group": "icon",
+   "prompt": "A round yellow smiley face with spiral eyes and a wobbly mouth, feeling dizzy."
+  },
+  {
+   "id": "face",
+   "group": "icon",
+   "prompt": "A round yellow smiley face with happy closed eyes and a big open smile."
+  },
+  {
+   "id": "rainbow",
+   "group": "icon",
+   "prompt": "A small rainbow arc with five soft color bands and two little white clouds at its ends."
+  },
+  {
+   "id": "fire",
+   "group": "icon",
+   "prompt": "A friendly campfire flame shape in orange and yellow on two crossed brown logs."
+  },
+  {
+   "id": "snowflake",
+   "group": "icon",
+   "prompt": "A six-armed light-blue snowflake with rounded tips."
+  },
+  {
+   "id": "wing",
+   "group": "icon",
+   "prompt": "A single soft white bird wing with three rounded feather layers and a light-blue shade."
+  },
+  {
+   "id": "snowman",
+   "group": "icon",
+   "prompt": "A small snowman of two round snowballs with a carrot nose, two dot eyes and a red scarf."
+  },
+  {
+   "id": "mountain",
+   "group": "icon",
+   "prompt": "Two rounded green-and-grey mountains with snowy rounded tops."
+  },
+  {
+   "id": "rock",
+   "group": "icon",
+   "prompt": "One rounded grey stone with a lighter top and a small crack."
+  },
+  {
+   "id": "normal",
+   "group": "icon",
+   "prompt": "A simple five-petal white flower with a yellow center."
+  },
+  {
+   "id": "car",
+   "group": "icon",
+   "prompt": "A small rounded red toy car seen from the side with two black wheels and a light-blue window."
+  },
+  {
+   "id": "train",
+   "group": "icon",
+   "prompt": "A small rounded toy train engine in blue and red with a chimney and round wheels."
+  },
+  {
+   "id": "rocket",
+   "group": "icon",
+   "prompt": "A small rounded toy rocket in white and coral with a round window and a little orange flame."
+  },
+  {
+   "id": "yoyo",
+   "group": "icon",
+   "prompt": "A round red yo-yo with a short string loop."
+  },
+  {
+   "id": "crown",
+   "group": "icon",
+   "prompt": "A small golden crown with three rounded points and three round colored gems."
+  },
+  {
+   "id": "cat",
+   "group": "icon",
+   "prompt": "Head of a friendly orange house cat with pointy ears and whiskers shapes, front view."
+  },
+  {
+   "id": "dog",
+   "group": "icon",
+   "prompt": "Head of a friendly brown puppy with floppy ears, front view."
+  },
+  {
+   "id": "fish",
+   "group": "icon",
+   "prompt": "A small rounded orange fish with a fan tail, side view."
+  },
+  {
+   "id": "bird",
+   "group": "icon",
+   "prompt": "A small round sky-blue songbird with a little orange beak, side view."
+  },
+  {
+   "id": "duck",
+   "group": "icon",
+   "prompt": "A small round yellow duckling with an orange bill, side view."
+  },
+  {
+   "id": "rabbit",
+   "group": "icon",
+   "prompt": "Head of a white bunny with long upright ears with pink insides, front view."
+  },
+  {
+   "id": "frog",
+   "group": "icon",
+   "prompt": "A small round green frog sitting, front view, with big round eyes on top."
+  },
+  {
+   "id": "turtle",
+   "group": "icon",
+   "prompt": "A small green turtle with a rounded brown patterned shell, side view."
+  },
+  {
+   "id": "bee",
+   "group": "icon",
+   "prompt": "A small round honeybee with yellow and dark-brown stripes and two light wings."
+  },
+  {
+   "id": "fox",
+   "group": "icon",
+   "prompt": "Head of an orange fox with a white muzzle and pointy ears, front view."
+  },
+  {
+   "id": "zebra",
+   "group": "icon",
+   "prompt": "Head of a zebra with black and white stripes and a short mane, front view."
+  },
+  {
+   "id": "nose",
+   "group": "icon",
+   "prompt": "A friendly cartoon human nose shape in warm skin tone, front view."
+  },
+  {
+   "id": "bush-0",
+   "group": "icon",
+   "prompt": "One small round green bush."
+  },
+  {
+   "id": "bush-1",
+   "group": "icon",
+   "prompt": "One round green bush with three small pink flowers."
+  },
+  {
+   "id": "bush-2",
+   "group": "icon",
+   "prompt": "A wide low green bush made of three round clumps."
   }
- ]
+ ],
+ "iconStyle": "A single small game UI icon, front view, centered with generous margin, nothing cropped, readable at 48 pixels: very simple bold rounded shapes, at most four flat colors plus one darker hard-edged shade shape and one small highlight, no outlines or line art. Fully transparent background (PNG with alpha), no ground shadow, no backdrop, no circle badge behind it. Same flat vector style as the attached style reference. No text, letters or numbers.",
+ "appStyle": "A square app icon that fills the whole canvas edge to edge with a solid bright background color (no transparency, no rounded corners drawn, no border); one bold centered subject, simple rounded shapes, flat fills with one darker hard-edged shade shape per color, no outlines. Same flat vector style as the attached style reference. No text, letters or numbers."
 }

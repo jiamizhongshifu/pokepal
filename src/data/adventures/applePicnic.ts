@@ -2,7 +2,7 @@ import type {Adventure} from '../../lib/storyPlayer';
 /** Authored pilot. Media is intentionally not marked ready until reviewed. */
 export const APPLE_PICNIC = {
  id:'apple-picnic',taskId:'magic-words',version:1,
- title:'留给你的一颗苹果',cast:[25,133],mediaStatus:'pending',
+ title:'留给你的一颗苹果',cast:[1001,1011],mediaStatus:'pending',
  beats:[
   {id:'welcome',zh:'小岛主人，你来啦。今天一起吃苹果。',en:'Apple!'},
   {id:'mud',zh:'苹果上还有一点泥，先洗一洗。',en:''},

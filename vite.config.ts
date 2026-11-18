@@ -35,13 +35,13 @@ return {
     ...(process.env.NO_SSL || hasCert ? [] : [basicSsl()]),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: online ? ["icons/icon-192.png", "icons/icon-512.png"] : ["pokemon/**/*", "icons/*"],
+      includeAssets: online ? ["icons/icon-192.png", "icons/icon-512.png"] : ["icons/*"],
       manifest: {
         id: "/",
         lang: "zh-CN",
-        name: "宝可梦小小训练师",
-        short_name: "PokéPal",
-        description: "和宝可梦一起学英语的家庭小游戏",
+        name: "啵啵岛 · Bubbly Isle",
+        short_name: "啵啵岛",
+        description: "和岛上的小精灵伙伴一起学英语的家庭小游戏",
         theme_color: "#ecf8f8",
         background_color: "#ecf8f8",
         display: "fullscreen",
@@ -58,7 +58,7 @@ return {
         globIgnores: ["**/HomeScene-*.js"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: "/index.html",
-        navigateFallbackDenylist: [/^\/(api|voice|models|pokemon|art|story-art|env|icons|textures|music|__ipad|release|privacy|terms|feedback)/],
+        navigateFallbackDenylist: [/^\/(api|voice|scenes|sprites|art|icons|music|environment|__ipad|release|privacy|terms|feedback)/],
         runtimeCaching: [{urlPattern:/\/environment\/[a-z-]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-nature-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:6,maxAgeSeconds:365*24*60*60}}},{urlPattern:/\/music\/[a-z]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-music-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:8,maxAgeSeconds:365*24*60*60}}}],
         cleanupOutdatedCaches: true
       } : {
@@ -77,7 +77,7 @@ return {
           writeFileSync(resolve(buildOutput, 'offline-release.js'), `self.POKE_RELEASE=${JSON.stringify(release)};`);
           return { manifest: entries, warnings: [] };
         }],
-        globPatterns: ["**/*.{js,css,html,png,jpg,hdr,m4a,ogg,svg,json,woff2,glb}"],
+        globPatterns: ["**/*.{js,css,html,png,jpg,webp,m4a,ogg,svg,json,woff2}"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024
       }
     }),

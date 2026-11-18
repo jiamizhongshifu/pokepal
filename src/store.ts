@@ -24,7 +24,7 @@ import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictErr
 import {clearParentNotice} from './lib/parentNotice';
 import { validateSave } from "./lib/saveValidation";
 import { acquireSaveSession } from "./lib/saveSession";
-import { CREATURES } from "./data/creatures";
+import { CREATURES, FIRST_FRIEND } from "./data/creatures";
 import { setSpeechRate } from "./lib/speech";
 import { isAvatarPhoto } from "./lib/avatar";
 import { migrateLearning,ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
@@ -64,7 +64,7 @@ export type Screen =
   | { name: "dexDetail"; id: number; picking?: boolean; browse?:DexBrowseState }
   | { name: "parent" };
 
-const DEFAULT_SETTINGS: Settings = { dailyMinutes: 15, tasksPerDay: 4, level: 1, favorites: [25], speechRate: 1 };
+const DEFAULT_SETTINGS: Settings = { dailyMinutes: 15, tasksPerDay: 4, level: 1, favorites: [FIRST_FRIEND], speechRate: 1 };
 
 function makeBoard(_n:3|4,_date:string):TaskKind[]{return ['listen','wordpic','repeat','trace'];}
 

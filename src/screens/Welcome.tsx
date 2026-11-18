@@ -1,9 +1,10 @@
+import { worldArt } from '../data/sceneArt';
 import { Announcements } from '../components/Announcements';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useGame } from "../store";
 import { say, unlockAudio, sfx, wait } from "../lib/speech";
 import { requestPersist } from "../lib/db";
-import { creatureAvatar } from "../data/creatures";
+import { creatureAvatar, WELCOME_CAST } from "../data/creatures";
 import { AVATARS, Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
@@ -43,11 +44,11 @@ export function Welcome() {
 
   return (
     <div className="screen welcome illustrated-welcome">
-      <img className="welcome-landscape" src={import.meta.env.VITE_ONLINE?"/art/world/welcome-island-v1.webp":"/art/world/welcome-island-v1.png"} alt="" aria-hidden="true" {...{fetchpriority:"high"}} draggable={false}/>
+      <img className="welcome-landscape" src={worldArt('welcome')} alt="" aria-hidden="true" {...{fetchpriority:"high"}} draggable={false}/>
       <nav className="welcome-tools" aria-label="音乐、项目与作者"><MusicToggle/><Announcements/><SourceRepositoryLink/><AuthorContact/></nav>
       <div className="welcome-content">
       <div className="welcome-pokemon">
-        {[25, 1, 4, 7, 133].map((id, i) => (
+        {WELCOME_CAST.map((id, i) => (
           <CreatureImg key={id} src={creatureAvatar(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
         ))}
       </div>

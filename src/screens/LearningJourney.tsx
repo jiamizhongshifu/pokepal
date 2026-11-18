@@ -1,3 +1,4 @@
+import { worldArt } from '../data/sceneArt';
 import {useEffect,useRef,useState,type CSSProperties} from 'react';
 import {FeatureGuide} from '../components/FeatureGuide';
 import {LEARNING_CHAPTERS,LEARNING_UNITS,recommendedUnit,unitUnlocked,learningEntry,unitById,type LearningUnit} from '../data/curriculum';
@@ -5,7 +6,7 @@ import {useGame} from '../store';
 import {TopBar} from '../components/TopBar';
 import {Icon} from '../icons';
 import {CreatureImg} from '../components/CreatureImg';
-import {creatureArt} from '../data/creatures';
+import {creatureArt, FIRST_FRIEND } from '../data/creatures';
 import {lessonWords} from '../data/learning';
 import {learningProfile} from '../lib/learningStage';
 import {LearningArt,hearEntry} from '../components/LearningItem';
@@ -18,7 +19,7 @@ import '../learning-map.css';
 const landmarks:Record<LearningUnit['theme'],string>={garden:'tree',play:'ball',leisure:'moon',camp:'tent',beach:'waves'};
 const destinationIcon=(unit:LearningUnit)=>/^(berry|bowl|picnic)/.test(unit.station)?'bowl':landmarks[unit.theme];
 const badges=['发现','照顾','表达','自主','心情','友爱'];
-const positions=[{x:18,y:63},{x:40,y:32},{x:65,y:62},{x:83,y:34}];
+const positions=[{x:20,y:62},{x:40,y:32},{x:62,y:59},{x:83,y:29}];
 function StopPicture({unit}:{unit:LearningUnit}){
  return <span className={`map-stop-picture map-${unit.theme}`} aria-hidden="true"><Icon name={landmarks[unit.theme]} size={76}/><Icon name={unit.theme==='beach'?'decor-shells':unit.theme==='leisure'?'star':'flower'} size={28}/></span>;
 }
@@ -66,12 +67,12 @@ export function LearningJourney(){
     <div className="adventure-map-shell">
      <div ref={viewport} className="adventure-map-viewport" tabIndex={0} role="region" aria-label="岛屿关卡地图，可左右滑动" aria-describedby="map-pan-hint">
       <div className="adventure-map-canvas">
-       <img className="adventure-map-art" src="/art/world/learning-adventure-v2.webp" alt="" draggable={false}/>
+       <img className="adventure-map-art" src={worldArt('learning-path')} alt="" draggable={false}/>
 
        <ol className="adventure-stops" aria-label="本阶段全部关卡">{units.map((u,i)=>{
         const done=!!s.learning?.units[u.id]?.completedAt,now=u.id===current.id&&!allDone;
         return <li key={u.id} style={{'--stop-x':`${positions[i].x}%`,'--stop-y':`${positions[i].y}%`} as CSSProperties}>
-         {now&&<span className="adventure-companion"><CreatureImg src={creatureArt(s.captures[0]?.id??25)} alt=""/><span>我们在这里</span></span>}
+         {now&&<span className="adventure-companion"><CreatureImg src={creatureArt(s.captures[0]?.id??FIRST_FRIEND)} alt=""/><span>我们在这里</span></span>}
          <button className={`adventure-stop ${done?'is-done':now?'is-current':'is-future'} ${celebrating&&u.id===arrival?.id?'just-lit':''}`} aria-pressed={selected.id===u.id} aria-label={`第${i+1}关，${u.title}，${done?'已完成，可回顾':now?'开始冒险':'尚未解锁，可以预览'}`} onClick={()=>select(u)}>
           <span className="adventure-stop-pin"><Icon name={done?'invite-berry':destinationIcon(u)} size={48}/><b>{i+1}</b><span className={`pin-state ${done?'pin-complete':now?'pin-play':'pin-locked'}`} aria-hidden="true"><Icon name={done?'check':now?'play':'lock'} size={done?22:25}/></span></span>
           <strong>{u.title}</strong><span className="adventure-stop-status">{done?'已点亮':now?'点这里出发':'未点亮'}</span>

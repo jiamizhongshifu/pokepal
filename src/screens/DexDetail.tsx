@@ -48,7 +48,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
-            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="grass" size={32}/><span>我想找这只<small lang="en">Find this Pokémon!</small></span></button><p>带上邀请果，去草丛邀请它吧！<small lang="en">Bring a Poké Ball.</small></p></>}
+            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="grass" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>带上邀请果，去草丛邀请它吧！<small lang="en">Bring an invite berry.</small></p></>}
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">

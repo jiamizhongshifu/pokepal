@@ -29,4 +29,4 @@ for(const p of CREATURES)for(const key of [p.nameEn,`${p.nameEn}!`])for(let i=0;
  assert.equal(new Set(options.map(o=>o.pokemonId)).size,options.length,`${key}: unique visible options`);
 }
 assert.equal(learningChoices(learningEntry('Bubbo!')!,['Bubbo','Bubbo!','Berry','Berry!'],3).length,2);
-console.log('PASS: valid legacy saves, non-mutating validation, malformed imports rejected, care compatibility and unique name choices for all 388 Pokémon.');
+console.log('PASS: valid legacy saves, non-mutating validation, malformed imports rejected, care compatibility and unique name choices for every island creature.');

@@ -48,9 +48,11 @@ const KINDS = {
  scene: {
   items: () => sceneCatalog.scenes,
   variants: sc => [{
-   dir: resolve(sceneRoot, sc.id), file: `${sc.id}.png`, size: sc.group === 'prop' ? 'square 1024x1024' : sc.size, refs: [styleReference],
+   dir: resolve(sceneRoot, sc.id), file: `${sc.id}.png`, size: ['prop', 'icon', 'app'].includes(sc.group) ? 'square 1024x1024' : sc.size, refs: [styleReference],
    prompt: sc.group === 'prop'
     ? `Draw a picture-book prop: ${sc.prompt}\n${sceneCatalog.propStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
+    : sc.group === 'icon' ? `Draw a game icon: ${sc.prompt}\n${sceneCatalog.iconStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
+    : sc.group === 'app' ? `Draw an app icon: ${sc.prompt}\n${sceneCatalog.appStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
     : `Draw a background illustration: ${sc.prompt}\n${sc.group === 'story-bg' ? sceneCatalog.storyStage + '\n' : ''}${sc.transparent ? '' : 'Fill the whole canvas edge to edge, no border or frame.\n'}${sceneCatalog.sceneStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`,
   }],
  },

@@ -101,7 +101,6 @@ export const PALMS: PalmSpot[] = palmRing.map(([deg, k, s], i) => {
 });
 
 // ---------- 高精度模型（Poly Haven，CC0，Blender 减面后约 5k~20k 面） ----------
-export const HQ_DIR = "/models/hq/";
 const logSeat = (x: number, z: number, r: number): Placement => ({ m: "log_seat", x, z, r });
 const shell = (deg: number, k: number, r: number, s = 1.7): Placement => ({ ...onIsland(deg, k), m: "lambis_shell", r, s, y: -0.01 });
 export const HQ_PROPS: Placement[] = [

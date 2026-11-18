@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../../store";
 import { dailyLearningPlan } from '../../data/learning';
 import { learningLevel } from '../../data/curriculum';
-import { CREATURES, COLORS, getCreature, creatureAvatar } from "../../data/creatures";
+import { CREATURES, COLORS, getCreature, creatureAvatar, WELCOME_CAST } from "../../data/creatures";
 import { PIC_WORDS, type PicWord, pickOne, pickRandom } from "../../data/words";
 import { say, playCry, wait, stopSpeech } from "../../lib/speech";
 import { useChoice } from "./useChoice";
@@ -32,7 +32,7 @@ const bilingual = () => (useGame.getState().save.settings.englishMode ?? "biling
 
 function makeRounds(caughtIds: number[], level: 1 | 2, practice:boolean): Round[] {
   const caught = caughtIds.map(getCreature);
-  const familiar = [...new Set([...caughtIds,25,1,4,7,133])].map(getCreature);
+  const familiar = [...new Set([...caughtIds,...WELCOME_CAST])].map(getCreature);
   const choices = learningProfile(useGame.getState().save.settings).choices;
   const fav = caught.length ? caught : [getCreature(25)];
   const pool:Round["kind"][]=level === 1 ? ["color", "name", "count", "size"] : caught.length >= 3 ? ["color", "name", "cry", "count", "size"] : ["color", "name", "count", "size"];
@@ -40,7 +40,7 @@ function makeRounds(caughtIds: number[], level: 1 | 2, practice:boolean): Round[
   const kinds = [...pickRandom(pool,pool.length),...pickRandom(pool,pool.length)].slice(0,practice?6:3);
   const rounds=kinds.map((kind): Round => {
     if (kind === "color") {
-      // Pokédex colour classifications can disagree with a multi-coloured model.
+      // Catalogue colour classifications can disagree with a multi-coloured model.
       // Use unambiguous colour swatches and the existing colour-word voice lines.
       const colors=pickRandom(PIC_WORDS.filter(w=>w.theme==='color'&&w.level<=level),choices);
       const options=colors.map(word=>({key:word.en,word}));
