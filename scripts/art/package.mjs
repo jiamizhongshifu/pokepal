@@ -5,8 +5,9 @@
  *   avatar-<n>.webp     每个阶段的 256px 头像
  *   expr-<k>.webp       宝宝期 8 个表情（从 4x2 表情表切出，顺序同 generate.mjs 的 EXPRESSIONS）
  *   public/sprites/manifest.json  文件清单
+ * 以及场景：public/scenes/flat-v1/<group>/<id>.webp（world 世界插画、story-bg 绘本背景、prop 透明底道具）与 manifest.json
  * 用法：node scripts/art/package.mjs
- * 依赖 ImageMagick。public/sprites/ 属于本地媒体，不入库（见 .gitignore 与 OPEN_SOURCE.md）。
+ * 依赖 ImageMagick。public/sprites/ 与 public/scenes/ 属于本地媒体，不入库（见 .gitignore 与 OPEN_SOURCE.md）。
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -84,5 +85,24 @@ for (const s of sprites) {
 writeFileSync(resolve(target, 'manifest.json'), JSON.stringify(manifest, null, 1) + '\n');
 const count = Object.values(manifest.sprites).reduce((n, e) => n + e.stages.length + e.avatars.length + e.expressions.length, 0);
 console.log(`已整理 ${Object.keys(manifest.sprites).length} 种精灵、${count} 个素材到 public/sprites/`);
+
+// Scenes: full-bleed backgrounds keep their framing; transparent art is cropped to what is visible.
+const scenes = JSON.parse(readFileSync(resolve(here, 'scenes.json'), 'utf8')).scenes;
+const sceneTarget = resolve(root, 'public/scenes/flat-v1');
+const sceneManifest = { version: 1, scenes: {} };
+for (const sc of scenes) {
+ const input = resolve(root, 'output/rebrand/scenes', sc.id, `${sc.id}.png`);
+ if (!existsSync(input)) { warnings.push(`场景 ${sc.id} 缺少`); continue; }
+ const transparent = sc.group === 'prop' || sc.transparent;
+ if (transparent && magick(input, '-format', '%[opaque]', 'info:') === 'True') { warnings.push(`场景 ${sc.id} 应为透明底`); continue; }
+ mkdirSync(resolve(sceneTarget, sc.group), { recursive: true });
+ const output = resolve(sceneTarget, sc.group, `${sc.id}.webp`);
+ if (sc.group === 'prop') fit(input, output, 512);
+ else if (transparent) magick(input, '-crop', magick(input, '-alpha', 'extract', '-threshold', '8%', '-format', '%@', 'info:'), '+repage', '-quality', '88', output);
+ else magick(input, '-resize', '1536x1536>', '-quality', '85', output);
+ sceneManifest.scenes[sc.id] = { group: sc.group, file: `${sc.group}/${sc.id}.webp` };
+}
+writeFileSync(resolve(sceneTarget, 'manifest.json'), JSON.stringify(sceneManifest, null, 1) + '\n');
+console.log(`已整理 ${Object.keys(sceneManifest.scenes).length} 个场景与道具到 public/scenes/flat-v1/`);
 warnings.forEach(w => console.log(`- ${w}`));
 process.exit(warnings.length ? 1 : 0);

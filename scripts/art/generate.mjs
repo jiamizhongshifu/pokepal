@@ -5,9 +5,10 @@
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs line [id...]         三阶段进化线（设定图，白底）
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs stage [id...]        每个阶段的标准立绘（透明底，需先有 line）
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs expressions [id...]  宝宝期 8 个表情（透明底，需先有 stage-1）
+ *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs scene [id...]        小岛与绘本的场景、道具（清单见 scenes.json）
  * 选项：--force 覆盖已有图片；--jobs=4 并发数；--stage=1 只生成某个阶段。
  * 画风参考图：output/rebrand/style-reference.png（本地美术资料，不入库）。
- * 产物：output/rebrand/sprites/<id>/<文件>.png，旁边的 .json 记录提示词、参考图、模型与时间，作为生成来源记录。
+ * 产物：output/rebrand/sprites/<id>/ 与 output/rebrand/scenes/<id>/，每张图旁的 .json 记录提示词、参考图、模型与时间，作为生成来源记录。
  */
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -21,6 +22,8 @@ const style = readFileSync(resolve(here, 'style.txt'), 'utf8');
 const sprites = JSON.parse(readFileSync(resolve(here, 'sprites.json'), 'utf8'));
 const styleReference = resolve(root, 'output/rebrand/style-reference.png');
 const outRoot = resolve(root, 'output/rebrand/sprites');
+const sceneCatalog = JSON.parse(readFileSync(resolve(here, 'scenes.json'), 'utf8'));
+const sceneRoot = resolve(root, 'output/rebrand/scenes');
 const at = (s, file) => resolve(outRoot, s.id, file);
 
 const STAGE_LABEL = ['baby, smallest and roundest', 'young, medium size', 'grown, largest and most elaborate'];
@@ -42,6 +45,15 @@ const KINDS = {
    prompt: `Draw ONE character only: stage ${i + 1} of the growth line in the second attached image (counting left to right), ${stageText(s, i)}.\nMatch that stage exactly: same body shape, proportions, colors, markings and signature feature. Full body, front three-quarter view, a friendly happy standing pose. ${TRANSPARENT}\n${avoid(s)} The first attached image is the STYLE reference only.\n\n${style}`,
   })),
  },
+ scene: {
+  items: () => sceneCatalog.scenes,
+  variants: sc => [{
+   dir: resolve(sceneRoot, sc.id), file: `${sc.id}.png`, size: sc.group === 'prop' ? 'square 1024x1024' : sc.size, refs: [styleReference],
+   prompt: sc.group === 'prop'
+    ? `Draw a picture-book prop: ${sc.prompt}\n${sceneCatalog.propStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
+    : `Draw a background illustration: ${sc.prompt}\n${sc.group === 'story-bg' ? sceneCatalog.storyStage + '\n' : ''}${sc.transparent ? '' : 'Fill the whole canvas edge to edge, no border or frame.\n'}${sceneCatalog.sceneStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`,
+  }],
+ },
  expressions: {
   variants: s => [{
    file: 'expressions.png', size: 'landscape 1536x1024', refs: [styleReference, at(s, 'stage-1.png')],
@@ -51,7 +63,7 @@ const KINDS = {
 };
 
 function run(sprite, v, force) {
- const dir = resolve(outRoot, sprite.id);
+ const dir = v.dir ?? resolve(outRoot, sprite.id);
  const base = v.file.replace(/\.png$/, '');
  if (!force && existsSync(resolve(dir, v.file))) return Promise.resolve({ id: sprite.id, file: v.file, skipped: true });
  const missing = v.refs.filter(r => !existsSync(r));
@@ -77,9 +89,10 @@ const force = rest.includes('--force');
 const jobs = Math.max(1, Number(option('jobs') ?? 4));
 const onlyStage = option('stage') ? Number(option('stage')) : undefined;
 const ids = rest.filter(a => !a.startsWith('--'));
-const unknown = ids.filter(id => !sprites.some(s => s.id === id));
-if (unknown.length) { console.error(`未知精灵：${unknown.join(', ')}`); process.exit(2); }
-const queue = sprites.filter(s => !ids.length || ids.includes(s.id)).flatMap(s => KINDS[kind].variants(s).filter(v => onlyStage === undefined || v.stage === onlyStage).map(v => [s, v]));
+const items = KINDS[kind].items?.() ?? sprites;
+const unknown = ids.filter(id => !items.some(s => s.id === id));
+if (unknown.length) { console.error(`未知条目：${unknown.join(', ')}`); process.exit(2); }
+const queue = items.filter(s => !ids.length || ids.includes(s.id)).flatMap(s => KINDS[kind].variants(s).filter(v => onlyStage === undefined || v.stage === onlyStage).map(v => [s, v]));
 const results = [];
 await Promise.all(Array.from({ length: jobs }, async () => {
  while (queue.length) { const [s, v] = queue.shift(); const r = await run(s, v, force); results.push(r); console.log(JSON.stringify(r)); }

@@ -44,7 +44,8 @@ node scripts/art/package.mjs                                     # 整理到 pub
 
 - 已完成：16 种 × 3 阶段进化线、48 张阶段立绘、16 份宝宝期表情表，整理为 224 个 WebP 素材（约 9 MB）与 `public/sprites/manifest.json`。
 - `CODEX_MODEL` 需填当前账号可用的模型；生成记录（提示词、参考图、模型、时间）保存在 `output/rebrand/sprites/<id>/`。
-- 下一批：小岛插画场景、绘本插画、界面图标、长大与成年期的表情。
+- 场景与道具（清单 `scripts/art/scenes.json`，`generate.mjs scene` 生成）：小岛全景、欢迎图、学习路径、草地空场、日记书桌、草丛前景条，6 张绘本背景，20 个透明底道具，共 32 张，整理到 `public/scenes/flat-v1/`（约 1.1 MB）。绘本角色不画进背景，由精灵立绘叠加。
+- 下一批：界面图标、长大与成年期的表情；小岛全景的站点坐标在代码重构时标注。
 
 ## 风险与建议
 
