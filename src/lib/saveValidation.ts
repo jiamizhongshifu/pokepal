@@ -55,6 +55,7 @@ export function validateSave(value:unknown):SaveData {
  if(cfg.ambientEnglish!==undefined)requireValue(['off','some','more'].includes(cfg.ambientEnglish),'环境英语');
  if(cfg.storyLanguage!==undefined)requireValue(['stage','short','full'].includes(cfg.storyLanguage),'故事语言版本');
  if(cfg.storyMode!==undefined)requireValue(['listen','read'].includes(cfg.storyMode),'故事阅读模式');
+ if(cfg.storyPace!==undefined)requireValue(['normal','slow'].includes(cfg.storyPace),'故事朗读速度');
  if(cfg.englishMode!==undefined)requireValue(['english','bilingual'].includes(cfg.englishMode),'语言设置');
  if(cfg.idleCamera!==undefined)requireValue(typeof cfg.idleCamera==='boolean','自动观察设置');
  if(cfg.hqLighting!==undefined)requireValue(typeof cfg.hqLighting==='boolean','画质设置');

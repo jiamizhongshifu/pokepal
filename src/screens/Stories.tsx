@@ -16,17 +16,18 @@ import { PokeImg } from '../components/PokeImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import { useGame } from '../store';
-import { say, stopSpeech } from '../lib/speech';
+import { say, setVoicePace, stopSpeech } from '../lib/speech';
+import { EchoPractice, ReadAlongText, WordCard, useSpokenWord } from '../components/StoryReadAlong';
+import { storyWordEntry, storyWordVoice } from '../lib/storyWords';
 import { PIC_WORDS } from '../data/words';
 
 /** Keep the full sentence readable; emphasis never changes narration or wording. */
-function StoryReading({page}:{page:StoryPage}){
- const start=page.en.toLowerCase().indexOf(page.keyword.en.toLowerCase());
+function StoryReading({page,spoken,selected,onWord}:{page:StoryPage;spoken:number;selected?:number;onWord:(word:string,index:number)=>void}){
  const keys=[page.keyword.en,...PIC_WORDS.filter(w=>new RegExp(`\\b${w.en}(?:s|es)?\\b`,'i').test(page.en)).map(w=>w.en)];
  const words=[...new Map(keys.flatMap(key=>{const e=learningEntry(key);return e?[[e.key,e] as const]:[];})).values()].slice(0,3);
  const records=useGame(s=>s.save.learning?.records);
  return <section className="story-reading-text" aria-label="中英对照故事正文">
-  <p className="story-text-en" lang="en">{start<0?page.en:<>{page.en.slice(0,start)}<mark>{page.en.slice(start,start+page.keyword.en.length)}</mark>{page.en.slice(start+page.keyword.en.length)}</>}</p>
+  <ReadAlongText en={page.en} keyword={page.keyword.en} active={spoken} selected={selected} onWord={onWord}/>
   <p className="story-text-zh" lang="zh-CN">{page.zh}</p>
   <p className="story-keyword"><span>一起认识</span><b lang="en">{page.keyword.en}</b><span lang="zh-CN">{page.keyword.zh}</span></p>
   {!!words.length&&<details className="story-word-disclosure"><summary><Icon name="book" size={22}/>这页的小词</summary><div className="story-word-saves" aria-label="把故事里的词放进手册">{words.map(w=><button key={w.key} aria-pressed={!!records?.[w.key]?.saved} onClick={()=>useGame.getState().saveLearningWord(w.key)}><Icon name="book" size={19}/>{records?.[w.key]?.saved?'已收藏':'收藏'} {w.en}</button>)}</div></details>}
@@ -93,6 +94,11 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const timer=useRef<ReturnType<typeof setTimeout>>();
  const auto=useRef(autoPlay);auto.current=autoPlay;
  const page=story.pages[idx];
+ const spoken=useSpokenWord(page.en);
+ const [word,setWord]=useState<{word:string;index:number}|null>(null);
+ useEffect(()=>setWord(null),[idx]);
+ const [slow,setSlow]=useState(useGame.getState().save.settings.storyPace==='slow');
+ useEffect(()=>{setVoicePace(slow?'slow':'normal');return()=>setVoicePace('normal');},[slow]);
  const finish=()=>{stopSpeech();setEnded(true);noteStoryPage(bookmark,story.pages.length+1);};
  useEffect(()=>{
    if(ended)return;
@@ -120,6 +126,15 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
    if(run.current===ticket){setStatus(ok?'idle':'unavailable');if(ok)useGame.getState().noteWord(line.en,'heard');}
  };
  const turn=(next:number)=>{pause();setIdx(next);};
+ const hearWord=async(next:string)=>{
+   pause();const ticket=++run.current;setStatus('playing');
+   const ok=await say(['en',storyWordVoice(next)]);
+   if(run.current!==ticket)return;
+   setStatus(ok?'idle':'unavailable');
+   const entry=storyWordEntry(next);if(ok&&entry)useGame.getState().noteWord(entry.key,'heard');
+ };
+ const pickWord=(next:string,index:number)=>{setWord({word:next,index});void hearWord(next);};
+ const toggleSlow=()=>{const next=!slow;setVoicePace(next?'slow':'normal');setSlow(next);useGame.getState().updateSettings({storyPace:next?'slow':'normal'});read();};
  return <div className="screen story-reader">
    <TopBar title={story.title} onBack={()=>go({name:'stories'})} focused
      progress={!ended&&<span className="story-page-count" aria-label={`第 ${idx+1} 页，共 ${story.pages.length} 页`}>{idx+1} / {story.pages.length}</span>}
@@ -146,7 +161,11 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <div className="story-mode" aria-label="阅读方式">{(['listen','read'] as const).map(mode=><button key={mode} aria-label={mode==='listen'?'听故事，自动翻页':'一起读，自己翻页'} aria-pressed={autoPlay===(mode==='listen')} onClick={()=>{setAutoPlay(mode==='listen');useGame.getState().updateSettings({storyMode:mode});read();}}><Icon name={mode==='listen'?'ear':'book'} size={26}/>{mode==='listen'?'听故事':'一起读'}<small>{mode==='listen'?'自动翻页':'自己翻页'}</small></button>)}</div>
      </header>
      <StoryStage key={idx} story={story} page={page} onWord={discover?readPair:undefined}/>
-     <div className="story-reading"><StoryReading page={page}/>
+     <div className="story-reading">
+     <div className="story-reading-tools"><button className="story-pace" aria-pressed={slow} onClick={toggleSlow}><Icon name="ear" size={22}/>{slow?'慢慢读':'慢一点'}<small lang="en">Slow</small></button></div>
+     <StoryReading page={page} spoken={spoken} selected={word?.index} onWord={pickWord}/>
+     {word&&<WordCard word={word.word} onHear={()=>void hearWord(word.word)} onClose={()=>setWord(null)}/>}
+     <EchoPractice key={`${story.id}:${idx}`} en={page.en} onStart={()=>{pause();setWord(null);}}/>
      {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
      </div>
      <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · {story.themeEn}{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>

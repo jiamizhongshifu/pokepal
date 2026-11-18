@@ -260,6 +260,7 @@ npm run build  # 网页构建不需要另做家庭离线配音包
 - `check-coverage.ts`：检查运行时话术是否被收集。
 - `verify-pack.py`：检查文件、火山成功回执及标准化记录，并拒绝系统 TTS 回退。
 - `normalize.py`：通过 ffmpeg 统一响度。
+- `align_timings.py`：绘本跟读句（`timed`，含 `en~slow|` 慢速版）在标准化后用火山录音识别校正逐词时间，写入 `public/voice/timings.json`；识别结果按音频哈希缓存，只有新录音才计费。
 - `pack.py`：生成离线包和文件字节索引。
 
 出现 `403 / requested resource not granted` 时检查账号资源授权或额度，不应改用本地合成掩盖缺失。恢复后运行同一合成命令即可补齐；只有所有配音检查通过，才发布新版本。

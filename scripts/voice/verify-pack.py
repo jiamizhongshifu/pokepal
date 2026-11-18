@@ -2,16 +2,18 @@
 """Fail the build if any current spoken line lacks a verified Volcengine recording."""
 import hashlib, json, os, sys
 from pathlib import Path
-from volc_tts import line_file
+from volc_tts import line_file, line_key
 ROOT = Path(__file__).resolve().parents[2]
 lines = json.loads((ROOT / 'voice/lines.json').read_text())
 manifest = json.loads((ROOT / 'public/voice/manifest.json').read_text())
 receipts = [json.loads(l) for l in (ROOT / 'scripts/.cache/tts-receipts.jsonl').read_text().splitlines() if l.strip()]
 proof = {(r.get('text_sha1'), r.get('voice')) for r in receipts if r.get('ok') and r.get('code') == 20000000}
 normalized = json.loads((ROOT / 'scripts/.cache/normalized.json').read_text())
+timings_path = ROOT / 'public/voice/timings.json'
+timings = json.loads(timings_path.read_text()) if timings_path.exists() else {}
 issues = []
 for l in lines:
-    key = f"{l['lang']}|{l['text']}"
+    key = line_key(l)
     file = line_file(l)
     p = ROOT / 'public/voice' / file
     if manifest.get(key) != file: issues.append({'kind':'manifest', 'key':key}); continue
@@ -19,6 +21,8 @@ for l in lines:
     data = p.read_bytes()
     if (hashlib.sha1(l['text'].encode()).hexdigest()[:12], l['voice']) not in proof: issues.append({'kind':'provider-receipt', 'key':key})
     if normalized.get(file) != hashlib.sha1(data).hexdigest(): issues.append({'kind':'normalization', 'key':key})
+    timing = timings.get(key, {})
+    if l.get('timed') and not (timing.get('raw') and timing.get('w') and len(timing['w']) == len(timing.get('t', []))): issues.append({'kind':'timing', 'key':key})
 for p in (ROOT / 'src').rglob('*'):
     if p.suffix in ('.ts','.tsx') and any(api in p.read_text() for api in ['speechSynthesis', 'SpeechSynthesisUtterance']):
         issues.append({'kind':'system-tts', 'file':str(p.relative_to(ROOT))})

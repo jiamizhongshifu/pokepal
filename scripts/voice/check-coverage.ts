@@ -16,8 +16,11 @@ import { STATIONS, compatible } from '../../src/scene/islandLife';
 import { lookLine, whatLine, whereLine } from '../../src/data/islandEnglish';
 import { ACTIVITY } from '../../src/lib/routine';
 import type { Part } from '../../src/lib/speech';
-const lines = JSON.parse(readFileSync('voice/lines.json','utf8')) as {lang:string;text:string}[];
-const keys = new Set(lines.map(l=>`${l.lang}|${l.text}`));
+import { storyLineWords, storyWordVoice } from '../../src/lib/storyWords';
+import { voiceKey } from '../../src/lib/voiceKey';
+const lines = JSON.parse(readFileSync('voice/lines.json','utf8')) as {lang:string;text:string;key?:string;timed?:boolean}[];
+const keys = new Set(lines.map(l=>l.key??`${l.lang}|${l.text}`));
+const timed = new Set(lines.filter(l=>l.timed).map(l=>l.key??`${l.lang}|${l.text}`));
 const missing = new Set<string>();
 let checked = 0;
 const check = (lang:string,text:string) => { checked++;if(!keys.has(`${lang}|${text}`))missing.add(`${lang}|${text}`); };
@@ -46,5 +49,10 @@ for(const unit of LEARNING_UNITS){check('zh',unit.mission);for(const scene of un
 for(const key of ['big','small','count:1','count:2','count:3','count:4','count:5'])parts(learningVoice(learningEntry(key)!));
 for(const item of [...LETTERS,...PIC_WORDS.filter(w=>w.icon).map(w=>({...w,letter:w.en[0].toUpperCase()}))]){parts(traceIntro(item));parts(traceSuccess(item));}
 for(const story of allStoryEditions(STORIES))for(const line of [...story.pages,...story.pages.flatMap(p=>p.pictureWord?[p.pictureWord]:[]),story.phrase,story.question,...story.pages.flatMap(p=>p.pause?.choices.map(c=>c.reply)??[])]){check('en',line.en);check('zh',line.zh);}
+// Read-along pages need both paces with word timings, and every word on its own.
+for(const story of allStoryEditions(STORIES))for(const page of story.pages){
+ for(const key of [voiceKey('en',page.en),voiceKey('en',page.en,'slow')]){checked++;if(!keys.has(key)||!timed.has(key))missing.add(`timed:${key}`);}
+ for(const word of storyLineWords(page.en))check('en',storyWordVoice(word));
+}
 console.log(JSON.stringify({checked,missing:[...missing],passed:missing.size===0},null,2));
 if(missing.size)process.exit(1);

@@ -96,6 +96,7 @@ export interface Settings {
   ambientEnglish?: "off" | "some" | "more";
   /** 中文提示：双语（英文 → 中文提示 → 英文复述）/ 纯英文，默认双语 */
   storyMode?: 'listen'|'read';
+  storyPace?: 'normal'|'slow';
   storyLanguage?: 'stage'|'short'|'full';
   englishMode?: "bilingual" | "english";
 }

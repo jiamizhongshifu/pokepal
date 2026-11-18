@@ -23,18 +23,22 @@ import { COUNT_ITEMS, SAY, traceIntro, traceSuccess, colorAsk, colorNo, colorYes
 import { evoDone, evoReady, evoStart, evoStay } from "../../src/data/evolutionEnglish";
 import { COUNTABLE, GOODNIGHT_TAIL, GREETINGS, SCENE_LINES, colorLine, countLine, lookLine, whatLine, whereLine, type Narration } from "../../src/data/islandEnglish";
 import { NARRATOR_EN, NARRATOR_ZH, pokemonVoice, type Voice } from "./cast";
+import { storyLineWords, storyWordVoice } from "../../src/lib/storyWords";
+import { voiceKey, SLOW_STORY_RATE } from "../../src/lib/voiceKey";
 
 type Lang = "zh" | "en";
-interface Line { lang: Lang; text: string; voice: string; pitch?: number; rate?: number; context?: string; resource: string }
+/** key: manifest key when it differs from lang|text; timed: also store word start times for read-along highlighting. */
+interface Line { lang: Lang; text: string; voice: string; pitch?: number; rate?: number; context?: string; resource: string; key?: string; timed?: boolean }
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
 const out = new Map<string, Line>();
-function add(lang: Lang, text: string, v?: Voice) {
+function add(lang: Lang, text: string, v?: Voice, extra: { key?: string; timed?: boolean } = {}) {
   if (!text || !text.trim()) return;
-  const key = `${lang}|${text}`;
-  if (out.has(key)) return;
+  const key = extra.key ?? `${lang}|${text}`;
+  const existing = out.get(key);
+  if (existing) { if (extra.timed) existing.timed = true; return; }
   const voice = v ?? (lang === "zh" ? NARRATOR_ZH : NARRATOR_EN);
-  out.set(key, { lang, text, resource: "seed-tts-2.0", ...voice });
+  out.set(key, { lang, text, resource: "seed-tts-2.0", ...voice, ...(extra.key ? { key } : {}), ...(extra.timed ? { timed: true } : {}) });
 }
 const zh = (t: string, v?: Voice) => add("zh", t, v);
 for(const w of [...Object.values(WEATHER),CLEAR_NIGHT]){add('en',w.en);add('zh',w.voice);}
@@ -71,6 +75,12 @@ for (const prompt of DIARY_PROMPTS) zh(prompt.voice);
 for (const story of allStoryEditions(STORIES)) {
   for (const line of [...story.pages, ...story.pages.flatMap(p=>p.pictureWord?[p.pictureWord]:[]), story.phrase, story.question, ...story.pages.flatMap(p=>p.pause?.choices.map(c=>c.reply)??[])]) { en(line.en); zh(line.zh); }
   en(story.titleEn); zh(story.title);
+  // Read-along: each page sentence at normal and slow pace, both with word timings, plus every word on its own.
+  for (const page of story.pages) {
+    add("en", page.en, undefined, { timed: true });
+    add("en", page.en, { ...NARRATOR_EN, rate: SLOW_STORY_RATE }, { key: voiceKey("en", page.en, "slow"), timed: true });
+    for (const word of storyLineWords(page.en)) add("en", storyWordVoice(word), { ...NARRATOR_EN, context: "Say just this one word clearly and warmly, like a kind teacher showing a 4-year-old a word in a picture book." });
+  }
 }
 
 // ---------- 2. 带变量的模板 ----------

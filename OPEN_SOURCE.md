@@ -32,7 +32,7 @@ npm run typecheck
 public/art/  public/env/  public/icons/  public/models/
 public/pokemon/  public/story-art/  public/textures/
 public/music/  public/environment/
-public/voice/manifest.json  public/voice/<hash>.mp3
+public/voice/manifest.json  public/voice/timings.json  public/voice/<hash>.mp3
 ```
 
 `npm run check` 中的教学引导和学习内容测试会读取真实配音清单及文件；纯源码环境不能完成这部分检查。资源准备好后：

@@ -27,7 +27,9 @@ for(const files of groups.values()){
 // Key hashing is shared with the browser; immutable shards are pinned by the built JS.
 const shardKey=key=>{let h=2166136261;for(let i=0;i<key.length;i++)h=Math.imul(h^key.charCodeAt(i),16777619);return (h>>>0)%256;};
 const shards=Array.from({length:256},()=>({}));
-for(const [key,file] of Object.entries(manifest))shards[shardKey(key)][key]=entries[file];
+// Read-along word timings travel with their recording in the immutable index entry.
+const timings=JSON.parse(await readFile('public/voice/timings.json','utf8'));
+for(const [key,file] of Object.entries(manifest))shards[shardKey(key)][key]=timings[key]?[...entries[file],{w:timings[key].w,t:timings[key].t,end:timings[key].end}]:entries[file];
 await mkdir(resolve(target,'voice-online/index'),{recursive:true});
 const index=[];
 for(const shard of shards){const body=JSON.stringify(shard),name=hash(body)+'.json';await writeFile(resolve(target,'voice-online/index',name),body);index.push(name);}

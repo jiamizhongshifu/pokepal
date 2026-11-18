@@ -12,6 +12,7 @@ for(let i=0;i<names.length;i++){
  for(const [key,entry]of Object.entries(JSON.parse(bytes))){assert.equal(shardKey(key),i);assert.ok(manifest[key]);entries.push([key,entry]);packNames.add(entry[0]);}
 }
 assert.equal(entries.length,Object.keys(manifest).length);
+{const timings=JSON.parse(await readFile('public/voice/timings.json','utf8'));for(const [key,e]of entries){const x=timings[key];assert.deepEqual(e[3],x&&{w:x.w,t:x.t,end:x.end},`Timing for ${key}`);}}
 let checked=0;const grouped=new Map();for(const [key,e]of entries){if(!grouped.has(e[0]))grouped.set(e[0],[]);grouped.get(e[0]).push([key,e]);}
 for(const [name,group]of grouped){const pack=await readFile(resolve(root,'voice-online/packs',name));assert.equal(createHash('sha256').update(pack).digest('hex').slice(0,24)+'.bin',name);for(const [key,[,offset,size]]of group){assert.deepEqual(pack.subarray(offset,offset+size),await readFile(resolve('public/voice',manifest[key])));checked++;}}
 const files=[];async function walk(dir){for(const d of await readdir(dir,{withFileTypes:true})){const f=resolve(dir,d.name);if(d.isDirectory())await walk(f);else{files.push(f.slice(root.length+1));assert.ok((await stat(f)).size<=25*1024*1024);}}}await walk(root);

@@ -1,5 +1,8 @@
 import { onlineVoiceBytes } from "./onlineVoice";
 import { type CaptionPart } from "./captions";
+import { onlineVoiceAvailable, onlineVoiceTiming } from "./onlineVoice";
+import { voiceKey, type VoicePace } from "./voiceKey";
+import type { RawTiming } from "./storyWords";
 import type { Lang } from "../types";
 
 /** All spoken teaching and narration uses the bundled Volcengine voice pack. */
@@ -12,6 +15,28 @@ export function setSpeechRate(r: number) {
 }
 export function onEnglishSpoken(cb: (text: string) => void) {
   onEnglish = cb;
+}
+
+/** Prefer slow English recordings where they exist (picture-book sentences); other lines keep their normal recording. */
+let pace: VoicePace = "normal";
+export function setVoicePace(next: VoicePace) {
+  pace = next;
+}
+
+/** Start of one recording on the shared AudioContext clock, so a reader can follow along word by word. */
+export interface VoicePlayback { lang: Lang; text: string; key: string; startedAt: number; rate: number; timing?: RawTiming }
+const playbackListeners = new Set<(playback: VoicePlayback | null) => void>();
+export function onVoicePlayback(listener: (playback: VoicePlayback | null) => void) {
+  playbackListeners.add(listener);
+  return () => { playbackListeners.delete(listener); };
+}
+const emitPlayback = (playback: VoicePlayback | null) => playbackListeners.forEach((l) => l(playback));
+
+let localTimings: Promise<Record<string, RawTiming>> | null = null;
+function voiceTiming(key: string): Promise<RawTiming | undefined> {
+  if (import.meta.env.VITE_ONLINE) return onlineVoiceTiming(key);
+  if (!localTimings) localTimings = fetchVoiceAsset("/voice/timings.json", (r) => r.json()).catch(() => { localTimings = null; return {}; });
+  return localTimings.then((all) => all[key]);
 }
 export const ttsAvailable = () => typeof window !== "undefined" && !!(window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext);
 export const voiceInfo = () => ({ en: "火山豆包 · Allison", zh: "火山豆包 · 小雪", provider: "volcengine", ready: import.meta.env.VITE_ONLINE || !!voiceManifest });
@@ -74,12 +99,15 @@ function voiceBuffer(file: string): Promise<AudioBuffer | null> {
 async function playVoice(text: string, lang: Lang, myToken: number, allowed: () => boolean): Promise<boolean> {
   await loadVoicePack();
   if (myToken !== token || !allowed()) return false;
-  const file = import.meta.env.VITE_ONLINE ? `${lang}|${text}` : voiceManifest?.[`${lang}|${text}`];
+  const slow = pace === "slow" && lang === "en" ? voiceKey(lang, text, "slow") : undefined;
+  const key = slow && (import.meta.env.VITE_ONLINE ? await onlineVoiceAvailable(slow) : voiceManifest?.[slow]) ? slow : voiceKey(lang, text);
+  if (myToken !== token || !allowed()) return false;
+  const file = import.meta.env.VITE_ONLINE ? key : voiceManifest?.[key];
   if (!file) {
     reportVoiceIssue(text, lang, voiceManifest ? "missing-file" : "manifest-unavailable");
     return false;
   }
-  const buf = await voiceBuffer(file);
+  const [buf, timing] = await Promise.all([voiceBuffer(file), playbackListeners.size ? voiceTiming(key) : undefined]);
   if (myToken !== token || !allowed()) return false;
   if (!buf) { reportVoiceIssue(text, lang, "download-or-decode"); return false; }
   const ac = getAudioContext();
@@ -94,12 +122,18 @@ async function playVoice(text: string, lang: Lang, myToken: number, allowed: () 
     src.playbackRate.value = rate;
     src.connect(ac.destination);
     currentSource = src;
+    let settled = false;
     const done = () => {
+      if (settled) return;
+      settled = true;
       if (currentSource === src) currentSource = null;
+      emitPlayback(null);
       resolve(true);
     };
     src.onended = done;
-    src.start();
+    const startedAt = ac.currentTime;
+    src.start(startedAt);
+    emitPlayback({ lang, text, key, startedAt, rate, timing });
     setTimeout(done, buf.duration * 1000 / rate + 800);
   });
 }
@@ -165,6 +199,7 @@ export function stopSpeech() {
     /* 已经结束 */
   }
   currentSource = null;
+  emitPlayback(null);
 }
 
 /** 在第一次点击时调用，解锁 iOS 的语音与音频 */

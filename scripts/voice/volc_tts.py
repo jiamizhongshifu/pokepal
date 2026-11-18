@@ -16,6 +16,12 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT_DIR = os.path.join(ROOT, "public", "voice")
 MANIFEST = os.path.join(OUT_DIR, "manifest.json")
 RECEIPTS = os.path.join(ROOT, "scripts", ".cache", "tts-receipts.jsonl")
+# Raw word timings for read-along lines: {manifest key: {"w": pieces, "t": starts, "e": ends, "c": confidence, "end": seconds}}.
+TIMINGS = os.path.join(OUT_DIR, "timings.json")
+
+
+def line_key(line):
+    return line.get("key") or f"{line['lang']}|{line['text']}"
 
 
 def api_key():
@@ -30,11 +36,11 @@ def api_key():
     return key
 
 
-def synth(key, text, speaker, resource="seed-tts-2.0", rate=0, pitch=0, context=None, loudness=0):
+def synth(key, text, speaker, resource="seed-tts-2.0", rate=0, pitch=0, context=None, loudness=0, timed=False):
     params = {
         "text": text,
         "speaker": speaker,
-        "audio_params": {"format": "mp3", "sample_rate": 24000, "bit_rate": 32000, "speech_rate": rate, "loudness_rate": loudness},
+        "audio_params": {"format": "mp3", "sample_rate": 24000, "bit_rate": 32000, "speech_rate": rate, "loudness_rate": loudness, **({"enable_subtitle": True} if timed else {})},
     }
     additions = {"disable_markdown_filter": False, "disable_default_bit_rate": True}
     if pitch:
@@ -52,6 +58,7 @@ def synth(key, text, speaker, resource="seed-tts-2.0", rate=0, pitch=0, context=
     })
     audio = bytearray()
     usage = None
+    words = []
     try:
         with urllib.request.urlopen(req, timeout=60) as resp:
             logid = resp.headers.get("X-Tt-Logid", "")
@@ -70,11 +77,17 @@ def synth(key, text, speaker, resource="seed-tts-2.0", rate=0, pitch=0, context=
                         audio += base64.b64decode(msg["data"])
                     if msg.get("usage"):
                         usage = msg["usage"]
+                    words += (msg.get("sentence") or {}).get("words") or []
             if buf.strip():
                 msg = json.loads(buf)
                 if msg.get("data"):
                     audio += base64.b64decode(msg["data"])
-        return bytes(audio), {"code": 20000000, "logid": logid, "usage": usage}
+        info = {"code": 20000000, "logid": logid, "usage": usage}
+        if timed:
+            if not words:
+                return None, {"code": "no-timestamps", "logid": logid}
+            info["timing"] = {"w": [w["word"] for w in words], "t": [round(float(w["startTime"]), 3) for w in words], "e": [round(float(w["endTime"]), 3) for w in words], "c": [round(float(w.get("confidence", 1)), 2) for w in words], "end": round(float(words[-1]["endTime"]), 3)}
+        return bytes(audio), info
     except urllib.error.HTTPError as e:
         detail = e.read()[:200].decode(errors="ignore")
         return None, {"http": e.code, "detail": detail}
@@ -94,17 +107,16 @@ def build(lines_path, workers=4, normalize=True):
         lines = json.load(f)
     os.makedirs(OUT_DIR, exist_ok=True)
     os.makedirs(os.path.dirname(RECEIPTS), exist_ok=True)
-    manifest = {}
-    if os.path.exists(MANIFEST):
-        manifest = json.load(open(MANIFEST))
-    todo = [l for l in lines if not os.path.exists(os.path.join(OUT_DIR, line_file(l)))]
+    timings = json.load(open(TIMINGS)) if os.path.exists(TIMINGS) else {}
+    # A read-along line without timings is synthesized again so its audio and word times come from one request.
+    todo = [l for l in lines if not os.path.exists(os.path.join(OUT_DIR, line_file(l))) or (l.get("timed") and "c" not in (timings.get(line_key(l), {}).get("raw") or timings.get(line_key(l), {})))]
     print(f"台词 {len(lines)} 条，需新合成 {len(todo)} 条，字符约 {sum(len(l['text']) for l in todo)}")
     done = fail = 0
     chars = 0
 
     def job(l):
         for attempt in range(3):
-            audio, info = synth(key, l["text"], l["voice"], l.get("resource", "seed-tts-2.0"), l.get("rate", 0), l.get("pitch", 0), l.get("context"))
+            audio, info = synth(key, l["text"], l["voice"], l.get("resource", "seed-tts-2.0"), l.get("rate", 0), l.get("pitch", 0), l.get("context"), timed=bool(l.get("timed")))
             if audio:
                 return l, audio, info
             if info.get("http") in (429, 500, 502, 503, 504) or info.get("code") in (45000292,) or info.get("net"):
@@ -119,17 +131,23 @@ def build(lines_path, workers=4, normalize=True):
             if audio:
                 with open(os.path.join(OUT_DIR, line_file(l)), "wb") as f:
                     f.write(audio)
+                if info.get("timing"):
+                    timings[line_key(l)] = info["timing"]
                 done += 1
                 chars += (info.get("usage") or {}).get("text_words", len(l["text"]))
             else:
                 fail += 1
                 print(f"  ✗ [{l['lang']}] {l['text'][:30]} → {info}")
-            rec.write(json.dumps({"t": time.time(), "text_sha1": hashlib.sha1(l["text"].encode()).hexdigest()[:12], "voice": l["voice"], "file": line_file(l), "provider": "volcengine", "ok": bool(audio), **{k: v for k, v in info.items() if k != 'detail'}}, ensure_ascii=False) + "\n")
+            rec.write(json.dumps({"t": time.time(), "text_sha1": hashlib.sha1(l["text"].encode()).hexdigest()[:12], "voice": l["voice"], "file": line_file(l), "provider": "volcengine", "ok": bool(audio), **{k: v for k, v in info.items() if k not in ('detail', 'timing')}}, ensure_ascii=False) + "\n")
             if (done + fail) % 50 == 0:
                 rec.flush()
                 print(f"  进度 {done + fail}/{len(todo)}，成功 {done}，失败 {fail}", flush=True)
     # 清单只登记实际存在的文件
-    manifest = {f"{l['lang']}|{l['text']}": line_file(l) for l in lines if os.path.exists(os.path.join(OUT_DIR, line_file(l)))}
+    manifest = {line_key(l): line_file(l) for l in lines if os.path.exists(os.path.join(OUT_DIR, line_file(l)))}
+    timed_keys = {line_key(l) for l in lines if l.get("timed")}
+    with open(TIMINGS + ".tmp", "w") as f:
+        json.dump({k: v for k, v in sorted(timings.items()) if k in timed_keys and k in manifest}, f, ensure_ascii=False, separators=(",", ":"))
+    os.replace(TIMINGS + ".tmp", TIMINGS)
     with open(MANIFEST + ".tmp", "w") as f:
         json.dump(manifest, f, ensure_ascii=False, separators=(",", ":"))
     os.replace(MANIFEST + ".tmp", MANIFEST)
@@ -138,6 +156,9 @@ def build(lines_path, workers=4, normalize=True):
     import subprocess
     if normalize:
         subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "normalize.py")], check=True)
+    # Word times are corrected against the final normalized audio.
+    if any(l.get("timed") for l in lines):
+        subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "align_timings.py")], check=True)
     if fail:
         raise SystemExit(1)
 
