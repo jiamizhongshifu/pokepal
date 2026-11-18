@@ -12,6 +12,6 @@ export function loadCreatures() {
  return read(resolve(root, 'src/data/creatures.json')).map(s => {
   const a = art.get(s.id);
   if (!a) throw new Error(`creature-art.json 缺少 ${s.id}`);
-  return { ...s, animal: a.animal, word: a.word, not: a.not, stages: s.stages.map((st, i) => ({ ...st, body: a.stages[i].body })) };
+  return { ...s, animal: a.animal, word: a.word, not: a.not, portrait: a.portrait ?? '', stages: s.stages.map((st, i) => ({ ...st, body: a.stages[i].body })) };
  });
 }

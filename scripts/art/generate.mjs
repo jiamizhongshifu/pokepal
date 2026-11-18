@@ -30,6 +30,9 @@ const at = (s, file) => resolve(outRoot, s.id, file);
 const STAGE_LABEL = ['baby, smallest and roundest', 'young, medium size', 'grown, largest and most elaborate'];
 const stageText = (s, i) => `"${s.stages[i].nameEn}" (${s.type} type), ${s.stages[i].body}`;
 const avoid = s => `It must not look like: ${s.not}.`;
+/** Standing portraits greet the child: face to the front, eyes on the viewer; body turns vary by species so the cast does not all lean one way. */
+const PORTRAIT = 'Full body, a friendly happy standing pose. The head and face point straight at the viewer and both pupils sit in the centre of the eyes, looking directly out of the picture at the child (clear eye contact, like greeting a friend); the pupils never point up, sideways or toward a corner.';
+const FACING = [`${PORTRAIT} The body faces the front.`, `${PORTRAIT} The body turns slightly to the left of the picture while the face still looks at the viewer.`, `${PORTRAIT} The body turns slightly to the right of the picture while the face still looks at the viewer.`];
 const TRANSPARENT = 'Fully transparent background (PNG with alpha), no ground shadow, no floor, no backdrop, no frame; the character is centered with generous margin and nothing is cropped.';
 
 /** Each kind lists the images one species needs; a variant is one output file. */
@@ -43,7 +46,7 @@ const KINDS = {
  stage: {
   variants: s => s.stages.map((_, i) => ({
    file: `stage-${i + 1}.png`, stage: i + 1, size: 'square 1024x1024', refs: [styleReference, at(s, 'line.png')],
-   prompt: `Draw ONE character only: stage ${i + 1} of the growth line in the second attached image (counting left to right), ${stageText(s, i)}.\nMatch that stage exactly: same body shape, proportions, colors, markings and signature feature. Full body, front three-quarter view, a friendly happy standing pose. ${TRANSPARENT}\n${avoid(s)} The first attached image is the STYLE reference only.\n\n${style}`,
+   prompt: `Draw ONE character only: stage ${i + 1} of the growth line in the second attached image (counting left to right), ${stageText(s, i)}.\nMatch that stage exactly: same body shape, proportions, colors, markings and signature feature, but NOT its eye direction or head angle. ${FACING[sprites.indexOf(s) % FACING.length]} ${s.portrait} ${TRANSPARENT}\n${avoid(s)} The first attached image is the STYLE reference only.\n\n${style}`,
   })),
  },
  scene: {

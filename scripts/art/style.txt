@@ -4,7 +4,7 @@ ART STYLE (apply strictly; it must match the attached style reference image):
 - Absolutely NO outlines or line art. Shapes are defined only by fill color.
 - Each color has one darker flat shade shape with a hard edge (cel shading) and occasionally one lighter highlight shape. No gradients, no texture, no soft airbrush.
 - Bright saturated colors.
-- Faces: big white eye shapes, often one eye slightly larger than the other, dark pupils pushed toward the direction of action, simple solid brow or eyelid shapes; mouths as solid shapes with a darker inside and a tongue.
+- Faces: big white eye shapes, often one eye slightly larger than the other, dark pupils, simple solid brow or eyelid shapes; mouths as solid shapes with a darker inside and a tongue. In standing portraits the face turns to the front and the pupils sit in the middle of the eyes, looking straight out at the viewer (eye contact with the child); only in action poses do the pupils follow the action.
 - Limbs are chunky rounded capsule shapes (never lines), small rounded hands and feet.
 - Lively poses with squash and stretch and slight tilt; strong, instantly readable silhouettes.
 - No text, letters, numbers, symbols, logos or watermarks anywhere.
