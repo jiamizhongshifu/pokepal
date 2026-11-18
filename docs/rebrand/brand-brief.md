@@ -64,6 +64,6 @@
 - 动作夸张有弹性，斜向构图，剪影一眼可辨。
 - 画面里不出现文字。精灵以真实小动物为原型、加一个自然元素作标志特征；原型避开宝可梦 151 的代表物种，不用猫头鹰，每种定稿前与各代宝可梦和多邻国角色逐一比对。
 
-生图规范与造型描述已入库：`scripts/art/style.txt`、`src/data/creatures.json`，批量生成用 `scripts/art/generate.mjs`（会为每张图留下提示词、参考图、模型和时间记录）。画风参考图 `output/rebrand/style-reference.png` 与生成的图片保存在本地 `output/`，按开源范围不入库。
+生图规范与造型描述已入库：`scripts/art/style.txt`、`src/data/creatures.json` 与 `scripts/art/creature-art.json`，批量生成用 `scripts/art/generate.mjs`（会为每张图留下提示词、参考图、模型和时间记录）。画风参考图 `output/rebrand/style-reference.png` 与生成的图片保存在本地 `output/`，按开源范围不入库。
 
 已知修正：啵啵必须是圆泡泡（不是水滴，水滴是「滴滴」）；墩墩是贴地的扁圆鹅卵石（不是海豹或鱼）。

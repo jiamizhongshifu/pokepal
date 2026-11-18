@@ -9,8 +9,8 @@ import { LEGACY_CREATURE } from './legacyCreatureMap';
  * so saves, voice lines and tests can refer to it; ids below 1000 are legacy and only read by the save migration.
  */
 export type CreatureType = 'water' | 'plant' | 'sky' | 'light' | 'night' | 'earth' | 'snow';
-type StageData = { nameEn: string; nameZh: string; body: string; heightCm: number };
-export type Species = { id: string; type: CreatureType; animal: string; word: string; color: string; genusEn: string; genusZh: string; stages: StageData[]; not: string };
+type StageData = { nameEn: string; nameZh: string; heightCm: number };
+export type Species = { id: string; type: CreatureType; color: string; genusEn: string; genusZh: string; stages: StageData[] };
 
 export const SPECIES = species as Species[];
 export const STAGE_COUNT = 3;

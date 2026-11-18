@@ -13,11 +13,12 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadCreatures } from './creatures.mjs';
 import { EXPRESSION_KEYS } from './expressions.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
-const sprites = JSON.parse(readFileSync(resolve(root, 'src/data/creatures.json'), 'utf8'));
+const sprites = loadCreatures();
 const source = resolve(root, 'output/rebrand/sprites');
 const target = resolve(root, 'public/sprites');
 const magick = (...args) => execFileSync('magick', args, { encoding: 'utf8' }).trim();

@@ -1,0 +1,274 @@
+[
+ {
+  "id": "bubbo",
+  "animal": "otter",
+  "word": "bubble",
+  "not": "Pokémon otters or sea otters (white-and-blue otters with a shell), seals, ducks, turtles; avoid a blue body with a cream or white belly",
+  "stages": [
+   {
+    "body": "a tiny round baby river OTTER with seafoam-teal fur and a soft lilac belly, lilac paws and inner ears, a little ring of three floating soap bubbles circling its head like a crown, short paddle tail with lilac tip"
+   },
+   {
+    "body": "a young OTTER, longer playful body in seafoam teal with lilac belly and paws, blows a big soap bubble from its mouth, the bubble ring becomes a bubble necklace, paddle tail with lilac bubble spots"
+   },
+   {
+    "body": "a grown sleek OTTER standing tall in seafoam teal with lilac belly and deeper teal back stripe, a cluster of shining soap bubbles floating around its shoulders like a mantle, a crown of bubbles, broad paddle tail"
+   }
+  ]
+ },
+ {
+  "id": "berry",
+  "animal": "red panda",
+  "word": "berry",
+  "not": "plant hedgehogs, fire foxes, pandas, raccoon-dog Pokémon",
+  "stages": [
+   {
+    "body": "a tiny round RED PANDA cub with rusty-red fur, cream face markings and dark brown legs, wears a headband of green leaves with three round red berries, a fluffy tail ringed with berry-red and cream stripes"
+   },
+   {
+    "body": "a young RED PANDA carrying a small woven basket full of red berries on its back, berry-and-leaf headband, ringed tail"
+   },
+   {
+    "body": "a grown RED PANDA standing on hind legs with a short mantle of berry vines and leaves over its shoulders, a small leafy crown with red berries, long ringed tail"
+   }
+  ]
+ },
+ {
+  "id": "puffy",
+  "animal": "lamb",
+  "word": "cloud",
+  "not": "electric sheep, cotton puff Pokémon, ghosts",
+  "stages": [
+   {
+    "body": "a tiny LAMB whose wool is a fluffy white rain-free cloud of round puffs, small pale-blue face and legs, tiny curled pale-blue horns, cloud wool hovers slightly above its back"
+   },
+   {
+    "body": "a young LAMB whose cloud wool is bigger and lets it float a little off the ground, the wool puffs drift like small clouds, pale-blue face, small curled horns"
+   },
+   {
+    "body": "a grown sheep whose huge cloud wool forms a soft cloud island it rides on, a small rainbow arc inside the wool, pale-blue face, larger curled horns"
+   }
+  ]
+ },
+ {
+  "id": "twinkle",
+  "animal": "fawn",
+  "word": "star",
+  "not": "legendary deer with rainbow or glowing antler tips, Christmas reindeer, seasonal deer Pokémon, fire horses; no dark navy body, no glowing antler points",
+  "stages": [
+   {
+    "body": "a tiny baby DEER FAWN in warm golden yellow, small white five-pointed star spots on its back, big ears, tiny round antler buds that glow like little stars"
+   },
+   {
+    "body": "a young deer in gold and soft orange, more star spots arranged like a constellation, small branching antlers tipped with tiny glowing stars"
+   },
+   {
+    "body": "a grown graceful deer in gold and warm orange with a cream chest, simple short branching antlers with just two small stars hanging from them like ornaments, a few white star spots on its back, short tidy tail"
+   }
+  ]
+ },
+ {
+  "id": "sunny",
+  "animal": "lion cub",
+  "word": "sun",
+  "not": "fire lions, fire dogs or wolves, flaming manes; no fire anywhere",
+  "stages": [
+   {
+    "body": "a tiny round LION CUB in golden yellow with a ring of short rounded orange sun-ray petals around its face as a mane, rosy cheeks, small tufted tail"
+   },
+   {
+    "body": "a young lion in gold with a bigger mane of rounded orange-and-yellow sun rays, a small round sun mark on the forehead"
+   },
+   {
+    "body": "a grown lion in gold and orange with a large round mane shaped like a rising sun with layered rounded rays, sun mark on the forehead, tail tuft like a small sun"
+   }
+  ]
+ },
+ {
+  "id": "moony",
+  "animal": "sloth",
+  "word": "moon",
+  "not": "big sleeping bear Pokémon, moon-marked bear cubs, bats, ghost Pokémon",
+  "stages": [
+   {
+    "body": "a tiny baby SLOTH with soft navy-grey fur and a cream face, hugging a pale-yellow crescent moon pillow, sleepy half-closed eyes"
+   },
+   {
+    "body": "a young SLOTH hanging happily from a pale-yellow crescent moon like a swing, navy fur with a few tiny star dots"
+   },
+   {
+    "body": "a grown SLOTH in deep navy with a soft starry fur cloak, a pale-yellow crescent mark on its forehead, holding a small glowing crescent lantern"
+   }
+  ]
+ },
+ {
+  "id": "drippy",
+  "animal": "snail",
+  "word": "rain",
+  "not": "slug or snail Pokémon with armor or helmets, frogs, tadpoles, jellyfish",
+  "stages": [
+   {
+    "body": "a tiny SNAIL with a light-blue soft body and two round eye stalks, its shell is a small white rain cloud with three blue raindrops hanging under it"
+   },
+   {
+    "body": "a young SNAIL whose cloud shell is bigger and drips a light rain trail behind it, blue body with a lighter belly"
+   },
+   {
+    "body": "a grown SNAIL carrying a large fluffy cloud shell with a small rainbow arching over it, blue body, gentle smile"
+   }
+  ]
+ },
+ {
+  "id": "snowy",
+  "animal": "penguin",
+  "word": "snow",
+  "not": "blue penguins with a white face and yellow beak, water penguin Pokémon with trident crests or capes, ice-cube head penguins; no blue body, no yellow beak",
+  "stages": [
+   {
+    "body": "a tiny round PENGUIN chick covered in soft white fluff with pale lavender back and wings, a peach-orange beak and feet, a pale-lavender six-pointed snowflake crest on top of its head"
+   },
+   {
+    "body": "a young PENGUIN sliding on its belly, white with pale lavender back, a lavender scarf with white snowflake shapes, peach-orange beak, snowflake crest"
+   },
+   {
+    "body": "a grown PENGUIN standing tall, white front and pale lavender back, a crown-like crest of rounded pale ice crystals, a white snowflake pattern on its lavender back, peach-orange beak and feet"
+   }
+  ]
+ },
+ {
+  "id": "leafy",
+  "animal": "koala",
+  "word": "leaf",
+  "not": "sleepy koala Pokémon hugging a log, grass starters with bulbs",
+  "stages": [
+   {
+    "body": "a tiny round KOALA joey with soft sage-green fur, a big dark nose, its two large round ears are fresh green leaves, holding a small leaf"
+   },
+   {
+    "body": "a young KOALA with sage fur and leaf ears, wearing a scarf of green leaves, hugging a small branch"
+   },
+   {
+    "body": "a grown KOALA in sage green with large leaf ears and a crown of small leafy branches, a leaf-pattern belly"
+   }
+  ]
+ },
+ {
+  "id": "petal",
+  "animal": "hummingbird",
+  "word": "flower",
+  "not": "pigeon or sparrow Pokémon, flying grass puffs, dancing birds, bee or fly Pokémon",
+  "stages": [
+   {
+    "body": "a tiny round HUMMINGBIRD in bright magenta-pink with a short pointed beak, its tail is a small open flower bloom, tiny fluttering wings"
+   },
+   {
+    "body": "a young HUMMINGBIRD whose wings look like pink flower petals, a flower-bloom tail, hovering"
+   },
+   {
+    "body": "a grown elegant HUMMINGBIRD with a fan of layered flower-petal tail feathers in pink and coral and a small flower crown"
+   }
+  ]
+ },
+ {
+  "id": "shelly",
+  "animal": "hermit crab",
+  "word": "shell",
+  "not": "crab Pokémon with big pincers, bivalve shell Pokémon, coral Pokémon, rock-carrying crabs",
+  "stages": [
+   {
+    "body": "a tiny HERMIT CRAB with a round coral body and two small claws, living inside a pearly pink scallop shell worn like a little house on its back"
+   },
+   {
+    "body": "a young HERMIT CRAB carrying a bigger pink spiral shell decorated with a strand of seaweed and a small pearl"
+   },
+   {
+    "body": "a grown HERMIT CRAB carrying a large swirled shell like a tiny seaside cottage with pearl windows and a starfish-free sea-glass decoration"
+   }
+  ]
+ },
+ {
+  "id": "dandy",
+  "animal": "hamster",
+  "word": "dandelion",
+  "not": "yellow electric mice with red cheeks, electric squirrels, antenna mice, cotton puff Pokémon; no yellow body, no red cheeks",
+  "stages": [
+   {
+    "body": "a tiny round HAMSTER whose fur is a soft white dandelion puff, a cream face with peach-pink cheeks, a small yellow dandelion flower on its head"
+   },
+   {
+    "body": "a young HAMSTER floating gently, its tail is a dandelion seed head releasing a few seeds, white puff fur"
+   },
+   {
+    "body": "a grown HAMSTER gliding under a big dandelion-seed parachute that grows from its back, white and cream fur"
+   }
+  ]
+ },
+ {
+  "id": "pebbo",
+  "animal": "elephant calf",
+  "word": "pebble",
+  "not": "small elephant Pokémon with ear flaps and armor, steel elephants, rhino Pokémon",
+  "stages": [
+   {
+    "body": "a tiny round baby ELEPHANT in warm grey with smooth pebble-shaped lighter patches on its skin, short trunk with a tiny two-leaf sprout at the tip"
+   },
+   {
+    "body": "a young ELEPHANT with a stacked-pebble pattern on its back, small leaf-shaped ears, the trunk sprout has grown a little flower"
+   },
+   {
+    "body": "a grown ELEPHANT carrying a tiny rock garden on its back with mossy stones and small flowers, rounded tusks"
+   }
+  ]
+ },
+ {
+  "id": "mushy",
+  "animal": "raccoon",
+  "word": "mushroom",
+  "not": "mushroom crab Pokémon, mushroom-cap Pokémon, zigzag raccoon Pokémon",
+  "stages": [
+   {
+    "body": "a tiny RACCOON kit in soft grey with a dark eye mask, wearing a teal mushroom cap with white dots like a hat, ringed tail"
+   },
+   {
+    "body": "a young RACCOON with a bigger teal mushroom cap hat and two tiny mushrooms growing on its tail rings"
+   },
+   {
+    "body": "a grown RACCOON holding a large teal mushroom like an umbrella, small softly glowing mushrooms on its tail"
+   }
+  ]
+ },
+ {
+  "id": "nutty",
+  "animal": "chipmunk",
+  "word": "acorn",
+  "not": "electric squirrels, cheek-stuffing squirrel Pokémon, acorn-shaped Pokémon",
+  "stages": [
+   {
+    "body": "a tiny CHIPMUNK in warm brown with cream and dark stripes, wearing a brown acorn cap as a hat, big fluffy tail"
+   },
+   {
+    "body": "a young CHIPMUNK with an acorn-cap hat and a little acorn belt pouch, cheeks puffed with snacks"
+   },
+   {
+    "body": "a grown CHIPMUNK with an acorn-cap helmet and a short cape of oak leaves, big striped tail"
+   }
+  ]
+ },
+ {
+  "id": "carro",
+  "animal": "guinea pig",
+  "word": "carrot",
+  "not": "rats or ferrets, scout-standing Pokémon",
+  "stages": [
+   {
+    "body": "a tiny round GUINEA PIG in carrot orange and cream with a tuft of three carrot-green leaves on its head"
+   },
+   {
+    "body": "a young GUINEA PIG with a taller leafy tuft and faint carrot-stripe marks on its back"
+   },
+   {
+    "body": "a grown GUINEA PIG with a crown of leafy carrot greens and a small woven garden basket on its back holding carrots"
+   }
+  ]
+ }
+]

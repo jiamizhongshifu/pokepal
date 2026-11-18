@@ -14,12 +14,13 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadCreatures } from './creatures.mjs';
 import { EXPRESSION_PROMPTS } from './expressions.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
 const style = readFileSync(resolve(here, 'style.txt'), 'utf8');
-const sprites = JSON.parse(readFileSync(resolve(root, 'src/data/creatures.json'), 'utf8'));
+const sprites = loadCreatures();
 const styleReference = resolve(root, 'output/rebrand/style-reference.png');
 const outRoot = resolve(root, 'output/rebrand/sprites');
 const sceneCatalog = JSON.parse(readFileSync(resolve(here, 'scenes.json'), 'utf8'));

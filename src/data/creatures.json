@@ -2,8 +2,6 @@
  {
   "id": "bubbo",
   "type": "water",
-  "animal": "otter",
-  "word": "bubble",
   "color": "blue",
   "genusEn": "Bubble Otter",
   "genusZh": "泡泡水獭",
@@ -11,29 +9,23 @@
    {
     "nameEn": "Bubbo",
     "nameZh": "啵啵",
-    "body": "a tiny round baby river OTTER with seafoam-teal fur and a soft lilac belly, lilac paws and inner ears, a little ring of three floating soap bubbles circling its head like a crown, short paddle tail with lilac tip",
     "heightCm": 25
    },
    {
     "nameEn": "Bubblet",
     "nameZh": "啵啵儿",
-    "body": "a young OTTER, longer playful body in seafoam teal with lilac belly and paws, blows a big soap bubble from its mouth, the bubble ring becomes a bubble necklace, paddle tail with lilac bubble spots",
     "heightCm": 55
    },
    {
     "nameEn": "Bubblord",
     "nameZh": "啵啵王",
-    "body": "a grown sleek OTTER standing tall in seafoam teal with lilac belly and deeper teal back stripe, a cluster of shining soap bubbles floating around its shoulders like a mantle, a crown of bubbles, broad paddle tail",
     "heightCm": 110
    }
-  ],
-  "not": "Pokémon otters or sea otters (white-and-blue otters with a shell), seals, ducks, turtles; avoid a blue body with a cream or white belly"
+  ]
  },
  {
   "id": "berry",
   "type": "plant",
-  "animal": "red panda",
-  "word": "berry",
   "color": "red",
   "genusEn": "Berry Panda",
   "genusZh": "莓果小熊猫",
@@ -41,29 +33,23 @@
    {
     "nameEn": "Berry",
     "nameZh": "莓莓",
-    "body": "a tiny round RED PANDA cub with rusty-red fur, cream face markings and dark brown legs, wears a headband of green leaves with three round red berries, a fluffy tail ringed with berry-red and cream stripes",
     "heightCm": 30
    },
    {
     "nameEn": "Berrikit",
     "nameZh": "莓莓熊猫",
-    "body": "a young RED PANDA carrying a small woven basket full of red berries on its back, berry-and-leaf headband, ringed tail",
     "heightCm": 55
    },
    {
     "nameEn": "Berrimane",
     "nameZh": "莓林熊猫",
-    "body": "a grown RED PANDA standing on hind legs with a short mantle of berry vines and leaves over its shoulders, a small leafy crown with red berries, long ringed tail",
     "heightCm": 100
    }
-  ],
-  "not": "plant hedgehogs, fire foxes, pandas, raccoon-dog Pokémon"
+  ]
  },
  {
   "id": "puffy",
   "type": "sky",
-  "animal": "lamb",
-  "word": "cloud",
   "color": "white",
   "genusEn": "Cloud Lamb",
   "genusZh": "云朵小羊",
@@ -71,29 +57,23 @@
    {
     "nameEn": "Puffy",
     "nameZh": "绵绵",
-    "body": "a tiny LAMB whose wool is a fluffy white rain-free cloud of round puffs, small pale-blue face and legs, tiny curled pale-blue horns, cloud wool hovers slightly above its back",
     "heightCm": 30
    },
    {
     "nameEn": "Puffleece",
     "nameZh": "绵云",
-    "body": "a young LAMB whose cloud wool is bigger and lets it float a little off the ground, the wool puffs drift like small clouds, pale-blue face, small curled horns",
     "heightCm": 60
    },
    {
     "nameEn": "Skyfleece",
     "nameZh": "云羊",
-    "body": "a grown sheep whose huge cloud wool forms a soft cloud island it rides on, a small rainbow arc inside the wool, pale-blue face, larger curled horns",
     "heightCm": 120
    }
-  ],
-  "not": "electric sheep, cotton puff Pokémon, ghosts"
+  ]
  },
  {
   "id": "twinkle",
   "type": "light",
-  "animal": "fawn",
-  "word": "star",
   "color": "yellow",
   "genusEn": "Star Fawn",
   "genusZh": "星星小鹿",
@@ -101,29 +81,23 @@
    {
     "nameEn": "Twinkle",
     "nameZh": "闪闪",
-    "body": "a tiny baby DEER FAWN in warm golden yellow, small white five-pointed star spots on its back, big ears, tiny round antler buds that glow like little stars",
     "heightCm": 35
    },
    {
     "nameEn": "Twinklet",
     "nameZh": "星星鹿",
-    "body": "a young deer in gold and soft orange, more star spots arranged like a constellation, small branching antlers tipped with tiny glowing stars",
     "heightCm": 80
    },
    {
     "nameEn": "Starhart",
     "nameZh": "星鹿",
-    "body": "a grown graceful deer in gold and warm orange with a cream chest, simple short branching antlers with just two small stars hanging from them like ornaments, a few white star spots on its back, short tidy tail",
     "heightCm": 150
    }
-  ],
-  "not": "legendary deer with rainbow or glowing antler tips, Christmas reindeer, seasonal deer Pokémon, fire horses; no dark navy body, no glowing antler points"
+  ]
  },
  {
   "id": "sunny",
   "type": "light",
-  "animal": "lion cub",
-  "word": "sun",
   "color": "yellow",
   "genusEn": "Sun Cub",
   "genusZh": "太阳小狮子",
@@ -131,29 +105,23 @@
    {
     "nameEn": "Sunny",
     "nameZh": "暖暖",
-    "body": "a tiny round LION CUB in golden yellow with a ring of short rounded orange sun-ray petals around its face as a mane, rosy cheeks, small tufted tail",
     "heightCm": 30
    },
    {
     "nameEn": "Sunmane",
     "nameZh": "阳阳",
-    "body": "a young lion in gold with a bigger mane of rounded orange-and-yellow sun rays, a small round sun mark on the forehead",
     "heightCm": 65
    },
    {
     "nameEn": "Solleo",
     "nameZh": "日狮",
-    "body": "a grown lion in gold and orange with a large round mane shaped like a rising sun with layered rounded rays, sun mark on the forehead, tail tuft like a small sun",
     "heightCm": 130
    }
-  ],
-  "not": "fire lions, fire dogs or wolves, flaming manes; no fire anywhere"
+  ]
  },
  {
   "id": "moony",
   "type": "night",
-  "animal": "sloth",
-  "word": "moon",
   "color": "black",
   "genusEn": "Moon Sloth",
   "genusZh": "月亮树懒",
@@ -161,29 +129,23 @@
    {
     "nameEn": "Moony",
     "nameZh": "月月",
-    "body": "a tiny baby SLOTH with soft navy-grey fur and a cream face, hugging a pale-yellow crescent moon pillow, sleepy half-closed eyes",
     "heightCm": 30
    },
    {
     "nameEn": "Moonsway",
     "nameZh": "月懒",
-    "body": "a young SLOTH hanging happily from a pale-yellow crescent moon like a swing, navy fur with a few tiny star dots",
     "heightCm": 60
    },
    {
     "nameEn": "Lunasloth",
     "nameZh": "月光懒",
-    "body": "a grown SLOTH in deep navy with a soft starry fur cloak, a pale-yellow crescent mark on its forehead, holding a small glowing crescent lantern",
     "heightCm": 110
    }
-  ],
-  "not": "big sleeping bear Pokémon, moon-marked bear cubs, bats, ghost Pokémon"
+  ]
  },
  {
   "id": "drippy",
   "type": "water",
-  "animal": "snail",
-  "word": "rain",
   "color": "blue",
   "genusEn": "Rain Snail",
   "genusZh": "雨云蜗牛",
@@ -191,29 +153,23 @@
    {
     "nameEn": "Drippy",
     "nameZh": "滴滴",
-    "body": "a tiny SNAIL with a light-blue soft body and two round eye stalks, its shell is a small white rain cloud with three blue raindrops hanging under it",
     "heightCm": 15
    },
    {
     "nameEn": "Drizzlet",
     "nameZh": "雨雨",
-    "body": "a young SNAIL whose cloud shell is bigger and drips a light rain trail behind it, blue body with a lighter belly",
     "heightCm": 30
    },
    {
     "nameEn": "Rainbell",
     "nameZh": "虹雨蜗",
-    "body": "a grown SNAIL carrying a large fluffy cloud shell with a small rainbow arching over it, blue body, gentle smile",
     "heightCm": 60
    }
-  ],
-  "not": "slug or snail Pokémon with armor or helmets, frogs, tadpoles, jellyfish"
+  ]
  },
  {
   "id": "snowy",
   "type": "snow",
-  "animal": "penguin",
-  "word": "snow",
   "color": "purple",
   "genusEn": "Snow Penguin",
   "genusZh": "雪花企鹅",
@@ -221,29 +177,23 @@
    {
     "nameEn": "Snowy",
     "nameZh": "雪雪",
-    "body": "a tiny round PENGUIN chick covered in soft white fluff with pale lavender back and wings, a peach-orange beak and feet, a pale-lavender six-pointed snowflake crest on top of its head",
     "heightCm": 25
    },
    {
     "nameEn": "Snowglide",
     "nameZh": "雪滑滑",
-    "body": "a young PENGUIN sliding on its belly, white with pale lavender back, a lavender scarf with white snowflake shapes, peach-orange beak, snowflake crest",
     "heightCm": 50
    },
    {
     "nameEn": "Frostcrown",
     "nameZh": "冰冠企鹅",
-    "body": "a grown PENGUIN standing tall, white front and pale lavender back, a crown-like crest of rounded pale ice crystals, a white snowflake pattern on its lavender back, peach-orange beak and feet",
     "heightCm": 100
    }
-  ],
-  "not": "blue penguins with a white face and yellow beak, water penguin Pokémon with trident crests or capes, ice-cube head penguins; no blue body, no yellow beak"
+  ]
  },
  {
   "id": "leafy",
   "type": "plant",
-  "animal": "koala",
-  "word": "leaf",
   "color": "green",
   "genusEn": "Leaf Koala",
   "genusZh": "叶子考拉",
@@ -251,29 +201,23 @@
    {
     "nameEn": "Leafy",
     "nameZh": "叶叶",
-    "body": "a tiny round KOALA joey with soft sage-green fur, a big dark nose, its two large round ears are fresh green leaves, holding a small leaf",
     "heightCm": 25
    },
    {
     "nameEn": "Leafkin",
     "nameZh": "叶叶熊",
-    "body": "a young KOALA with sage fur and leaf ears, wearing a scarf of green leaves, hugging a small branch",
     "heightCm": 50
    },
    {
     "nameEn": "Eucalord",
     "nameZh": "林叶熊",
-    "body": "a grown KOALA in sage green with large leaf ears and a crown of small leafy branches, a leaf-pattern belly",
     "heightCm": 95
    }
-  ],
-  "not": "sleepy koala Pokémon hugging a log, grass starters with bulbs"
+  ]
  },
  {
   "id": "petal",
   "type": "plant",
-  "animal": "hummingbird",
-  "word": "flower",
   "color": "pink",
   "genusEn": "Flower Bird",
   "genusZh": "花朵蜂鸟",
@@ -281,29 +225,23 @@
    {
     "nameEn": "Petal",
     "nameZh": "瓣瓣",
-    "body": "a tiny round HUMMINGBIRD in bright magenta-pink with a short pointed beak, its tail is a small open flower bloom, tiny fluttering wings",
     "heightCm": 10
    },
    {
     "nameEn": "Petalwing",
     "nameZh": "花翅",
-    "body": "a young HUMMINGBIRD whose wings look like pink flower petals, a flower-bloom tail, hovering",
     "heightCm": 20
    },
    {
     "nameEn": "Bloomquill",
     "nameZh": "花冠蜂鸟",
-    "body": "a grown elegant HUMMINGBIRD with a fan of layered flower-petal tail feathers in pink and coral and a small flower crown",
     "heightCm": 40
    }
-  ],
-  "not": "pigeon or sparrow Pokémon, flying grass puffs, dancing birds, bee or fly Pokémon"
+  ]
  },
  {
   "id": "shelly",
   "type": "water",
-  "animal": "hermit crab",
-  "word": "shell",
   "color": "pink",
   "genusEn": "Shell Crab",
   "genusZh": "贝壳寄居蟹",
@@ -311,29 +249,23 @@
    {
     "nameEn": "Shelly",
     "nameZh": "贝贝",
-    "body": "a tiny HERMIT CRAB with a round coral body and two small claws, living inside a pearly pink scallop shell worn like a little house on its back",
     "heightCm": 15
    },
    {
     "nameEn": "Shellet",
     "nameZh": "贝贝蟹",
-    "body": "a young HERMIT CRAB carrying a bigger pink spiral shell decorated with a strand of seaweed and a small pearl",
     "heightCm": 30
    },
    {
     "nameEn": "Pearlhome",
     "nameZh": "珍珠贝蟹",
-    "body": "a grown HERMIT CRAB carrying a large swirled shell like a tiny seaside cottage with pearl windows and a starfish-free sea-glass decoration",
     "heightCm": 60
    }
-  ],
-  "not": "crab Pokémon with big pincers, bivalve shell Pokémon, coral Pokémon, rock-carrying crabs"
+  ]
  },
  {
   "id": "dandy",
   "type": "sky",
-  "animal": "hamster",
-  "word": "dandelion",
   "color": "white",
   "genusEn": "Dandelion Hamster",
   "genusZh": "蒲公英仓鼠",
@@ -341,29 +273,23 @@
    {
     "nameEn": "Dandy",
     "nameZh": "蒲蒲",
-    "body": "a tiny round HAMSTER whose fur is a soft white dandelion puff, a cream face with peach-pink cheeks, a small yellow dandelion flower on its head",
     "heightCm": 12
    },
    {
     "nameEn": "Dandyfloat",
     "nameZh": "蒲公英鼠",
-    "body": "a young HAMSTER floating gently, its tail is a dandelion seed head releasing a few seeds, white puff fur",
     "heightCm": 25
    },
    {
     "nameEn": "Dandeglide",
     "nameZh": "飘飘鼠",
-    "body": "a grown HAMSTER gliding under a big dandelion-seed parachute that grows from its back, white and cream fur",
     "heightCm": 45
    }
-  ],
-  "not": "yellow electric mice with red cheeks, electric squirrels, antenna mice, cotton puff Pokémon; no yellow body, no red cheeks"
+  ]
  },
  {
   "id": "pebbo",
   "type": "earth",
-  "animal": "elephant calf",
-  "word": "pebble",
   "color": "gray",
   "genusEn": "Pebble Elephant",
   "genusZh": "石子小象",
@@ -371,29 +297,23 @@
    {
     "nameEn": "Pebbo",
     "nameZh": "墩墩",
-    "body": "a tiny round baby ELEPHANT in warm grey with smooth pebble-shaped lighter patches on its skin, short trunk with a tiny two-leaf sprout at the tip",
     "heightCm": 60
    },
    {
     "nameEn": "Pebblefoot",
     "nameZh": "石墩象",
-    "body": "a young ELEPHANT with a stacked-pebble pattern on its back, small leaf-shaped ears, the trunk sprout has grown a little flower",
     "heightCm": 120
    },
    {
     "nameEn": "Stonebloom",
     "nameZh": "石苑象",
-    "body": "a grown ELEPHANT carrying a tiny rock garden on its back with mossy stones and small flowers, rounded tusks",
     "heightCm": 250
    }
-  ],
-  "not": "small elephant Pokémon with ear flaps and armor, steel elephants, rhino Pokémon"
+  ]
  },
  {
   "id": "mushy",
   "type": "earth",
-  "animal": "raccoon",
-  "word": "mushroom",
   "color": "gray",
   "genusEn": "Mushroom Raccoon",
   "genusZh": "蘑菇浣熊",
@@ -401,29 +321,23 @@
    {
     "nameEn": "Mushy",
     "nameZh": "菇菇",
-    "body": "a tiny RACCOON kit in soft grey with a dark eye mask, wearing a teal mushroom cap with white dots like a hat, ringed tail",
     "heightCm": 30
    },
    {
     "nameEn": "Mushkit",
     "nameZh": "菇菇熊",
-    "body": "a young RACCOON with a bigger teal mushroom cap hat and two tiny mushrooms growing on its tail rings",
     "heightCm": 55
    },
    {
     "nameEn": "Mushcoon",
     "nameZh": "菇伞浣熊",
-    "body": "a grown RACCOON holding a large teal mushroom like an umbrella, small softly glowing mushrooms on its tail",
     "heightCm": 95
    }
-  ],
-  "not": "mushroom crab Pokémon, mushroom-cap Pokémon, zigzag raccoon Pokémon"
+  ]
  },
  {
   "id": "nutty",
   "type": "earth",
-  "animal": "chipmunk",
-  "word": "acorn",
   "color": "brown",
   "genusEn": "Acorn Chipmunk",
   "genusZh": "橡果花栗鼠",
@@ -431,29 +345,23 @@
    {
     "nameEn": "Nutty",
     "nameZh": "栗栗",
-    "body": "a tiny CHIPMUNK in warm brown with cream and dark stripes, wearing a brown acorn cap as a hat, big fluffy tail",
     "heightCm": 15
    },
    {
     "nameEn": "Nutbelt",
     "nameZh": "橡橡",
-    "body": "a young CHIPMUNK with an acorn-cap hat and a little acorn belt pouch, cheeks puffed with snacks",
     "heightCm": 30
    },
    {
     "nameEn": "Oakpaw",
     "nameZh": "橡林鼠",
-    "body": "a grown CHIPMUNK with an acorn-cap helmet and a short cape of oak leaves, big striped tail",
     "heightCm": 55
    }
-  ],
-  "not": "electric squirrels, cheek-stuffing squirrel Pokémon, acorn-shaped Pokémon"
+  ]
  },
  {
   "id": "carro",
   "type": "plant",
-  "animal": "guinea pig",
-  "word": "carrot",
   "color": "orange",
   "genusEn": "Carrot Guinea Pig",
   "genusZh": "胡萝卜豚鼠",
@@ -461,22 +369,18 @@
    {
     "nameEn": "Carro",
     "nameZh": "萝萝",
-    "body": "a tiny round GUINEA PIG in carrot orange and cream with a tuft of three carrot-green leaves on its head",
     "heightCm": 20
    },
    {
     "nameEn": "Carrotuft",
     "nameZh": "萝卜萝",
-    "body": "a young GUINEA PIG with a taller leafy tuft and faint carrot-stripe marks on its back",
     "heightCm": 35
    },
    {
     "nameEn": "Gardenpig",
     "nameZh": "园萝萝",
-    "body": "a grown GUINEA PIG with a crown of leafy carrot greens and a small woven garden basket on its back holding carrots",
     "heightCm": 60
    }
-  ],
-  "not": "rats or ferrets, scout-standing Pokémon"
+  ]
  }
 ]

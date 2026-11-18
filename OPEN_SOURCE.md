@@ -3,7 +3,7 @@
 ## 发布内容
 
 本仓库开放原创应用代码、构建工具、测试和工程文档，采用根目录的 MIT 许可证；依赖及 Gradle Wrapper 按各自上游许可证使用。
-小精灵、场景、图标与叫声均为本项目原创：角色设定（`src/data/creatures.json`）和生图规范（`scripts/art/`）随源码开放，生成的图片与配音属于本地媒体，不随仓库发布。
+小精灵、场景、图标与叫声均为本项目原创：角色设定（`src/data/creatures.json` 与 `scripts/art/creature-art.json`）和生图规范（`scripts/art/`）随源码开放，生成的图片与配音属于本地媒体，不随仓库发布。
 早期版本曾以第三方游戏角色为主题；这些名称、图片、模型与音频已从当前源码和线上版本移除，旧存档编号仅在 `src/data/legacyCreatureMap.ts` 中保留为数字对应表，用于迁移。
 
 ## 不包含的内容
