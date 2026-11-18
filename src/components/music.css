@@ -5,4 +5,4 @@
 .music-toggle:active{transform:translateY(2px);box-shadow:0 1px 0 #aacfc3}
 .music-toggle:focus-visible{outline:3px solid #087e91;outline-offset:4px}
 @media(max-width:440px){.home .tb-right{gap:5px}.home .music-toggle{width:44px;height:44px}}
-@media(max-width:380px){.home .tb-right :is(.energy-chip,.balls-chip){min-height:44px;font-size:18px;padding:4px 7px}.home .tb-right .parent-btn{width:44px;height:44px}.home .tb-right .pokeball{width:24px!important;height:24px!important}}
+@media(max-width:380px){.home .tb-right :is(.energy-chip,.balls-chip){min-height:44px;font-size:18px;padding:4px 7px}.home .tb-right .parent-btn{width:44px;height:44px}.home .tb-right .invite-berry{width:24px!important;height:24px!important}}

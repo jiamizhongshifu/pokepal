@@ -67,7 +67,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .welcome { min-height: 100%; padding: 36px 20px; gap: 20px; }
 .welcome::before { width: min(760px,100vw); height: min(760px,100dvh); }
 .welcome-pokemon { max-width: 90vw; gap: 0; }
-.welcome-pokemon img:not(.icon):not(.pokeball) { width: clamp(60px, 12vw, 130px); height: auto; animation: none; filter: drop-shadow(0 8px 8px #16384618); }
+.welcome-pokemon img:not(.icon):not(.invite-berry) { width: clamp(60px, 12vw, 130px); height: auto; animation: none; filter: drop-shadow(0 8px 8px #16384618); }
 .welcome-pokemon img:first-child { transform: scale(1.15); }
 .logo { font-size: clamp(30px, 5vw, 58px); color: var(--text); letter-spacing: 1px; text-shadow: none; text-align: center; }
 .logo-en { background: none; color: var(--accent-en); font-size: clamp(14px, 2.5vw, 22px); letter-spacing: 1px; padding: 0; margin: 0 0 18px; text-shadow: none; }
@@ -156,9 +156,9 @@ button:not(:disabled):active { transform: scale(.97); }
 .word-hint { font-size: 44px; min-height: 52px; color: var(--text); letter-spacing: 0; }
 .color-dot { width: 62%; height: auto; aspect-ratio: 1; }
 .pic-label { font-size: 26px; bottom: 10px; }
-.pic-icon,.trace-icon,.choice.poke img:not(.icon):not(.pokeball) { filter: none; }
+.pic-icon,.trace-icon,.choice.poke img:not(.icon):not(.invite-berry) { filter: none; }
 .buddy { width: min(780px,100%); justify-content: center; gap: 24px; }
-.buddy img:not(.icon):not(.pokeball) { width: clamp(140px,24vw,260px); height: auto; filter: drop-shadow(0 8px 10px #16384618); }
+.buddy img:not(.icon):not(.invite-berry) { width: clamp(140px,24vw,260px); height: auto; filter: drop-shadow(0 8px 10px #16384618); }
 .bubble { min-width: 0; padding: 36px 36px 24px; text-align: center; }
 .bubble-en { font-size: clamp(32px,4.5vw,58px); overflow-wrap: anywhere; }
 .bubble-zh { font-size: 22px; }
@@ -173,7 +173,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .trace-pad { width: min(420px,50vw); flex-shrink: 0; border: 2px solid #a7cbc4; box-shadow: none; }
 .trace-progress { background: #16384618; }
 .trace-progress div { box-shadow: none; }
-/* 球店：明确可换、还差多少，价格和收藏数量不用猜。 */
+/* 邀请果小店：明确可换、还差多少，价格和收藏数量不用猜。 */
 .shop { gap: 16px; }
 .shop-energy { font-size: 22px; border: 0; background: none; box-shadow: none; }
 .shop-energy b { font-size: 32px; }
@@ -210,7 +210,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .throw-hint { bottom: 14px; padding: 12px 22px; font-size: 20px; }
 .back-field { right: 20px; bottom: 86px; }
 .center-msg { padding: 28px 20px; text-align: center; font-size: 26px; min-height: 400px; }
-/* 图鉴：每页 8 只，可先看自己的伙伴。 */
+/* 好朋友相册：每页 8 只，可先看自己的伙伴。 */
 .screen:not(.home):not(.parent):not(.welcome).dex { padding-bottom: env(safe-area-inset-bottom); }
 .dex-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; width: min(1000px,92vw); margin: 12px auto 20px; }
 .collection-tabs { display: flex; gap: 10px; }
@@ -219,9 +219,9 @@ button:not(:disabled):active { transform: scale(.97); }
 .collection-count { color: var(--muted); font-size: 22px; font-weight: 800; white-space: nowrap; }
 .dex-grid { width: min(1000px,92vw); margin: 0 auto; flex: 1 0 auto; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; padding: 4px 0 12px; overflow: visible; align-content: center; }
 .dex-cell { min-height: 196px; padding: 26px 12px 16px; border-radius: 28px; }
-.dex-cell img:not(.icon):not(.pokeball) { width: 130px; height: 130px; max-width: 100%; filter: none; }
+.dex-cell img:not(.icon):not(.invite-berry) { width: 130px; height: 130px; max-width: 100%; filter: none; }
 .dex-cell.unknown { background: color-mix(in srgb,var(--surface) 55%,transparent); opacity: 1; border-style: dashed; box-shadow: none; }
-.dex-cell.unknown img:not(.icon):not(.pokeball) { filter: brightness(0) opacity(.24); }
+.dex-cell.unknown img:not(.icon):not(.invite-berry) { filter: brightness(0) opacity(.24); }
 .dex-name { font-size: 22px; }
 .dex-no { font-size: 15px; }
 .dex-pagination { display: flex; gap: 30px; align-items: center; justify-content: center; padding: 18px 20px; flex: none; position: sticky; bottom: 0; z-index: 2; background: var(--browser); }
@@ -230,7 +230,7 @@ button:not(:disabled):active { transform: scale(.97); }
 /* 伙伴资料：图像优先，听读操作保持一致。 */
 .detail { overflow: visible; gap: 28px; width: min(1200px,100%); margin: 0 auto; align-items: start; padding: 20px 32px 32px; }
 .detail-art { flex: 0 0 36%; min-height: 400px; padding: 24px; background: var(--surface); border: 2px solid var(--surface-border); }
-.detail-art img:not(.icon):not(.pokeball) { max-height: 360px; animation: none; filter: drop-shadow(0 10px 12px #16384618); }
+.detail-art img:not(.icon):not(.invite-berry) { max-height: 360px; animation: none; filter: drop-shadow(0 10px 12px #16384618); }
 .detail-info { overflow: visible; min-width: 0; gap: 16px; }
 .detail-name { font-size: 36px; }
 .detail-name span { font-size: 28px; display: block; margin-left: 0; }
@@ -245,7 +245,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .fact { min-height: 120px; height: 100%; font-size: 20px; }
 .fact small { font-size: 17px; }
 .official summary { padding: 18px 0; min-height: 56px; }
-/* 家长、庆祝、进化、休息共享清晰层级。 */
+/* 家长、庆祝、长大、休息共享清晰层级。 */
 .modal { max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; border: 3px solid var(--surface-border); border-radius: 32px; padding: 28px; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .celebrate-card,.caught-card { min-width: 0; width: min(640px,calc(100vw - 32px)); }
 .cel-title { color: var(--text); background: none; padding: 0; text-shadow: none; font-size: 34px; }
@@ -271,14 +271,14 @@ button:not(:disabled):active { transform: scale(.97); }
 .sleepy-text { font-size: clamp(28px,4vw,44px); text-shadow: none; text-align: center; }
 .sleepy-en { font-size: clamp(18px,3vw,28px); text-align: center; }
 .sleepers { max-width: 100%; justify-content: center; }
-.sleeper img:not(.icon):not(.pokeball) { width: min(130px,16vw); height: auto; }
+.sleeper img:not(.icon):not(.invite-berry) { width: min(130px,16vw); height: auto; }
 .evo-card { max-height: calc(100dvh - 32px); overflow-y: auto; padding: 24px; }
 .evo-overlay.flash::after { display: none; }
 .evo-title { font-size: 28px; }
 .evo-title span { display: block; font-size: 22px; }
 .evo-row { flex-wrap: wrap; }
-.evo-mon img:not(.icon):not(.pokeball) { width: 130px; height: 130px; }
-.evo-mon.option img:not(.icon):not(.pokeball) { width: 112px; height: 112px; }
+.evo-mon img:not(.icon):not(.invite-berry) { width: 130px; height: 130px; }
+.evo-mon.option img:not(.icon):not(.invite-berry) { width: 112px; height: 112px; }
 /* 控制环境动效，让触摸目标保持静止。 */
 .badge,.energy-chip .bolt,.act.evolve.pulse,.start,.welcome-pokemon img { animation: none; }
 @media (max-width: 900px) {
@@ -293,10 +293,10 @@ button:not(:disabled):active { transform: scale(.97); }
   .tc-zh { font-size: 28px; }
   .detail { flex-direction: column; }
   .detail-art { flex: 0 0 auto; width: 100%; min-height: 280px; flex-direction: row; }
-  .detail-art img:not(.icon):not(.pokeball) { width: 48%; max-height: 280px; }
+  .detail-art img:not(.icon):not(.invite-berry) { width: 48%; max-height: 280px; }
   .detail-info { width: 100%; }
   .trace-side { width: 210px; }
-  .trace-side img:not(.icon):not(.pokeball) { width: 150px; height: 150px; }
+  .trace-side img:not(.icon):not(.invite-berry) { width: 150px; height: 150px; }
 }
 @media (max-width: 600px) {
   .topbar { min-height: 82px; padding: 12px; gap: 8px; }
@@ -370,14 +370,14 @@ button:not(:disabled):active { transform: scale(.97); }
   .word-hint { font-size: 32px; min-height: 40px; }
   .pic-label { font-size: 20px; bottom: 4px; }
   .buddy { flex-direction: column; gap: 12px; }
-  .buddy img:not(.icon):not(.pokeball) { width: 155px; height: 155px; }
+  .buddy img:not(.icon):not(.invite-berry) { width: 155px; height: 155px; }
   .bubble { width: 100%; padding: 36px 20px 18px; }
   .bubble-en { font-size: 36px; }
   .bubble-zh { font-size: 21px; }
   .say-round { gap: 22px; }
   .trace-round { flex-direction: column; gap: 20px; padding-top: 4px; padding-bottom: 40px; }
   .trace-side { width: 100%; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; padding: 0; }
-  .trace-side img:not(.icon):not(.pokeball),.trace-side > .trace-icon { width: 86px; height: 86px; grid-row: 1/3; }
+  .trace-side img:not(.icon):not(.invite-berry),.trace-side > .trace-icon { width: 86px; height: 86px; grid-row: 1/3; }
   .trace-word { font-size: 26px; grid-column: 2/5; align-self: end; }
   .trace-word b { font-size: 34px; }
   .trace-zh { grid-column: 2/5; font-size: 18px; }
@@ -388,13 +388,13 @@ button:not(:disabled):active { transform: scale(.97); }
   .trace-pad { width: min(380px,calc(100vw - 40px)); }
   .shop-grid { gap: 16px; }
   .shop-item { padding: 18px 10px; min-height: 292px; }
-  .shop-item > .pokeball { width: 88px; height: 88px; }
+  .shop-item > .invite-berry { width: 88px; height: 88px; }
   .si-name { font-size: 24px; }
   .si-name span { font-size: 15px; }
   .si-own,.shop-status { font-size: 16px; }
   .shop-footer { flex-direction: column; align-items: stretch; }
   .ball-choice { padding: 20px 14px; width: calc(50% - 12px); font-size: 18px; }
-  .ball-choice > .pokeball { width: 84px; height: 84px; }
+  .ball-choice > .invite-berry { width: 84px; height: 84px; }
   .field { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 70px 20px; padding: 28px 12px 72px; align-content: start; }
   .field .wild:last-child:nth-child(odd) { grid-column: 1/-1; width: calc((100% - 20px)/2); }
   .field-wrap .page-prompt { font-size: 23px; margin: 10px 12px 24px; }
@@ -412,14 +412,14 @@ button:not(:disabled):active { transform: scale(.97); }
   .collection-count { font-size: 18px; margin-left: auto; }
   .dex-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
   .dex-cell { min-height: 174px; padding: 24px 10px 12px; }
-  .dex-cell img:not(.icon):not(.pokeball) { width: 110px; height: 110px; }
+  .dex-cell img:not(.icon):not(.invite-berry) { width: 110px; height: 110px; }
   .dex-name { font-size: 21px; }
   .dex-pagination { gap: 12px; padding: 20px 12px; }
   .dex-pagination .replay { font-size: 18px; padding: 10px 12px; }
   .dex-pagination > span { font-size: 18px; }
   .detail { padding: 6px 16px 24px; gap: 22px; }
   .detail-art { min-height: 240px; flex-direction: column; gap: 10px; padding: 16px; }
-  .detail-art img:not(.icon):not(.pokeball) { width: 190px; max-height: 190px; }
+  .detail-art img:not(.icon):not(.invite-berry) { width: 190px; max-height: 190px; }
   .detail-name { font-size: 34px; }
   .detail-name span { font-size: 26px; }
   .detail-desc .en { font-size: 22px; }
@@ -446,7 +446,7 @@ button:not(:disabled):active { transform: scale(.97); }
   .sleepy .moon { width: 96px; height: 96px; }
   .sleepers { margin: 24px 0; }
   .evo-card { padding: 20px 14px; }
-  .evo-mon img:not(.icon):not(.pokeball),.evo-mon.option img:not(.icon):not(.pokeball) { width: 92px; height: 92px; }
+  .evo-mon img:not(.icon):not(.invite-berry),.evo-mon.option img:not(.icon):not(.invite-berry) { width: 92px; height: 92px; }
   .evo-title { font-size: 25px; }
   .evo-result { font-size: 26px; }
 }
@@ -502,8 +502,8 @@ button:not(:disabled):active { transform: scale(.97); }
 .choice.eliminated { opacity:.4; box-shadow:none; }
 .choices.size-choices { max-width:760px; }
 .size-stage { width:86%; height:84%; display:flex; align-items:flex-end; justify-content:center; border-bottom:3px solid var(--surface-border); }
-.choices.size-choices .size-stage img:not(.icon):not(.pokeball) { object-fit:contain; object-position:center bottom; width:100%; height:100%; }
-.choices.size-choices .size-stage img.size-small:not(.icon):not(.pokeball) { width:40%; height:40%; }
+.choices.size-choices .size-stage img:not(.icon):not(.invite-berry) { object-fit:contain; object-position:center bottom; width:100%; height:100%; }
+.choices.size-choices .size-stage img.size-small:not(.icon):not(.invite-berry) { width:40%; height:40%; }
 .round-dots span { width:22px; height:22px; }
 .round-dots span.done { background:#23755f; }
 .round-dots span.done::after { content:'✓'; display:block; color:#fff; font-size:16px; text-align:center; font-weight:900; }
@@ -560,12 +560,12 @@ button:not(:disabled):active { transform: scale(.97); }
  .round .replay{min-height:44px;padding:6px 14px;font-size:17px}
  .choices{gap:12px;max-width:650px}.choice.pic,.choice.poke{height:150px;min-height:0;width:180px}
  .choice img:not(.icon){max-height:125px}.choice .pic-icon{width:100px;height:100px}.choice .color-dot{width:90px;height:90px}
- .trace-round{min-height:0;padding:8px 0;gap:20px}.trace-pad{width:200px;height:200px}.trace-side{width:200px}.trace-side img:not(.icon):not(.pokeball),.trace-side>.trace-icon{width:76px;height:76px}.trace-instruction{font-size:15px}.trace-instruction small{font-size:12px}.trace-workspace{width:auto}
+ .trace-round{min-height:0;padding:8px 0;gap:20px}.trace-pad{width:200px;height:200px}.trace-side{width:200px}.trace-side img:not(.icon):not(.invite-berry),.trace-side>.trace-icon{width:76px;height:76px}.trace-instruction{font-size:15px}.trace-instruction small{font-size:12px}.trace-workspace{width:auto}
 }
 @media(max-height:500px) and (min-width:601px){
  .trace-round{align-items:flex-start;justify-content:center;padding-top:0;gap:24px}
  .trace-side{display:grid;grid-template-columns:60px 1fr;gap:6px;width:240px;padding:0}
- .trace-side>.trace-icon,.trace-side>img:not(.icon):not(.pokeball){grid-row:1/3;width:56px;height:56px}
+ .trace-side>.trace-icon,.trace-side>img:not(.icon):not(.invite-berry){grid-row:1/3;width:56px;height:56px}
  .trace-word{font-size:25px}.trace-word b{font-size:30px}.trace-zh{font-size:17px}.trace-side>.replay{grid-column:1/-1;min-height:44px}
  .trace-pad{width:160px;height:160px}.trace-workspace{gap:6px}.trace-instruction{margin:0;font-size:14px}.trace-instruction small{font-size:11px}.trace-progress{bottom:-14px;height:6px}
 }
@@ -613,12 +613,13 @@ button:not(:disabled):active { transform: scale(.97); }
 .wild-adventure .ball-pick .hint { text-align:center; font-size:24px; }
 .wild-adventure .ball-row { gap:12px; padding:14px 0 0; }
 .wild-adventure .ball-choice { padding:12px; font-size:18px; border:2px solid #c4d8a8; background:#f3f7e6; border-radius:22px; }
-.wild-adventure .ball-choice .pokeball { width:70px!important; height:70px!important; }
+.wild-adventure .ball-choice .invite-berry { width:70px!important; height:70px!important; }
 .ball-pick-close { position:absolute; top:8px; right:10px; width:48px; height:48px; border-radius:50%; color:#31563e; font-size:32px; background:#edf2dc; }
 .wild-adventure .arena { min-height:0; padding-top:3vh; }
-.wild-adventure .arena-target { width:min(36vh,360px); height:min(36vh,360px); margin-top:0; }
+.wild-adventure .arena-target { width:min(32vh,320px); height:min(32vh,320px); margin-top:0; }
 .wild-adventure .arena-name { background:#fffbeadf; border:2px solid #cfddba; color:#31563e; font-size:clamp(18px,2vw,26px); }
-.wild-adventure .throw-ball { bottom:140px; }
+.wild-adventure .throw-ball { bottom:136px; width:100px; height:100px; margin-left:-50px; }
+.wild-adventure .throw-ball .invite-berry { width:100px!important; height:100px!important; }
 .wild-adventure .throw-ball.shaking { top:32%; bottom:auto; }
 .wild-adventure .throw-hint { bottom:62px; display:flex; align-items:center; gap:10px; background:#fffbeae8; color:#31563e; font-size:20px; max-width:95%; text-align:center; }
 .wild-adventure .back-field { bottom:160px; padding:8px 16px; background:#fffbea; border-radius:18px; min-height:54px; color:#31563e; }
@@ -639,7 +640,7 @@ button:not(:disabled):active { transform: scale(.97); }
 }
 @media(max-height:600px) and (min-width:601px){
  .wild-adventure .page-prompt{top:0;font-size:18px;padding:6px 20px}.wild-adventure .field{inset:26% 4% 110px}.wild-adventure .wild,.wild-adventure .encounters-6 .wild{width:90px;height:90px}.wild-adventure .encounters-6 .wild{width:64px;height:64px}.wild-name{font-size:14px;padding:3px 8px}.wild-name small[lang]{font-size:11px}
- .field-kit{bottom:44px;font-size:15px;padding:6px 14px}.field-kit button{min-height:44px}.wild-adventure .arena{padding:0}.wild-adventure .arena-target{width:36vh;height:36vh}.wild-adventure .arena-name{font-size:16px}.wild-adventure .throw-ball{left:80%;bottom:88px;width:80px;height:80px;margin-left:-40px}.wild-adventure .throw-ball .pokeball{width:80px!important;height:80px!important}.wild-adventure .throw-hint{bottom:48px;font-size:15px;padding:5px 12px}.wild-adventure .back-field{bottom:88px;right:auto;left:16px}.wild-adventure .ball-pick{bottom:46px;padding:10px}.wild-adventure .ball-choice{padding:6px}
+ .field-kit{bottom:44px;font-size:15px;padding:6px 14px}.field-kit button{min-height:44px}.wild-adventure .arena{padding:0}.wild-adventure .arena-target{width:36vh;height:36vh}.wild-adventure .arena-name{font-size:16px}.wild-adventure .throw-ball{left:80%;bottom:88px;width:80px;height:80px;margin-left:-40px}.wild-adventure .throw-ball .invite-berry{width:80px!important;height:80px!important}.wild-adventure .throw-hint{bottom:48px;font-size:15px;padding:5px 12px}.wild-adventure .back-field{bottom:88px;right:auto;left:16px}.wild-adventure .ball-pick{bottom:46px;padding:10px}.wild-adventure .ball-choice{padding:6px}
 }
 @media(prefers-reduced-motion:reduce){.wild-adventure .wild>img{transition:none}}
 .wild-adventure .topbar { background:transparent; }
@@ -768,30 +769,32 @@ button:not(:disabled):active { transform: scale(.97); }
 
 /* Capture uses one measured impact point on every viewport. Travel and spin
    live on separate elements so Safari never replaces one transform with another. */
-.capture-arena .arena-target.capture-absorbing{animation:captureAbsorb .65s ease-in forwards;transform-origin:center;will-change:transform,opacity;}
-.capture-arena .arena-target.capture-hidden{animation:none;opacity:0;transform:scale(0);transition:none;}
+.capture-arena .arena-target.invite-receiving{animation:inviteHappy .65s ease-out both;transform-origin:50% 100%;}
+.capture-arena .arena-target.invite-nodding{animation:inviteNod .7s ease-in-out 3 both;transform-origin:50% 100%;}
 .wild-adventure .capture-arena .capture-ball{animation:none;opacity:1;overflow:visible;transition:none;transform:translate3d(0,0,0);-webkit-tap-highlight-color:transparent;}
 .capture-ball-body{display:block;width:100%;height:100%;transform-origin:50% 85%;will-change:transform;}
-.capture-ball .pokeball{display:block;}
+.capture-ball .invite-berry{display:block;}
 .wild-adventure .capture-arena .capture-throwing{animation:captureTravel .7s cubic-bezier(.22,.6,.3,1) both;}
 .capture-throwing .capture-ball-body{animation:captureSpin .7s ease-out both;}
 .wild-adventure .capture-arena .capture-ball.capture-absorbing{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6);}
 .wild-adventure .capture-arena .capture-landing{animation:captureLand .45s ease-in both;}
 .wild-adventure .capture-arena .capture-shaking{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6);}
-.capture-shaking .capture-ball-body{animation:captureRock .7s ease-in-out 3 both;}
+.capture-absorbing .capture-ball-body{animation:inviteTaken .65s ease-in forwards;}
+.capture-landing .capture-ball-body,.capture-shaking .capture-ball-body{opacity:0;animation:none;}
 .capture-flash{pointer-events:none;position:absolute;inset:-18px;border:6px solid #fff6bd;border-radius:50%;opacity:0;box-shadow:0 0 35px #ffe79b;}
 .capture-absorbing .capture-flash{animation:captureGlow .65s ease-out both;}
 .capture-progress{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:22px;background:#fffbeaf0;color:#31563e;font-size:20px;font-weight:800;text-align:center;white-space:nowrap;}
 .capture-progress>span{display:flex;justify-content:center;gap:10px;margin-top:8px;}.capture-progress i{width:12px;height:12px;border-radius:50%;background:#d5dfc8;}.capture-progress i.on{background:#3c956a;}
 @keyframes captureTravel{0%{transform:translate3d(0,var(--capture-start-y,0px),0) scale(1)}60%{transform:translate3d(calc(var(--capture-x) * .6),calc(var(--capture-y) - 65px),0) scale(.73)}100%{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6)}}
 @keyframes captureSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-@keyframes captureAbsorb{0%{transform:scale(1);opacity:1;filter:brightness(1)}25%{transform:scale(1.05);opacity:1;filter:brightness(2)}85%,100%{transform:scale(.02);opacity:0;filter:brightness(3)}}
+@keyframes inviteHappy{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-8%) scale(1.06,.96)}70%{transform:translateY(0) scale(.97,1.03)}100%{transform:translateY(0) scale(1)}}
+@keyframes inviteNod{0%,100%{transform:rotate(0) translateY(0)}40%{transform:rotate(-4deg) translateY(3%)}70%{transform:rotate(2deg) translateY(0)}}
+@keyframes inviteTaken{0%{transform:scale(1);opacity:1}70%{transform:scale(.4);opacity:.8}100%{transform:scale(0);opacity:0}}
 @keyframes captureLand{0%{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6)}78%{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6)}90%{transform:translate3d(var(--capture-x),calc(var(--capture-land-y) - 12px),0) scale(.6)}100%{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6)}}
-@keyframes captureRock{0%,100%{transform:translateX(0) rotate(0)}20%{transform:translateX(-12px) rotate(-24deg)}55%{transform:translateX(12px) rotate(24deg)}80%{transform:translateX(-5px) rotate(-10deg)}}
 @keyframes captureGlow{0%{opacity:0;transform:scale(.6)}35%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
 @media(prefers-reduced-motion:reduce){
  .wild-adventure .capture-arena .capture-throwing{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6);}
- .capture-arena .arena-target.capture-absorbing{opacity:0;}
+ .capture-arena .arena-target.invite-receiving,.capture-arena .arena-target.invite-nodding{animation:none;}
  .wild-adventure .capture-arena .capture-landing{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6);}
 }
 /* The meadow keeps a light paper header in both day and night themes. */
@@ -924,5 +927,5 @@ button:not(:disabled):active { transform: scale(.97); }
  .screen:not(.home):not(.parent) .topbar .back span { display:none; }
  .screen:not(.home):not(.parent) .topbar .tb-right { gap:5px; }
  .screen:not(.home):not(.parent) .topbar :is(.energy-chip,.balls-chip) { min-height:48px; padding:6px 8px; font-size:18px; }
- .screen:not(.home):not(.parent) .topbar :is(.energy-chip .icon,.balls-chip .pokeball) { width:24px!important; height:24px!important; }
+ .screen:not(.home):not(.parent) .topbar :is(.energy-chip .icon,.balls-chip .invite-berry) { width:24px!important; height:24px!important; }
 }

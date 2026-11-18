@@ -10,7 +10,7 @@ import { bi } from "../../lib/bi";
 import { traceIntro, traceSuccess } from "../../data/taskEnglish";
 import { LETTER_STROKES } from "../../data/letterStrokes";
 import { TraceStroke,type TracePoint } from "../../lib/traceStroke";
-import { PokeImg } from "../../components/PokeImg";
+import { CreatureImg } from "../../components/CreatureImg";
 
 const SIZE = 460;
 const BRUSH = 30;
@@ -31,11 +31,11 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
       const themed=eligible.filter(w=>plan.words.some(p=>p.en===w.en));
       const words=themed.length ? themed : eligible;
       const w=words[0];
-      return {letter:w.en[0].toUpperCase(),en:w.en,zh:w.zh,icon:w.icon,pokemonId:undefined};
+      return {letter:w.en[0].toUpperCase(),en:w.en,zh:w.zh,icon:w.icon,creatureId:undefined};
     }
     // 进阶可以描画熟悉伙伴的首字母
     const pool = LETTERS.filter(l=>!excluded.includes(l.letter));
-    const mine = pool.filter((l) => l.pokemonId && caught.includes(l.pokemonId));
+    const mine = pool.filter((l) => l.creatureId && caught.includes(l.creatureId));
     const fresh = pool.filter((l) => !stats[`letter:${l.letter}`]);
     return pickOne(mine.length && Math.random() < 0.6 ? mine : fresh.length ? fresh : pool);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -143,7 +143,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
     <div className="round trace-round">
       <div className="trace-side">
         <div className="trace-example">
-        {item.pokemonId ? <PokeImg src={creatureArt(item.pokemonId)} alt="" /> : <Icon name={item.icon ?? "star"} size={170} className="trace-icon" />}
+        {item.creatureId ? <CreatureImg src={creatureArt(item.creatureId)} alt="" /> : <Icon name={item.icon ?? "star"} size={170} className="trace-icon" />}
         <div className="trace-word"><b>{item.letter}</b>{item.en.slice(1)}</div>
         <div className="trace-zh">{item.zh}</div>
         <button className="replay trace-listen" onClick={intro} disabled={completed}><Icon name="speaker" size={32} /> 听一听</button>

@@ -31,12 +31,12 @@ export function StoryAdventurePreview(){
  const restart=()=>{dispatch({type:'restart'});setEntered(false);};
  const reacting=state.phase==='reacting';
  return <div className="adventure-preview">
-  <aside className="preview-notice">开发预览 · 现有素材排演 · 无配音 · 不发积分、不改训练师存档</aside>
-  <header><a href="/">PokéPal</a><span>小岛故事 / 01</span>{entered&&<button onClick={leave}>退出故事</button>}</header>
+  <aside className="preview-notice">开发预览 · 现有素材排演 · 无配音 · 不发积分、不改小岛存档</aside>
+  <header><a href="/">Bubbly Isle</a><span>小岛故事 / 01</span>{entered&&<button onClick={leave}>退出故事</button>}</header>
   {storageFailed&&<p role="status">浏览器暂时无法保存预览位置，关闭页面后可能需要重新开始。</p>}
   {!entered?<main className="adventure-lobby">
    <p>今天，和朋友一起</p><h1>{story.title}</h1><p>有一颗认真洗净的苹果，特意留给你。</p>
-   <div className="preview-friends">{story.cast.map(id=><img key={id} src={`/pokemon/art/${id}.png`} alt={id===25?'皮卡丘':'伊布'}/>)}</div>
+   <div className="preview-friends">{story.cast.map(id=><img key={id} src={`/pokemon/art/${id}.png`} alt={id===25?'啵啵':'莓莓'}/>)}</div>
    {state.phase==='completed'?<><p>今天的野餐已经结束啦。</p><button className="main-action" onClick={restart}>再看这个故事</button></>:<button className="main-action" onClick={start}>{state.phase==='paused'?'接着上次的故事':'一起出发'}</button>}
    <small>这是供大人审阅流程的静音排演，正式动画与旁白尚未接入。</small>
   </main>:<main className="adventure-reader" data-phase={state.phase} data-beat={beat.id}>
@@ -45,7 +45,7 @@ export function StoryAdventurePreview(){
    </div>
    <div className={`adventure-stage beat-${beat.id} ${reacting?'is-reacting':''}`}>
     <img className="adventure-background" src="/story-art/painted-v1/backgrounds/orchard.png" alt="安静的苹果园" onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>
-    {story.cast.map((id,i)=><img key={id} className={`adventure-actor actor-${i}`} src={`/pokemon/art/${id}.png`} alt={id===25?'皮卡丘':'伊布'} onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>)}
+    {story.cast.map((id,i)=><img key={id} className={`adventure-actor actor-${i}`} src={`/pokemon/art/${id}.png`} alt={id===25?'啵啵':'莓莓'} onError={()=>{setAssetFailed(true);dispatch({type:'pause'});}}/>)}
     <img className="adventure-basket" src="/story-art/painted-v1/props/basket-apples.png" alt="装着苹果的篮子"/>
     {['help','wash'].includes(beat.id)&&<div className="pouring-prop"><img src="/story-art/painted-v1/props/watering-can.png" alt="水壶"/><span className="water-stream"/></div>}
     {['help','wash'].includes(beat.id)&&<img className="wash-bowl" src="/story-art/painted-v1/props/bowl.png" alt="接水的盆"/>}

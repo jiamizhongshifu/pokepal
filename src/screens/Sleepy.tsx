@@ -7,7 +7,7 @@ import { sayCancellableWhile, unlockAudio, type Part } from "../lib/speech";
 import { modalIsOpen } from '../lib/modalLayer';
 import { restPeriod, restingFriends } from '../lib/rest';
 import { Icon } from "../icons";
-import { PokeImg } from "../components/PokeImg";
+import { CreatureImg } from "../components/CreatureImg";
 import './sleepy.css';
 
 const localClock=()=>new Date();
@@ -27,10 +27,10 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
     if(manual)unlockAudio();
     cancel();setSpeaking(true);setUnavailable(false);const ticket=sequence.current;
     const parts:Part[]=closing?(night?[["en","Good night!"],["zh","晚安，明天见。"]]:[["zh","好呀，放心去休息吧。小伙伴们也会好好休息。"]]):night?[
-      ['zh','宝可梦们都困了，我们一起跟它们说晚安吧。'],400,
+      ['zh','小精灵们都困了，我们一起跟它们说晚安吧。'],400,
       ['en','Good night!'],400,['zh','晚安，小伙伴们。放下屏幕，让眼睛和身体一起休息吧。'],400,['en','See you tomorrow!']
     ]:[
-      ['zh','宝可梦要休息咯。你也一起休息一下吧！放下屏幕，看看远处，让小眼睛歇一歇。'],400,
+      ['zh','小精灵要休息咯。你也一起休息一下吧！放下屏幕，看看远处，让小眼睛歇一歇。'],400,
       ['en','Time to rest.'],...(ids.length?([400,['zh','所有伙伴都在这里，新朋友也来啦。']] as Part[]):[])
     ];
     const run=sayCancellableWhile(()=>live.current&&!document.hidden&&!modalIsOpen(),...parts);voice.current=run;
@@ -59,13 +59,13 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
   return <div className={`screen sleepy rest-${period}`}>
     <div className="sleepy-top"><ParentButton onOpen={()=>{cancel();go({name:'parent'});}}/></div>
     <header className="rest-heading"><Icon name={night?'moon':'sun'} size={68}/><div>
-      <h1 className="sleepy-text">{night?'宝可梦们都困了':'宝可梦要休息咯'}</h1>
+      <h1 className="sleepy-text">{night?'小精灵们都困了':'小精灵要休息咯'}</h1>
       <p>{night?'一起说晚安，让眼睛和身体都休息吧。':'你也歇一歇，让小眼睛休息一下吧。'}</p>
     </div></header>
-    <section className="rest-family" aria-label="所有已拥有的宝可梦">
+    <section className="rest-family" aria-label="所有已拥有的小精灵">
       <div className="rest-family-heading"><Icon name="heart" size={24}/><span>伙伴都在这里 <b>{ids.length}</b></span></div>
       {ids.length>0?<ul className={`sleepers ${ids.length<=12?"few-friends":""}`} style={{"--rest-cols":ids.length<=6?Math.max(1,ids.length):ids.length<=12?Math.ceil(ids.length/2):6} as CSSProperties} ref={gallery} onScroll={updateMore} tabIndex={0} aria-label={`全部 ${ids.length} 位伙伴，可上下滑动查看`}>
-        {ids.map((id,i)=><li key={id} className="sleeper"><Icon name="zz" size={22}/><PokeImg src={creatureAvatar(id)} alt={getCreature(id).nameZh} loading={i<12?'eager':'lazy'}/><span>{getCreature(id).nameZh}</span></li>)}
+        {ids.map((id,i)=><li key={id} className="sleeper"><Icon name="zz" size={22}/><CreatureImg src={creatureAvatar(id)} alt={getCreature(id).nameZh} loading={i<12?'eager':'lazy'}/><span>{getCreature(id).nameZh}</span></li>)}
       </ul>:<p className="rest-empty">小岛也在安静休息，伙伴下次再见。</p>}
       {more&&<button className="rest-more" onClick={()=>gallery.current?.scrollBy({top:Math.max(120,gallery.current.clientHeight*.75),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}><Icon name="swipe" size={24}/>下面还有伙伴 <span aria-hidden="true">↓</span></button>}
     </section>

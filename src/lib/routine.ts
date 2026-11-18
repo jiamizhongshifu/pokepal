@@ -7,7 +7,7 @@ export type Activity =
 
 /**
  * 活动的中英文描述和头顶图标。英文按 3–6 岁幼儿的水平：只用最常见的动词和短句，
- * 每个活动配一个拟声词 / 口头禅（sound），以及宝可梦自己的第一人称回答（me），用于家园的环境英语。
+ * 每个活动配一个拟声词 / 口头禅（sound），以及小精灵自己的第一人称回答（me），用于家园的环境英语。
  */
 export const ACTIVITY: Record<Activity, { zh: string; en: string; icon: string; sound: string; me: string; zhSound: string }> = {
   sleep: { zh: "在睡觉", en: "is sleeping", icon: "zz", sound: "Zzz…", me: "I'm sleeping!", zhSound: "呼——呼——" },
@@ -42,7 +42,7 @@ function hourOf(date: Date) {
 }
 const inRange = (h: number, a: number, b: number) => (a <= b ? h >= a && h < b : h >= a || h < b);
 
-/** 当前习性：按每只宝可梦自己的作息表（找不到就用通用作息） */
+/** 当前习性：按每只小精灵自己的作息表（找不到就用通用作息） */
 export function habitAt(p: Creature, date = new Date()): Habit {
   const sched = BEHAVIORS[p.id]?.schedule ?? DEFAULT_SCHEDULE;
   const h = hourOf(date);

@@ -1,10 +1,10 @@
 import { DECOR_LAYOUT, DECOR_POSTS, DECOR_STONES } from './decorationLayout';
 import type { FurnitureId } from '../lib/islandLiving';
 /**
- * 家园场景布局：《风/波》式热带海岛 + 宝可梦世界道具。
+ * 家园场景布局：《风/波》式热带海岛 + 小精灵世界道具。
  *
- * 比例约定：1 个单位 ≈ 1 米。宝可梦按真实身高轻度压缩显示（皮卡丘约 0.75 米、卡比兽约 1.8 米、拉普拉斯约 2 米），
- * 道具按同一比例摆放：帐篷约 2 米高，原木凳约 0.45 米高刚好够小宝可梦坐，椰子树约 6~8 米，礁石 1.5~2 米。
+ * 比例约定：1 个单位 ≈ 1 米。小精灵按真实身高轻度压缩显示（小精灵宝宝约 0.3 米、成年的大个子约 2 米），
+ * 道具按同一比例摆放：帐篷约 2 米高，原木凳约 0.45 米高刚好够小小精灵坐，椰子树约 6~8 米，礁石 1.5~2 米。
  */
 export interface Placement {
   m: string;
@@ -52,7 +52,7 @@ export function grassMask(x: number, z: number) {
 // ---------- 功能区 ----------
 export const CAMPFIRE = { x: 0.4, z: -5.7 };
 export const TENT = { x: -6.8, z: -6.8 };
-/** 冥想石（超梦）：岸边一块约 1 米高的岩石，顶面高度 top */
+/** 冥想石：岸边一块约 1 米高的岩石，顶面高度 top */
 export const HIGH_ROCK = { x: 10.4, z: 4.6, top: 0.86 };
 /** 栈桥：从东岸伸进海里，桥面高出海面约 0.4 米 */
 export const PIER = { x: 10.7, z: -0.2, deck: 0.28 };
@@ -68,20 +68,20 @@ export const COAST_ROCKS: { x: number; z: number; size: [number, number, number]
   { ...onIsland(160, 1.25), size: [0.9, 0.44, 0.75], yaw: 0.2 }
 ];
 
-/** 精灵球睡垫：直径按要睡的宝可梦大小给几档 */
+/** 睡垫：直径按要睡的小精灵大小给几档 */
 export const CUSHIONS: { x: number; z: number; d: number }[] = [
   { x: -9.4, z: -8.3, d: 1.5 }, { x: -6.6, z: -10.0, d: 1.2 },
   { x: -4.3, z: -9.6, d: 1.4 }, { x: -10.0, z: -5.7, d: 1.1 },
   { x: -1.0, z: -9.2, d: 1.3 }, { x: -11.4, z: -7.0, d: 1.0 }
 ];
-/** 树果丛：橙橙果（蓝）、桃桃果（粉）、樱子果（红） */
+/** 树果丛：蓝莓（蓝）、桃子（粉）、草莓（红） */
 export const BERRY_BUSHES: { x: number; z: number; berry: "oran" | "pecha" | "cheri"; s: number }[] = [
   { x: 5.4, z: -7.7, berry: "oran", s: 0.85 },
   { x: 8.7, z: -3.2, berry: "pecha", s: 0.85 },
   { x: -10.8, z: -5.3, berry: "cheri", s: 0.8 },
   { x: 4.7, z: 3.2, berry: "oran", s: 1.2 }
 ];
-/** 篝火边的宝可梦食盆 */
+/** 篝火边的小精灵食盆 */
 export const BOWLS: { x: number; z: number }[] = [
   { x: CAMPFIRE.x + 1.3, z: CAMPFIRE.z + 1.5 },
   { x: CAMPFIRE.x - 1.4, z: CAMPFIRE.z + 1.4 },
@@ -105,7 +105,7 @@ export const HQ_DIR = "/models/hq/";
 const logSeat = (x: number, z: number, r: number): Placement => ({ m: "log_seat", x, z, r });
 const shell = (deg: number, k: number, r: number, s = 1.7): Placement => ({ ...onIsland(deg, k), m: "lambis_shell", r, s, y: -0.01 });
 export const HQ_PROPS: Placement[] = [
-  // 篝火：石砌火塘（直径约 1.8 米）+ 三根原木长凳（程序化建模，长 1.9 米、高 0.42 米，小宝可梦刚好坐上去）
+  // 篝火：石砌火塘（直径约 1.8 米）+ 三根原木长凳（程序化建模，长 1.9 米、高 0.42 米，小小精灵刚好坐上去）
   logSeat(CAMPFIRE.x - 2.0, CAMPFIRE.z, 90),
   logSeat(CAMPFIRE.x + 2.0, CAMPFIRE.z, 92),
   logSeat(CAMPFIRE.x, CAMPFIRE.z - 1.9, 4),
@@ -118,7 +118,7 @@ export const HQ_PROPS: Placement[] = [
   { m: "pier", x: PIER.x, z: PIER.z, r: -90, sv:[1,1,PIER_LENGTH_SCALE], abs: true, y: PIER.deck - 2.6 },
   // 沙滩上的海螺壳
   shell(70, 0.95, 30), shell(100, 1.1, 160, 1.4), shell(20, 1.12, 260), shell(130, 1.02, 80, 1.5), shell(-5, 1.18, 200, 1.3),
-  // 动森式圆团花灌木（程序化，见 Garden.tsx）：只种在草地台地和岛边缘，不挡宝可梦。v 是花色
+  // 动森式圆团花灌木（程序化，见 Garden.tsx）：只种在草地台地和岛边缘，不挡小精灵。v 是花色
   { m: "shrub", x: -10.6, z: -8.7, s: 0.7, r: 20, v: 0 },
   { m: "shrub", x: -10.5, z: -7.6, s: 0.9, r: 200, v: 2 },
   { m: "shrub", x: -8.7, z: -9.2, s: 0.85, r: 40, v: 1 },
@@ -204,8 +204,8 @@ export const GRASS_CLEAR: { x: number; z: number; r: number }[] = [
 ];
 
 /**
- * 宝可梦走动时要绕开的障碍：圆形（中心 + 半径），或胶囊形（线段 x,z → x2,z2 + 半径）。
- * water=true 的障碍水里的宝可梦也要绕开（栈桥）。
+ * 小精灵走动时要绕开的障碍：圆形（中心 + 半径），或胶囊形（线段 x,z → x2,z2 + 半径）。
+ * water=true 的障碍水里的小精灵也要绕开（栈桥）。
  */
 export interface Obstacle { x: number; z: number; r: number; x2?: number; z2?: number; water?: boolean; decoration?: boolean; height?:number; airRadius?:number; canopyBottom?:number }
 /** 栈桥占地：按模型的纵向缩放同步桥面中心线，宽约 2.5 米 */
@@ -249,7 +249,7 @@ export const OBSTACLES: Obstacle[] = [
     const a = ((FENCE.from + ((FENCE.to - FENCE.from) * (i + 0.5)) / 6) * Math.PI) / 180;
     return { x: FENCE.cx + Math.cos(a) * FENCE.r, z: FENCE.cz + Math.sin(a) * FENCE.r, r: 0.35 };
   }),
-  // 栈桥：桥面沿 x 方向伸进海里，陆上和水里的宝可梦都不从桥柱里穿过
+  // 栈桥：桥面沿 x 方向伸进海里，陆上和水里的小精灵都不从桥柱里穿过
   { x: PIER_SPAN.x1, z: PIER_SPAN.z, x2: PIER_SPAN.x2, z2: PIER_SPAN.z, r: PIER_SPAN.r, water: true }
 ];
 

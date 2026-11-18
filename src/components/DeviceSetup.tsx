@@ -45,7 +45,7 @@ function OnlineSetup({initiallyOpen}:{initiallyOpen:boolean}){
    <div className="offline-update-heading"><span className="offline-update-symbol"><Icon name={phase==='ready'||phase==='latest'?'check':phase==='error'?'cloud':'island'} size={48}/></span><div><strong role="status">{titles[phase]}</strong><small>当前版本 {loadedVersion}{target&&target!==loadedVersion?` → ${target}`:''}</small></div></div>
    {busy&&<progress aria-label={titles[phase]}/>}
    <ol className="offline-update-steps"><li className={phase==='checking'?'current':phase==='idle'||phase==='error'?'':'finished'}><Icon name="search" size={28}/>找一找</li><li className={phase==='preparing'?'current':phase==='ready'||phase==='latest'?'finished':''}><Icon name="island" size={28}/>准备小岛</li><li className={phase==='ready'||phase==='latest'?'finished':''}><Icon name="check" size={28}/>准备好了</li></ol>
-   <p className="offline-update-detail">{phase==='error'?'检查未完成，可能是网络或浏览器更新服务暂时无响应。可重试，或点“打开新版入口”；不会清除本机存档。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的宝可梦、学习进度和日记。'}</p>
+   <p className="offline-update-detail">{phase==='error'?'检查未完成，可能是网络或浏览器更新服务暂时无响应。可重试，或点“打开新版入口”；不会清除本机存档。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的小精灵、学习进度和日记。'}</p>
    <div className="offline-update-actions">{phase==='ready'?<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}><Icon name="play" size={28}/>打开新版本</button>:<button disabled={busy} onClick={()=>void check()}><Icon name="refresh" size={28}/>{busy?'正在准备…':phase==='error'?'再试一次':'检查更新'}</button>}{phase==='error'&&<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}>打开新版入口</button>}</div>
   </section>
   <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。网页版不提供完整离线安装。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心分别导出游戏存档、备份日记与原声，并另存需要保留的跟读录音。</p></details>
@@ -107,7 +107,7 @@ function OfflineSetup({initiallyOpen,compactTools}:{initiallyOpen:boolean;compac
           catch{setNote(summary+' 诊断显示在下方，未连接到 Mac。');}
         }}>检查观察镜头</button>}
         {canInstall&&!standalone&&!native&&<button onClick={install}>安装到主屏幕</button>}
-        <button onClick={async()=>{unlockAudio();const ok=await say(['en',"Hello! I'm Pikachu!"],['zh','你好，我是皮卡丘！']);setNote(ok?'配音播放已完成，请确认设备扬声器能听到中英文。':'配音未播放成功，请等待下载完成后重试。');}}>试听中英配音</button>
+        <button onClick={async()=>{unlockAudio();const ok=await say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！']);setNote(ok?'配音播放已完成，请确认设备扬声器能听到中英文。':'配音未播放成功，请等待下载完成后重试。');}}>试听中英配音</button>
         {!native&&<button onClick={keep}>保留离线资料</button>}
 
       </div>

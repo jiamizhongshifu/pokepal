@@ -45,7 +45,7 @@ export function StoryAdventure(){
  return <div className="screen story-adventure">
   <TopBar title="苹果野餐" onBack={()=>{stopSpeech();go({name:'stories'});}} focused/>
   <main>
-   <header><p>和皮卡丘、伊布一起 · {state.index+1} / {book.pages.length}</p><h1>{state.phase==='ready'?book.title:page.beat}</h1></header>
+   <header><p>和啵啵、莓莓一起 · {state.index+1} / {book.pages.length}</p><h1>{state.phase==='ready'?book.title:page.beat}</h1></header>
    <div onErrorCapture={()=>{setAssetFailed(true);stopSpeech();void send({type:'pause'});}} className={`adventure-picture ${active?'':'is-paused'}`}>
     <StoryStage story={book} page={page}/>
     {state.phase==='invitation'&&<button className="adventure-invite" disabled={busy} onClick={()=>void send({type:'participate',token:state.token})}>一起扶住篮子<small>也可以看朋友来做</small></button>}
@@ -59,8 +59,8 @@ export function StoryAdventure(){
    </div>}
    {state.phase==='completed'&&<section className="adventure-reward" aria-live="polite">
     <h2>谢谢你，一起度过这个小故事。</h2>
-    <p>{save.daily.adventureReward!==undefined?(save.daily.adventureReward>0?`今天的故事已存好，获得 ${save.daily.adventureReward} 能量。`:'今天的故事已存好。今天的能量已收集过或已满。'):'这段故事已经听完，可以再听一次。'} 现在有 {save.energy} 能量、{save.balls.poke} 个精灵球。</p>
-    {save.balls.poke>0?<button disabled={busy} onClick={()=>go({name:'catch'})}>带上精灵球，认识新伙伴</button>:save.energy>=5?<button disabled={busy} onClick={()=>void buy()}>用 5 能量换精灵球，去找伙伴</button>:<button onClick={()=>go({name:'home'})}>回小岛，陪陪伙伴</button>}
+    <p>{save.daily.adventureReward!==undefined?(save.daily.adventureReward>0?`今天的故事已存好，获得 ${save.daily.adventureReward} 能量。`:'今天的故事已存好。今天的能量已收集过或已满。'):'这段故事已经听完，可以再听一次。'} 现在有 {save.energy} 能量、{save.balls.poke} 个邀请果。</p>
+    {save.balls.poke>0?<button disabled={busy} onClick={()=>go({name:'catch'})}>带上邀请果，认识新伙伴</button>:save.energy>=5?<button disabled={busy} onClick={()=>void buy()}>用 5 能量换邀请果，去找伙伴</button>:<button onClick={()=>go({name:'home'})}>回小岛，陪陪伙伴</button>}
     <div className="adventure-secondary"><button disabled={busy} onClick={()=>void send({type:'restart'})}>再听一次</button><button onClick={()=>go({name:'home'})}>回小岛</button></div>
     <small>故事每天共 5 能量，与旧版共读合并计算；所有活动每天最多 15 能量。重听不会重复领取。</small>
    </section>}

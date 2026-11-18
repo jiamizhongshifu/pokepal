@@ -52,16 +52,16 @@ export function Energy() {
     <main className="child-page energy-page">
       <section className="energy-next">
         <div className="energy-balance"><Icon name="bolt" size={32}/>我的能量 <b>{save.energy}</b></div>
-        <Icon name={goal.goal==='ball'?'pokeball':'upgrade'} size={76}/>
-        <h1>{goal.ready?(goal.complete?'已经变漂亮啦':goal.hasBall?'球准备好啦！':'能量够啦！'):goal.title}</h1>
-        <p>{goal.ready?(goal.hasBall?'去找你喜欢的伙伴吧。':goal.complete?'去小岛看看我们的成果。':`可以${goal.goal==='ball'?'换一个精灵球':`升级${goal.title}`}。`):`再收集 ${goal.short} 点能量，就能${goal.goal==='ball'?'换一个精灵球':`升级${goal.title}`}。`}</p>
+        <Icon name={goal.goal==='ball'?'invite-berry':'upgrade'} size={76}/>
+        <h1>{goal.ready?(goal.complete?'已经变漂亮啦':goal.hasBall?'邀请果准备好啦！':'能量够啦！'):goal.title}</h1>
+        <p>{goal.ready?(goal.hasBall?'去找你喜欢的伙伴吧。':goal.complete?'去小岛看看我们的成果。':`可以${goal.goal==='ball'?'换一个邀请果':`升级${goal.title}`}。`):`再收集 ${goal.short} 点能量，就能${goal.goal==='ball'?'换一个邀请果':`升级${goal.title}`}。`}</p>
         {!goal.ready&&<p className="energy-course-hint">{earned===DAILY_CAP?'今天收集好啦。还可以自由玩，也可以休息。':recommended==='course'?`一起发现：${course.title}`:'选一个喜欢的小活动，不用全部完成。'}</p>}
-        <button className="btn-big" onClick={goal.ready?destination:()=>open(recommended)}><Icon name={goal.ready?(goal.goal==='ball'?(goal.hasBall?'grass':'pokeball'):'island'):ACTIVITIES[recommended].icon} size={38}/>{goal.ready?(goal.goal==='ball'?(goal.hasBall?'去找伙伴':'去换精灵球'):goal.complete?'去看看':'去升级'):label(recommended)}</button>
+        <button className="btn-big" onClick={goal.ready?destination:()=>open(recommended)}><Icon name={goal.ready?(goal.goal==='ball'?(goal.hasBall?'grass':'invite-berry'):'island'):ACTIVITIES[recommended].icon} size={38}/>{goal.ready?(goal.goal==='ball'?(goal.hasBall?'去找伙伴':'去换邀请果'):goal.complete?'去看看':'去升级'):label(recommended)}</button>
       </section>
       <section className="energy-other"><h2>{goal.ready?'还想玩一会儿？':'也可以这样玩'}</h2><div className="energy-alternatives">{(goal.ready?['course','story'] as ParticipationKind[]:others.slice(0,2)).map(card)}</div>
        <details className="quiet-disclosure"><summary>换个玩法</summary><div className="energy-alternatives">{(goal.ready?choices.filter(k=>k!=='course'&&k!=='story'):others.slice(2)).map(card)}</div></details>
       </section>
-      <details className="quiet-disclosure"><summary>能量还能做什么？</summary><div className="energy-alternatives"><button className="energy-alternative" onClick={()=>go({name:'shop'})}><Icon name="pokeball" size={38}/>换精灵球</button><button className="energy-alternative" onClick={()=>go({name:'home',station:'upgrades'})}><Icon name="island" size={38}/>装扮小岛</button></div></details>
+      <details className="quiet-disclosure"><summary>能量还能做什么？</summary><div className="energy-alternatives"><button className="energy-alternative" onClick={()=>go({name:'shop'})}><Icon name="invite-berry" size={38}/>换邀请果</button><button className="energy-alternative" onClick={()=>go({name:'home',station:'upgrades'})}><Icon name="island" size={38}/>装扮小岛</button></div></details>
       <details className="energy-parent-note"><summary>给家长：今天的小收获</summary><p>今天收集 {earned} / {DAILY_CAP} 点。苹果野餐与旧版共读合计每天 5 点能量。英语主题及其他活动每天首次完成得 2 点，体验三种再得 1 点。照顾伙伴时听见一句英语也算参与，不需要开口或答题。玩过的活动可继续玩，不重复发放能量。</p></details>
     </main>
   </div>;

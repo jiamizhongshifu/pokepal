@@ -5,7 +5,7 @@ import '../components/island-living.css';
 import { ParticipationNote } from '../components/ParticipationNote';
 import { creatureArt,getCreature } from '../data/creatures';
 import { BERRIES } from '../lib/farm';
-import { PokeImg } from '../components/PokeImg';
+import { CreatureImg } from '../components/CreatureImg';
 import '../components/picnic.css';
 import { useMemo,useState,useRef,useEffect } from 'react';
 import { useGame } from '../store';
@@ -41,8 +41,8 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
   </article>;})}</div>}
   {keys.length>limit&&<div className="lesson-actions"><button onClick={()=>setLimit(n=>n+24)}><Icon name="search" size={30}/>再看一些发现（{limit} / {keys.length}）</button></div>}
   {filter==='all'&&!query&&((s.picnic?.memories.length??0)+(s.islandLiving?.memories.length??0)>0)&&<details className="notebook-memories"><summary>我们在小岛的回忆</summary>
-  {filter==='all'&&!query&&!!s.picnic?.memories.length&&<section className="picnic-memories" aria-label="野餐回忆"><h2>我们一起分享过</h2><p>这是小岛上的共同经历，不代表已经学会英语。</p>{s.picnic.memories.slice(0,3).map(m=><div className="picnic-memory" key={m.id}><PokeImg src={creatureArt(m.pokemonId)} alt=""/><div>和{getCreature(m.pokemonId).nameZh}分享了{BERRIES[m.berry].name}<small>{new Date(m.at).toLocaleDateString('zh-CN')} · 伙伴吃得很开心</small></div></div>)}</section>}
-  {filter==='all'&&!query&&!!s.islandLiving?.memories.length&&<section className="picnic-memories" aria-label="小岛生活回忆"><h2>一起生活的小发现</h2>{(s.islandLiving?.memories??[]).slice(0,6).map(m=><div className="picnic-memory" key={m.id}><div className="living-memory-images">{m.partners.map(id=><PokeImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div><div>和{m.partners.map(id=>getCreature(id).nameZh).join('、')}{m.kind==='ball'?'轮流玩了球':'安静坐了一会儿'}<small>{m.context==='coast'?'海岸':m.context==='play'?'游乐区':'树荫下'} · {new Date(m.at).toLocaleDateString('zh-CN')}</small></div></div>)}<p>共同经历不等于听懂。应用记录接触和操作，无法判断家长是否帮忙。</p><button className="living-memory-link" onClick={()=>go({name:'diary'})}><Icon name="mic" size={30}/>把今天的事，记进小日记</button></section>}
+  {filter==='all'&&!query&&!!s.picnic?.memories.length&&<section className="picnic-memories" aria-label="野餐回忆"><h2>我们一起分享过</h2><p>这是小岛上的共同经历，不代表已经学会英语。</p>{s.picnic.memories.slice(0,3).map(m=><div className="picnic-memory" key={m.id}><CreatureImg src={creatureArt(m.pokemonId)} alt=""/><div>和{getCreature(m.pokemonId).nameZh}分享了{BERRIES[m.berry].name}<small>{new Date(m.at).toLocaleDateString('zh-CN')} · 伙伴吃得很开心</small></div></div>)}</section>}
+  {filter==='all'&&!query&&!!s.islandLiving?.memories.length&&<section className="picnic-memories" aria-label="小岛生活回忆"><h2>一起生活的小发现</h2>{(s.islandLiving?.memories??[]).slice(0,6).map(m=><div className="picnic-memory" key={m.id}><div className="living-memory-images">{m.partners.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div><div>和{m.partners.map(id=>getCreature(id).nameZh).join('、')}{m.kind==='ball'?'轮流玩了球':'安静坐了一会儿'}<small>{m.context==='coast'?'海岸':m.context==='play'?'游乐区':'树荫下'} · {new Date(m.at).toLocaleDateString('zh-CN')}</small></div></div>)}<p>共同经历不等于听懂。应用记录接触和操作，无法判断家长是否帮忙。</p><button className="living-memory-link" onClick={()=>go({name:'diary'})}><Icon name="mic" size={30}/>把今天的事，记进小日记</button></section>}
   </details>}
   <details className="quiet-disclosure notebook-parent"><summary>给家长 · 需要帮助的小发现</summary><p>重听不算答对；有无应用内提示分别记录，不代表识别了家长的帮助。</p><button className="btn-small" onClick={()=>{setFilter(filter==='retry'?'all':'retry');setQuery('');setLimit(24);requestAnimationFrame(()=>header.current?.scrollIntoView({block:'start'}));}}>{filter==='retry'?'返回全部发现':'看看需要再试的词'}</button>{filter==='retry'&&<p role="status">当前只显示需要帮助的小发现。</p>}</details>
  </main></div>;

@@ -20,8 +20,8 @@ test('tokens rebuild every story sentence exactly and number only real words', (
 test('every word a child can tap has a Chinese meaning and a single-word recording text', () => {
  const missing = new Set(pages.flatMap(p => storyLineWords(p.en)).filter(w => !storyWordGloss(w)));
  assert.deepEqual([...missing], []);
- assert.equal(storyWordVoice('eevee'), 'Eevee');
- assert.equal(storyWordVoice("pikachu's"), "Pikachu's");
+ assert.equal(storyWordVoice('berry'), 'Berry');
+ assert.equal(storyWordVoice("bubbo's"), "Bubbo's");
  assert.equal(storyWordVoice('i'), 'I');
  assert.equal(storyWordGloss('turn'), '轮到');
 });

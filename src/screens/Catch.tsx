@@ -4,7 +4,7 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
-import { PokeBall } from "../components/PokeBall";
+import { InviteBerry } from "../components/InviteBerry";
 import { Confetti } from "../components/Celebration";
 import { CREATURES, meetableCreatures, RARITY, creatureArt, creatureAvatar } from "../data/creatures";
 import { pickRandom } from "../data/words";
@@ -12,7 +12,7 @@ import { say, playCry, sfx, wait, stopSpeech } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
 import type { Creature } from "../types";
 import { Icon, Stars } from "../icons";
-import { PokeImg } from "../components/PokeImg";
+import { CreatureImg } from "../components/CreatureImg";
 function EncounterGrass() {
   return <span className="encounter-grass" aria-hidden="true"><img src="/art/world/meadow-tuft-v2.png" alt="" draggable={false}/></span>;
 }
@@ -24,7 +24,7 @@ type Phase = "field" | "aim" | "throwing" | "absorbing" | "landing" | "shaking" 
 export function Catch() {
   const save = useGame((s) => s.save);
   const go = useGame((s) => s.go);
-  const catchPokemon = useGame((s) => s.catchPokemon);
+  const inviteFriend = useGame((s) => s.inviteFriend);
   const setCatchWish = useGame((s) => s.setCatchWish);
   const wish = CREATURES.find((p) => p.id === save.catchWish && !save.captures.some(c=>c.id===p.id));
   const ball = "poke" as const;
@@ -58,12 +58,12 @@ export function Catch() {
   }, [wish?.id, exploration]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useIntro(() => {
-    if (!ready) say(["zh", "先看看草丛里的伙伴，准备好精灵球再来邀请它吧！"], ["en", "You need a Poké Ball."]);
+    if (!ready) say(["zh", "先看看草丛里的伙伴，准备好邀请果再来邀请它吧！"], ["en", "You need an invite berry."]);
   });
   useEffect(() => {
     if (phase === "field" && ready && encounters.length) {
       if (wish) { say(["en", `Let’s meet ${wish.nameEn}!`], ["zh", `${wish.nameZh}在等你，轻轻点一下它吧！`]); return; }
-      say(["zh", "草丛里有宝可梦！点一点你想要的那只。"], ["en", "Which one do you like?"]);
+      say(["zh", "草丛里有小精灵！点一点你想要的那只。"], ["en", "Which one do you like?"]);
     }
   }, [phase, wish?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -83,7 +83,7 @@ export function Catch() {
     const ticket=++selectionRun.current;
     if (!ready) {
       setCatchWish(p.id);
-      say(["zh", "先看看草丛里的伙伴，准备好精灵球再来邀请它吧！"], ["en", "You need a Poké Ball."]);
+      say(["zh", "先看看草丛里的伙伴，准备好邀请果再来邀请它吧！"], ["en", "You need an invite berry."]);
       return;
     }
     sfx("pop");
@@ -91,7 +91,7 @@ export function Catch() {
     setPhase("aim");
     await playCry(p.id);
     if (!mounted.current || ticket!==selectionRun.current || busy.current) return;
-    void say(["en", `Hi! I'm ${p.nameEn}!`], ["zh", `我是${p.nameZh}！`], ["zh", "把精灵球往上扔出去吧！"], ["en", "Throw the ball!"]).then(ok=>{if(ok)useGame.getState().noteWord(p.nameEn,"heard");});
+    void say(["en", `Hi! I'm ${p.nameEn}!`], ["zh", `我是${p.nameZh}！`], ["zh", "把邀请果送给它吧！"], ["en", "Throw the ball!"]).then(ok=>{if(ok)useGame.getState().noteWord(p.nameEn,"heard");});
   };
 
   const throwBall = async () => {
@@ -121,14 +121,14 @@ export function Catch() {
     }
     await wait(500);
     if (!mounted.current) return;
-    const captured=await catchPokemon(target.id);
+    const captured=await inviteFriend(target.id);
     if(!mounted.current)return;
     if (!captured) {
       busy.current=false;setTarget(null);setPhase("field");return;
     }
     setPhase("caught");
     sfx("sparkle");
-    await say(["en", "Gotcha!"], ["en", `You caught ${target!.nameEn}!`], ["zh", `你抓到了${target!.nameZh}！`]);
+    await say(["en", "Hello, friend!"], ["en", `${target!.nameEn} is your new friend!`], ["zh", `${target!.nameZh}成了你的新朋友！`]);
     if (mounted.current) playCry(target!.id);
   };
 
@@ -161,7 +161,7 @@ export function Catch() {
             <button className="wish-button explore-again" onClick={exploreAgain}><span className="field-action-picture"><Icon name="grass" size={40}/><Icon name="refresh" size={22} className="field-action-corner"/></span><span>再次探索</span></button>
           </div>
         </div>
-        <div className={`field encounters-${encounters.length}`} aria-label="草丛里的宝可梦">
+        <div className={`field encounters-${encounters.length}`} aria-label="草丛里的小精灵">
           {encounters.length === 0 ? (
             <div className="center-msg">
               <Icon name="party" size={120} />
@@ -171,16 +171,16 @@ export function Catch() {
           ) : (
             encounters.map((p, i) => (
               <button key={p.id} aria-label={`${p.nameZh} ${p.nameEn}`} className="wild" style={{"--spot":i} as React.CSSProperties} onClick={() => chooseTarget(p)}>
-                <span className="encounter-portrait"><PokeImg src={creatureAvatar(p.id)} alt="" draggable={false} /><EncounterGrass /></span>
+                <span className="encounter-portrait"><CreatureImg src={creatureAvatar(p.id)} alt="" draggable={false} /><EncounterGrass /></span>
                 <span className="wild-name">{p.nameZh}<small lang="en">{p.nameEn}</small></span>
               </button>
             ))
           )}
         </div>
           {encounters.length > 0 && <div className="field-kit">
-            <PokeBall type="poke" size={48}/>
-            <div className="field-kit-copy"><strong>{ready ? `精灵球 ×${save.balls.poke}` : "准备一个精灵球"}</strong><small>{ready ? "点一点喜欢的伙伴吧" : "有了球，就能邀请伙伴回家"}</small></div>
-            {!ready && <button onClick={()=>go({name:"shop"})}><Icon name="gift" size={30}/><span>去换球</span></button>}
+            <InviteBerry type="poke" size={48}/>
+            <div className="field-kit-copy"><strong>{ready ? `邀请果 ×${save.balls.poke}` : "准备一个邀请果"}</strong><small>{ready ? "点一点喜欢的伙伴吧" : "有了邀请果，就能邀请伙伴回家"}</small></div>
+            {!ready && <button onClick={()=>go({name:"shop"})}><Icon name="gift" size={30}/><span>去换邀请果</span></button>}
           </div>}
 
 
@@ -189,15 +189,15 @@ export function Catch() {
 
       {target && ["aim", "throwing", "absorbing", "landing", "shaking"].includes(phase) && (
         <div className="arena capture-arena" ref={arenaRef} style={captureMotion}>
-          <PokeImg
-            className={`arena-target ${phase === "absorbing" ? "capture-absorbing" : phase === "landing" || phase === "shaking" ? "capture-hidden" : ""}`}
+          <CreatureImg
+            className={`arena-target ${phase === "absorbing" ? "invite-receiving" : phase === "landing" || phase === "shaking" ? "invite-nodding" : ""}`}
             src={creatureArt(target.id)}
             alt=""
           />
           <div className="arena-name">{target.nameZh} · {target.nameEn} <Stars n={RARITY[target.rarity].stars} size={22} /></div>
           <button
             className={`throw-ball capture-ball capture-${phase}`}
-            aria-label="扔出精灵球"
+            aria-label="送出邀请果"
             disabled={phase !== "aim"}
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); throwBall(); } }}
             style={{ transform: phase === "aim" ? `translateY(${dragDy}px)` : undefined }}
@@ -206,11 +206,11 @@ export function Catch() {
             onPointerUp={onUp}
             onPointerCancel={() => { drag.current = null; setDragDy(0); }}
           >
-            <span className="capture-ball-body"><PokeBall type="poke" size={120} /></span>
+            <span className="capture-ball-body"><InviteBerry type="poke" size={120} /></span>
             <span className="capture-flash" aria-hidden="true"/>
           </button>
-          {['throwing','absorbing','landing','shaking'].includes(phase)&&<div className="capture-progress" role="status" aria-live="polite">{phase==='throwing'?'精灵球，出发！':phase==='absorbing'?'伙伴进入精灵球啦':phase==='landing'?'轻轻落地…':`摇一摇 ${shakeCount} / 3`}<span aria-hidden="true">{[1,2,3].map(n=><i key={n} className={n<=shakeCount?'on':''}/>)}</span></div>}
-          {(phase === "aim") && <div className="throw-hint"><Icon name="swipe" size={30} /><span>点一下精灵球，或向上滑<small lang="en">Tap or slide up!</small></span></div>}
+          {['throwing','absorbing','landing','shaking'].includes(phase)&&<div className="capture-progress" role="status" aria-live="polite">{phase==='throwing'?'送出邀请果！':phase==='absorbing'?'伙伴收下邀请果啦':phase==='landing'?'它在想一想…':`点点头 ${shakeCount} / 3`}<span aria-hidden="true">{[1,2,3].map(n=><i key={n} className={n<=shakeCount?'on':''}/>)}</span></div>}
+          {(phase === "aim") && <div className="throw-hint"><Icon name="swipe" size={30} /><span>点一下邀请果，或向上滑<small lang="en">Tap or slide up!</small></span></div>}
           {phase === "aim" && <button className="link back-field" onClick={() => { selectionRun.current++; stopSpeech(); setTarget(null); setPhase("field"); }}><Icon name="search" size={28}/><span>换一只</span></button>}
         </div>
       )}
@@ -219,8 +219,8 @@ export function Catch() {
         <BlockingDialog className="modal-backdrop celebrate" label="认识新伙伴">
           <Confetti />
           <div className="modal caught-card">
-            <div className="cel-title">抓到啦！Gotcha!</div>
-            <PokeImg className="caught-art" src={creatureArt(target.id)} alt="" />
+            <div className="cel-title">交到新朋友啦！New friend!</div>
+            <CreatureImg className="caught-art" src={creatureArt(target.id)} alt="" />
             <div className="caught-name">{target.nameZh}<span>{target.nameEn}</span></div>
             <div className="caught-rarity"><Stars n={RARITY[target.rarity].stars} size={28} /> {RARITY[target.rarity].zh}</div>
             <div className="cel-actions">

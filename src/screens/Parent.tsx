@@ -19,7 +19,7 @@ import { listRecordings, type Recording } from "../lib/db";
 import { playUrl, say, voiceInfo } from "../lib/speech";
 import type { BallType, SaveData } from "../types";
 import { Icon } from "../icons";
-import { PokeImg } from "../components/PokeImg";
+import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { LEARNING_UNITS,learningEntry,selectedUnit } from '../data/curriculum';
 import { reviewKeys } from '../lib/learningProgress';
@@ -116,7 +116,7 @@ export function Parent() {
               <div className="chips">{letters.map((l) => <span key={l} className="chip letter">{l}</span>)}</div>
             {todayWords.length===0&&learned.length===0&&letters.length===0&&<p className="muted">还没有记录。听故事、玩课程或写字后，会慢慢积累在这里。</p>}</div></details>
 <details className="parent-fold"><summary><Icon name="tasks" size={28}/><span>最近 7 天<small>查看参与与游玩记录</small></span></summary><div className="parent-fold-content"><p className="parent-table-hint">表格可左右滑动，查看完整记录。</p><div className="parent-table-scroll" role="region" aria-label="最近七天学习记录，可左右滚动" tabIndex={0}><table className="hist">
-                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>能量</th><th>新词</th><th>抓到</th><th>分钟</th></tr></thead>
+                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>能量</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
                 <tbody>
                   {history.map((h) => (
                     <tr key={h.date}><td>{h.date.slice(5)}</td><td>{h.heard}</td><td>{h.spoken}</td><td>{h.tasksCompleted}</td><td>{h.energyEarned}/{DAILY_ENERGY_CAP}</td><td>{h.words}</td><td>{h.caught}</td><td>{h.playMinutes}</td></tr>
@@ -146,13 +146,13 @@ export function Parent() {
                 <span className="muted">刚开始建议保留中文提示（先英文、再中文、最后英文复述）；宝宝熟悉这些句型后可切到只说英文。</span>
               </label><label>语速：<b>{s.speechRate.toFixed(1)}×</b>
                 <input type="range" min={0.6} max={1.3} step={0.1} value={s.speechRate} onChange={(e) => updateSettings({ speechRate: Number(e.target.value) })} />
-              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Pikachu!"],['zh','你好，我是皮卡丘！'])}><Icon name="speaker" size={22}/>试听语音</button><label>家园英语（磨耳朵）
+              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！'])}><Icon name="speaker" size={22}/>试听语音</button><label>家园英语（磨耳朵）
                 <div className="seg">
                   {([["off", "关闭"], ["some", "少一点"], ["more", "多一点"]] as const).map(([v, t]) => (
                     <button key={v} aria-label={t} aria-pressed={(s.ambientEnglish ?? "some") === v} className={(s.ambientEnglish ?? "some") === v ? "on" : ""} onClick={() => updateSettings({ ambientEnglish: v })}>{t}</button>
                   ))}
                 </div>
-                <span className="muted">宝宝在家园里玩的时候，旁白会用简单英语描述宝可梦正在做的事（Look! Pikachu is eating. Yum yum!），也会数一数、找一找、说颜色。少一点约 50 秒一句，多一点约 25 秒一句。</span>
+                <span className="muted">宝宝在家园里玩的时候，旁白会用简单英语描述小精灵正在做的事（Look! Bubbo is eating. Yum yum!），也会数一数、找一找、说颜色。少一点约 50 秒一句，多一点约 25 秒一句。</span>
               </label><label>背景音乐
                 <div className="seg">
                   {([['off','关闭'],['soft','轻轻播放'],['normal','标准音量']] as const).map(([value,label])=><button key={value} aria-pressed={(s.backgroundMusic??'soft')===value} className={(s.backgroundMusic??'soft')===value?'on':''} onClick={()=>updateSettings({backgroundMusic:value})}>{label}</button>)}
@@ -173,8 +173,8 @@ export function Parent() {
                 <span className="muted">高画质会开启实时环境光遮蔽，物体之间的阴影更真实，但更耗电，建议 iPad Pro 使用；卡顿时会自动关闭。</span>
               </label></div></div></details>
 <details className="parent-fold"><summary><Icon name="hand" size={28}/><span>操作引导<small>{save.onboarding?.automatic!==false?'首次使用主动提示':'按需点“帮助”'}</small></span></summary><div className="parent-fold-content"><GuideSettings/></div></details>
-<details className="parent-fold" onToggle={e=>setFavoritesOpen(e.currentTarget.open)}><summary><Icon name="pokeball" size={28}/><span>偏爱的伙伴<small>已置顶 {s.favorites.length} 只 · 在草丛里优先出现</small></span></summary>{favoritesOpen&&<div className="parent-fold-content"><p>只影响随机出现的优先顺序；宝宝仍能在草丛和图鉴里指定伙伴。</p><label className="parent-search">找一个伙伴<input type="search" value={favoriteQuery} placeholder="中文、英文或编号" onChange={e=>{setFavoriteQuery(e.target.value);setFavoriteLimit(24);}}/></label><label className="parent-fav-filter"><input type="checkbox" checked={onlyFavorites} onChange={e=>{setOnlyFavorites(e.target.checked);setFavoriteLimit(24);}}/>只看已置顶</label><div className="fav-grid">{favoriteOptions.slice(0,favoriteLimit).map(p=>{const on=s.favorites.includes(p.id);return <button key={p.id} className={`fav ${on?'on':''}`} aria-pressed={on} aria-label={`${p.nameZh}，${on?'已置顶，点击取消':'点击置顶'}`} onClick={()=>updateSettings({favorites:on?s.favorites.filter(x=>x!==p.id):[...s.favorites,p.id]})}><PokeImg src={creatureAvatar(p.id)} alt=""/><span>{p.nameZh}</span>{on&&<small>已置顶</small>}</button>;})}</div>{!favoriteOptions.length&&<p role="status">{onlyFavorites?'没有符合条件的已置顶伙伴，可以取消筛选看看。':'没有找到，试试其他名字或编号。'}</p>}{favoriteOptions.length>favoriteLimit&&<button className="btn-small" onClick={()=>setFavoriteLimit(n=>n+24)}>再看一些（{Math.min(favoriteLimit,favoriteOptions.length)} / {favoriteOptions.length}）</button>}</div>}</details>
-<details className="parent-fold"><summary><Icon name="avatar-red" size={28}/><span>训练师名字<small>{save.trainer?.name||'小小训练师'}</small></span></summary><div className="parent-fold-content form"><label>训练师名字
+<details className="parent-fold" onToggle={e=>setFavoritesOpen(e.currentTarget.open)}><summary><Icon name="invite-berry" size={28}/><span>偏爱的伙伴<small>已置顶 {s.favorites.length} 只 · 在草丛里优先出现</small></span></summary>{favoritesOpen&&<div className="parent-fold-content"><p>只影响随机出现的优先顺序；宝宝仍能在草丛和好朋友相册里指定伙伴。</p><label className="parent-search">找一个伙伴<input type="search" value={favoriteQuery} placeholder="中文、英文或编号" onChange={e=>{setFavoriteQuery(e.target.value);setFavoriteLimit(24);}}/></label><label className="parent-fav-filter"><input type="checkbox" checked={onlyFavorites} onChange={e=>{setOnlyFavorites(e.target.checked);setFavoriteLimit(24);}}/>只看已置顶</label><div className="fav-grid">{favoriteOptions.slice(0,favoriteLimit).map(p=>{const on=s.favorites.includes(p.id);return <button key={p.id} className={`fav ${on?'on':''}`} aria-pressed={on} aria-label={`${p.nameZh}，${on?'已置顶，点击取消':'点击置顶'}`} onClick={()=>updateSettings({favorites:on?s.favorites.filter(x=>x!==p.id):[...s.favorites,p.id]})}><CreatureImg src={creatureAvatar(p.id)} alt=""/><span>{p.nameZh}</span>{on&&<small>已置顶</small>}</button>;})}</div>{!favoriteOptions.length&&<p role="status">{onlyFavorites?'没有符合条件的已置顶伙伴，可以取消筛选看看。':'没有找到，试试其他名字或编号。'}</p>}{favoriteOptions.length>favoriteLimit&&<button className="btn-small" onClick={()=>setFavoriteLimit(n=>n+24)}>再看一些（{Math.min(favoriteLimit,favoriteOptions.length)} / {favoriteOptions.length}）</button>}</div>}</details>
+<details className="parent-fold"><summary><Icon name="avatar-red" size={28}/><span>小岛主人的名字<small>{save.trainer?.name||'小岛主人'}</small></span></summary><div className="parent-fold-content form"><label>小岛主人的名字
                 <input defaultValue={save.trainer?.name} onBlur={(e) => renameTrainer(e.target.value)} maxLength={10} />
               </label><p className="muted">输入后离开输入框即可保存，最多 10 个字。</p></div></details></>}
    {tab==='data'&&<><DeviceSetup initiallyOpen compactTools/>

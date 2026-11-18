@@ -159,12 +159,6 @@ export const UI_ICONS: Record<string, string> = {
   refresh: oline("M48 22 A18 18 0 1 0 50 38", C.white, 5) + poly([[50, 10], [52, 26], [38, 22]], C.white),
   play: c(32, 32, 26, C.violet) + poly([[26, 20], [44, 32], [26, 44]], C.white),
   lock: rect(12, 28, 40, 28, 7, C.gold) + line("M20 28 V20 C20 8 44 8 44 20 V28", 5) + dot(32, 41, 4),
-  "pokeball":
-    c(32, 32, 26, C.white) +
-    p("M6 32 A26 26 0 0 1 58 32 Z", C.red) +
-    line("M6 32 H58", 3.5) +
-    c(32, 32, 7, C.white) +
-    hl(20, 18, 5, 3, -35),
   trophy:
     p("M18 8 H46 V24 C46 34 40 40 32 40 C24 40 18 34 18 24 Z", C.yellow) +
     line("M18 14 H10 C10 24 14 28 20 28 M46 14 H54 C54 24 50 28 44 28", 3.5) +

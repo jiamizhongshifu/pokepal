@@ -17,7 +17,7 @@ export const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 export interface Lines { en: string[]; zh?: string; zhAudio?: string[] }
 
 // ---------- 听一听：颜色 ----------
-export const colorAsk = (c: string, zh: string): Lines => ({ en: [`${cap(c)}!`, `Find the ${c} Pokémon!`], zh: `找一找${zh}的宝可梦。` });
+export const colorAsk = (c: string, zh: string): Lines => ({ en: [`${cap(c)}!`, `Find the ${c} friend!`], zh: `找一找${zh}的小精灵。` });
 export const colorYes = (p: Creature): Lines => ({ en: [`Yes! ${p.nameEn} is ${COLORS[p.color].en}!`, `${cap(COLORS[p.color].en)}!`], zh: `${p.nameZh}是${COLORS[p.color].zh}的！` });
 export const colorNo = (p: Creature, target: string): Lines => ({ en: [`Oops! ${p.nameEn} is ${COLORS[p.color].en}.`, `Find ${target}!`], zh: `这是${COLORS[p.color].zh}的。再找找${Object.values(COLORS).find(c=>c.en===target)?.zh ?? target}的！` });
 

@@ -30,7 +30,7 @@ if (import.meta.env.DEV) (window as unknown as { __game: typeof useGame }).__gam
 document.addEventListener("gesturestart", (e) => e.preventDefault());
 document.addEventListener("dblclick", (e) => e.preventDefault(), { passive: false });
 
-// 宝可梦图片常驻内存，之后各页面不再依赖网络
+// 小精灵图片常驻内存，之后各页面不再依赖网络
 const disposeViewportSizing = installViewportSizing();
 if (import.meta.hot) import.meta.hot.dispose(disposeViewportSizing);
 

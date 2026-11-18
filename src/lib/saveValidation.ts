@@ -3,7 +3,7 @@ import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
 import { validOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
-import { mergePokeballs } from "./pokeballs";
+import { mergeInvites } from "./invites";
 import { validIslandProgress } from './islandProgress';
 import { PREFERENCES,validLiving } from './islandLiving';
 import { PARTICIPATION_KINDS } from './participation';
@@ -29,7 +29,7 @@ function requireValue(ok:unknown,label:string):asserts ok {if(!ok)throw new Erro
 export function validateSave(input:unknown):SaveData {
  const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);
  requireValue(object(value)&&value.version===1,'版本');const s=value;
- requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'训练师');
+ requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'小岛主人');
  requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');
  requireValue(Array.isArray(s.captures)&&creatureIds(s.captures.map((c:any)=>c?.id)),'伙伴编号');
  for(const c of s.captures){
@@ -66,8 +66,8 @@ export function validateSave(input:unknown):SaveData {
  if(cfg.hqLighting!==undefined)requireValue(typeof cfg.hqLighting==='boolean','画质设置');
  requireValue(Array.isArray(s.history)&&s.history.every((h:any)=>object(h)&&typeof h.date==='string'&&['energyEarned','tasksCompleted','heard','spoken','words','caught','playMinutes'].every(k=>number(h[k]))),'历史记录');
  if(s.onboarding!==undefined)requireValue(validOnboarding(s.onboarding),'新手引导');
- if(s.dex!==undefined)requireValue(creatureIds(s.dex),'图鉴');
- if(s.catchWish!==undefined)requireValue(ids.has(s.catchWish),'捕捉愿望');
+ if(s.dex!==undefined)requireValue(creatureIds(s.dex),'好朋友相册');
+ if(s.catchWish!==undefined)requireValue(ids.has(s.catchWish),'邀请愿望');
  if(s.farm!==undefined)requireValue(validFarm(s.farm),'树果园');
  if(s.islandProgress!==undefined)requireValue(validIslandProgress(s.islandProgress),'岛屿礼物和升级');
  if(s.islandLiving!==undefined)requireValue(validLiving(s.islandLiving,ids),'小岛生活');
@@ -84,6 +84,6 @@ export function validateSave(input:unknown):SaveData {
   for(const [id,p] of Object.entries(l.units))requireValue(object(p)&&(p.pendingAudio===undefined||Array.isArray(p.pendingAudio)&&p.pendingAudio.length<=20&&p.pendingAudio.every((n:any)=>integer(n)&&n<(unitById(id)?unitRoundCount(unitById(id)!):20)))&&integer(p.round)&&(!unitById(id)||p.round<=unitRoundCount(unitById(id)!))&&['completedAt','appliedAt','encounteredAt','storyAt'].every(k=>p[k]===undefined||number(p[k])),'课程进度');
  }
  const result=structuredClone(s) as SaveData;
- mergePokeballs(result);
+ mergeInvites(result);
  return result;
 }

@@ -4,7 +4,7 @@ import {LEARNING_CHAPTERS,LEARNING_UNITS,recommendedUnit,unitUnlocked,learningEn
 import {useGame} from '../store';
 import {TopBar} from '../components/TopBar';
 import {Icon} from '../icons';
-import {PokeImg} from '../components/PokeImg';
+import {CreatureImg} from '../components/CreatureImg';
 import {creatureArt} from '../data/creatures';
 import {lessonWords} from '../data/learning';
 import {learningProfile} from '../lib/learningStage';
@@ -60,7 +60,7 @@ export function LearningJourney(){
     <header className="region-heading">
      <button className="region-arrow" aria-label="查看上一阶段" disabled={chapter===0} onClick={()=>changeChapter(chapter-1)}><Icon name="back" size={28}/></button>
      <div className="region-title"><span>第 {chapter+1} / {LEARNING_CHAPTERS.length} 段冒险{chapter===current.chapter&&!allDone?' · 正在探索':''}</span><h1>{LEARNING_CHAPTERS[chapter].title}</h1><p role={celebrating?'status':undefined}>{celebrating?`${arrival!.title}，点亮啦！`:LEARNING_CHAPTERS[chapter].goal}</p></div>
-     <div className="region-progress" aria-label={`本阶段已完成 ${finished} 关，共 ${units.length} 关`}><div aria-hidden="true">{units.map(u=><span className="region-progress-dot" key={u.id}>{s.learning?.units[u.id]?.completedAt?<Icon name="pokeball" size={22}/>:null}</span>)}</div><span>{finished} / {units.length} 关</span></div>
+     <div className="region-progress" aria-label={`本阶段已完成 ${finished} 关，共 ${units.length} 关`}><div aria-hidden="true">{units.map(u=><span className="region-progress-dot" key={u.id}>{s.learning?.units[u.id]?.completedAt?<Icon name="invite-berry" size={22}/>:null}</span>)}</div><span>{finished} / {units.length} 关</span></div>
      <button className="region-arrow" aria-label="查看下一阶段" disabled={chapter===LEARNING_CHAPTERS.length-1} onClick={()=>changeChapter(chapter+1)}><Icon name="back" className="point-forward" size={28}/></button>
     </header>
     <div className="adventure-map-shell">
@@ -71,9 +71,9 @@ export function LearningJourney(){
        <ol className="adventure-stops" aria-label="本阶段全部关卡">{units.map((u,i)=>{
         const done=!!s.learning?.units[u.id]?.completedAt,now=u.id===current.id&&!allDone;
         return <li key={u.id} style={{'--stop-x':`${positions[i].x}%`,'--stop-y':`${positions[i].y}%`} as CSSProperties}>
-         {now&&<span className="adventure-companion"><PokeImg src={creatureArt(s.captures[0]?.id??25)} alt=""/><span>我们在这里</span></span>}
+         {now&&<span className="adventure-companion"><CreatureImg src={creatureArt(s.captures[0]?.id??25)} alt=""/><span>我们在这里</span></span>}
          <button className={`adventure-stop ${done?'is-done':now?'is-current':'is-future'} ${celebrating&&u.id===arrival?.id?'just-lit':''}`} aria-pressed={selected.id===u.id} aria-label={`第${i+1}关，${u.title}，${done?'已完成，可回顾':now?'开始冒险':'尚未解锁，可以预览'}`} onClick={()=>select(u)}>
-          <span className="adventure-stop-pin"><Icon name={done?'pokeball':destinationIcon(u)} size={48}/><b>{i+1}</b><span className={`pin-state ${done?'pin-complete':now?'pin-play':'pin-locked'}`} aria-hidden="true"><Icon name={done?'check':now?'play':'lock'} size={done?22:25}/></span></span>
+          <span className="adventure-stop-pin"><Icon name={done?'invite-berry':destinationIcon(u)} size={48}/><b>{i+1}</b><span className={`pin-state ${done?'pin-complete':now?'pin-play':'pin-locked'}`} aria-hidden="true"><Icon name={done?'check':now?'play':'lock'} size={done?22:25}/></span></span>
           <strong>{u.title}</strong><span className="adventure-stop-status">{done?'已点亮':now?'点这里出发':'未点亮'}</span>
          </button>
         </li>;

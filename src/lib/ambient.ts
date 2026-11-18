@@ -5,7 +5,7 @@ import { isSpeaking, type Part } from "./speech";
 import { narrateOnIsland as sayCancellable, islandAudioAllowed } from './islandSpeech';
 import { COUNTABLE, GREETINGS, SCENE_LINES, colorLine, countLine, lookLine, whatLine, whereLine, type Narration } from "../data/islandEnglish";
 
-/** 一段旁白朗读：英文 → (中文提示) → 英文复述；宝可梦自己的回答用宝可梦的声音 */
+/** 一段旁白朗读：英文 → (中文提示) → 英文复述；小精灵自己的回答用小精灵的声音 */
 export function narrationParts(n: Narration, mode: "bilingual" | "english"): Part[] {
   const parts: Part[] = [];
   n.en.forEach((t, i) => {
@@ -19,7 +19,7 @@ export function narrationParts(n: Narration, mode: "bilingual" | "english"): Par
 }
 
 let rr = 0;
-/** 挑下一句：几种句型轮流出现，宝可梦优先挑醒着的 */
+/** 挑下一句：几种句型轮流出现，小精灵优先挑醒着的 */
 function nextNarration(pokemon: Creature[], now: Date, facilities: Record<number,Activity> = {}): Narration {
   const action=(p:Creature)=>facilities[p.id] ?? activityAt(p,now);
   const sky = skyFor(now);
@@ -36,7 +36,7 @@ function nextNarration(pokemon: Creature[], now: Date, facilities: Record<number
   if (kind === "what") return whatLine(p, a);
   if (kind === "color") return colorLine(p) ?? lookLine(p, a);
   if (kind === "count") {
-    // 数正在做同一件事的宝可梦（至少 2 只才有意思）
+    // 数正在做同一件事的小精灵（至少 2 只才有意思）
     const by = new Map<Activity, number>();
     for (const q of pokemon) {
       const qa = action(q);
@@ -53,7 +53,7 @@ function nextNarration(pokemon: Creature[], now: Date, facilities: Record<number
 }
 
 /**
- * 家园环境英语：空闲一段时间后，旁白挑一只宝可梦描述它正在做的事（它会跳一下吸引视线），
+ * 家园环境英语：空闲一段时间后，旁白挑一只小精灵描述它正在做的事（它会跳一下吸引视线），
  * 或者描述看得见的风景、数一数。孩子正在互动、或者正在朗读别的内容时不插话。
  */
 export function useAmbientEnglish(opts: {

@@ -4,10 +4,10 @@ export const ANALYTICS_CONSENT_KEY='pokepal-analytics-consent';
 export const ANALYTICS_CONSENT_VERSION=2;
 export const ANALYTICS_CONSENT_DAYS=180;
 export const ANALYTICS_HOST='pokepal-online.pages.dev';
-const pages:Record<string,string>={welcome:'首页',home:'小岛',journey:'学习小路',lesson:'主题学习',notebook:'发现手册',review:'回顾',tasks:'学英语',practice:'小游戏',energy:'能量',diary:'小日记',stories:'故事屋',story:'绘本课堂',task:'练习',shop:'精灵球',catch:'草丛',dex:'图鉴',dexDetail:'伙伴介绍',parent:'家长中心',privacy:'隐私说明',terms:'试用须知',feedback:'反馈',rest:'休息'};
+const pages:Record<string,string>={welcome:'首页',home:'小岛',journey:'学习小路',lesson:'主题学习',notebook:'发现手册',review:'回顾',tasks:'学英语',practice:'小游戏',energy:'能量',diary:'小日记',stories:'故事屋',story:'绘本课堂',task:'练习',shop:'邀请果',catch:'草丛',dex:'好朋友相册',dexDetail:'伙伴介绍',parent:'家长中心',privacy:'隐私说明',terms:'试用须知',feedback:'反馈',rest:'休息'};
 export function trafficPage(name:string){
  if(!Object.prototype.hasOwnProperty.call(pages,name))return null;
- return {page_title:`宝可梦小小训练师 · ${pages[name]}`,page_location:`https://${ANALYTICS_HOST}${name==='welcome'?'/':`/${name}/`}`};
+ return {page_title:`啵啵岛 · ${pages[name]}`,page_location:`https://${ANALYTICS_HOST}${name==='welcome'?'/':`/${name}/`}`};
 }
 export function trafficReferrer(value:string){try{const u=new URL(value);return /^https?:$/.test(u.protocol)?u.origin+'/':'';}catch{return '';}}
 export function readAnalyticsConsent(storage:Pick<Storage,'getItem'>,now=Date.now()){

@@ -5,7 +5,7 @@ import { COLORS } from "./creatures";
 /**
  * 家园的环境英语（磨耳朵）：适合 3–6 岁幼儿的可理解输入。
  * 原则：
- * - 说的永远是孩子此刻在屏幕上能看到的东西（宝可梦正在做的事、太阳、大海、花）；
+ * - 说的永远是孩子此刻在屏幕上能看到的东西（小精灵正在做的事、太阳、大海、花）；
  * - 句子 2–6 个词，几种固定句型反复出现（Look! / Where is…? / What are you doing? / I see… / Let's count!），
  *   每次只换一两个词，让孩子靠重复自己“悟”出意思；
  * - 每句配拟声词或口头禅，好听、好学、好模仿；
@@ -19,33 +19,33 @@ export interface Narration {
   zh: string;
   /** 结尾再重复一遍的英文关键句 */
   echo?: string;
-  /** 被点名的宝可梦（会跳一下吸引视线） */
+  /** 被点名的小精灵（会跳一下吸引视线） */
   focus?: number;
-  /** 宝可梦自己说的那句（用宝可梦的声音） */
+  /** 小精灵自己说的那句（用小精灵的声音） */
   me?: string;
 }
 
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
-/** 看一看：Look! Pikachu is eating. Yum yum! */
+/** 看一看：Look! Bubbo is eating. Yum yum! */
 export function lookLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`Look! ${p.nameEn} ${A.en}.`, A.sound], zh: `看！${p.nameZh}${A.zh}。`, echo: `${p.nameEn} ${A.en}.`, focus: p.id };
 }
 
-/** 找一找：Where is Pikachu? … There it is! */
+/** 找一找：Where is Bubbo? … There it is! */
 export function whereLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`Where is ${p.nameEn}?`, "There it is!", `${p.nameEn} ${A.en}.`], zh: `${p.nameZh}在哪里？在这里！`, echo: A.sound, focus: p.id };
 }
 
-/** 问答：Pikachu, Pikachu, what are you doing? — I'm eating! */
+/** 问答：Bubbo, Bubbo, what are you doing? — I'm eating! */
 export function whatLine(p: Creature, a: Activity): Narration {
   const A = ACTIVITY[a];
   return { en: [`${p.nameEn}, ${p.nameEn}, what are you doing?`], me: A.me, zh: `${p.nameZh}，你在做什么呀？${A.zhSound}`, echo: A.me, focus: p.id };
 }
 
-/** 颜色：Pikachu is yellow. Yellow, yellow! */
+/** 颜色：Bubbo is yellow. Yellow, yellow! */
 export function colorLine(p: Creature): Narration | null {
   const c = COLORS[p.color];
   if (!c) return null;
@@ -58,11 +58,11 @@ export const COUNTABLE: Activity[] = ["sleep", "eat", "play", "swim", "fly", "wa
 export const countChant = (n: number) => NUMBERS.slice(0, n).map(cap).join(", ") + "!";
 export function countSentence(n: number, a: Activity) {
   const verb = ACTIVITY[a].en.replace(/^is /, n === 1 ? "is " : "are ");
-  return `${cap(NUMBERS[n - 1])} Pokémon ${verb}.`;
+  return `${cap(NUMBERS[n - 1])} friends ${verb}.`;
 }
-/** 数一数：Let's count! One, two, three! Three Pokémon are sleeping. */
+/** 数一数：Let's count! One, two, three! Three friends are sleeping. */
 export function countLine(n: number, a: Activity): Narration {
-  return { en: ["Let's count!", countChant(n), countSentence(n, a)], zh: `我们来数一数：${n}只宝可梦${ACTIVITY[a].zh}。`, echo: countChant(n) };
+  return { en: ["Let's count!", countChant(n), countSentence(n, a)], zh: `我们来数一数：${n}只小精灵${ACTIVITY[a].zh}。`, echo: countChant(n) };
 }
 
 /** 看风景：I see … 按时段挑选，都是屏幕上看得见的东西 */
@@ -87,8 +87,8 @@ export const GREETINGS: Record<"morning" | "day" | "evening" | "night", Narratio
   morning: { en: ["Good morning!", "The sun is up!"], zh: "早上好！太阳出来啦！", echo: "Good morning!" },
   day: { en: ["Good afternoon!", "Let's play!"], zh: "下午好！我们一起玩吧！", echo: "Let's play!" },
   evening: { en: ["Good evening!", "The fire is warm."], zh: "晚上好！篝火暖暖的。", echo: "Good evening!" },
-  night: { en: ["It's night.", "Shh… Pokémon are sleeping."], zh: "天黑了，嘘，宝可梦们在睡觉。", echo: "Shh…" }
+  night: { en: ["It's night.", "Shh… our friends are sleeping."], zh: "天黑了，嘘，小精灵们在睡觉。", echo: "Shh…" }
 };
 
-/** 晚安小儿歌（晚安页）：Good night, Pikachu! … Good night, moon! */
+/** 晚安小儿歌（晚安页）：Good night, Bubbo! … Good night, moon! */
 export const GOODNIGHT_TAIL = ["Good night, moon!", "Good night, stars!", "Good night, sea!", "See you tomorrow!"];

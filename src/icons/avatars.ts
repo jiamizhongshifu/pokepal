@@ -1,6 +1,6 @@
 import { C, c, dot, e, face, line, p } from "./draw";
 
-/** 训练师头像：戴帽子的小训练师，四种配色 */
+/** 小岛主人头像：戴帽子的小朋友，四种配色 */
 function trainer(cap: string, hair: string, extra = "") {
   return (
     c(32, 36, 22, C.skin) +

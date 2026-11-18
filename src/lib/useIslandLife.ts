@@ -8,7 +8,7 @@ import { getCreature } from '../data/creatures';
 import { habitAt } from './routine';
 import { affinity, compatible, isAquatic, furnishedStation, STATIONS, stationById, type Visit } from '../scene/islandLife';
 
-/** Activity assignments are derived only from owned Pokémon; no save mutation or reward farming. */
+/** Activity assignments are derived only from owned creatures; no save mutation or reward farming. */
 export function useIslandLife(captures: Capture[], now: Date, paused: boolean, careId?:number, group:Visit[]=[], furniture:readonly FurnitureId[]=[], focus:readonly (number|null|undefined)[]=[], weather:WeatherKind='sunny') {
   const [request,setRequest] = useState<{stationId:string;pokemonId:number;nonce:number}|null>(null);
   const [arrivals,setArrivals] = useState<Record<number,string>>({});

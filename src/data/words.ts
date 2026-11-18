@@ -111,38 +111,38 @@ export const PHRASES: SayPhrase[] = [
   {"en": "Let's tidy up!", "zh": "我们一起收拾吧！", "level": 2}
 ];
 
-/** 字母描红：A–Z 每个字母绑定一只宝可梦（有的话）或一个词 */
+/** 字母描红：A–Z 每个字母绑定一只首字母相同的小精灵（有的话）或一个词 */
 export interface LetterItem {
   letter: string;
   en: string;
   zh: string;
-  pokemonId?: number;
+  creatureId?: number;
   icon?: string;
 }
 
 export const LETTERS: LetterItem[] = [
-  { letter: "A", en: "Abra", zh: "凯西", pokemonId: 63 },
-  { letter: "B", en: "Bulbasaur", zh: "妙蛙种子", pokemonId: 1 },
-  { letter: "C", en: "Charmander", zh: "小火龙", pokemonId: 4 },
-  { letter: "D", en: "Dratini", zh: "迷你龙", pokemonId: 147 },
-  { letter: "E", en: "Eevee", zh: "伊布", pokemonId: 133 },
+  { letter: "A", en: "apple", zh: "苹果", icon: "apple" },
+  { letter: "B", en: "Bubbo", zh: "啵啵", creatureId: 1001 },
+  { letter: "C", en: "Carro", zh: "萝萝", creatureId: 1151 },
+  { letter: "D", en: "Drippy", zh: "滴滴", creatureId: 1061 },
+  { letter: "E", en: "egg", zh: "鸡蛋", icon: "egg" },
   { letter: "F", en: "fish", zh: "小鱼", icon: "fish" },
-  { letter: "G", en: "Growlithe", zh: "卡蒂狗", pokemonId: 58 },
-  { letter: "H", en: "Horsea", zh: "墨海马", pokemonId: 116 },
+  { letter: "G", en: "grapes", zh: "葡萄", icon: "grapes" },
+  { letter: "H", en: "house", zh: "房子", icon: "home" },
   { letter: "I", en: "ice cream", zh: "冰淇淋", icon: "icecream" },
-  { letter: "J", en: "Jigglypuff", zh: "胖丁", pokemonId: 39 },
-  { letter: "K", en: "Krabby", zh: "大钳蟹", pokemonId: 98 },
-  { letter: "L", en: "Lapras", zh: "拉普拉斯", pokemonId: 131 },
-  { letter: "M", en: "Meowth", zh: "喵喵", pokemonId: 52 },
-  { letter: "N", en: "nose", zh: "鼻子", icon: "nose" },
-  { letter: "O", en: "Oddish", zh: "走路草", pokemonId: 43 },
-  { letter: "P", en: "Pikachu", zh: "皮卡丘", pokemonId: 25 },
+  { letter: "J", en: "juice", zh: "果汁", icon: "juice" },
+  { letter: "K", en: "kite", zh: "风筝", icon: "kite" },
+  { letter: "L", en: "Leafy", zh: "叶叶", creatureId: 1081 },
+  { letter: "M", en: "Moony", zh: "月月", creatureId: 1051 },
+  { letter: "N", en: "Nutty", zh: "栗栗", creatureId: 1141 },
+  { letter: "O", en: "Oakpaw", zh: "橡林鼠", creatureId: 1143 },
+  { letter: "P", en: "Petal", zh: "瓣瓣", creatureId: 1091 },
   { letter: "Q", en: "queen", zh: "女王", icon: "crown" },
-  { letter: "R", en: "Raichu", zh: "雷丘", pokemonId: 26 },
-  { letter: "S", en: "Squirtle", zh: "杰尼龟", pokemonId: 7 },
-  { letter: "T", en: "tree", zh: "大树", icon: "tree" },
+  { letter: "R", en: "rabbit", zh: "兔子", icon: "rabbit" },
+  { letter: "S", en: "Sunny", zh: "暖暖", creatureId: 1041 },
+  { letter: "T", en: "Twinkle", zh: "闪闪", creatureId: 1031 },
   { letter: "U", en: "umbrella", zh: "雨伞", icon: "umbrella" },
-  { letter: "V", en: "Vulpix", zh: "六尾", pokemonId: 37 },
+  { letter: "V", en: "violin", zh: "小提琴", icon: "violin" },
   { letter: "W", en: "watermelon", zh: "西瓜", icon: "watermelon" },
   { letter: "X", en: "xylophone", zh: "木琴", icon: "music" },
   { letter: "Y", en: "yo-yo", zh: "悠悠球", icon: "yoyo" },

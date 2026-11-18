@@ -5,9 +5,9 @@ import { TopBar } from "../components/TopBar";
 import { COLORS, RARITY, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, friendshipLevel, getCreature, hobby, kidDescription } from "../data/creatures";
 import { INVITE_KINDS } from "../data/invites";
 import { say, playCry, stopSpeech } from "../lib/speech";
-import { PokeBall } from "../components/PokeBall";
+import { InviteBerry } from "../components/InviteBerry";
 import { Icon, Stars, Hearts } from "../icons";
-import { PokeImg } from "../components/PokeImg";
+import { CreatureImg } from "../components/CreatureImg";
 
 const KID_HEIGHT = 105;
 
@@ -36,10 +36,10 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
 
   return (
     <div className="screen dex-detail">
-      <TopBar title="宝可梦资料" onBack={() => go({ name: "dex", picking, browse })} focused help={<FeatureGuide id={cap?"ownedDetail":"detail"} compact/>}/>
+      <TopBar title="小精灵资料" onBack={() => go({ name: "dex", picking, browse })} focused help={<FeatureGuide id={cap?"ownedDetail":"detail"} compact/>}/>
       <div className="detail">
         <div className="detail-art">
-          <PokeImg src={creatureArt(p.id)} alt="" />
+          <CreatureImg src={creatureArt(p.id)} alt="" />
           <button className="cry-btn" onClick={() => playCry(p.id)}><Icon name="speaker" size={30} /> 听听叫声</button>
         </div>
         <div className="detail-info">
@@ -48,7 +48,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
-            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="grass" size={32}/><span>我想找这只<small lang="en">Find this Pokémon!</small></span></button><p>带上精灵球，去草丛邀请它吧！<small lang="en">Bring a Poké Ball.</small></p></>}
+            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="grass" size={32}/><span>我想找这只<small lang="en">Find this Pokémon!</small></span></button><p>带上邀请果，去草丛邀请它吧！<small lang="en">Bring a Poké Ball.</small></p></>}
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">
@@ -79,7 +79,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           {cap && (
             <div className="bond">
               <Hearts n={friendshipLevel(cap.friendship)} />
-              <span className="bond-meta"><PokeBall type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>
+              <span className="bond-meta"><InviteBerry type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>
             </div>
           )}
           <details className="official">

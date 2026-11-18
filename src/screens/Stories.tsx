@@ -12,7 +12,7 @@ import { StoryStage } from '../components/StoryStage';
 import { STORY_COVER_PAGE } from '../data/storyScenes';
 import { STORIES, STORY_THEMES, storyProgressKey, type StoryTheme, type Story, type StoryPage } from '../data/stories';
 import { creatureArt, getCreature } from '../data/creatures';
-import { PokeImg } from '../components/PokeImg';
+import { CreatureImg } from '../components/CreatureImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import { useGame } from '../store';
@@ -45,7 +45,7 @@ export function StoryLibrary(){
  const books=STORIES.filter(s=>theme==='all'||s.group===theme);
  const resume=STORIES.find(s=>{const p=progress?.[bookmark(s)]??0;return p>0&&p<=s.pages.length;});
  return <div className="screen story-library">
-  <TopBar title="宝可梦故事屋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="stories" compact/>}/>
+  <TopBar title="啵啵岛故事屋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="stories" compact/>}/>
   <header className="learning-heading"><h1>今天想听哪个故事？</h1></header>
    <button className="story-resume" onClick={()=>go({name:'adventure'})}><Icon name="book" size={36}/><span><b>一起听故事，去认识新伙伴</b><small>苹果野餐 · 自动播放 · 今日故事共 5 能量</small></span><span aria-hidden="true">›</span></button>
    <button className="story-resume" onClick={()=>go({name:'careStory'})}><Icon name="heart" size={36}/><span><b>和我的伙伴过一个小下午</b><small>分享点心 · 照顾小苗 · 一起滚球</small></span><span aria-hidden="true">›</span></button>
@@ -142,7 +142,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
    <div ref={reader} className="story-pages">
    {ended ? <main className="story-ending">
      <span className="section-eyebrow">THE END · 故事读完啦</span><h1>把温柔的话，带到生活里</h1>
-     <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><PokeImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
+     <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
      <nav className="story-ending-destinations" aria-label="故事读完后去哪里">
        <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'stories'});}}><Icon name="book" size={32}/>回到故事屋</button>

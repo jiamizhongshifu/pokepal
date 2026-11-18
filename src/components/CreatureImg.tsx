@@ -2,10 +2,10 @@ import { useEffect, useState, type ImgHTMLAttributes } from "react";
 import { Icon } from "../icons";
 
 /**
- * 宝可梦图片：加载失败时不显示浏览器的裂图图标，而是先显示精灵球占位，
+ * 小精灵图片：加载失败时不显示浏览器的裂图图标，而是先显示柔和的占位，
  * 并按 1s、2s、4s…（最长 15s）自动重试，成功后换回图片。
  */
-export function PokeImg({ src, className, alt = "", ...rest }: ImgHTMLAttributes<HTMLImageElement> & { src: string }) {
+export function CreatureImg({ src, className, alt = "", ...rest }: ImgHTMLAttributes<HTMLImageElement> & { src: string }) {
   const [attempt, setAttempt] = useState(0);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -24,7 +24,7 @@ export function PokeImg({ src, className, alt = "", ...rest }: ImgHTMLAttributes
   if (failed) {
     return (
       <span className={`poke-img-fallback ${className ?? ""}`} style={rest.style} aria-hidden>
-        <Icon name="pokeball" size={56} />
+        <Icon name="invite-berry" size={56} />
       </span>
     );
   }

@@ -2,7 +2,7 @@ import { FeatureGuide } from './FeatureGuide';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { creatureArt, getCreature } from '../data/creatures';
 import { Icon } from '../icons';
-import { PokeImg } from './PokeImg';
+import { CreatureImg } from './CreatureImg';
 
 /** Owned companions only: recognition by portrait first, optional parent-assisted search. */
 export function CompanionFinder({ids, selected, onSelect, onClose,purpose='visit'}:{purpose?:'visit'|'choose';ids:number[];selected:number|null;onSelect:(id:number)=>void;onClose:()=>void}) {
@@ -18,7 +18,7 @@ export function CompanionFinder({ids, selected, onSelect, onClose,purpose='visit
     {searching&&<input autoFocus type="search" value={query} onChange={e=>{setQuery(e.target.value);setPage(0);}} placeholder="输入名字找一找" aria-label="按名字找伙伴（家长帮忙）"/>}
     <div className="companion-portraits">
       {matches.slice(current*9,current*9+9).map(p=><button key={p.id} aria-label={`${purpose==='choose'?'选择':'找到'}${p.nameZh}`} aria-pressed={p.id===selected} onClick={()=>onSelect(p.id)}>
-        <PokeImg src={creatureArt(p.id)} alt=""/><span>{p.nameZh}</span>
+        <CreatureImg src={creatureArt(p.id)} alt=""/><span>{p.nameZh}</span>
       </button>)}
     </div>
     {!matches.length&&<p className="companion-no-match">还没找到，试试别的名字吧</p>}

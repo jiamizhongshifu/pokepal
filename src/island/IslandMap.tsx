@@ -110,6 +110,7 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
     {effect?.id === c.id && <span key={effect.at} className="island-effect" aria-hidden="true"><Icon name={effect.icon} size={30} /></span>}
    </button>;
   })}
+  <div className="island-tint" aria-hidden="true" />
   {raining && <div className="island-rain" aria-hidden="true" />}
  </div>;
 }

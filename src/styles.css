@@ -1,5 +1,5 @@
 /*
- * 视觉系统：参考《宝可梦 风/波》官网
+ * 视觉系统：参考明亮海岛风格
  * - 白天：薄荷 → 天蓝渐变 + 白色风之飘带；夜晚：#0a1e32 海军蓝 + 青绿光晕
  * - 白色粗边框卡片，海军蓝文字；英文强调用海蓝
  * - 主按钮：黄绿 → 翠绿 → 青色渐变胶囊 + 白色描边环
@@ -104,8 +104,8 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .parent-btn { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; padding: 4px; opacity: 0.8; }
 .parent-btn span { width: 100%; height: 100%; border-radius: 50%; background: rgba(255, 255, 255, 0.85); display: grid; place-items: center; font-size: 22px; }
 
-/* ---------- 精灵球 ---------- */
-.pokeball { display: inline-block; object-fit: contain; flex: none; vertical-align: middle; user-select: none; }
+/* ---------- 邀请果 ---------- */
+.invite-berry { display: inline-block; object-fit: contain; flex: none; vertical-align: middle; user-select: none; }
 .wiggle { animation: wiggle 2.4s ease-in-out infinite; }
 .spin-in { animation: spinIn 0.8s ease-out; }
 
@@ -113,7 +113,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .welcome { align-items: center; justify-content: center; gap: 14px; }
 .welcome::before { content: ""; position: absolute; width: 760px; height: 760px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 65%); top: 50%; left: 50%; transform: translate(-50%, -58%); pointer-events: none; }
 .welcome-pokemon { display: flex; gap: 6px; position: relative; }
-.welcome-pokemon img:not(.icon):not(.pokeball) { width: 140px; height: 140px; animation: hop 1.6s ease-in-out infinite; filter: drop-shadow(0 10px 14px rgba(40, 40, 160, 0.35)); }
+.welcome-pokemon img:not(.icon):not(.invite-berry) { width: 140px; height: 140px; animation: hop 1.6s ease-in-out infinite; filter: drop-shadow(0 10px 14px rgba(40, 40, 160, 0.35)); }
 .logo { position: relative; margin: 6px 0 0; font-size: 66px; font-weight: 900; letter-spacing: 4px; color: transparent; background: var(--grad-iris); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 4px 10px rgba(40, 30, 160, 0.45)); text-shadow: none; }
 .logo-en { position: relative; font-family: var(--font-num); font-size: 40px; font-weight: 800; letter-spacing: 3px; color: var(--accent-en); text-transform: uppercase; text-shadow: 0 2px 0 rgba(110, 70, 220, 0.55), 0 0 16px rgba(255, 225, 77, 0.55); margin-top: -8px; }
 .start { flex-direction: column; min-height: 190px; padding: 22px 64px; border-radius: 40px; font-size: 32px; animation: breathe 2.4s ease-in-out infinite; }
@@ -129,7 +129,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .home .topbar { pointer-events: none; }
 .home .topbar > * { pointer-events: auto; }
 .scene-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; font-size: 26px; font-weight: 800; background: var(--page-bg); z-index: 5; }
-.sl-ball { width: 84px; height: 84px; background: url("/icons/swsh/ball-poke.png") center / contain no-repeat; animation: wiggle 1s ease-in-out infinite; }
+.sl-ball { width: 84px; height: 84px; background: url("/scenes/flat-v1/prop/invite-berry.webp") center / contain no-repeat; animation: wiggle 1s ease-in-out infinite; }
 .empty-home { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
 .sign { font-size: 32px; font-weight: 800; padding: 12px 30px; border-radius: 999px; }
 .dock { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 60; padding: 12px; border-radius: 40px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.35); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); box-shadow: 0 10px 40px rgba(30, 30, 140, 0.25); }
@@ -158,7 +158,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .ep-label .num { font-size: 32px; color: var(--accent-en); }
 .ep-bar { position: relative; height: 10px; border-radius: 5px; background: rgba(255, 255, 255, 0.35); margin: 0 16px; }
 .ep-bar > div { position: relative; height: 100%; background: linear-gradient(90deg, #56b6ff, #7252ff, #b84cff); border-radius: 5px; box-shadow: 0 0 14px rgba(114, 82, 255, 0.8); transition: width 0.8s var(--ease-out); }
-.ep-bar > div::after { content: ""; position: absolute; right: -18px; top: 50%; width: 36px; height: 36px; transform: translateY(-50%); background: url("/icons/swsh/ball-poke.png") center / contain no-repeat; }
+.ep-bar > div::after { content: ""; position: absolute; right: -18px; top: 50%; width: 36px; height: 36px; transform: translateY(-50%); background: url("/scenes/flat-v1/prop/invite-berry.webp") center / contain no-repeat; }
 .ep-note { margin-top: 12px; font-size: 20px; color: var(--accent-en); }
 .board { flex: 1; display: flex; align-items: center; justify-content: center; gap: 26px; padding: 20px; }
 .task-card { position: relative; width: 220px; height: 300px; border-radius: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; overflow: hidden; transition: transform 0.3s var(--ease-out), box-shadow 0.3s; }
@@ -177,12 +177,12 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .round-dots { position: absolute; top: 0; display: flex; gap: 18px; align-items: center; }
 .round-dots span { width: 14px; height: 14px; border-radius: 50%; background: rgba(255, 255, 255, 0.55); box-shadow: 0 0 8px rgba(117, 202, 255, 0.85); transition: all 0.3s var(--ease-out); }
 .round-dots span.done { background: #fff; }
-.round-dots span.cur { width: 34px; height: 34px; background: url("/icons/swsh/ball-poke.png") center / contain no-repeat; box-shadow: none; }
+.round-dots span.cur { width: 34px; height: 34px; background: url("/scenes/flat-v1/prop/invite-berry.webp") center / contain no-repeat; box-shadow: none; }
 .replay { border-radius: 999px; padding: 12px 28px; font-size: 22px; font-weight: 800; }
 .choices { display: flex; gap: 36px; justify-content: center; min-height: 270px; align-items: center; }
 .choice { width: 260px; height: 260px; border-radius: 36px; display: grid; place-items: center; position: relative; transition: transform 0.25s var(--ease-out), opacity 0.3s, box-shadow 0.3s; }
 .choice:active { transform: scale(0.95); }
-.choice.poke img:not(.icon):not(.pokeball) { width: 86%; height: 86%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(20, 20, 120, 0.35)); }
+.choice.poke img:not(.icon):not(.invite-berry) { width: 86%; height: 86%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(20, 20, 120, 0.35)); }
 .choice.right { box-shadow: 0 0 0 6px #9bffcb, 0 0 40px rgba(0, 255, 140, 0.7); animation: happyJump 0.5s ease-in-out 2; }
 .choice.glow { animation: glow 1s ease-in-out infinite; }
 .choice.shake { animation: shake 0.45s; }
@@ -192,8 +192,8 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 
 .say-round { gap: 30px; }
 .buddy { display: flex; align-items: center; gap: 28px; }
-.buddy img:not(.icon):not(.pokeball) { width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(20, 20, 120, 0.4)); }
-.buddy img:not(.icon):not(.pokeball).bounce { animation: hop 0.8s ease-in-out infinite; }
+.buddy img:not(.icon):not(.invite-berry) { width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(20, 20, 120, 0.4)); }
+.buddy img:not(.icon):not(.invite-berry).bounce { animation: hop 0.8s ease-in-out infinite; }
 .bubble { position: relative; border-radius: 32px; padding: 26px 46px; min-width: 300px; cursor: pointer; }
 .bubble-en { font-family: var(--font-num); font-size: 68px; font-weight: 800; letter-spacing: 1px; color: var(--accent-en); text-shadow: 0 0 18px rgba(255, 225, 77, 0.5), 0 3px 6px rgba(40, 30, 140, 0.45); }
 .bubble-zh { font-size: 26px; font-weight: 700; color: var(--muted); }
@@ -208,7 +208,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 
 .trace-round { flex-direction: row; gap: 40px; }
 .trace-side { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 290px; padding: 20px 10px; border-radius: 32px; }
-.trace-side img:not(.icon):not(.pokeball) { width: 210px; height: 210px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(20, 20, 120, 0.35)); }
+.trace-side img:not(.icon):not(.invite-berry) { width: 210px; height: 210px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(20, 20, 120, 0.35)); }
 .trace-word { font-family: var(--font-num); font-size: 46px; font-weight: 700; }
 .trace-word b { color: var(--accent-en); font-size: 60px; }
 .trace-zh { font-size: 24px; color: var(--muted); font-weight: 700; }
@@ -243,7 +243,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .keypad button { height: 66px; border-radius: 18px; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.35); font-family: var(--font-num); font-size: 32px; font-weight: 700; }
 .keypad button.ok { background: var(--grad-primary); }
 
-/* ---------- 换球 ---------- */
+/* ---------- 换邀请果 ---------- */
 .shop-energy { align-self: center; padding: 6px 26px; border-radius: 999px; font-size: 26px; font-weight: 700; }
 .shop-energy b { font-family: var(--font-num); font-size: 44px; color: var(--accent-en); margin-left: 6px; }
 .shop-grid { flex: 1; display: flex; align-items: center; justify-content: center; gap: 24px; padding: 10px 20px; }
@@ -263,7 +263,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .si-own { font-size: 17px; color: var(--muted); font-weight: 700; }
 .shop-footer { display: flex; justify-content: center; gap: 24px; padding-bottom: 30px; }
 
-/* ---------- 草丛捕捉 ---------- */
+/* ---------- 草丛邀请 ---------- */
 .grass { background: radial-gradient(70% 45% at 50% 100%, rgba(0, 255, 120, 0.35), transparent 70%), var(--page-bg); }
 .center-msg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; font-size: 32px; font-weight: 800; }
 .ball-pick { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -288,18 +288,18 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .throw-hint { position: absolute; bottom: 20px; font-size: 22px; font-weight: 800; padding: 6px 22px; border-radius: 999px; }
 .back-field { position: absolute; right: 24px; bottom: 20px; }
 
-/* ---------- 图鉴 ---------- */
+/* ---------- 好朋友相册 ---------- */
 .dex-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; padding: 10px 24px 40px; align-content: start; }
 .dex-cell { border-radius: 24px; padding: 10px; display: flex; flex-direction: column; align-items: center; position: relative; transition: transform 0.25s var(--ease-out); }
 .dex-cell:active { transform: scale(0.95); }
-.dex-cell img:not(.icon):not(.pokeball) { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(20, 20, 120, 0.3)); }
-.dex-cell.unknown img:not(.icon):not(.pokeball) { filter: brightness(0) invert(1) opacity(0.45); }
+.dex-cell img:not(.icon):not(.invite-berry) { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(20, 20, 120, 0.3)); }
+.dex-cell.unknown img:not(.icon):not(.invite-berry) { filter: brightness(0) invert(1) opacity(0.45); }
 .dex-cell.unknown { opacity: 0.85; }
 .dex-no { position: absolute; top: 8px; left: 12px; font-family: var(--font-num); font-size: 16px; color: var(--muted); font-weight: 700; }
 .dex-name { font-size: 22px; font-weight: 800; }
 .detail { flex: 1; display: flex; gap: 30px; padding: 0 30px 20px; overflow: hidden; }
 .detail-art { flex: 0 0 38%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border-radius: 36px; background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0.08) 60%), var(--surface); border: 1px solid var(--surface-border); }
-.detail-art img:not(.icon):not(.pokeball) { width: 90%; max-height: 70vh; object-fit: contain; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 18px 20px rgba(20, 20, 120, 0.4)); }
+.detail-art img:not(.icon):not(.invite-berry) { width: 90%; max-height: 70vh; object-fit: contain; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 18px 20px rgba(20, 20, 120, 0.4)); }
 .cry-btn { padding: 10px 26px; border-radius: 999px; font-size: 22px; font-weight: 800; }
 .detail-info { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
 .speakable { text-align: left; border-radius: 18px; padding: 2px 4px; }
@@ -358,7 +358,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .seg button.on { background: var(--grad-primary); color: #fff; }
 .fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
 .fav { border-radius: 16px; background: #f6f7ff; border: 3px solid transparent; padding: 6px; display: flex; flex-direction: column; align-items: center; font-size: 15px; font-weight: 600; }
-.fav img:not(.icon):not(.pokeball) { width: 64px; height: 64px; object-fit: contain; }
+.fav img:not(.icon):not(.invite-berry) { width: 64px; height: 64px; object-fit: contain; }
 .fav.on { border-color: var(--violet); background: #efeaff; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
 .toast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); background: var(--grad-primary); color: #fff; padding: 10px 26px; border-radius: 999px; z-index: 300; font-size: 18px; box-shadow: 0 10px 30px rgba(66, 82, 255, 0.4); }
@@ -368,7 +368,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .sleepy-top { position: absolute; top: calc(16px + env(safe-area-inset-top)); right: 22px; }
 .sleepers { display: flex; gap: 10px; }
 .sleeper { position: relative; animation: breatheSmall 3s ease-in-out infinite; }
-.sleeper img:not(.icon):not(.pokeball) { width: 150px; height: 150px; filter: brightness(0.85) drop-shadow(0 0 18px rgba(120, 160, 255, 0.6)); }
+.sleeper img:not(.icon):not(.invite-berry) { width: 150px; height: 150px; filter: brightness(0.85) drop-shadow(0 0 18px rgba(120, 160, 255, 0.6)); }
 .sleepy-text { font-size: 50px; font-weight: 900; color: transparent; background: var(--grad-iris); -webkit-background-clip: text; background-clip: text; text-shadow: none; }
 .sleepy-en { font-family: var(--font-num); font-size: 34px; font-weight: 600; color: var(--accent-en); margin-bottom: 10px; }
 
@@ -399,12 +399,12 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
   .dock-btn { width: 124px; height: 108px; } 
   .choice { width: 220px; height: 220px; } .color-dot { width: 140px; height: 140px; }
   .task-card { width: 190px; height: 260px; }
-  .buddy img:not(.icon):not(.pokeball) { width: 200px; height: 200px; }
+  .buddy img:not(.icon):not(.invite-berry) { width: 200px; height: 200px; }
 }
 @media (orientation: portrait) {
   .board, .shop-grid { flex-wrap: wrap; }
   .trace-round, .detail { flex-direction: column; align-items: center; }
-  .detail-art { flex: 0 0 auto; width: 100%; } .detail-art img:not(.icon):not(.pokeball) { max-height: 32vh; }
+  .detail-art { flex: 0 0 auto; width: 100%; } .detail-art img:not(.icon):not(.invite-berry) { max-height: 32vh; }
 }
 
 
@@ -548,12 +548,12 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .gate-input { color: var(--sea); border-color: var(--teal); }
 .gate-q { font-family: var(--font-num); }
 
-/* 换球、图鉴 */
+/* 换邀请果、好朋友相册 */
 .shop-item.ok { box-shadow: 0 0 0 3px var(--mint), 0 0 26px rgba(113, 238, 175, 0.55), 0 8px 24px rgba(10, 30, 50, 0.12); }
 .si-streak span { background: rgba(10, 30, 50, 0.12); }
 .si-streak span.on { background: var(--teal); box-shadow: 0 0 8px var(--teal); }
-.dex-cell.unknown img:not(.icon):not(.pokeball) { filter: brightness(0) opacity(0.22); }
-:root[data-theme="dark"] .dex-cell.unknown img:not(.icon):not(.pokeball) { filter: brightness(0) invert(1) opacity(0.35); }
+.dex-cell.unknown img:not(.icon):not(.invite-berry) { filter: brightness(0) opacity(0.22); }
+:root[data-theme="dark"] .dex-cell.unknown img:not(.icon):not(.invite-berry) { filter: brightness(0) invert(1) opacity(0.35); }
 .detail-art { background: radial-gradient(circle at 50% 45%, #ffffff 0, rgba(255, 255, 255, 0.4) 55%, rgba(198, 242, 255, 0.6) 100%); border: 4px solid #fff; }
 :root[data-theme="dark"] .detail-art { background: radial-gradient(circle at 50% 45%, rgba(113, 238, 175, 0.25) 0, rgba(10, 30, 50, 0.6) 70%); border-color: var(--surface-border); }
 .detail-desc .zh { color: var(--text); }
@@ -599,7 +599,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .cam-btn .icon { filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3)); }
 @media (max-height: 760px) { .cam-btn { width: 66px; height: 58px; font-size: 13px; } .cam-btn .icon { width: 30px; height: 30px; } }
 
-/* 宝可梦图片加载失败时的占位：精灵球轻轻呼吸，自动重试成功后换回图片 */
+/* 小精灵图片加载失败时的占位：占位轻轻呼吸，自动重试成功后换回图片 */
 .poke-img-fallback { display: inline-flex; align-items: center; justify-content: center; aspect-ratio: 1; min-width: 56px; min-height: 56px; opacity: 0.55; animation: pokeFallback 1.6s ease-in-out infinite; }
 @keyframes pokeFallback { 50% { opacity: 0.85; transform: scale(1.05); } }
 
@@ -614,7 +614,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .ambient-caption .ac-zh { font-size: 17px; color: #0a1e32; opacity: 0.7; margin-top: 2px; }
 @keyframes acIn { from { opacity: 0; transform: translate(-50%, -10px); } }
 
-/* 听一听：数一数（图标成组排列）、大小（同一只宝可梦一大一小） */
+/* 听一听：数一数（图标成组排列）、大小（同一只小精灵一大一小） */
 .choice.count { display: flex; align-items: center; justify-content: center; }
 .count-group { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; max-width: 200px; padding: 8px; }
 .choices.two .choice { display: grid; place-items: center; }
@@ -627,7 +627,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .stars-3d { display: inline-flex; gap: 0; filter: drop-shadow(0 3px 4px rgba(150, 90, 0, 0.35)); }
 .wild .stars-3d img { width: 40px; height: 40px; margin: 0 -3px; object-fit: contain; filter: none; }
 
-/* ---------- 进化 ---------- */
+/* ---------- 长大 ---------- */
 .act.evolve { background: linear-gradient(135deg, #fff7c2, #ffe17a); }
 .act.evolve.pulse { animation: evoPulse 1.4s ease-in-out infinite; }
 @keyframes evoPulse { 50% { box-shadow: 0 0 0 6px rgba(255, 210, 60, 0.45), 0 0 26px rgba(255, 200, 40, 0.8); transform: translateY(-2px); } }
@@ -639,9 +639,9 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .evo-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 18px 0; }
 .evo-options { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .evo-mon { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 20px; color: #0a1e32; }
-.evo-mon img:not(.icon):not(.pokeball) { width: 170px; height: 170px; object-fit: contain; }
+.evo-mon img:not(.icon):not(.invite-berry) { width: 170px; height: 170px; object-fit: contain; }
 .evo-mon.option { border-radius: 28px; padding: 10px 14px; background: linear-gradient(180deg, #f2fbff, #dff3ff); border: 3px solid #fff; box-shadow: 0 8px 18px rgba(9, 107, 228, 0.18); }
-.evo-mon.option img:not(.icon):not(.pokeball) { width: 150px; height: 150px; }
+.evo-mon.option img:not(.icon):not(.invite-berry) { width: 150px; height: 150px; }
 .evo-mon small { font-family: "M PLUS 1", system-ui, sans-serif; color: #096be4; font-size: 16px; }
 .evo-arrow { animation: spin 3s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

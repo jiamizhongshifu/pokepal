@@ -5,7 +5,7 @@ import { say, unlockAudio, sfx, wait } from "../lib/speech";
 import { requestPersist } from "../lib/db";
 import { creatureAvatar } from "../data/creatures";
 import { AVATARS, Icon } from "../icons";
-import { PokeImg } from "../components/PokeImg";
+import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { TrainerAvatar } from "../components/TrainerAvatar";
 import {useState} from 'react';
@@ -32,7 +32,7 @@ export function Welcome() {
       go({ name: "home" });
       await wait(300);
       if(useGame.getState().screen.name!=="home")return;
-      say(["zh", "欢迎你，小训练师！"], ["en", "Welcome, Trainer!"], ["zh", "送你一个精灵球，去草丛里抓第一只宝可梦吧！"], ["en", "Here is a Poké Ball for you!"]);
+      say(["zh", "欢迎你，小岛主人！"], ["en", "Welcome to Bubbly Isle!"], ["zh", "送你一个邀请果，去草丛里认识第一位小精灵朋友吧！"], ["en", "Here is an invite berry for you!"]);
     } else {
       go({ name: "home" });
       await wait(300);
@@ -48,13 +48,13 @@ export function Welcome() {
       <div className="welcome-content">
       <div className="welcome-pokemon">
         {[25, 1, 4, 7, 133].map((id, i) => (
-          <PokeImg key={id} src={creatureAvatar(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
+          <CreatureImg key={id} src={creatureAvatar(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
         ))}
       </div>
       <div className="welcome-title-board">
         <Icon name="leaf" size={40} className="welcome-title-leaf" />
-        <h1 className="logo">宝可梦小小训练师</h1>
-        <div className="logo-en">Little Pokémon Trainer</div>
+        <h1 className="logo">啵啵岛</h1>
+        <div className="logo-en">Bubbly Isle</div>
       </div>
       {trainer ? (
         <button className="start welcome-enter" onClick={() => requestBegin()} aria-label="一起出发 Let’s play!">
@@ -64,10 +64,10 @@ export function Welcome() {
         </button>
       ) : (
         <div className="avatar-pick">
-          <header className="help-heading avatar-heading"><div className="hint">选一个你喜欢的训练师<small lang="en">Choose your trainer</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
+          <header className="help-heading avatar-heading"><div className="hint">选一个你喜欢的形象<small lang="en">Choose your trainer</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
           <div className="avatar-row">
             {AVATARS.map((a) => (
-              <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label="选择这个训练师"><Icon name={a} size={120} /></button>
+              <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label="选择这个形象"><Icon name={a} size={120} /></button>
             ))}
           </div>
         </div>

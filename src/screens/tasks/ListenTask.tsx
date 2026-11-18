@@ -11,7 +11,7 @@ import { say, playCry, wait, stopSpeech } from "../../lib/speech";
 import { useChoice } from "./useChoice";
 import { Icon } from "../../icons";
 import type { Creature } from "../../types";
-import { PokeImg } from "../../components/PokeImg";
+import { CreatureImg } from "../../components/CreatureImg";
 import {
   picAsk, picYes, picNo, COUNT_ITEMS, askParts, feedbackParts, colorAsk, colorNo, colorYes, countAsk, countNo, countYes, cryAsk, cryNo, cryYes,
   nameAsk, nameNo, nameYes, sizeAsk, sizeNo, sizeYes, type CountItem, type Lines
@@ -117,8 +117,8 @@ function OptionView({ round, o }: { round: Round; o: Opt }) {
       </span>
     );
   }
-  if (round.kind === "size") return <span className="size-stage"><PokeImg src={creatureAvatar(round.pokemon.id)} alt="" draggable={false} className={o.big ? "size-big" : "size-small"} /></span>;
-  return <PokeImg src={creatureAvatar(o.pokemon!.id)} alt="" draggable={false} />;
+  if (round.kind === "size") return <span className="size-stage"><CreatureImg src={creatureAvatar(round.pokemon.id)} alt="" draggable={false} className={o.big ? "size-big" : "size-small"} /></span>;
+  return <CreatureImg src={creatureAvatar(o.pokemon!.id)} alt="" draggable={false} />;
 }
 
 function ListenRound({ round, idx, total, onNext, noteWord }: { round: Round; idx: number; total: number; onNext: () => void; noteWord: (w: string, k: "heard" | "spoken" | "correct") => void }) {

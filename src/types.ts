@@ -31,7 +31,7 @@ export interface Capture {
   ball: BallType;
   /** 0–100，每 20 点一级 */
   friendship: number;
-  /** 满友好度时选择了“保持现在的样子”（之后仍可随时进化，只是不再提醒） */
+  /** 满友好度时选择了“保持现在的样子”（之后仍可随时长大，只是不再提醒） */
   stay?: boolean;
 }
 
@@ -116,7 +116,7 @@ export interface SaveData {
   wordStats: Record<string, WordStat>;
   settings: Settings;
   history: DaySummary[];
-  /** 图鉴记录：抓到过或进化得到过的宝可梦（进化后原来的形态也保留在图鉴里） */
+  /** 好朋友相册记录：认识过或长大得到过的小精灵（长大后原来的形态也保留在好朋友相册里） */
   dex?: number[];
   /** 想在草丛遇见的伙伴；可选以兼容旧存档。 */
   catchWish?: number;

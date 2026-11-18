@@ -1,7 +1,7 @@
 import {MusicToggle} from './MusicToggle';
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useGame } from "../store";
-import { PokeBall } from "./PokeBall";
+import { InviteBerry } from "./InviteBerry";
 import { ParentGate } from "./ParentGate";
 import { sfx } from "../lib/speech";
 import { Icon } from "../icons";
@@ -31,9 +31,9 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
           <Icon name="bolt" size={30} className="bolt" />
           <span className="num">{save.energy}</span>
         </button>
-        <button className="balls-chip" aria-label="去换精灵球" onClick={()=>{sfx("click");go({name:"shop"});}}>
-          <span className="ball-count" aria-label={`精灵球共 ${Object.values(save.balls).reduce((a, b) => a + b, 0)} 个`}>
-            <PokeBall type="poke" size={30} />×{Object.values(save.balls).reduce((a, b) => a + b, 0)}
+        <button className="balls-chip" aria-label="去换邀请果" onClick={()=>{sfx("click");go({name:"shop"});}}>
+          <span className="ball-count" aria-label={`邀请果共 ${Object.values(save.balls).reduce((a, b) => a + b, 0)} 个`}>
+            <InviteBerry type="poke" size={30} />×{Object.values(save.balls).reduce((a, b) => a + b, 0)}
           </span>
         </button>
         {home && <MusicToggle/>}

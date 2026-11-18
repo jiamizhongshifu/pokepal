@@ -3,37 +3,183 @@
  "storyStage": "Picture-book stage composition: eye-level view, horizon at about 40% of the height, an open, mostly flat, uncluttered ground area across the lower 55% of the image where two small characters and a few props will be placed later; framing elements only at the far left and right edges and in the background.",
  "propStyle": "A single object only, front three-quarter view, centered with generous margin, nothing cropped. Fully transparent background (PNG with alpha), no ground shadow, no floor, no backdrop. Same flat vector style as the attached style reference: no outlines, flat fills with one darker hard-edged shade shape and one small highlight, simple rounded shapes, bright cheerful colors. No text, letters, characters or faces.",
  "scenes": [
-  {"id":"island-map","group":"world","size":"landscape 1536x1024","prompt":"A cheerful bird's-eye three-quarter view of ONE small rounded tropical island in a turquoise sea. Clearly separated areas connected by wide sandy paths: (1) upper left: a fruit orchard with three round fruit trees and a small vegetable garden with three neat soil plots; (2) upper middle: a playground with a small windmill, a little round music stage with a striped awning, a grass ball field and a sandbox; (3) upper right: a camping corner with a triangle tent, a ring-of-stones campfire and a short wooden fence; (4) center: a big picnic lawn with a checkered picnic blanket, a wooden bench and a striped beach parasol; (5) lower part: a sandy beach with a few shells, calm shallow water, two palm trees with a hammock between them, and a wooden pier going out into the sea with a tiny rowboat; (6) a plain wooden signpost without writing next to the central path. Every area keeps open flat ground where small characters can stand. Calm sea around the island with a few gentle wave shapes."},
-  {"id":"welcome","group":"world","size":"landscape 1536x1024","prompt":"Wide welcome landscape: a bright sky-blue sky with big layered rounded clouds framing the left and right sides, a small green island with palm trees and a tiny windmill far away in the lower middle on a calm turquoise sea, soft hills on the island. The center and upper middle stay calm and open for a title and characters."},
-  {"id":"learning-path","group":"world","size":"portrait 1024x1536","prompt":"Tall vertical scenery for a learning path: a wide sandy path zig-zags from the bottom to the top, passing a meadow at the bottom, then a fruit garden, then a beach edge, then a hill with a small windmill at the top. Along the path there are five wide, empty, round, flat clearings evenly spaced from bottom to top, left empty for level buttons. Small trees, flowers and rocks decorate the far sides; soft sky with clouds at the very top."},
-  {"id":"meadow-clearing","group":"world","size":"landscape 1536x1024","prompt":"A sunny grass clearing at the edge of a light forest: open flat grass across the lower 60%, round bushes and round trees framing the left and right edges, soft rolling hills and sky with a few clouds behind."},
-  {"id":"diary-desk","group":"world","size":"landscape 1536x1024","prompt":"Cozy room interior seen from the front: a warm wooden desk top runs across the bottom 30% and is completely empty, a window in the middle shows the sea and a small island, light curtains on both sides of the window, a small lantern and a cup of pencils on wooden shelves at the far left and right."},
-  {"id":"meadow-tuft","group":"world","size":"landscape 1536x1024","transparent":true,"prompt":"A horizontal strip of foreground grass tufts with a few small white and yellow flowers along the bottom 35% of the image, spanning the full width edge to edge; everything above is fully transparent (PNG with alpha). No ground plane, no shadow, no sky."},
-  {"id":"beach","group":"story-bg","size":"landscape 1536x1024","prompt":"A sunny sandy beach: calm turquoise sea and a gentle shoreline in the background, a few rounded rocks and palm leaves framing the far left and right, wide open flat sand in front."},
-  {"id":"garden-flowers","group":"story-bg","size":"landscape 1536x1024","prompt":"A flower garden lawn: low flower beds with round colorful flowers and a low wooden fence in the background, a round tree at the far left, wide open flat lawn in front."},
-  {"id":"garden-path","group":"story-bg","size":"landscape 1536x1024","prompt":"A garden courtyard: a low wooden fence with a small gate and flower planters in the background, wide open flat sandy paved ground in front with a few round stepping-stone shapes."},
-  {"id":"meadow","group":"story-bg","size":"landscape 1536x1024","prompt":"A grassy meadow: soft rolling hills and a gentle sandy path in the background, a round tree at the far left, wide open flat grass in front."},
-  {"id":"orchard","group":"story-bg","size":"landscape 1536x1024","prompt":"An apple orchard: round apple trees with red apples framing the far left and right, distant green hills, wide open flat grass in front."},
-  {"id":"playground","group":"story-bg","size":"landscape 1536x1024","prompt":"An open grass playground: a wooden bench and a short wooden fence in the background, round trees at the far sides, wide open flat grass in front."},
-  {"id":"apple","group":"prop","prompt":"A shiny red apple with a short brown stem and one green leaf."},
-  {"id":"ball","group":"prop","prompt":"A bright yellow play ball with one curved white stripe."},
-  {"id":"basket-apples","group":"prop","prompt":"A round woven wicker basket with a handle holding exactly two red apples."},
-  {"id":"basket","group":"prop","prompt":"An empty round woven wicker basket with a handle."},
-  {"id":"bowl","group":"prop","prompt":"A shallow light-blue bowl filled with clear water."},
-  {"id":"castle-building","group":"prop","prompt":"A small half-built sandcastle: two short sand towers and a pile of sand."},
-  {"id":"castle-fallen","group":"prop","prompt":"A collapsed sandcastle: a low messy mound of sand with a few broken tower pieces."},
-  {"id":"castle-tall","group":"prop","prompt":"A tall sandcastle with one tall round tower and a pointed top, no flag."},
-  {"id":"castle-wide","group":"prop","prompt":"A wide low sandcastle with four short towers and a wall between them."},
-  {"id":"cookie","group":"prop","prompt":"A round golden cookie with chocolate chips."},
-  {"id":"flag","group":"prop","prompt":"A small triangular coral-red pennant flag on a thin wooden pole, no writing."},
-  {"id":"flower","group":"prop","prompt":"A single pink flower with a yellow center on a green stem with two leaves."},
-  {"id":"heart","group":"prop","prompt":"A soft pink rounded heart shape with a small highlight."},
-  {"id":"pot-fallen","group":"prop","prompt":"A terracotta flower pot tipped over on its side with a little spilled soil and a small pink flower."},
-  {"id":"pot-upright","group":"prop","prompt":"A terracotta flower pot standing upright with a small pink flower growing in it."},
-  {"id":"soil","group":"prop","prompt":"A small rounded mound of brown garden soil."},
-  {"id":"sparkle","group":"prop","prompt":"Three yellow four-pointed sparkle stars of different sizes grouped together."},
-  {"id":"water","group":"prop","prompt":"Three light-blue water droplets of different sizes grouped together."},
-  {"id":"watering-can","group":"prop","prompt":"A green watering can with a spout and a round handle, standing upright."},
-  {"id":"watering-can-small","group":"prop","prompt":"A small green watering can tilted forward as if pouring, spout pointing to the right."}
+  {
+   "id": "island-map",
+   "group": "world",
+   "size": "landscape 1536x1024",
+   "prompt": "A cheerful bird's-eye three-quarter view of ONE small rounded tropical island in a turquoise sea. Clearly separated areas connected by wide sandy paths: (1) upper left: a fruit orchard with three round fruit trees and a small vegetable garden with three neat soil plots; (2) upper middle: a playground with a small windmill, a little round music stage with a striped awning, a grass ball field and a sandbox; (3) upper right: a camping corner with a triangle tent, a ring-of-stones campfire and a short wooden fence; (4) center: a big picnic lawn with a checkered picnic blanket, a wooden bench and a striped beach parasol; (5) lower part: a sandy beach with a few shells, calm shallow water, two palm trees with a hammock between them, and a wooden pier going out into the sea with a tiny rowboat; (6) a plain wooden signpost without writing next to the central path. Every area keeps open flat ground where small characters can stand. Calm sea around the island with a few gentle wave shapes."
+  },
+  {
+   "id": "welcome",
+   "group": "world",
+   "size": "landscape 1536x1024",
+   "prompt": "Wide welcome landscape: a bright sky-blue sky with big layered rounded clouds framing the left and right sides, a small green island with palm trees and a tiny windmill far away in the lower middle on a calm turquoise sea, soft hills on the island. The center and upper middle stay calm and open for a title and characters."
+  },
+  {
+   "id": "learning-path",
+   "group": "world",
+   "size": "portrait 1024x1536",
+   "prompt": "Tall vertical scenery for a learning path: a wide sandy path zig-zags from the bottom to the top, passing a meadow at the bottom, then a fruit garden, then a beach edge, then a hill with a small windmill at the top. Along the path there are five wide, empty, round, flat clearings evenly spaced from bottom to top, left empty for level buttons. Small trees, flowers and rocks decorate the far sides; soft sky with clouds at the very top."
+  },
+  {
+   "id": "meadow-clearing",
+   "group": "world",
+   "size": "landscape 1536x1024",
+   "prompt": "A sunny grass clearing at the edge of a light forest: open flat grass across the lower 60%, round bushes and round trees framing the left and right edges, soft rolling hills and sky with a few clouds behind."
+  },
+  {
+   "id": "diary-desk",
+   "group": "world",
+   "size": "landscape 1536x1024",
+   "prompt": "Cozy room interior seen from the front: a warm wooden desk top runs across the bottom 30% and is completely empty, a window in the middle shows the sea and a small island, light curtains on both sides of the window, a small lantern and a cup of pencils on wooden shelves at the far left and right."
+  },
+  {
+   "id": "meadow-tuft",
+   "group": "world",
+   "size": "landscape 1536x1024",
+   "transparent": true,
+   "prompt": "A horizontal strip of foreground grass tufts with a few small white and yellow flowers along the bottom 35% of the image, spanning the full width edge to edge; everything above is fully transparent (PNG with alpha). No ground plane, no shadow, no sky."
+  },
+  {
+   "id": "beach",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "A sunny sandy beach: calm turquoise sea and a gentle shoreline in the background, a few rounded rocks and palm leaves framing the far left and right, wide open flat sand in front."
+  },
+  {
+   "id": "garden-flowers",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "A flower garden lawn: low flower beds with round colorful flowers and a low wooden fence in the background, a round tree at the far left, wide open flat lawn in front."
+  },
+  {
+   "id": "garden-path",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "A garden courtyard: a low wooden fence with a small gate and flower planters in the background, wide open flat sandy paved ground in front with a few round stepping-stone shapes."
+  },
+  {
+   "id": "meadow",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "A grassy meadow: soft rolling hills and a gentle sandy path in the background, a round tree at the far left, wide open flat grass in front."
+  },
+  {
+   "id": "orchard",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "An apple orchard: round apple trees with red apples framing the far left and right, distant green hills, wide open flat grass in front."
+  },
+  {
+   "id": "playground",
+   "group": "story-bg",
+   "size": "landscape 1536x1024",
+   "prompt": "An open grass playground: a wooden bench and a short wooden fence in the background, round trees at the far sides, wide open flat grass in front."
+  },
+  {
+   "id": "apple",
+   "group": "prop",
+   "prompt": "A shiny red apple with a short brown stem and one green leaf."
+  },
+  {
+   "id": "ball",
+   "group": "prop",
+   "prompt": "A bright yellow play ball with one curved white stripe."
+  },
+  {
+   "id": "basket-apples",
+   "group": "prop",
+   "prompt": "A round woven wicker basket with a handle holding exactly two red apples."
+  },
+  {
+   "id": "basket",
+   "group": "prop",
+   "prompt": "An empty round woven wicker basket with a handle."
+  },
+  {
+   "id": "bowl",
+   "group": "prop",
+   "prompt": "A shallow light-blue bowl filled with clear water."
+  },
+  {
+   "id": "castle-building",
+   "group": "prop",
+   "prompt": "A small half-built sandcastle: two short sand towers and a pile of sand."
+  },
+  {
+   "id": "castle-fallen",
+   "group": "prop",
+   "prompt": "A collapsed sandcastle: a low messy mound of sand with a few broken tower pieces."
+  },
+  {
+   "id": "castle-tall",
+   "group": "prop",
+   "prompt": "A tall sandcastle with one tall round tower and a pointed top, no flag."
+  },
+  {
+   "id": "castle-wide",
+   "group": "prop",
+   "prompt": "A wide low sandcastle with four short towers and a wall between them."
+  },
+  {
+   "id": "cookie",
+   "group": "prop",
+   "prompt": "A round golden cookie with chocolate chips."
+  },
+  {
+   "id": "flag",
+   "group": "prop",
+   "prompt": "A small triangular coral-red pennant flag on a thin wooden pole, no writing."
+  },
+  {
+   "id": "flower",
+   "group": "prop",
+   "prompt": "A single pink flower with a yellow center on a green stem with two leaves."
+  },
+  {
+   "id": "heart",
+   "group": "prop",
+   "prompt": "A soft pink rounded heart shape with a small highlight."
+  },
+  {
+   "id": "pot-fallen",
+   "group": "prop",
+   "prompt": "A terracotta flower pot tipped over on its side with a little spilled soil and a small pink flower."
+  },
+  {
+   "id": "pot-upright",
+   "group": "prop",
+   "prompt": "A terracotta flower pot standing upright with a small pink flower growing in it."
+  },
+  {
+   "id": "soil",
+   "group": "prop",
+   "prompt": "A small rounded mound of brown garden soil."
+  },
+  {
+   "id": "sparkle",
+   "group": "prop",
+   "prompt": "Three yellow four-pointed sparkle stars of different sizes grouped together."
+  },
+  {
+   "id": "water",
+   "group": "prop",
+   "prompt": "Three light-blue water droplets of different sizes grouped together."
+  },
+  {
+   "id": "watering-can",
+   "group": "prop",
+   "prompt": "A green watering can with a spout and a round handle, standing upright."
+  },
+  {
+   "id": "watering-can-small",
+   "group": "prop",
+   "prompt": "A small green watering can tilted forward as if pouring, spout pointing to the right."
+  },
+  {
+   "id": "invite-berry",
+   "group": "prop",
+   "prompt": "An invite berry: one plump round glossy coral-red berry with a small green leaf on top and a little pale-yellow ribbon bow tied around its stem, like a cheerful gift. It must not look like a ball, capsule or sphere split in two halves."
+  }
  ]
 }

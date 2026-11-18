@@ -34,7 +34,7 @@ export const THING_ICONS: Record<string, string> = {
   crown: p("M8 48 L10 18 L22 32 L32 12 L42 32 L54 18 L56 48 Z", C.yellow) + rect(8, 46, 48, 8, 3, C.gold) + dot(32, 34, 3.5, C.red) + dot(18, 38, 2.5, C.blue) + dot(46, 38, 2.5, C.blue)
 };
 
-/** 动物（圆头正面，和宝可梦的可爱风格一致） */
+/** 动物（圆头正面，和小精灵的可爱风格一致） */
 export const ANIMAL_ICONS: Record<string, string> = {
   cat: poly([[12, 26], [14, 6], [28, 18]], C.orange) + poly([[52, 26], [50, 6], [36, 18]], C.orange) + e(32, 36, 22, 19, C.orange) + face(32, 34, 8, { blush: C.pink }) + line("M8 38 H18 M8 44 L18 42 M56 38 H46 M56 44 L46 42", 2),
   dog: e(32, 34, 20, 20, C.brown) + e(12, 30, 7, 14, C.dark, 15) + e(52, 30, 7, 14, C.dark, -15) + e(32, 42, 9, 7, C.skin) + face(32, 30, 8, { mouth: false }) + e(32, 38, 3.5, 2.5, C.ink),

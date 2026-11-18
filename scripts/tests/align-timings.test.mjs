@@ -17,13 +17,13 @@ print(json.dumps(A.correct(words,A.merge(raw,words),heard,0.175,4.4,0.4)))`);
 });
 
 test('an unsure name follows the word before it; an unheard first name starts with the first sound',()=>{
- const [t]=run(`words=A.sentence_words("Bulbasaur rolls in Pikachu’s basket.")
-raw={"w":["Bulbasaur","rolls","in","Pikachu’","s","basket."],"t":[1.325,1.355,2.395,3.065,3.095,3.185],"e":[1.33,1.6,2.605,3.095,3.185,3.835],"c":[0.2,0.85,0.73,0.08,0.28,0.92]}
+ const [t]=run(`words=A.sentence_words("Carro rolls in Bubbo’s basket.")
+raw={"w":["Carro","rolls","in","Bubbo’","s","basket."],"t":[1.325,1.355,2.395,3.065,3.095,3.185],"e":[1.33,1.6,2.605,3.095,3.185,3.835],"c":[0.2,0.85,0.73,0.08,0.28,0.92]}
 heard=[["Balthazar",0.42],["rolls",1.62],["in",2.57],["basket",3.36]]
 print(json.dumps(A.correct(words,A.merge(raw,words),heard,0.175,4.0,0.5)))`);
  assert.equal(t[0],0.5);
  assert.ok(t[2]<=t[3]&&t[3]<t[4],`${t}`);
- assert.ok(Math.abs(t[3]-2.6)<0.15,`Pikachu's at ${t[3]}`);
+ assert.ok(Math.abs(t[3]-2.6)<0.15,`Bubbo's at ${t[3]}`);
 });
 
 test('contraction pieces merge and mismatched provider words are rejected',()=>{

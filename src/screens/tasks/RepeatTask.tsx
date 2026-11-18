@@ -14,7 +14,7 @@ import { todayStr } from "../../lib/date";
 import type { RecordResult } from "../../lib/mic";
 import type { Creature } from "../../types";
 import { Icon } from "../../icons";
-import { PokeImg } from "../../components/PokeImg";
+import { CreatureImg } from "../../components/CreatureImg";
 
 export function RepeatTask({ onFinish, practice=false }: { onFinish: () => void; practice?:boolean }) {
   const save = useGame((s) => s.save);
@@ -23,7 +23,7 @@ export function RepeatTask({ onFinish, practice=false }: { onFinish: () => void;
     const ids = save.captures.map((c) => c.id);
     const buddy = getCreature(ids.length ? pickOne(ids) : 25);
     const picked = dailyLearningPlan(save,practice).phrases;
-    // 第三句说宝可梦的名字
+    // 第三句说小精灵的名字
     const nameP: SayPhrase = { en: `${buddy.nameEn}!`, zh: `${buddy.nameZh}！`, level: 1 };
     return { buddy, phrases: !practice && learningProfile(save.settings).vocabulary===2 && ids.length ? [...picked.slice(0,2),nameP] : picked };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -102,7 +102,7 @@ function SayRound({ buddy, phrase, idx, total, onNext, onSpoken }: { buddy: Crea
     <div className="round say-round">
       <RoundProgress index={idx} total={total} unit="句"/>
       <div className="buddy">
-        <PokeImg src={creatureArt(buddy.id)} alt="" className={busy ? "bounce" : ""} />
+        <CreatureImg src={creatureArt(buddy.id)} alt="" className={busy ? "bounce" : ""} />
         <button className="bubble" disabled={busy||recording} onClick={model} aria-label={`再听一次：${phrase.en}`}>
           <div className="bubble-en">{phrase.en}</div>
           <div className="bubble-zh">{phrase.zh}</div>

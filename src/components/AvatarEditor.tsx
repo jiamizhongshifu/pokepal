@@ -44,7 +44,7 @@ export function AvatarEditor({onClose}:{onClose:()=>void}) {
     </div>
     <input hidden ref={library} type="file" accept="image/*" onChange={choose} aria-label="从相册选择头像"/>
     <input hidden ref={camera} type="file" accept="image/*" capture="user" onChange={choose} aria-label="拍摄头像照片"/>
-    <p className="avatar-preset-label">也可以选一位小训练师</p>
+    <p className="avatar-preset-label">也可以选一个形象</p>
     <div className="avatar-presets">{AVATARS.map((a,i)=><button key={a} disabled={busy} aria-label={`选择${['红帽子','粉帽子','蓝帽子','黄帽子'][i]}头像`} aria-pressed={!photo&&avatar===a} onClick={()=>{setChoice(a);setPhoto(undefined);setError('');}}><Icon name={a} size={48}/></button>)}</div>
     {busy&&<p role="status">正在准备照片…</p>}
     {error&&<p className="avatar-error" role="alert">{error}</p>}

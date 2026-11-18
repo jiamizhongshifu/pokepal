@@ -1,7 +1,7 @@
 import { BABY_CREATURES, creatureArt, creatureAvatar } from "../data/creatures";
 
 /**
- * 只预热首页伙伴图片。完整图鉴由 Service Worker 缓存，显示时按需解码。
+ * 只预热首页伙伴图片。完整好朋友相册由 Service Worker 缓存，显示时按需解码。
  * 386 只的两套大图不能全部常驻解码内存，否则 iPad 会承受数百 MiB 压力。
  * 浏览器对同一文档里已加载过的图片地址会直接复用内存里的解码结果，之后任何页面再用同一张图都不再走网络——
  * 即使开发服务器重启、Wi-Fi 抖动，或 Service Worker 还没装好，也不会图裂。

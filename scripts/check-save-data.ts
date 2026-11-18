@@ -28,5 +28,5 @@ for(const p of CREATURES)for(const key of [p.nameEn,`${p.nameEn}!`])for(let i=0;
  assert.equal(options.filter(o=>o.pokemonId===p.id).length,1,`${key}: exactly one correct image`);
  assert.equal(new Set(options.map(o=>o.pokemonId)).size,options.length,`${key}: unique visible options`);
 }
-assert.equal(learningChoices(learningEntry('Pikachu!')!,['Pikachu','Pikachu!','Eevee','Eevee!'],3).length,2);
+assert.equal(learningChoices(learningEntry('Bubbo!')!,['Bubbo','Bubbo!','Berry','Berry!'],3).length,2);
 console.log('PASS: valid legacy saves, non-mutating validation, malformed imports rejected, care compatibility and unique name choices for all 388 Pokémon.');

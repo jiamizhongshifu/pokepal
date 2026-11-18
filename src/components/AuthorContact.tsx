@@ -53,7 +53,7 @@ export function AuthorContact({active=true}:{active?:boolean}) {
       <div className="author-contact-row"><label>微信号<input ref={wechat} readOnly value={PARENT_CONTACT.wechat} aria-label="作者微信号" onFocus={e=>e.currentTarget.select()}/></label><button onClick={()=>void copy('wechat')}>复制微信号</button></div>
       <div className="author-contact-row"><label>邮箱<input ref={email} readOnly value={PARENT_CONTACT.email} aria-label="作者邮箱" onFocus={e=>e.currentTarget.select()}/></label><button onClick={()=>void copy('email')}>复制邮箱</button></div>
       <p className="author-copy-status" role="status">{status}</p>
-      <div className="author-contact-actions"><a href={`mailto:${PARENT_CONTACT.email}?subject=${encodeURIComponent('宝可梦小小训练师 · 体验反馈')}`}>写邮件</a><a href="/feedback/" target="_blank" rel="noopener noreferrer">整理问题反馈 ↗</a></div>
+      <div className="author-contact-actions"><a href={`mailto:${PARENT_CONTACT.email}?subject=${encodeURIComponent('啵啵岛 · 体验反馈')}`}>写邮件</a><a href="/feedback/" target="_blank" rel="noopener noreferrer">整理问题反馈 ↗</a></div>
       </div>
       </div>
       <p className="author-contact-note">请由家长联系。截图前请遮住孩子的姓名和照片，不需要提供孩子的录音、学校或住址。</p>

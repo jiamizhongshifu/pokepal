@@ -5,7 +5,7 @@ import { BERRY_BUSHES, CAMPFIRE, CUSHIONS, HIGH_ROCK, ISLAND, OBSTACLES, PALMS, 
 export interface Spot { x: number; z: number; y?: number }
 export interface Effect { id: number; kind: "pet" | "feed" | "night"; icon: string; at: number }
 
-/** 场景里的身高（米）：按真实身高轻度压缩，大小差异明显但小宝可梦也够大、好点 */
+/** 场景里的身高（米）：按真实身高轻度压缩，大小差异明显但小小精灵也够大、好点 */
 export function sceneHeight(p: Creature) {
   return Math.min(2.3, Math.max(0.62, 0.5 + (p.heightCm / 100) * 0.62));
 }
@@ -17,7 +17,7 @@ const ring = (cx: number, cz: number, r: number, n: number, start = 0, y?: numbe
     return { x: cx + Math.cos(a) * r, z: cz + Math.sin(a) * r, y };
   });
 
-/** 固定位置（stay 轨迹用），同一区域的宝可梦依次占位 */
+/** 固定位置（stay 轨迹用），同一区域的小精灵依次占位 */
 const FIXED: Partial<Record<ZoneKey, Spot[]>> = {
   // 篝火：原木凳上 + 食盆旁
   campfire: [
@@ -35,7 +35,7 @@ const FIXED: Partial<Record<ZoneKey, Spot[]>> = {
   tent: [{ x: TENT.x + 0.6, z: TENT.z + 1.9 }, { x: TENT.x - 1.0, z: TENT.z + 1.8 }, { x: TENT.x + 1.9, z: TENT.z + 1.2 }],
   // 礁石脚下
   rocks: [onIsland(-24, 1.2), onIsland(-18, 1.25), onIsland(-30, 1.17), onIsland(62, 1.13)],
-  // 冥想石顶（超梦冥想）
+  // 冥想石顶
   highrock: [{ x: HIGH_ROCK.x, z: HIGH_ROCK.z, y: HIGH_ROCK.top }],
   // 椰子树下
   palms: PALMS.slice(0, 8).map((p) => {
@@ -45,7 +45,7 @@ const FIXED: Partial<Record<ZoneKey, Spot[]>> = {
   // 树果丛前
   bushes: BERRY_BUSHES.map((b) => {
     const dx = ISLAND.cx - b.x, dz = ISLAND.cz - b.z, l = Math.hypot(dx, dz);
-    // 站在树冠外沿之外（树冠半径约 0.95×s，再留出半个宝可梦的宽度）
+    // 站在树冠外沿之外（树冠半径约 0.95×s，再留出半个小精灵的宽度）
     return { x: b.x + (dx / l) * (1.0 * b.s + 0.55), z: b.z + (dz / l) * (1.0 * b.s + 0.55) };
   }),
   // 海边站着

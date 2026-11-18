@@ -9,7 +9,7 @@ export function homeHint(state:{active:boolean;immersive:boolean;blocked:boolean
  if(state.care)return 'care';
  return 'guide';
 }
-/** Pokémon take their own turns; only the child's turn asks for a tap. */
+/** Island friends take their own turns; only the child's turn asks for a tap. */
 export function automaticTogetherTurn(kind:TogetherKind,partners:number,turn:number){
  return kind==='rest'||kind==='ball'&&(partners===2||turn%2===0);
 }

@@ -3,9 +3,9 @@ import type { SaveData } from '../types';
 import { comfortCompanion } from './companionCare';
 
 export const BERRIES = {
-  oran: { name: '橙橙果', color: '#5d9fdf', leaf: '#80b78b' },
-  pecha: { name: '桃桃果', color: '#ee9fa7', leaf: '#85b88b' },
-  cheri: { name: '樱子果', color: '#da6c65', leaf: '#75ad82' }
+  oran: { name: '蓝莓', en: 'blueberry', color: '#5d9fdf', leaf: '#80b78b' },
+  pecha: { name: '桃子', en: 'peach', color: '#ee9fa7', leaf: '#85b88b' },
+  cheri: { name: '草莓', en: 'strawberry', color: '#da6c65', leaf: '#75ad82' }
 } as const;
 export type BerryKind = keyof typeof BERRIES;
 export const BERRY_KINDS = Object.keys(BERRIES) as BerryKind[];

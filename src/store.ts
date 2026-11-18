@@ -9,7 +9,7 @@ import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
-import { mergePokeballs, exchangePokeball, capturePartner } from "./lib/pokeballs";
+import { mergeInvites, exchangeInvite, invitePartner } from "./lib/invites";
 import { ensureIslandProgress,claimIslandGift,upgradeIsland,placeIslandDecoration,type UpgradeId } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
@@ -154,11 +154,11 @@ interface State {
   completeTask: (kind: TaskKind, boardIndex: number | null) => Promise<TaskReward | undefined>;
   noteStoryPage: (id:string,page:number) => void;
   buyBall: () => Promise<boolean>;
-  catchPokemon: (id: number) => Promise<boolean>;
+  inviteFriend: (id: number) => Promise<boolean>;
   setCatchWish: (id: number | null) => void;
-  /** 满友好度进化：from 进化成 to，友好度保留到 3 颗心，图鉴记下新形态 */
+  /** 满友好度长大：from 长大成 to，友好度保留到 3 颗心，好朋友相册记下新形态 */
   evolve: (from: number, to: number) => void;
-  /** 选择保持现在的样子（不再提醒，之后仍可进化） */
+  /** 选择保持现在的样子（不再提醒，之后仍可长大） */
   stayAsIs: (id: number) => void;
   interact: (id: number, kind: InteractKind) => boolean;
   noteHeard: (count?: number) => void;
@@ -218,7 +218,7 @@ export const useGame = create<State>((set, get) => {
     if(!get().loaded||get().saveIssue||get().saveBusy)return undefined as R;
     const s = structuredClone(get().save);
     rollover(s);
-    mergePokeballs(s);
+    mergeInvites(s);
     const r = fn(s);
     migratePersonalities(s);ensureIslandProgress(s);
     set({ save: s });
@@ -231,7 +231,7 @@ export const useGame = create<State>((set, get) => {
   async function commit<R>(fn:(s:SaveData)=>R):Promise<R|undefined> {
     if(!get().loaded||get().saveIssue||get().saveBusy)return undefined;
     const s=structuredClone(get().save);
-    rollover(s);mergePokeballs(s);
+    rollover(s);mergeInvites(s);
     const result=fn(s);
     migratePersonalities(s);ensureIslandProgress(s);
     set({saveBusy:true});
@@ -350,7 +350,7 @@ export const useGame = create<State>((set, get) => {
       if(get().saveBusy||get().saveIssue)return false;
       if(get().save.trainer)return true;
       const created=await commit((s) => {
-        s.trainer = { name: "小训练师", avatar, createdAt: Date.now() };
+        s.trainer = { name: "小岛主人", avatar, createdAt: Date.now() };
         s.balls.poke += 1; // 见面礼只在成功创建时发放一次。
         return true;
       })===true;
@@ -371,7 +371,7 @@ export const useGame = create<State>((set, get) => {
       mut(s=>{ s.storyProgress ??= {}; s.storyProgress[id]=Math.max(s.storyProgress[id]??0,page); });
     },
 
-    async buyBall() {const ok=!!await commit(exchangePokeball);if(ok)trackInteraction('ball_exchanged');return ok;},
+    async buyBall() {const ok=!!await commit(exchangeInvite);if(ok)trackInteraction('ball_exchanged');return ok;},
 
     setCatchWish(id) {
       mut((s) => {
@@ -381,7 +381,7 @@ export const useGame = create<State>((set, get) => {
       });
     },
 
-    async catchPokemon(id) {const ok=!!await commit(s=>capturePartner(s,id));if(ok)trackInteraction('capture_succeeded');return ok;},
+    async inviteFriend(id) {const ok=!!await commit(s=>invitePartner(s,id));if(ok)trackInteraction('capture_succeeded');return ok;},
 
     evolve(from, to) {
       mut((s) => {
@@ -486,7 +486,7 @@ export const useGame = create<State>((set, get) => {
 
     renameTrainer(name) {
       mut((s) => {
-        if (s.trainer) s.trainer.name = name.trim() || "小训练师";
+        if (s.trainer) s.trainer.name = name.trim() || "小岛主人";
       });
     },
 
@@ -535,5 +535,5 @@ export const useGame = create<State>((set, get) => {
 
 export const playLimitSeconds = (s: SaveData) => s.settings.dailyMinutes * 60 + s.daily.extraSeconds;
 
-/** 图鉴里“已拥有”的宝可梦：现在的伙伴 + 进化前的形态 */
+/** 好朋友相册里“已拥有”的小精灵：现在的伙伴 + 长大前的形态 */
 export const dexOwned = (s: SaveData) => new Set([...(s.dex ?? []), ...s.captures.map((c) => c.id)]);

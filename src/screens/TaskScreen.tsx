@@ -53,7 +53,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
     setReward(r);
     const parts: Parameters<typeof say> = [["en", "You did it!"]];
     if(r.gained+r.bonus>0)parts.push(["zh",`你得到了${r.gained+r.bonus}点能量！`]);
-    if(r.ballGranted)parts.push(["en","You got a Poké Ball!"]);
+    if(r.ballGranted)parts.push(["en","You got an invite berry!"]);
     say(...parts);
   };
 

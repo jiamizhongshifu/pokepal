@@ -13,11 +13,11 @@
 .island-map-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: auto; }
 
 /* Time of day and weather tint the whole picture; they never cover interactive layers. */
-.island-map::after { content: ""; position: absolute; inset: 0; pointer-events: none; transition: background-color 1.2s ease, opacity 1.2s ease; z-index: 3; }
-.island-map.sky-morning::after { background: rgba(255, 214, 160, .14); }
-.island-map.sky-evening::after { background: rgba(255, 140, 90, .22); mix-blend-mode: multiply; }
-.island-map.sky-night::after { background: rgba(28, 40, 110, .42); mix-blend-mode: multiply; }
-.island-map.is-cloudy::after { background-color: rgba(120, 140, 160, .16); }
+.island-tint { position: absolute; inset: 0; pointer-events: none; transition: background-color 1.2s ease, opacity 1.2s ease; z-index: 3; }
+.island-map.sky-morning .island-tint { background: rgba(255, 214, 160, .14); }
+.island-map.sky-evening .island-tint { background: rgba(255, 140, 90, .22); mix-blend-mode: multiply; }
+.island-map.sky-night .island-tint { background: rgba(28, 40, 110, .42); mix-blend-mode: multiply; }
+.island-map.is-cloudy .island-tint { background-color: rgba(120, 140, 160, .16); }
 
 .island-station {
   position: absolute; z-index: 1; width: 9%; aspect-ratio: 1; transform: translate(-50%, -70%);

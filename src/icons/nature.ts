@@ -77,7 +77,7 @@ export const NATURE_ICONS: Record<string, string> = {
   tent: p("M6 54 L32 10 L58 54 Z", C.red) + p("M32 10 L22 54 H42 Z", C.yellow) + line("M4 54 H60", 4)
 };
 
-/** 宝可梦属性 → 图标 */
+/** 小精灵属性 → 图标 */
 export const TYPE_ICON: Record<string, string> = {
   normal: "normal", fire: "fire", water: "water", grass: "leaf", electric: "bolt", ice: "snowflake",
   fighting: "fist", poison: "poison", ground: "mountain", flying: "wing", psychic: "eye", bug: "bug",

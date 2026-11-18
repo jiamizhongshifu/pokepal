@@ -11,7 +11,7 @@ export function feedbackEnvironment(userAgent:string, width:number, online:boole
 }
 export function makeFeedbackReport(input:{version:string;mode:string;topic:string;details:string;environment?:ReturnType<typeof feedbackEnvironment>}) {
   const topic=FEEDBACK_TOPICS.includes(input.topic as FeedbackTopic)?input.topic:'其他建议';
-  const lines=['PokéPal 家长反馈',`页面版本：${input.version}`,`运行方式：${input.mode}`,`问题类型：${topic}`];
+  const lines=['啵啵岛 家长反馈',`页面版本：${input.version}`,`运行方式：${input.mode}`,`问题类型：${topic}`];
   if(input.environment)lines.push(`浏览器：${input.environment.browser}`,`屏幕：${input.environment.screen}`,`联网状态：${input.environment.network}`);
   lines.push('', '家长填写的说明：', input.details.trim().slice(0,1500)||'（请补充：在哪一步、发生了什么、希望怎样）', '', '此报告不自动附带孩子姓名、头像、录音、日记、存档、网址参数或设备标识。请在发送前检查手写内容。');
   return lines.join('\n');
@@ -19,7 +19,7 @@ export function makeFeedbackReport(input:{version:string;mode:string;topic:strin
 
 // Keep long Chinese feedback out of mailto URLs; copying/downloading preserves the full report.
 export function feedbackMailDraft(email:string,topic:string,report:string){
-  const subject=`PokéPal 家长反馈：${topic}`;
+  const subject=`啵啵岛 家长反馈：${topic}`;
   const base=`mailto:${email}?subject=${encodeURIComponent(subject)}`;
   const full=`${base}&body=${encodeURIComponent(report)}`;
   const needsPaste=full.length>1800;
