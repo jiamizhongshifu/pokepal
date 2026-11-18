@@ -13,15 +13,15 @@
 #root .story-word:disabled { cursor:default; }
 
 #root .story-reading-tools { display:flex; justify-content:flex-end; margin:-4px 0 6px; }
-#root .story-pace { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:6px 14px; border:1px solid #c9d8cf; border-radius:999px; background:#fff; color:var(--coast-ink,#254f43); font:inherit; font-size:15px; font-weight:700; cursor:pointer; }
-#root .story-pace[aria-pressed=true] { background:var(--coast-yellow-soft,#fff3c4); border-color:#e3b23c; }
+#root .story-pace { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:6px 14px; border:1px solid #c9d8cf; border-radius:999px; background:#fff; color:var(--brand-ink,#254f43); font:inherit; font-size:15px; font-weight:700; cursor:pointer; }
+#root .story-pace[aria-pressed=true] { background:var(--brand-sun-soft,#fff3c4); border-color:#e3b23c; }
 #root .story-pace small { font-weight:600; color:#62756b; }
 
 #root .story-word-card { display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px; margin:4px 0 12px; padding:10px 12px; border-radius:16px; background:#eef7fa; border:1px solid #c6e0ea; }
-#root .story-word-card-hear { display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:6px 14px; border:0; border-radius:12px; background:#fff; color:var(--coast-ink,#254f43); font:inherit; font-size:22px; cursor:pointer; }
+#root .story-word-card-hear { display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:6px 14px; border:0; border-radius:12px; background:#fff; color:var(--brand-ink,#254f43); font:inherit; font-size:22px; cursor:pointer; }
 #root .story-word-card-zh { font-size:20px; font-weight:700; color:#3d5a52; }
 #root .story-word-card-save { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:6px 12px; border:1px solid #c4d3b7; border-radius:12px; background:#fff; font:inherit; font-size:15px; cursor:pointer; }
-#root .story-word-card-save[aria-pressed=true] { background:var(--coast-yellow-soft,#fff3c4); }
+#root .story-word-card-save[aria-pressed=true] { background:var(--brand-sun-soft,#fff3c4); }
 #root .story-word-card-close { margin-left:auto; display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:50%; background:transparent; cursor:pointer; }
 
 #root .story-echo { display:flex; align-items:center; flex-wrap:wrap; gap:10px 12px; margin:14px 0 4px; padding:12px; border-radius:18px; background:#f4f8ec; border:1px solid #d6e3c6; }

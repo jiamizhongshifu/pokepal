@@ -1,8 +1,8 @@
 /* Global dialogs own the native top layer. Passive island messages never join it. */
-dialog.blocking-dialog[open]{position:fixed;inset:0;margin:0;width:100%;height:100%;max-width:none;max-height:none;box-sizing:border-box;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));border:0;overflow:auto;color:var(--coast-ink)}
+dialog.blocking-dialog[open]{position:fixed;inset:0;margin:0;width:100%;height:100%;max-width:none;max-height:none;box-sizing:border-box;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));border:0;overflow:auto;color:var(--brand-ink)}
 dialog.blocking-dialog:not([open]){display:none}
 dialog.blocking-dialog::backdrop{background:transparent}
-dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow:auto;box-sizing:border-box;color:var(--coast-ink);background:var(--coast-paper);text-shadow:none;flex-shrink:0}
+dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow:auto;box-sizing:border-box;color:var(--brand-ink);background:var(--brand-paper);text-shadow:none;flex-shrink:0}
 /* One foreground panel in the left corner. The main dock yields that space. */
 #root .home{--corner-left:max(16px,env(safe-area-inset-left));--corner-bottom:max(20px,env(safe-area-inset-bottom))}
 #root .home:is([data-modal-blocked])>:is(.companion-card,.companion-finder,.picnic-panel,.facility-panel,.area-choices,.island-weather,.feature-guide){visibility:hidden;pointer-events:none}
@@ -20,8 +20,8 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 #root .home .farm-feedback{flex-wrap:wrap}
 #root .home .farm-feedback>span{min-width:160px}
 #root .home .farm-feedback button{min-height:48px}
-#root .home .picnic-panel>header{position:sticky;top:-18px;z-index:3;background:var(--coast-paper);padding:8px 0;margin-top:-8px}
-#root .home .picnic-change summary{display:flex;align-items:center;gap:6px;cursor:pointer;min-height:48px;color:var(--coast-blue);font-weight:800}
+#root .home .picnic-panel>header{position:sticky;top:-18px;z-index:3;background:var(--brand-paper);padding:8px 0;margin-top:-8px}
+#root .home .picnic-change summary{display:flex;align-items:center;gap:6px;cursor:pointer;min-height:48px;color:var(--brand-primary);font-weight:800}
 #root .home .picnic-chosen{font-weight:800;line-height:1.5}
 #root .home .picnic-panel .feature-guide{margin:6px 0}
 #root .home .picnic-resume{display:flex;gap:8px;align-items:center}
@@ -34,14 +34,14 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
  #root .home>:is(.companion-card,.picnic-panel,.area-choices,.facility-panel){max-height:calc(100% - 80px - env(safe-area-inset-top))}
  #root .home .picnic-panel>header p{display:none}
 }
-#root .home .companion-more{width:100%;border-top:1px solid var(--coast-line)}
-#root .home .companion-more summary{display:flex;align-items:center;gap:8px;min-height:48px;cursor:pointer;font-size:14px;font-weight:800;color:var(--coast-blue)}
+#root .home .companion-more{width:100%;border-top:1px solid var(--brand-line)}
+#root .home .companion-more summary{display:flex;align-items:center;gap:8px;min-height:48px;cursor:pointer;font-size:14px;font-weight:800;color:var(--brand-primary)}
 #root .home .companion-more summary>span{margin-left:auto}
 #root .home .companion-more[open] summary{margin-bottom:6px}
-#root .home .companion-find{margin-left:auto;flex:none;min-width:44px;min-height:44px;border-radius:16px;background:var(--coast-mint);color:var(--coast-blue);border:1px solid var(--coast-line);display:grid;place-items:center}
-.blocking-dialog .gate-nav{position:sticky;top:-28px;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--coast-paper);padding:8px 0;margin-top:-8px}
+#root .home .companion-find{margin-left:auto;flex:none;min-width:44px;min-height:44px;border-radius:16px;background:var(--brand-primary-soft);color:var(--brand-primary);border:1px solid var(--brand-line);display:grid;place-items:center}
+.blocking-dialog .gate-nav{position:sticky;top:-28px;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--brand-paper);padding:8px 0;margin-top:-8px}
 .blocking-dialog .gate-nav .gate-title{flex:1;margin:0}
-.blocking-dialog .gate-nav button{flex:none;min-width:48px;min-height:48px;border-radius:50%;background:var(--coast-mint);color:var(--coast-blue);border:0;display:grid;place-items:center}
+.blocking-dialog .gate-nav button{flex:none;min-width:48px;min-height:48px;border-radius:50%;background:var(--brand-primary-soft);color:var(--brand-primary);border:0;display:grid;place-items:center}
 @media(max-height:500px){
  #root .home .companion-card{padding:10px}
  #root .home .companion-card .companion-heading{gap:8px}
@@ -68,7 +68,7 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 
 /* Continuity: compact result controls, explicit partner selection and scene previews. */
 .story-mode{display:flex;justify-content:center;gap:10px;margin:12px auto;flex-wrap:wrap}
-.story-mode button{display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;border:2px solid var(--border,#c5dfe1);border-radius:18px;background:var(--paper,#fffef7);color:var(--ink,#173d4b);font-weight:800}
+.story-mode button{display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;border:2px solid var(--border,#c5dfe1);border-radius:18px;background:var(--paper,var(--brand-paper));color:var(--ink,#173d4b);font-weight:800}
 .story-mode button[aria-pressed=true],.dress-compare button[aria-pressed=true]{background:#d9f3e4;border-color:#67ac90;color:#235e4a}
 .story-mode small{font-weight:500}
 .energy-return{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px;margin:16px 0;border:2px solid #e2c36d;border-radius:20px;background:#fff4c8;color:#334c45}
@@ -83,7 +83,7 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 .dress-preview-strip header{display:flex;align-items:center;gap:10px}.dress-preview-strip header strong{flex:1}
 .dress-preview-strip button,.dress-preview-strip summary{min-height:44px}
 .dress-preview-strip p{margin:8px 0;font-size:14px;line-height:1.5}
-.dress-compare{display:flex;gap:8px;margin:8px 0}.dress-compare button{flex:1;border:2px solid #bdd8d5;border-radius:14px;padding:8px;color:#244a45;background:#fffef7}
+.dress-compare{display:flex;gap:8px;margin:8px 0}.dress-compare button{flex:1;border:2px solid #bdd8d5;border-radius:14px;padding:8px;color:#244a45;background:var(--brand-paper)}
 .dress-preview-strip>.farm-primary{width:100%;margin-top:10px}
 .dress-preview-strip small{display:block;line-height:1.5}.dress-remove{margin-top:8px}
 .diary-voice-finished{max-width:650px;margin:auto}.diary-voice-finished>h1,.diary-voice-finished>p{text-align:center}

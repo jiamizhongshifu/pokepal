@@ -1,0 +1,31 @@
+/* Bubbly Isle design tokens (docs/rebrand/brand-brief.md). Every theme layer reads colours from here. */
+:root {
+  --brand-lagoon:#19b3a6;          /* bright accent: highlights, progress, correct */
+  --brand-primary:#118a80;         /* button faces with white text (large bold text, >= 3:1) */
+  --brand-primary-deep:#0b6a62;    /* button bottom edge and pressed state */
+  --brand-primary-soft:#dcf4f1;
+  --brand-success:#118a80;
+  --brand-sun:#ffc531;
+  --brand-sun-deep:#d99a00;
+  --brand-sun-soft:#fff1c7;
+  --brand-sun-ink:#5c4100;
+  --brand-coral:#ff7a59;
+  --brand-coral-deep:#d9573a;
+  --brand-coral-soft:#ffe4db;
+  --brand-sky:#3ba9f5;
+  --brand-sky-ink:#1670b0;         /* English text and listen actions on light surfaces */
+  --brand-grape:#a274f0;
+  --brand-ink:#2f3b45;
+  --brand-ink-muted:#5f6b74;
+  --brand-line:#e3e8eb;
+  --brand-line-deep:#cbd3d8;
+  --brand-paper:#ffffff;
+  --brand-page:#f3f8f8;
+  --brand-night:#14303f;
+  --brand-radius-button:16px;
+  --brand-radius-card:20px;
+  --brand-press:4px;
+  --night-ink:#f2fbff; --night-muted:#bddae4;
+  --activity-listen:#e1f2fd; --activity-wordpic:#dcf4f1;
+  --activity-repeat:#ffe4db; --activity-trace:#fff1c7;
+}

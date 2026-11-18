@@ -1,0 +1,34 @@
+/* Bubbly Isle shared components: thick-bottom buttons and cards (docs/rebrand/brand-brief.md).
+   Loaded last so every screen's call-to-action shares one look; screens keep only their layout. */
+#root .screen :is(.btn-big:not(.alt), .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
+  .wish-button.primary, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action) {
+  background:var(--brand-primary); color:#fff; text-shadow:none;
+  border:0; border-radius:var(--brand-radius-button);
+  box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep);
+  font-weight:800; transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+#root .screen :is(.btn-big.alt, .wish-button:not(.primary)) {
+  background:var(--brand-paper); color:var(--brand-primary-deep); text-shadow:none;
+  border:2px solid var(--brand-line); border-radius:var(--brand-radius-button);
+  box-shadow:0 var(--brand-press) 0 var(--brand-line-deep);
+  font-weight:800; transition:transform .12s ease, box-shadow .12s ease;
+}
+#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
+  .wish-button, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action):not(:disabled):hover { filter:brightness(1.05); }
+#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
+  .wish-button, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action):not(:disabled):active {
+  transform:translateY(var(--brand-press)); box-shadow:0 0 0 transparent;
+}
+#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next):disabled {
+  background:var(--brand-line); color:var(--brand-ink-muted); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep);
+}
+#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next):focus-visible {
+  outline:3px solid var(--brand-sky); outline-offset:4px;
+}
+/* Harvest keeps the sunny reward colour so ripe fruit stands out from everyday actions. */
+#root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-sun-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }
+/* Flat illustration style: no glossy sweep over buttons. */
+#root .screen .btn-big::after { display:none; }
+@media (prefers-reduced-motion: reduce) {
+  #root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next) { transition:none; }
+}

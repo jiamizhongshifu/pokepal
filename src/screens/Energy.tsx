@@ -16,7 +16,7 @@ const ACTIVITIES: Record<ParticipationKind, {icon:string; tint:string; label:str
   course: {icon:'island', tint:'#dff2e9', label:'去冒险'},
   review: {icon:'speaker', tint:'#e1eff7', label:'再听听', accent:'refresh'},
   story: {icon:'book', tint:'#fff0cf', label:'读故事'},
-  island: {icon:'hand', tint:'var(--coast-coral-soft)', label:'陪伙伴', accent:'heart'},
+  island: {icon:'hand', tint:'var(--brand-coral-soft)', label:'陪伙伴', accent:'heart'},
 };
 
 export function Energy() {

@@ -6,7 +6,7 @@
 #root .avatar-pick .avatar-heading .hint{margin:0;flex:1;min-width:0;line-height:1.4}
 #root .avatar-pick .avatar-heading .hint small{margin-top:4px}
 #root .avatar-heading .guide-content{width:min(372px,calc(100vw - 128px))}
-#root .help-symbol{display:grid;place-items:center;flex:none;width:26px;height:26px;border:2px solid currentColor;border-radius:50%;font-size:20px;font-weight:900;line-height:1;color:var(--coast-blue,#22668a);box-sizing:border-box}
+#root .help-symbol{display:grid;place-items:center;flex:none;width:26px;height:26px;border:2px solid currentColor;border-radius:50%;font-size:20px;font-weight:900;line-height:1;color:var(--brand-primary,#22668a);box-sizing:border-box}
 #root .feature-guide .guide-reopen{white-space:nowrap;min-width:48px;min-height:48px;justify-content:center;flex-shrink:0}
 #root .feature-guide .guide-reopen .help-symbol{font-size:20px;line-height:1}
 #root .feature-guide.guide-compact .guide-content{box-sizing:border-box}

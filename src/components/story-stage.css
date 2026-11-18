@@ -44,5 +44,5 @@
 .story-language-options legend{font-weight:800}
 .story-language-options p,.story-language-options small{font-size:14px;line-height:1.6}
 .story-language-options>div{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.story-language-options button{min-height:48px;padding:10px 14px;border:2px solid #c4dce1;border-radius:16px;background:#fffef7;color:#163d50;font:inherit;font-weight:700}
+.story-language-options button{min-height:48px;padding:10px 14px;border:2px solid #c4dce1;border-radius:16px;background:var(--brand-paper);color:#163d50;font:inherit;font-weight:700}
 .story-language-options button[aria-pressed=true]{background:#fff0ac;border-color:#c2a13e}

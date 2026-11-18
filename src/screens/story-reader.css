@@ -15,7 +15,7 @@
 #root .story-reader .story-reading-text { padding:0; }
 #root .story-reader .story-text-en { font-size:clamp(22px,2.4vw,28px); }
 #root .story-reader .story-parent-options { grid-column:1/-1; margin:0; }
-#root .story-reader .story-context { font-size:14px; color:var(--coast-muted); }
+#root .story-reader .story-context { font-size:14px; color:var(--brand-ink-muted); }
 #root .story-reader .story-primary-controls { position:static; flex:none; transform:none; width:min(620px,calc(100% - 32px)); margin:0 auto; padding:8px; box-shadow:none; background:transparent; border:0; border-radius:0; }
 #root .story-reader .story-primary-controls button { min-height:56px; }
 #root .story-reader .story-pause-note, #root .story-reader .story-audio-note { grid-column:1/-1; margin:0; }

@@ -88,7 +88,7 @@ export default function App() {
     const apply = () => {
       const theme = skyFor() === "night" ? "dark" : "light";
       document.documentElement.dataset.theme = theme;
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#102b42" : "#ecf8f8");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#14303f" : "#f3f8f8");
     };
     apply();
     const t = setInterval(apply, 60000);

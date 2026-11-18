@@ -3,23 +3,22 @@
 #root .parent-organized .device-setup,
 #root .parent-organized .parent-body section,
 #root .parent-organized .parent-fold-content {
-  --text:var(--coast-ink); --ink:var(--coast-ink); --navy:var(--coast-ink); --muted:var(--coast-muted);
-  --accent-en:#0e679e; --sea:#0e679e; --surface:var(--coast-paper); --surface-strong:var(--coast-paper);
+  --text:var(--brand-ink); --ink:var(--brand-ink); --navy:var(--brand-ink); --muted:var(--brand-ink-muted);
+  --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper);
   color:var(--text);
 }
 #root .story-reader .story-page-count { color:#234b46; }
 #root .story-reader .theatre-word { width:max-content; max-width:calc(100% - 24px); }
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }
 #root .story-reader .theatre-word>.icon { flex:none; }
-#root .notebook-parent .btn-small { color:var(--coast-ink); }
+#root .notebook-parent .btn-small { color:var(--brand-ink); }
 #root .welcome-title-board .logo-en { color:#435e6d; }
 :root[data-theme="dark"] #root .energy-focused .quiet-disclosure { color:var(--night-muted); }
 #root .task-trace .trace-word b { color:#176b61; }
-#root .dex-detail .type-chip.color { color:var(--coast-ink); background:#e8f1ee; }
-#root .screen :is(.ball-ready,.energy-next)>.btn-big { background:#176c9b; color:var(--coast-paper); }
-#root .parent-organized .parent-fold-content { background:var(--coast-paper); border-radius:18px; padding:16px; margin-bottom:16px; }
+#root .dex-detail .type-chip.color { color:var(--brand-ink); background:#e8f1ee; }
+#root .parent-organized .parent-fold-content { background:var(--brand-paper); border-radius:18px; padding:16px; margin-bottom:16px; }
 /* A translucent white surface over the night sky made both labels and icons muddy. */
-:root[data-theme="dark"] #root :is(.learning-home-tools button,.energy-alternative) { background:var(--coast-paper); }
+:root[data-theme="dark"] #root :is(.learning-home-tools button,.energy-alternative) { background:var(--brand-paper); }
 :root[data-theme="dark"] #root :is(.learning-home-tools h2,.learning-home-extension,.energy-other h2,.ball-extra>summary,.route-heading p),
 :root[data-theme="dark"] #root .screen>:is(.quiet-disclosure),
 :root[data-theme="dark"] #root :is(.journey-wrap,.notebook-wrap,.energy-page)>.quiet-disclosure { color:var(--night-muted); }
@@ -27,7 +26,7 @@
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro h2,.parent-fold>summary) { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro p,.parent-detail-heading,.parent-fold>summary small,.parent-fold>summary::after) { color:var(--night-muted); }
 :root[data-theme="dark"] #root .parent-organized .parent-danger>summary { color:#ffc4b4; }
-:root[data-theme="dark"] #root .parent-organized .parent-fold-content .parent-inner-fold { color:var(--coast-ink); }
+:root[data-theme="dark"] #root .parent-organized .parent-fold-content .parent-inner-fold { color:var(--brand-ink); }
 
 /* Keep illustrated word labels readable as words, even on a 320px screen. */
 #root .task-trace .trace-example .trace-listen { grid-column:1/-1; justify-self:stretch; width:100%; white-space:nowrap; }

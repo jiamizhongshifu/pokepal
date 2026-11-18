@@ -1,4 +1,5 @@
 /* Shared cascade order for the app and browser QA. Route styles remain scoped. */
+@import "./brand-tokens.css";
 @import "./styles.css";
 @import "./child-ui.css";
 @import "./learning-ui.css";
@@ -11,3 +12,4 @@
 @import "./learning-flow.css";
 @import "./overlay-layout.css";
 @import "./small-screen-theme.css";
+@import "./brand-components.css";
