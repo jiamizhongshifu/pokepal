@@ -5,6 +5,9 @@ import {Icon} from '../icons';
 import {DIARY_PROMPTS} from '../data/diaryPrompts';
 import {diaryAnswerText,pendingDiaryAnswers,toDiaryWav,type DiaryAnswer,type DiaryEntry} from '../lib/diary';
 import {say,stopSpeech} from '../lib/speech';
+import {useClipRecorder,type ClipFailure} from '../lib/clipRecorder';
+
+const RECORDING_FAILURES:Partial<Record<ClipFailure,string>>={unsupported:'请大人打开受信任的 HTTPS 并允许麦克风，也可以用下面的文字框记录。',permission:'麦克风还没有打开，请大人在系统设置里允许。也可以先用文字记录。',interrupted:'这次没有录好，原来的回答还在，请再试一次。',empty:'这次没有录好，原来的回答还在，请再试一次。'};
 
 function AnswerAudio({audio}:{audio?:Blob}){
  const [url,setUrl]=useState('');useEffect(()=>{if(!audio){setUrl('');return;}const u=URL.createObjectURL(audio);setUrl(u);return()=>URL.revokeObjectURL(u);},[audio]);
@@ -13,43 +16,34 @@ function AnswerAudio({audio}:{audio?:Blob}){
 export function DiaryRecordings({answers}:{answers:DiaryAnswer[]}){return <div className="diary-recordings">{DIARY_PROMPTS.map(p=>{const a=answers.find(a=>a.question===p.id);return a?.audio&&!a.skipped?<div key={p.id}><p>{p.title}</p><AnswerAudio audio={a.audio}/></div>:null;})}</div>;}
 export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:DiaryEntry;onSave:(entry:DiaryEntry)=>Promise<void>;onLeave:()=>void;onLibrary:()=>void;footer?:ReactNode}){
  const [step,setStep]=useState(Math.min(entry.guidedStep??0,DIARY_PROMPTS.length));
- const [busy,setBusy]=useState(false),[recording,setRecording]=useState(false),[seconds,setSeconds]=useState(0),[error,setError]=useState(''),[status,setStatus]=useState(''),[speaking,setSpeaking]=useState(false);
+ const [saving,setSaving]=useState(false),[error,setError]=useState(''),[status,setStatus]=useState(''),[speaking,setSpeaking]=useState(false);
  const current=useRef(entry);current.current=entry;
- const live=useRef(true),lock=useRef(false),recorder=useRef<MediaRecorder>(),stream=useRef<MediaStream>(),timer=useRef<ReturnType<typeof setInterval>>(),controller=useRef<AbortController>(),voiceToken=useRef(0);
+ const live=useRef(true),lock=useRef(false),controller=useRef<AbortController>(),voiceToken=useRef(0),recordingQuestion=useRef('');
+ const rec=useClipRecorder({maxSeconds:45,
+  onRecorded:async audio=>{await update({question:recordingQuestion.current,audio,audioRevision:crypto.randomUUID()});if(live.current)setStatus('谢谢你愿意分享。声音已经留在这里啦。');},
+  onFailure:(kind,e)=>fail(RECORDING_FAILURES[kind]?new Error(RECORDING_FAILURES[kind]):e)});
+ const {recording,seconds,stop}=rec,busy=saving||rec.busy;
  const prompt=DIARY_PROMPTS[step];const answer=entry.answers?.find(a=>a.question===prompt?.id);
  const silence=()=>{voiceToken.current++;stopSpeech();if(live.current)setSpeaking(false);};
- const stop=()=>{if(recorder.current?.state==='recording'){if(live.current)setBusy(true);recorder.current.stop();}stream.current?.getTracks().forEach(t=>t.stop());clearInterval(timer.current);};
- useEffect(()=>{live.current=true;const hide=()=>{if(document.hidden){silence();stop();}};document.addEventListener('visibilitychange',hide);return()=>{live.current=false;controller.current?.abort();silence();stop();document.removeEventListener('visibilitychange',hide);};},[]);
+ useEffect(()=>{live.current=true;const hide=()=>{if(document.hidden)silence();};document.addEventListener('visibilitychange',hide);return()=>{live.current=false;controller.current?.abort();silence();document.removeEventListener('visibilitychange',hide);};},[]);
  const save=async(next:DiaryEntry)=>{current.current=next;await onSave(next);};
  const update=async(a:DiaryAnswer)=>{const base=current.current;await save({...base,answers:[...(base.answers??[]).filter(x=>x.question!==a.question),a]});};
  const fail=(e:unknown)=>{if(live.current)setError(e instanceof Error?e.message:'没有保存成功，先留在这里再试一次。');};
  const hear=async()=>{silence();document.querySelectorAll('audio').forEach(a=>a.pause());const token=voiceToken.current;setSpeaking(true);const ok=await say(['zh',prompt.voice]);if(live.current&&token===voiceToken.current){setSpeaking(false);if(!ok&&![...document.querySelectorAll('audio')].some(a=>!a.paused))setStatus('这段声音暂时没有准备好，可以请大人读给你听。');}};
- useEffect(()=>{if(!prompt)return;const t=setTimeout(()=>{if(live.current&&!lock.current&&!document.hidden&&recorder.current?.state!=='recording')void hear();},120);return()=>{clearTimeout(t);silence();};},[step]);
+ useEffect(()=>{if(!prompt)return;const t=setTimeout(()=>{if(live.current&&!lock.current&&!document.hidden&&!rec.isCapturing())void hear();},120);return()=>{clearTimeout(t);silence();};},[step]);
  const move=async(next:number,skip=false)=>{
-  if(lock.current||recording)return;lock.current=true;setBusy(true);setError('');silence();
+  if(lock.current||rec.isCapturing())return;lock.current=true;setSaving(true);setError('');silence();
   try{const base=current.current;const answers=skip?[...(base.answers??[]).filter(a=>a.question!==prompt.id),{question:prompt.id,skipped:true}]:base.answers;await save({...base,answers,guidedStep:next});if(live.current){setStep(next);setStatus('');}}
-  catch(e){fail(e);}finally{lock.current=false;if(live.current)setBusy(false);}
+  catch(e){fail(e);}finally{lock.current=false;if(live.current)setSaving(false);}
  };
  const start=async()=>{
-  if(lock.current||recording)return;lock.current=true;setBusy(true);setError('');silence();
-  try{
-   document.querySelectorAll('audio').forEach(a=>a.pause());
-   if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw new Error('请大人打开受信任的 HTTPS 并允许麦克风，也可以用下面的文字框记录。');
-   const media=await navigator.mediaDevices.getUserMedia({audio:true});if(!live.current||document.hidden){media.getTracks().forEach(t=>t.stop());return;}stream.current=media;
-   const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(m=>MediaRecorder.isTypeSupported(m));const r=new MediaRecorder(media,mime?{mimeType:mime}:undefined);recorder.current=r;
-   const chunks:BlobPart[]=[];const question=prompt.id;let broken=false;
-   r.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
-   r.onerror=()=>{broken=true;stop();if(live.current)setError('这次录音被打断了，原来的回答还在。请重新试试。');};
-   r.onstop=()=>{media.getTracks().forEach(t=>t.stop());clearInterval(timer.current);const audio=new Blob(chunks,{type:r.mimeType});void (async()=>{
-    try{if(broken||!audio.size)throw new Error('这次没有录好，原来的回答还在，请再试一次。');await update({question,audio,audioRevision:crypto.randomUUID()});if(live.current)setStatus('谢谢你愿意分享。声音已经留在这里啦。');}
-    catch(e){fail(e);}finally{lock.current=false;if(live.current){setBusy(false);setRecording(false);}}
-   })();};
-   r.start(250);setRecording(true);setBusy(false);setSeconds(0);setStatus('我在听，慢慢说。说完就点一下。');let elapsed=0;timer.current=setInterval(()=>{elapsed++;if(live.current)setSeconds(elapsed);if(elapsed>=45)stop();},1000);
-  }catch(e){stream.current?.getTracks().forEach(t=>t.stop());fail(e instanceof DOMException&&e.name==='NotAllowedError'?new Error('麦克风还没有打开，请大人在系统设置里允许。也可以先用文字记录。'):e);lock.current=false;}
-  finally{if(recorder.current?.state!=='recording'){lock.current=false;if(live.current)setBusy(false);}}
+  if(lock.current||rec.isCapturing())return;setError('');silence();
+  document.querySelectorAll('audio').forEach(a=>a.pause());
+  recordingQuestion.current=prompt.id;
+  if(await rec.start()&&live.current)setStatus('我在听，慢慢说。说完就点一下。');
  };
  const finish=async(transcribe=false)=>{
-  if(lock.current)return;lock.current=true;setBusy(true);setError('');silence();const abort=new AbortController();controller.current=abort;
+  if(lock.current||rec.isCapturing())return;lock.current=true;setSaving(true);setError('');silence();const abort=new AbortController();controller.current=abort;
   try{
    const pending=!transcribe||import.meta.env.VITE_ONLINE ? [] : pendingDiaryAnswers(current.current.answers??[]);
    for(let i=0;i<pending.length;i++){
@@ -61,7 +55,7 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
    }
    const base=current.current;await save({...base,transcript:diaryAnswerText(base.answers??[]),guidedComplete:true});
   }catch(e){if(live.current){setStatus('录音和已转好的文字都还在，可以稍后接着来。');fail(e instanceof TypeError||e instanceof Error&&e.name==='AbortError'?new Error('没有连上转写服务，录音已经保存。请联网后重试。'):e);}}
-  finally{lock.current=false;if(live.current)setBusy(false);}
+  finally{lock.current=false;if(live.current)setSaving(false);}
  };
  const hasAnswers=(entry.answers??[]).some(a=>!a.skipped&&(a.audio||a.text?.trim()));
  return <><TopBar title="我的小日记" onBack={onLeave} focused
