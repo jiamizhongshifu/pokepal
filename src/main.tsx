@@ -13,7 +13,7 @@ import "@fontsource/m-plus-1/latin-800.css";
 import "@fontsource/m-plus-1/latin-900.css";
 import { installViewportSizing } from "./lib/viewport";
 import { useGame } from "./store";
-import { preloadPokemonImages } from "./lib/imageCache";
+import { preloadCreatureImages } from "./lib/imageCache";
 import { setupNative } from "./lib/native";
 
 // Only fixed page names enter analytics; no save fields or lesson IDs leave the app.
@@ -34,7 +34,7 @@ document.addEventListener("dblclick", (e) => e.preventDefault(), { passive: fals
 const disposeViewportSizing = installViewportSizing();
 if (import.meta.hot) import.meta.hot.dispose(disposeViewportSizing);
 
-preloadPokemonImages();
+preloadCreatureImages();
 setupNative();
 
 createRoot(document.getElementById("root")!).render(

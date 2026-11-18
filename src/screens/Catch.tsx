@@ -6,7 +6,7 @@ import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
 import { PokeBall } from "../components/PokeBall";
 import { Confetti } from "../components/Celebration";
-import { CREATURES, RARITY, creatureArt, creatureAvatar } from "../data/creatures";
+import { CREATURES, meetableCreatures, RARITY, creatureArt, creatureAvatar } from "../data/creatures";
 import { pickRandom } from "../data/words";
 import { say, playCry, sfx, wait, stopSpeech } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
@@ -17,7 +17,7 @@ function EncounterGrass() {
   return <span className="encounter-grass" aria-hidden="true"><img src="/art/world/meadow-tuft-v2.png" alt="" draggable={false}/></span>;
 }
 
-import WildMeadow from "../scene/WildMeadow";
+import WildMeadow from "../components/WildMeadow";
 
 type Phase = "field" | "aim" | "throwing" | "absorbing" | "landing" | "shaking" | "caught";
 
@@ -45,10 +45,10 @@ export function Catch() {
 
   const ready = save.balls.poke > 0;
 
-  // Every unowned partner is available, including evolved and legendary Pokémon.
+  // Unmet babies first; grown-up stages open once every species is a friend.
   const encounters = useMemo(() => {
     if (wish) return [wish];
-    const allowed = CREATURES.filter(p => !caughtIds.has(p.id));
+    const allowed = meetableCreatures(caughtIds);
     if (exploration.round > 0) {
       const fresh = pickRandom(allowed.filter(p => !exploration.previousIds.includes(p.id)), 3);
       return [...fresh, ...pickRandom(allowed.filter(p => !fresh.includes(p)), 3 - fresh.length)];
@@ -68,7 +68,7 @@ export function Catch() {
   }, [phase, wish?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const exploreAgain = () => {
-    const available = CREATURES.filter(p => !caughtIds.has(p.id));
+    const available = meetableCreatures(caughtIds);
     const previousIds = encounters.map(p => p.id);
     const freshCount = available.filter(p => !previousIds.includes(p.id)).length;
     if (wish) setCatchWish(null);

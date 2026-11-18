@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { migratePersonalities,preference,rememberTogether,setFurniture,furnitureAffinity,storyTrail,validLiving } from '../../src/lib/islandLiving';
 import type { SaveData } from '../../src/types';
 import { togetherSession } from '../../src/scene/together';
-import { IdleDirector,IDLE_DELAY,OBSERVE_SHOT } from '../../src/scene/idleDirector';
 const make=()=>({captures:[{id:25,caughtAt:1234000,ball:'poke',friendship:20},{id:7,caughtAt:1234001,ball:'poke',friendship:20}]} as SaveData);
 test('old captures get stable individual preferences, retained through evolution',()=>{
  const s=make();const before=s.captures.map(preference);migratePersonalities(s);assert.deepEqual(s.captures.map(preference),before);
@@ -30,21 +29,6 @@ test('life story distinguishes doing, reading and a changed context',()=>{
  rememberTogether(s,{id:'three',kind:'rest',partners:[25],context:'coast',at:102});s.storyProgress={'little-storm:edition-2':9};
  assert.deepEqual(storyTrail(s,'rest'),{played:true,read:true,revisited:true});
 });
-test('two residents have separate endpoints, including mixed water-land and large partners',()=>{
- for(const ids of [[25,7],[95,143],[129,25],[129,118]])for(const kind of ['ball','rest','bubbles','jump'] as const){
-  const s=togetherSession(kind,ids);const [a,b]=s.visits.map(v=>v.station.target);
-  assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>2.5,`${ids} ${kind}: overlapping spots`);
-  assert.notEqual(s.visits[0].key,s.visits[1].key);
-  for(const {station} of s.visits)assert.ok(Math.hypot(station.x-station.target.x,station.z-station.target.z)<.01,"arrival uses the actual temporary play spot, not the old facility center");
-  if(ids[0]===129)assert.equal(s.visits[0].station.water,true);
- }
-});
-test('recent events get one priority shot, then ordinary partners remain visible; input still owns timing',()=>{
- const d=new IdleDirector(0),c=[{id:1,activity:'explore',moving:true},{id:25,activity:'play',moving:false,eventAt:5},{id:7,activity:'play',moving:false,eventAt:5}];
- assert.equal(d.tick(IDLE_DELAY,true,c),7);assert.equal(d.tick(IDLE_DELAY+OBSERVE_SHOT,true,c),25);assert.equal(d.tick(IDLE_DELAY+OBSERVE_SHOT*2,true,c),1);
- d.interrupt(100000);assert.equal(d.tick(100001,true,c),null);
-});
-
 test('new play memories survive serialization and cannot claim unrelated story completion',()=>{
  const s=make();
  for(const kind of ['bubbles','jump'] as const){

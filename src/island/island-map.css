@@ -1,0 +1,75 @@
+.island-map {
+  position: relative;
+  width: min(100%, calc((100dvh - 24px) * 1.5));
+  aspect-ratio: 3 / 2;
+  margin: 0 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #22d3e6;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.island-map-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: auto; }
+
+/* Time of day and weather tint the whole picture; they never cover interactive layers. */
+.island-map::after { content: ""; position: absolute; inset: 0; pointer-events: none; transition: background-color 1.2s ease, opacity 1.2s ease; z-index: 3; }
+.island-map.sky-morning::after { background: rgba(255, 214, 160, .14); }
+.island-map.sky-evening::after { background: rgba(255, 140, 90, .22); mix-blend-mode: multiply; }
+.island-map.sky-night::after { background: rgba(28, 40, 110, .42); mix-blend-mode: multiply; }
+.island-map.is-cloudy::after { background-color: rgba(120, 140, 160, .16); }
+
+.island-station {
+  position: absolute; z-index: 1; width: 9%; aspect-ratio: 1; transform: translate(-50%, -70%);
+  border: 0; border-radius: 50%; background: transparent; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.island-station:focus-visible { outline: 4px solid #fff; outline-offset: -4px; box-shadow: 0 0 0 7px rgba(25, 179, 166, .7); }
+
+.island-plot {
+  position: absolute; z-index: 2; width: 5.6%; aspect-ratio: 1.15; transform: translate(-50%, -50%);
+  display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; cursor: pointer;
+}
+.island-plot.is-thirsty, .island-plot.is-ripe { animation: plot-call 1.6s ease-in-out infinite; }
+.island-plot img { filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .18)); }
+.island-plot[aria-busy="true"] { box-shadow: 0 0 0 4px rgba(59, 169, 245, .8); }
+
+.island-resident {
+  position: absolute; z-index: 4; width: var(--size, 8%); aspect-ratio: 1; padding: 0;
+  transform: translate(-50%, -92%);
+  border: 0; background: transparent; cursor: pointer;
+  transition: left var(--walk, 2.2s) ease-in-out, top var(--walk, 2.2s) ease-in-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.island-resident img { width: 100%; height: 100%; object-fit: contain; animation: resident-idle 2.6s ease-in-out infinite; transform-origin: 50% 100%; pointer-events: none; }
+.island-resident::before {
+  content: ""; position: absolute; left: 18%; right: 18%; bottom: 2%; height: 9%;
+  border-radius: 50%; background: rgba(0, 0, 0, .16); z-index: -1;
+}
+.island-resident[data-selected] img { filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 6px #fff) drop-shadow(0 0 10px rgba(255, 197, 49, .9)); }
+.island-resident:focus-visible { outline: 4px solid #fff; outline-offset: 2px; border-radius: 16px; }
+
+.island-bubble, .island-effect {
+  position: absolute; left: 50%; top: -14%; transform: translateX(-50%);
+  display: grid; place-items: center; width: 52%; aspect-ratio: 1; border-radius: 50%;
+  background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .12); pointer-events: none;
+}
+.island-bubble { animation: bubble-bob 1.4s ease-in-out infinite; }
+.island-effect { background: transparent; box-shadow: none; animation: effect-pop 1.2s ease-out forwards; }
+
+.island-rain {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: .55;
+  background-image: repeating-linear-gradient(105deg, transparent 0 14px, rgba(255, 255, 255, .55) 14px 16px, transparent 16px 34px);
+  background-size: 120px 120px; animation: rain-fall .6s linear infinite;
+}
+
+@keyframes resident-idle { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.03, .97); } }
+@keyframes bubble-bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -8%); } }
+@keyframes effect-pop { 0% { opacity: 0; transform: translate(-50%, 20%) scale(.6); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.1); } }
+@keyframes plot-call { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -58%) scale(1.06); } }
+@keyframes rain-fall { from { background-position: 0 0; } to { background-position: -30px 120px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .island-resident { transition-duration: .05s; }
+  .island-resident img, .island-bubble, .island-plot, .island-rain { animation: none; }
+}

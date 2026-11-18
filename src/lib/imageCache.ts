@@ -1,4 +1,4 @@
-import { CREATURES, creatureArt, creatureAvatar } from "../data/creatures";
+import { BABY_CREATURES, creatureArt, creatureAvatar } from "../data/creatures";
 
 /**
  * 只预热首页伙伴图片。完整图鉴由 Service Worker 缓存，显示时按需解码。
@@ -19,8 +19,8 @@ function hold(url: string, attempt = 0) {
   held.set(url, img);
 }
 
-export function preloadPokemonImages() {
-  for (const p of CREATURES.filter(p => [1,4,7,25,133].includes(p.id))) {
+export function preloadCreatureImages() {
+  for (const p of BABY_CREATURES.slice(0, 5)) {
     for (const url of (import.meta.env.VITE_ONLINE ? [creatureAvatar(p.id)] : [creatureAvatar(p.id), creatureArt(p.id)])) if (!held.has(url)) hold(url);
   }
 }

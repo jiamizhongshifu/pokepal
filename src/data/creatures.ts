@@ -41,6 +41,11 @@ export const getCreature = (id: number): Creature => (CREATURE_BY_ID.get(id) ?? 
 export const speciesOf = (c: Creature) => SPECIES.find(s => s.id === c.species)!;
 /** Creatures that can be met as babies; later stages only come from growing up. */
 export const BABY_CREATURES = CREATURES.filter(c => c.stage === 1);
+/** Who can still be met in the meadow: unmet babies first; once every species is a friend, the other stages open up. */
+export function meetableCreatures(owned: ReadonlySet<number>): Creature[] {
+ const babies = BABY_CREATURES.filter(c => !owned.has(c.id));
+ return babies.length ? babies : CREATURES.filter(c => !owned.has(c.id));
+}
 
 const sprite = (c: Creature) => `/sprites/${c.species}`;
 export const creatureArt = (id: number) => `${sprite(getCreature(id))}/stage-${getCreature(id).stage}.webp`;

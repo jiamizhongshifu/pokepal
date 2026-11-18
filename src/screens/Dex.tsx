@@ -2,19 +2,16 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useLayoutEffect, useRef, useState } from "react";
 import { dexOwned, useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
-import { CREATURES, creatureAvatar } from "../data/creatures";
+import { CREATURES, creatureAvatar, CREATURE_TYPES, type CreatureType } from "../data/creatures";
 import { say } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
 import { PokeImg } from "../components/PokeImg";
 import { Icon } from "../icons";
 
 const PAGE_SIZE = 8;
-const REGIONS = [
-  { name: '所有地区', min: 1, max: Infinity },
-  { name: '关都', min: 1, max: 151 },
-  { name: '城都', min: 152, max: 251 },
-  { name: '丰缘', min: 252, max: 386 },
-  { name: '帕底亚', min: 906, max: 1025 },
+const REGIONS: { name: string; type?: CreatureType }[] = [
+  { name: '全部属性' },
+  ...(Object.entries(CREATURE_TYPES) as [CreatureType, { zh: string }][]).map(([type, t]) => ({ name: t.zh, type })),
 ];
 
 export function Dex({ picking = false, browse }: { picking?: boolean; browse?:DexBrowseState }) {
@@ -40,7 +37,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
     previousFilters.current=filtersKey;
   }, [filtersKey]);
   const region = REGIONS[generation];
-  const list = CREATURES.filter((p) => (!onlyOwned || caught.has(p.id)) && p.id >= region.min && p.id <= region.max && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const list = CREATURES.filter((p) => (!onlyOwned || caught.has(p.id)) && (!region.type || p.types.includes(region.type)) && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
   const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
   const currentPage = Math.min(page, pages - 1);
   useIntro(() => picking ? say(["zh", "挑一只你喜欢的宝可梦吧！"], ["en", "Pick a Pokémon you love!", {en:"Pick a Pokémon you love!",zh:"挑一只你喜欢的宝可梦吧！"}]) : say(["zh", `训练师图鉴。你已经有${caught.size}只宝可梦啦！`], ["en", `You have ${caught.size} Pokémon!`]));
@@ -57,7 +54,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
       <div className="dex-discovery-tools">
         {!picking && <button className="wish-button" onClick={() => go({name:"dex", picking:true})}><Icon name="grass" size={32}/><span>找新伙伴</span><span aria-hidden="true">›</span></button>}
         <details className="dex-filters" open={browse?.filtersOpen||undefined}>
-          <summary>按名字或地区找 <span>{[generation ? region.name : "", query].filter(Boolean).join(" · ")}</span></summary>
+          <summary>按名字或属性找 <span>{[generation ? region.name : "", query].filter(Boolean).join(" · ")}</span></summary>
           <label className="wish-search">找找它<input type="search" value={query} onChange={(e)=>{setQuery(e.target.value);setPage(0);}} placeholder="名字 / English / 编号" aria-label="搜索宝可梦" /></label>
           <div className="collection-tabs dex-generations" aria-label="宝可梦地区">
             {REGIONS.map(({name},i)=><button key={name} aria-pressed={generation===i} onClick={()=>{setGeneration(i);setPage(0);}}>{name}</button>)}

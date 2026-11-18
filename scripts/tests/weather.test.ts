@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {weatherAt,soundscape,WEATHER_PERIOD,WEATHER_TRANSITION,validWeatherMode} from '../../src/lib/weather';
 import {waterCropsWithRain,newFarm,harvestCrop,GROW_MS,validFarm} from '../../src/lib/farm';
 import {weatherReaction,weatherVisit} from '../../src/scene/weatherReactions';
-import type {SaveData,Creature} from '../../src/types';
+import type {SaveData} from '../../src/types';
+import {CREATURES} from '../../src/data/creatures';
 import type {Habit} from '../../src/data/behaviors';
 const habit:Habit={from:0,to:24,activity:'explore',zone:'meadow'};
-const pokemon=(id:number,types:string[])=>({id,types,heightCm:60} as Creature);
 test('offline weather survives reload, transitions continuously, and bounds consecutive rain',()=>{
  let run=0;const kinds=new Set();
  for(let slot=1000000;slot<1001000;slot++){
@@ -32,33 +32,17 @@ test('rain waters once after a short wait; never duplicates harvests or changes 
  assert.deepEqual(s.farm!.basket,{oran:0,pecha:0,cheri:0});assert.ok(validFarm(s.farm));
  assert.equal(harvestCrop(s,0,13000+GROW_MS-1),false);assert.equal(harvestCrop(s,0,13000+GROW_MS),true);assert.equal(harvestCrop(s,0,13000+GROW_MS),false);assert.equal(s.farm!.basket.oran,2);
 });
-test('weather reactions distinguish water, grass, fire, flight and sleeping routines',()=>{
- assert.equal(weatherReaction(pokemon(7,['water']),habit,'rain'),'splash');assert.equal(weatherReaction(pokemon(1,['grass']),habit,'rain'),'leaves');
- assert.equal(weatherReaction(pokemon(4,['fire']),habit,'rain'),'shelter');assert.equal(weatherReaction(pokemon(16,['flying']),habit,'breezy'),'perch');
- assert.equal(weatherVisit(pokemon(4,['fire']),{...habit,activity:'sleep'},'rain')!.station.activity,'nap');
- assert.equal(weatherReaction(pokemon(4,['fire']),habit,'sunny'),null);
- assert.equal(weatherReaction(pokemon(7,['water']),{...habit,activity:'sleep'},'rain'),null);
- assert.equal(weatherVisit(pokemon(129,['water']),habit,'rain')!.station.water,true);
- assert.equal(weatherVisit(pokemon(1,['grass']),habit,'rain')!.station.activity,'guard');
- assert.notDeepEqual(weatherVisit(pokemon(4,['fire']),habit,'rain',0)!.station.target,weatherVisit(pokemon(4,['fire']),habit,'rain',1)!.station.target);
- assert.deepEqual(weatherVisit(pokemon(4,['fire']),habit,'rain'),weatherVisit(pokemon(4,['fire']),habit,'rain'));
-});
-
-test('rain shelters are distinct clear positions under real tree canopies with reachable approaches',async()=>{
- const {RAIN_CANOPIES}=await import('../../src/scene/rainShelter');
- const {clearSpot}=await import('../../src/scene/navigation');
- const {planStationWalk}=await import('../../src/scene/islandLife');
- const {getCreature}=await import('../../src/data/creatures');
- const {sceneHeight}=await import('../../src/scene/zones');
- const occupied:{x:number;z:number}[]=[];
- for(const [i,id] of [25,4,6,133,59].entries()){
-  const p=getCreature(id),h=sceneHeight(p),v=weatherVisit(p,habit,'rain',i,occupied);
-  assert.ok(v,`missing shelter for ${id}`);const target=v.station.target,r=Math.max(.82,h*.5);
-  assert.equal(v.station.name,'在树下躲雨');assert.ok(clearSpot(target,r,h));
-  assert.ok(RAIN_CANOPIES.some(t=>Math.hypot(target.x-t.x,target.z-t.z)<=t.radius&&h+.15<=t.bottom));
-  assert.ok(occupied.every(o=>Math.hypot(target.x-o.x,target.z-o.z)>r*2+.3));
-  const path=planStationWalk({x:0,z:4},v.station,r,[],h);
-  assert.ok(path.length);const end=path.at(-1)!;assert.ok(Math.hypot(end.x-target.x,end.z-target.z)<.4,`unreachable tree for ${id}`);
-  occupied.push(target);
- }
+test('weather reactions distinguish water, plant, sunshine, flight and sleeping routines',()=>{
+ const of=(species:string)=>CREATURES.find(c=>c.species===species&&c.stage===1)!;
+ const otter=of('bubbo'),panda=of('berry'),lion=of('sunny'),bird=of('petal');
+ assert.equal(weatherReaction(otter,habit,'rain'),'splash');assert.equal(weatherReaction(panda,habit,'rain'),'leaves');
+ assert.equal(weatherReaction(lion,habit,'rain'),'shelter');assert.equal(weatherReaction(bird,habit,'breezy'),'perch');
+ assert.equal(weatherVisit(lion,{...habit,activity:'sleep'},'rain')!.station.activity,'nap');
+ assert.equal(weatherReaction(lion,habit,'sunny'),null);
+ assert.equal(weatherReaction(otter,{...habit,activity:'sleep'},'rain'),null);
+ assert.equal(weatherVisit(otter,habit,'rain')!.station.id,'shells');
+ assert.equal(weatherVisit(panda,habit,'rain')!.station.activity,'guard');
+ assert.ok(['tree','tent'].includes(weatherVisit(lion,habit,'rain')!.station.id),'shelter goes to a real island station');
+ assert.notDeepEqual(weatherVisit(lion,habit,'rain',0)!.station.target,weatherVisit(lion,habit,'rain',1)!.station.target);
+ assert.deepEqual(weatherVisit(lion,habit,'rain'),weatherVisit(lion,habit,'rain'));
 });
