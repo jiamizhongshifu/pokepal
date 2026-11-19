@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
-import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,type RoundTrace} from '../../src/lib/learningProgress';
+import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,summarizeOpportunities,EVIDENCE_MIN_SAMPLE,type RoundTrace,type Opportunity} from '../../src/lib/learningProgress';
 import {validateSave} from '../../src/lib/saveValidation';
 
 const base:RoundTrace={firstAnswer:'correct',replays:0,modelShown:false,heardBeforeAnswer:true,outcome:'solved'};
@@ -40,4 +40,15 @@ test('opportunities are bounded, survive a reload and corrupt entries are reject
  const bad=JSON.parse(JSON.stringify(s));bad.learning.opportunities[0].kind='mastered';
  assert.throws(()=>validateSave(bad));
  const old=fixture();delete old.learning!.opportunities;assert.doesNotThrow(()=>validateSave(old),'older saves without records still load');
+});
+
+// T09: the parent summary never counts helped answers as independent and says when there is too little to tell.
+test('the parent summary keeps every kind apart and only offers a share with enough decidable answers',()=>{
+ const o=(kind:Opportunity['kind'],at=10):Opportunity=>({v:1,at,source:'unit:x',key:'ball',kind,tries:1,replays:0});
+ const few=summarizeOpportunities([o('independent'),o('after-hint'),o('unknown'),o('left')],0);
+ assert.equal(few.decidable,2);assert.equal(few.enough,false);assert.equal(few.count.unknown,1);
+ const list=[o('independent'),o('independent'),o('after-replay'),o('after-hint'),o('after-model'),o('skipped'),o('unknown'),o('independent',1)];
+ const week=summarizeOpportunities(list,5);
+ assert.equal(week.total,7,'older than the window is left out');
+ assert.equal(week.independent,2);assert.equal(week.decidable,6);assert.equal(week.enough,week.decidable>=EVIDENCE_MIN_SAMPLE);
 });

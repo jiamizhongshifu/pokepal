@@ -12,7 +12,7 @@ import { LearningStageSettings } from '../components/LearningStageSettings';
 import { learningStageTitle } from '../lib/learningStage';
 import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
-import { DAILY_ENERGY_CAP, playLimitSeconds, useGame } from "../store";
+import { playLimitSeconds, useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
 import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
@@ -25,6 +25,7 @@ import { DeviceSetup } from "../components/DeviceSetup";
 import { LEARNING_UNITS,learningEntry,selectedUnit } from '../data/curriculum';
 import { reviewKeys } from '../lib/learningProgress';
 import {familyLearning} from '../lib/familyLearning';
+import {ParentEvidence} from '../components/ParentEvidence';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -109,19 +110,20 @@ export function Parent() {
  <button className="btn-small" onClick={()=>go({name:'notebook',mode:retry?'retry':'all',returnTo:'parent'})}><Icon name="book" size={24}/>查看词汇与复习</button>
 </section>
 <section className="parent-today"><h3>今天的小足迹</h3><dl><div><dt>接触的词</dt><dd>{todayWords.length}<small> 个</small></dd></div><div><dt>开口尝试</dt><dd>{d.spoken}<small> 次</small></dd></div><div><dt>游玩时间</dt><dd>{Math.round(d.playSeconds/60)}<small> / {Math.round(playLimitSeconds(save)/60)} 分钟</small></dd></div></dl><p>开口包含手动确认，不作为发音评分。轻松参与比完成数量更重要。</p></section>
+<ParentEvidence/>
 <h3 className="parent-detail-heading">需要时，再看看</h3>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与书写记录<small>今天接触 {todayWords.length} 个词 · 熟悉 {learned.length} 个词</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{d.words.filter((w) => !w.startsWith("letter:")).length}）</h3>
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与书写记录<small>今天接触 {todayWords.length} 个词 · 不同日期都选对 {learned.length} 个词</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{d.words.filter((w) => !w.startsWith("letter:")).length}）</h3>
               <div className="chips">{d.words.filter((w) => !w.startsWith("letter:")).map((w) => <button key={w} className="chip" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
-              <h3>渐渐熟悉的词（不同日期未用应用提示选对，共 {learned.length}）</h3>
+              <h3>在两个不同日期都没用提示选对的词（{learned.length}，不代表已经掌握）</h3>
               <div className="chips">{learned.map((w) => <button key={w} className="chip ok" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
               <h3>写过的字母（{letters.length} / 26）</h3>
               <div className="chips">{letters.map((l) => <span key={l} className="chip letter">{l}</span>)}</div>
             {todayWords.length===0&&learned.length===0&&letters.length===0&&<p className="muted">还没有记录。听故事、玩课程或写字后，会慢慢积累在这里。</p>}</div></details>
 <details className="parent-fold"><summary><Icon name="tasks" size={28}/><span>最近 7 天<small>查看参与与游玩记录</small></span></summary><div className="parent-fold-content"><p className="parent-table-hint">表格可左右滑动，查看完整记录。</p><div className="parent-table-scroll" role="region" aria-label="最近七天学习记录，可左右滚动" tabIndex={0}><table className="hist">
-                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>参与</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
+                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
                 <tbody>
                   {history.map((h) => (
-                    <tr key={h.date}><td>{h.date.slice(5)}</td><td>{h.heard}</td><td>{h.spoken}</td><td>{h.tasksCompleted}</td><td>{h.energyEarned}/{DAILY_ENERGY_CAP}</td><td>{h.words}</td><td>{h.caught}</td><td>{h.playMinutes}</td></tr>
+                    <tr key={h.date}><td>{h.date.slice(5)}</td><td>{h.heard}</td><td>{h.spoken}</td><td>{h.tasksCompleted}</td><td>{h.words}</td><td>{h.caught}</td><td>{h.playMinutes}</td></tr>
                   ))}
                 </tbody>
               </table></div></div></details>
@@ -135,7 +137,7 @@ export function Parent() {
                 ))}
               </div>
             </div></details>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、熟悉与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“熟悉”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，这些记录不代表孩子独立完成。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details></>}
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，这些记录不代表孩子独立完成。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details></>}
    {tab==='settings'&&<><details className="parent-fold parent-stage-fold" open={stageOpen} onToggle={e=>setStageOpen(e.currentTarget.open)}><summary><Icon name="sign" size={28}/><span>英语学习阶段<small>当前：{learningStageTitle(s)}</small></span></summary><div className="parent-fold-content"><LearningStageSettings/></div></details>
 <section className="form parent-routine"><h3>游玩与休息</h3><label><span>每日游玩时长：<b>{s.dailyMinutes} 分钟</b></span>
                 <input type="range" min={5} max={60} step={5} value={s.dailyMinutes} onChange={(e) => updateSettings({ dailyMinutes: Number(e.target.value) })} />

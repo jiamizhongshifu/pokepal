@@ -34,6 +34,18 @@ export function recordOpportunity(s:SaveData,o:Omit<Opportunity,'v'>){
  const data=ensureLearning(s);
  data.opportunities=[...(data.opportunities??[]),{v:1 as const,...o}].slice(-OPPORTUNITY_LIMIT);
 }
+/**
+ * A parent's view of recent answers. "Decidable" first answers exclude unconfirmed audio and leaving; the independent
+ * share is offered only with enough opportunities, and never as mastery.
+ */
+export const EVIDENCE_MIN_SAMPLE=5;
+export function summarizeOpportunities(list:Opportunity[]|undefined,since:number){
+ const recent=(list??[]).filter(o=>o.at>=since);
+ const count=Object.fromEntries(RESPONSE_KINDS.map(k=>[k,0])) as Record<ResponseKind,number>;
+ for(const o of recent)count[o.kind]++;
+ const decidable=recent.length-count.unknown-count.left;
+ return {total:recent.length,count,decidable,independent:count.independent,enough:decidable>=EVIDENCE_MIN_SAMPLE};
+}
 export function validOpportunity(o:unknown):boolean{
  const r=o as Record<string,unknown>;
  return !!r&&typeof r==='object'&&r.v===1&&Number.isFinite(r.at)&&typeof r.source==='string'&&(r.source as string).length<=40&&typeof r.key==='string'&&(r.key as string).length<=80

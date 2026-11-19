@@ -110,3 +110,10 @@
 #root .parent-path-friends { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 #root .parent-path-friends span { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 2px; border-radius: var(--radius-pill); background: var(--brand-paper); font-size: var(--text-sm); }
 #root .parent-path-friends img { width: 32px; height: 32px; object-fit: contain; }
+#root .parent-evidence{background:var(--surface);border:2px solid var(--brand-line);border-radius:var(--brand-radius-lg,20px);padding:20px;margin:0 0 20px}
+#root .parent-evidence h3{margin:0 0 10px}
+#root .parent-evidence-lead{font-size:var(--text-lg);margin:0 0 12px}
+#root .parent-evidence>small,#root .parent-evidence-tip{display:block;font-size:var(--text-sm);color:var(--brand-ink-muted);margin:12px 0 0}
+#root .parent-evidence-lessons{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+#root .parent-evidence-lessons li{display:grid;gap:2px}
+#root .parent-evidence-lessons span{font-size:var(--text-sm);color:var(--brand-ink-muted)}
