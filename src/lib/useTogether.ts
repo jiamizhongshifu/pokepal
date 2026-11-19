@@ -13,7 +13,8 @@ import {bi} from './bi';
 import {togetherVoice,togetherFinishedVoice,togetherEvidence,togetherRounds,togetherDuration,togetherLearningStation} from './togetherTurn';
 import type {TogetherKind} from './islandLiving';
 /** Foreground-only play. Requests are heard BEFORE movement; child turns never time out. */
-export function useTogether(active:boolean,captures:Capture[]){
+/** `asked`: turns the child answers by choosing who plays next; such turns wait for that choice instead of speaking and playing by themselves. */
+export function useTogether(active:boolean,captures:Capture[],asked:(session:TogetherSession,turn:number)=>boolean=()=>false){
  const blocked=useModalBlocked();
  const [session,setSession]=useState<TogetherSession|null>(null);
  const [phase,setPhaseState]=useState<'arriving'|'ready'|'acting'|'done'|'timeout'>('arriving');
@@ -65,7 +66,7 @@ export function useTogether(active:boolean,captures:Capture[]){
  useEffect(()=>{const hide=()=>{if(document.hidden)cancel();};document.addEventListener('visibilitychange',hide);return()=>document.removeEventListener('visibilitychange',hide);},[]);
  useEffect(()=>{if(!active||session?.partners.some(id=>!captures.some(c=>c.id===id)))cancel();},[active,captures.map(c=>c.id).join(',')]);
  useEffect(()=>{
-  if(!session||phase!=='ready'||!active||blocked||!arrived)return;
+  if(!session||phase!=='ready'||!active||blocked||!arrived||asked(session,turn))return;
   let valid=true;const ticket=run.current;
   void hear().then(()=>{if(valid&&ticket===run.current&&!session.help&&automaticTogetherTurn(session.kind,session.partners.length,turn))act();});
   return()=>{valid=false;stopVoice();};
@@ -98,5 +99,5 @@ export function useTogether(active:boolean,captures:Capture[]){
  const canHelp=useMemo(()=>!!session&&!session.help&&session.kind==='ball'&&!!togetherHelpTarget(session),[session]);
  const askHelp=()=>{const s=current.current;if(s.session?.kind==='ball'&&s.phase==='done'&&!s.session.help&&togetherHelpTarget(s.session))begin('ball',s.session.partners,s.session.context==='coast',true);};
  const retry=()=>{const s=current.current;if(s.session&&s.phase==='timeout')begin(s.session.kind,s.session.partners,s.session.context==='coast',!!s.session.help);};
- return {session,phase,turn,progress,arrived,speaking,canHelp,begin,cancel,act,hear,askHelp,retry,syncArrivals,visits:session&&phase!=='timeout'?session.visits:[]};
+ return {session,phase,turn,progress,arrived,speaking,canHelp,begin,cancel,act,hear,askHelp,retry,syncArrivals,asked:!!session&&phase==='ready'&&arrived&&asked(session,turn),visits:session&&phase!=='timeout'?session.visits:[]};
 }

@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
-import { plantCrop,waterCrop,harvestCrop,feedBerry,newFarm,validFarm,cropStage,GROW_MS,BASKET_CAP } from '../src/lib/farm';
+import { plantCrop,waterCrop,harvestCrop,feedCrop,newFarm,validFarm,cropStage,GROW_MS,BASKET_CAP } from '../src/lib/farm';
 import { validateSave } from '../src/lib/saveValidation';
 import { stationById } from '../src/scene/islandLife';
 import { FARM_ENTRY, FARM_PLOTS } from '../src/scene/layout';
 import type { SaveData } from '../src/types';
 const s:SaveData={version:1,trainer:null,energy:5,balls:{poke:1,great:0,ultra:0,master:0},captures:[{id:1001,caughtAt:1,ball:'poke',friendship:95}],daily:{date:'2026-10-16',energyEarned:0,board:['listen','repeat','wordpic','trace'],boardDone:[false,false,false,false],bonusGiven:false,tasksCompleted:0,heard:0,spoken:0,words:[],caught:[],playSeconds:0,extraSeconds:0},streak:{lastDate:'',count:0},wordStats:{},settings:{dailyMinutes:15,tasksPerDay:4,level:1,favorites:[],speechRate:1},history:[]};
 assert.deepEqual(validateSave(s),s,'old saves need no destructive migration');
-assert.equal(plantCrop(s,9,'oran',1000),false);assert.equal(s.farm,undefined);
-assert.equal(plantCrop(s,0,'oran',1000),true);assert.equal(plantCrop(s,0,'pecha',1001),false);
+assert.equal(plantCrop(s,9,'grapes',1000),false);assert.equal(s.farm,undefined);
+assert.equal(plantCrop(s,0,'grapes',1000),true);assert.equal(plantCrop(s,0,'apple',1001),false);
 assert.equal(harvestCrop(s,0,1000000),false,'dry crops never auto-reward');
 assert.equal(waterCrop(s,0,1000,1,2000),false,'unowned helper rejected');
 assert.equal(waterCrop(s,0,999,1001,2000),false,'stale crop identity rejected');
@@ -17,16 +17,16 @@ assert.equal(harvestCrop(s,0,2000+GROW_MS-1),false);
 const restored=validateSave(JSON.parse(JSON.stringify(s)));
 assert.equal(harvestCrop(restored,0,2000+GROW_MS),true,'growth survives a restart');
 assert.equal(harvestCrop(restored,0,2000+GROW_MS),false,'double harvest rejected');
-assert.equal(restored.farm!.basket.oran,2);
-assert.equal(feedBerry(restored,1,'oran'),false,'unowned feeding never consumes inventory');
-assert.equal(feedBerry(restored,1001,'pecha'),false);
-assert.equal(feedBerry(restored,1001,'oran'),true);assert.equal(restored.captures[0].friendship,100);
-assert.equal(feedBerry(restored,1001,'oran'),true);assert.equal(feedBerry(restored,1001,'oran'),false);assert.equal(restored.farm!.basket.oran,0);
+assert.equal(restored.farm!.basket.grapes,2);
+assert.equal(feedCrop(restored,1,'grapes'),false,'unowned feeding never consumes inventory');
+assert.equal(feedCrop(restored,1001,'apple'),false);
+assert.equal(feedCrop(restored,1001,'grapes'),true);assert.equal(restored.captures[0].friendship,100);
+assert.equal(feedCrop(restored,1001,'grapes'),true);assert.equal(feedCrop(restored,1001,'grapes'),false);assert.equal(restored.farm!.basket.grapes,0);
 assert.equal(restored.energy,5);assert.equal(restored.balls.poke,1);
-assert.equal(plantCrop(restored,0,'pecha',100000),true);assert.equal(waterCrop(restored,0,1000,1001,100001),false,'late arrival cannot water new cycle');
-restored.farm!.plots[0]={berry:'pecha',plantedAt:1,wateredAt:2};restored.farm!.basket.pecha=BASKET_CAP;
+assert.equal(plantCrop(restored,0,'apple',100000),true);assert.equal(waterCrop(restored,0,1000,1001,100001),false,'late arrival cannot water new cycle');
+restored.farm!.plots[0]={berry:'apple',plantedAt:1,wateredAt:2};restored.farm!.basket.apple=BASKET_CAP;
 assert.equal(harvestCrop(restored,0,100000),false,'full basket keeps crop intact');assert.ok(restored.farm!.plots[0]);
-for(const bad of [{...newFarm(),plots:[]},{...newFarm(),basket:{oran:-1,pecha:0,cheri:0}},{...newFarm(),plots:[{berry:'__proto__',plantedAt:1},null,null]},{...newFarm(),plots:[{berry:'oran',plantedAt:NaN},null,null]}]){assert.equal(validFarm(bad),false);assert.throws(()=>validateSave({...s,farm:bad}));}
+for(const bad of [{...newFarm(),plots:[]},{...newFarm(),basket:{grapes:-1,apple:0,strawberry:0}},{...newFarm(),plots:[{berry:'__proto__',plantedAt:1},null,null]},{...newFarm(),plots:[{berry:'grapes',plantedAt:NaN},null,null]}]){assert.equal(validFarm(bad),false);assert.throws(()=>validateSave({...s,farm:bad}));}
 for(let i=0;i<3;i++){const p=FARM_PLOTS[i],t=stationById(`farm-${i}`).target;assert.ok(Math.hypot(t.x-p.x,t.z-(p.z+1.9))<.8,`plot ${i} approach reachable`);}
 const target=stationById('farm').target;
 assert.ok(Math.hypot(target.x-FARM_ENTRY.x,target.z-FARM_ENTRY.z)<1,'helper reaches the front lane');

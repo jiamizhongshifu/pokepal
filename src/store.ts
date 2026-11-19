@@ -14,7 +14,7 @@ import { ensureIslandProgress,claimIslandGift,grantNextIslandUpgrade,placeIsland
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
-import { plantCrop, waterCrop, harvestCrop, feedBerry, type BerryKind } from './lib/farm';
+import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './lib/farm';
 import { beginPicnic, servePicnic, endPicnic } from './lib/picnic';
 import { advanceCare, comfortCompanion, deferCare } from "./lib/companionCare";
 import { create } from "zustand";
@@ -164,14 +164,14 @@ interface State {
   stayAsIs: (id: number) => void;
   interact: (id: number, kind: InteractKind) => boolean;
   noteHeard: (count?: number) => void;
-  plantCrop: (index:number,berry:BerryKind)=>boolean;
+  plantCrop: (index:number,berry:CropKind)=>boolean;
   waterCrop: (index:number,plantedAt:number,pokemonId:number)=>boolean;
   rainWaterCrops: ()=>number;
   harvestCrop: (index:number)=>Promise<boolean>;
-  feedBerry: (id:number,berry:BerryKind)=>boolean;
+  feedCrop: (id:number,berry:CropKind)=>boolean;
   setFurniture:(id:FurnitureId,enabled:boolean)=>boolean;
   rememberTogether:(memory:LivingMemory)=>boolean;
-  beginPicnic:(id:number,berry:BerryKind)=>boolean;
+  beginPicnic:(id:number,berry:CropKind)=>boolean;
   servePicnic:(id:string)=>boolean;
   endPicnic:(id:string)=>void;
   noteWord: (word: string, kind: "heard" | "spoken" | "correct") => void;
@@ -341,7 +341,7 @@ export const useGame = create<State>((set, get) => {
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
-    feedBerry(id,berry) {return mut(s=>{const ok=feedBerry(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
+    feedCrop(id,berry) {return mut(s=>{const ok=feedCrop(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
     claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
     celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);for(const k of fresh)if(k.startsWith('island:'))grantNextIslandUpgrade(s);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},

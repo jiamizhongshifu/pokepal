@@ -3,13 +3,13 @@ import {StoryNextButton} from '../components/StoryNextButton';
 import {collectionStep} from '../lib/storyHome';
 import {useEffect,useRef,useState} from 'react';
 import {useGame} from '../store';
-import {BERRIES,GROW_MS,cropStage} from '../lib/farm';
+import {CROPS,GROW_MS,cropStage} from '../lib/farm';
 import {gardenPlan,gardenPlanKey,type CareAction} from '../lib/careStory';
 import {PHRASES} from '../data/words';
 import {creatureArt,getCreature} from '../data/creatures';
 import {say,stopSpeech} from '../lib/speech';
 import {TopBar} from '../components/TopBar';
-import {BerryBadge} from '../components/FarmPanel';
+import {CropBadge} from '../components/FarmPanel';
 import './care-story.css';
 const phrases={snack:"I'm hungry.",shared:'Yummy!',garden:'Water!',watered:'Thank you!',play:"Let's play!",rolled:"I'm happy!",growing:'Wow!',ending:'See you!'} as const;
 export function CareStoryScreen(){
@@ -52,7 +52,7 @@ export function CareStoryScreen(){
    if(!crop||crop.plantedAt!==session.plot.plantedAt||cropStage(crop,now)==='ripe')void act('harvest');
   }
  },[running,busy,heard,phase,now,key,assetFailed]);
- const food=session?.food==='plain'?'普通点心':session?BERRIES[session.food].name:'';
+ const food=session?.food==='plain'?'普通点心':session?CROPS[session.food].name:'';
  const missingFood=session?.food!=='plain'&&session&&!(save.farm?.basket[session.food]);
  const crop=session?.plot?save.farm?.plots[session.plot.index]:undefined;
  const seconds=crop?.wateredAt?Math.max(0,Math.ceil((GROW_MS-(now-crop.wateredAt))/1000)):0;
@@ -65,8 +65,8 @@ export function CareStoryScreen(){
  <div className={`care-story-stage phase-${phase} ${running?'':'paused'}`} onErrorCapture={()=>{setAssetFailed(true);setRunning(false);stopSpeech();}}>
  <img className="care-backdrop" alt="" src={storyBackground(phase==='play'||phase==='rolled'?'playground':phase==='garden'||phase==='watered'||phase==='growing'?'garden-path':'orchard')}/>
  <img className="care-actor" alt={pokemon!.nameZh} src={creatureArt(partner.id)}/>
- {(phase==='snack'||phase==='shared')&&<div className="care-meal"><img alt="小碗" src={storyProp('bowl')}/><div className={`care-food ${session.meal==='fed'?'eaten':''}`}>{session.food==='plain'?<img alt="普通点心" src={storyProp('cookie')}/>:<BerryBadge kind={session.food}/>}</div></div>}
- {(phase==='garden'||phase==='watered'||phase==='growing'||phase==='ending')&&<div className="care-plots" aria-label="我的三块田地">{(save.farm?.plots??[null,null,null]).map((c,i)=><div key={i} className={`care-plot stage-${cropStage(c,now)}`}><img src={storyProp(c?'flower':'soil')} alt=""/>{c&&cropStage(c,now)==='ripe'&&<BerryBadge kind={c.berry}/>}<span>{i+1} · {!c?'空地':cropStage(c,now)==='ripe'?'成熟':cropStage(c,now)==='thirsty'?'待浇水':'生长中'}</span></div>)}</div>}
+ {(phase==='snack'||phase==='shared')&&<div className="care-meal"><img alt="小碗" src={storyProp('bowl')}/><div className={`care-food ${session.meal==='fed'?'eaten':''}`}>{session.food==='plain'?<img alt="普通点心" src={storyProp('cookie')}/>:<CropBadge kind={session.food}/>}</div></div>}
+ {(phase==='garden'||phase==='watered'||phase==='growing'||phase==='ending')&&<div className="care-plots" aria-label="我的三块田地">{(save.farm?.plots??[null,null,null]).map((c,i)=><div key={i} className={`care-plot stage-${cropStage(c,now)}`}><img src={storyProp(c?'flower':'soil')} alt=""/>{c&&cropStage(c,now)==='ripe'&&<CropBadge kind={c.berry}/>}<span>{i+1} · {!c?'空地':cropStage(c,now)==='ripe'?'成熟':cropStage(c,now)==='thirsty'?'待浇水':'生长中'}</span></div>)}</div>}
  {phase==='watered'&&['planted','watered'].includes(session.gardenResult??'')&&<img className="care-water" src={storyProp('watering-can')} alt="给小苗浇水"/>}
  {(phase==='play'||phase==='rolled')&&<img className="care-ball" src={storyProp('ball')} alt="轻轻滚动的小球"/>}
  </div>
@@ -81,7 +81,7 @@ export function CareStoryScreen(){
  {<button className="care-quiet" onClick={()=>{stopSpeech();setRunning(false);}}>暂停一下</button>}
  </>}
  </div>}
- <footer><p>果篮：{Object.entries(save.farm?.basket??{oran:0,pecha:0,cheri:0}).map(([k,n])=>`${BERRIES[k as keyof typeof BERRIES].name} ${n}`).join(' · ')}</p>{phase==='ending'&&<button onClick={()=>go({name:'home'})}>回到今天的故事</button>}<small>吃过的点心、照顾过的田地和滚球回忆都保存在原存档里。离开也没关系。</small></footer>
+ <footer><p>果篮：{Object.entries(save.farm?.basket??{oran:0,pecha:0,cheri:0}).map(([k,n])=>`${CROPS[k as keyof typeof CROPS].name} ${n}`).join(' · ')}</p>{phase==='ending'&&<button onClick={()=>go({name:'home'})}>回到今天的故事</button>}<small>吃过的点心、照顾过的田地和滚球回忆都保存在原存档里。离开也没关系。</small></footer>
  </>}
  </main></div>;
 }

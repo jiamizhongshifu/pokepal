@@ -9,7 +9,7 @@ import { mergeInvites } from "./invites";
 import { validIslandProgress } from './islandProgress';
 import { PREFERENCES,validLiving } from './islandLiving';
 import { PARTICIPATION_KINDS } from './participation';
-import { validFarm } from './farm';
+import { validFarm, migrateCrops } from './farm';
 import { validPicnic } from './picnic';
 import type { SaveData } from '../types';
 import { CREATURES } from '../data/creatures';
@@ -29,7 +29,7 @@ function requireValue(ok:unknown,label:string):asserts ok {if(!ok)throw new Erro
  * original-creature rebrand are first rewritten on a copy, so the caller's object (an imported backup) stays intact.
  */
 export function validateSave(input:unknown):SaveData {
- const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);
+ const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);migrateCrops(value);
  requireValue(object(value)&&value.version===1,'版本');const s=value;
  requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'小岛主人');
  requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');

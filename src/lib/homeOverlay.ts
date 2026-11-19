@@ -1,6 +1,6 @@
 import type {TogetherKind} from './islandLiving';
 /** One foreground activity and one quiet corner. Never stack independent HUD cards. */
-export type HomePanel = 'companion'|'finder'|'living'|'picnic'|'facility'|'area'|'weather'|'menu';
+export type HomePanel = 'companion'|'finder'|'living'|'picnic'|'facility'|'area'|'weather'|'menu'|'ask';
 export type HomeHint = 'farm'|'follow'|'picnic'|'care'|'task'|'observe'|'gesture'|'guide';
 export function homeHint(state:{active:boolean;immersive:boolean;blocked:boolean;panel:HomePanel|null;farm:boolean;picnic:boolean;care:boolean;task?:boolean}):HomeHint|null{
  if(!state.active||state.immersive||state.blocked||state.panel)return null;

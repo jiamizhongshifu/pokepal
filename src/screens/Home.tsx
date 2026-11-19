@@ -15,9 +15,9 @@ import { IslandLivingPanel } from '../components/IslandLivingPanel';
 import { useTogether } from '../lib/useTogether';
 import { preference, PREFERENCE_LABEL, type TogetherKind } from '../lib/islandLiving';
 import { markInteresting } from '../scene/observationInterest';
-import { BerryBadge } from '../components/FarmPanel';
+import { CropBadge } from '../components/FarmPanel';
 import { PicnicPanel } from '../components/PicnicPanel';
-import { BERRIES, BERRY_KINDS, newFarm, cropStage, HARVEST_COUNT, BASKET_CAP, type BerryKind } from '../lib/farm';
+import { CROPS, CROP_KINDS, newFarm, cropStage, HARVEST_COUNT, BASKET_CAP, type CropKind } from '../lib/farm';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
 import { BottomNav } from '../components/BottomNav';
@@ -46,6 +46,8 @@ import { IslandTaskCard } from '../components/IslandTaskCard';
 import { learningVoice } from '../lib/learningVoice';
 import { islandTask, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
 import type { District } from '../scene/islandLife';
+import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
+import { IslandAskRound } from '../components/IslandAskRound';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -98,7 +100,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const [livingUpgrade,setLivingUpgrade]=useState<UpgradeId>();
   const [livingTab,setLivingTab]=useState<"play"|"build">("play");
   const [livingInitialId,setLivingInitialId]=useState<number>();
-  const together=useTogether(active,save.captures);
+  // Once turn-taking is learned, each ball turn asks the child who rolls: the friend says "My turn!" or "Your turn!".
+  const together=useTogether(active,save.captures,(s)=>s.kind==='ball'&&!s.help&&s.partners.length===1&&!!useGame.getState().save.learning?.units['our-turn']?.completedAt);
   useEffect(()=>{
     const session=together.session;
     if(!session||session.kind!=='ball'||session.help)return;
@@ -128,6 +131,9 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const [picnicMessage,setPicnicMessage]=useState('');
   const picnic=save.picnic?.session;
   const picnicKey=useRef<string|null>(null);
+  /** Once seated, the friend asks for the fruit in words the child has learned; unlearned fruit is simply shared. */
+  const picnicRequest=picnic&&!picnic.servedAt?picnicAsk(save,seedOf(picnic.id),picnic.berry):undefined;
+  const learnedFruit=(()=>{const f=picnicFruits(save);return f.length?f[(save.picnic?.memories.length??0)%f.length]:undefined;})();
   const picnicReady=!!picnic&&life.active.some(v=>v.pokemonId===picnic.pokemonId&&v.manual&&v.key===picnicKey.current);
   const [feedPicker,setFeedPicker]=useState(false);
   const [watering,setWatering]=useState<{index:number;plantedAt:number;key:string;id:number}|null>(null);
@@ -152,6 +158,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   },[active,watering,waterVisit?.key]);
   const cancelWater=()=>{setWatering(null);life.cancel();};
   const openFarm=(_index:number=0)=>{setPanel(null);setAreaId(null);setLivingOpen(false);together.cancel();stopSpeech();setPicnicOpen(false);cancelWater();setSelected(null);setPrompt(null);setStationId(null);setFarmMessage('');};
+  /** One island ask on screen at a time: planting a plot, or feeding from the companion card. */
+  const [round,setRound]=useState<{play:'plant';index:number;ask:IslandAsk}|{play:'feed';id:number;ask:IslandAsk}|null>(null);
+  const plantSolved=(index:number,kind:string)=>{
+    setRound(null);closePanel('ask');
+    if(!(CROP_KINDS as readonly string[]).includes(kind)||!useGame.getState().plantCrop(index,kind as CropKind))return;
+    farmRetryAt.current=0;setFarmClock(Date.now());sfx('pop');setFarmMessage('种好啦，伙伴会来浇水。');
+  };
   const farmRetryAt=useRef(0);
   const lastPlotTap=useRef([0,0,0]);
   const tapPlot=async(index:number)=>{
@@ -163,15 +176,15 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     const crop=useGame.getState().save.farm?.plots[index]??null;
     const stage=cropStage(crop);
     if(stage==='empty'){
-      if(useGame.getState().plantCrop(index,BERRY_KINDS[index])){
-        farmRetryAt.current=0;setFarmClock(Date.now());sfx('pop');
-        setFarmMessage('种好啦，伙伴会来浇水。');
-      }
+      // The friend names a fruit learned on the path; the child picks its picture, then it is planted.
+      const ask=plantAsk(useGame.getState().save,seedOf(`plot-${index}-${useGame.getState().save.farm?.basket[CROP_KINDS[0]]??0}-${Math.floor(Date.now()/60000)}`));
+      if(!ask){const u=firstFruitUnit();sfx('boop');setLockNote(`学完「${u?.title??''}」，就能种水果啦`);if(u)void say(['zh',u.mission]);return;}
+      activatePanel('ask');setRound({play:'plant',index,ask});
     }else if(stage==='ripe'){
       const harvested=await useGame.getState().harvestCrop(index);
       if(!activeRef.current||useGame.getState().saveIssue)return;
       if(harvested){
-        setFarmMessage('树果装进果篮啦！',{berry:crop!.berry,count:HARVEST_COUNT,total:useGame.getState().save.farm!.basket[crop!.berry]});sfx('ding');
+        setFarmMessage('水果装进果篮啦！',{berry:crop!.berry,count:HARVEST_COUNT,total:useGame.getState().save.farm!.basket[crop!.berry]});sfx('ding');
         void say(['en','Two!'],['en','I did it!']).then(ok=>{if(ok&&activeRef.current){noteWord('count:2','heard');useGame.getState().noteStationLearning('farm','I did it!',true);}});
       }else if(crop&&useGame.getState().save.farm!.basket[crop.berry]+HARVEST_COUNT>BASKET_CAP){setFarmMessage('果篮满啦，先给伙伴吃一点吧。');openPicnic();}
       else setFarmMessage('这块田已经变化啦，看看现在的小芽吧。');
@@ -385,13 +398,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(heard){useGame.getState().noteStationLearning(station,phrase.en,true);}
   };
 
-  const shareBerry=(p:Creature,berry:BerryKind)=>{
+  const shareBerry=(p:Creature,berry:CropKind)=>{
     const run=++interactionRun.current;
     const before=useGame.getState().save.captures.find(c=>c.id===p.id)?.friendship??0;
-    if(!useGame.getState().feedBerry(p.id,berry))return;
+    if(!useGame.getState().feedCrop(p.id,berry))return;
     const after=useGame.getState().save.captures.find(c=>c.id===p.id)!.friendship;
     setFeedPicker(false);ambient.poke();setEffect({id:p.id,kind:'feed',icon:'heart',at:performance.now()});
-    setCareThanks({id:p.id,text:`吃到你种的${BERRIES[berry].name}啦！${after>before?`好感 +${after-before}`:'好感已满'}`});
+    setCareThanks({id:p.id,text:`吃到你种的${CROPS[berry].name}啦！${after>before?`好感 +${after-before}`:'好感已满'}`});
     sfx('sparkle');void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&run===interactionRun.current&&activeRef.current){noteWord('Yummy!','heard');useGame.getState().noteStationLearning('farm','Thank you!',true);}});
   };
   const openPicnic=(id?:number)=>{
@@ -427,7 +440,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const hearPicnic=()=>{const line=learnedPlayLine(useGame.getState().save,'picnic');void (line?say(...learningVoice(line)):say(['en','Thank you!'])).then(ok=>{if(ok&&activeRef.current)noteWord(line?.key??'Thank you!','heard');});};
   const servePicnic=()=>{
     if(!picnicReady||!picnic||!activeRef.current||document.hidden)return;
-    if(!useGame.getState().servePicnic(picnic.id)){setPicnicMessage('树果已经用完啦，可以去果园再准备一些。');return;}
+    if(!useGame.getState().servePicnic(picnic.id)){setPicnicMessage('水果已经用完啦，可以去果园再准备一些。');return;}
     markInteresting([picnic.pokemonId]);
     setEffect({id:picnic.pokemonId,kind:'feed',icon:'heart',at:performance.now()});sfx('sparkle');
     void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&activeRef.current){useGame.getState().noteStationLearning('picnic','Thank you!',true);}});
@@ -459,7 +472,11 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(!quickCare)return;
     if(!active||selected!==quickCare.id){setQuickCare(null);return;}
     if(blocked)return;
-    setQuickCare(null);void doInteract(getCreature(quickCare.id),quickCare.kind,quickCare.station);
+    setQuickCare(null);
+    // A hungry friend says what it would like, in a food word learned on the path; the child picks it.
+    const cap=save.captures.find(c=>c.id===quickCare.id),ask=quickCare.kind==='feed'&&cap?feedAsk(save,seedOf(`feed-${cap.id}-${cap.friendship}`)):undefined;
+    if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:quickCare.id,ask});return;}
+    void doInteract(getCreature(quickCare.id),quickCare.kind,quickCare.station);
   },[quickCare,active,blocked,selected]);
   useEffect(()=>{
     const escape=(event:KeyboardEvent)=>{
@@ -476,7 +493,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   // Fruit was deliberately selected once. Sharing proceeds after the real arrival.
   const servingPicnic=useRef<string|null>(null);
   useEffect(()=>{
-    if(!active||document.hidden||blocked||!picnicOpen||!picnicReady||!picnic||picnic.servedAt||servingPicnic.current===picnic.id)return;
+    if(!active||document.hidden||blocked||!picnicOpen||!picnicReady||!picnic||picnic.servedAt||picnicRequest||servingPicnic.current===picnic.id)return;
     servingPicnic.current=picnic.id;servePicnic();
   },[active,blocked,picnicOpen,picnicReady,picnic?.id,picnic?.servedAt,now]);
 
@@ -531,16 +548,17 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       </aside>}
       {active&&area&&<section className="area-choices" aria-label={area.label}>
         <header className="panel-toolbar"><Icon name={area.icon} size={28}/><strong>{area.label}</strong><FeatureGuide compact id="area" autoVoice={false}/><button onClick={()=>{setAreaId(null);closePanel('area');}} aria-label="关闭活动选择"><Icon name="close" size={24}/></button></header>
-        <div>{area.choices.map(id=>{const s=stationById(id);return <button key={id} onClick={()=>inviteStation(id)}><Icon name={id==='picnic'?'bowl':id==='farm'?'grass':id==='pier'?'eye':id==='sea'?'fish':s.icon} size={48}/><span>{id==='farm'?'种树果':s.name}</span></button>;})}</div>
+        <div>{area.choices.map(id=>{const s=stationById(id);return <button key={id} onClick={()=>inviteStation(id)}><Icon name={id==='picnic'?'bowl':id==='farm'?'grass':id==='pier'?'eye':id==='sea'?'fish':s.icon} size={48}/><span>{id==='farm'?'种水果':s.name}</span></button>;})}</div>
       </section>}
-      {hint==='farm'&&<FarmFeedback notice={farmNotice} canShare={BERRY_KINDS.some(k=>farm.basket[k]>0)} onShare={()=>openPicnic()} onClose={()=>setFarmMessage('')}/>}
-      {active&&picnicOpen&&<PicnicPanel captures={captures} farm={farm} session={picnic} initialId={picnicInitialId} ready={picnicReady} unreachable={life.timedOut} message={picnicMessage}
-        onBegin={(id,berry)=>{if(!useGame.getState().beginPicnic(id,berry))setPicnicMessage('请重新选一颗还有的树果。');}}
+      {hint==='farm'&&<FarmFeedback notice={farmNotice} canShare={CROP_KINDS.some(k=>farm.basket[k]>0)} onShare={()=>openPicnic()} onClose={()=>setFarmMessage('')}/>}
+      {active&&picnicOpen&&<PicnicPanel captures={captures} farm={farm} session={picnic} initialId={picnicInitialId} ready={picnicReady} unreachable={life.timedOut} message={picnicMessage} ask={picnicRequest} learnedFruit={learnedFruit}
+        onBegin={(id,berry)=>{if(!useGame.getState().beginPicnic(id,berry))setPicnicMessage('请重新选一颗还有的水果。');}}
         onSnack={id=>{closePicnic();tapCreature(getCreature(id),false);setQuickCare({id,kind:'feed',station:'picnic'});}} onFind={()=>{closePicnic();go({name:'catch'});}}
         onServe={servePicnic} onClose={closePicnic} onFarm={()=>openFarm()} onRetry={invitePicnic} onHear={hearPicnic}
         onStory={()=>{closePicnic();go({name:'story',id:'magic-words'});}}
         onNotebook={()=>{closePicnic();go({name:'notebook'});}}/>}
       {hint==='picnic'&&picnic&&<button className="picnic-resume" onClick={()=>openPicnic()}>{picnic.servedAt?'看看野餐回忆':'继续伙伴野餐'}</button>}
+      {round?.play==='plant'&&panel==='ask'&&<section className="facility-panel island-ask-panel" aria-label="种一种水果"><strong>伙伴想种什么？</strong><IslandAskRound ask={round.ask} station="farm" onSolved={id=>plantSolved(round.index,id)} onClose={()=>{setRound(null);closePanel('ask');}}/></section>}
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
         <Icon name={station.icon} size={40}/>
@@ -584,10 +602,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
             {!feedPicker&&!prompt&&<p className="living-preference">{PREFERENCE_LABEL[preference(selCap)]}{save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='ball'?' · 上次我们一起玩了球':save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='rest'?' · 记得我们一起休息过':''}</p>}
             {(selNeed || careThanks?.id===sel.id) && <div className="companion-wish" role="status"><Icon name={selNeed?.kind==='feed'?'apple':'heart'} size={24}/>{careThanks?.id===sel.id?careThanks.text:selNeed?.kind==='feed'?'我肚子饿啦，喂我一点点心吧！':'可以摸摸我吗？我想和你一起玩。'}</div>}
-            {feedPicker ? <div className="berry-menu">
-              <h3>选一份小点心</h3><p>{BERRY_KINDS.some(k=>farm.basket[k]>0)?'点一下，就能分享给伙伴。':'果篮还空着，可以先分享普通点心。'}</p>
-              {BERRY_KINDS.filter(k=>farm.basket[k]>0).map(k=><button key={k} onClick={()=>shareBerry(sel,k)}><BerryBadge kind={k}/><span>{BERRIES[k].name}<small>我的果篮 ×{farm.basket[k]}</small></span><Icon name="heart" size={23}/></button>)}
-              <div className="berry-menu-footer"><button onClick={()=>doInteract(sel,'feed')}><Icon name="apple" size={26}/>普通点心</button><button onClick={()=>{setFeedPicker(false);openFarm();}}><Icon name="grass" size={26}/>去种树果</button></div>
+            {round?.play==='feed'&&round.id===sel.id ? <IslandAskRound ask={round.ask} speaker={sel.id} station="companion" onClose={()=>setRound(null)} onSolved={id=>{setRound(null);if((CROP_KINDS as readonly string[]).includes(id)&&farm.basket[id as CropKind]>0)shareBerry(sel,id as CropKind);else void doInteract(sel,'feed');}}/> : feedPicker ? <div className="berry-menu">
+              <h3>选一份小点心</h3><p>{CROP_KINDS.some(k=>farm.basket[k]>0)?'点一下，就能分享给伙伴。':'果篮还空着，可以先分享普通点心。'}</p>
+              {CROP_KINDS.filter(k=>farm.basket[k]>0).map(k=><button key={k} onClick={()=>shareBerry(sel,k)}><CropBadge kind={k}/><span>{CROPS[k].name}<small>我的果篮 ×{farm.basket[k]}</small></span><Icon name="heart" size={23}/></button>)}
+              <div className="berry-menu-footer"><button onClick={()=>doInteract(sel,'feed')}><Icon name="apple" size={26}/>普通点心</button><button onClick={()=>{setFeedPicker(false);openFarm();}}><Icon name="grass" size={26}/>去种水果</button></div>
             </div> : prompt ? (
               <div className="say-back">
                 <button className="companion-listen" onClick={() => say(["en", prompt.en])}><Icon name="speaker" size={30} />再听一句</button>
@@ -611,11 +629,11 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
           </div>
         </section>
-        {!feedPicker&&!prompt&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions"><button className="act" onClick={()=>{stopSpeech();go({name:"careStory",companion:sel.id});}}><Icon name="book" size={32}/>一起过个小下午</button>
+        {!feedPicker&&!prompt&&!round&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions"><button className="act" onClick={()=>{stopSpeech();go({name:"careStory",companion:sel.id});}}><Icon name="book" size={32}/>一起过个小下午</button>
                 {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
                 <button className={`act pet-action ${selNeed?.kind==='pet'?'requested':''}`} onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
-                <button className={`act ${selNeed?.kind==='feed'?'requested':''}`} onClick={() => doInteract(sel,'feed')}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
-                <button className="act" onClick={()=>{setFeedPicker(true);setCareThanks(null);stopSpeech();}}><Icon name="bowl" size={32}/>分享树果</button>
+                <button className={`act ${selNeed?.kind==='feed'?'requested':''}`} onClick={() => {const ask=feedAsk(save,seedOf(`feed-${sel.id}-${selCap.friendship}`));if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:sel.id,ask});}else void doInteract(sel,'feed');}}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
+                <button className="act" onClick={()=>{setFeedPicker(true);setCareThanks(null);stopSpeech();}}><Icon name="bowl" size={32}/>分享水果</button>
                 <button className="act" onClick={()=>openLiving(sel.id)}><Icon name="balloon" size={32}/>一起玩</button>
                 {friendshipLevel(selCap.friendship) >= 5 && evoOptions(sel).length > 0 && (
                   <button className={`act evolve ${selCap.stay ? "" : "pulse"}`} onClick={() => { stopSpeech(); setEvolving(sel.id); }}>

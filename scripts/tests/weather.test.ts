@@ -26,11 +26,11 @@ test('fixed weather, nighttime calls and foreground ducking match the environmen
  assert.equal(soundscape(rain,'night','off').rain,0);
 });
 test('rain waters once after a short wait; never duplicates harvests or changes existing watering',()=>{
- const s={farm:newFarm()} as SaveData;s.farm!.plots=[{berry:'oran',plantedAt:1000},{berry:'pecha',plantedAt:1000,wateredAt:2000},null];
+ const s={farm:newFarm()} as SaveData;s.farm!.plots=[{berry:'grapes',plantedAt:1000},{berry:'apple',plantedAt:1000,wateredAt:2000},null];
  assert.equal(waterCropsWithRain(s,12999),0);assert.equal(waterCropsWithRain(s,NaN),0);
  assert.equal(waterCropsWithRain(s,13000),1);assert.equal(waterCropsWithRain(s,14000),0);assert.equal(s.farm!.plots[1]!.wateredAt,2000);
- assert.deepEqual(s.farm!.basket,{oran:0,pecha:0,cheri:0});assert.ok(validFarm(s.farm));
- assert.equal(harvestCrop(s,0,13000+GROW_MS-1),false);assert.equal(harvestCrop(s,0,13000+GROW_MS),true);assert.equal(harvestCrop(s,0,13000+GROW_MS),false);assert.equal(s.farm!.basket.oran,2);
+ assert.deepEqual(s.farm!.basket,newFarm().basket);assert.ok(validFarm(s.farm));
+ assert.equal(harvestCrop(s,0,13000+GROW_MS-1),false);assert.equal(harvestCrop(s,0,13000+GROW_MS),true);assert.equal(harvestCrop(s,0,13000+GROW_MS),false);assert.equal(s.farm!.basket.grapes,2);
 });
 test('weather reactions distinguish water, plant, sunshine, flight and sleeping routines',()=>{
  const of=(species:string)=>CREATURES.find(c=>c.species===species&&c.stage===1)!;
