@@ -25,7 +25,7 @@ const LearningLesson=lazy(()=>import("./screens/LearningLesson").then(m=>({defau
 const LearningNotebook=lazy(()=>import("./screens/LearningNotebook").then(m=>({default:m.LearningNotebook})));
 const LearningReview=lazy(()=>import("./screens/LearningNotebook").then(m=>({default:m.LearningReview})));
 
-const StoryHome=lazy(()=>import("./screens/StoryHome").then(m=>({default:m.StoryHome})));
+const PathHome=lazy(()=>import("./screens/PathHome").then(m=>({default:m.PathHome})));
 const CareStoryScreen=lazy(()=>import("./screens/CareStory").then(m=>({default:m.CareStoryScreen})));
 const StoryAdventure=lazy(()=>import("./screens/StoryAdventure").then(m=>({default:m.StoryAdventure})));
 const StoryLibrary=lazy(()=>import("./screens/Stories").then(m=>({default:m.StoryLibrary})));
@@ -130,7 +130,7 @@ export default function App() {
   function renderScreen() {
   switch (screen.name) {
     case "welcome": return <Welcome />;
-    case "home": return <StoryHome companion={screen.companion}/>;
+    case "home": return <PathHome/>;
     case "journey": return <LearningJourney/>;
     case "lesson": return <LearningLesson key={screen.id} id={screen.id}/>;
     case "notebook": return <LearningNotebook key={screen.mode} mode={screen.mode} returnTo={screen.returnTo}/>;

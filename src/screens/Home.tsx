@@ -20,6 +20,7 @@ import { PicnicPanel } from '../components/PicnicPanel';
 import { BERRIES, BERRY_KINDS, newFarm, cropStage, HARVEST_COUNT, BASKET_CAP, type BerryKind } from '../lib/farm';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
+import { BottomNav } from '../components/BottomNav';
 import { TopBar } from "../components/TopBar";
 import { getCreature, favoriteFood, friendshipLevel, creatureArt } from "../data/creatures";
 import { ACTIVITY, activityAt, skyFor } from "../lib/routine";
@@ -257,7 +258,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[manualReady, selected, active]);
   const sky = skyFor(now);
-  const ballsTotal = Object.values(save.balls).reduce((a, b) => a + b, 0);
 
   // 每 2 秒刷新天气目标；帧内平滑过渡，作息和天色随之变化
   useEffect(() => {
@@ -605,20 +605,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         </>
       )}
       {active && !blocked && panel===null && (
-        <nav className="dock" aria-label="家园主菜单">
-          <button className="dock-btn tasks" onClick={() => go({ name: "tasks" })}>
-            <Icon name="tasks" size={62} className="ico" />学英语
-          </button>
-          <button className="dock-btn catch" onClick={() => go({ name: "catch" })}>
-            <Icon name="grass" size={62} className="ico" />草丛{ballsTotal > 0 && <span className="badge">{ballsTotal}</span>}
-          </button>
-          <button className="dock-btn stories" onClick={() => go({ name: "stories" })}><Icon name="book" size={62} className="ico" />故事屋</button>
-          <button className="dock-btn diary" onClick={()=>{stopSpeech();go({name:"diary"});}}><Icon name="diary" size={62} className="ico"/>小日记</button>
-          {captures.length>0&&<button className="dock-btn friends" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><span className="ico friend-portrait"><CreatureImg src={creatureArt(residents[0].id)} alt=""/><Icon name="search" size={20}/></span>找伙伴</button>}
-          <button className="dock-btn dex" onClick={() => go({ name: "dex" })}>
-            <Icon name="dex" size={62} className="ico" />好朋友相册
-          </button>
-        </nav>
+        <>
+          {captures.length>0&&<button className="island-finder-launch" onClick={()=>{ambient.poke();stopSpeech();setFinderOpen(true);}} aria-label="找伙伴"><span className="ico friend-portrait"><CreatureImg src={creatureArt(residents[0].id)} alt=""/><Icon name="search" size={20}/></span>找伙伴</button>}
+          <BottomNav active="island" />
+        </>
       )}
     </div>
   );

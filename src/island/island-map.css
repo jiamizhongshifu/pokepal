@@ -74,3 +74,15 @@
   .island-resident { transition-duration: .05s; }
   .island-resident img, .island-bubble, .island-plot, .island-rain { animation: none; }
 }
+
+/* "Find a friend" floats above the shared bottom navigation. */
+.island-finder-launch {
+  position: fixed; z-index: 41; left: 16px; bottom: calc(96px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 8px; min-height: 56px; padding: 6px 16px 6px 6px;
+  border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface);
+  box-shadow: 0 var(--brand-press) 0 var(--surface-border); color: var(--text);
+  font: var(--brand-weight-display) var(--text-base)/1 var(--brand-font); cursor: pointer;
+}
+.island-finder-launch .friend-portrait { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--brand-sky-soft); }
+.island-finder-launch .friend-portrait img { width: 40px; height: 40px; object-fit: contain; }
+.island-finder-launch .friend-portrait .icon { position: absolute; right: -4px; bottom: -4px; }

@@ -1,0 +1,75 @@
+/* Learning path home, after the Duolingo path: chapter banners, round stops on a winding column. */
+.screen.path-home { display: block; overflow-y: auto; height: 100dvh; background: var(--page-bg); color: var(--text); }
+
+.path-header {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background: var(--surface); border-bottom: var(--brand-border) solid var(--surface-border);
+}
+.path-avatar { width: 52px; height: 52px; padding: 0; border-radius: 50%; border: var(--brand-border) solid var(--surface-border); background: var(--surface); overflow: hidden; cursor: pointer; }
+.path-stats { display: flex; gap: 10px; }
+.path-stat {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 4px 14px;
+  border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface);
+  box-shadow: 0 var(--brand-press) 0 var(--surface-border);
+  font: var(--brand-weight-display) var(--text-xl)/1 var(--brand-font); color: var(--text); cursor: default;
+}
+button.path-stat { cursor: pointer; }
+.path-stat:first-child b { color: var(--brand-sun-deep); }
+
+.path-main { width: min(560px, calc(100% - 32px)); margin: 0 auto; padding: 20px 0 calc(120px + env(safe-area-inset-bottom)); }
+.path-chapter { --tone: var(--brand-primary); --tone-deep: var(--brand-primary-deep); --tone-ink: #fff; margin-bottom: 28px; }
+.path-chapter.tone-sky { --tone: var(--brand-sky); --tone-deep: var(--brand-sky-deep); }
+.path-chapter.tone-gem { --tone: var(--brand-gem); --tone-deep: var(--brand-gem-deep); }
+.path-chapter.tone-streak { --tone: var(--brand-streak); --tone-deep: var(--brand-streak-deep); }
+.path-chapter.tone-sun { --tone: var(--brand-sun); --tone-deep: var(--brand-sun-deep); --tone-ink: var(--brand-ink); }
+.path-chapter.tone-danger { --tone: var(--brand-danger); --tone-deep: var(--brand-danger-deep); }
+
+.path-banner {
+  padding: 16px 20px; border-radius: var(--radius-md); background: var(--tone); color: var(--tone-ink);
+  box-shadow: 0 var(--brand-press) 0 var(--tone-deep);
+}
+.path-banner small { font-size: var(--text-sm); font-weight: var(--brand-weight-display); opacity: .9; letter-spacing: .04em; }
+.path-banner h2 { margin: 4px 0 2px; font-size: var(--text-2xl); font-weight: var(--brand-weight-display); color: inherit; }
+.path-banner p { margin: 0; font-size: var(--text-base); font-weight: 700; opacity: .92; }
+
+.path-nodes { list-style: none; margin: 0; padding: 72px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.path-node { position: relative; display: flex; flex-direction: column; align-items: center; translate: var(--sway) 0; }
+.path-node-button {
+  width: 78px; height: 72px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+  background: var(--surface-border); box-shadow: 0 6px 0 color-mix(in srgb, var(--surface-border) 78%, #000); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+#root .path-node-button:not(:disabled):active { transform: translateY(6px); box-shadow: 0 0 0 transparent; }
+.path-node.is-done .path-node-button { background: var(--brand-sun); box-shadow: 0 6px 0 var(--brand-sun-deep); }
+.path-node.is-current .path-node-button {
+  width: 92px; height: 86px; background: var(--tone); box-shadow: 0 6px 0 var(--tone-deep), 0 0 0 8px color-mix(in srgb, var(--tone) 22%, transparent);
+  animation: path-pulse 1.6s var(--brand-ease) infinite;
+}
+.path-node.is-locked .path-node-button .icon { opacity: .55; }
+.path-node-title { margin-top: 10px; max-width: 150px; text-align: center; font-size: var(--text-sm); font-weight: var(--brand-weight-display); color: var(--muted); }
+.path-node.is-current .path-node-title { color: var(--text); font-size: var(--text-base); }
+.path-node.is-current:not(:first-child) { margin-top: 44px; }
+.path-node.is-nudged .path-node-button { animation: path-nudge .5s ease; }
+
+.path-start {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; translate: -50% 0; white-space: nowrap;
+  padding: 8px 16px; border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--tone-deep); font: var(--brand-weight-display) var(--text-lg)/1.1 var(--brand-font);
+  box-shadow: 0 var(--brand-press) 0 var(--surface-border); animation: path-bob 1.6s ease-in-out infinite;
+}
+.path-start small { display: block; font-size: var(--text-xs); color: var(--muted); text-align: center; }
+.path-start::after { content: ""; position: absolute; left: 50%; top: 100%; width: 12px; height: 12px; translate: -50% -6px; rotate: 45deg; background: var(--surface); border-right: var(--brand-border) solid var(--surface-border); border-bottom: var(--brand-border) solid var(--surface-border); }
+
+.path-buddy { position: absolute; top: -12px; width: 104px; height: 104px; object-fit: contain; pointer-events: none; }
+.path-buddy.on-right { left: calc(100% + 18px); }
+.path-buddy.on-left { right: calc(100% + 18px); }
+.path-chest { margin-top: 18px; filter: drop-shadow(0 4px 0 var(--surface-border)); }
+.path-end { text-align: center; color: var(--muted); font-weight: 700; }
+
+@keyframes path-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.05; } }
+@keyframes path-bob { 0%, 100% { translate: -50% 0; } 50% { translate: -50% -4px; } }
+@keyframes path-nudge { 0%, 100% { translate: 0 0; } 25% { translate: -6px 0; } 75% { translate: 6px 0; } }
+@media (prefers-reduced-motion: reduce) { .path-node.is-current .path-node-button, .path-start, .path-node.is-nudged .path-node-button { animation: none; } }
+@media (max-width: 420px) { .path-buddy { width: 72px; height: 72px; } }

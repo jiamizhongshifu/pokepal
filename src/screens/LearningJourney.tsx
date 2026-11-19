@@ -12,12 +12,12 @@ import {learningProfile} from '../lib/learningStage';
 import {LearningArt,hearEntry} from '../components/LearningItem';
 import {say,stopSpeech} from '../lib/speech';
 import {todayStr} from '../lib/date';
+import { destinationIcon } from '../lib/learningPath';
 import '../learning-journey.css';
 import '../learning-next.css';
 import '../learning-map.css';
 
 const landmarks:Record<LearningUnit['theme'],string>={garden:'tree',play:'ball',leisure:'moon',camp:'tent',beach:'waves'};
-const destinationIcon=(unit:LearningUnit)=>/^(berry|bowl|picnic)/.test(unit.station)?'bowl':landmarks[unit.theme];
 const badges=['发现','照顾','表达','自主','心情','友爱'];
 const positions=[{x:20,y:62},{x:40,y:32},{x:62,y:59},{x:83,y:29}];
 function StopPicture({unit}:{unit:LearningUnit}){

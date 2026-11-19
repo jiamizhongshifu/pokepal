@@ -2,6 +2,7 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useLayoutEffect, useRef, useState } from "react";
 import { dexOwned, useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
+import { BottomNav } from "../components/BottomNav";
 import { CREATURES, creatureAvatar, CREATURE_TYPES, type CreatureType } from "../data/creatures";
 import { say } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
@@ -89,6 +90,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
         <button className="replay" disabled={currentPage + 1 === pages} onClick={() => setPage(currentPage + 1)}>下一页<Icon name="back" size={28} className="next-icon" /></button>
       </nav>
       </>}
+      {!picking && <BottomNav active="friends" />}
     </div>
   );
 }
