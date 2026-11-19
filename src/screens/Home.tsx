@@ -475,6 +475,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       <div className={`sky-backdrop sky-${sky}`} aria-hidden>
       </div>
       <div className="meadow">
+        <div className="island-scroller">
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'?need:null}
@@ -484,6 +485,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
             farm={{open:panel!==null||blocked,farm:save.farm,clock:farmClock,working:watering?.index??null,onPlot:tapPlot}}
           />
+        </div>
         {active && !blocked && !immersive && captures.length === 0 && panel===null && (
           <div className="empty-home">
             <div className="sign"><Icon name="sign" size={40} /> 家园还空空的</div>

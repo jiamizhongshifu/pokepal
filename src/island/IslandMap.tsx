@@ -80,12 +80,18 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
   for (const id of [...reported.current.keys()]) if (!targets.get(id)?.visit) { reported.current.delete(id); clearTimeout(timers.current.get(id)); }
  }, [targets, activeVisits, onArrival]);
  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+ // When the island is wider than the screen (portrait phones), start centred on the island.
+ const root = useRef<HTMLDivElement>(null);
+ useEffect(() => {
+  const scroller = root.current?.parentElement;
+  if (scroller && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
+ }, []);
 
  const background = (e: MouseEvent) => { if (e.target === e.currentTarget) onDeselect(); };
  const raining = weather.rain > 0.15;
  const interactive = active && showInterface;
 
- return <div className={`island-map sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`} onClick={background} role="group" aria-label="我的小岛">
+ return <div ref={root} className={`island-map sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`} onClick={background} role="group" aria-label="我的小岛">
   <img className="island-map-art" src={worldArt('island-map')} alt="" draggable={false} onClick={onDeselect} />
   {interactive && STATIONS.filter(s => STATION_SPOTS[s.id]).map(s => <button key={s.id} type="button" className="island-station" style={{ left: `${STATION_SPOTS[s.id][0]}%`, top: `${STATION_SPOTS[s.id][1]}%` }} aria-label={s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }} />)}
   {interactive && !farm.open && PLOT_SPOTS.map((spot, i) => {

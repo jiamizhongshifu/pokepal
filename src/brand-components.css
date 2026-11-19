@@ -30,6 +30,12 @@
 }
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)):not(:disabled):hover { color:var(--text); border-color:var(--brand-ink-meta); }
 
+/* Icons are full-colour pictures, so inside a coloured button they sit on a white chip and never blend in (green on green). */
+#root .screen :is(.btn-big:not(.alt), .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
+  .wish-button.primary, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action) > .icon {
+  background:#fff; border-radius:12px; padding:4px; box-sizing:content-box; flex:none;
+}
+
 /* Reward moments use the yellow "streak" recipe. */
 #root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }
 #root .screen .farm-primary.harvest:not(:disabled):hover { background:#ffd333; }
