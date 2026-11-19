@@ -1,5 +1,5 @@
 import { LEARNING_UNITS, learningEntry, type LearningEntry, type LearningUnit } from '../data/curriculum';
-import { STATIONS, DISTRICTS, type District } from '../scene/islandLife';
+import { placeById, districtName as nameOfDistrict, type District } from '../island/world';
 import { currentNode, learningPath, pathNodes } from './learningPath';
 import { atStation } from './learningProgress';
 import type { SaveData } from '../types';
@@ -11,7 +11,7 @@ import type { SaveData } from '../types';
  */
 
 export function stationDistrict(stationId: string): District | undefined {
- return (STATIONS.find(s => s.id === stationId) ?? STATIONS.find(s => s.id.startsWith(stationId)))?.district;
+ return placeById(stationId)?.district;
 }
 export const unitDistrict = (unit: LearningUnit) => stationDistrict(unit.station) ?? unit.theme;
 
@@ -30,7 +30,7 @@ export function unlockedDistricts(s: SaveData): Set<District> {
 export function unlockingUnit(district: District): LearningUnit | undefined {
  return LEARNING_UNITS.find(u => unitDistrict(u) === district);
 }
-export const districtName = (d: District) => DISTRICTS.find(x => x.id === d)?.name ?? '';
+export const districtName = nameOfDistrict;
 
 /** Island play that belongs to an area: it opens with that area. */
 export const PLAY_DISTRICT = { picnic: 'leisure', farm: 'garden', ball: 'play', rest: 'leisure', bubbles: 'camp', jump: 'camp' } as const satisfies Record<string, District>;

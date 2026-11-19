@@ -73,11 +73,9 @@ test('saved energy becomes invite berries once and survives a reload',()=>{
  assert.throws(()=>validateSave({...raw,path:{version:1,friends:{x:1},seen:[]}}));
 });
 
-test('every island place a lesson or the island uses has a spot on the 2D island',async()=>{
- const {stationSpot}=await import('../../src/island/spots');
- const {STATIONS}=await import('../../src/scene/islandLife');
- for(const u of LEARNING_UNITS)assert.ok(stationSpot(u.station),u.station);
- for(const s of STATIONS)assert.ok(stationSpot(s.id),s.id);
+test('every lesson happens at one of the island\'s places',async()=>{
+ const {placeById}=await import('../../src/island/world');
+ for(const u of LEARNING_UNITS)assert.ok(placeById(u.station),u.station);
 });
 
 test('due review waits as one stop just before the current stop, and earns a star when done',()=>{

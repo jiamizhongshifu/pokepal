@@ -2,19 +2,14 @@ import { worldArt } from '../data/sceneArt';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties, MouseEvent } from 'react';
 import type { Capture } from '../types';
-import type { Visit } from '../scene/islandLife';
-import { STATIONS } from '../scene/islandLife';
-import type { Effect } from '../scene/zones';
+import { PLACES, homeOf, type Effect, type Spot, type Visit } from './world';
 import type { IslandWeather } from '../lib/weather';
 import { cropStage, type FarmState } from '../lib/farm';
 import { creatureArt, getCreature } from '../data/creatures';
 import { Icon } from '../icons';
-import { STATION_SPOTS, stationSpot, type Spot } from './spots';
 import './island-map.css';
 
 export type Sky = 'morning' | 'day' | 'evening' | 'night';
-/** Open lawn and beach spots for creatures that are not visiting a station. */
-const IDLE_SPOTS: Spot[] = [[48, 60], [35, 53], [58, 62], [70, 42], [32, 38], [66, 64], [46, 37], [76, 56], [25, 49], [52, 42], [38, 67], [61, 35], [29, 70], [56, 74], [72, 66], [43, 57]];
 /** The three vegetable plots painted on the island, left to right. */
 const PLOT_SPOTS: Spot[] = [[11.9, 39.5], [17.8, 39.5], [24.4, 39.5]];
 const WALK_MS = 2200;
@@ -36,8 +31,6 @@ export interface IslandMapProps {
  effect: Effect | null;
  need?: { id: number; kind: 'feed' | 'pet' } | null;
  farm: { open: boolean; farm?: FarmState; clock: number; working: number | null; onPlot: (index: number) => void };
- /** Partners in a shared activity stand together at its station. */
- together?: { partners: number[]; station?: string };
  active?: boolean;
  showInterface?: boolean;
 }
@@ -45,25 +38,20 @@ export interface IslandMapProps {
 const offset = (spot: Spot, slot: number, of: number): Spot => of < 2 ? spot : [spot[0] + (slot - (of - 1) / 2) * 5, spot[1] + (slot % 2) * 1.5];
 
 /** Island home as one illustration: stations are tappable spots, creatures walk between them with a short glide. */
-export function IslandMap({ captures, visits, activeVisits, onArrival, onStation, lockedDistricts, selected, onSelect, onDeselect, sky, weather, effect, need, farm, together, active = true, showInterface = true }: IslandMapProps) {
+export function IslandMap({ captures, visits, activeVisits, onArrival, onStation, lockedDistricts, selected, onSelect, onDeselect, sky, weather, effect, need, farm, active = true, showInterface = true }: IslandMapProps) {
+ // Everyone stands at the place of its visit, or at home; companions at the same place stand side by side.
  const targets = useMemo(() => {
-  const byStation = new Map<string, number[]>();
+  const at = (c: Capture) => visits.find(v => v.pokemonId === c.id);
+  const placeId = (c: Capture) => at(c)?.station.id ?? homeOf(getCreature(c.id).species).id;
+  const groups = new Map<string, number[]>();
+  for (const c of captures) groups.set(placeId(c), [...(groups.get(placeId(c)) ?? []), c.id]);
   const placed = new Map<number, { spot: Spot; visit?: Visit }>();
   for (const c of captures) {
-   const visit = visits.find(v => v.pokemonId === c.id);
-   const station = visit?.station.id ?? (together?.partners.includes(c.id) ? together.station : undefined);
-   if (station && stationSpot(station)) byStation.set(station, [...(byStation.get(station) ?? []), c.id]);
-  }
-  let idle = 0;
-  for (const c of captures) {
-   const visit = visits.find(v => v.pokemonId === c.id);
-   const station = visit?.station.id ?? (together?.partners.includes(c.id) ? together.station : undefined);
-   const group = station ? byStation.get(station) : undefined;
-   if (station && group && stationSpot(station)) placed.set(c.id, { spot: offset(stationSpot(station)!, group.indexOf(c.id), group.length), visit });
-   else placed.set(c.id, { spot: IDLE_SPOTS[idle++ % IDLE_SPOTS.length] });
+   const visit = at(c), spot = visit?.station.spot ?? homeOf(getCreature(c.id).species).spot, group = groups.get(placeId(c))!;
+   placed.set(c.id, { spot: offset(spot, group.indexOf(c.id), group.length), visit });
   }
   return placed;
- }, [captures, visits, together]);
+ }, [captures, visits]);
 
  // Report departure at once and arrival after the glide, matching the walking contract of the island life hooks.
  const timers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
@@ -95,7 +83,7 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
 
  return <div ref={root} className={`island-map sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`} onClick={background} role="group" aria-label="我的小岛">
   <img className="island-map-art" src={worldArt('island-map')} alt="" draggable={false} onClick={onDeselect} />
-  {interactive && STATIONS.filter(s => STATION_SPOTS[s.id]).map(s => { const locked = !!lockedDistricts?.has(s.district); return <button key={s.id} type="button" className={`island-station${locked ? ' is-locked' : ''}`} style={{ left: `${STATION_SPOTS[s.id][0]}%`, top: `${STATION_SPOTS[s.id][1]}%` }} aria-label={locked ? `${s.name}（还没开放）` : s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }}>{locked && <Icon name="lock" size={26} />}</button>; })}
+  {interactive && PLACES.map(s => { const locked = !!lockedDistricts?.has(s.district); return <button key={s.id} type="button" className={`island-station${locked ? ' is-locked' : ''}`} style={{ left: `${s.spot[0]}%`, top: `${s.spot[1]}%` }} aria-label={locked ? `${s.name}（还没开放）` : s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }}>{locked && <Icon name="lock" size={26} />}</button>; })}
   {interactive && !farm.open && PLOT_SPOTS.map((spot, i) => {
    const stage = cropStage(farm.farm?.plots[i] ?? null, farm.clock);
    return <button key={i} type="button" className={`island-plot is-${stage}${lockedDistricts?.has('garden') ? ' is-locked' : ''}`} style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }} aria-label={`第 ${i + 1} 块地：${{ empty: '空地', thirsty: '口渴了', growing: '正在长', ripe: '可以收啦' }[stage]}`} aria-busy={farm.working === i} onClick={e => { e.stopPropagation(); farm.onPlot(i); }}>

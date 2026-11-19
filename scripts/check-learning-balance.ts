@@ -6,7 +6,7 @@ import {migrateLearning,attempt,encounter,applyStation,progressUnit} from '../sr
 import {learningEntry,learningLevel,LEARNING_UNITS,unitRoundCount,selectedUnit} from '../src/data/curriculum';
 import {dailyLearningPlan,facilityLesson} from '../src/data/learning';
 import {STORIES} from '../src/data/stories';
-import {STATIONS} from '../src/scene/islandLife';
+import {PLACES as STATIONS} from '../src/island/world';
 import {EXTRA_LEARNING} from '../src/data/learningLexicon';
 import {learningVoice} from '../src/lib/learningVoice';
 import {validateSave} from '../src/lib/saveValidation';

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { migratePersonalities,preference,rememberTogether,setFurniture,furnitureAffinity,storyTrail,validLiving } from '../../src/lib/islandLiving';
 import type { SaveData } from '../../src/types';
-import { togetherSession } from '../../src/scene/together';
+import { togetherSession } from '../../src/island/together';
 const make=()=>({captures:[{id:25,caughtAt:1234000,ball:'poke',friendship:20},{id:7,caughtAt:1234001,ball:'poke',friendship:20}]} as SaveData);
 test('old captures get stable individual preferences, retained through evolution',()=>{
  const s=make();const before=s.captures.map(preference);migratePersonalities(s);assert.deepEqual(s.captures.map(preference),before);

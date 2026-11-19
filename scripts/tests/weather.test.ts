@@ -2,11 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {weatherAt,soundscape,WEATHER_PERIOD,WEATHER_TRANSITION,validWeatherMode} from '../../src/lib/weather';
 import {waterCropsWithRain,newFarm,harvestCrop,GROW_MS,validFarm} from '../../src/lib/farm';
-import {weatherReaction,weatherVisit} from '../../src/scene/weatherReactions';
+import {whereNow} from '../../src/island/world';
 import type {SaveData} from '../../src/types';
-import {CREATURES} from '../../src/data/creatures';
-import type {Habit} from '../../src/data/behaviors';
-const habit:Habit={from:0,to:24,activity:'explore',zone:'meadow'};
 test('offline weather survives reload, transitions continuously, and bounds consecutive rain',()=>{
  let run=0;const kinds=new Set();
  for(let slot=1000000;slot<1001000;slot++){
@@ -32,17 +29,12 @@ test('rain waters once after a short wait; never duplicates harvests or changes 
  assert.deepEqual(s.farm!.basket,newFarm().basket);assert.ok(validFarm(s.farm));
  assert.equal(harvestCrop(s,0,13000+GROW_MS-1),false);assert.equal(harvestCrop(s,0,13000+GROW_MS),true);assert.equal(harvestCrop(s,0,13000+GROW_MS),false);assert.equal(s.farm!.basket.grapes,2);
 });
-test('weather reactions distinguish water, plant, sunshine, flight and sleeping routines',()=>{
- const of=(species:string)=>CREATURES.find(c=>c.species===species&&c.stage===1)!;
- const otter=of('bubbo'),panda=of('berry'),lion=of('sunny'),bird=of('petal');
- assert.equal(weatherReaction(otter,habit,'rain'),'splash');assert.equal(weatherReaction(panda,habit,'rain'),'leaves');
- assert.equal(weatherReaction(lion,habit,'rain'),'shelter');assert.equal(weatherReaction(bird,habit,'breezy'),'perch');
- assert.equal(weatherVisit(lion,{...habit,activity:'sleep'},'rain')!.station.activity,'nap');
- assert.equal(weatherReaction(lion,habit,'sunny'),null);
- assert.equal(weatherReaction(otter,{...habit,activity:'sleep'},'rain'),null);
- assert.equal(weatherVisit(otter,habit,'rain')!.station.id,'shells');
- assert.equal(weatherVisit(panda,habit,'rain')!.station.activity,'guard');
- assert.ok(['tree','tent'].includes(weatherVisit(lion,habit,'rain')!.station.id),'shelter goes to a real island station');
- assert.notDeepEqual(weatherVisit(lion,habit,'rain',0)!.station.target,weatherVisit(lion,habit,'rain',1)!.station.target);
- assert.deepEqual(weatherVisit(lion,habit,'rain'),weatherVisit(lion,habit,'rain'));
+test('weather and time change who is where, following each companion\'s setting',()=>{
+ assert.equal(whereNow('drippy',10,'rain').id,'farm','the rain snail comes out to the garden');
+ assert.equal(whereNow('mushy',10,'rain').id,'tree','the mushroom raccoon walks under the trees');
+ assert.equal(whereNow('bubbo',10,'rain').id,'shells');assert.equal(whereNow('sunny',10,'rain').id,'tent','others shelter by the tent');
+ assert.equal(whereNow('sunny',10,'sunny').id,'bench','the sun cub sunbathes');
+ assert.equal(whereNow('sunny',22,'sunny').id,'tent','most sleep by the tent at night');
+ assert.equal(whereNow('twinkle',22,'sunny').id,'music','the star fawn glows on the stage at night');
+ assert.equal(whereNow('moony',12,'sunny').id,'tent');assert.equal(whereNow('moony',22,'sunny').id,'hammock','the moon sloth is awake at night');
 });

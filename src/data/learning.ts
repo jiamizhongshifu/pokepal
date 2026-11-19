@@ -1,6 +1,6 @@
 import { learningProfile } from '../lib/learningStage';
 import { PHRASES, PIC_WORDS, type SayPhrase, type PicWord } from './words';
-import type { District, Station } from '../scene/islandLife';
+import type { District, Place } from '../island/world';
 import type { SaveData } from '../types';
 import { selectedUnit, unitSituations, type LearningUnit } from './curriculum';
 
@@ -51,10 +51,9 @@ const LESSONS:Record<string,[string,string,string,string]>={
  music:['Sing!','唱一唱！',"Let's sing!",'一起唱歌吧！'], sand:['Dig!','挖一挖！',"Let's dig!",'一起挖一挖！'],
  bench:['Rest!','歇一歇！',"Let's rest.",'一起歇一歇。'], parasol:['Rest!','歇一歇！','I feel cool.','好凉快。'],
  tent:['Hello!','你好！','Welcome home!','欢迎回家！'], fire:['Warm!','暖暖的！','It is warm.','这里暖暖的。'],
- shore:['Splash!','扑通！','I can splash!','我会玩水！'], sea:['Swim!','游一游！','I can swim!','我会游泳！'],
  shells:['Look!','看一看！','Look at the shell.','看看这个贝壳。'], pier:['Look!','看一看！','Look at the sea.','看看大海。']
 };
-export function facilityLesson(station:Station,level:1|2){
+export function facilityLesson(station:Place,level:1|2){
  const fallback=station.activity==='eat'?['Yummy!','好吃！','More, please!','请再来一点！']:station.activity==='sleep'||station.activity==='nap'?['Good night!','晚安！','Time to rest.','该休息啦。']:['Look!','看一看！','Look with me.','和我一起看。'];
  const lines=LESSONS[station.id]??fallback;
  return {en:lines[level===1?0:2],zh:lines[level===1?1:3]};

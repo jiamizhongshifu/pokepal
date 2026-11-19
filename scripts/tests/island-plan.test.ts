@@ -4,7 +4,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {progressUnit,applyStation} from '../../src/lib/learningProgress';
 import {learningPath,currentNode} from '../../src/lib/learningPath';
-import {STATIONS} from '../../src/scene/islandLife';
+import {placeById} from '../../src/island/world';
 import {unlockedDistricts,unlockingUnit,unitDistrict,learnedPhrase,learnedHere,islandTask,playOpen,visitStation} from '../../src/lib/islandPlan';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 
@@ -13,7 +13,7 @@ const unit=(id:string)=>LEARNING_UNITS.find(u=>u.id===id)!;
 const finish=(s:SaveData,id:string,at=100)=>progressUnit(s,id,unitRoundCount(unit(id)),at);
 
 test('every lesson happens at a real island place, and every area is opened by some lesson',()=>{
- for(const u of LEARNING_UNITS)assert.ok(STATIONS.some(s=>u.station.endsWith('-')?s.id.startsWith(u.station):s.id===u.station),`${u.id} at ${u.station}`);
+ for(const u of LEARNING_UNITS)assert.ok(placeById(u.station),`${u.id} at ${u.station}`);
  for(const d of ['garden','play','leisure','camp','beach'] as const)assert.ok(unlockingUnit(d),`${d} can be reached`);
 });
 
@@ -31,7 +31,7 @@ test('a place speaks a sentence learned there, the same all day, and nothing bef
  assert.equal(learnedPhrase(s,'tent'),undefined);
  finish(s,'hello-island');
  assert.equal(learnedPhrase(s,'tent')?.en,'Hello!');
- assert.deepEqual(learnedHere(s,'bed-1'),[],'numbered places match their family only when learned');
+ assert.deepEqual(learnedHere(s,'bed-1').map(u=>u.id),['hello-island'],'the sleeping mats are at the tent');
  s.learning!.units['tidy-together']={round:unitRoundCount(unit('tidy-together')),completedAt:200};
  const morning=new Date(2026,10,19,8).getTime(),night=new Date(2026,10,19,22).getTime();
  assert.equal(learnedPhrase(s,'tent',morning)?.en,learnedPhrase(s,'tent',night)?.en,'stable within a day');

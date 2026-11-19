@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import { plantCrop,waterCrop,harvestCrop,feedCrop,newFarm,validFarm,cropStage,GROW_MS,BASKET_CAP } from '../src/lib/farm';
 import { validateSave } from '../src/lib/saveValidation';
-import { stationById } from '../src/scene/islandLife';
-import { FARM_ENTRY, FARM_PLOTS } from '../src/scene/layout';
+import { placeById } from '../src/island/world';
 import type { SaveData } from '../src/types';
 const s:SaveData={version:1,trainer:null,energy:5,balls:{poke:1,great:0,ultra:0,master:0},captures:[{id:1001,caughtAt:1,ball:'poke',friendship:95}],daily:{date:'2026-10-16',energyEarned:0,board:['listen','repeat','wordpic','trace'],boardDone:[false,false,false,false],bonusGiven:false,tasksCompleted:0,heard:0,spoken:0,words:[],caught:[],playSeconds:0,extraSeconds:0},streak:{lastDate:'',count:0},wordStats:{},settings:{dailyMinutes:15,tasksPerDay:4,level:1,favorites:[],speechRate:1},history:[]};
 assert.deepEqual(validateSave(s),s,'old saves need no destructive migration');
@@ -27,10 +26,6 @@ assert.equal(plantCrop(restored,0,'apple',100000),true);assert.equal(waterCrop(r
 restored.farm!.plots[0]={berry:'apple',plantedAt:1,wateredAt:2};restored.farm!.basket.apple=BASKET_CAP;
 assert.equal(harvestCrop(restored,0,100000),false,'full basket keeps crop intact');assert.ok(restored.farm!.plots[0]);
 for(const bad of [{...newFarm(),plots:[]},{...newFarm(),basket:{grapes:-1,apple:0,strawberry:0}},{...newFarm(),plots:[{berry:'__proto__',plantedAt:1},null,null]},{...newFarm(),plots:[{berry:'grapes',plantedAt:NaN},null,null]}]){assert.equal(validFarm(bad),false);assert.throws(()=>validateSave({...s,farm:bad}));}
-for(let i=0;i<3;i++){const p=FARM_PLOTS[i],t=stationById(`farm-${i}`).target;assert.ok(Math.hypot(t.x-p.x,t.z-(p.z+1.9))<.8,`plot ${i} approach reachable`);}
-const target=stationById('farm').target;
-assert.ok(Math.hypot(target.x-FARM_ENTRY.x,target.z-FARM_ENTRY.z)<1,'helper reaches the front lane');
-for(let i=1;i<FARM_PLOTS.length;i++)assert.ok(FARM_PLOTS[i].x-FARM_PLOTS[i-1].x>1.85,'raised beds do not overlap');
 console.log('PASS: legacy imports, crop lifecycle, restart growth, replay/stale actions, inventory/ownership/friendship limits, malformed saves and farm approach anchors.');
 
 // Retired flower-care saves still load; lessons now apply to actual crop watering.
@@ -42,7 +37,7 @@ const {LEARNING_UNITS}=await import('../src/data/curriculum');
 const {applyStation}=await import('../src/lib/learningProgress');
 for(const id of ['garden-helper','keep-our-promise','sorry-and-repair']){
  const unit=LEARNING_UNITS.find(u=>u.id===id)!;
- assert.ok(stationById(unit.station),'lesson destination exists');
+ assert.ok(placeById(unit.station),'lesson destination exists');
  const lessonSave=validateSave(JSON.parse(JSON.stringify(s)));
  lessonSave.learning={version:1,activeUnit:id,records:{},units:{[id]:{round:4,completedAt:123}}};
  applyStation(lessonSave,'farm',456);

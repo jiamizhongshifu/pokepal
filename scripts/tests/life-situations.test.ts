@@ -1,8 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {togetherEvidence,togetherVoice,togetherFinishedVoice} from '../../src/lib/togetherTurn';
-import {togetherSession,togetherHelpTarget} from '../../src/scene/together';
-import {clearSpot} from '../../src/scene/navigation';
+import {togetherSession,togetherHelpTarget} from '../../src/island/together';
 import {rememberTogether,validLiving} from '../../src/lib/islandLiving';
 import type {SaveData} from '../../src/types';
 test('help invitation and acknowledgement match the actual request, not a turn-taking word',()=>{
@@ -17,14 +16,11 @@ test('rest is an explicit companion action, never an independent answer',()=>{
  assert.deepEqual(togetherFinishedVoice('rest')[0],['en','Thank you!']);
  assert.equal('independent' in togetherEvidence('rest',[25],0),false);
 });
-test('temporary basket stays on clear land and outside both participant footprints',()=>{
- for(const ids of [[25],[25,7],[95,143],[129],[129,118]])for(const coast of [false,true]){
-  const session=togetherSession('ball',ids,coast),p=togetherHelpTarget(session);
-  if(!p)continue; // no safe place means this optional action is not offered
-  assert.ok(clearSpot(p,.65));
-  for(const v of session.visits)assert.ok(Math.hypot(p.x-v.station.target.x,p.z-v.station.target.z)>2.4);
+test('the tidy-up basket is at the place where the game was played',()=>{
+ for(const ids of [[25],[25,7],[129,118]])for(const coast of [false,true]){
+  const session=togetherSession('ball',ids,coast);
+  assert.equal(togetherHelpTarget(session)?.id,coast?'shells':'ball');
  }
- assert.ok(togetherHelpTarget(togetherSession('ball',[25])));
 });
 test('existing memory schema and saves remain compatible; no new persisted activity kind',()=>{
  const save={captures:[{id:25}]} as SaveData;

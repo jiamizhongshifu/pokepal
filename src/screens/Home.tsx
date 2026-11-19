@@ -1,6 +1,6 @@
 import {FarmFeedback,type FarmNotice} from '../components/FarmFeedback';
 import {CompanionStrip} from '../components/CompanionStrip';
-import {previewLevels,type DecorPreview} from '../lib/decorPreview';
+import {type DecorPreview} from '../lib/decorPreview';
 import {homeHint,type HomePanel} from '../lib/homeOverlay';
 import {useModalBlocked} from '../lib/modalLayer';
 import {UPGRADES,type UpgradeId} from '../lib/islandProgress';
@@ -8,9 +8,7 @@ import { Announcements } from '../components/Announcements';
 import {weatherAt} from '../lib/weather';
 import {WeatherBadge} from '../components/WeatherBadge';
 import { FeatureGuide } from '../components/FeatureGuide';
-import { FACILITY_GROUPS } from '../scene/facilityControls';
 import { CompanionFinder } from '../components/CompanionFinder';
-import { configureIslandExpansion, configureIslandDecorations } from '../scene/layout';
 import { IslandLivingPanel } from '../components/IslandLivingPanel';
 import { useTogether } from '../lib/useTogether';
 import { preference, PREFERENCE_LABEL, type TogetherKind } from '../lib/islandLiving';
@@ -31,7 +29,6 @@ import { useAmbientEnglish } from "../lib/ambient";
 import { MicButton } from "../components/MicButton";
 import type { InteractKind, Creature } from "../types";
 import { Hearts, Icon } from "../icons";
-import type { Effect } from "../scene/zones";
 import { IslandMap } from "../island/IslandMap";
 import { CreatureImg } from "../components/CreatureImg";
 import { Evolution } from "../components/Evolution";
@@ -40,12 +37,12 @@ import { visitUnit,learningLevel } from '../data/curriculum';
 import { captionParts } from "../lib/captions";
 import { useIslandLife } from "../lib/useIslandLife";
 import { careRequest, nextCareRequest } from "../lib/companionCare";
-import { stationById, compatible, isAquatic } from "../scene/islandLife";
+import { placeOf, placesIn, DISTRICTS, type Effect } from "../island/world";
 import {AuthorContact} from '../components/AuthorContact';
 import { IslandTaskCard } from '../components/IslandTaskCard';
 import { learningVoice } from '../lib/learningVoice';
 import { islandTask, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
-import type { District } from '../scene/islandLife';
+import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
 
@@ -55,10 +52,7 @@ import { IslandAskRound } from '../components/IslandAskRound';
 export function Home({initialStation,initialCompanion,active=true}:{initialStation?:string;initialCompanion?:number;active?:boolean}) {
   const save = useGame((s) => s.save);
   const [decorPreview,setDecorPreview]=useState<DecorPreview|null>(null);
-  const displayedLevels=previewLevels(save.islandProgress?.levels,active?decorPreview:null);
-  configureIslandExpansion(displayedLevels.island);
   useEffect(()=>{if(!active)setDecorPreview(null);},[active]);
-  configureIslandDecorations(save.islandLiving?.furniture??[]);
   const go = useGame((s) => s.go);
   const interact = useGame((s) => s.interact);
   const noteWord = useGame((s) => s.noteWord);
@@ -94,7 +88,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const [effect, setEffect] = useState<Effect | null>(null);
   const need = nextCareRequest(save.captures);
   const [areaId,setAreaId]=useState<string|null>(null);
-  const area=panel==='area'?FACILITY_GROUPS.find(g=>g.id===areaId):undefined;
+  const areaInfo=panel==='area'?DISTRICTS.find(d=>d.id===areaId):undefined;
+  const area=areaInfo&&{id:areaInfo.id,label:areaInfo.name,icon:areaInfo.icon,choices:placesIn(areaInfo.id).map(p=>p.id)};
   const livingOpen=panel==='living';
   const setLivingOpen=(open:boolean)=>open?activatePanel('living'):closePanel('living');
   const [livingUpgrade,setLivingUpgrade]=useState<UpgradeId>();
@@ -111,7 +106,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       sfx('sparkle');
     }
   },[together.session?.id,together.phase,together.turn]);
-  const life = useIslandLife(save.captures,now,false,livingOpen?undefined:need?.id,together.visits,save.islandLiving?.furniture??[],[selected],weather.kind);
+  const life = useIslandLife(save.captures,now,false,livingOpen?undefined:need?.id,together.visits,[selected],weather.kind);
   useEffect(()=>{together.syncArrivals(life.active);},[life.active.map(v=>v.key).join(','),together.session?.id]);
   const finderOpen=panel==='finder';
   const setFinderOpen=(open:boolean)=>open?activatePanel('finder'):closePanel('finder');
@@ -190,12 +185,12 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       else setFarmMessage('这块田已经变化啦，看看现在的小芽吧。');
     }else if(stage==='thirsty'){
       farmRetryAt.current=0;
-      if(!useGame.getState().save.captures.some(c=>!isAquatic(getCreature(c.id))))go({name:'catch'});
+      if(!useGame.getState().save.captures.length)go({name:'catch'});
       else {setFarmClock(Date.now());setFarmMessage('伙伴会按顺序照顾小芽，不用再点啦。');}
     }
   };
   const [stationId,setStationId] = useState<string|null>(null);
-  const station = panel==='facility' && stationId ? stationById(stationId) : null;
+  const station = panel==='facility' && stationId ? placeOf(stationId) : null;
   const learningUnit=visitUnit(save);
   const courseVisit=station&&learningUnit.station===station.id&&!!save.learning?.units[learningUnit.id]?.completedAt;
   // Describe the real facility activity; a course sentence may refer to a different situation.
@@ -253,7 +248,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(weather.rain>.65||!active||document.hidden||watering||selected!==null||stationId!==null||livingOpen||picnicOpen||together.session||Date.now()<farmRetryAt.current)return;
     const index=farm.plots.findIndex(c=>c&&cropStage(c)==='thirsty');
     if(index<0)return;
-    const helpers=captures.filter(c=>!isAquatic(getCreature(c.id)));
+    const helpers=captures;
     if(!helpers.length)return;
     const helper=helpers[Math.floor(Math.random()*helpers.length)];
     const request=life.invite(`farm-${index}`,false,helper.id);
@@ -415,8 +410,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   };
   const invitePicnic=()=>{
     if(!picnic||picnic.servedAt)return;
-    const water=isAquatic(getCreature(picnic.pokemonId));
-    const request=life.invite(water?'shore':'picnic',false,picnic.pokemonId);
+    const request=life.invite('picnic',false,picnic.pokemonId);
     picnicKey.current=request?`manual-${request.nonce}`:null;
     
   };
@@ -520,7 +514,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'?need:null}
             active={active} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session}
-            together={together.session?{partners:together.session.partners}:undefined}
             onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getCreature(id),'pet');}}else tapCreature(getCreature(id));}}
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
             farm={{open:panel!==null||blocked,farm:save.farm,clock:farmClock,working:watering?.index??null,onPlot:tapPlot}}
@@ -548,7 +541,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       </aside>}
       {active&&area&&<section className="area-choices" aria-label={area.label}>
         <header className="panel-toolbar"><Icon name={area.icon} size={28}/><strong>{area.label}</strong><FeatureGuide compact id="area" autoVoice={false}/><button onClick={()=>{setAreaId(null);closePanel('area');}} aria-label="关闭活动选择"><Icon name="close" size={24}/></button></header>
-        <div>{area.choices.map(id=>{const s=stationById(id);return <button key={id} onClick={()=>inviteStation(id)}><Icon name={id==='picnic'?'bowl':id==='farm'?'grass':id==='pier'?'eye':id==='sea'?'fish':s.icon} size={48}/><span>{id==='farm'?'种水果':s.name}</span></button>;})}</div>
+        <div>{area.choices.map(id=>{const s=placeOf(id);return <button key={id} onClick={()=>inviteStation(id)}><Icon name={s.icon} size={48}/><span>{id==='farm'?'种水果':s.name}</span></button>;})}</div>
       </section>}
       {hint==='farm'&&<FarmFeedback notice={farmNotice} canShare={CROP_KINDS.some(k=>farm.basket[k]>0)} onShare={()=>openPicnic()} onClose={()=>setFarmMessage('')}/>}
       {active&&picnicOpen&&<PicnicPanel captures={captures} farm={farm} session={picnic} initialId={picnicInitialId} ready={picnicReady} unreachable={life.timedOut} message={picnicMessage} ask={picnicRequest} learnedFruit={learnedFruit}
@@ -563,10 +556,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
         <Icon name={station.icon} size={40}/>
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
-          <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? station.water ? '需要喜欢水的小伙伴来这里玩' : '这里适合在陆地活动的小伙伴':'先去草丛认识新朋友'}</span></div>
+          <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回冒险路线'}</button>}
-        {captures.filter(c=>compatible(getCreature(c.id),station)).length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
+        {captures.length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
       </section>}
       {active && evolving !== null && (
         <Evolution

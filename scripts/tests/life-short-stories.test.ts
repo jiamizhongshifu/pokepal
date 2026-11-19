@@ -5,7 +5,7 @@ import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {LIFE_SHORT_STORIES} from '../../src/data/lifeShortStories';
 import {STORY_SCENES} from '../../src/data/storyScenes';
 import {LEARNING_UNITS,learningEntry} from '../../src/data/curriculum';
-import {togetherSession} from '../../src/scene/together';
+import {togetherSession} from '../../src/island/together';
 import {storyProp} from '../../src/data/sceneArt';
 
 test('every short story has bilingual pages, matching art assets and reusable learning words',()=>{

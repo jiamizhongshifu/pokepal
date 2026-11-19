@@ -1,5 +1,5 @@
 import type { Creature } from "../types";
-import { BEHAVIORS, DEFAULT_SCHEDULE, type Habit, type ZoneKey } from "../data/behaviors";
+import { BEHAVIORS, DEFAULT_SCHEDULE, type Habit } from "../data/behaviors";
 
 export type Activity =
   | "sleep" | "nap" | "eat" | "play" | "bath" | "swim" | "splash" | "sunbathe" | "sing" | "dance"
@@ -47,7 +47,7 @@ export function habitAt(p: Creature, date = new Date()): Habit {
   const sched = BEHAVIORS[p.id]?.schedule ?? DEFAULT_SCHEDULE;
   const h = hourOf(date);
   for (const s of sched) if (inRange(h, s.from, s.to)) return s;
-  return { from: 0, to: 24, activity: "play", zone: "meadow" as ZoneKey };
+  return { from: 0, to: 24, activity: "play" };
 }
 
 export function activityAt(p: Creature, date = new Date()): Activity {

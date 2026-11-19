@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync,existsSync } from 'node:fs';
 import { attempt,encounter,migrateLearning,progressUnit,applyStation,reviewKeys } from '../src/lib/learningProgress';
 import { LEARNING_UNITS,unitSituations,unitRoundCount,reviewSituation,learningEntry,unitUnlocked,selectedUnit } from '../src/data/curriculum';
-import { STATIONS } from '../src/scene/islandLife';
+import { placeById } from '../src/island/world';
 import { STORIES } from '../src/data/stories';
 import { learningTheme,themePhrases,themeWords } from '../src/data/learning';
 import { learningChoices } from '../src/lib/learningChoices';
@@ -63,7 +63,7 @@ assert.equal(reviewSituation('Thank you!',['unit:water-break'])?.situation,'ä¼™ä
 console.log(`PASS: ${LEARNING_UNITS.length} stations; sequential unlock, resume, transfer-round completion, daily tasks and unique scenario choices.`);
 const manifest=JSON.parse(readFileSync('public/voice/manifest.json','utf8'));
 for(const unit of LEARNING_UNITS){
- assert(STATIONS.some(s=>s.id===unit.station),unit.station);assert(STORIES.some(s=>s.id===unit.story),unit.story);
+ assert(placeById(unit.station),unit.station);assert(STORIES.some(s=>s.id===unit.story),unit.story);
  assert.equal(new Set(unit.words).size,3);assert.notEqual(unit.phrase,unit.alternative);
  for(const key of [...unit.words,...unitSituations(unit).flatMap(s=>[s.phrase,s.alternative])]){const entry=learningEntry(key);assert(entry,key);for(const p of learningVoice(entry)){if(typeof p!=='number')assert(manifest[`${p[0]}|${p[1]}`],`${p[0]}|${p[1]}`);}}
  for(const scene of unitSituations(unit)){assert.notEqual(scene.phrase,scene.alternative);assert(manifest[`zh|${scene.situation}`]);}assert(manifest[`zh|${unit.mission}`]);

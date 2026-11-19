@@ -12,7 +12,7 @@ import { learningVoice,learningExplanation } from '../../src/lib/learningVoice';
 import { PIC_WORDS, PHRASES, LETTERS } from '../../src/data/words';
 import { nameNo, picNo, feedbackParts, traceIntro, traceSuccess } from '../../src/data/taskEnglish';
 import { facilityLesson } from '../../src/data/learning';
-import { STATIONS, compatible } from '../../src/scene/islandLife';
+import { PLACES as STATIONS } from '../../src/island/world';
 import { lookLine, whatLine, whereLine } from '../../src/data/islandEnglish';
 import { ACTIVITY } from '../../src/lib/routine';
 import type { Part } from '../../src/lib/speech';
@@ -32,7 +32,7 @@ for(const actual of CREATURES)for(const target of CREATURES)parts(feedbackParts(
 for(const actual of PIC_WORDS)for(const target of PIC_WORDS)parts(feedbackParts(picNo(actual,target),true));
 for(const station of STATIONS){
  for(const level of [1,2] as const){const l=facilityLesson(station,level);check('en',l.en);check('zh',l.zh);}
- for(const p of CREATURES.filter(p=>compatible(p,station))){
+ for(const p of CREATURES){
   const a=station.activity,A=ACTIVITY[a];
   for(const n of [lookLine(p,a),whereLine(p,a),whatLine(p,a)]){
    n.en.forEach(t=>check('en',t));check('zh',n.zh);if(n.echo)check('en',n.echo);if(n.me)check('en',n.me);

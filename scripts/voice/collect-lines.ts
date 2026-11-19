@@ -14,7 +14,7 @@ import { STORIES } from "../../src/data/stories";
 import { learningExplanation } from '../../src/lib/learningVoice';
 import { LEARNING_UNITS, unitSituations, learningEntry } from '../../src/data/curriculum';
 import { facilityLesson } from "../../src/data/learning";
-import { STATIONS, compatible } from "../../src/scene/islandLife";
+import { PLACES as STATIONS } from "../../src/island/world";
 import { CREATURES, COLORS, CREATURE_TYPES, kidDescription, hobby, favoriteFood } from "../../src/data/creatures";
 import { INVITE_KINDS } from "../../src/data/invites";
 import { PIC_WORDS, PHRASES, LETTERS, PRAISE } from "../../src/data/words";
@@ -85,7 +85,7 @@ for (const story of allStoryEditions(STORIES)) {
 }
 
 // ---------- 2. 带变量的模板 ----------
-const activitiesOf = (id: number): Activity[] => [...new Set([...((BEHAVIORS[id]?.schedule ?? DEFAULT_SCHEDULE).map(h=>h.activity)), "explore" as Activity, ...STATIONS.filter(s=>compatible(CREATURES.find(p=>p.id===id)!,s)).map(s=>s.activity)])];
+const activitiesOf = (id: number): Activity[] => [...new Set([...((BEHAVIORS[id]?.schedule ?? DEFAULT_SCHEDULE).map(h=>h.activity)), "explore" as Activity, ...STATIONS.map(s=>s.activity)])];
 
 for (const p of CREATURES) {
   const pz = pokemonVoice(p.id, "zh"), pe = pokemonVoice(p.id, "en");
