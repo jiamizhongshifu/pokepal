@@ -9,5 +9,4 @@ export function connectInteractions(handler:(event:InteractionEvent)=>void){sink
 export function trackLearningCompletion(event:'lesson_completed'|'practice_completed'|'review_completed'|'story_completed',reward:{gained:number;bonus:number}|undefined){
  if(!reward)return;
  trackInteraction(event);
- if(reward.gained+reward.bonus>0)trackInteraction('energy_earned');
 }

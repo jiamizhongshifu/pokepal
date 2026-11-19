@@ -48,15 +48,16 @@ test('storage failures do not return success or leak internal errors',async()=>{
  assert.equal((await onRequest({request:req(),env:{}})).status,503);
  const r=await onRequest({request:req(),env:{TRAFFIC_DB:database(true).db}});assert.equal(r.status,503);assert.equal(await r.text(),'');
 });
-test('interaction vocabulary cannot carry private input; completion precedes energy and failures never count',()=>{
+test('interaction vocabulary cannot carry private input; completion is sent once, energy no longer exists and failures never count',()=>{
  for(const value of ['__proto__','baby-name','lesson_123','catch_25',{},null])assert.equal(interactionEvent(value),null);
  for(const value of INTERACTION_EVENTS)assert.equal(interactionEvent(value),value);
  const events:string[]=[];trackInteraction('help_opened'); // no backlog before a sink exists
  const disconnect=connectInteractions(e=>events.push(e));
  assert.deepEqual(events,[]);
  trackLearningCompletion('lesson_completed',undefined);assert.deepEqual(events,[]);
- trackLearningCompletion('lesson_completed',{gained:2,bonus:0});assert.deepEqual(events,['lesson_completed','energy_earned']);
- trackLearningCompletion('practice_completed',{gained:0,bonus:0});assert.deepEqual(events,['lesson_completed','energy_earned','practice_completed']);
- trackInteraction('private' as never);assert.equal(events.length,3);disconnect();trackInteraction('help_opened');assert.equal(events.length,3);
+ trackLearningCompletion('lesson_completed',{gained:2,bonus:0});assert.deepEqual(events,['lesson_completed']);
+ trackLearningCompletion('practice_completed',{gained:0,bonus:0});assert.deepEqual(events,['lesson_completed','practice_completed']);
+ assert.equal(interactionEvent('energy_earned'),null,'events with no current meaning are not accepted (T15)');
+ trackInteraction('private' as never);assert.equal(events.length,2);disconnect();trackInteraction('help_opened');assert.equal(events.length,2);
  const broken=connectInteractions(()=>{throw Error();});assert.doesNotThrow(()=>trackInteraction('help_opened'));broken();
 });

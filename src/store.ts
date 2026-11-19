@@ -336,7 +336,7 @@ export const useGame = create<State>((set, get) => {
         if(!s.daily.words.includes(entry.key))s.daily.words.push(entry.key);
         if(action)return rewardParticipation(s,'island');
       }
-    });if(reward&&reward.gained+reward.bonus>0)void flushSave().then(()=>trackInteraction('energy_earned')).catch(()=>{});},
+    });if(reward)void flushSave().catch(()=>{});},
 
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
