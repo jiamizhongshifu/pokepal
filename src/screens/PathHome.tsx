@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useGame } from '../store';
-import { learningPath, withReview, pathStars, pathNodes, type PathNode } from '../lib/learningPath';
+import { learningPath, withReview, pathStars, pathNodes, chapterProgress, type PathNode } from '../lib/learningPath';
 import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
 import { creatureArt } from '../data/creatures';
@@ -69,7 +69,7 @@ export function PathHome() {
   <main className="path-main">
    {path.map(chapter => <section key={chapter.index} className={`path-chapter tone-${CHAPTER_COLOR[chapter.index % CHAPTER_COLOR.length]}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <div className="path-banner">
-     <small>第 {chapter.index + 1} 章 · {chapter.done} / {chapter.nodes.filter(n => n.kind !== 'review').length}</small>
+     <small>第 {chapter.index + 1} 章 · {chapterProgress(chapter).done} / {chapterProgress(chapter).total}</small>
      <h2>{chapter.title}</h2>
      <p>{chapter.goal}</p>
     </div>

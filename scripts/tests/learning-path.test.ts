@@ -5,7 +5,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_CHAPTERS,LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {progressUnit,applyStation} from '../../src/lib/learningProgress';
-import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD} from '../../src/lib/learningPath';
+import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {validateSave} from '../../src/lib/saveValidation';
 import {BABY_CREATURES} from '../../src/data/creatures';
@@ -98,4 +98,27 @@ test('opening the chapter diary completes it once, without asking for any conten
  assert.equal(s.path!.diaries!['0'],first);
  assert.equal(learningPath(s)[0].nodes.find(n=>n.kind==='diary')!.state,'done');
  assert.throws(()=>validateSave({...JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')),path:{version:1,friends:{},seen:[],reviews:-1}}));
+});
+
+// T02: one denominator, whatever screen shows it. Samples mirror the counts seen in the 2026-11-19 walkthrough.
+test('chapter counts come from one rule: 0/8 fresh, 2/8 after two lessons, unchanged by a woven-in review or a replay',()=>{
+ assert.equal(PATH_CONTENT_VERSION,3);
+ const s=fresh();
+ assert.deepEqual(chapterProgress(learningPath(s)[0]),{done:0,total:8});
+ const [a,b]=lessonsOf(0);finishLesson(s,a);finishLesson(s,b);
+ assert.deepEqual(chapterProgress(learningPath(s)[0]),{done:2,total:8});
+ for(const k of ['ball','book','hat'])s.learning!.records[k]={seen:1,spoken:0,attempts:1,misses:0,independent:1,streak:1,lastSeen:1,nextReview:1,needsPractice:false,actions:0,contexts:[]} as never;
+ const woven=withReview(s,learningPath(s),10_000)[0];
+ assert.ok(woven.nodes.some(n=>n.kind==='review'));
+ assert.deepEqual(chapterProgress(woven),{done:2,total:8},'a review stop never changes the denominator');
+ finishLesson(s,a);assert.deepEqual(chapterProgress(learningPath(s)[0]),{done:2,total:8},'replaying a finished lesson does not count twice');
+ assert.equal(learningPath(s)[0].done,chapterProgress(learningPath(s)[0]).done);
+});
+
+test('a save from the seven-stop route (version 2) keeps every finished stop and gains the chat stop as next',()=>{
+ const s=fresh();walkChapter(s,0);delete s.path!.diaries;
+ const first=learningPath(s)[0];
+ assert.deepEqual(chapterProgress(first),{done:7,total:8});
+ assert.equal(currentNode(learningPath(s))?.kind,'diary');
+ assert.equal(s.path!.friends['0']!==undefined,true,'the chapter friend is kept');
 });

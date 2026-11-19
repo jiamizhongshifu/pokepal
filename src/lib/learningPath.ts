@@ -66,10 +66,21 @@ export function learningPath(s: SaveData): PathChapter[] {
    if (!done) foundCurrent = true;
    return { ...n, index: ordinal++, state };
   });
-  return { index: c, title: chapter.title, goal: chapter.goal, nodes, done: nodes.filter(n => n.state === 'done').length };
+  return { index: c, title: chapter.title, goal: chapter.goal, nodes, done: chapterProgress({ index: c, title: '', goal: '', nodes, done: 0 }).done };
  });
 }
 
+/**
+ * Version of the fixed route. Bump it whenever stops are added, removed or reordered; progress is always
+ * re-derived from the underlying lesson, story, island, friend and diary records, so a new version needs no migration.
+ * 2 = seven stops per chapter, 3 = eight (adds "talk about this chapter").
+ */
+export const PATH_CONTENT_VERSION = 3;
+/** The one place a chapter's progress is counted: finished fixed stops over all fixed stops; a woven-in review never counts. */
+export function chapterProgress(chapter: PathChapter) {
+ const fixed = chapter.nodes.filter(n => n.kind !== 'review');
+ return { done: fixed.filter(n => n.state === 'done').length, total: fixed.length };
+}
 /** Stars are one per finished stop plus one per finished review; they record progress and are never spent. */
 export const pathStars = (path: PathChapter[], s?: SaveData) => path.reduce((n, c) => n + c.done, 0) + (s?.path?.reviews ?? 0);
 export const currentNode = (path: PathChapter[]) => path.flatMap(c => c.nodes).find(n => n.state === 'current');

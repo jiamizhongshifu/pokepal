@@ -14,7 +14,7 @@ import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
 import { DAILY_ENERGY_CAP, playLimitSeconds, useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
-import { learningPath, withReview, currentNode, pathNodes, pathStars } from "../lib/learningPath";
+import { learningPath, withReview, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
 import { listRecordings, type Recording } from "../lib/db";
 import { playUrl, say, voiceInfo } from "../lib/speech";
@@ -203,7 +203,7 @@ function ParentPathSummary(){
  const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length;
  const friends=Object.entries(save.path?.friends??{}).sort(([a],[b])=>+a-+b);
  return <div className="parent-path-summary">
-  <div className="parent-path-row"><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {path.length} 章</span><strong>{chapter.title}</strong><small>本章 {chapter.done} / {chapter.nodes.filter(n=>n.kind!=='review').length} 站 · 共点亮 {pathStars(route,save)} 颗星（路线 {total} 站）</small></div>
+  <div className="parent-path-row"><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {path.length} 章</span><strong>{chapter.title}</strong><small>本章 {chapterProgress(chapter).done} / {chapterProgress(chapter).total} 站 · 共点亮 {pathStars(route,save)} 颗星（路线 {total} 站）</small></div>
   <p>{next?<>下一站：<b>{NEXT_KIND[next.kind]}</b>{next.kind==='lesson'||next.kind==='story'?`「${next.title}」`:''}</>:'整条路线已经走完，可以挑喜欢的站再玩一次。'}</p>
   {friends.length>0&&<div className="parent-path-friends" aria-label="路线上认识的朋友">{friends.map(([c,id])=><span key={c}><CreatureImg src={creatureArt(id)} alt=""/>第 {+c+1} 章 · {getCreature(id).nameZh}</span>)}</div>}
  </div>;
