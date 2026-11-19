@@ -42,6 +42,10 @@ import { useIslandLife } from "../lib/useIslandLife";
 import { careRequest, nextCareRequest } from "../lib/companionCare";
 import { stationById, compatible, isAquatic } from "../scene/islandLife";
 import {AuthorContact} from '../components/AuthorContact';
+import { IslandTaskCard } from '../components/IslandTaskCard';
+import { learningVoice } from '../lib/learningVoice';
+import { islandTask, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
+import type { District } from '../scene/islandLife';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -151,6 +155,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const farmRetryAt=useRef(0);
   const lastPlotTap=useRef([0,0,0]);
   const tapPlot=async(index:number)=>{
+    if(playLocked('farm'))return;
     if(useGame.getState().saveBusy||useGame.getState().saveIssue)return;
     if(Date.now()-lastPlotTap.current[index]<600)return;
     lastPlotTap.current[index]=Date.now();
@@ -181,7 +186,20 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const learningUnit=visitUnit(save);
   const courseVisit=station&&learningUnit.station===station.id&&!!save.learning?.units[learningUnit.id]?.completedAt;
   // Describe the real facility activity; a course sentence may refer to a different situation.
-  const lesson = station ? facilityLesson(station,learningLevel(save)) : null;
+  const learnedLine = station ? learnedPhrase(save,station.id) : undefined;
+  const lesson = station ? (learnedLine?{en:learnedLine.en,zh:learnedLine.zh}:facilityLesson(station,learningLevel(save))) : null;
+  const open = unlockedDistricts(save);
+  const [lockNote,setLockNote]=useState('');
+  useEffect(()=>{if(!lockNote)return;const t=setTimeout(()=>setLockNote(''),5000);return()=>clearTimeout(t);},[lockNote]);
+  /** A place in an area the path has not reached yet says which lesson opens it, using that lesson's recorded mission. */
+  const lockedAt=(district:District|undefined)=>{
+    if(!district||open.has(district))return false;
+    const u=unlockingUnit(district);sfx('boop');stopSpeech();
+    setLockNote(`学到「${u?.title??''}」，就能来${districtName(district)}玩啦`);
+    if(u)void say(['zh',u.mission]);
+    return true;
+  };
+  const playLocked=(play:keyof typeof PLAY_DISTRICT)=>!playOpen(save,play)&&lockedAt(({picnic:'leisure',farm:'garden',ball:'play',rest:'leisure',bubbles:'camp',jump:'camp'} as const)[play]);
   const facilityRun = useRef(0);
   const learnedFacilityVisit = useRef<string|null>(null);
   useEffect(() => { facilityRun.current++; return () => { facilityRun.current++; }; }, [stationId, selected,active]);
@@ -189,7 +207,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if (!lesson) return;
     const ticket = ++facilityRun.current;
     ambient.poke();
-    const ok = await say(...bi(["en",lesson.en,lesson],["zh",lesson.zh,lesson]));
+    const ok = learnedLine ? await say(...learningVoice(learnedLine)) : await say(...bi(["en",lesson.en,lesson],["zh",lesson.zh,lesson]));
     if (ok && ticket === facilityRun.current) {
       const visit=station&&life.active.find(v=>v.manual&&v.station.id===station.id);
       if(visit){
@@ -278,6 +296,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   }, [captures.length,active]);
 
   const inviteStation = (id:string,cycle=false) => {
+    setLockNote('');
+    if(lockedAt(id.startsWith('area-')?id.slice(5) as District:stationDistrict(id==='together-ball'?'ball':id==='together-rest'?'bench':id)))return;
     if(id.startsWith('area-')){ambient.poke();stopSpeech();activatePanel('area');setAreaId(id.slice(5));return;}
     setAreaId(null);
     if(id==='upgrades'||id.startsWith('upgrades:')){openLiving(undefined,'build',UPGRADES.find(u=>u.id===id.split(':')[1])?.id);return;}
@@ -350,14 +370,14 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     let phrase: { en: string; zh: string };
     let heard=false;
     if (kind === "pet") {
-      phrase = { en: "I'm happy!", zh: "我很开心！" };
+      phrase = learnedPlayLine(useGame.getState().save,'pet') ?? { en: "I'm happy!", zh: "我很开心！" };
       heard=await say(...bi(["en", `${p.nameEn} is happy!`], ["en", "Hee hee! I'm happy!"], 300, ["zh", `${p.nameZh}好开心！`]));
     } else if (kind === "feed") {
       const f = favoriteFood(p);
-      phrase = { en: "Yummy!", zh: "好吃！" };
+      phrase = learnedPlayLine(useGame.getState().save,'feed') ?? { en: "Yummy!", zh: "好吃！" };
       heard=await say(...bi(["en", `Here is ${f.one} for you!`], ["zh", `给你吃${f.zh}！`], ["en", "Yummy! Thank you!"]));
     } else {
-      phrase = { en: "Good night!", zh: "晚安！" };
+      phrase = learnedPlayLine(useGame.getState().save,'sleep') ?? { en: "Good night!", zh: "晚安！" };
       heard=await say(...bi(["en", `Good night, ${p.nameEn}!`], ["zh", `${p.nameZh}，晚安！`]));
     }
     if (run !== interactionRun.current) return;
@@ -375,6 +395,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     sfx('sparkle');void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&run===interactionRun.current&&activeRef.current){noteWord('Yummy!','heard');useGame.getState().noteStationLearning('farm','Thank you!',true);}});
   };
   const openPicnic=(id?:number)=>{
+    if(playLocked('picnic'))return;
     setAreaId(null);setLivingOpen(false);together.cancel();
     stopSpeech();cancelWater();setSelected(null);setStationId(null);setPrompt(null);
     setPicnicInitialId(id);setPicnicMessage('');setPicnicOpen(true);
@@ -403,7 +424,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(picnic)useGame.getState().endPicnic(picnic.id);
     setPicnicOpen(false);life.cancel();stopSpeech();
   };
-  const hearPicnic=()=>{void say(['en','Thank you!']).then(ok=>{if(ok&&activeRef.current)noteWord('Thank you!','heard');});};
+  const hearPicnic=()=>{const line=learnedPlayLine(useGame.getState().save,'picnic');void (line?say(...learningVoice(line)):say(['en','Thank you!'])).then(ok=>{if(ok&&activeRef.current)noteWord(line?.key??'Thank you!','heard');});};
   const servePicnic=()=>{
     if(!picnicReady||!picnic||!activeRef.current||document.hidden)return;
     if(!useGame.getState().servePicnic(picnic.id)){setPicnicMessage('树果已经用完啦，可以去果园再准备一些。');return;}
@@ -416,6 +437,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     stopSpeech();cancelWater();setPicnicOpen(false);setSelected(null);setStationId(null);setPrompt(null);setLivingInitialId(id);setLivingOpen(true);
   };
   const beginTogether=(kind:TogetherKind,ids:number[],coast:boolean)=>{
+    if(playLocked(kind)||coast&&lockedAt('beach'))return;
     stopSpeech();life.cancel();together.begin(kind,ids,coast);
   };
   const sel = selected ? getCreature(selected) : null;
@@ -427,7 +449,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const selNeed = selected ? careRequest(save.captures.find(c=>c.id===selected)!) : null;
   const selCap = selected ? captures.find((c) => c.id === selected) : null;
 
-  const hint=homeHint({active,immersive,blocked:blocked||evolving!==null,panel,farm:!!farmMessage,picnic:!!picnic,care:!!need});
+  const hint=homeHint({active,immersive,blocked:blocked||evolving!==null,panel,farm:!!farmMessage,picnic:!!picnic,care:!!need,task:captures.length>0&&!livingOpen&&!picnicOpen&&!station});
   useEffect(()=>{
     if(hint!=='care'||!need)return;
     const timer=setTimeout(()=>{if(!document.hidden)useGame.getState().deferCare(need.id);},30000);
@@ -461,10 +483,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   return (
     <div className={`screen home sky-${sky}${immersive?" is-immersive":""}`} data-home-panel={panel??undefined} data-hint={hint??undefined} data-modal-blocked={blocked||undefined}>
       {panel!=='companion'&&!together.session&&<TopBar title={`${save.trainer?.name ?? ""}的家园`} help={<FeatureGuide id={captures.length?'home':'firstFriend'} enabled={active&&!immersive&&!blocked&&panel===null} topics={captures.length?['home','farm','camera','music']:undefined}/>} homeActions={active&&!livingOpen&&!sel&&!station&&!picnicOpen?<>
-        <button onClick={()=>{stopSpeech();go({name:"home"});}}><Icon name="book" size={30}/><span>今天的故事</span></button>
         <Announcements active={active}/>
-        <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
         <details className="home-more" open={panel==='menu'}><summary onClick={e=>{e.preventDefault();if(panel==='menu')closePanel('menu');else activatePanel('menu');}}><Icon name="island" size={30}/><span>小岛生活</span><span aria-hidden="true">⌄</span></summary><div className="home-more-menu" onClick={()=>closePanel('menu')}>
+        <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
+        <button className={open.has('leisure')?undefined:'is-locked'} onClick={()=>openPicnic()}><Icon name={open.has('leisure')?'bowl':'lock'} size={30}/><span>野餐</span></button>
         <button onClick={()=>openLiving(undefined,'build')}><Icon name="island" size={30}/><span>装扮</span></button>
         <AuthorContact active={active&&!immersive}/>
         {evolving===null&&<button ref={immersiveEntry} aria-label="隐藏界面，观赏小岛" onClick={()=>{stopSpeech();ambient.poke();setFinderOpen(false);setAreaId(null);setImmersive(true);}}><Icon name="eye" size={28}/><span>看风景</span></button>}
@@ -478,6 +500,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <div className="island-scroller">
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
+            lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'?need:null}
             active={active} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session}
             together={together.session?{partners:together.session.partners}:undefined}
@@ -500,6 +523,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {active&&livingOpen&&<IslandLivingPanel onPreview={setDecorPreview} save={save} together={together} initialId={livingInitialId} initialTab={livingTab} initialUpgrade={livingUpgrade} onBegin={beginTogether}
         onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();}}
         onPicnic={id=>openPicnic(id)}/>}
+      {hint==='task'&&<IslandTaskCard task={islandTask(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandTask(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
+      {lockNote&&<p className="island-lock-note" role="status" onClick={()=>setLockNote('')}><Icon name="lock" size={24}/>{lockNote}</p>}
       {hint==='care' && need && <aside className="care-request" aria-label="伙伴的小心愿">
         <button className="care-open" onClick={()=>{setCareThanks(null);tapCreature(getCreature(need.id),false);setQuickCare({id:need.id,kind:need.kind});}}><CreatureImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}{need.kind==='feed'?'肚子饿啦':'想让你摸摸'}</strong><small>{need.kind==='feed'?'点一下，喂我小点心':'点一下，摸摸我'}</small></span><Icon name={need.kind==='feed'?'apple':'heart'} size={32}/></button>
         <button className="care-later" aria-label="等一会再陪它" onClick={()=>useGame.getState().deferCare(need.id)}>等一会</button>

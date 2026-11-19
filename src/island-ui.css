@@ -123,3 +123,19 @@
   .home .companion-card .act .icon{width:25px;height:25px}
   .home .companion-switch button{min-height:44px}
 }
+/* One island task from the learning path (shares the bottom-left hint slot). */
+.island-task{display:flex;align-items:stretch;gap:6px;padding:6px;border:2px solid var(--brand-primary);border-radius:var(--radius-lg);background:var(--surface-strong);box-shadow:0 4px 0 var(--brand-primary-deep)}
+.island-task.is-route{border-color:var(--brand-sky);box-shadow:0 4px 0 var(--brand-sky-deep)}
+.island-task button{border:0;background:none;color:var(--text);cursor:pointer;min-height:56px}
+.island-task-hear{min-width:52px;border-radius:var(--radius-md)!important;background:var(--brand-primary-soft)!important}
+.island-task-main{flex:1;display:flex;align-items:center;gap:10px;text-align:left;padding:4px 8px}
+.island-task-main>span:not([aria-hidden]){display:grid;gap:2px}
+.island-task-main strong{font-size:var(--text-base);line-height:1.35}
+.island-task-main small{font-size:var(--text-sm);color:var(--muted)}
+.island-task-main>[aria-hidden]{font-size:var(--text-2xl);color:var(--muted)}
+.island-lock-note{position:absolute;left:50%;top:96px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:8px;margin:0;padding:10px 16px;border-radius:var(--radius-lg);background:var(--surface-strong);border:2px solid var(--brand-line);box-shadow:var(--soft-shadow);font-weight:800;max-width:calc(100% - 32px)}
+.island-plot.is-locked{filter:grayscale(.85);opacity:.55}
+.island-station.is-locked{display:grid;place-items:center}
+.island-station.is-locked .icon{width:40px;height:40px;padding:7px;box-sizing:border-box;border-radius:50%;background:var(--surface-strong);box-shadow:0 3px 0 var(--surface-border),0 0 0 2px var(--surface-border)}
+.home-more-menu .is-locked{opacity:.6}
+.living-play-choices .is-locked,.living-quiet-choices .is-locked{filter:grayscale(.8);opacity:.6}

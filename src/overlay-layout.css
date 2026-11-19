@@ -4,7 +4,7 @@ dialog.blocking-dialog:not([open]){display:none}
 dialog.blocking-dialog::backdrop{background:transparent}
 dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow:auto;box-sizing:border-box;color:var(--brand-ink);background:var(--brand-paper);text-shadow:none;flex-shrink:0}
 /* One foreground panel in the left corner. The main dock yields that space. */
-#root .home{--corner-left:max(16px,env(safe-area-inset-left));--corner-bottom:max(20px,env(safe-area-inset-bottom))}
+#root .home{--corner-left:max(16px,env(safe-area-inset-left));--corner-bottom:max(20px,env(safe-area-inset-bottom));--hint-bottom:calc(164px + env(safe-area-inset-bottom))}
 #root .home:is([data-modal-blocked])>:is(.companion-card,.companion-finder,.picnic-panel,.facility-panel,.area-choices,.island-weather,.feature-guide){visibility:hidden;pointer-events:none}
 #root .home>:is(.companion-card,.picnic-panel,.area-choices,.facility-panel){left:var(--corner-left);right:auto;bottom:var(--corner-bottom);top:auto;transform:none;width:min(370px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:calc(100% - 100px - env(safe-area-inset-top) - env(safe-area-inset-bottom));box-sizing:border-box;overflow:auto;overscroll-behavior:contain}
 #root .home .facility-panel{display:flex;flex-wrap:wrap;gap:12px;padding:16px;padding-top:54px}
@@ -12,7 +12,8 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 #root .home .facility-panel>div{flex:1;min-width:200px}
 #root .home .facility-panel>button:not(.facility-close){min-height:48px}
 /* Exactly one of these hints is rendered by homeHint(). Reserve the right dock. */
-#root .home>:is(.care-request,.follow-status,.farm-feedback,.picnic-resume,.idle-observe-status,.camera-gesture-hint,.guide-floating){position:absolute;left:var(--corner-left);right:auto;top:auto;bottom:var(--corner-bottom);transform:none;margin:0;box-sizing:border-box;max-width:min(370px,calc(100% - 380px));z-index:24}
+/* The corner hint sits above the bottom navigation and the find-a-friend button. */
+#root .home>:is(.care-request,.follow-status,.farm-feedback,.picnic-resume,.idle-observe-status,.camera-gesture-hint,.guide-floating,.island-task){position:absolute;left:var(--corner-left);right:auto;top:auto;bottom:var(--hint-bottom);transform:none;margin:0;box-sizing:border-box;max-width:min(370px,calc(100% - 380px));z-index:24}
 #root .home .care-request{width:370px}
 #root .home .care-open{min-width:0;flex:1}
 #root .home .care-open strong{font-size:var(--text-base);line-height:1.4}
@@ -27,7 +28,7 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 #root .home .picnic-resume{display:flex;gap:8px;align-items:center}
 @media(max-width:800px){
  #root .home{--corner-left:12px;--corner-bottom:max(14px,env(safe-area-inset-bottom))}
- #root .home>:is(.care-request,.follow-status,.farm-feedback,.picnic-resume,.idle-observe-status,.camera-gesture-hint,.guide-floating){bottom:calc(110px + env(safe-area-inset-bottom));max-width:calc(100% - 24px)}
+ #root .home>:is(.care-request,.follow-status,.farm-feedback,.picnic-resume,.idle-observe-status,.camera-gesture-hint,.guide-floating,.island-task){bottom:var(--hint-bottom);max-width:calc(100% - 24px)}
  #root .home>:is(.companion-card,.picnic-panel,.area-choices,.facility-panel){width:min(370px,calc(100% - 24px));max-width:calc(100% - 24px);max-height:calc(100% - 90px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
 }
 @media(max-height:500px){

@@ -1,5 +1,6 @@
 import type {DecorPreview} from '../lib/decorPreview';
 import {CompanionFinder} from './CompanionFinder';
+import {playOpen,unlockedDistricts} from '../lib/islandPlan';
 import {togetherTurn,togetherStatus,togetherRounds,togetherChildTurn,TOGETHER_LABELS,TOGETHER_ICONS} from '../lib/togetherTurn';
 import type {UpgradeId} from '../lib/islandProgress';
 import { FeatureGuide } from './FeatureGuide';
@@ -51,19 +52,19 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
    {!save.captures.length&&<button className="farm-primary living-main-action" onClick={()=>useGame.getState().go({name:'catch'})}><Icon name="grass" size={30}/>认识新伙伴</button>}
    {!!save.captures.length&&<>
    <div className="living-play-choices" aria-label="选一个一起玩的活动">
-    <button disabled={!selected.length} onClick={()=>onBegin('ball',selected,coast)}><Icon name="ball" size={58}/><strong>玩球</strong></button>
-    <button onClick={()=>onBegin('bubbles',selected,coast)}><Icon name="bubbles" size={58}/><strong>戳泡泡</strong></button>
-    <button onClick={()=>onBegin('jump',selected,coast)}><span className="living-jump-picture" aria-hidden="true"><CreatureImg src={creatureArt(selected[0])} alt=""/><span>↑</span></span><strong>一起跳</strong></button>
+    <button className={playOpen(save,'ball')?undefined:'is-locked'} disabled={!selected.length} onClick={()=>onBegin('ball',selected,coast)}><Icon name={playOpen(save,'ball')?'ball':'lock'} size={58}/><strong>玩球</strong></button>
+    <button className={playOpen(save,'bubbles')?undefined:'is-locked'} onClick={()=>onBegin('bubbles',selected,coast)}><Icon name="bubbles" size={58}/><strong>戳泡泡</strong></button>
+    <button className={playOpen(save,'jump')?undefined:'is-locked'} onClick={()=>onBegin('jump',selected,coast)}><span className="living-jump-picture" aria-hidden="true"><CreatureImg src={creatureArt(selected[0])} alt=""/><span>↑</span></span><strong>一起跳</strong></button>
    </div>
    <div className="living-quiet-choices">
-    <button onClick={()=>onBegin('rest',selected,coast)}><Icon name="rest" size={28}/>歇一歇</button>
-    <button onClick={()=>onPicnic(selected[0])}><Icon name="apple" size={28}/>喂点心</button>
+    <button className={playOpen(save,'rest')?undefined:'is-locked'} onClick={()=>onBegin('rest',selected,coast)}><Icon name={playOpen(save,'rest')?'rest':'lock'} size={28}/>歇一歇</button>
+    <button className={playOpen(save,'picnic')?undefined:'is-locked'} onClick={()=>onPicnic(selected[0])}><Icon name={playOpen(save,'picnic')?'apple':'lock'} size={28}/>喂点心</button>
    </div>
    <div className="living-partner-tools">
     <button aria-expanded={finding} onClick={e=>{partnerTrigger.current=e.currentTarget;setFinding(true);}}><Icon name="search" size={26}/>换个伙伴</button>
 
    </div>
-   <details className="living-place"><summary><Icon name="island" size={23}/>换个地方玩</summary><div className="living-options"><button aria-pressed={!coast} onClick={()=>setCoast(false)}><Icon name="tree" size={30}/>小岛</button><button aria-pressed={coast} onClick={()=>setCoast(true)}><Icon name="waves" size={30}/>海边</button></div></details>
+   <details className="living-place"><summary><Icon name="island" size={23}/>换个地方玩</summary><div className="living-options"><button aria-pressed={!coast} onClick={()=>setCoast(false)}><Icon name="tree" size={30}/>小岛</button><button aria-pressed={coast} disabled={!unlockedDistricts(save).has('beach')} onClick={()=>setCoast(true)}><Icon name={unlockedDistricts(save).has('beach')?'waves':'lock'} size={30}/>海边</button></div></details>
    </>}
 
   </>:<IslandRewards onPreview={onPreview} initialUpgrade={initialUpgrade} onSeeIsland={onClose}/>}

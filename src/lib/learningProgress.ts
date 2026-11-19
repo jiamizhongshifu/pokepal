@@ -150,9 +150,11 @@ export function progressUnit(s:SaveData,id:string,round:number,now=Date.now()){
  if(p.round===unitRoundCount(unit))p.completedAt??=now;
 }
 /** A visit is exposure. Only the actual named expression is recorded; no inferred speech. */
+/** A lesson's station names one place (`ball`) or a family of numbered places (`bed-` for `bed-0`, `bed-1`…). */
+export const atStation=(unit:{station:string},stationId:string)=>unit.station.endsWith('-')?stationId.startsWith(unit.station):unit.station===stationId;
 export function applyStation(s:SaveData,station:string,now=Date.now(),key?:string,action=false){
- const data=ensureLearning(s),u=unitById(data.activeUnit);
- if(u&&u.station===station&&data.units[u.id]?.completedAt)data.units[u.id].encounteredAt??=now;
+ const data=ensureLearning(s);
+ for(const u of LEARNING_UNITS)if(atStation(u,station)&&data.units[u.id]?.completedAt)data.units[u.id].encounteredAt??=now;
  if(!key)return;
  const entry=learningEntry(key);if(!entry)return;
  encounter(s,entry.key,'island',now);

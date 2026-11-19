@@ -1,10 +1,10 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {homeHint,automaticTogetherTurn,type HomePanel} from '../../src/lib/homeOverlay';
-const base={active:true,immersive:false,blocked:false,panel:null,farm:false,picnic:false,care:false};
-const hints=['farm','picnic','care'] as const;
+const base={active:true,immersive:false,blocked:false,panel:null,farm:false,picnic:false,care:false,task:false};
+const hints=['farm','picnic','care','task'] as const;
 test('every combination of simultaneous events yields exactly one highest priority corner hint',()=>{
- for(let mask=0;mask<64;mask++){
+ for(let mask=0;mask<16;mask++){
   const state={...base};hints.forEach((key,i)=>state[key]=!!(mask&(1<<i)));
   assert.equal(homeHint(state),hints.find(key=>state[key])??'guide');
  }
