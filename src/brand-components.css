@@ -102,3 +102,6 @@
 #root .feature-guide .guide-content, #root .modal, #root .companion-card, #root .facility-panel {
   border:var(--brand-border) solid var(--surface-border); border-radius:var(--radius-lg); box-shadow:0 var(--brand-press) 0 var(--surface-border); background:var(--surface); color:var(--text);
 }
+
+/* Icon pictures show a soft placeholder until they load (see Icon), so a slow image never reads as an empty slot. */
+#root img.icon.is-loading { background: color-mix(in srgb, var(--surface-border) 70%, transparent); border-radius: 30%; }
