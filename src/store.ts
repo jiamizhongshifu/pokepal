@@ -1,4 +1,5 @@
-import { playById, finishPlay, wishFor } from './island/plays';
+import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
+import { toggleSticker } from './island/stickers';
 import { getCreature as creatureOf } from './data/creatures';
 import {startCareStory,actCareStory,type CareStory,type CareAction} from './lib/careStory';
 import {advanceAdventure,PICNIC_ADVENTURE} from './lib/storyAdventure';
@@ -143,6 +144,8 @@ interface State {
   noteOpportunity: (o:Omit<Opportunity,'v'|'at'>)=>void;
   /** Three rounds of an island activity finished with a companion. */
   finishIslandPlay: (playId:string,partner:number)=>boolean;
+  /** Put an earned island sticker away or bring it back. */
+  toggleSticker: (id:string)=>boolean;
   markHomeTried: (id:string,tried:boolean)=>void;
   restLearningWord: (word:string)=>void;
   saveLearningWord: (word:string)=>void;
@@ -329,6 +332,7 @@ export const useGame = create<State>((set, get) => {
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
+    toggleSticker(id) {return !!mut(s=>toggleSticker(s,id));},
     finishIslandPlay(playId,partner) {const play=playById(playId);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
     markHomeTried(id,tried) {mut(s=>markHomeTried(s,id,tried));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
@@ -352,9 +356,9 @@ export const useGame = create<State>((set, get) => {
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
-    rememberTogether(memory){return mut(s=>rememberTogether(s,memory))??false;},
+    rememberTogether(memory){return mut(s=>{const ok=rememberTogether(s,memory);if(ok)for(const id of memory.partners){const c=s.captures.find(c=>c.id===id);if(c)notePlayedTogether(c);}return ok;})??false;},
     beginPicnic(id,berry) {return mut(s=>beginPicnic(s,id,berry,crypto.randomUUID()))??false;},
-    servePicnic(id) {return mut(s=>servePicnic(s,id))??false;},
+    servePicnic(id) {return mut(s=>{const pid=s.picnic?.session?.pokemonId,ok=servePicnic(s,id);const c=ok?s.captures.find(c=>c.id===pid):undefined;if(c)notePlayedTogether(c);return ok;})??false;},
     endPicnic(id) {mut(s=>endPicnic(s,id));},
 
     async createTrainer(avatar) {

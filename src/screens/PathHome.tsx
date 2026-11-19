@@ -63,7 +63,7 @@ export function PathHome() {
    <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
    <div className="path-stats">
     <span className="path-stat" aria-label={`已经点亮 ${stars} 颗星星`}><Icon name="star" size={30} /><b>{stars}</b></span>
-    <button className="path-stat" aria-label={`邀请果 ${save.balls.poke} 个${save.balls.poke ? '，去草丛认识新伙伴' : ''}`} disabled={save.balls.poke < 1} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>
+    <button className="path-stat" aria-label={`邀请果 ${save.balls.poke} 个${save.balls.poke ? '，去海边迎接新朋友' : ''}`} disabled={save.balls.poke < 1} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>
    </div>
    <div className="path-header-tools"><FeatureGuide id="path" compact /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>
   </header>

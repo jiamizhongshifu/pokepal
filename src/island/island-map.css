@@ -94,3 +94,7 @@
 .island-finder-launch .friend-portrait { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--brand-sky-soft); }
 .island-finder-launch .friend-portrait img { width: 40px; height: 40px; object-fit: contain; }
 .island-finder-launch .friend-portrait .icon { position: absolute; right: -4px; bottom: -4px; }
+/* Earned decorations sit on the illustration: bottom-centre at their spot, never in the way of a tap. */
+.island-sticker { position: absolute; z-index: 1; transform: translate(-50%, -100%); pointer-events: none; filter: drop-shadow(0 2px 0 rgba(0,0,0,.12)); animation: sticker-in .32s var(--brand-ease, ease-out) both; }
+@keyframes sticker-in { from { transform: translate(-50%, -100%) scale(.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .island-sticker { animation: none; } }

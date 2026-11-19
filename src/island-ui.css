@@ -139,3 +139,12 @@
 .island-station.is-locked .icon{width:40px;height:40px;padding:7px;box-sizing:border-box;border-radius:50%;background:var(--surface-strong);box-shadow:0 3px 0 var(--surface-border),0 0 0 2px var(--surface-border)}
 .home-more-menu .is-locked{opacity:.6}
 .living-play-choices .is-locked,.living-quiet-choices .is-locked{filter:grayscale(.8);opacity:.6}
+.companion-grow{display:flex;align-items:center;gap:6px;margin:4px 0 0;font-size:var(--text-sm);font-weight:700;color:var(--muted)}
+/* Sticker catalogue: one picture per card, never larger than the card. */
+#root .island-rewards .dress-catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+#root .island-rewards .dress-item{display:grid;justify-items:center;align-content:start;gap:4px;min-height:132px;padding:10px 6px;overflow:hidden}
+#root .island-rewards .dress-item img{width:64px;height:64px;object-fit:contain}
+#root .island-rewards .dress-item span{font-weight:800;font-size:var(--text-sm)}
+#root .island-rewards .dress-item small{color:var(--muted);font-size:var(--text-xs)}
+#root .island-rewards .dress-item[aria-pressed=false]:not(:disabled) img{opacity:.45}
+#root .island-rewards .dress-item.is-locked{opacity:.6}

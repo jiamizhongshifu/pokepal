@@ -8,7 +8,9 @@ export const UPGRADES=[
  {id:'island',name:'我们的小岛',icon:'island',cost:[10,15],changes:['向北扩建花草空地，陆地面积增加约 16%','再向北扩建一片空地，总面积增加约 32%']}
 ] as const;
 export type UpgradeId=typeof UPGRADES[number]['id'];
-export interface IslandProgress{version:1;owned:FurnitureId[];pending?:FurnitureId;nextGiftAt:number;levels:Record<UpgradeId,number>;}
+export interface IslandProgress{version:1;owned:FurnitureId[];pending?:FurnitureId;nextGiftAt:number;levels:Record<UpgradeId,number>;
+ /** Earned stickers the child has put away. */
+ hidden?:string[];}
 export function ensureIslandProgress(s:SaveData){
  const p=s.islandProgress??={version:1,owned:[...(s.islandLiving?.furniture??[])],nextGiftAt:120,levels:{camp:0,picnic:0,island:0,garden:0,play:0}};
  p.levels.garden??=0;p.levels.play??=0;return p;
@@ -28,7 +30,7 @@ export function grantNextIslandUpgrade(s:SaveData):UpgradeId|undefined{
  if(!next)return undefined;
  p.levels[next.id]=next.level+1;return next.id;
 }
-export function validIslandProgress(p:any){return p&&p.version===1&&Array.isArray(p.owned)&&p.owned.length<=FURNITURE.length&&new Set(p.owned).size===p.owned.length&&p.owned.every((id:any)=>FURNITURE.some(f=>f.id===id))&&(p.pending===undefined||FURNITURE.some(f=>f.id===p.pending)&&!p.owned.includes(p.pending))&&Number.isFinite(p.nextGiftAt)&&p.nextGiftAt>=0&&p.nextGiftAt<=1000000&&p.levels&&UPGRADES.every(u=>(['garden','play'].includes(u.id)&&p.levels[u.id]===undefined)||(Number.isInteger(p.levels[u.id])&&p.levels[u.id]>=0&&p.levels[u.id]<=2));}
+export function validIslandProgress(p:any){return (p?.hidden===undefined||Array.isArray(p.hidden)&&p.hidden.length<=20&&p.hidden.every((h:any)=>typeof h==='string'&&h.length<=40))&&p&&p.version===1&&Array.isArray(p.owned)&&p.owned.length<=FURNITURE.length&&new Set(p.owned).size===p.owned.length&&p.owned.every((id:any)=>FURNITURE.some(f=>f.id===id))&&(p.pending===undefined||FURNITURE.some(f=>f.id===p.pending)&&!p.owned.includes(p.pending))&&Number.isFinite(p.nextGiftAt)&&p.nextGiftAt>=0&&p.nextGiftAt<=1000000&&p.levels&&UPGRADES.every(u=>(['garden','play'].includes(u.id)&&p.levels[u.id]===undefined)||(Number.isInteger(p.levels[u.id])&&p.levels[u.id]>=0&&p.levels[u.id]<=2));}
 
 /** Decorations are freely available: one tap places a fixed, reviewed layout. */
 export function placeIslandDecoration(s:SaveData,id:FurnitureId,enabled:boolean){

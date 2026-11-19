@@ -1,0 +1,25 @@
+.screen.friend-visit{background-size:cover;background-position:center bottom;background-color:var(--brand-sky-soft)}
+.friend-visit-sea{position:relative;min-height:calc(100dvh - 96px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:16px}
+.friend-visit-title,.friend-visit-status{margin:0;padding:10px 18px;border-radius:var(--radius-lg);background:var(--surface-strong);box-shadow:var(--soft-shadow);font-size:var(--text-xl);font-weight:800;text-align:center}
+.friend-visit-boats{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
+.friend-boat{position:relative;display:grid;justify-items:center;width:min(220px,28vw);min-width:150px;padding:0 0 8px;border:0;background:none;cursor:pointer;animation:friend-bob 3s ease-in-out infinite}
+.friend-boat-guest{position:absolute;z-index:1;left:8%;bottom:27%;width:44%}
+.friend-pier-boat,.friend-boat{position:relative}
+.friend-boat .friend-boat-guest{bottom:calc(27% + 18px)}
+.friend-boat-hull{width:100%}
+.friend-boat span{margin-top:4px;padding:4px 14px;border-radius:var(--radius-pill);background:var(--surface-strong);font-weight:800;color:var(--text)}
+.friend-visit-more{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:8px 18px;border-radius:var(--radius-pill);border:2px solid var(--surface-border);background:var(--surface-strong);color:var(--text);font-weight:800;cursor:pointer}
+.friend-arrival{display:grid;justify-items:center;gap:16px}
+.friend-pier-boat{display:grid;justify-items:center;width:min(300px,60vw)}
+.friend-arrival.is-arriving .friend-pier-boat{animation:friend-sail 1.8s var(--brand-ease,ease-out) both}
+.friend-arrival.is-greet .friend-boat-guest,.friend-arrival.is-friends .friend-boat-guest{animation:friend-hop .6s ease-out}
+.friend-hello{min-width:220px}
+.friend-hello span{font-size:var(--text-2xl)}
+.friend-visit-done{display:grid;justify-items:center;gap:8px;padding:16px 20px;border-radius:var(--radius-lg);background:var(--surface-strong);box-shadow:var(--soft-shadow);text-align:center}
+.friend-visit-done h1{margin:0}.friend-visit-done p{margin:0;font-size:var(--text-lg)}
+.friend-visit-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.friend-visit-note{display:grid;justify-items:center;gap:10px;max-width:420px;padding:20px;border-radius:var(--radius-lg);background:var(--surface-strong);box-shadow:var(--soft-shadow);text-align:center}
+@keyframes friend-bob{50%{transform:translateY(-8px) rotate(-1.5deg)}}
+@keyframes friend-sail{from{transform:translateX(-70vw)}to{transform:translateX(0)}}
+@keyframes friend-hop{40%{transform:translateY(-18px)}}
+@media (prefers-reduced-motion:reduce){.friend-boat,.friend-arrival .friend-pier-boat,.friend-arrival .friend-boat-guest{animation:none!important}}

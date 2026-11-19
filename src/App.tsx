@@ -33,7 +33,7 @@ const StoryReader=lazy(()=>import("./screens/Stories").then(m=>({default:m.Story
 const TaskScreen=lazy(()=>import("./screens/TaskScreen").then(m=>({default:m.TaskScreen})));
 
 
-const Catch=lazy(()=>import("./screens/Catch").then(m=>({default:m.Catch})));
+const FriendVisit=lazy(()=>import("./screens/FriendVisit").then(m=>({default:m.FriendVisit})));
 
 const Dex=lazy(()=>import("./screens/Dex").then(m=>({default:m.Dex})));
 
@@ -137,7 +137,7 @@ export default function App() {
     case "stories": return <StoryLibrary />;
     case "story": return <StoryReader key={screen.id} id={screen.id} />;
     case "task": return <TaskScreen key={`${screen.kind}-${screen.boardIndex}-${screen.session ?? 0}`} kind={screen.kind} boardIndex={screen.boardIndex} practice={screen.practice} />;
-    case "catch": return <Catch />;
+    case "catch": return <FriendVisit />;
     case "dex": return <Dex key={String(screen.picking)} picking={screen.picking} browse={screen.browse} />;
     case "dexDetail": return <DexDetail id={screen.id} picking={screen.picking} browse={screen.browse} />;
     case "parent": return <Parent />;

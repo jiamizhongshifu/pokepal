@@ -1,9 +1,7 @@
 import {FarmFeedback,type FarmNotice} from '../components/FarmFeedback';
 import {CompanionStrip} from '../components/CompanionStrip';
-import {type DecorPreview} from '../lib/decorPreview';
 import {homeHint,type HomePanel} from '../lib/homeOverlay';
 import {useModalBlocked} from '../lib/modalLayer';
-import {UPGRADES,type UpgradeId} from '../lib/islandProgress';
 import { Announcements } from '../components/Announcements';
 import {weatherAt} from '../lib/weather';
 import {WeatherBadge} from '../components/WeatherBadge';
@@ -45,15 +43,14 @@ import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
 import { IslandPlaySession } from '../components/IslandPlaySession';
-import { playsAt, wishFor, wishDone, nextWish, type Play } from '../island/plays';
+import { shownStickers } from '../island/stickers';
+import { playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, GROW_AT, type Play } from '../island/plays';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
 
 export function Home({initialStation,initialCompanion,active=true}:{initialStation?:string;initialCompanion?:number;active?:boolean}) {
   const save = useGame((s) => s.save);
-  const [decorPreview,setDecorPreview]=useState<DecorPreview|null>(null);
-  useEffect(()=>{if(!active)setDecorPreview(null);},[active]);
   const go = useGame((s) => s.go);
   const interact = useGame((s) => s.interact);
   const noteWord = useGame((s) => s.noteWord);
@@ -95,7 +92,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const area=areaInfo&&{id:areaInfo.id,label:areaInfo.name,icon:areaInfo.icon,choices:placesIn(areaInfo.id).map(p=>p.id)};
   const livingOpen=panel==='living';
   const setLivingOpen=(open:boolean)=>open?activatePanel('living'):closePanel('living');
-  const [livingUpgrade,setLivingUpgrade]=useState<UpgradeId>();
   const [livingTab,setLivingTab]=useState<"play"|"build">("play");
   const [livingInitialId,setLivingInitialId]=useState<number>();
   // Once turn-taking is learned, each ball turn asks the child who rolls: the friend says "My turn!" or "Your turn!".
@@ -313,7 +309,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     if(lockedAt(id.startsWith('area-')?id.slice(5) as District:stationDistrict(id==='together-ball'?'ball':id==='together-rest'?'bench':id)))return;
     if(id.startsWith('area-')){ambient.poke();stopSpeech();activatePanel('area');setAreaId(id.slice(5));return;}
     setAreaId(null);
-    if(id==='upgrades'||id.startsWith('upgrades:')){openLiving(undefined,'build',UPGRADES.find(u=>u.id===id.split(':')[1])?.id);return;}
+    if(id==='upgrades'||id.startsWith('upgrades:')){openLiving(undefined,'build');return;}
     if(id==='ball'&&playsAt(useGame.getState().save,'ball').length){openPlace('ball',cycle,preferred);return;}
     if(id==='ball'||id==='together-ball'||id==='together-rest'){
       openLiving();
@@ -453,8 +449,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     setEffect({id:picnic.pokemonId,kind:'feed',icon:'heart',at:performance.now()});sfx('sparkle');
     void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&activeRef.current){useGame.getState().noteStationLearning('picnic','Thank you!',true);}});
   };
-  const openLiving=(id?:number,tab:"play"|"build"="play",upgrade?:UpgradeId)=>{
-    setAreaId(null);setLivingTab(tab);setLivingUpgrade(upgrade);
+  const openLiving=(id?:number,tab:"play"|"build"="play")=>{
+    setAreaId(null);setLivingTab(tab);
     stopSpeech();cancelWater();setPicnicOpen(false);setSelected(null);setStationId(null);setPrompt(null);setLivingInitialId(id);setLivingOpen(true);
   };
   const beginTogether=(kind:TogetherKind,ids:number[],coast:boolean)=>{
@@ -525,9 +521,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <div className="island-scroller">
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
+            stickers={shownStickers(save)}
             lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'&&need?{id:need.id,icon:need.play.icon}:null}
-            active={active} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session}
+            active={active} showInterface={!immersive&&!blocked&&panel!=='companion'&&!together.session}
             onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getCreature(id),'pet');}}else tapCreature(getCreature(id));}}
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
             farm={{open:panel!==null||blocked,farm:save.farm,clock:farmClock,working:watering?.index??null,onPlot:tapPlot}}
@@ -536,7 +533,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         {active && !blocked && !immersive && captures.length === 0 && panel===null && (
           <div className="empty-home">
             <div className="sign"><Icon name="sign" size={40} /> 家园还空空的</div>
-            <button className="btn-big" onClick={() => go({ name: "catch" })}><Icon name="grass" size={44} /> 去草丛认识新朋友</button>
+            <button className="btn-big" onClick={() => go({ name: "catch" })}><Icon name="waves" size={44} /> 去海边迎接新朋友</button>
           </div>
         )}
       </div>
@@ -544,7 +541,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {active&&!livingOpen&&!station&&!picnicOpen&&evolving===null&&captures.length>0&&<>
         {finderOpen&&<CompanionFinder ids={captures.map(c=>c.id)} selected={selected} onSelect={id=>tapCreature(getCreature(id))} onClose={()=>{setFinderOpen(false);ambient.poke();}}/>}
       </>}
-      {active&&livingOpen&&<IslandLivingPanel onPreview={setDecorPreview} save={save} together={together} initialId={livingInitialId} initialTab={livingTab} initialUpgrade={livingUpgrade} onBegin={beginTogether}
+      {active&&livingOpen&&<IslandLivingPanel save={save} together={together} initialId={livingInitialId} initialTab={livingTab} onBegin={beginTogether}
         onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();}}
         onPicnic={id=>openPicnic(id)}/>}
       {hint==='task'&&<IslandTaskCard task={islandTask(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandTask(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
@@ -612,6 +609,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
             </header>
 
+            {!feedPicker&&!prompt&&!round&&GROW_AT[sel.stage]!==undefined&&evoOptions(sel).length>0&&!readyToGrow(selCap,sel.stage)&&<p className="companion-grow"><Icon name="sparkle" size={20}/>再一起玩 {GROW_AT[sel.stage]-playedTogether(selCap)} 次，{sel.nameZh}就能长大</p>}
             {!feedPicker&&!prompt&&<p className="living-preference">{PREFERENCE_LABEL[preference(selCap)]}{save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='ball'?' · 上次我们一起玩了球':save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='rest'?' · 记得我们一起休息过':''}</p>}
             {careThanks?.id===sel.id ? <div className="companion-wish" role="status"><Icon name="heart" size={24}/>{careThanks.text}</div> : selWish && <button className="companion-wish" onClick={()=>startWish(sel.id,selWish)}><Icon name={selWish.icon} size={24}/>我今天想{selWish.title}，陪我去{placeOf(selWish.place).name}吧</button>}
             {round?.play==='feed'&&round.id===sel.id ? <IslandAskRound ask={round.ask} speaker={sel.id} station="companion" onClose={()=>setRound(null)} onSolved={id=>{setRound(null);if((CROP_KINDS as readonly string[]).includes(id)&&farm.basket[id as CropKind]>0)shareBerry(sel,id as CropKind);else void doInteract(sel,'feed');}}/> : feedPicker ? <div className="berry-menu">
@@ -647,7 +645,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
                 <button className="act" onClick={() => {const ask=feedAsk(save,seedOf(`feed-${sel.id}-${selCap.friendship}`));if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:sel.id,ask});}else void doInteract(sel,'feed');}}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
                 <button className="act" onClick={()=>{setFeedPicker(true);setCareThanks(null);stopSpeech();}}><Icon name="bowl" size={32}/>分享水果</button>
                 <button className="act" onClick={()=>openLiving(sel.id)}><Icon name="balloon" size={32}/>一起玩</button>
-                {friendshipLevel(selCap.friendship) >= 5 && evoOptions(sel).length > 0 && (
+                {readyToGrow(selCap, sel.stage) && evoOptions(sel).length > 0 && (
                   <button className={`act evolve ${selCap.stay ? "" : "pulse"}`} onClick={() => { stopSpeech(); setEvolving(sel.id); }}>
                     <Icon name="sparkle" size={28} />可以长大啦
                   </button>

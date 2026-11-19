@@ -860,6 +860,61 @@
    "id": "ui-nuts",
    "group": "icon",
    "prompt": "Two acorns."
+  },
+  {
+   "id": "deco-camp-bunting",
+   "group": "prop",
+   "prompt": "A short string of five small triangular party flags in red, yellow, blue and green, hanging between two little wooden posts."
+  },
+  {
+   "id": "deco-camp-lantern",
+   "group": "prop",
+   "prompt": "A small round paper lantern in warm orange with a soft glowing center, hanging from a short wooden pole."
+  },
+  {
+   "id": "deco-picnic-basket",
+   "group": "prop",
+   "prompt": "A round wicker fruit tray holding a red apple, a yellow banana and a bunch of purple grapes."
+  },
+  {
+   "id": "deco-picnic-cushions",
+   "group": "prop",
+   "prompt": "Two soft round floor cushions stacked slightly apart, one pink with white dots and one mint green."
+  },
+  {
+   "id": "deco-garden-sunflowers",
+   "group": "prop",
+   "prompt": "A cluster of three cheerful sunflowers of different heights with big green leaves."
+  },
+  {
+   "id": "deco-garden-birdhouse",
+   "group": "prop",
+   "prompt": "A tiny wooden birdhouse with a red roof and a round door, on a short post with a little leafy vine."
+  },
+  {
+   "id": "deco-play-lights",
+   "group": "prop",
+   "prompt": "A short arch of round party light bulbs in purple, orange, pink and blue on a thin wire between two small poles."
+  },
+  {
+   "id": "deco-play-balloons",
+   "group": "prop",
+   "prompt": "A bundle of four round balloons in red, yellow, blue and green tied to a small sandbag weight."
+  },
+  {
+   "id": "deco-beach-sandcastle",
+   "group": "prop",
+   "prompt": "A small sandcastle with two round towers and a tiny flag, with two little seashells beside it."
+  },
+  {
+   "id": "deco-beach-starfish",
+   "group": "prop",
+   "prompt": "A ring garland made of small starfish and seashells in coral, yellow and cream."
+  },
+  {
+   "id": "visit-boat",
+   "group": "prop",
+   "prompt": "A small friendly wooden sailboat with a white triangular sail with one round sun patch, empty deck, floating, seen from the side."
   }
  ],
  "iconStyle": "A single game UI icon in the style of a modern gamified language-learning app (Duolingo-like icon language): bold, chunky, very rounded silhouette, front view, centered with generous margin, nothing cropped, instantly readable at 40 pixels. Flat fills only, at most four colors taken from this palette: green #58cc02 (shade #58a700), blue #1cb0f6 (shade #1899d6), yellow #ffc800 (shade #d1a400), red #ff4b4b (shade #cc3b3b), orange #ff9600, purple #ce82ff, brown #a5642c, white, and dark gray #4b4b4b for small details. Each color has one darker hard-edged shade shape along the bottom and one small white highlight; no outlines, no gradients, no texture, no 3D clay look. Fully transparent background (PNG with alpha), no ground shadow, no backdrop, no circle badge. No text, letters or numbers.",

@@ -1,10 +1,8 @@
-import type {DecorPreview} from '../lib/decorPreview';
 import {CompanionFinder} from './CompanionFinder';
 import {playOpen,unlockedDistricts} from '../lib/islandPlan';
 import {ballAsk} from '../lib/islandAsk';
 import {IslandAskRound} from './IslandAskRound';
 import {togetherTurn,togetherStatus,togetherRounds,togetherChildTurn,TOGETHER_LABELS,TOGETHER_ICONS} from '../lib/togetherTurn';
-import type {UpgradeId} from '../lib/islandProgress';
 import { FeatureGuide } from './FeatureGuide';
 import { useGame } from '../store';
 import { IslandRewards } from './IslandRewards';
@@ -16,7 +14,7 @@ import { type TogetherKind } from '../lib/islandLiving';
 import type { SaveData } from '../types';
 import type { useTogether } from '../lib/useTogether';
 import './island-living.css';
-export function IslandLivingPanel({save,together,initialId,initialTab,initialUpgrade,onPreview,onClose,onPicnic,onBegin}:{save:SaveData;together:ReturnType<typeof useTogether>;initialId?:number;initialTab?:"play"|"build";initialUpgrade?:UpgradeId;onPreview:(p:DecorPreview|null)=>void;onClose:()=>void;onPicnic:(id?:number)=>void;onBegin:(kind:TogetherKind,ids:number[],coast:boolean)=>void}){
+export function IslandLivingPanel({save,together,initialId,initialTab,onClose,onPicnic,onBegin}:{save:SaveData;together:ReturnType<typeof useTogether>;initialId?:number;initialTab?:"play"|"build";onClose:()=>void;onPicnic:(id?:number)=>void;onBegin:(kind:TogetherKind,ids:number[],coast:boolean)=>void}){
  const tab=initialTab??'play';
  const [selection,setSelected]=useState<number[]>(initialId?[initialId]:save.captures.slice(0,1).map(c=>c.id)),[coast,setCoast]=useState(false);
  const validSelection=selection.filter(id=>save.captures.some(c=>c.id===id));
@@ -70,7 +68,7 @@ export function IslandLivingPanel({save,together,initialId,initialTab,initialUpg
    <details className="living-place"><summary><Icon name="island" size={23}/>换个地方玩</summary><div className="living-options"><button aria-pressed={!coast} onClick={()=>setCoast(false)}><Icon name="tree" size={30}/>小岛</button><button aria-pressed={coast} disabled={!unlockedDistricts(save).has('beach')} onClick={()=>setCoast(true)}><Icon name={unlockedDistricts(save).has('beach')?'waves':'lock'} size={30}/>海边</button></div></details>
    </>}
 
-  </>:<IslandRewards onPreview={onPreview} initialUpgrade={initialUpgrade} onSeeIsland={onClose}/>}
+  </>:<IslandRewards onSeeIsland={onClose}/>}
   </div>
  </section>;
 }

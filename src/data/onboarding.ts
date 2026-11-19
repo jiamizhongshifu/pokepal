@@ -19,7 +19,7 @@ export const GUIDES = {
  review:{icon:'heart',title:'和老朋友再玩一次',voice:'听听这个老朋友，再试着找一找。忘记了也没关系，我们一起再听一次。',target:'.learning-choices, .guided-example',sequence:['ear','picture']},
  energy:{icon:'bolt',title:'玩一玩，收集小能量',voice:'点一个喜欢的活动，听、找、读故事，都能收集能量。同一种活动今天只送一次。玩累了，休息也很好。',target:'.energy-next .btn-big',sequence:['ear','bolt']},
  shop:{icon:'gift',title:'五点能量，换一个邀请果',voice:'五点能量可以换一个邀请果。有了邀请果，就能邀请你喜欢的伙伴。能量还不够的话，先选个小游戏吧。',target:'.single-ball-card .btn-big',sequence:['bolt','gift','grass']},
- catch:{icon:'grass',title:'点点喜欢的伙伴',voice:'点一只你喜欢的小精灵。想找特别喜欢的那只，就点选个伙伴。想看看别的朋友，可以点再次探索。',target:'.field',sequence:['grass','hand','invite-berry']},
+ catch:{icon:'waves',title:'点点喜欢的伙伴',voice:'点一只你喜欢的小精灵。想找特别喜欢的那只，就点选个伙伴。想看看别的朋友，可以点再次探索。',target:'.friend-visit-boats',sequence:['waves','hand','invite-berry']},
  noBall:{icon:'gift',title:'先准备一个邀请果',voice:'先看看你喜欢谁，再去换一个邀请果。有了邀请果，就能邀请它回家。',target:'.field-kit button',sequence:['bolt','invite-berry']},
  throw:{icon:'hand',title:'轻点邀请果，邀请它',voice:'轻轻点一下邀请果，就能邀请这位伙伴。也可以把邀请果向上滑。',target:'.throw-ball',sequence:['hand','invite-berry']},
  dex:{icon:'dex',title:'点图片，认识伙伴',voice:'点开喜欢的小精灵，听听它的名字。还没有的伙伴，也可以选择去找它。',target:'.dex-cell',sequence:['dex','hand']},

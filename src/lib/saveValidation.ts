@@ -36,7 +36,7 @@ export function validateSave(input:unknown):SaveData {
  requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');
  requireValue(Array.isArray(s.captures)&&creatureIds(s.captures.map((c:any)=>c?.id)),'伙伴编号');
  for(const c of s.captures){
-  requireValue(object(c)&&number(c.caughtAt)&&['poke','great','ultra','master'].includes(c.ball)&&number(c.friendship)&&c.friendship<=100&&(c.stay===undefined||typeof c.stay==='boolean'),'伙伴记录');
+  requireValue(object(c)&&number(c.caughtAt)&&['poke','great','ultra','master'].includes(c.ball)&&number(c.friendship)&&c.friendship<=100&&(c.stay===undefined||typeof c.stay==='boolean')&&(c.played===undefined||Number.isInteger(c.played)&&c.played>=0&&c.played<=9999),'伙伴记录');
   if(c.personality!==undefined)requireValue(object(c.personality)&&c.personality.version===1&&PREFERENCES.includes(c.personality.preference),'伙伴喜好');
   if(c.care!==undefined)requireValue(object(c.care)&&['seconds','quietUntil'].every(k=>number(c.care[k]))&&['fedAt','petAt'].every(k=>typeof c.care[k]==='number'&&Number.isFinite(c.care[k])),'伙伴心愿');
  }

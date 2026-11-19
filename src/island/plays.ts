@@ -65,6 +65,7 @@ export function finishPlay(s: SaveData, play: Play, partner: number, date: strin
  const c = s.captures.find(c => c.id === partner);
  if (!c) return false;
  c.friendship = Math.min(100, c.friendship + 2);
+ notePlayedTogether(c);
  if (wished?.id === play.id) {
   if (s.islandWishes?.date !== date) s.islandWishes = { date, done: [] };
   if (!s.islandWishes.done.includes(partner)) s.islandWishes.done = [...s.islandWishes.done, partner].slice(-64);
@@ -81,3 +82,12 @@ export function nextWish(s: SaveData, date: string, ids: readonly number[], late
  }
  return null;
 }
+
+/**
+ * Growing up follows time spent together, not a friendship meter: island activities, shared games and picnics done
+ * with a companion. Older saves start from their friendship (about one activity per 16 points).
+ */
+export const GROW_AT: Record<number, number> = { 1: 5, 2: 15 };
+export const playedTogether = (c: { played?: number; friendship: number }) => c.played ?? Math.floor(c.friendship / 16);
+export function notePlayedTogether(c: { played?: number; friendship: number }) { c.played = Math.min(9999, playedTogether(c) + 1); }
+export const readyToGrow = (c: { played?: number; friendship: number }, stage: number) => GROW_AT[stage] !== undefined && playedTogether(c) >= GROW_AT[stage];

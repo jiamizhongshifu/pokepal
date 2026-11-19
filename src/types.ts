@@ -31,6 +31,8 @@ export interface Capture {
   ball: BallType;
   /** 0–100，每 20 点一级 */
   friendship: number;
+  /** Island activities, shared games and picnics done together; growing up follows it. */
+  played?: number;
   /** 满友好度时选择了“保持现在的样子”（之后仍可随时长大，只是不再提醒） */
   stay?: boolean;
 }
