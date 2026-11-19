@@ -27,6 +27,7 @@ import { reviewKeys } from '../lib/learningProgress';
 import {familyLearning} from '../lib/familyLearning';
 import {ParentEvidence} from '../components/ParentEvidence';
 import {ParentRecordings,ParentDiaries} from '../components/ParentRecordings';
+import {StorageFacts} from '../components/StorageFacts';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -184,6 +185,7 @@ export function Parent() {
                 
               </div>
               <div className="muted">存档、录音和小日记保存在当前设备。{import.meta.env.VITE_ONLINE?'网页版暂不提供云端日记转写，不会把日记录音发送到火山。':'另行点击日记转写时，会把所选录音发送到火山，需要联网。'}游戏存档不包含录音和日记。请同时使用下方的日记备份；跟读录音可在学习记录中另存。</div>
+            <StorageFacts/>
             <DiaryBackup/></div></details>
 <details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
 <details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) {setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();} }}>清空全部数据</button></div></details></>}

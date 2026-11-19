@@ -897,3 +897,6 @@ button:not(:disabled):active { transform: scale(.97); }
  .screen:not(.home):not(.parent) .topbar :is(.energy-chip,.balls-chip) { min-height:48px; padding:6px 8px; font-size:var(--text-lg); }
  .screen:not(.home):not(.parent) .topbar :is(.energy-chip .icon,.balls-chip .invite-berry) { width:24px!important; height:24px!important; }
 }
+.save-recovery-parent { max-width:520px; text-align:left; border:2px dashed var(--brand-line); border-radius:var(--radius-md); padding:10px 16px; }
+.save-recovery-parent summary { cursor:pointer; font-weight:800; min-height:44px; display:flex; align-items:center; }
+.save-recovery-diagnostic { font-size:var(--text-sm); color:var(--muted); user-select:all; }
