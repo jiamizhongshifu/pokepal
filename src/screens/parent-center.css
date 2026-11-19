@@ -118,3 +118,4 @@
 #root .parent-evidence-lessons li{display:grid;gap:2px}
 #root .parent-evidence-lessons span{font-size:var(--text-sm);color:var(--brand-ink-muted)}
 #root .parent-home-tried{margin-top:10px}#root .parent-home-tried[aria-pressed=true]{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
+#root .parent-evidence-delayed{font-size:var(--text-base);margin:12px 0 0}

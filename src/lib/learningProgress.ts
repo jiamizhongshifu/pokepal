@@ -14,7 +14,16 @@ export interface UnitProgress {round:number;pendingAudio?:number[];completedAt?:
  * tell whether an adult helped off screen. Older saves have no opportunities, and their history stays unknown.
  */
 export type ResponseKind='independent'|'after-replay'|'after-hint'|'after-model'|'skipped'|'unknown'|'left';
-export interface Opportunity {v:1;at:number;source:string;key:string;kind:ResponseKind;tries:number;replays:number}
+/** `gapDays`: local calendar days since the item was last met (0 = same day, so not delayed); `cv`: content version. */
+export interface Opportunity {v:1;at:number;source:string;key:string;kind:ResponseKind;tries:number;replays:number;gapDays?:number;cv?:number}
+/** Bump when lesson or review scenes change, so evidence from different material is never pooled silently. */
+export const LEARNING_CONTENT_VERSION=1;
+/** Whole local days between two times. A clock set backwards reads as the same day rather than a negative gap. */
+export function localDayGap(last:number|undefined,now:number):number|undefined{
+ if(last===undefined||!Number.isFinite(last))return undefined;
+ const day=(t:number)=>{const d=new Date(t);return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate());};
+ return Math.max(0,Math.round((day(now)-day(last))/86400000));
+}
 export const OPPORTUNITY_LIMIT=400;
 export const RESPONSE_KINDS:ResponseKind[]=['independent','after-replay','after-hint','after-model','skipped','unknown','left'];
 export interface LearningProgress {version:1;activeUnit?:string;records:Record<string,LearningRecord>;units:Record<string,UnitProgress>;opportunities?:Opportunity[]}
@@ -51,10 +60,15 @@ export function markHomeTried(s:SaveData,id:string,tried:boolean,now=Date.now())
  const p=ensureLearning(s).units[id];if(!p)return;
  if(tried)p.homeTriedAt??=now;else delete p.homeTriedAt;
 }
+/** Delayed review only: answers met again on a later local day. Same-day repeats never count as remembering. */
+export function summarizeDelayed(list:Opportunity[]|undefined,since:number){
+ return summarizeOpportunities((list??[]).filter(o=>o.source==='review'&&(o.gapDays??0)>=1),since);
+}
 export function validOpportunity(o:unknown):boolean{
  const r=o as Record<string,unknown>;
  return !!r&&typeof r==='object'&&r.v===1&&Number.isFinite(r.at)&&typeof r.source==='string'&&(r.source as string).length<=40&&typeof r.key==='string'&&(r.key as string).length<=80
-  &&RESPONSE_KINDS.includes(r.kind as ResponseKind)&&Number.isInteger(r.tries)&&(r.tries as number)>=0&&Number.isInteger(r.replays)&&(r.replays as number)>=0;
+  &&RESPONSE_KINDS.includes(r.kind as ResponseKind)&&Number.isInteger(r.tries)&&(r.tries as number)>=0&&Number.isInteger(r.replays)&&(r.replays as number)>=0
+  &&(r.gapDays===undefined||Number.isInteger(r.gapDays)&&(r.gapDays as number)>=0&&(r.gapDays as number)<=36500)&&(r.cv===undefined||Number.isInteger(r.cv)&&(r.cv as number)>=1);
 }
 export function ensureLearning(s:SaveData):LearningProgress {
  if(!s.learning||s.learning.version!==1)s.learning={version:1,records:{},units:{}};

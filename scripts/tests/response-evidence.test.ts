@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
-import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,summarizeOpportunities,EVIDENCE_MIN_SAMPLE,markHomeTried,type RoundTrace,type Opportunity} from '../../src/lib/learningProgress';
+import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,summarizeOpportunities,summarizeDelayed,localDayGap,EVIDENCE_MIN_SAMPLE,markHomeTried,type RoundTrace,type Opportunity} from '../../src/lib/learningProgress';
 import {validateSave} from '../../src/lib/saveValidation';
+import {LEARNING_UNITS,reviewSituation,unitSituations,unitById} from '../../src/data/curriculum';
 
 const base:RoundTrace={firstAnswer:'correct',replays:0,modelShown:false,heardBeforeAnswer:true,outcome:'solved'};
 const fixture=()=>validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));
@@ -64,4 +65,32 @@ test('marking the take-home phrase as tried touches nothing else and survives a 
  assert.equal(validateSave(JSON.parse(JSON.stringify(s))).learning!.units[id].homeTriedAt,123);
  markHomeTried(s,id,false);assert.equal(s.learning!.units[id].homeTriedAt,undefined);
  markHomeTried(s,'not-started',true);assert.equal(s.learning!.units['not-started'],undefined,'no record for lessons never opened');
+});
+
+// T07: delayed review is measured in local days, same-day repeats never count, and clock changes cannot break it.
+test('local day gaps ignore same-day repeats and clocks set backwards',()=>{
+ const noon=new Date(2026,10,19,12).getTime();
+ assert.equal(localDayGap(undefined,noon),undefined,'first meeting has no gap');
+ assert.equal(localDayGap(new Date(2026,10,19,8).getTime(),noon),0);
+ assert.equal(localDayGap(new Date(2026,10,18,23).getTime(),noon),1,'calendar days, not 24-hour blocks');
+ assert.equal(localDayGap(new Date(2026,10,25).getTime(),noon),0,'clock moved back reads as same day');
+});
+
+test('only review answers met again on a later day count as delayed, and the content version is kept',()=>{
+ const o=(gapDays:number|undefined,source='review',kind:Opportunity['kind']='independent'):Opportunity=>({v:1,at:10,source,key:'ball',kind,tries:1,replays:0,gapDays,cv:1});
+ const later=summarizeDelayed([o(0),o(undefined),o(1),o(3,'review','after-hint'),o(2,'unit:x')],0);
+ assert.equal(later.total,2);assert.equal(later.independent,1);
+ const s=fixture() as SaveData;recordOpportunity(s,o(2));
+ assert.equal(validateSave(JSON.parse(JSON.stringify(s))).learning!.opportunities!.at(-1)!.cv,1);
+ const bad=JSON.parse(JSON.stringify(s));bad.learning.opportunities.at(-1).gapDays=-1;assert.throws(()=>validateSave(bad));
+});
+
+test('review prefers a scene from a lesson the phrase was not met in, and falls back to the familiar one',()=>{
+ const multi=LEARNING_UNITS.flatMap(u=>unitSituations(u).map(s=>[u.id,s.phrase] as const));
+ const byPhrase=new Map<string,string[]>();for(const [id,p] of multi)byPhrase.set(p,[...(byPhrase.get(p)??[]),id]);
+ for(const [phrase,ids] of byPhrase){
+  const scene=reviewSituation(phrase,[`unit:${ids[0]}`])!;
+  assert.equal(scene.phrase,phrase);
+  if(new Set(ids).size>1)assert.ok(!unitSituations(unitById(ids[0])!).includes(scene),`${phrase} moves to a new lesson scene`);
+ }
 });

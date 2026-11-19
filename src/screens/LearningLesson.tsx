@@ -1,4 +1,4 @@
-import {classifyResponse} from '../lib/learningProgress';
+import {classifyResponse,localDayGap,LEARNING_CONTENT_VERSION} from '../lib/learningProgress';
 import {trackInteraction} from '../lib/interaction';
 import {guideIsOpen,subscribeGuides} from '../lib/guidePause';
 import {LessonPicnic} from '../components/LessonPicnic';
@@ -82,10 +82,11 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  // T06: what help this opportunity saw, frozen at the first answer; recorded exactly once.
  const trace=useRef({firstAnswer:null as 'correct'|'wrong'|null,replays:0,modelShown:initialListening,heardBeforeAnswer:false,tries:0,wrong:0,asked:!initialListening});
  const recorded=useRef(false);
+ const lastMet=useRef(useGame.getState().save.learning?.records[target.key]?.lastSeen);
  const finishTrace=(outcome:'solved'|'skipped'|'left')=>{
   if(recorded.current||target.contextOnly||(!trace.current.asked&&outcome==='left'))return;recorded.current=true;
   const t=trace.current;
-  useGame.getState().noteOpportunity({source,key:target.key,kind:classifyResponse({...t,outcome}),tries:t.tries,replays:t.replays});
+  useGame.getState().noteOpportunity({source,key:target.key,gapDays:localDayGap(lastMet.current,Date.now()),cv:LEARNING_CONTENT_VERSION,kind:classifyResponse({...t,outcome}),tries:t.tries,replays:t.replays});
  };
  const replay=(entry?:LearningEntry)=>{if(trace.current.firstAnswer===null)trace.current.replays++;return entry?playEntry(entry):hear();};
  const assisted=useRef(initialListening||target.kind==='phrase'||!!situation||source.startsWith('unit:')||options.length<2),busy=useRef(false),active=useRef(true);

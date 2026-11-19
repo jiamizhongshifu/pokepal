@@ -47,7 +47,14 @@ export const unitSituations=(unit:LearningUnit):LearningSituation[]=>[unit,...(u
 export const unitRoundCount=(unit:LearningUnit)=>unit.words.length+unitSituations(unit).length;
 export const unitById=(id?:string)=>LEARNING_UNITS.find(u=>u.id===id);
 /** Review the situation in which the child met the phrase, including transfer rounds. */
+/**
+ * Review prefers a scene the child has not met this phrase in (a new context), in curriculum order so it is the same
+ * on every device; it falls back to the most recent familiar scene when the phrase only lives in one place.
+ */
 export function reviewSituation(key:string,contexts:string[]=[]):LearningSituation|undefined {
+ const met=new Set(contexts.filter(c=>c.startsWith('unit:')).map(c=>c.slice(5)));
+ const fresh=LEARNING_UNITS.filter(u=>!met.has(u.id)).flatMap(unitSituations).find(s=>s.phrase===key);
+ if(fresh)return fresh;
  for(const context of [...contexts].reverse()){
   if(!context.startsWith('unit:'))continue;
   const unit=unitById(context.slice(5));

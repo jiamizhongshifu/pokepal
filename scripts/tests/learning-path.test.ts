@@ -90,6 +90,7 @@ test('due review waits as one stop just before the current stop, and earns a sta
  const at=woven.findIndex(n=>n.kind==='review');
  assert.ok(at>0);assert.equal(woven[at].state,'current');assert.ok(woven[at].reviewKeys!.length>=REVIEW_THRESHOLD);
  assert.equal(woven.filter(n=>n.state==='current').length,1);assert.equal(woven[at+1].unit?.id,LEARNING_UNITS[1].id);
+ assert.equal(woven[at+1].state,'open','review is optional: the next lesson stays reachable (T07)');
  notePathReview(s);assert.equal(pathStars(learningPath(s),s),2);
 });
 

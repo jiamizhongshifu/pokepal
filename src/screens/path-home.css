@@ -49,6 +49,8 @@ button.path-stat { cursor: pointer; }
   animation: path-pulse 1.6s var(--brand-ease) infinite;
 }
 .path-node.is-locked .path-node-button .icon { opacity: .55; }
+.path-node.is-open .path-node-button { background: var(--tone); box-shadow: 0 6px 0 var(--tone-deep); }
+.path-node.is-open .path-node-title { color: var(--text); }
 .path-node-title { margin-top: 10px; max-width: 150px; text-align: center; font-size: var(--text-sm); font-weight: var(--brand-weight-display); color: var(--muted); }
 .path-node.is-current .path-node-title { color: var(--text); font-size: var(--text-base); }
 .path-node.is-current:not(:first-child) { margin-top: 44px; }

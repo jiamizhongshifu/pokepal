@@ -84,7 +84,7 @@ export function PathHome() {
       return <li key={node.key} ref={current ? currentRef : undefined} className={`path-node kind-${node.kind} is-${node.state}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style}>
        {current && <span className="path-start" aria-hidden="true">{KIND_LABEL[node.kind]}！<small lang="en">Start</small></span>}
        <button type="button" className="path-node-button" onClick={() => void open(node)}
-        aria-label={`${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : '还没解锁'}`}>
+        aria-label={`${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`}>
         {met ? <CreatureImg className="path-node-friend" src={creatureArt(met)} alt="" />
          : <Icon name={node.state === 'locked' ? 'lock' : node.state === 'done' && node.kind === 'lesson' ? 'check' : node.icon} size={current ? 44 : 36} />}
        </button>

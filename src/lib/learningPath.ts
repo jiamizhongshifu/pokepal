@@ -6,7 +6,8 @@ import type { SaveData } from '../types';
 export type PathNodeKind = 'lesson' | 'story' | 'island' | 'friend' | 'diary' | 'review' | 'welcome';
 /** Stops woven in for a moment (due review, meeting the first friend); they never count towards a chapter. */
 const TRANSIENT: PathNodeKind[] = ['review', 'welcome'];
-export type PathNodeState = 'done' | 'current' | 'locked';
+/** `open`: reachable but not the highlighted next step (the stop waiting behind an optional review). */
+export type PathNodeState = 'done' | 'current' | 'open' | 'locked';
 export interface PathNode {
  key: string; kind: PathNodeKind; chapter: number; index: number; title: string; icon: string; state: PathNodeState;
  unit?: LearningUnit; storyId?: string; station?: string; reviewKeys?: string[];
@@ -97,7 +98,7 @@ export function withReview(s: SaveData, path: PathChapter[], now = Date.now()): 
  const current = currentNode(path);
  if (due.length < REVIEW_THRESHOLD || !current) return path;
  const review: PathNode = { key: 'review', kind: 'review', chapter: current.chapter, index: current.index, title: '和老朋友见面', icon: 'refresh', state: 'current', reviewKeys: due.slice(0, 4) };
- return path.map(c => c.index !== current.chapter ? c : { ...c, nodes: c.nodes.flatMap(n => n.key === current.key ? [review, { ...n, state: 'locked' as const }] : [n]) });
+ return path.map(c => c.index !== current.chapter ? c : { ...c, nodes: c.nodes.flatMap(n => n.key === current.key ? [review, { ...n, state: 'open' as const }] : [n]) });
 }
 /**
  * A new child is welcomed with an invite berry and the spoken invitation to meet a first friend, so until that friend
