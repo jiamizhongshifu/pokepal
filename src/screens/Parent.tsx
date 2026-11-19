@@ -14,7 +14,7 @@ import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
 import { DAILY_ENERGY_CAP, playLimitSeconds, useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
-import { learningPath, withReview, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
+import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
 import { listRecordings, type Recording } from "../lib/db";
 import { playUrl, say, voiceInfo } from "../lib/speech";
@@ -195,11 +195,11 @@ export function Parent() {
   </div>;
 }
 
-const NEXT_KIND:Record<string,string>={lesson:'学一站课',story:'听这一章的绘本',island:'带伙伴去小岛用一用',friend:'认识一位新朋友',diary:'说说这一章',review:'和学过的词再见面'};
+const NEXT_KIND:Record<string,string>={lesson:'学一站课',story:'听这一章的绘本',island:'带伙伴去小岛用一用',friend:'认识一位新朋友',diary:'说说这一章',review:'和学过的词再见面',welcome:'用见面礼认识第一位朋友'};
 /** The learning path as a parent sees it: where the child is, what comes next, and the friends met on the way. */
 function ParentPathSummary(){
  const save=useGame(s=>s.save);
- const route=learningPath(save),path=withReview(save,route),next=currentNode(path);
+ const route=learningPath(save),path=withWelcomeFriend(save,withReview(save,route)),next=currentNode(path);
  const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length;
  const friends=Object.entries(save.path?.friends??{}).sort(([a],[b])=>+a-+b);
  return <div className="parent-path-summary">

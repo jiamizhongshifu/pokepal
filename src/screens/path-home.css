@@ -7,6 +7,7 @@
   padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
   background: var(--surface); border-bottom: var(--brand-border) solid var(--surface-border);
 }
+.path-header-tools { display: flex; align-items: center; gap: 10px; }
 .path-avatar { width: 52px; height: 52px; padding: 0; border-radius: 50%; border: var(--brand-border) solid var(--surface-border); background: var(--surface); overflow: hidden; cursor: pointer; }
 .path-stats { display: flex; gap: 10px; }
 .path-stat {

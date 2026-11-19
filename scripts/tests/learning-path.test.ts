@@ -5,7 +5,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_CHAPTERS,LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {progressUnit,applyStation} from '../../src/lib/learningProgress';
-import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION} from '../../src/lib/learningPath';
+import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION,withWelcomeFriend} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {validateSave} from '../../src/lib/saveValidation';
 import {BABY_CREATURES} from '../../src/data/creatures';
@@ -121,4 +121,16 @@ test('a save from the seven-stop route (version 2) keeps every finished stop and
  assert.deepEqual(chapterProgress(first),{done:7,total:8});
  assert.equal(currentNode(learningPath(s))?.kind,'diary');
  assert.equal(s.path!.friends['0']!==undefined,true,'the chapter friend is kept');
+});
+
+// T03: one next step for a new child — the welcome voice, the empty island and the path all point to meeting a first friend.
+test('with the welcome berry and no friend yet, the path first meets a friend, without changing any count',()=>{
+ const s=fresh();s.balls.poke=1;
+ const woven=withWelcomeFriend(s,learningPath(s));
+ assert.equal(currentNode(woven)?.kind,'welcome');
+ assert.equal(woven[0].nodes[1].state,'locked','the first lesson waits behind it');
+ assert.deepEqual(chapterProgress(woven[0]),{done:0,total:8});
+ invitePartner(s,BABY_CREATURES[0].id);
+ assert.equal(currentNode(withWelcomeFriend(s,learningPath(s)))?.kind,'lesson','gone once a friend is met');
+ const none=fresh();assert.equal(currentNode(withWelcomeFriend(none,learningPath(none)))?.kind,'lesson','no berry, no detour');
 });

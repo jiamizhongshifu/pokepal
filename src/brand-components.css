@@ -105,3 +105,13 @@
 
 /* Icon pictures show a soft placeholder until they load (see Icon), so a slow image never reads as an empty slot. */
 #root img.icon.is-loading { background: color-mix(in srgb, var(--surface-border) 70%, transparent); border-radius: 30%; }
+
+/* Parent-to-child handoff after the trial notice. */
+#root .handoff-card { width: min(520px, calc(100% - 32px)); padding: 24px; text-align: left; }
+#root .handoff-card .handoff-eyebrow { margin: 0; color: var(--muted); font-size: var(--text-sm); font-weight: var(--brand-weight-display); }
+#root .handoff-card h2 { margin: 4px 0 12px; font-size: var(--text-2xl); }
+#root .handoff-card ul { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 12px; }
+#root .handoff-card li { display: flex; align-items: center; gap: 12px; font-size: var(--text-lg); line-height: 1.45; }
+#root .handoff-card li .icon { flex: none; }
+#root .handoff-card .handoff-go { width: 100%; }
+#root .screen .handoff-backdrop { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; }

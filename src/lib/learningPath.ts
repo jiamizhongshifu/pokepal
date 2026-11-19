@@ -3,7 +3,9 @@ import { STORIES, storyProgressKey } from '../data/stories';
 import { recommendedReviewKeys } from './learningProgress';
 import type { SaveData } from '../types';
 
-export type PathNodeKind = 'lesson' | 'story' | 'island' | 'friend' | 'diary' | 'review';
+export type PathNodeKind = 'lesson' | 'story' | 'island' | 'friend' | 'diary' | 'review' | 'welcome';
+/** Stops woven in for a moment (due review, meeting the first friend); they never count towards a chapter. */
+const TRANSIENT: PathNodeKind[] = ['review', 'welcome'];
 export type PathNodeState = 'done' | 'current' | 'locked';
 export interface PathNode {
  key: string; kind: PathNodeKind; chapter: number; index: number; title: string; icon: string; state: PathNodeState;
@@ -78,7 +80,7 @@ export function learningPath(s: SaveData): PathChapter[] {
 export const PATH_CONTENT_VERSION = 3;
 /** The one place a chapter's progress is counted: finished fixed stops over all fixed stops; a woven-in review never counts. */
 export function chapterProgress(chapter: PathChapter) {
- const fixed = chapter.nodes.filter(n => n.kind !== 'review');
+ const fixed = chapter.nodes.filter(n => !TRANSIENT.includes(n.kind));
  return { done: fixed.filter(n => n.state === 'done').length, total: fixed.length };
 }
 /** Stars are one per finished stop plus one per finished review; they record progress and are never spent. */
@@ -96,6 +98,16 @@ export function withReview(s: SaveData, path: PathChapter[], now = Date.now()): 
  if (due.length < REVIEW_THRESHOLD || !current) return path;
  const review: PathNode = { key: 'review', kind: 'review', chapter: current.chapter, index: current.index, title: '和老朋友见面', icon: 'refresh', state: 'current', reviewKeys: due.slice(0, 4) };
  return path.map(c => c.index !== current.chapter ? c : { ...c, nodes: c.nodes.flatMap(n => n.key === current.key ? [review, { ...n, state: 'locked' as const }] : [n]) });
+}
+/**
+ * A new child is welcomed with an invite berry and the spoken invitation to meet a first friend, so until that friend
+ * is met the path's next step is the same: a "meet your first friend" stop just before the first lesson.
+ */
+export function withWelcomeFriend(s: SaveData, path: PathChapter[]): PathChapter[] {
+ const current = currentNode(path);
+ if (s.captures.length > 0 || s.balls.poke < 1 || !current) return path;
+ const welcome: PathNode = { key: 'welcome', kind: 'welcome', chapter: current.chapter, index: current.index, title: '认识第一位朋友', icon: 'invite-berry', state: 'current' };
+ return path.map(c => c.index !== current.chapter ? c : { ...c, nodes: c.nodes.flatMap(n => n.key === current.key ? [welcome, { ...n, state: 'locked' as const }] : [n]) });
 }
 export function notePathReview(s: SaveData) { const p = ensurePath(s); p.reviews = (p.reviews ?? 0) + 1; }
 /** Talking about a chapter is never required to be good or long: opening the diary for it completes the stop. */

@@ -1,11 +1,12 @@
 /** Short, spoken instructions for real controls. No rewards or forced tutorial steps. */
 export const GUIDES = {
  welcome:{icon:'hand',title:'选一个喜欢的头像',voice:'点一点你喜欢的头像，我们就出发啦。',target:'.avatar-choice',sequence:['hand','play']},
- firstFriend:{icon:'grass',title:'交个新朋友',voice:'送你的邀请果已经准备好啦。点草丛，找一位喜欢的伙伴。',target:'.empty-home .btn-big, .dock-btn.catch',sequence:['invite-berry','grass']},
- home:{icon:'ear',title:'和伙伴一起学英语',voice:'点学英语，和伙伴学一点。也能点点伙伴，摸摸它、喂它吃东西。',target:'.dock-btn.tasks',sequence:['ear','hand']},
+ firstFriend:{icon:'grass',title:'交个新朋友',voice:'送你的邀请果已经准备好啦。点草丛，找一位喜欢的伙伴。',target:'.empty-home .btn-big',sequence:['invite-berry','grass']},
+ home:{icon:'ear',title:'和伙伴一起学英语',voice:'点学英语，和伙伴学一点。也能点点伙伴，摸摸它、喂它吃东西。',target:'.bottom-nav-tab:first-child',sequence:['ear','hand']},
  camera:{icon:'swipe',title:'小手逛小岛',voice:'一根手指转一转，两根手指一起拖动。两根手指分开，就能看近一点。想安静看风景，先点小岛生活，再点小眼睛。',target:'.home-more > summary',sequence:['swipe','eye']},
  music:{icon:'music',title:'音乐轻轻响',voice:'点小音符，可以打开或关掉音乐。想调小声音，请大人到家长设置里帮忙。',target:'.music-toggle',sequence:['music','speaker']},
  farm:{icon:'grass',title:'种下，等等，再摘果',voice:'点空地上的种植图标，伙伴会来帮忙浇水。等树果长大，点果子就能收起来。不用一直等在这里哦。',target:'.plot-action:not(:disabled)',sequence:['grass','water','apple']},
+ path:{icon:'sign',title:'跟着路线，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.path-node.is-current .path-node-button',sequence:['play','ear','hand']},
  tasks:{icon:'ear',title:'跟着伙伴，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.learning-trail-primary',sequence:['play','ear','hand']},
  listen:{icon:'ear',title:'先听，再点图片',voice:'先听听在找什么，再点你觉得对的图片。没听清，点喇叭再听一次。选错也没关系。',target:'.task-listen .choices',sequence:['ear','picture','hand']},
  repeat:{icon:'speak',title:'听一句，试着说一句',voice:'先听伙伴说。点麦克风，试着跟它说一句。说完可以点我说完啦。现在不想说，也可以换个游戏。',target:'.task-repeat .mic-btn:not(:disabled)',sequence:['ear','mic']},
