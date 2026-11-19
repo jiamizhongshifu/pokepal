@@ -2,12 +2,11 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {validateSave} from '../../src/lib/saveValidation';
-import {todayStory,collectionStep} from '../../src/lib/storyHome';
-import {todayStr} from '../../src/lib/date';
-import {beginStory,storyPlayback} from '../../src/lib/storyPlayer';
-import {PICNIC_ADVENTURE} from '../../src/lib/storyAdventure';
-const make=()=>{const s=validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));s.daily.date=todayStr();delete s.careStory;delete s.storyAdventure;delete s.daily.adventureReward;s.energy=0;s.balls={poke:0,great:0,ultra:0,master:0};return s;};
-test('homepage suggests existing companion without mutating inventory or saved progress',()=>{const s=make(),before=structuredClone(s);const step=todayStory(s);assert.equal(step.kind,'care');assert.ok(s.captures.some(c=>c.id===step.companion));assert.deepEqual(s,before);});
-test('unfinished care wins over a requested new partner; interrupted book resumes before fresh care',()=>{const s=make();s.careStory={version:1,id:'run',pokemonId:s.captures[0].id,phase:'play',food:'plain',meal:'fed'};assert.equal(todayStory(s,133).companion,s.captures[0].id);delete s.careStory;s.storyAdventure=storyPlayback(PICNIC_ADVENTURE,beginStory(PICNIC_ADVENTURE),{type:'start'});assert.equal(todayStory(s).kind,'adventure');s.captures=[];s.balls.poke=1;assert.equal(todayStory(s).kind,'adventure');});
-test('new child is guided through available ball, exchange or story without a dead end',()=>{const s=make();s.captures=[];assert.equal(todayStory(s).kind,'adventure');s.energy=5;assert.equal(todayStory(s).kind,'exchange');s.balls.poke=1;assert.equal(todayStory(s).kind,'catch');});
-test('finished afternoon leads into collection; no repeated reward request once today is done',()=>{const s=make();s.careStory={version:1,id:'done',pokemonId:s.captures[0].id,phase:'ending',food:'plain',meal:'fed'};s.islandLiving={version:1,furniture:[],memories:[{id:'care:done',kind:'ball',partners:[s.captures[0].id],at:Date.now(),context:'play'}]};assert.equal(todayStory(s).kind,'adventure');s.energy=5;assert.equal(todayStory(s).kind,'exchange');s.energy=0;s.daily.adventureReward=5;assert.equal(todayStory(s).kind,'rest');assert.equal(todayStory(s,s.captures[0].id).kind,'care');s.islandLiving.memories[0].at-=86400000;assert.equal(todayStory(s).kind,'care');s.daily.date='2000-01-01';assert.equal(collectionStep(s).kind,'adventure');});
+import {collectionStep} from '../../src/lib/storyHome';
+
+const make=()=>validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));
+test('after a shared moment a waiting berry leads to the meadow, otherwise back to the path, without touching the save',()=>{
+ const s=make();s.balls.poke=1;const before=JSON.stringify(s);
+ assert.equal(collectionStep(s).kind,'catch');assert.equal(JSON.stringify(s),before);
+ s.balls.poke=0;assert.equal(collectionStep(s).kind,'path');
+});

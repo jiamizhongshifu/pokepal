@@ -37,7 +37,7 @@ button.path-stat { cursor: pointer; }
 .path-nodes { list-style: none; margin: 0; padding: 72px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
 .path-node { position: relative; display: flex; flex-direction: column; align-items: center; translate: var(--sway) 0; }
 .path-node-button {
-  width: 78px; height: 72px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+  width: 78px; height: 72px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; overflow: visible;
   background: var(--surface-border); box-shadow: 0 6px 0 color-mix(in srgb, var(--surface-border) 78%, #000); cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -68,8 +68,18 @@ button.path-stat { cursor: pointer; }
 .path-chest { margin-top: 18px; filter: drop-shadow(0 4px 0 var(--surface-border)); }
 .path-end { text-align: center; color: var(--muted); font-weight: 700; }
 
+/* Story and friend stops read differently at a glance; a met friend shows on its stop. */
+.path-node.kind-story.is-done .path-node-button { background: var(--brand-gem); box-shadow: 0 6px 0 var(--brand-gem-deep); }
+.path-node.kind-island.is-done .path-node-button { background: var(--brand-sky); box-shadow: 0 6px 0 var(--brand-sky-deep); }
+.path-node.kind-friend .path-node-button { width: 88px; height: 82px; }
+.path-node-friend { width: 76px; height: 76px; object-fit: contain; translate: 0 -6px; }
+.path-node.is-lit .path-node-button { animation: path-lit 1.4s var(--brand-ease); }
+.path-node.is-lit::after { content: ""; position: absolute; top: -10px; left: 50%; width: 120px; height: 120px; translate: -50% 0; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand-sun) 55%, transparent) 0 40%, transparent 70%); animation: path-glow 1.4s ease-out forwards; pointer-events: none; }
+@keyframes path-lit { 0% { scale: .7; } 50% { scale: 1.18; } 100% { scale: 1; } }
+@keyframes path-glow { from { opacity: 1; scale: .6; } to { opacity: 0; scale: 1.4; } }
 @keyframes path-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.05; } }
 @keyframes path-bob { 0%, 100% { translate: -50% 0; } 50% { translate: -50% -4px; } }
 @keyframes path-nudge { 0%, 100% { translate: 0 0; } 25% { translate: -6px 0; } 75% { translate: 6px 0; } }
-@media (prefers-reduced-motion: reduce) { .path-node.is-current .path-node-button, .path-start, .path-node.is-nudged .path-node-button { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .path-node.is-current .path-node-button, .path-start, .path-node.is-nudged .path-node-button, .path-node.is-lit .path-node-button, .path-node.is-lit::after { animation: none; } }
 @media (max-width: 420px) { .path-buddy { width: 72px; height: 72px; } }

@@ -12,7 +12,6 @@ import { todayStr } from "./lib/date";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { lazy, Suspense } from "react";
 
-const Energy=lazy(()=>import("./screens/Energy").then(m=>({default:m.Energy})));
 
 const Diary=lazy(()=>import("./screens/Diary").then(m=>({default:m.Diary})));
 
@@ -35,7 +34,6 @@ const TaskBoard=lazy(()=>import("./screens/TaskBoard").then(m=>({default:m.TaskB
 
 const TaskScreen=lazy(()=>import("./screens/TaskScreen").then(m=>({default:m.TaskScreen})));
 
-const Shop=lazy(()=>import("./screens/Shop").then(m=>({default:m.Shop})));
 
 const Catch=lazy(()=>import("./screens/Catch").then(m=>({default:m.Catch})));
 
@@ -137,14 +135,12 @@ export default function App() {
     case "review": return <LearningReview key={screen.keys.join('|')} keys={screen.keys} returnTo={screen.returnTo}/>;
     case "tasks": return <TaskBoard />;
     case "practice": return <Practice />;
-    case "energy": return <Energy/>;
     case "diary": return <Diary key={screen.id??"new"} id={screen.id}/>;
     case "careStory": return <CareStoryScreen />;
     case "adventure": return <StoryAdventure />;
     case "stories": return <StoryLibrary />;
     case "story": return <StoryReader key={screen.id} id={screen.id} />;
     case "task": return <TaskScreen key={`${screen.kind}-${screen.boardIndex}-${screen.session ?? 0}`} kind={screen.kind} boardIndex={screen.boardIndex} practice={screen.practice} />;
-    case "shop": return <Shop />;
     case "catch": return <Catch />;
     case "dex": return <Dex key={String(screen.picking)} picking={screen.picking} browse={screen.browse} />;
     case "dexDetail": return <DexDetail id={screen.id} picking={screen.picking} browse={screen.browse} />;

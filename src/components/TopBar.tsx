@@ -27,11 +27,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
       </div>
       {!home&&(help||progress)&&<div className="tb-learning-tools">{progress&&<div className="tb-progress">{progress}</div>}{help}</div>}
       {!focused && <div className="tb-right">
-        <button className="energy-chip" aria-label={`能量 ${save.energy}，看看怎样获得能量`} onClick={()=>{sfx("click");go({name:"energy"});}}>
-          <Icon name="bolt" size={30} className="bolt" />
-          <span className="num">{save.energy}</span>
-        </button>
-        <button className="balls-chip" aria-label="去换邀请果" onClick={()=>{sfx("click");go({name:"shop"});}}>
+        <button className="balls-chip" aria-label="带上邀请果，去草丛认识新伙伴" disabled={save.balls.poke<1} onClick={()=>{sfx("click");go({name:"catch"});}}>
           <span className="ball-count" aria-label={`邀请果共 ${Object.values(save.balls).reduce((a, b) => a + b, 0)} 个`}>
             <InviteBerry type="poke" size={30} />×{Object.values(save.balls).reduce((a, b) => a + b, 0)}
           </span>
@@ -82,7 +78,7 @@ export function ParentButton({ onOpen }: { onOpen: () => void }) {
         onPointerCancel={cancel}
         onContextMenu={(e) => e.preventDefault()}
         aria-label="家长入口，长按三秒或按回车验证"
-        style={{ background: `conic-gradient(#ffcb05 ${progress * 360}deg, rgba(255,255,255,.5) 0)` }}
+        style={{ background: `conic-gradient(var(--brand-sun) ${progress * 360}deg, rgba(255,255,255,.5) 0)` }}
       >
         <span><Icon name="gear" size={28} /></span>
       </button>

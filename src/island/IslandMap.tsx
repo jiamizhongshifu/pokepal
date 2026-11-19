@@ -9,17 +9,10 @@ import type { IslandWeather } from '../lib/weather';
 import { cropStage, type FarmState } from '../lib/farm';
 import { creatureArt, getCreature } from '../data/creatures';
 import { Icon } from '../icons';
+import { STATION_SPOTS, stationSpot, type Spot } from './spots';
 import './island-map.css';
 
 export type Sky = 'morning' | 'day' | 'evening' | 'night';
-type Spot = readonly [x: number, y: number];
-
-/** Where a creature stands at each station, as % of the island illustration (feet position). */
-export const STATION_SPOTS: Record<string, Spot> = {
- farm: [17.5, 47], tree: [24, 31], windmill: [37.5, 20], music: [55, 18], ball: [47, 26], sand: [63, 28],
- picnic: [54, 53], bench: [43, 47], parasol: [62, 47], tent: [79, 31], fire: [82, 36], fence: [90, 32],
- sign: [27, 59], hammock: [40, 80], shells: [18, 78], shore: [10, 83], sea: [47, 94], pier: [74, 81],
-};
 /** Open lawn and beach spots for creatures that are not visiting a station. */
 const IDLE_SPOTS: Spot[] = [[48, 60], [35, 53], [58, 62], [70, 42], [32, 38], [66, 64], [46, 37], [76, 56], [25, 49], [52, 42], [38, 67], [61, 35], [29, 70], [56, 74], [72, 66], [43, 57]];
 /** The three vegetable plots painted on the island, left to right. */
@@ -57,14 +50,14 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
   for (const c of captures) {
    const visit = visits.find(v => v.pokemonId === c.id);
    const station = visit?.station.id ?? (together?.partners.includes(c.id) ? together.station : undefined);
-   if (station && STATION_SPOTS[station]) byStation.set(station, [...(byStation.get(station) ?? []), c.id]);
+   if (station && stationSpot(station)) byStation.set(station, [...(byStation.get(station) ?? []), c.id]);
   }
   let idle = 0;
   for (const c of captures) {
    const visit = visits.find(v => v.pokemonId === c.id);
    const station = visit?.station.id ?? (together?.partners.includes(c.id) ? together.station : undefined);
    const group = station ? byStation.get(station) : undefined;
-   if (station && group && STATION_SPOTS[station]) placed.set(c.id, { spot: offset(STATION_SPOTS[station], group.indexOf(c.id), group.length), visit });
+   if (station && group && stationSpot(station)) placed.set(c.id, { spot: offset(stationSpot(station)!, group.indexOf(c.id), group.length), visit });
    else placed.set(c.id, { spot: IDLE_SPOTS[idle++ % IDLE_SPOTS.length] });
   }
   return placed;

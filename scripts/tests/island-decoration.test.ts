@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {FURNITURE} from '../../src/lib/islandLiving';
-import {ensureIslandProgress,placeIslandDecoration,upgradeIsland,validIslandProgress} from '../../src/lib/islandProgress';
+import {ensureIslandProgress,placeIslandDecoration,validIslandProgress} from '../../src/lib/islandProgress';
 import {validateSave} from '../../src/lib/saveValidation';
 import {BASE_OBSTACLES,PLAYGROUND,obstacleDist} from '../../src/scene/layout';
 import {DECOR_LAYOUT,DECOR_POSTS} from '../../src/scene/decorationLayout';
@@ -17,10 +17,6 @@ test('every decoration is freely placeable, idempotent, reversible and survives 
  assert.equal(s.energy,energy);assert.equal(s.islandLiving!.furniture.length,12);
  const saved=validateSave(JSON.parse(JSON.stringify(s)));assert.equal(saved.islandLiving!.furniture.length,12);
  for(const f of FURNITURE)assert.ok(placeIslandDecoration(saved,f.id,false));assert.equal(saved.islandLiving!.furniture.length,0);assert.equal(saved.energy,energy);
-});
-test('new area upgrades charge once, cap at two and reject malformed or stale levels',()=>{
- const s=make();s.energy=40;for(const id of ['garden','play'] as const){assert.equal(upgradeIsland(s,id,-1),false);assert.equal(upgradeIsland(s,id,0),true);assert.equal(upgradeIsland(s,id,0),false);assert.equal(upgradeIsland(s,id,1),true);assert.equal(upgradeIsland(s,id,2),false);}
- assert.equal(s.energy,16);assert.doesNotThrow(()=>validateSave(s));
 });
 test('fixed decoration footprints clear existing solid facilities and each other',()=>{
  const entries=Object.entries(DECOR_LAYOUT).filter(([id])=>!['track','flags'].includes(id));

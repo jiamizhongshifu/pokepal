@@ -21,6 +21,6 @@ export function Practice(){
   <div className="practice-options">{OPTIONS.map(o=><button key={o.kind} className="practice-option" aria-label={`${TASK_INFO[o.kind].zh}，${o.detail}`} onClick={()=>go({name:'task',kind:o.kind,boardIndex:null,practice:true,session:Date.now()})}>
     <Icon name={TASK_INFO[o.kind].icon} size={72}/><span><strong>{TASK_INFO[o.kind].zh}</strong><small lang="en">{o.en}</small></span><b>{listening&&(o.kind==='listen'||o.kind==='wordpic')?`${plan.words.length} 个小发现`:o.kind==='repeat'?`${plan.phrases.length} 句英文`:o.kind==='wordpic'?`${plan.words.length} 张图片`:o.amount}<span aria-hidden="true"> ›</span></b>
   </button>)}</div>
-  <p className="practice-note">按自己的节奏玩，不用全部完成。能量和游玩时间遵守家长设置。</p>
+  <p className="practice-note">按自己的节奏玩，不用全部完成。游玩时间遵守家长设置。</p>
  </div>;
 }

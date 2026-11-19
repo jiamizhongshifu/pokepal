@@ -122,6 +122,8 @@ export interface SaveData {
   catchWish?: number;
   /** 绘本已读页数；可选以兼容旧存档。 */
   storyProgress?: Record<string,number>;
+  /** Learning path record: chapter friends, celebrated stops and the one-time energy retirement. */
+  path?: import('./lib/learningPath').PathRecord;
   careStory?: import("./lib/careStory").CareStory;
   storyAdventure?: import("./lib/storyPlayer").StoryPlayback;
   /** 可选字段兼容旧存档；花园不消耗能量，不绑定每日任务。 */

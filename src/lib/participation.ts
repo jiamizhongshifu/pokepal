@@ -43,11 +43,11 @@ export function rewardParticipation(s:SaveData,kind:ParticipationKind,courseId?:
  if(kind==='course'&&courseId)d.courseUnits!.push(courseId);
  if(!d.participated!.includes(kind))d.participated!.push(kind);
  result.gained=Math.min(PARTICIPATION_ENERGY,room);
- d.energyEarned+=result.gained;s.energy+=result.gained;
+ d.energyEarned+=result.gained;
  if(!d.goalDone&&participationCount(s)>=DAILY_GOAL){
   d.goalDone=true;result.boardComplete=true;
   result.bonus=Math.min(1,Math.max(0,DAILY_CAP-d.energyEarned));
-  d.energyEarned+=result.bonus;s.energy+=result.bonus;
+  d.energyEarned+=result.bonus;
   const p=s.participation!;
   if(p.lastDate!==d.date){p.days++;p.lastDate=d.date;}
   if(Math.floor(p.days/DAYS_FOR_GIFT)>p.gifts){p.gifts++;s.balls.poke++;result.ballGranted=true;}

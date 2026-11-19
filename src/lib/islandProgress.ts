@@ -20,7 +20,14 @@ export function tickIslandGift(s:SaveData,seconds:number){
  if(!p.nextGiftAt){const choices=FURNITURE.filter(f=>!p.owned.includes(f.id));p.pending=choices[(s.trainer?.createdAt??0)%choices.length|0].id;}
 }
 export function claimIslandGift(s:SaveData){const p=ensureIslandProgress(s),id=p.pending;if(!id)return false;p.owned=[...new Set([...p.owned,id])];s.islandLiving??={version:1,furniture:[],memories:[]};s.islandLiving.furniture=[...new Set([...s.islandLiving.furniture,id])];delete p.pending;p.nextGiftAt=180+(p.owned.length*47)%180;return id;}
-export function upgradeIsland(s:SaveData,id:UpgradeId,expectedLevel:number){const p=ensureIslandProgress(s),spec=UPGRADES.find(u=>u.id===id);if(!spec||!Number.isInteger(expectedLevel)||expectedLevel<0||p.levels[id]!==expectedLevel||expectedLevel>=2)return false;const cost=spec.cost[expectedLevel];if(s.energy<cost)return false;s.energy-=cost;p.levels[id]++;return true;}
+/** Island stops on the learning path each unlock the next upgrade: every area's first level, then every area's second. */
+export const UPGRADE_ORDER:{id:UpgradeId;level:0|1}[]=([0,1] as const).flatMap(level=>UPGRADES.map(u=>({id:u.id as UpgradeId,level})));
+export function grantNextIslandUpgrade(s:SaveData):UpgradeId|undefined{
+ const p=ensureIslandProgress(s);
+ const next=UPGRADE_ORDER.find(o=>p.levels[o.id]===o.level);
+ if(!next)return undefined;
+ p.levels[next.id]=next.level+1;return next.id;
+}
 export function validIslandProgress(p:any){return p&&p.version===1&&Array.isArray(p.owned)&&p.owned.length<=FURNITURE.length&&new Set(p.owned).size===p.owned.length&&p.owned.every((id:any)=>FURNITURE.some(f=>f.id===id))&&(p.pending===undefined||FURNITURE.some(f=>f.id===p.pending)&&!p.owned.includes(p.pending))&&Number.isFinite(p.nextGiftAt)&&p.nextGiftAt>=0&&p.nextGiftAt<=1000000&&p.levels&&UPGRADES.every(u=>(['garden','play'].includes(u.id)&&p.levels[u.id]===undefined)||(Number.isInteger(p.levels[u.id])&&p.levels[u.id]>=0&&p.levels[u.id]<=2));}
 
 /** Decorations are freely available: one tap places a fixed, reviewed layout. */

@@ -102,7 +102,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
   const paint=(p:TracePoint)=>{
     const tracker=trackers.current[current.current];if(doneRef.current||!tracker||tracker.done)return;
     const c=ink.current!.getContext('2d')!,from=last.current??p;
-    c.lineCap='round';c.lineJoin='round';c.lineWidth=BRUSH;c.strokeStyle='#7652ba';
+    c.lineCap='round';c.lineJoin='round';c.lineWidth=BRUSH;c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--brand-sky').trim()||'#1cb0f6';
     c.beginPath();c.moveTo(from.x,from.y);c.lineTo(p.x,p.y);c.stroke();
     tracker.advance(from,p);last.current=p;
     setCoverage((current.current+tracker.progress)/strokes.length);

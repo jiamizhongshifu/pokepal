@@ -1,4 +1,5 @@
 import {validCareStory} from './careStory';
+import {validPath,migratePathEconomy} from './learningPath';
 import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
 import { validOnboarding } from '../data/onboarding';
@@ -77,6 +78,7 @@ export function validateSave(input:unknown):SaveData {
  if(s.storyAdventure!==undefined)requireValue(validAdventure(s.storyAdventure),'故事旅程');
  if(d.adventureReward!==undefined)requireValue(integer(d.adventureReward)&&d.adventureReward<=5,'故事奖励');
  if(s.storyProgress!==undefined)requireValue(object(s.storyProgress)&&Object.values(s.storyProgress).every(integer),'故事进度');
+ if(s.path!==undefined)requireValue(validPath(s.path),'学习路线');
  if(s.learning!==undefined){
   const l=s.learning;requireValue(object(l)&&l.version===1&&object(l.records)&&object(l.units)&&(l.activeUnit===undefined||typeof l.activeUnit==='string'),'学习手册');
   for(const r of Object.values(l.records)){requireValue(object(r)&&['seen','spoken','attempts','misses','independent','streak','lastSeen','nextReview'].every(k=>number(r[k]))&&typeof r.needsPractice==='boolean'&&typeof r.saved==='boolean'&&strings(r.contexts)&&(r.lastSuccessDay===undefined||typeof r.lastSuccessDay==='string'),'单词进度');requireValue(['supported','actions','legacyIndependent'].every(k=>r[k]===undefined||integer(r[k]))&&(r.evidenceVersion===undefined||r.evidenceVersion===2),'学习证据');}
@@ -85,5 +87,6 @@ export function validateSave(input:unknown):SaveData {
  }
  const result=structuredClone(s) as SaveData;
  mergeInvites(result);
+ migratePathEconomy(result);
  return result;
 }

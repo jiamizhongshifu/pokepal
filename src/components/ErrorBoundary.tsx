@@ -13,7 +13,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode; onReset: () 
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <div className="screen center-msg" style={{ background: "#fff8e1" }}>
+      <div className="screen center-msg" style={{ background: "var(--page-bg)" }}>
         <Icon name="dizzy" size={120} />
         <div>哎呀，小精灵摔了一跤</div>
         {import.meta.env.VITE_ONLINE ? <button className="btn-big" onClick={()=>location.reload()}><Icon name="home" size={40}/> 重新打开小岛</button> : <button className="btn-big" onClick={() => { this.setState({ error: null }); this.props.onReset(); }}><Icon name="home" size={40} /> 回家园</button>}

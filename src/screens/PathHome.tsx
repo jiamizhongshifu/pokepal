@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useGame } from '../store';
-import { learningPath, pathStars, destinationIcon, type PathNode } from '../lib/learningPath';
+import { learningPath, pathStars, pathNodes, type PathNode } from '../lib/learningPath';
 import { say, stopSpeech, sfx } from '../lib/speech';
+import { STORIES } from '../data/stories';
 import { creatureArt } from '../data/creatures';
 import { Icon } from '../icons';
 import { CreatureImg } from '../components/CreatureImg';
@@ -15,26 +16,41 @@ import './path-home.css';
 /** Gentle left-right sway of the stops, in px, like a winding path. */
 const SWAY = [0, 46, 70, 46, 0, -46, -70, -46];
 const CHAPTER_COLOR = ['primary', 'sky', 'gem', 'streak', 'sun', 'danger'] as const;
+const KIND_LABEL: Record<PathNode['kind'], string> = { lesson: '学一学', story: '听故事', island: '去小岛', friend: '新朋友' };
 
 export function PathHome() {
  const save = useGame(s => s.save), go = useGame(s => s.go), start = useGame(s => s.startUnit);
+ const celebrate = useGame(s => s.celebratePath), claimFriend = useGame(s => s.claimChapterFriend);
  const path = useMemo(() => learningPath(save), [save]);
  const stars = pathStars(path);
  const friend = save.captures.find(c => save.settings.favorites.includes(c.id)) ?? save.captures[0];
  const [editing, setEditing] = useState(false);
  const [nudge, setNudge] = useState<string | null>(null);
+ const [lit, setLit] = useState<string[]>([]);
  const currentRef = useRef<HTMLLIElement>(null);
 
+ // Stops finished since the last visit light up once; island stops hand out their upgrade at the same moment.
+ useEffect(() => {
+  const done = pathNodes(path).filter(n => n.state === 'done').map(n => n.key);
+  const fresh = celebrate(done);
+  if (fresh.length) { setLit(fresh); sfx('sparkle'); const t = setTimeout(() => setLit([]), 1600); return () => clearTimeout(t); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, []);
  useEffect(() => { currentRef.current?.scrollIntoView({ block: 'center' }); }, []);
  useEffect(() => () => stopSpeech(), []);
 
- const open = (node: PathNode) => {
+ const open = async (node: PathNode) => {
   if (node.state === 'locked') {
    sfx('boop'); setNudge(node.key); setTimeout(() => setNudge(n => n === node.key ? null : n), 600);
-   void say(['zh', node.unit.mission]);
+   if (node.unit) void say(['zh', node.unit.mission]);
    return;
   }
-  stopSpeech(); sfx('click'); start(node.unit.id);
+  stopSpeech(); sfx('click');
+  if (node.kind === 'lesson') start(node.unit!.id);
+  else if (node.kind === 'story') go({ name: 'story', id: node.storyId! });
+  else if (node.kind === 'island') go({ name: 'home', station: node.station });
+  else if (node.state === 'done') go({ name: 'dex' });
+  else if (await claimFriend(node.chapter)) go({ name: 'catch' });
  };
 
  return <div className="screen path-home">
@@ -42,7 +58,7 @@ export function PathHome() {
    <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
    <div className="path-stats">
     <span className="path-stat" aria-label={`已经点亮 ${stars} 颗星星`}><Icon name="star" size={30} /><b>{stars}</b></span>
-    <button className="path-stat" aria-label={`邀请果 ${save.balls.poke} 个`} onClick={() => go({ name: 'shop' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>
+    <button className="path-stat" aria-label={`邀请果 ${save.balls.poke} 个${save.balls.poke ? '，去草丛认识新伙伴' : ''}`} disabled={save.balls.poke < 1} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>
    </div>
    <ParentButton onOpen={() => go({ name: 'parent' })} />
   </header>
@@ -55,18 +71,20 @@ export function PathHome() {
      <p>{chapter.goal}</p>
     </div>
     <ol className="path-nodes">
-     {chapter.nodes.map((node, i) => {
-      const style = { '--sway': `${SWAY[(node.index) % SWAY.length]}px` } as CSSProperties;
+     {chapter.nodes.map(node => {
+      const style = { '--sway': `${SWAY[node.index % SWAY.length]}px` } as CSSProperties;
       const current = node.state === 'current';
-      return <li key={node.key} ref={current ? currentRef : undefined} className={`path-node is-${node.state}${nudge === node.key ? ' is-nudged' : ''}`} style={style}>
-       {current && <span className="path-start" aria-hidden="true">开始！<small lang="en">Start</small></span>}
-       <button type="button" className="path-node-button" onClick={() => open(node)}
-        aria-label={`第 ${node.index + 1} 站，${node.unit.title}，${node.state === 'done' ? '已完成，可以再玩一次' : current ? '现在开始' : '还没解锁，听听介绍'}`}>
-        <Icon name={node.state === 'done' ? 'check' : node.state === 'locked' ? 'lock' : destinationIcon(node.unit)} size={node.state === 'current' ? 44 : 36} />
+      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;
+      const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
+      return <li key={node.key} ref={current ? currentRef : undefined} className={`path-node kind-${node.kind} is-${node.state}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style}>
+       {current && <span className="path-start" aria-hidden="true">{KIND_LABEL[node.kind]}！<small lang="en">Start</small></span>}
+       <button type="button" className="path-node-button" onClick={() => void open(node)}
+        aria-label={`第 ${node.index + 1} 站，${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : '还没解锁'}`}>
+        {met ? <CreatureImg className="path-node-friend" src={creatureArt(met)} alt="" />
+         : <Icon name={node.state === 'locked' ? 'lock' : node.state === 'done' && node.kind === 'lesson' ? 'check' : node.icon} size={current ? 44 : 36} />}
        </button>
-       <span className="path-node-title">{node.unit.title}</span>
+       <span className="path-node-title">{title}</span>
        {current && friend && <CreatureImg className={`path-buddy ${SWAY[node.index % SWAY.length] > 0 ? 'on-left' : 'on-right'}`} src={creatureArt(friend.id)} alt="" />}
-       {i === chapter.nodes.length - 1 && <span className="path-chest" aria-hidden="true"><Icon name={chapter.done === chapter.nodes.length ? 'trophy' : 'gift'} size={44} /></span>}
       </li>;
      })}
     </ol>

@@ -2,7 +2,8 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {validateSave} from '../../src/lib/saveValidation';
-import {exchangeInvite,invitePartner} from '../../src/lib/invites';
+import {invitePartner} from '../../src/lib/invites';
+import {claimChapterFriend} from '../../src/lib/learningPath';
 import {rewardParticipation} from '../../src/lib/participation';
 import {CREATURES} from '../../src/data/creatures';
 const grown=CREATURES.find(c=>c.isFinal)!.id;
@@ -13,7 +14,7 @@ test('legacy inventory merges once on load/import, preserves records and origina
  const copy=structuredClone(old);const s=validateSave(old);
  assert.deepEqual(s.balls,{poke:14,great:0,ultra:0,master:0});
  assert.deepEqual(validateSave(s).balls,s.balls);assert.deepEqual(old,copy);
- assert.deepEqual(s.captures,old.captures);assert.equal(s.energy,old.energy);
+ assert.deepEqual(s.captures,old.captures);assert.equal(s.energy,0,'energy is retired into berries');
 });
 test('reject negative or overflowing legacy inventory instead of losing balls',()=>{
  const s=make();s.balls.great=-1;assert.throws(()=>validateSave(s));
@@ -29,9 +30,10 @@ test('empty inventory and invalid targets never create a companion or consume a 
  const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};assert.equal(invitePartner(s,grown),false);
  s.balls.poke=1;assert.equal(invitePartner(s,-1),false);assert.equal(s.balls.poke,1);assert.equal(s.captures.length,0);
 });
-test('exchange spends exactly five energy and allows an immediate invite of a chosen grown creature',()=>{
- const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};s.energy=4;assert.equal(exchangeInvite(s),false);assert.equal(s.energy,4);
- s.energy=5;assert.equal(exchangeInvite(s),true);assert.equal(s.energy,0);assert.equal(invitePartner(s,grown),true);assert.equal(s.balls.poke,0);assert.equal(exchangeInvite(s),false);
+test('a friend-stop berry allows an immediate invite of a chosen grown creature',()=>{
+ const s=make();s.captures=[];s.balls={poke:0,great:0,ultra:0,master:0};
+ assert.equal(claimChapterFriend(s,0),true);assert.equal(s.balls.poke,1);assert.equal(invitePartner(s,grown),true);assert.equal(s.balls.poke,0);
+ assert.equal(s.path!.friends['0'],grown);assert.equal(claimChapterFriend(s,0),false);assert.equal(s.balls.poke,0);
 });
 test('seventh participation day gives the same ball once',()=>{
  const s=make();s.balls={poke:0,great:0,ultra:0,master:0};s.participation={version:1,days:6,gifts:0,lastDate:'2020-01-01'};

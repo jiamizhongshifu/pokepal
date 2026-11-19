@@ -26,7 +26,7 @@ export function advanceAdventure(s:SaveData,event:StoryEvent){
  const reward=rewardParticipation(s,'story');
  // The legacy reader and this adventure share the day's story credit (2 + 3 = 5).
  const extra=Math.min(3,Math.max(0,DAILY_CAP-s.daily.energyEarned));
- s.energy+=extra;s.daily.energyEarned+=extra;
+ s.daily.energyEarned+=extra;
  s.daily.adventureReward=reward.gained+extra;
  s.daily.tasksCompleted++;
  noteLearningStory(s,PICNIC_BOOK.id);

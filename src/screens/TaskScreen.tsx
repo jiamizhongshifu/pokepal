@@ -1,6 +1,5 @@
 import {trackInteraction} from '../lib/interaction';
 import {EnergyToast} from '../components/EnergyToast';
-import { EnergyReturn } from '../components/EnergyReturn';
 import {ProgressHost,RoundProgress} from '../components/RoundProgress';
 import { learningProfile } from '../lib/learningStage';
 import {selectedUnit,learningEntry} from '../data/curriculum';
@@ -40,7 +39,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
   }, []);
 
   const finish = async () => {
-    if (!active.current || finished.current) return; // 防止重复结算能量
+    if (!active.current || finished.current) return; // 防止重复结算
     const state=useGame.getState();
     if(!state.loaded||state.saveIssue||state.saveBusy)return;
     finished.current = true;
@@ -52,7 +51,6 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
       .sort(([,a],[,b])=>b.lastSeen-a.lastSeen).slice(0,3).map(([key])=>key));
     setReward(r);
     const parts: Parameters<typeof say> = [["en", "You did it!"]];
-    if(r.gained+r.bonus>0)parts.push(["zh",`你得到了${r.gained+r.bonus}点能量！`]);
     if(r.ballGranted)parts.push(["en","You got an invite berry!"]);
     say(...parts);
   };
@@ -65,7 +63,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
   return (
     <ProgressHost.Provider value={progressHost}><div className={`screen task task-${kind}`} >
       <TopBar icon={info.icon} title={practice ? `${info.zh} · 加练` : info.zh} onBack={back} focused progress={!reward&&(kind==='trace'?<RoundProgress index={traced.length} total={practice?3:1} unit="个字母"/>:<div ref={setProgressHost}/>)} help={<FeatureGuide compact id={passive?"lesson":kind} autoVoice={false} enabled={!reward}>
-        {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',returnGoal:('returnGoal' in useGame.getState().screen?(useGame.getState().screen as {returnGoal?:import('../lib/energyGoal').EnergyGoal}).returnGoal:undefined),boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
+        {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
       </FeatureGuide>}/>
 
       <div className="task-stage">
@@ -83,7 +81,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
           <div className="cel-actions completion-next">
             <button className="btn-big" onClick={()=>go({name:'journey'})}><Icon name="sign" size={36}/>看看下一站</button>
             <button className="btn-big alt" onClick={()=>go({name:'home',station:sessionStart.unit.station})}><Icon name="island" size={28}/>回小岛玩</button>
-          </div><EnergyReturn/>
+          </div>
           </div>
         </Celebration>
       )}

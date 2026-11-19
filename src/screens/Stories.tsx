@@ -2,7 +2,6 @@ import {trackInteraction} from '../lib/interaction';
 import './story-reader.css';
 import { SHORT_STORY_LINES, storyLanguage, storyEdition, storyBookmarkKey, storyInitialPage, type StoryLanguage } from '../data/storyLevels';
 import { learningProfile } from '../lib/learningStage';
-import { EnergyReturn } from '../components/EnergyReturn';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { LIFE_STORIES } from '../lib/islandLiving';
 import { learningEntry, selectedUnit } from '../data/curriculum';
@@ -36,7 +35,6 @@ function StoryReading({page,spoken,selected,onWord}:{page:StoryPage;spoken:numbe
 
 export function StoryLibrary(){
  const go=useGame(s=>s.go);
- const returnGoal=useGame(s=>s.screen.name==='stories'?s.screen.returnGoal:undefined);
  const progress=useGame(s=>s.save.storyProgress);
  const settings=useGame(s=>s.save.settings);
  const bookmark=(story:Story)=>storyBookmarkKey(story,storyLanguage(story,settings));
@@ -47,13 +45,13 @@ export function StoryLibrary(){
  return <div className="screen story-library">
   <TopBar title="啵啵岛故事屋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="stories" compact/>}/>
   <header className="learning-heading"><h1>今天想听哪个故事？</h1></header>
-   <button className="story-resume" onClick={()=>go({name:'adventure'})}><Icon name="book" size={36}/><span><b>一起听故事，去认识新伙伴</b><small>苹果野餐 · 自动播放 · 今日故事共 5 能量</small></span><span aria-hidden="true">›</span></button>
+   <button className="story-resume" onClick={()=>go({name:'adventure'})}><Icon name="book" size={36}/><span><b>一起听故事，去认识新伙伴</b><small>苹果野餐 · 自动播放</small></span><span aria-hidden="true">›</span></button>
    <button className="story-resume" onClick={()=>go({name:'careStory'})}><Icon name="heart" size={36}/><span><b>和我的伙伴过一个小下午</b><small>分享点心 · 照顾小苗 · 一起滚球</small></span><span aria-hidden="true">›</span></button>
   <nav className="story-themes" aria-label="故事主题"><button aria-pressed={theme==='all'} onClick={()=>setTheme('all')}><Icon name="book" size={32}/>全部故事</button>{STORY_THEMES.map(t=><button key={t.id} aria-pressed={theme===t.id} onClick={()=>setTheme(t.id)}><Icon name={t.icon} size={32}/>{t.name}</button>)}</nav>
-  {resume&&(theme==='all'||resume.group===theme)&&<button className="story-resume" onClick={()=>go({name:'story',id:resume.id,returnGoal})}><Icon name="book" size={30}/><span><b>接着读：{resume.title}</b><small>停在第 {progress?.[bookmark(resume)]} 页 · 随时可以重读</small></span><span aria-hidden="true">›</span></button>}
+  {resume&&(theme==='all'||resume.group===theme)&&<button className="story-resume" onClick={()=>go({name:'story',id:resume.id})}><Icon name="book" size={30}/><span><b>接着读：{resume.title}</b><small>停在第 {progress?.[bookmark(resume)]} 页 · 随时可以重读</small></span><span aria-hidden="true">›</span></button>}
   <div className="story-shelf">{books.map((story)=>{const i=STORIES.indexOf(story);
     const seen=progress?.[bookmark(story)]??0;
-    return <button key={story.id} className={`storybook book-${i}`} onClick={()=>go({name:'story',id:story.id,returnGoal})} aria-label={`${story.title}，${story.theme}，${seen>story.pages.length?'再读一次':seen?'继续阅读':'开始阅读'}`}>
+    return <button key={story.id} className={`storybook book-${i}`} onClick={()=>go({name:'story',id:story.id})} aria-label={`${story.title}，${story.theme}，${seen>story.pages.length?'再读一次':seen?'继续阅读':'开始阅读'}`}>
       <div className="book-cover"><StoryStage story={story} page={story.pages[STORY_COVER_PAGE[story.id]??0]} cover/><span className="book-number">{String(i+1).padStart(2,'0')}</span><span className="book-theme">{story.theme}</span></div>
       <div className="book-title">{unit.story===story.id&&<span className="story-learning-link">和「{unit.title}」一起读</span>}<h2>{story.title}</h2><span lang="en">{story.titleEn}</span><p className="book-summary">{story.summary}</p><div className="book-footer"><small>{story.pages.length} 页 · 约 {story.pages.length<=4?1:3} 分钟</small><b>{seen>story.pages.length?'再读一次':seen?'接着读':'翻开看看'} <span aria-hidden="true">›</span></b></div></div>
     </button>;
@@ -66,7 +64,7 @@ export function StoryReader({id}:{id:string}){
  const story=STORIES.find(s=>s.id===id);
  const go=useGame(s=>s.go);
  const settings=useGame(s=>s.save.settings);
- if(!story)return <div className="screen"><TopBar title="故事屋" onBack={()=>go({name:'stories'})}/><p>这个故事还没准备好。</p></div>;
+ if(!story)return <div className="screen"><TopBar title="故事屋" onBack={()=>go({name:'home'})}/><p>这个故事还没准备好。</p></div>;
  const language=storyLanguage(story,settings);
  return <Book key={`${id}:${language}`} story={storyEdition(story,language)} language={language}/>;
 }
@@ -136,16 +134,16 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const pickWord=(next:string,index:number)=>{setWord({word:next,index});void hearWord(next);};
  const toggleSlow=()=>{const next=!slow;setVoicePace(next?'slow':'normal');setSlow(next);useGame.getState().updateSettings({storyPace:next?'slow':'normal'});read();};
  return <div className="screen story-reader">
-   <TopBar title={story.title} onBack={()=>go({name:'stories'})} focused
+   <TopBar title={story.title} onBack={()=>go({name:'home'})} focused
      progress={!ended&&<span className="story-page-count" aria-label={`第 ${idx+1} 页，共 ${story.pages.length} 页`}>{idx+1} / {story.pages.length}</span>}
      help={!ended&&<FeatureGuide id="story" compact autoVoice={false} onVoiceStart={pause}/>}/>
    <div ref={reader} className="story-pages">
    {ended ? <main className="story-ending">
      <span className="section-eyebrow">THE END · 故事读完啦</span><h1>把温柔的话，带到生活里</h1>
-     <EnergyReturn/><ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
+     <ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
      <nav className="story-ending-destinations" aria-label="故事读完后去哪里">
-       <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'stories'});}}><Icon name="book" size={32}/>回到故事屋</button>
+       <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'home'});}}><Icon name="sign" size={32}/>回到学习路线</button>
        <button className="btn-small story-ending-island" onClick={()=>{pause();go({name:'home'});}}><Icon name="island" size={28}/>回小岛上玩</button>
      </nav>
      <details className="quiet-disclosure"><summary>还想一起做点什么？</summary><button className="btn-small" onClick={()=>useGame.getState().saveLearningWord(story.phrase.en)}>把这句话放进手册</button><div className="story-talk"><b>和大人聊一聊</b><p>{story.question.zh}</p><span lang="en">{story.question.en}</span><button className="replay" onClick={()=>readPair(story.question)}><Icon name="speaker" size={24}/>听一听</button></div>

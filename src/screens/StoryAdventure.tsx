@@ -41,7 +41,6 @@ export function StoryAdventure(){
   return()=>{cancelled=true;clearTimeout(timer);stopSpeech();};
  },[ready,state.token,state.phase,assetFailed]);
  const resume=()=>{setAudioFailed(false);void send({type:state.phase==='ready'?'start':'resume'});};
- const buy=async()=>{if(lock.current)return;lock.current=true;try{if(await useGame.getState().buyBall())go({name:'catch'});}finally{lock.current=false;}};
  return <div className="screen story-adventure">
   <TopBar title="苹果野餐" onBack={()=>{stopSpeech();go({name:'stories'});}} focused/>
   <main>
@@ -59,10 +58,9 @@ export function StoryAdventure(){
    </div>}
    {state.phase==='completed'&&<section className="adventure-reward" aria-live="polite">
     <h2>谢谢你，一起度过这个小故事。</h2>
-    <p>{save.daily.adventureReward!==undefined?(save.daily.adventureReward>0?`今天的故事已存好，获得 ${save.daily.adventureReward} 能量。`:'今天的故事已存好。今天的能量已收集过或已满。'):'这段故事已经听完，可以再听一次。'} 现在有 {save.energy} 能量、{save.balls.poke} 个邀请果。</p>
-    {save.balls.poke>0?<button disabled={busy} onClick={()=>go({name:'catch'})}>带上邀请果，认识新伙伴</button>:save.energy>=5?<button disabled={busy} onClick={()=>void buy()}>用 5 能量换邀请果，去找伙伴</button>:<button onClick={()=>go({name:'home'})}>回小岛，陪陪伙伴</button>}
+    <p>{save.daily.adventureReward!==undefined?'今天的故事已经记下啦。':'这段故事已经听完，可以再听一次。'} 现在有 {save.balls.poke} 个邀请果。</p>
+    {save.balls.poke>0?<button disabled={busy} onClick={()=>go({name:'catch'})}>带上邀请果，认识新伙伴</button>:<button onClick={()=>go({name:'home'})}>回到学习路线</button>}
     <div className="adventure-secondary"><button disabled={busy} onClick={()=>void send({type:'restart'})}>再听一次</button><button onClick={()=>go({name:'home'})}>回小岛</button></div>
-    <small>故事每天共 5 能量，与旧版共读合并计算；所有活动每天最多 15 能量。重听不会重复领取。</small>
    </section>}
   </main>
  </div>;

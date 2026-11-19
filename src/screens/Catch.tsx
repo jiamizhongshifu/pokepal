@@ -180,8 +180,8 @@ export function Catch() {
         </div>
           {encounters.length > 0 && <div className="field-kit">
             <InviteBerry type="poke" size={48}/>
-            <div className="field-kit-copy"><strong>{ready ? `邀请果 ×${save.balls.poke}` : "准备一个邀请果"}</strong><small>{ready ? "点一点喜欢的伙伴吧" : "有了邀请果，就能邀请伙伴回家"}</small></div>
-            {!ready && <button onClick={()=>go({name:"shop"})}><Icon name="gift" size={30}/><span>去换邀请果</span></button>}
+            <div className="field-kit-copy"><strong>{ready ? `邀请果 ×${save.balls.poke}` : "准备一个邀请果"}</strong><small>{ready ? "点一点喜欢的伙伴吧" : "走到路线上的伙伴站，就会得到邀请果"}</small></div>
+            {!ready && <button onClick={()=>go({name:"home"})}><Icon name="sign" size={30}/><span>去学习路线</span></button>}
           </div>}
 
 

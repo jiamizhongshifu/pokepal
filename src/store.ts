@@ -4,13 +4,13 @@ import {restoreStory,type StoryEvent} from './lib/storyPlayer';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
 import {advancePlayClock,advanceCareClock} from './lib/playClock';
 import {markReviewAudio,settleUnitRound} from './lib/learningProgress';
-import type {EnergyGoal} from './lib/energyGoal';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
-import { mergeInvites, exchangeInvite, invitePartner } from "./lib/invites";
-import { ensureIslandProgress,claimIslandGift,upgradeIsland,placeIslandDecoration,type UpgradeId } from './lib/islandProgress';
+import { mergeInvites, invitePartner } from "./lib/invites";
+import { markPathSeen, claimChapterFriend } from "./lib/learningPath";
+import { ensureIslandProgress,claimIslandGift,grantNextIslandUpgrade,placeIslandDecoration } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
@@ -46,19 +46,17 @@ export type Screen =
   | { name: "welcome" }
   | { name: "home"; view?:"island"; station?:string; companion?:number }
   | { name: "journey"; completedUnit?:string }
-  | { name: "lesson"; returnGoal?:EnergyGoal; id:string }
-  | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'energy'|'tasks'|'parent' }
-  | { name: "review"; keys:string[]; returnTo?:'energy'|'tasks'|'parent' }
+  | { name: "lesson"; id:string }
+  | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'tasks'|'parent' }
+  | { name: "review"; keys:string[]; returnTo?:'tasks'|'parent' }
   | { name: "tasks" }
   | { name: "practice" }
-  | { name: "energy"; goal?:EnergyGoal }
   | { name: "diary"; id?:string }
   | { name: "adventure"; autoplay?:boolean }
   | { name: "careStory"; companion?:number; autoplay?:boolean }
-  | { name: "stories"; returnGoal?:EnergyGoal }
-  | { name: "story"; returnGoal?:EnergyGoal; id:string }
-  | { name: "task"; returnGoal?:EnergyGoal; kind: TaskKind; boardIndex: number | null; practice?:boolean; session?:number }
-  | { name: "shop" }
+  | { name: "stories" }
+  | { name: "story"; id:string }
+  | { name: "task"; kind: TaskKind; boardIndex: number | null; practice?:boolean; session?:number }
   | { name: "catch" }
   | { name: "dex"; picking?: boolean; browse?:DexBrowseState }
   | { name: "dexDetail"; id: number; picking?: boolean; browse?:DexBrowseState }
@@ -129,11 +127,14 @@ interface State {
   restoreAdventure:()=>void;
   advanceAdventure:(event:StoryEvent)=>Promise<void>;
   claimIslandGift:()=>boolean;
-  upgradeIsland:(id:UpgradeId,expectedLevel:number)=>boolean;
+  /** Light up newly finished path stops once; island stops grant the next island upgrade. Returns the keys celebrated. */
+  celebratePath:(keys:string[])=>string[];
+  /** Friend stop: one invite berry for meeting this chapter's new friend. */
+  claimChapterFriend:(chapter:number)=>Promise<boolean>;
   finishReview: () => Reward;
   markReviewAudio: (key:string,pending:boolean)=>void;
   noteStoryRead: (id:string,page:number) => void;
-  startUnit: (id:string,returnGoal?:EnergyGoal)=>void;
+  startUnit: (id:string)=>void;
   advanceUnit: (id:string,round:number,skipped?:boolean)=>Promise<Reward|undefined>;
   noteAttempt: (word:string,correct:boolean,assisted:boolean,source:string)=>void;
   restLearningWord: (word:string)=>void;
@@ -147,13 +148,11 @@ interface State {
   restoreSaveBackup: () => Promise<void>;
   save: SaveData;
   screen: Screen;
-  energyGoal?: EnergyGoal;
   load: () => Promise<void>;
   go: (s: Screen) => void;
   createTrainer: (avatar: string) => Promise<boolean>;
   completeTask: (kind: TaskKind, boardIndex: number | null) => Promise<TaskReward | undefined>;
   noteStoryPage: (id:string,page:number) => void;
-  buyBall: () => Promise<boolean>;
   inviteFriend: (id: number) => Promise<boolean>;
   setCatchWish: (id: number | null) => void;
   /** 满友好度长大：from 长大成 to，友好度保留到 3 颗心，好朋友相册记下新形态 */
@@ -286,10 +285,10 @@ export const useGame = create<State>((set, get) => {
     },
 
     go(screen) {
-      set({ screen, ...(screen.name==='energy'&&screen.goal?{energyGoal:screen.goal}:{}) });
+      set({ screen });
     },
 
-    startUnit(id,returnGoal) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});set({screen:{name:'lesson',id,returnGoal}}); },
+    startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});set({screen:{name:'lesson',id}}); },
     async advanceUnit(id,round,skipped=false) {
       const u=unitById(id);if(!u||!unitUnlocked(get().save,id))return;
       if(round!==unitRoundCount(u)){mut(s=>{settleUnitRound(s,id,round,skipped);});return;}
@@ -339,7 +338,8 @@ export const useGame = create<State>((set, get) => {
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
     feedBerry(id,berry) {return mut(s=>{const ok=feedBerry(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
     claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
-    upgradeIsland(id,level){return mut(s=>upgradeIsland(s,id,level))??false;},
+    celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);for(const k of fresh)if(k.startsWith('island:'))grantNextIslandUpgrade(s);});return fresh;},
+    async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
     rememberTogether(memory){return mut(s=>rememberTogether(s,memory))??false;},
     beginPicnic(id,berry) {return mut(s=>beginPicnic(s,id,berry,crypto.randomUUID()))??false;},
@@ -371,7 +371,6 @@ export const useGame = create<State>((set, get) => {
       mut(s=>{ s.storyProgress ??= {}; s.storyProgress[id]=Math.max(s.storyProgress[id]??0,page); });
     },
 
-    async buyBall() {const ok=!!await commit(exchangeInvite);if(ok)trackInteraction('ball_exchanged');return ok;},
 
     setCatchWish(id) {
       mut((s) => {

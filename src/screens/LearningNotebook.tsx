@@ -17,7 +17,7 @@ import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import '../learning-journey.css';
 
-export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'retry';returnTo?:'energy'|'tasks'|'parent'}){
+export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'retry';returnTo?:'tasks'|'parent'}){
  const s=useGame(v=>v.save),go=useGame(v=>v.go),toggle=useGame(v=>v.saveLearningWord);
  const [filter,setFilter]=useState(mode),[query,setQuery]=useState('');
  const [limit,setLimit]=useState(24),[searching,setSearching]=useState(false);
@@ -48,7 +48,7 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
  </main></div>;
 }
 
-export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'energy'|'tasks'|'parent'}){
+export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'tasks'|'parent'}){
  const trackedStart=useRef(false);
  useEffect(()=>{if(!trackedStart.current&&keys.some(k=>learningEntry(k))){trackedStart.current=true;trackInteraction('review_started');}},[]);
  const go=useGame(s=>s.go),records=useGame(s=>s.save.learning?.records);
@@ -59,6 +59,6 @@ export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'energy'
  const next=(skip=false)=>{if(skip)deferred.current.push(e.key);useGame.getState().markReviewAudio(e.key,skip);if(idx+1===entries.length&&!deferred.current.length)useGame.getState().finishReview();setIdx(i=>i+1);};
  const e=entries[idx],unit=e?reviewSituation(e.key,records?.[e.key]?.contexts):undefined;
  return <div className="screen learning-review"><TopBar title="和老朋友见面" onBack={()=>go(returnTo?{name:returnTo}:{name:'notebook',mode:'retry'})} focused progress={e&&<RoundProgress index={idx} total={entries.length}/>} help={<FeatureGuide compact id="review" autoVoice={false} enabled={!!e}/>}/><main className="lesson-wrap">
-  {!e?<section className="learning-empty"><Icon name="heart" size={80}/><h1>{deferred.current.length?'声音准备好后，再一起听':entries.length?'又多认识了一点':'现在可以自由玩耍啦'}</h1><p>{deferred.current.length?"已经帮你记好啦，联网后可以回来继续。":"今天先到这里。过几天，我们再和这些词见面。"}</p>{entries.length>0&&!deferred.current.length&&<ParticipationNote kind="review"/>}{deferred.current.length>0&&<p>有 {deferred.current.length} 个小发现留在手册里，补听前不会算作完成。</p>}<div className="lesson-actions">{deferred.current.length>0&&<button onClick={()=>go({name:'notebook',mode:'retry',returnTo})}>看看待补听的小发现</button>}<button className="journey-primary" onClick={()=>go({name:returnTo??'journey'})}>{returnTo==='tasks'?'回到学英语':returnTo==='energy'?'回能量小口袋':returnTo==='parent'?'回家长中心':'回到冒险路线'}</button><button onClick={()=>go({name:'home'})}>回小岛玩</button></div></section>:<><div className="lesson-breadcrumb"><span>陪伙伴找一找</span></div><LearningRound key={idx} target={e} situation={unit?.situation} choices={unit?[unit.phrase,unit.alternative]:undefined} onNext={()=>next()} onSkip={()=>next(true)} source="review"/></>}
+  {!e?<section className="learning-empty"><Icon name="heart" size={80}/><h1>{deferred.current.length?'声音准备好后，再一起听':entries.length?'又多认识了一点':'现在可以自由玩耍啦'}</h1><p>{deferred.current.length?"已经帮你记好啦，联网后可以回来继续。":"今天先到这里。过几天，我们再和这些词见面。"}</p>{entries.length>0&&!deferred.current.length&&<ParticipationNote kind="review"/>}{deferred.current.length>0&&<p>有 {deferred.current.length} 个小发现留在手册里，补听前不会算作完成。</p>}<div className="lesson-actions">{deferred.current.length>0&&<button onClick={()=>go({name:'notebook',mode:'retry',returnTo})}>看看待补听的小发现</button>}<button className="journey-primary" onClick={()=>go({name:returnTo??'journey'})}>{returnTo==='tasks'?'回到学英语':returnTo==='parent'?'回家长中心':'回到冒险路线'}</button><button onClick={()=>go({name:'home'})}>回小岛玩</button></div></section>:<><div className="lesson-breadcrumb"><span>陪伙伴找一找</span></div><LearningRound key={idx} target={e} situation={unit?.situation} choices={unit?[unit.phrase,unit.alternative]:undefined} onNext={()=>next()} onSkip={()=>next(true)} source="review"/></>}
  </main></div>;
 }

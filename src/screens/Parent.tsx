@@ -116,7 +116,7 @@ export function Parent() {
               <div className="chips">{letters.map((l) => <span key={l} className="chip letter">{l}</span>)}</div>
             {todayWords.length===0&&learned.length===0&&letters.length===0&&<p className="muted">还没有记录。听故事、玩课程或写字后，会慢慢积累在这里。</p>}</div></details>
 <details className="parent-fold"><summary><Icon name="tasks" size={28}/><span>最近 7 天<small>查看参与与游玩记录</small></span></summary><div className="parent-fold-content"><p className="parent-table-hint">表格可左右滑动，查看完整记录。</p><div className="parent-table-scroll" role="region" aria-label="最近七天学习记录，可左右滚动" tabIndex={0}><table className="hist">
-                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>能量</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
+                <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>参与</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
                 <tbody>
                   {history.map((h) => (
                     <tr key={h.date}><td>{h.date.slice(5)}</td><td>{h.heard}</td><td>{h.spoken}</td><td>{h.tasksCompleted}</td><td>{h.energyEarned}/{DAILY_ENERGY_CAP}</td><td>{h.words}</td><td>{h.caught}</td><td>{h.playMinutes}</td></tr>
