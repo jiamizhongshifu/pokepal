@@ -139,3 +139,4 @@
 #root .learning-explanation-label{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 10px;max-width:100%;overflow-wrap:anywhere}
 #root .learning-explanation-pointer{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:38px;height:38px;background:var(--brand-sun);border-radius:50%}
 #root .learning-explanation-pointer>.icon{width:28px;height:28px;max-width:none;margin:0;position:static;transform:none}
+.lesson-home-idea{max-width:520px;margin:18px auto 0;padding:14px 18px;border:2px dashed var(--brand-line);border-radius:var(--radius-md);text-align:left;background:var(--surface)}.lesson-home-idea p{margin:6px 0;font-size:var(--text-base)}.lesson-home-idea small{color:var(--muted);font-size:var(--text-sm)}

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
-import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,summarizeOpportunities,EVIDENCE_MIN_SAMPLE,type RoundTrace,type Opportunity} from '../../src/lib/learningProgress';
+import {classifyResponse,recordOpportunity,OPPORTUNITY_LIMIT,summarizeOpportunities,EVIDENCE_MIN_SAMPLE,markHomeTried,type RoundTrace,type Opportunity} from '../../src/lib/learningProgress';
 import {validateSave} from '../../src/lib/saveValidation';
 
 const base:RoundTrace={firstAnswer:'correct',replays:0,modelShown:false,heardBeforeAnswer:true,outcome:'solved'};
@@ -51,4 +51,17 @@ test('the parent summary keeps every kind apart and only offers a share with eno
  const week=summarizeOpportunities(list,5);
  assert.equal(week.total,7,'older than the window is left out');
  assert.equal(week.independent,2);assert.equal(week.decidable,6);assert.equal(week.enough,week.decidable>=EVIDENCE_MIN_SAMPLE);
+});
+
+// T08: the parent's "tried at home" note is separate from answers and can be undone.
+test('marking the take-home phrase as tried touches nothing else and survives a reload',()=>{
+ const s=fixture() as SaveData;
+ const id='hello-island';s.learning!.units[id]??={round:0};
+ const before=JSON.stringify({r:s.learning!.records,o:s.learning!.opportunities,c:s.learning!.units[id].completedAt});
+ markHomeTried(s,id,true,123);markHomeTried(s,id,true,456);
+ assert.equal(s.learning!.units[id].homeTriedAt,123,'first note kept');
+ assert.equal(JSON.stringify({r:s.learning!.records,o:s.learning!.opportunities,c:s.learning!.units[id].completedAt}),before);
+ assert.equal(validateSave(JSON.parse(JSON.stringify(s))).learning!.units[id].homeTriedAt,123);
+ markHomeTried(s,id,false);assert.equal(s.learning!.units[id].homeTriedAt,undefined);
+ markHomeTried(s,'not-started',true);assert.equal(s.learning!.units['not-started'],undefined,'no record for lessons never opened');
 });

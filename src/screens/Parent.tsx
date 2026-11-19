@@ -31,6 +31,7 @@ export function Parent() {
   const save = useGame((s) => s.save);
   const go = useGame((s) => s.go);
   const updateSettings = useGame((s) => s.updateSettings);
+  const markHomeTried = useGame((s) => s.markHomeTried);
   const grantExtraMinutes = useGame((s) => s.grantExtraMinutes);
   const grantMysteryGift = useGame((s) => s.grantMysteryGift);
   const renameTrainer = useGame((s) => s.renameTrainer);
@@ -105,7 +106,7 @@ export function Parent() {
  <ParentPathSummary/>
  <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 个课程单元，不代表已经掌握。</p>
  <div className="parent-family-facts"><strong>今天留下的小发现</strong><p>{family.completed.length?`首次走完了「${family.completed[0].title}」${family.completed.length>1?`等 ${family.completed.length} 站`:''}。`:'今天还没有首次走完的新一站，听听、看看也可以。'}{family.words.length?`接触过 ${family.words.map(e=>e.en).join('、')}。`:''}</p><small>记录来自应用操作，无法判断是否由宝宝独自完成。</small></div>
- <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>下次生活里，可以一起试试</strong><p>{family.focus.homePlay}</p><small>让宝宝选，你来回应。中文也很好，不用考一考或回来打卡。</small></div></div>
+ <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>下次生活里，可以一起试试</strong><p><span lang="en">{family.focus.phrase}</span> · {family.focus.homePlay}</p><small>让宝宝选，你来回应。中文也很好，不用考一考。“试过了”只是家长自己的记录，和应用里的作答分开。</small>{save.learning?.units[family.focus.id]&&<button className="btn-small parent-home-tried" aria-pressed={!!save.learning.units[family.focus.id].homeTriedAt} onClick={()=>markHomeTried(family.focus.id,!save.learning!.units[family.focus.id].homeTriedAt)}><Icon name={save.learning.units[family.focus.id].homeTriedAt?'heart':'sparkle'} size={22}/>{save.learning.units[family.focus.id].homeTriedAt?`试过了 · ${new Date(save.learning.units[family.focus.id].homeTriedAt!).toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'})}（再点取消）`:'在家试过了'}</button>}</div></div>
  <p className="parent-review-note">{due?`${due} 个词可以再遇见，${retry} 个词可以再试试。`:'暂时没有到期的复习，轻松听一听、玩一玩就好。'}</p>
  <button className="btn-small" onClick={()=>go({name:'notebook',mode:retry?'retry':'all',returnTo:'parent'})}><Icon name="book" size={24}/>查看词汇与复习</button>
 </section>

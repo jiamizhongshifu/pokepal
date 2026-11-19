@@ -8,7 +8,7 @@ export interface LearningRecord {
  seen:number;spoken:number;attempts:number;misses:number;independent:number;streak:number;
  lastSeen:number;nextReview:number;lastSuccessDay?:string;needsPractice:boolean;saved:boolean;contexts:string[];
 }
-export interface UnitProgress {round:number;pendingAudio?:number[];completedAt?:number;appliedAt?:number;encounteredAt?:number;storyAt?:number}
+export interface UnitProgress {round:number;pendingAudio?:number[];completedAt?:number;appliedAt?:number;encounteredAt?:number;storyAt?:number;homeTriedAt?:number}
 /**
  * One answer opportunity, kept on this device only. "Independent" means no visible help inside the app; it cannot
  * tell whether an adult helped off screen. Older saves have no opportunities, and their history stays unknown.
@@ -45,6 +45,11 @@ export function summarizeOpportunities(list:Opportunity[]|undefined,since:number
  for(const o of recent)count[o.kind]++;
  const decidable=recent.length-count.unknown-count.left;
  return {total:recent.length,count,decidable,independent:count.independent,enough:decidable>=EVIDENCE_MIN_SAMPLE};
+}
+/** A parent's own note that the take-home phrase was tried in real life; kept apart from in-app answers. */
+export function markHomeTried(s:SaveData,id:string,tried:boolean,now=Date.now()){
+ const p=ensureLearning(s).units[id];if(!p)return;
+ if(tried)p.homeTriedAt??=now;else delete p.homeTriedAt;
 }
 export function validOpportunity(o:unknown):boolean{
  const r=o as Record<string,unknown>;
