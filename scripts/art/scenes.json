@@ -390,8 +390,478 @@
    "id": "bush-2",
    "group": "icon",
    "prompt": "A wide low green bush made of three round clumps."
+  },
+  {
+   "id": "ui-decor-basket",
+   "group": "icon",
+   "prompt": "A woven picnic basket with a handle."
+  },
+  {
+   "id": "ui-decor-table",
+   "group": "icon",
+   "prompt": "A small round wooden picnic table."
+  },
+  {
+   "id": "ui-decor-mat",
+   "group": "icon",
+   "prompt": "A round woven floor mat."
+  },
+  {
+   "id": "ui-decor-bush",
+   "group": "icon",
+   "prompt": "A round green bush with a few flowers."
+  },
+  {
+   "id": "ui-decor-stones",
+   "group": "icon",
+   "prompt": "Three flat rounded stepping stones."
+  },
+  {
+   "id": "ui-decor-flowers",
+   "group": "icon",
+   "prompt": "A small cluster of three colorful flowers."
+  },
+  {
+   "id": "ui-decor-lantern",
+   "group": "icon",
+   "prompt": "A small hanging paper lantern glowing yellow."
+  },
+  {
+   "id": "ui-decor-flags",
+   "group": "icon",
+   "prompt": "A string of triangular bunting flags."
+  },
+  {
+   "id": "ui-decor-pinwheel",
+   "group": "icon",
+   "prompt": "A colorful pinwheel on a stick."
+  },
+  {
+   "id": "ui-decor-shells",
+   "group": "icon",
+   "prompt": "Two seashells and a starfish."
+  },
+  {
+   "id": "ui-decor-rainbow",
+   "group": "icon",
+   "prompt": "A rainbow arch with two clouds."
+  },
+  {
+   "id": "ui-decor-track",
+   "group": "icon",
+   "prompt": "A short curved toy race track."
+  },
+  {
+   "id": "ui-decor-garden",
+   "group": "icon",
+   "prompt": "A small raised garden bed with sprouts."
+  },
+  {
+   "id": "ui-decor-music",
+   "group": "icon",
+   "prompt": "A small xylophone with colorful bars."
+  },
+  {
+   "id": "ui-decor-camp",
+   "group": "icon",
+   "prompt": "A small triangle tent with a campfire."
+  },
+  {
+   "id": "ui-decor-island",
+   "group": "icon",
+   "prompt": "A tiny round island with one palm tree."
+  },
+  {
+   "id": "ui-camera",
+   "group": "icon",
+   "prompt": "A chunky photo camera."
+  },
+  {
+   "id": "ui-diary",
+   "group": "icon",
+   "prompt": "A closed diary book with a heart on the cover."
+  },
+  {
+   "id": "ui-feelings",
+   "group": "icon",
+   "prompt": "Two round faces, one smiling and one calm."
+  },
+  {
+   "id": "ui-rest",
+   "group": "icon",
+   "prompt": "A cozy armchair."
+  },
+  {
+   "id": "ui-seed",
+   "group": "icon",
+   "prompt": "A seed with a small green sprout."
+  },
+  {
+   "id": "ui-watering-can",
+   "group": "icon",
+   "prompt": "A watering can."
+  },
+  {
+   "id": "ui-harvest",
+   "group": "icon",
+   "prompt": "A basket full of fruit and vegetables."
+  },
+  {
+   "id": "ui-upgrade",
+   "group": "icon",
+   "prompt": "A house with a green up arrow."
+  },
+  {
+   "id": "ui-back",
+   "group": "icon",
+   "prompt": "A thick rounded arrow pointing left."
+  },
+  {
+   "id": "ui-close",
+   "group": "icon",
+   "prompt": "A thick rounded X mark."
+  },
+  {
+   "id": "ui-gear",
+   "group": "icon",
+   "prompt": "A rounded gear cog."
+  },
+  {
+   "id": "ui-tasks",
+   "group": "icon",
+   "prompt": "A clipboard with a checklist of green ticks."
+  },
+  {
+   "id": "ui-gift",
+   "group": "icon",
+   "prompt": "A wrapped gift box with a bow."
+  },
+  {
+   "id": "ui-home",
+   "group": "icon",
+   "prompt": "A small house."
+  },
+  {
+   "id": "ui-speaker",
+   "group": "icon",
+   "prompt": "A speaker with sound waves."
+  },
+  {
+   "id": "ui-mic",
+   "group": "icon",
+   "prompt": "A microphone."
+  },
+  {
+   "id": "ui-ear",
+   "group": "icon",
+   "prompt": "A friendly ear."
+  },
+  {
+   "id": "ui-check",
+   "group": "icon",
+   "prompt": "A thick green check mark."
+  },
+  {
+   "id": "ui-search",
+   "group": "icon",
+   "prompt": "A magnifying glass."
+  },
+  {
+   "id": "ui-swipe",
+   "group": "icon",
+   "prompt": "A pointing hand with a curved motion arrow."
+  },
+  {
+   "id": "ui-sign",
+   "group": "icon",
+   "prompt": "A wooden signpost with two blank arrows."
+  },
+  {
+   "id": "ui-refresh",
+   "group": "icon",
+   "prompt": "Two curved arrows forming a circle."
+  },
+  {
+   "id": "ui-play",
+   "group": "icon",
+   "prompt": "A rounded play triangle."
+  },
+  {
+   "id": "ui-star",
+   "group": "icon",
+   "prompt": "A filled golden star."
+  },
+  {
+   "id": "ui-star-empty",
+   "group": "icon",
+   "prompt": "An empty star shape in light gray."
+  },
+  {
+   "id": "ui-heart",
+   "group": "icon",
+   "prompt": "A filled red heart."
+  },
+  {
+   "id": "ui-heart-empty",
+   "group": "icon",
+   "prompt": "An empty heart shape in light gray."
+  },
+  {
+   "id": "ui-sparkle",
+   "group": "icon",
+   "prompt": "Three sparkle stars."
+  },
+  {
+   "id": "ui-party",
+   "group": "icon",
+   "prompt": "A party popper with confetti."
+  },
+  {
+   "id": "ui-hand",
+   "group": "icon",
+   "prompt": "An open waving hand."
+  },
+  {
+   "id": "ui-moon",
+   "group": "icon",
+   "prompt": "A crescent moon."
+  },
+  {
+   "id": "ui-ruler",
+   "group": "icon",
+   "prompt": "A ruler."
+  },
+  {
+   "id": "ui-eraser",
+   "group": "icon",
+   "prompt": "A pencil eraser."
+  },
+  {
+   "id": "ui-speak",
+   "group": "icon",
+   "prompt": "A speech bubble with sound lines."
+  },
+  {
+   "id": "ui-lock",
+   "group": "icon",
+   "prompt": "A closed padlock."
+  },
+  {
+   "id": "ui-trophy",
+   "group": "icon",
+   "prompt": "A golden trophy cup."
+  },
+  {
+   "id": "ui-bowl",
+   "group": "icon",
+   "prompt": "A bowl."
+  },
+  {
+   "id": "ui-balloon",
+   "group": "icon",
+   "prompt": "A red balloon on a string."
+  },
+  {
+   "id": "ui-bubbles",
+   "group": "icon",
+   "prompt": "A few soap bubbles."
+  },
+  {
+   "id": "ui-picture",
+   "group": "icon",
+   "prompt": "A framed picture of a mountain and sun."
+  },
+  {
+   "id": "ui-pencil",
+   "group": "icon",
+   "prompt": "A yellow pencil."
+  },
+  {
+   "id": "ui-flame",
+   "group": "icon",
+   "prompt": "A small orange flame."
+  },
+  {
+   "id": "ui-bolt",
+   "group": "icon",
+   "prompt": "A yellow lightning bolt."
+  },
+  {
+   "id": "ui-grass",
+   "group": "icon",
+   "prompt": "A tuft of green grass."
+  },
+  {
+   "id": "ui-sun",
+   "group": "icon",
+   "prompt": "A smiling round sun."
+  },
+  {
+   "id": "ui-cloud",
+   "group": "icon",
+   "prompt": "A fluffy cloud."
+  },
+  {
+   "id": "ui-tree",
+   "group": "icon",
+   "prompt": "A round green tree."
+  },
+  {
+   "id": "ui-flower",
+   "group": "icon",
+   "prompt": "A flower."
+  },
+  {
+   "id": "ui-water",
+   "group": "icon",
+   "prompt": "A water drop."
+  },
+  {
+   "id": "ui-leaf",
+   "group": "icon",
+   "prompt": "A green leaf."
+  },
+  {
+   "id": "ui-waves",
+   "group": "icon",
+   "prompt": "Ocean waves."
+  },
+  {
+   "id": "ui-wind",
+   "group": "icon",
+   "prompt": "Wind swirls."
+  },
+  {
+   "id": "ui-music",
+   "group": "icon",
+   "prompt": "Two music notes."
+  },
+  {
+   "id": "ui-shovel",
+   "group": "icon",
+   "prompt": "A small garden shovel."
+  },
+  {
+   "id": "ui-eye",
+   "group": "icon",
+   "prompt": "An open eye."
+  },
+  {
+   "id": "ui-island",
+   "group": "icon",
+   "prompt": "A small island with a palm tree."
+  },
+  {
+   "id": "ui-target",
+   "group": "icon",
+   "prompt": "A target with an arrow in the center."
+  },
+  {
+   "id": "ui-tent",
+   "group": "icon",
+   "prompt": "A triangle tent."
+  },
+  {
+   "id": "ui-ball",
+   "group": "icon",
+   "prompt": "A soccer ball."
+  },
+  {
+   "id": "ui-book",
+   "group": "icon",
+   "prompt": "An open book."
+  },
+  {
+   "id": "ui-cap",
+   "group": "icon",
+   "prompt": "A baseball cap."
+  },
+  {
+   "id": "ui-umbrella",
+   "group": "icon",
+   "prompt": "An open umbrella."
+  },
+  {
+   "id": "ui-apple",
+   "group": "icon",
+   "prompt": "A red apple."
+  },
+  {
+   "id": "ui-apple-green",
+   "group": "icon",
+   "prompt": "A green apple."
+  },
+  {
+   "id": "ui-banana",
+   "group": "icon",
+   "prompt": "A banana."
+  },
+  {
+   "id": "ui-strawberry",
+   "group": "icon",
+   "prompt": "A strawberry."
+  },
+  {
+   "id": "ui-grapes",
+   "group": "icon",
+   "prompt": "A bunch of purple grapes."
+  },
+  {
+   "id": "ui-cake",
+   "group": "icon",
+   "prompt": "A slice of birthday cake."
+  },
+  {
+   "id": "ui-milk",
+   "group": "icon",
+   "prompt": "A glass of milk."
+  },
+  {
+   "id": "ui-egg",
+   "group": "icon",
+   "prompt": "An egg."
+  },
+  {
+   "id": "ui-watermelon",
+   "group": "icon",
+   "prompt": "A slice of watermelon."
+  },
+  {
+   "id": "ui-carrot",
+   "group": "icon",
+   "prompt": "A carrot."
+  },
+  {
+   "id": "ui-cookie",
+   "group": "icon",
+   "prompt": "A chocolate chip cookie."
+  },
+  {
+   "id": "ui-icecream",
+   "group": "icon",
+   "prompt": "An ice cream cone."
+  },
+  {
+   "id": "ui-blueberry",
+   "group": "icon",
+   "prompt": "A few blueberries."
+  },
+  {
+   "id": "ui-peach",
+   "group": "icon",
+   "prompt": "A peach."
+  },
+  {
+   "id": "ui-riceball",
+   "group": "icon",
+   "prompt": "A rice ball with a seaweed band."
+  },
+  {
+   "id": "ui-nuts",
+   "group": "icon",
+   "prompt": "Two acorns."
   }
  ],
- "iconStyle": "A single small game UI icon, front view, centered with generous margin, nothing cropped, readable at 48 pixels: very simple bold rounded shapes, at most four flat colors plus one darker hard-edged shade shape and one small highlight, no outlines or line art. Fully transparent background (PNG with alpha), no ground shadow, no backdrop, no circle badge behind it. Same flat vector style as the attached style reference. No text, letters or numbers.",
+ "iconStyle": "A single game UI icon in the style of a modern gamified language-learning app (Duolingo-like icon language): bold, chunky, very rounded silhouette, front view, centered with generous margin, nothing cropped, instantly readable at 40 pixels. Flat fills only, at most four colors taken from this palette: green #58cc02 (shade #58a700), blue #1cb0f6 (shade #1899d6), yellow #ffc800 (shade #d1a400), red #ff4b4b (shade #cc3b3b), orange #ff9600, purple #ce82ff, brown #a5642c, white, and dark gray #4b4b4b for small details. Each color has one darker hard-edged shade shape along the bottom and one small white highlight; no outlines, no gradients, no texture, no 3D clay look. Fully transparent background (PNG with alpha), no ground shadow, no backdrop, no circle badge. No text, letters or numbers.",
  "appStyle": "A square app icon that fills the whole canvas edge to edge with a solid bright background color (no transparency, no rounded corners drawn, no border); one bold centered subject, simple rounded shapes, flat fills with one darker hard-edged shade shape per color, no outlines. Same flat vector style as the attached style reference. No text, letters or numbers."
 }

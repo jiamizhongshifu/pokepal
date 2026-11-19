@@ -22,7 +22,13 @@
   --brand-danger:#ff4b4b;  --brand-danger-deep:#cc3b3b; --brand-danger-soft:#ffdfe0;
   --brand-sun:#ffc800;     --brand-sun-deep:#d1a400;    --brand-sun-soft:#fff4cc; --brand-sun-ink:#3c3c3c;
   --brand-coral:#ff4b4b;   --brand-coral-deep:#cc3b3b;  --brand-coral-soft:#ffdfe0;
-  --brand-grape:#ce82ff;
+  --brand-grape:#ce82ff;   --brand-gem-deep:#a568cc;   --brand-gem-soft:#f4e6ff;
+  --brand-sky-soft:#ddf4ff; --brand-streak-soft:#ffe8cc;
+  /* Type scale (DESIGN.md §3) plus 20px and 28px steps for children's body and large buttons. */
+  --text-xs:12px; --text-sm:13px; --text-base:15px; --text-lg:18px; --text-xl:20px;
+  --text-2xl:24px; --text-3xl:28px; --text-4xl:32px; --text-5xl:40px; --text-6xl:56px;
+  /* Radii: inputs 12, cards and buttons 16, sheets 20, large panels 24, chips 9999. */
+  --radius-sm:12px; --radius-md:16px; --radius-lg:20px; --radius-xl:24px; --radius-pill:9999px;
   /* Surfaces, ink and borders. */
   --brand-paper:#ffffff;
   --brand-page:#ffffff;

@@ -14,9 +14,9 @@
 #root .notebook-parent .btn-small { color:var(--brand-ink); }
 #root .welcome-title-board .logo-en { color:var(--muted); }
 :root[data-theme="dark"] #root .energy-focused .quiet-disclosure { color:var(--night-muted); }
-#root .task-trace .trace-word b { color:#176b61; }
-#root .dex-detail .type-chip.color { color:var(--brand-ink); background:#e8f1ee; }
-#root .parent-organized .parent-fold-content { background:var(--brand-paper); border-radius:18px; padding:16px; margin-bottom:16px; }
+#root .task-trace .trace-word b { color:var(--text); }
+#root .dex-detail .type-chip.color { color:var(--brand-ink); background:var(--brand-primary-soft); }
+#root .parent-organized .parent-fold-content { background:var(--brand-paper); border-radius:var(--radius-md); padding:16px; margin-bottom:16px; }
 /* A translucent white surface over the night sky made both labels and icons muddy. */
 :root[data-theme="dark"] #root :is(.learning-home-tools button,.energy-alternative) { background:var(--brand-paper); }
 :root[data-theme="dark"] #root :is(.learning-home-tools h2,.learning-home-extension,.energy-other h2,.ball-extra>summary,.route-heading p),
@@ -25,7 +25,7 @@
 :root[data-theme="dark"] #root .parent-organized { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro h2,.parent-fold>summary) { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro p,.parent-detail-heading,.parent-fold>summary small,.parent-fold>summary::after) { color:var(--night-muted); }
-:root[data-theme="dark"] #root .parent-organized .parent-danger>summary { color:#ffc4b4; }
+:root[data-theme="dark"] #root .parent-organized .parent-danger>summary { color:var(--brand-danger-deep); }
 :root[data-theme="dark"] #root .parent-organized .parent-fold-content .parent-inner-fold { color:var(--brand-ink); }
 
 /* Keep illustrated word labels readable as words, even on a 320px screen. */
@@ -45,19 +45,19 @@
 @media(min-width:601px) and (max-height:500px) {
   #root .story-reader .theatre-word { --word-layout-x:50%; }
   #root .screen .topbar.has-learning-tools { min-height:64px; padding:6px 16px; gap:10px; flex-wrap:nowrap; }
-  #root .topbar.has-learning-tools .tb-title { font-size:18px; }
+  #root .topbar.has-learning-tools .tb-title { font-size:var(--text-lg); }
   #root .topbar.has-learning-tools .back { width:48px; min-width:48px; height:48px; padding:0; }
   #root .topbar.has-learning-tools .back span { display:none; }
   #root .topbar.has-learning-tools .tb-learning-tools { gap:12px; }
   #root .topbar .progress-beads { display:none; }
   #root .parent-organized .parent-head { flex-wrap:nowrap; padding:6px 14px; gap:12px; }
   #root .parent-organized .parent-title-row { gap:8px; }
-  #root .parent-organized .parent-title-row h2 { font-size:19px; white-space:nowrap; }
+  #root .parent-organized .parent-title-row h2 { font-size:var(--text-xl); white-space:nowrap; }
   #root .parent-organized .tabs { width:auto; flex:1; max-width:380px; }
   #root .parent-organized .parent-body { padding-top:14px; }
   #root .story-reader .open-storybook { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
   #root .story-reader .open-storybook>.story-stage { height:220px; }
-  #root .story-reader .story-text-en { font-size:22px; }
+  #root .story-reader .story-text-en { font-size:var(--text-2xl); }
   #root .story-reader .story-primary-controls { padding:4px 0; }
   #root .story-reader .story-primary-controls button { min-height:48px; }
   #root .learning-lesson .lesson-world.has-learning-item { height:88px; }

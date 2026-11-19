@@ -1,6 +1,6 @@
 /* Generated environment paintings, with live characters and accessible HTML controls. */
 .screen.illustrated-welcome {
-  --text:#31563e; --muted:#52735a; --surface:#f3f7e6; --surface-strong:#fffbea; --surface-border:#c2d4a3;
+  --text:var(--brand-ink); --muted:var(--brand-ink-muted); --surface:var(--brand-paper); --surface-strong:#fffbea; --surface-border:var(--brand-line);
   isolation:isolate; background:#d5eadb; padding: max(24px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));
   gap:20px; overflow-y:auto;
 }

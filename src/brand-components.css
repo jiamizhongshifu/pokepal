@@ -76,3 +76,32 @@
   #root .adventure-stops .adventure-stop.is-current .adventure-stop-pin { animation:none; }
   #root .ep-bar > div { transition:none; }
 }
+
+/* ── Icon buttons and navigation ─────────────────────── */
+#root .screen :is(.btn-round, .companion-back, .immersive-exit) {
+  background:var(--surface); color:var(--muted); border:var(--brand-border) solid var(--surface-border);
+  border-radius:var(--radius-md); box-shadow:0 var(--brand-press) 0 var(--surface-border);
+}
+#root .screen :is(.btn-round, .companion-back, .immersive-exit):not(:disabled):active { transform:translateY(var(--brand-press)); box-shadow:none; }
+
+/* Tabs and segmented choices: Duolingo's selected-option blue. */
+#root .screen :is(.tabs, .seg, .journey-tabs, .notebook-tabs, .collection-tabs, .stage-controls) button {
+  background:var(--surface); color:var(--muted); border:var(--brand-border) solid var(--surface-border);
+  border-radius:var(--radius-md); box-shadow:0 var(--brand-press) 0 var(--surface-border); font-weight:var(--brand-weight-display);
+}
+#root .screen :is(.tabs, .seg, .journey-tabs, .notebook-tabs, .collection-tabs, .stage-controls) button:is(.on, [aria-pressed="true"], [aria-selected="true"]) {
+  background:var(--brand-sky-soft); color:var(--brand-sky-deep); border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky);
+}
+
+/* Bottom dock: plain icons, the pressed item lifts into a tile. */
+#root .home .dock .dock-btn { background:transparent; border:var(--brand-border) solid transparent; box-shadow:none; border-radius:var(--radius-md); color:var(--brand-ink-muted); font-weight:var(--brand-weight-display); }
+#root .home .dock .dock-btn:hover { background:var(--brand-sky-soft); border-color:var(--brand-sky); color:var(--brand-sky-deep); }
+
+/* Chips: energy and invite berries. */
+#root .screen :is(.energy-chip, .balls-chip) { border-radius:var(--radius-pill); border:var(--brand-border) solid var(--surface-border); box-shadow:0 var(--brand-press) 0 var(--surface-border); background:var(--surface); color:var(--text); }
+#root .screen .energy-chip .num { color:var(--brand-streak); }
+
+/* Help bubbles, dialogs and sheets. */
+#root .feature-guide .guide-content, #root .modal, #root .companion-card, #root .facility-panel {
+  border:var(--brand-border) solid var(--surface-border); border-radius:var(--radius-lg); box-shadow:0 var(--brand-press) 0 var(--surface-border); background:var(--surface); color:var(--text);
+}
