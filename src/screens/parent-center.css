@@ -119,3 +119,9 @@
 #root .parent-evidence-lessons span{font-size:var(--text-sm);color:var(--brand-ink-muted)}
 #root .parent-home-tried{margin-top:10px}#root .parent-home-tried[aria-pressed=true]{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
 #root .parent-evidence-delayed{font-size:var(--text-base);margin:12px 0 0}
+#root .parent-media-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+#root .parent-media-list li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--brand-line)}
+#root .parent-media-list li>span{display:grid;gap:2px;flex:1 1 180px}
+#root .parent-media-list small{color:var(--brand-ink-muted);font-size:var(--text-sm);margin-left:6px}
+#root .parent-media-list .is-armed{background:var(--brand-danger);border-color:var(--brand-danger-deep);color:#fff}
+#root .parent-media-status{min-height:1.4em;font-size:var(--text-sm);color:var(--brand-ink-muted)}

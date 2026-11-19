@@ -53,14 +53,22 @@ export async function resetSave(value:SaveData,expectedRevision:number){
     return expectedRevision+1;
   });
 }
+export const RECORDING_LIMIT = MAX_RECORDINGS;
+/** Adding and trimming happen together, so a failed write never leaves the list over its limit or half trimmed. */
 export async function addRecording(r: Omit<Recording, "id">) {
-  await db.recordings.add(r);
-  const count = await db.recordings.count();
-  if (count > MAX_RECORDINGS) {
-    const old = await db.recordings.orderBy("createdAt").limit(count - MAX_RECORDINGS).primaryKeys();
-    await db.recordings.bulkDelete(old);
-  }
+  return db.transaction("rw", db.recordings, async () => {
+    const id = await db.recordings.add(r);
+    const count = await db.recordings.count();
+    if (count > MAX_RECORDINGS) {
+      const old = await db.recordings.orderBy("createdAt").limit(count - MAX_RECORDINGS).primaryKeys();
+      await db.recordings.bulkDelete(old);
+    }
+    return id;
+  });
 }
+export const recordingCount = () => db.recordings.count();
+export const deleteRecording = (id: number) => db.recordings.delete(id);
+export const deleteDiary = (id: string) => db.diaries.delete(id);
 export const listRecordings = () => db.recordings.orderBy("createdAt").reverse().limit(MAX_RECORDINGS).toArray();
 export async function clearAll() {
   await db.kv.clear();

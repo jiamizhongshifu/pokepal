@@ -16,8 +16,8 @@ import { playLimitSeconds, useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
 import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
-import { listRecordings, type Recording } from "../lib/db";
-import { playUrl, say, voiceInfo } from "../lib/speech";
+import { recordingCount } from "../lib/db";
+import { say, voiceInfo } from "../lib/speech";
 import type { BallType, SaveData } from "../types";
 import { Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
@@ -26,6 +26,7 @@ import { LEARNING_UNITS,learningEntry,selectedUnit } from '../data/curriculum';
 import { reviewKeys } from '../lib/learningProgress';
 import {familyLearning} from '../lib/familyLearning';
 import {ParentEvidence} from '../components/ParentEvidence';
+import {ParentRecordings,ParentDiaries} from '../components/ParentRecordings';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -37,7 +38,7 @@ export function Parent() {
   const renameTrainer = useGame((s) => s.renameTrainer);
   const resetAll = useGame((s) => s.resetAll);
   const importSave = useGame((s) => s.importSave);
-  const [recs, setRecs] = useState<Recording[]>([]);
+  const [recCount, setRecCount] = useState(0);
   const [tab, setTab] = useState<"report" | "settings" | "data">("report");
   const saveBusy=useGame(s=>s.saveBusy);
   const hasBackup=useGame(s=>s.hasSaveBackup);
@@ -54,7 +55,7 @@ export function Parent() {
   const d = save.daily;
 
   useEffect(() => {
-    listRecordings().then(setRecs).catch(() => setRecs([]));
+    recordingCount().then(setRecCount).catch(() => setRecCount(0));
   }, []);
 
   const flash = (m: string) => {
@@ -128,16 +129,7 @@ export function Parent() {
                   ))}
                 </tbody>
               </table></div></div></details>
-<details className="parent-fold"><summary><Icon name="mic" size={28}/><span>跟读录音<small>{recs.length} 条，仅保存在本机</small></span></summary><div className="parent-fold-content"><h3>跟读录音（最近 {recs.length} 条，仅存本机）</h3>
-              {recs.length === 0 && <div className="muted">还没有录音。跟读任务里检测到跟读声音后会自动保存；点“我说完啦”不一定产生录音。</div>}
-              <div className="recs">
-                {recs.map((r) => (
-                  <button key={r.id} className="rec" onClick={() => { const u = URL.createObjectURL(r.blob); playUrl(u).then(() => URL.revokeObjectURL(u)); }}>
-                    <Icon name="play" size={22} /> <b>{r.phrase}</b> <small>{new Date(r.createdAt).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</small>
-                  </button>
-                ))}
-              </div>
-            </div></details>
+<details className="parent-fold"><summary><Icon name="mic" size={28}/><span>跟读录音<small>{recCount} 条，仅保存在本机</small></span></summary><div className="parent-fold-content"><ParentRecordings onCount={setRecCount}/></div></details>
 <details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，这些记录不代表孩子独立完成。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details></>}
    {tab==='settings'&&<><details className="parent-fold parent-stage-fold" open={stageOpen} onToggle={e=>setStageOpen(e.currentTarget.open)}><summary><Icon name="sign" size={28}/><span>英语学习阶段<small>当前：{learningStageTitle(s)}</small></span></summary><div className="parent-fold-content"><LearningStageSettings/></div></details>
 <section className="form parent-routine"><h3>游玩与休息</h3><label><span>每日游玩时长：<b>{s.dailyMinutes} 分钟</b></span>
@@ -193,6 +185,7 @@ export function Parent() {
               </div>
               <div className="muted">存档、录音和小日记保存在当前设备。{import.meta.env.VITE_ONLINE?'网页版暂不提供云端日记转写，不会把日记录音发送到火山。':'另行点击日记转写时，会把所选录音发送到火山，需要联网。'}游戏存档不包含录音和日记。请同时使用下方的日记备份；跟读录音可在学习记录中另存。</div>
             <DiaryBackup/></div></details>
+<details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
 <details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) {setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();} }}>清空全部数据</button></div></details></>}
    </div>
   </div>;
