@@ -12,6 +12,8 @@ import { installViewportSizing } from "./lib/viewport";
 import { useGame } from "./store";
 import { preloadCreatureImages } from "./lib/imageCache";
 import { setupNative } from "./lib/native";
+import { installAutoUpdate, quietMoment, restoreEntryAddress } from "./lib/autoUpdate";
+import { flushPendingSave } from "./store";
 
 // Only fixed page names enter analytics; no save fields or lesson IDs leave the app.
 const stopAnalytics=initializeAnalytics();
@@ -33,6 +35,14 @@ if (import.meta.hot) import.meta.hot.dispose(disposeViewportSizing);
 
 preloadCreatureImages();
 setupNative();
+// The web build opens a newer release by itself at a quiet moment, so returning families need no manual update.
+restoreEntryAddress();
+if (import.meta.env.VITE_ONLINE && !import.meta.env.DEV) installAutoUpdate({
+  loadedBuild: import.meta.env.VITE_APP_BUILD_ID,
+  isSafe: () => { const g = useGame.getState(); return quietMoment({ loaded: g.loaded, saveBusy: g.saveBusy, saveIssue: g.saveIssue, screen: g.screen, hasTrainer: !!g.save.trainer }); },
+  subscribe: listener => useGame.subscribe(listener),
+  beforeOpen: flushPendingSave,
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
