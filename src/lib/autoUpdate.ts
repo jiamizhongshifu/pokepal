@@ -13,6 +13,45 @@ export interface UpdateState { ready?: string; tried?: string | null; safe: bool
 export const shouldOpen = ({ ready, tried, safe }: UpdateState) => !!ready && ready !== tried && safe;
 export const shouldCheck = (last: number, now: number) => now - last >= RECHECK_MS;
 
+/** Everything the updater touches in the browser, so the order of its steps can be tested. */
+export interface UpdateEnv {
+ check: () => Promise<{ id: string; changed: boolean }>;
+ read: () => string | null; write: (id: string) => void; note: (state: string) => void;
+ hidden: () => boolean; online: () => boolean; now: () => number; open: () => void;
+}
+const browserEnv = (loadedBuild: string): UpdateEnv => ({
+ check: () => checkOnlineUpdate({ loadedBuild, workers: navigator.serviceWorker }),
+ read: () => { try { return sessionStorage.getItem(AUTO_UPDATE_KEY); } catch { return null; } },
+ write: id => { try { sessionStorage.setItem(AUTO_UPDATE_KEY, id); } catch { /* Without storage, still open once per page. */ } },
+ // The last step reached, kept in this tab only, to explain a release that did not open.
+ note: state => { try { sessionStorage.setItem(`${AUTO_UPDATE_KEY}-state`, state); } catch { /* Diagnostic only. */ } },
+ hidden: () => document.hidden, online: () => navigator.onLine, now: () => Date.now(),
+ open: () => location.assign(onlineUpdateEntry()),
+});
+
+/**
+ * The "already opened" mark is written only immediately before the page is replaced: a failed save or a moment that
+ * stopped being quiet leaves the release waiting, and it opens at the next quiet moment instead of never.
+ */
+export function createAutoUpdate({ isSafe, beforeOpen, env }: { isSafe: () => boolean; beforeOpen: () => Promise<void>; env: UpdateEnv }) {
+ let ready: string | undefined, checking = false, opening = false, last = -Infinity;
+ const open = async () => {
+  if (opening || !shouldOpen({ ready, tried: env.read(), safe: isSafe() })) return;
+  opening = true;
+  try { await beforeOpen(); } catch { opening = false; env.note('save-failed'); return; }
+  if (!shouldOpen({ ready, tried: env.read(), safe: isSafe() })) { opening = false; env.note('not-quiet'); return; }
+  env.write(ready!); env.note('opening'); env.open();
+ };
+ const check = async () => {
+  if (checking || ready || env.hidden() || !env.online() || !shouldCheck(last, env.now())) return;
+  checking = true; last = env.now();
+  try { const { id, changed } = await env.check(); env.note(changed ? 'ready' : 'latest'); if (changed) { ready = id; await open(); } }
+  catch { env.note('check-failed'); /* A failed check never interrupts play; the parent page keeps the manual check. */ }
+  finally { checking = false; }
+ };
+ return { check, open, changed: () => { if (ready) void open(); } };
+}
+
 export function installAutoUpdate({ loadedBuild, isSafe, subscribe, beforeOpen }: {
  loadedBuild: string;
  /** True when leaving the page loses nothing: no lesson, game or save in progress. */
@@ -23,30 +62,12 @@ export function installAutoUpdate({ loadedBuild, isSafe, subscribe, beforeOpen }
  beforeOpen: () => Promise<void>;
 }) {
  if (!('serviceWorker' in navigator)) return () => {};
- let ready: string | undefined, checking = false, opening = false, last = -Infinity;
- const tried = () => { try { return sessionStorage.getItem(AUTO_UPDATE_KEY); } catch { return null; } };
- const open = async () => {
-  if (opening || !shouldOpen({ ready, tried: tried(), safe: isSafe() })) return;
-  opening = true;
-  try { sessionStorage.setItem(AUTO_UPDATE_KEY, ready!); } catch { /* Without storage, still open once per page. */ }
-  try { await beforeOpen(); } catch { opening = false; return; }
-  if (!isSafe()) { opening = false; return; }
-  location.assign(onlineUpdateEntry());
- };
- const check = async () => {
-  if (checking || ready || document.hidden || !navigator.onLine || !shouldCheck(last, Date.now())) return;
-  checking = true; last = Date.now();
-  try {
-   const { id, changed } = await checkOnlineUpdate({ loadedBuild, workers: navigator.serviceWorker });
-   if (changed) { ready = id; void open(); }
-  } catch { /* A failed check never interrupts play; the parent page keeps the manual check. */ }
-  finally { checking = false; }
- };
- const visible = () => { if (!document.hidden) { void check(); void open(); } };
+ const updater = createAutoUpdate({ isSafe, beforeOpen, env: browserEnv(loadedBuild) });
+ const visible = () => { if (!document.hidden) { void updater.check(); void updater.open(); } };
  document.addEventListener('visibilitychange', visible);
  window.addEventListener('online', visible);
- const unsubscribe = subscribe(() => { if (ready) void open(); });
- void check();
+ const unsubscribe = subscribe(updater.changed);
+ void updater.check();
  return () => { document.removeEventListener('visibilitychange', visible); window.removeEventListener('online', visible); unsubscribe(); };
 }
 

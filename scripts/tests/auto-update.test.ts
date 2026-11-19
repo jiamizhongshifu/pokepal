@@ -30,3 +30,26 @@ test('the update entry is recognised with or without .html, and nothing else is'
  assert.ok(isUpdateEntry('/release-entry'));assert.ok(isUpdateEntry('/release-entry.html'));
  for(const p of ['/','/privacy/','/release.json','/release-recovery.html'])assert.equal(isUpdateEntry(p),false,p);
 });
+
+import {createAutoUpdate,type UpdateEnv} from '../../src/lib/autoUpdate';
+const fakeEnv=(over:Partial<UpdateEnv>={})=>{const st={mark:null as string|null,opened:0,notes:[] as string[]};const env:UpdateEnv={check:async()=>({id:'B',changed:true}),read:()=>st.mark,write:id=>{st.mark=id;},note:n=>{st.notes.push(n);},hidden:()=>false,online:()=>true,now:()=>0,open:()=>{st.opened++;},...over};return {st,env};};
+test('a failed save leaves the release waiting, and it opens at the next quiet moment',async()=>{
+ const {st,env}=fakeEnv();let fail=true;
+ const u=createAutoUpdate({isSafe:()=>true,beforeOpen:async()=>{if(fail)throw new Error('busy');},env});
+ await u.check();assert.equal(st.opened,0);assert.equal(st.mark,null,'not marked as tried');assert.ok(st.notes.includes('save-failed'));
+ fail=false;u.changed();await new Promise(r=>setTimeout(r,0));
+ assert.equal(st.opened,1);assert.equal(st.mark,'B');
+});
+test('a moment that stops being quiet while saving does not use up the attempt',async()=>{
+ const {st,env}=fakeEnv();let safe=true,first=true;
+ const u=createAutoUpdate({isSafe:()=>safe,beforeOpen:async()=>{if(first){first=false;safe=false;}},env});
+ await u.check();assert.equal(st.opened,0);assert.equal(st.mark,null);assert.ok(st.notes.includes('not-quiet'));
+ safe=true;await u.open();assert.equal(st.opened,1);
+});
+test('the same release never opens twice in a tab, and a busy moment waits',async()=>{
+ const {st,env}=fakeEnv();st.mark='B';
+ const u=createAutoUpdate({isSafe:()=>true,beforeOpen:async()=>{},env});
+ await u.check();assert.equal(st.opened,0);
+ const b=fakeEnv();let safe=false;const w=createAutoUpdate({isSafe:()=>safe,beforeOpen:async()=>{},env:b.env});
+ await w.check();assert.equal(b.st.opened,0);safe=true;w.changed();await new Promise(r=>setTimeout(r,0));assert.equal(b.st.opened,1);
+});
