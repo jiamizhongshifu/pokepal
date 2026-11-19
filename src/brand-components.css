@@ -1,34 +1,78 @@
-/* Bubbly Isle shared components: thick-bottom buttons and cards (docs/rebrand/brand-brief.md).
-   Loaded last so every screen's call-to-action shares one look; screens keep only their layout. */
+/* Shared components after the Duolingo design system (DESIGN.md §4, components.html).
+   Loaded last: screens keep layout only, these recipes own colour, border, elevation and press. */
+
+/* ── Type ─────────────────────────────────────────────── */
+#root { font-family:var(--brand-font); font-weight:var(--brand-weight-body); }
+#root :is(h1, h2, h3, button, summary) { font-family:var(--brand-font); }
+#root .screen :is(h1, h2) { font-weight:var(--brand-weight-display); letter-spacing:-.005em; }
+
+/* ── Page canvas: plain white, never patterned ────────── */
+#root .screen:not(.home):not(.welcome):not(.wild-adventure):not(.sleepy) { background:var(--page-bg); background-image:none; }
+
+/* ── Buttons ──────────────────────────────────────────── */
 #root .screen :is(.btn-big:not(.alt), .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
   .wish-button.primary, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action) {
   background:var(--brand-primary); color:#fff; text-shadow:none;
   border:0; border-radius:var(--brand-radius-button);
   box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep);
-  font-weight:800; transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  font-weight:var(--brand-weight-display); letter-spacing:.02em;
+  transition:transform var(--brand-motion-fast) var(--brand-ease), box-shadow var(--brand-motion-fast) var(--brand-ease), background-color var(--brand-motion-fast);
 }
+#root .screen :is(.btn-big:not(.alt), .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
+  .wish-button.primary, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action):not(:disabled):hover { background:var(--brand-primary-hover); }
+
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)) {
-  background:var(--brand-paper); color:var(--brand-primary-deep); text-shadow:none;
-  border:2px solid var(--brand-line); border-radius:var(--brand-radius-button);
-  box-shadow:0 var(--brand-press) 0 var(--brand-line-deep);
-  font-weight:800; transition:transform .12s ease, box-shadow .12s ease;
+  background:var(--surface); color:var(--muted); text-shadow:none;
+  border:var(--brand-border) solid var(--surface-border); border-radius:var(--brand-radius-button);
+  box-shadow:0 var(--brand-press) 0 var(--surface-border);
+  font-weight:var(--brand-weight-display);
+  transition:transform var(--brand-motion-fast) var(--brand-ease), box-shadow var(--brand-motion-fast) var(--brand-ease), color var(--brand-motion-fast);
 }
-#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
-  .wish-button, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action):not(:disabled):hover { filter:brightness(1.05); }
+#root .screen :is(.btn-big.alt, .wish-button:not(.primary)):not(:disabled):hover { color:var(--text); border-color:var(--brand-ink-meta); }
+
+/* Reward moments use the yellow "streak" recipe. */
+#root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }
+#root .screen .farm-primary.harvest:not(:disabled):hover { background:#ffd333; }
+
 #root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .camp-play-primary,
   .wish-button, .today-start, .story-next, .learning-trail-primary, .avatar-save, .living-main-action):not(:disabled):active {
   transform:translateY(var(--brand-press)); box-shadow:0 0 0 transparent;
 }
-#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next):disabled {
-  background:var(--brand-line); color:var(--brand-ink-muted); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep);
+#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next, .learning-trail-primary):disabled {
+  background:var(--brand-line); color:var(--brand-ink-meta); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); opacity:1;
 }
-#root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next):focus-visible {
-  outline:3px solid var(--brand-sky); outline-offset:4px;
-}
-/* Harvest keeps the sunny reward colour so ripe fruit stands out from everyday actions. */
-#root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-sun-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }
-/* Flat illustration style: no glossy sweep over buttons. */
 #root .screen .btn-big::after { display:none; }
+
+/* ── Focus: eel-blue glow ─────────────────────────────── */
+#root :is(button, summary, a, input, select, textarea):focus-visible { outline:2px solid var(--brand-sky); outline-offset:3px; box-shadow:var(--brand-focus); }
+#root :is(input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea) {
+  border:var(--brand-border) solid var(--surface-border); border-radius:12px; background:var(--surface); color:var(--text); font-family:var(--brand-font);
+}
+
+/* ── Answer feedback ──────────────────────────────────── */
+#root .screen .choice.right { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); color:var(--brand-ink); }
+#root .screen .choice.shake { background:var(--brand-danger-soft); border-color:var(--brand-danger); box-shadow:0 var(--brand-press) 0 var(--brand-danger-deep); }
+#root .screen .choice.glow { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
+
+/* ── Progress: 16px pill bar, beads for rounds ────────── */
+#root .ep-bar { height:16px; margin:0; border-radius:9999px; background:var(--brand-line); overflow:visible; }
+#root .ep-bar > div { border-radius:9999px; background:var(--brand-primary); box-shadow:inset 0 -4px 0 #0000, inset 0 4px 0 #ffffff40; transition:width var(--brand-motion-base) ease-out; }
+#root .ep-bar > div::after { display:none; }
+#root .progress-beads i { background:var(--brand-line); border:0; box-shadow:none; }
+#root .progress-beads i.done { background:var(--brand-primary); }
+#root .progress-beads i.current { background:var(--brand-paper); box-shadow:0 0 0 3px var(--brand-primary); }
+#root .region-progress-dot { background:var(--brand-line); }
+
+/* ── Learning path nodes: round bubbles with a 6px underside ── */
+#root .adventure-stops .adventure-stop-pin { border:0; background:var(--brand-line); box-shadow:0 6px 0 var(--brand-line-deep); }
+#root .adventure-stops .adventure-stop.is-done .adventure-stop-pin { background:var(--brand-sun); border:0; box-shadow:0 6px 0 var(--brand-sun-deep); }
+#root .adventure-stops .adventure-stop.is-current .adventure-stop-pin { background:var(--brand-primary); border:0; box-shadow:0 6px 0 var(--brand-primary-deep); animation:brand-node-pulse 1.6s ease-in-out infinite; }
+#root .adventure-stops .adventure-stop.is-future .adventure-stop-pin { background:var(--brand-line); border:0; box-shadow:0 6px 0 var(--brand-line-deep); }
+#root .adventure-stops .adventure-stop-pin > b { background:var(--brand-ink); border-color:var(--brand-paper); }
+@keyframes brand-node-pulse { 0%, 100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+
 @media (prefers-reduced-motion: reduce) {
   #root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next) { transition:none; }
+  #root .adventure-stops .adventure-stop.is-current .adventure-stop-pin { animation:none; }
+  #root .ep-bar > div { transition:none; }
 }

@@ -1,31 +1,77 @@
-/* Bubbly Isle design tokens (docs/rebrand/brand-brief.md). Every theme layer reads colours from here. */
+/* Bubbly Isle design tokens, following the Duolingo design system
+   (nexu-io/open-design design-systems/duolingo DESIGN.md + tokens.css, Apache-2.0).
+   This file is the only place theme colours, type, radii, elevation and motion are defined;
+   every other stylesheet reads these variables. See docs/rebrand/brand-brief.md. */
+@import "@fontsource/nunito/latin-500.css";
+@import "@fontsource/nunito/latin-700.css";
+@import "@fontsource/nunito/latin-800.css";
+@import "@fontsource/nunito/latin-900.css";
+
 :root {
-  --brand-lagoon:#19b3a6;          /* bright accent: highlights, progress, correct */
-  --brand-primary:#118a80;         /* button faces with white text (large bold text, >= 3:1) */
-  --brand-primary-deep:#0b6a62;    /* button bottom edge and pressed state */
-  --brand-primary-soft:#dcf4f1;
-  --brand-success:#118a80;
-  --brand-sun:#ffc531;
-  --brand-sun-deep:#d99a00;
-  --brand-sun-soft:#fff1c7;
-  --brand-sun-ink:#5c4100;
-  --brand-coral:#ff7a59;
-  --brand-coral-deep:#d9573a;
-  --brand-coral-soft:#ffe4db;
-  --brand-sky:#3ba9f5;
-  --brand-sky-ink:#1670b0;         /* English text and listen actions on light surfaces */
-  --brand-grape:#a274f0;
-  --brand-ink:#2f3b45;
-  --brand-ink-muted:#5f6b74;
-  --brand-line:#e3e8eb;
-  --brand-line-deep:#cbd3d8;
+  /* Owl green: primary action, progress, correct answer. */
+  --brand-primary:#58cc02;
+  --brand-primary-deep:#58a700;
+  --brand-primary-hover:#89e219;
+  --brand-primary-soft:#dbf8c5;
+  --brand-success:#58cc02;
+  --brand-lagoon:#58cc02;
+  /* Secondary accents. */
+  --brand-streak:#ff9600;  --brand-streak-deep:#cc7a00;
+  --brand-gem:#ce82ff;
+  --brand-sky:#1cb0f6;     --brand-sky-deep:#1899d6;   --brand-sky-ink:#1899d6;
+  --brand-danger:#ff4b4b;  --brand-danger-deep:#cc3b3b; --brand-danger-soft:#ffdfe0;
+  --brand-sun:#ffc800;     --brand-sun-deep:#d1a400;    --brand-sun-soft:#fff4cc; --brand-sun-ink:#3c3c3c;
+  --brand-coral:#ff4b4b;   --brand-coral-deep:#cc3b3b;  --brand-coral-soft:#ffdfe0;
+  --brand-grape:#ce82ff;
+  /* Surfaces, ink and borders. */
   --brand-paper:#ffffff;
-  --brand-page:#f3f8f8;
-  --brand-night:#14303f;
+  --brand-page:#ffffff;
+  --brand-section:#f7f7f7;
+  --brand-ink:#3c3c3c;
+  --brand-ink-muted:#777777;
+  --brand-ink-meta:#afafaf;
+  --brand-line:#e5e5e5;
+  --brand-line-deep:#d7d7d7;
+  --brand-night:#131f24;
+  /* Shape, elevation, focus and motion. */
   --brand-radius-button:16px;
-  --brand-radius-card:20px;
+  --brand-radius-card:16px;
+  --brand-radius-sheet:20px;
+  --brand-border:2px;
   --brand-press:4px;
-  --night-ink:#f2fbff; --night-muted:#bddae4;
-  --activity-listen:#e1f2fd; --activity-wordpic:#dcf4f1;
-  --activity-repeat:#ffe4db; --activity-trace:#fff1c7;
+  --brand-elev:0 4px 0 var(--brand-line-deep);
+  --brand-focus:0 0 0 3px rgba(28, 176, 246, .2);
+  --brand-motion-fast:180ms;
+  --brand-motion-base:320ms;
+  --brand-ease:cubic-bezier(.34, 1.56, .64, 1);
+  /* Type: Nunito stands in for the proprietary Feather Bold; Chinese falls back to rounded system faces. */
+  --brand-font:"Nunito", "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --brand-weight-display:800;
+  --brand-weight-body:600;
+
+  --night-ink:#f1f7fb; --night-muted:#a6bac4;
+  --activity-listen:#ddf4ff; --activity-wordpic:#dbf8c5;
+  --activity-repeat:#ffe8cc; --activity-trace:#fff4cc;
+
+  /* Semantic theme roles used across the app. */
+  --font-cn:var(--brand-font);
+  --font-num:var(--brand-font);
+  --navy:var(--brand-ink); --ink:var(--brand-ink);
+  --mint:var(--brand-primary-soft); --teal:var(--brand-primary); --sea:var(--brand-sky-ink); --coral:var(--brand-danger);
+  --grad-primary:linear-gradient(var(--brand-primary), var(--brand-primary));
+  --grad-brand:linear-gradient(var(--brand-primary), var(--brand-primary));
+  --village-paper:var(--brand-paper); --village-ink:var(--brand-ink); --village-line:var(--brand-line); --village-shadow:var(--brand-elev);
+}
+:root, :root[data-theme="light"] {
+  --page-bg:var(--brand-page); --browser:var(--brand-page);
+  --surface:var(--brand-paper); --surface-strong:var(--brand-paper); --surface-border:var(--brand-line);
+  --text:var(--brand-ink); --muted:var(--brand-ink-muted); --accent-en:var(--brand-sky-ink);
+  --text-shadow:none; --soft-shadow:var(--brand-elev);
+}
+/* Night keeps the same system on Duolingo's dark surfaces. */
+:root[data-theme="dark"] {
+  --page-bg:var(--brand-night); --browser:var(--brand-night);
+  --surface:#202f36; --surface-strong:#202f36; --surface-border:#37464f;
+  --text:var(--night-ink); --muted:var(--night-muted); --accent-en:#49c0f8;
+  --text-shadow:none; --soft-shadow:0 4px 0 #37464f;
 }

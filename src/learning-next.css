@@ -12,17 +12,17 @@
 #root .map-tree{position:absolute;left:10px;bottom:20px;z-index:-1}
 #root .map-current,#root .map-upcoming{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
 #root .map-upcoming{transform:translateY(-14px)}
-#root .map-you{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:#264c41;background:#fffdf4;padding:4px 12px 4px 4px;border-radius:24px}
+#root .map-you{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:var(--text);background:var(--surface);padding:4px 12px 4px 4px;border-radius:24px}
 #root .map-you img{height:40px;width:40px;object-fit:contain}
-#root .map-next-label{font-weight:800;font-size:15px;color:#264c41}
-#root .map-stop{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:250px;border:2px solid #9fbe95;border-radius:28px;padding:14px 10px;background:#fffdf4;color:#294d43;text-align:center;font:inherit;box-sizing:border-box}
+#root .map-next-label{font-weight:800;font-size:15px;color:var(--text)}
+#root .map-stop{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:250px;border:2px solid #9fbe95;border-radius:28px;padding:14px 10px;background:var(--surface);color:var(--text);text-align:center;font:inherit;box-sizing:border-box}
 #root button.map-stop{cursor:pointer;border:3px solid #32866d;box-shadow:0 6px 0 #32866d45}
 #root .map-stop strong{font-size:clamp(17px,2.3vw,23px);line-height:1.4}
-#root .map-stop small{font-size:13px;color:#536a60}
+#root .map-stop small{font-size:13px;color:var(--muted)}
 #root .map-stop-picture{display:flex;align-items:end;justify-content:center;min-height:84px;gap:0}
 #root .map-stop-picture>.icon:last-child{margin-left:-15px;transform:translateY(-4px)}
 #root .map-go{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:#397864;color:var(--brand-paper);border-radius:18px;font-weight:800;font-size:17px}
-#root .map-finish{color:#294d43;text-align:center}
+#root .map-finish{color:var(--text);text-align:center}
 #root .journey-review h1{font-size:24px;margin:20px 0}
 #root .journey-review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 #root .journey-review-grid>button{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--brand-line);border-radius:22px;background:var(--brand-paper);color:var(--brand-ink);font:inherit;text-align:left;cursor:pointer;min-width:0}

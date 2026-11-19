@@ -1,4 +1,4 @@
-.music-toggle{position:relative;flex:none;display:grid;place-items:center;width:48px;height:48px;border:2px solid #c9e4dc;border-radius:50%;background:#fffaf0;color:#245a50;box-shadow:0 3px 0 #aacfc3;cursor:pointer;touch-action:manipulation}
+.music-toggle{position:relative;flex:none;display:grid;place-items:center;width:48px;height:48px;border:2px solid var(--surface-border);border-radius:50%;background:var(--surface);color:var(--text);box-shadow:0 3px 0 #aacfc3;cursor:pointer;touch-action:manipulation}
 .music-toggle-state{position:absolute;right:-3px;bottom:-2px;padding:1px 4px;border-radius:9px;background:#287a60;color:#fff;font-size:11px;line-height:15px;font-weight:800}
 .music-toggle.is-muted .icon{opacity:.45}
 .music-toggle.is-muted .music-toggle-state{background:#596f75}

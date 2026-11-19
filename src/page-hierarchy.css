@@ -90,7 +90,7 @@
 }
 
 /* Keep page chrome compact; the first useful choice follows the navigation. */
-#root .route-focused .journey-stops .next button{color:#234b46}
+#root .route-focused .journey-stops .next button{color:var(--text)}
 #root .route-focused .journey-stops .next :is(strong,small,b){color:inherit}
 #root .route-focused .journey-wrap{margin-top:0}
 #root .route-focused .route-current{margin-top:8px}
@@ -123,9 +123,9 @@
 .diary-question-count{color:var(--text);font-size:16px;font-weight:800;white-space:nowrap}
 #root .diary-screen>.child-page:empty{display:none}
 #root .guide-alternative{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:14px;line-height:1.5;border-top:1px solid #d7c69b;margin-top:8px;padding-top:8px}
-#root .guide-alternative .btn-small{min-height:48px;color:#234b46;background:#fffef5;margin-left:auto}
-#root .task-trace .trace-side{color:#234b46;padding:12px}
-#root .task-trace .trace-word,#root .task-trace .trace-zh{color:#234b46}
+#root .guide-alternative .btn-small{min-height:48px;color:var(--text);background:var(--surface);margin-left:auto}
+#root .task-trace .trace-side{color:var(--text);padding:12px}
+#root .task-trace .trace-word,#root .task-trace .trace-zh{color:var(--text)}
 #root .task-trace .trace-tools{display:flex;flex-direction:row;justify-content:center;max-width:none;gap:12px}
 #root .task-trace .trace-tools .replay{flex:1;flex-direction:row;min-height:48px;padding:8px;gap:6px;font-size:17px}
 #root .task-trace .trace-listen{margin:8px 0 0;min-height:48px;padding:8px 12px;font-size:17px}
@@ -169,7 +169,7 @@
  #root .living-panel .living-selection>span{flex-direction:column;justify-content:center;text-align:center}
 }
 /* The meadow stays sunlit even when the island uses its night palette. */
-#root .screen.wild-adventure .tb-title{color:#234b46}
+#root .screen.wild-adventure .tb-title{color:var(--text)}
 /* A narrow viewport must constrain the meadow's intrinsic grid track. */
 #root .wild-adventure .field-wrap{grid-template-columns:minmax(0,1fr)}
 #root .wild-adventure :is(.field,.field-kit,.field .wild){min-width:0;box-sizing:border-box}

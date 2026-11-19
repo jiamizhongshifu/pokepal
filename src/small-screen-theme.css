@@ -7,12 +7,12 @@
   --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper);
   color:var(--text);
 }
-#root .story-reader .story-page-count { color:#234b46; }
+#root .story-reader .story-page-count { color:var(--text); }
 #root .story-reader .theatre-word { width:max-content; max-width:calc(100% - 24px); }
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }
 #root .story-reader .theatre-word>.icon { flex:none; }
 #root .notebook-parent .btn-small { color:var(--brand-ink); }
-#root .welcome-title-board .logo-en { color:#435e6d; }
+#root .welcome-title-board .logo-en { color:var(--muted); }
 :root[data-theme="dark"] #root .energy-focused .quiet-disclosure { color:var(--night-muted); }
 #root .task-trace .trace-word b { color:#176b61; }
 #root .dex-detail .type-chip.color { color:var(--brand-ink); background:#e8f1ee; }

@@ -1,27 +1,8 @@
 /* Island coast: 30th celebration colours, Winds / Waves mint and ocean blue.
    Palette adapted for preschool reading; original painted icon silhouettes stay intact.
    Scoped above lazy screen styles; teaching colours and character artwork stay intact. */
-:root,:root[data-theme="light"] {
-  --page-bg:var(--brand-page); --browser:var(--brand-page);
-  --surface:var(--brand-paper); --surface-strong:var(--brand-paper); --surface-border:var(--brand-line);
-  --text:var(--brand-ink); --navy:var(--brand-ink); --ink:var(--brand-ink); --muted:var(--brand-ink-muted);
-  --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --teal:var(--brand-lagoon); --mint:#98d9c1;
-  --coral:#c86d51; --grad-primary:linear-gradient(var(--brand-primary),var(--brand-primary));
-  --soft-shadow:0 4px 0 var(--brand-line-deep);
-  --village-paper:var(--brand-paper); --village-ink:var(--brand-ink); --village-line:var(--brand-line);
-  --village-shadow:0 4px 0 var(--brand-line-deep);
-}
-:root[data-theme="dark"] {
-  --page-bg:var(--brand-night); --browser:var(--brand-night); --surface:#193e55; --surface-strong:#193e55;
-  --surface-border:#466a7e; --text:#f2fbff; --navy:#f2fbff; --ink:#f2fbff;
-  --muted:#bddae4; --accent-en:#99e1ce; --sea:#99e1ce; --mint:#98d9c1;
-  --soft-shadow:0 4px 0 #071c2e66,0 8px 20px #071c2e22;
-}
-#root .screen:not(.home):not(.welcome):not(.wild-adventure):not(.sleepy) {
-  background-color:var(--page-bg);
-  background-image:radial-gradient(ellipse at 0 100%,#70bacd12 0,transparent 48%),radial-gradient(#70bacd20 .7px,transparent .9px);
-  background-size:auto,12px 12px;
-}
+
+
 #root .screen.sleepy { background:radial-gradient(ellipse at 50% 30%,#2f6b9188,transparent 65%),var(--brand-night); color:#f2fbff; }
 #root .sleepy .sleepy-text { color:#f2fbff; }
 #root .sleepy .sleepy-en { color:#bddae4; }
@@ -63,7 +44,7 @@
 #root .screen .btn-big::after { display:none; }
 #root .screen .feature-guide { --guide-ink:var(--brand-ink); }
 #root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
-#root .screen .guide-hear { background:var(--brand-primary-soft); border-color:#b7d7c5; }
+#root .screen .guide-hear { background:var(--brand-primary-soft); border-color:var(--surface-border); }
 #root .screen .guide-reopen { background:var(--brand-sun-soft); border-color:var(--brand-line); }
 
 /* A sunlit sign with the original tactile grain and rounded silhouette. */
@@ -91,7 +72,7 @@
 #root .learning-trail header small { background:#ddf4e8; color:var(--brand-success); padding:6px 10px; border-radius:12px; }
 #root .learning-trail h1 { color:var(--brand-ink); }
 #root .learning-trail .trail-discoveries button { background:#dff2f6; border:1.5px solid var(--brand-line); color:var(--brand-ink); border-radius:23px; box-shadow:inset 0 2px var(--brand-paper); }
-#root .learning-trail .trail-steps button { background:#dff2f6; border-color:#dfd5b8; color:var(--brand-ink-muted); }
+#root .learning-trail .trail-steps button { background:#dff2f6; border-color:var(--surface-border); color:var(--brand-ink-muted); }
 #root .learning-trail .trail-steps [aria-current=step] { background:var(--brand-primary-soft); border:2px solid #70b99b; color:var(--brand-success); box-shadow:0 3px 0 var(--brand-line-deep); }
 #root .learning-trail footer,#root .learning-trail footer button { color:var(--brand-ink-muted); }
 #root .learning-tool-row button { background:var(--brand-paper); color:var(--brand-ink); border:2px solid var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
@@ -108,7 +89,7 @@
 #root .screen .practice-option { border-color:var(--brand-line); box-shadow:var(--village-shadow); }
 #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --leaf:var(--brand-primary); --ink:var(--brand-ink); --text:var(--brand-ink); color:var(--brand-ink); }
 #root .screen :is(.lesson-wrap,.notebook-entry,.journey-focus,.journey-family) { color:var(--brand-ink); background:var(--brand-paper); border:1px solid var(--brand-line); box-shadow:var(--village-shadow); }
-#root .screen .lesson-actions>button:not(.journey-primary),#root .screen .notebook-entry-actions button { color:var(--brand-sky-ink); background:#dff2f6; border-color:#b7d7c5; }
+#root .screen .lesson-actions>button:not(.journey-primary),#root .screen .notebook-entry-actions button { color:var(--brand-sky-ink); background:#dff2f6; border-color:var(--surface-border); }
 #root .screen .learning-choices>div>button:not(.learning-choice-audio) { background:#dff2f6; border-color:var(--brand-line); color:var(--brand-ink); }
 #root .screen .notebook-tabs button[aria-pressed=true] { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
 #root .screen .choice { border-color:var(--brand-line); background:var(--brand-paper); color:var(--brand-ink); box-shadow:0 4px 0 var(--brand-line-deep); }
@@ -139,7 +120,7 @@
 #root .screen .energy-pocket { background:var(--brand-paper); border-color:var(--brand-line); box-shadow:var(--village-shadow); color:var(--brand-ink); }
 #root .energy-guide .energy-activity { background:var(--brand-paper); border-color:var(--brand-line); border-bottom-color:#5198ae; }
 #root .energy-guide .energy-activity>strong { color:var(--brand-ink); }
-#root .energy-guide .energy-spend>button { background:#dff2f6; color:var(--brand-ink); border-color:#b7d7c5; }
+#root .energy-guide .energy-spend>button { background:#dff2f6; color:var(--brand-ink); border-color:var(--surface-border); }
 #root .energy-guide .energy-reward { background:var(--brand-sun); color:var(--brand-sun-ink); }
 #root .energy-guide .energy-reward.collected { background:var(--brand-primary-soft); color:var(--brand-success); }
 
@@ -149,7 +130,7 @@
 #root .home .dock .dock-btn .ico { background:#fff8e4e8; border:1px solid #e8dbb8; box-shadow:0 3px 0 var(--brand-line-deep),0 5px 12px #214f6712; border-radius:19px 22px 18px 23px; padding:4px; }
 #root .home .home-actions button { background:#fffef7ee; color:var(--brand-ink); border-color:var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
 #root .home :is(.companions-launch,.care-request,.follow-status) { background:#fffef7ee; color:var(--brand-ink); border-color:var(--brand-line); }
-#root .home .companion-card .act { background:#dff2f6; color:var(--brand-sky-ink); border-color:#b7d7c5; box-shadow:0 2px 0 var(--brand-line-deep); }
+#root .home .companion-card .act { background:#dff2f6; color:var(--brand-sky-ink); border-color:var(--surface-border); box-shadow:0 2px 0 var(--brand-line-deep); }
 #root .home .companion-card .act.following { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
 #root .home .companion-card .act.requested { background:var(--brand-sun); color:var(--brand-sun-ink); border-color:#d8b64e; }
 #root .wild-adventure .wish-button { background:var(--brand-paper); color:var(--brand-sky-ink); border-color:var(--brand-line); }
@@ -211,7 +192,7 @@
 
 #root .diary-screen .child-page { box-sizing:border-box; padding:0; }
 #root .diary-screen .guided-diary { --diary-ink:var(--brand-ink); }
-#root .diary-screen .diary-friend { background:var(--brand-primary-soft); border:2px solid #b7d7c5; }
+#root .diary-screen .diary-friend { background:var(--brand-primary-soft); border:2px solid var(--surface-border); }
 #root .diary-screen .diary-steps { gap:clamp(16px,5vw,42px); }
 #root .diary-screen .diary-steps li { flex-direction:column; gap:6px; font-size:15px; }
 #root .diary-screen .diary-steps li span { width:46px; height:46px; border-radius:16px; background:#dff2f6; border:2px solid transparent; }
@@ -223,7 +204,7 @@
 #root .diary-screen .diary-record { background:var(--brand-primary-soft); border:2px solid #70b99b; color:var(--brand-success); box-shadow:0 4px 0 #b7d7c5; min-height:84px; }
 #root .diary-screen .diary-record[aria-pressed=true] { background:var(--brand-coral-soft); border-color:#c86d51; color:var(--brand-sun-ink); box-shadow:0 4px 0 #d8b888; }
 #root .diary-screen .diary-parent { color:var(--brand-ink-muted); border-top:1px dashed var(--brand-line); }
-#root .diary-screen .diary-parent textarea { color:var(--brand-ink); border-color:#b7d7c5; background:#dff2f6; }
+#root .diary-screen .diary-parent textarea { color:var(--brand-ink); border-color:var(--surface-border); background:#dff2f6; }
 #root .diary-screen .diary-guide-actions>button { display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 14px; }
 #root .diary-screen .diary-guide-actions>button:not(.farm-primary) { color:var(--brand-ink); background:#dff2f6; border-color:var(--brand-line); }
 #root .diary-screen .farm-primary { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
@@ -269,14 +250,14 @@
 #root .home .dock .stories .ico { background:#ffe4d8; }
 #root .home .dock .dex .ico { background:#dceafc; }
 #root .screen .feature-guide.is-open { background:#fff5cc; border-color:#e5cf83; }
-#root .screen .guide-hear { background:#dff2f6; border-color:#b7d6df; }
+#root .screen .guide-hear { background:#dff2f6; border-color:var(--surface-border); }
 #root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }
 #root .tasks .task-card.listen .tc-icon { background:var(--activity-listen); }
 #root .tasks .task-card.repeat .tc-icon { background:var(--activity-repeat); }
 #root .tasks .task-card.wordpic .tc-icon { background:var(--activity-wordpic); }
 #root .tasks .task-card.trace .tc-icon { background:var(--activity-trace); }
 #root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
-#root .screen :is(.journey-focus-words>button,.journey-transfer button,.learning-help,.guided-example,.story-word-saves button) { color:var(--brand-ink); background:#e5f3f7; border-color:var(--brand-line); }
+#root .screen :is(.journey-focus-words>button,.journey-transfer button,.learning-help,.guided-example,.story-word-saves button) { color:var(--brand-ink); background:var(--surface); border-color:var(--brand-line); }
 #root .screen .story-word-saves button[aria-pressed=true] { background:var(--brand-sun-soft); }
 #root .screen .energy-pocket-symbol { background:var(--brand-sun); box-shadow:inset 0 -5px #e7c956; }
 #root .screen .energy-pocket-total b { color:var(--brand-sun-ink); }
@@ -289,31 +270,31 @@
 #root .screen .stage-presets>button[aria-pressed=true] { background:var(--brand-primary-soft); outline-color:#70b99b; }
 #root .screen .stage-controls button[aria-pressed=true] { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
 #root .screen .stage-current { color:var(--brand-success); background:var(--brand-primary-soft); }
-#root .screen .stage-preview { background:#e5f3f7; border-color:#7db9ca; }
+#root .screen .stage-preview { background:var(--surface); border-color:#7db9ca; }
 #root .screen .guide-target { outline-color:#e6bc37!important; }
 #root .screen .diary-friend { background:var(--brand-primary-soft); }
-#root .screen .diary-question-icon { background:#e5f3f7; }
+#root .screen .diary-question-icon { background:var(--surface); }
 #root .wild-adventure .wish-button.explore-again { color:var(--brand-success); background:var(--brand-primary-soft); border-color:#87cbb1; }
 
 /* Island mail and automatic dressing use the same coastal materials. */
 :root .device-setup>summary{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--brand-ink);background:var(--brand-paper);border:2px solid var(--brand-line);border-radius:20px}
 :root .device-setup[open]{border:2px solid var(--brand-line);background:var(--brand-paper);color:var(--brand-ink);box-shadow:0 7px 0 #a5c6cc55}
 :root .device-setup[open]>summary{border:0;border-radius:18px 18px 0 0;background:var(--brand-primary-soft)}
-:root .device-setup .offline-update{border:2px solid var(--brand-line);border-radius:24px;background:#f2faff;color:var(--brand-ink)}
+:root .device-setup .offline-update{border:2px solid var(--brand-line);border-radius:24px;background:var(--surface);color:var(--brand-ink)}
 :root .offline-update .offline-update-symbol{width:56px;height:56px;border-radius:18px;background:var(--brand-sun);flex:none}
 :root .offline-update-heading strong{font-size:20px;color:var(--brand-ink)}
 :root .offline-update-heading small,:root .offline-update-detail,:root .offline-update-time,:root .device-capabilities,:root .device-setup-body>small{color:var(--brand-ink-muted)}
 :root .offline-update .offline-update-steps{display:flex;align-items:stretch;margin:16px 0;gap:8px;font-size:13px}
 :root .offline-update-steps li{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column;text-align:center;padding:10px 4px;background:#e5eef1;border-radius:14px;color:var(--brand-ink-muted)}
-:root .offline-update-steps li.current{background:var(--brand-sun-soft);color:#614817}:root .offline-update-steps li.finished{background:var(--brand-primary-soft);color:#205f47}
+:root .offline-update-steps li.current{background:var(--brand-sun-soft);color:#614817}:root .offline-update-steps li.finished{background:var(--brand-primary-soft);color:var(--text)}
 :root .device-setup .offline-update progress{height:19px;background:#cce4ec}:root .offline-update progress::-webkit-progress-value{background:#278fc0}:root .offline-update progress::-moz-progress-bar{background:#278fc0}
 :root .offline-update-actions button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border:2px solid #a1c8da;background:var(--brand-paper);color:var(--brand-ink);border-radius:18px;box-shadow:0 3px 0 #b8d5df}
 :root .offline-update-actions .offline-update-reopen{background:var(--brand-sun);color:var(--brand-ink);border-color:#e8cd64}
-:root .offline-update.is-ready,:root .offline-update.is-reload,:root .offline-update.is-latest{background:#effaf3;border-color:#99cdb4}:root .offline-update.is-error{background:#fff0e8;border-color:#e7bda9}
+:root .offline-update.is-ready,:root .offline-update.is-reload,:root .offline-update.is-latest{background:var(--surface);border-color:#99cdb4}:root .offline-update.is-error{background:var(--surface);border-color:#e7bda9}
 :root .update-parent-notes>summary{font-size:14px;color:var(--brand-ink-muted);padding:10px;min-height:44px;cursor:pointer}
-:root .island-rewards .dress-tabs{display:flex;gap:10px;margin:8px 0 14px}:root .dress-tabs>button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:62px;border:2px solid var(--brand-line);border-radius:20px;background:#f3f8f8;color:var(--brand-ink);font:inherit;font-weight:800;cursor:pointer}:root .dress-tabs>button[aria-pressed=true]{background:#ffe36d;border-color:#dec464;box-shadow:0 3px 0 #d6c57b}
+:root .island-rewards .dress-tabs{display:flex;gap:10px;margin:8px 0 14px}:root .dress-tabs>button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:62px;border:2px solid var(--brand-line);border-radius:20px;background:var(--surface);color:var(--brand-ink);font:inherit;font-weight:800;cursor:pointer}:root .dress-tabs>button[aria-pressed=true]{background:#ffe36d;border-color:#dec464;box-shadow:0 3px 0 #d6c57b}
 :root .dress-feedback{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;margin:10px 0 14px;background:#ddf4e8;color:#205f47;border-radius:15px;font-size:14px}.dress-feedback>.icon{flex:none}
-:root .dress-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}:root .dress-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:12px 6px;min-width:0;border:2px solid var(--brand-line);border-radius:22px;background:var(--brand-paper);color:var(--brand-ink);font:inherit;cursor:pointer;box-shadow:0 3px 0 #c5dde166}:root .dress-item[aria-pressed=true]{background:#eefaf2;border-color:#79bca0}:root .dress-item-art{display:grid;place-items:center;position:relative;width:76px;height:76px;border-radius:26px;background:#d9f1fa}:root .dress-item:nth-child(3n+2) .dress-item-art{background:#fff0b5}:root .dress-item:nth-child(3n) .dress-item-art{background:#ffe3d6}.dress-check{position:absolute;right:-5px;top:-4px;display:grid;place-items:center;background:#ddf4e8;border:2px solid var(--brand-paper);border-radius:50%;width:28px;height:28px}:root .dress-item strong{font-size:17px}:root .dress-item small{font-size:11px;color:var(--brand-ink-muted)}.dress-item-action{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800}.dress-hint{font-size:13px;line-height:1.6;color:var(--brand-ink-muted)}.dress-see{position:sticky;bottom:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;width:100%;background:var(--brand-primary);color:var(--brand-paper);border:2px solid var(--brand-primary-deep);border-radius:19px;font:inherit;font-weight:800;cursor:pointer;margin:14px 0 2px;box-shadow:0 3px 0 var(--brand-primary-deep)}.dress-energy{display:flex;gap:6px;align-items:center;justify-content:center}.upgrade-level{display:flex;gap:3px;margin:4px 0}.island-rewards .upgrade-choice>div{min-width:0}:root .island-rewards .upgrade-choice{gap:10px}:root .island-rewards .upgrade-choice>button{min-width:78px}
+:root .dress-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}:root .dress-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:12px 6px;min-width:0;border:2px solid var(--brand-line);border-radius:22px;background:var(--brand-paper);color:var(--brand-ink);font:inherit;cursor:pointer;box-shadow:0 3px 0 #c5dde166}:root .dress-item[aria-pressed=true]{background:var(--surface);border-color:#79bca0}:root .dress-item-art{display:grid;place-items:center;position:relative;width:76px;height:76px;border-radius:26px;background:#d9f1fa}:root .dress-item:nth-child(3n+2) .dress-item-art{background:#fff0b5}:root .dress-item:nth-child(3n) .dress-item-art{background:#ffe3d6}.dress-check{position:absolute;right:-5px;top:-4px;display:grid;place-items:center;background:#ddf4e8;border:2px solid var(--brand-paper);border-radius:50%;width:28px;height:28px}:root .dress-item strong{font-size:17px}:root .dress-item small{font-size:11px;color:var(--brand-ink-muted)}.dress-item-action{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800}.dress-hint{font-size:13px;line-height:1.6;color:var(--brand-ink-muted)}.dress-see{position:sticky;bottom:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;width:100%;background:var(--brand-primary);color:var(--brand-paper);border:2px solid var(--brand-primary-deep);border-radius:19px;font:inherit;font-weight:800;cursor:pointer;margin:14px 0 2px;box-shadow:0 3px 0 var(--brand-primary-deep)}.dress-energy{display:flex;gap:6px;align-items:center;justify-content:center}.upgrade-level{display:flex;gap:3px;margin:4px 0}.island-rewards .upgrade-choice>div{min-width:0}:root .island-rewards .upgrade-choice{gap:10px}:root .island-rewards .upgrade-choice>button{min-width:78px}
 :root .dress-item:focus-visible,:root .dress-tabs button:focus-visible,:root .dress-see:focus-visible{outline:3px solid var(--brand-primary);outline-offset:3px}:root .dress-item:active{transform:translateY(2px)}
 @media(max-width:600px){:root .dress-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}:root .home-actions{max-width:calc(100vw - 24px);gap:5px}:root .home-actions button{padding:6px 8px;font-size:12px;min-height:48px}:root .home-actions button>.icon{width:26px;height:26px}:root .offline-update-heading strong{font-size:17px}:root .offline-update .offline-update-symbol{width:44px;height:44px}}
 

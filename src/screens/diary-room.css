@@ -11,15 +11,15 @@
 .diary-room-friend.friend-1 { right:0; bottom:20%; }
 .diary-room-friend.friend-2 { right:2%; top:22%; width:clamp(80px,12vw,160px); height:20vh; }
 #root .diary-room .topbar { position:sticky; top:0; z-index:5; background:linear-gradient(#f9eed9ed,#f9eed9b8); backdrop-filter:blur(12px); margin-bottom:0; }
-#root .diary-room .tb-title { color:#344c3e; }
+#root .diary-room .tb-title { color:var(--text); }
 #root .diary-room .tb-progress { display:flex; align-items:center; gap:12px; }
-#root .diary-room .diary-shelf-toggle { display:inline-flex; align-items:center; gap:7px; min-height:44px; border:1px solid #a9b99a; border-radius:15px; padding:8px 14px; background:#fff9e9; color:#345c48; font:inherit; font-size:15px; font-weight:800; cursor:pointer; }
-#root .diary-room .diary-question-count { color:#526c57; font-size:14px; white-space:nowrap; }
+#root .diary-room .diary-shelf-toggle { display:inline-flex; align-items:center; gap:7px; min-height:44px; border:1px solid #a9b99a; border-radius:15px; padding:8px 14px; background:var(--surface); color:var(--text); font:inherit; font-size:15px; font-weight:800; cursor:pointer; }
+#root .diary-room .diary-question-count { color:var(--muted); font-size:14px; white-space:nowrap; }
 #root .diary-room .child-page { position:relative; flex-shrink:0; width:min(680px,64%); margin:clamp(24px,5vh,64px) auto 24px; padding:24px 32px; color:var(--text); background:linear-gradient(90deg,#eadab7 0,#fff8e8 18px,#fffaf0 70%,#f4e8cc); border:2px solid #b5a77f; border-radius:12px 22px 22px 12px; box-shadow:-7px 3px 0 #62806b,0 6px 0 #d1bd94,0 11px 0 #62806b,0 22px 30px #67472540; }
 #root .diary-room .guided-diary { margin-bottom:40px; }
-#root .diary-room .diary-welcome { justify-content:center; gap:12px; margin:0 0 14px; color:#61705c; font-size:16px; }
+#root .diary-room .diary-welcome { justify-content:center; gap:12px; margin:0 0 14px; color:var(--muted); font-size:16px; }
 #root .diary-room .diary-friend { background:transparent; }
-#root .diary-room .diary-question { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; color:#344c3e; }
+#root .diary-room .diary-question { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; color:var(--text); }
 #root .diary-room .diary-question h2 { font-size:clamp(23px,2.5vw,32px); margin:14px 0 10px; }
 #root .diary-room .diary-question-heading { justify-content:center; gap:20px; }
 #root .diary-room .diary-question-icon { background:#ead9ac80; }
@@ -30,21 +30,21 @@
 #root .diary-room .diary-guide-actions>button.diary-skip {
   flex:0 0 auto; width:auto; min-width:88px; min-height:48px;
   padding:10px 16px; background:transparent; border-color:transparent;
-  box-shadow:none; color:#626956; font-size:15px; font-weight:500;
+  box-shadow:none; color:var(--muted); font-size:15px; font-weight:500;
 }
 #root .diary-room .diary-guide-actions>button.diary-skip:hover:not(:disabled) { background:#76694c0d; text-decoration:underline; text-underline-offset:4px; }
 
 #root .diary-room .diary-guide-status:empty { display:none; }
-#root .diary-room .diary-parent { color:#5a6654; margin-top:12px; }
-#root .diary-room .diary-caption { color:#61705c; font-size:12px; letter-spacing:0; line-height:1.7; }
+#root .diary-room .diary-parent { color:var(--muted); margin-top:12px; }
+#root .diary-room .diary-caption { color:var(--muted); font-size:12px; letter-spacing:0; line-height:1.7; }
 #root .diary-room .diary-original { white-space:pre-wrap; overflow-wrap:anywhere; }
-#root .diary-room .diary-room-eyebrow { color:#777342; font-size:14px; letter-spacing:2px; }
+#root .diary-room .diary-room-eyebrow { color:var(--muted); font-size:14px; letter-spacing:2px; }
 #root .diary-room .diary-collection { min-height:320px; }
 #root .diary-room .diary-collection h1 { margin:8px 0; }
 #root .diary-room .diary-books { display:grid; gap:12px; margin-top:24px; }
-#root .diary-room .diary-books button { display:flex; align-items:center; gap:14px; min-width:0; width:100%; text-align:left; background:#fffdf3; border-color:#ddcda5; box-shadow:-4px 0 0 #8baa87; }
+#root .diary-room .diary-books button { display:flex; align-items:center; gap:14px; min-width:0; width:100%; text-align:left; background:var(--surface); border-color:#ddcda5; box-shadow:-4px 0 0 #8baa87; }
 #root .diary-room .diary-books button span { flex:1; overflow-wrap:anywhere; }
-#root .diary-room .diary-books small { display:block; font-size:13px; color:#61705c; margin-top:6px; }
+#root .diary-room .diary-books small { display:block; font-size:13px; color:var(--muted); margin-top:6px; }
 #root .diary-room .diary-empty { text-align:center; padding:28px 0; }
 #root .diary-room button:focus-visible { outline:3px solid #276f57; outline-offset:4px; }
 :root[data-theme="dark"] #root .diary-room { --text:#344c3e; --muted:#61705c; }
@@ -73,7 +73,7 @@
  #root .diary-room .guided-diary .diary-welcome { grid-column:1; grid-row:1 / span 5; flex-direction:column; align-self:center; text-align:center; font-size:20px; gap:18px; }
  #root .diary-room .diary-question,#root .diary-room .diary-guide-status,#root .diary-room .guided-diary>.diary-caption,#root .diary-room .guided-diary>.diary-error,#root .diary-room .diary-page-footer { grid-column:2; }
 }
-#root .diary-room .diary-welcome time { display:flex; align-items:center; gap:8px; color:#4a6d52; }
+#root .diary-room .diary-welcome time { display:flex; align-items:center; gap:8px; color:var(--muted); }
 #root .diary-room .diary-welcome time small { font-size:13px; }
 #root .diary-room .diary-welcome time b { font-size:19px; }
 #root .diary-room .diary-welcome time b span { font-size:13px; margin:0 4px; }
