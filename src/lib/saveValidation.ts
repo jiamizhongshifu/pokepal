@@ -1,5 +1,6 @@
 import {validCareStory} from './careStory';
 import {validPath,migratePathEconomy} from './learningPath';
+import {OPPORTUNITY_LIMIT,validOpportunity} from './learningProgress';
 import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
 import { validOnboarding } from '../data/onboarding';
@@ -83,6 +84,7 @@ export function validateSave(input:unknown):SaveData {
   const l=s.learning;requireValue(object(l)&&l.version===1&&object(l.records)&&object(l.units)&&(l.activeUnit===undefined||typeof l.activeUnit==='string'),'学习手册');
   for(const r of Object.values(l.records)){requireValue(object(r)&&['seen','spoken','attempts','misses','independent','streak','lastSeen','nextReview'].every(k=>number(r[k]))&&typeof r.needsPractice==='boolean'&&typeof r.saved==='boolean'&&strings(r.contexts)&&(r.lastSuccessDay===undefined||typeof r.lastSuccessDay==='string'),'单词进度');requireValue(['supported','actions','legacyIndependent'].every(k=>r[k]===undefined||integer(r[k]))&&(r.evidenceVersion===undefined||r.evidenceVersion===2),'学习证据');}
   for(const r of Object.values(l.records))requireValue((r as any).pendingAudio===undefined||typeof (r as any).pendingAudio==='boolean','待补听记录');
+  requireValue(l.opportunities===undefined||(Array.isArray(l.opportunities)&&l.opportunities.length<=OPPORTUNITY_LIMIT&&l.opportunities.every(validOpportunity)),'作答记录');
   for(const [id,p] of Object.entries(l.units))requireValue(object(p)&&(p.pendingAudio===undefined||Array.isArray(p.pendingAudio)&&p.pendingAudio.length<=20&&p.pendingAudio.every((n:any)=>integer(n)&&n<(unitById(id)?unitRoundCount(unitById(id)!):20)))&&integer(p.round)&&(!unitById(id)||p.round<=unitRoundCount(unitById(id)!))&&['completedAt','appliedAt','encounteredAt','storyAt'].every(k=>p[k]===undefined||number(p[k])),'课程进度');
  }
  const result=structuredClone(s) as SaveData;

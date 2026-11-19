@@ -9,7 +9,36 @@ export interface LearningRecord {
  lastSeen:number;nextReview:number;lastSuccessDay?:string;needsPractice:boolean;saved:boolean;contexts:string[];
 }
 export interface UnitProgress {round:number;pendingAudio?:number[];completedAt?:number;appliedAt?:number;encounteredAt?:number;storyAt?:number}
-export interface LearningProgress {version:1;activeUnit?:string;records:Record<string,LearningRecord>;units:Record<string,UnitProgress>}
+/**
+ * One answer opportunity, kept on this device only. "Independent" means no visible help inside the app; it cannot
+ * tell whether an adult helped off screen. Older saves have no opportunities, and their history stays unknown.
+ */
+export type ResponseKind='independent'|'after-replay'|'after-hint'|'after-model'|'skipped'|'unknown'|'left';
+export interface Opportunity {v:1;at:number;source:string;key:string;kind:ResponseKind;tries:number;replays:number}
+export const OPPORTUNITY_LIMIT=400;
+export const RESPONSE_KINDS:ResponseKind[]=['independent','after-replay','after-hint','after-model','skipped','unknown','left'];
+export interface LearningProgress {version:1;activeUnit?:string;records:Record<string,LearningRecord>;units:Record<string,UnitProgress>;opportunities?:Opportunity[]}
+
+/** What happened before the round was finished, in the order a child can experience it. */
+export interface RoundTrace {firstAnswer:'correct'|'wrong'|null;replays:number;modelShown:boolean;heardBeforeAnswer:boolean;outcome:'solved'|'skipped'|'left'}
+/** Strongest help wins: a shown answer, then a wrong first try, then unconfirmed audio, then replays. */
+export function classifyResponse(t:RoundTrace):ResponseKind{
+ if(t.outcome==='skipped')return 'skipped';
+ if(t.outcome==='left')return 'left';
+ if(t.modelShown)return 'after-model';
+ if(t.firstAnswer==='wrong')return 'after-hint';
+ if(!t.heardBeforeAnswer)return 'unknown';
+ return t.replays>0?'after-replay':'independent';
+}
+export function recordOpportunity(s:SaveData,o:Omit<Opportunity,'v'>){
+ const data=ensureLearning(s);
+ data.opportunities=[...(data.opportunities??[]),{v:1 as const,...o}].slice(-OPPORTUNITY_LIMIT);
+}
+export function validOpportunity(o:unknown):boolean{
+ const r=o as Record<string,unknown>;
+ return !!r&&typeof r==='object'&&r.v===1&&Number.isFinite(r.at)&&typeof r.source==='string'&&(r.source as string).length<=40&&typeof r.key==='string'&&(r.key as string).length<=80
+  &&RESPONSE_KINDS.includes(r.kind as ResponseKind)&&Number.isInteger(r.tries)&&(r.tries as number)>=0&&Number.isInteger(r.replays)&&(r.replays as number)>=0;
+}
 export function ensureLearning(s:SaveData):LearningProgress {
  if(!s.learning||s.learning.version!==1)s.learning={version:1,records:{},units:{}};
  s.learning.records??={};s.learning.units??={};return s.learning;

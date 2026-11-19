@@ -3,7 +3,7 @@ import {advanceAdventure,PICNIC_ADVENTURE} from './lib/storyAdventure';
 import {restoreStory,type StoryEvent} from './lib/storyPlayer';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
 import {advancePlayClock,advanceCareClock} from './lib/playClock';
-import {markReviewAudio,settleUnitRound} from './lib/learningProgress';
+import {markReviewAudio,settleUnitRound, recordOpportunity, type Opportunity } from './lib/learningProgress';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
@@ -137,6 +137,8 @@ interface State {
   startUnit: (id:string)=>void;
   advanceUnit: (id:string,round:number,skipped?:boolean)=>Promise<Reward|undefined>;
   noteAttempt: (word:string,correct:boolean,assisted:boolean,source:string)=>void;
+  /** One answer opportunity, classified by the help seen before it was finished (local only). */
+  noteOpportunity: (o:Omit<Opportunity,'v'|'at'>)=>void;
   restLearningWord: (word:string)=>void;
   saveLearningWord: (word:string)=>void;
   noteStationLearning: (station:string,key?:string,action?:boolean)=>void;
@@ -321,6 +323,7 @@ export const useGame = create<State>((set, get) => {
     },
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
+    noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
     noteStationLearning(station,key,action=false) {const reward=mut(s=>{
       const entry=key?learningEntry(key):undefined;

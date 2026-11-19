@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { sfx } from "../../lib/speech";
 
 /**
- * 答错卡片留在原位并变淡；减少可选项，但不移动孩子正在观察的图片。
+ * 默认：答错卡片留在原位并变淡，减少可选项。
+ * retry 模式（课程用）：答错不排除选项，所有候选保持可选，避免只剩一个答案却被当成“答对”。
  */
-export function useChoice<T>(options: T[], correct: T) {
+export function useChoice<T>(options: T[], correct: T, { retry = false }: { retry?: boolean } = {}) {
   const [removed, setRemoved] = useState<T[]>([]);
   const [solved, setSolved] = useState(false);
   const solvedRef = useRef(false);
@@ -27,7 +28,7 @@ export function useChoice<T>(options: T[], correct: T) {
     timer.current = setTimeout(() => {
       pending.current = false;
       setShake(null);
-      setRemoved((r) => [...r, o]);
+      if (!retry) setRemoved((r) => [...r, o]);
     }, 500);
     return "wrong";
   };
