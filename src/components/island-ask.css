@@ -20,3 +20,18 @@
 .companion-card .island-ask-speaker{width:48px;height:48px}
 .island-ask-panel{display:grid!important;gap:10px}
 #root .island-ask .island-ask-hear{display:inline-flex;min-height:52px;padding:8px 16px;border-radius:var(--radius-pill);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text)}
+.island-play{display:grid;gap:10px;width:100%}
+.island-play header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.island-play-rounds{display:flex;gap:6px}
+.island-play-rounds i{width:14px;height:14px;border-radius:50%;background:var(--surface-border)}
+.island-play-rounds .is-current{background:var(--brand-sky)}.island-play-rounds .is-done{background:var(--brand-primary)}
+.island-play-done{display:grid;justify-items:center;gap:8px;text-align:center}
+.island-play-done p{margin:0;font-size:var(--text-lg);font-weight:800}
+.island-play-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.island-play-actions button{min-height:52px}
+.facility-plays{display:flex;flex-wrap:wrap;gap:8px;width:100%}
+.facility-plays button{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:8px 14px;border-radius:var(--radius-md);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text);font-weight:800;cursor:pointer}
+.facility-plays button.is-wish{border-color:var(--brand-sun-deep);background:var(--brand-sun-soft)}
+.facility-panel .island-play .island-ask-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.facility-panel .island-play .island-ask-options button{min-height:104px;padding:8px 4px}
+.facility-panel .island-play .island-ask-options button .icon{width:52px!important;height:52px!important}

@@ -1,3 +1,5 @@
+import { playById, finishPlay, wishFor } from './island/plays';
+import { getCreature as creatureOf } from './data/creatures';
 import {startCareStory,actCareStory,type CareStory,type CareAction} from './lib/careStory';
 import {advanceAdventure,PICNIC_ADVENTURE} from './lib/storyAdventure';
 import {restoreStory,type StoryEvent} from './lib/storyPlayer';
@@ -139,6 +141,8 @@ interface State {
   noteAttempt: (word:string,correct:boolean,assisted:boolean,source:string)=>void;
   /** One answer opportunity, classified by the help seen before it was finished (local only). */
   noteOpportunity: (o:Omit<Opportunity,'v'|'at'>)=>void;
+  /** Three rounds of an island activity finished with a companion. */
+  finishIslandPlay: (playId:string,partner:number)=>boolean;
   markHomeTried: (id:string,tried:boolean)=>void;
   restLearningWord: (word:string)=>void;
   saveLearningWord: (word:string)=>void;
@@ -325,6 +329,7 @@ export const useGame = create<State>((set, get) => {
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
+    finishIslandPlay(playId,partner) {const play=playById(playId);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
     markHomeTried(id,tried) {mut(s=>markHomeTried(s,id,tried));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
     noteStationLearning(station,key,action=false) {const reward=mut(s=>{

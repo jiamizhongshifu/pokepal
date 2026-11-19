@@ -125,6 +125,8 @@ export interface SaveData {
   /** Learning path record: chapter friends, celebrated stops and the one-time energy retirement. */
   path?: import('./lib/learningPath').PathRecord;
   careStory?: import("./lib/careStory").CareStory;
+  /** Today's little wishes already done (companion ids), by local date. */
+  islandWishes?: import("./island/plays").WishState;
   storyAdventure?: import("./lib/storyPlayer").StoryPlayback;
   /** 可选字段兼容旧存档；花园不消耗能量，不绑定每日任务。 */
   /** Legacy flower-care save; retained for import compatibility, no longer used by gameplay. */

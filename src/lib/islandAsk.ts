@@ -7,7 +7,8 @@ import type { SaveData } from '../types';
  * matching picture. A wrong tap only makes the companion say it again. Choices come from learned words only, so the
  * island never tests something the path has not taught.
  */
-export type IslandPlay = 'picnic' | 'plant' | 'feed' | 'bubbles' | 'ball';
+/** The island activity an answer belongs to: the farm/picnic/feed/ball rounds or one of the place activities. */
+export type IslandPlay = string;
 /** A picture to tap: a learned word, a friend's portrait, or the child's own avatar (`avatar`, with an optional photo). */
 export interface AskOption { id: string; entry?: LearningEntry; image?: string; avatar?: string; photo?: string; label: string }
 export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string }
@@ -32,7 +33,7 @@ export const seedOf = (id: string) => [...id].reduce((n, c) => (n * 31 + c.charC
 const pick = <T,>(list: T[], seed: number) => list[((seed % list.length) + list.length) % list.length];
 
 /** Other pictures come from the closest pool first (other foods), then from any learned word. */
-function wordAsk(play: IslandPlay, target: string, pool: string[], seed: number, count = 3, fallback: string[] = []): IslandAsk | undefined {
+export function wordAsk(play: IslandPlay, target: string, pool: string[], seed: number, count = 3, fallback: string[] = []): IslandAsk | undefined {
  const prompt = learningEntry(target);
  if (!prompt) return undefined;
  const near = rotate(pool.filter(w => w !== target), seed), far = rotate(fallback.filter(w => w !== target && !near.includes(w)), seed);

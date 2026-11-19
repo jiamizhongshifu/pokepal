@@ -36,7 +36,6 @@ import { facilityLesson } from "../data/learning";
 import { visitUnit,learningLevel } from '../data/curriculum';
 import { captionParts } from "../lib/captions";
 import { useIslandLife } from "../lib/useIslandLife";
-import { careRequest, nextCareRequest } from "../lib/companionCare";
 import { placeOf, placesIn, DISTRICTS, type Effect } from "../island/world";
 import {AuthorContact} from '../components/AuthorContact';
 import { IslandTaskCard } from '../components/IslandTaskCard';
@@ -45,6 +44,8 @@ import { islandTask, unlockedDistricts, unlockingUnit, districtName, stationDist
 import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
+import { IslandPlaySession } from '../components/IslandPlaySession';
+import { playsAt, wishFor, wishDone, nextWish, type Play } from '../island/plays';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -86,7 +87,9 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const activeRef=useRef(active);
   useEffect(()=>{activeRef.current=active;return()=>{activeRef.current=false;};},[active]);
   const [effect, setEffect] = useState<Effect | null>(null);
-  const need = nextCareRequest(save.captures);
+  // One little wish at a time instead of hunger or loneliness timers; "later" only hides it for this visit.
+  const [laterWish,setLaterWish]=useState<number[]>([]);
+  const need = nextWish(save,save.daily.date,save.captures.map(c=>c.id),laterWish,id=>getCreature(id).species);
   const [areaId,setAreaId]=useState<string|null>(null);
   const areaInfo=panel==='area'?DISTRICTS.find(d=>d.id===areaId):undefined;
   const area=areaInfo&&{id:areaInfo.id,label:areaInfo.name,icon:areaInfo.icon,choices:placesIn(areaInfo.id).map(p=>p.id)};
@@ -190,6 +193,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     }
   };
   const [stationId,setStationId] = useState<string|null>(null);
+  /** The place activity being played in the place panel. */
+  const [placePlay,setPlacePlay]=useState<Play|null>(null);
   const station = panel==='facility' && stationId ? placeOf(stationId) : null;
   const learningUnit=visitUnit(save);
   const courseVisit=station&&learningUnit.station===station.id&&!!save.learning?.units[learningUnit.id]?.completedAt;
@@ -303,12 +308,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     return () => stopSpeech();
   }, [captures.length,active]);
 
-  const inviteStation = (id:string,cycle=false) => {
-    setLockNote('');
+  const inviteStation = (id:string,cycle=false,preferred?:number) => {
+    setLockNote('');setPlacePlay(null);
     if(lockedAt(id.startsWith('area-')?id.slice(5) as District:stationDistrict(id==='together-ball'?'ball':id==='together-rest'?'bench':id)))return;
     if(id.startsWith('area-')){ambient.poke();stopSpeech();activatePanel('area');setAreaId(id.slice(5));return;}
     setAreaId(null);
     if(id==='upgrades'||id.startsWith('upgrades:')){openLiving(undefined,'build',UPGRADES.find(u=>u.id===id.split(':')[1])?.id);return;}
+    if(id==='ball'&&playsAt(useGame.getState().save,'ball').length){openPlace('ball',cycle,preferred);return;}
     if(id==='ball'||id==='together-ball'||id==='together-rest'){
       openLiving();
       // A story's invitation already chose the activity; do not ask the child again.
@@ -318,11 +324,19 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     setLivingOpen(false);together.cancel();
     if(id==='picnic'){openPicnic();return;}
     setPicnicOpen(false);
+    if(id==='farm'&&playsAt(useGame.getState().save,'farm').length){openPlace('farm',cycle,preferred);return;}
     if(id==='farm'||id==='flowers'||/^farm-[0-2]$/.test(id)){openFarm(id==='flowers'||id==='farm'?0:Number(id.slice(-1)));return;}
     cancelWater();
-    stopSpeech(); setSelected(null);setPrompt(null);setStationId(id);activatePanel('facility');
-    life.invite(id,cycle);
+    openPlace(id,cycle,preferred);
   };
+  /** The place panel: a companion comes over, says its line, and the place's activities can start. */
+  function openPlace(id:string,cycle=false,preferred?:number){
+    setLivingOpen(false);together.cancel();setPicnicOpen(false);cancelWater();
+    stopSpeech();setSelected(null);setPrompt(null);setStationId(id);activatePanel('facility');
+    life.invite(id,cycle,preferred);
+  }
+  /** A little wish: the companion goes to the place and the wished activity starts when it arrives. */
+  const startWish=(id:number,play:Play)=>{setLockNote('');openPlace(play.place,false,id);setPlacePlay(play);};
   useEffect(()=>{if(active&&initialStation)inviteStation(initialStation);},[initialStation,active]); // Deliberate handoff from the lesson to a real island visit.
 
   useEffect(()=>{
@@ -453,15 +467,15 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const [evolving, setEvolving] = useState<number | null>(null);
   /** 满友好度、还有下一阶段（且那个形态还不在伙伴里）才能长大 */
   const evoOptions = (p: Creature) => p.evolvesTo.filter((id) => !captures.some((c) => c.id === id)).map(getCreature);
-  const selNeed = selected ? careRequest(save.captures.find(c=>c.id===selected)!) : null;
+  const selWish = selected!==null&&!wishDone(save,save.daily.date,selected) ? wishFor(save,getCreature(selected).species) : undefined;
   const selCap = selected ? captures.find((c) => c.id === selected) : null;
 
   const hint=homeHint({active,immersive,blocked:blocked||evolving!==null,panel,farm:!!farmMessage,picnic:!!picnic,care:!!need,task:captures.length>0&&!livingOpen&&!picnicOpen&&!station});
   useEffect(()=>{
     if(hint!=='care'||!need)return;
-    const timer=setTimeout(()=>{if(!document.hidden)useGame.getState().deferCare(need.id);},30000);
+    const timer=setTimeout(()=>{if(!document.hidden)setLaterWish(l=>[...l,need.id]);},30000);
     return()=>clearTimeout(timer);
-  },[hint,need?.id,need?.kind]);
+  },[hint,need?.id,need?.play.id]);
   useEffect(()=>{
     if(!quickCare)return;
     if(!active||selected!==quickCare.id){setQuickCare(null);return;}
@@ -512,7 +526,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
             lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
-            sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'?need:null}
+            sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'&&need?{id:need.id,icon:need.play.icon}:null}
             active={active} showInterface={!immersive&&!blocked&&!decorPreview&&panel!=='companion'&&!together.session}
             onSelect={(id)=>{if(immersive)return;if(together.session){if(together.session.partners.includes(id)){if(together.session.kind==='jump')together.act();else if(together.session.kind!=='bubbles')void doInteract(getCreature(id),'pet');}}else tapCreature(getCreature(id));}}
             onDeselect={() => { if(immersive)return; setAreaId(null);closePanel('area');closePanel('weather');closePanel('menu');ambient.poke(); if (selected) { setSelected(null); setPrompt(null); } }}
@@ -536,8 +550,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {hint==='task'&&<IslandTaskCard task={islandTask(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandTask(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
       {lockNote&&<p className="island-lock-note" role="status" onClick={()=>setLockNote('')}><Icon name="lock" size={24}/>{lockNote}</p>}
       {hint==='care' && need && <aside className="care-request" aria-label="伙伴的小心愿">
-        <button className="care-open" onClick={()=>{setCareThanks(null);tapCreature(getCreature(need.id),false);setQuickCare({id:need.id,kind:need.kind});}}><CreatureImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}{need.kind==='feed'?'肚子饿啦':'想让你摸摸'}</strong><small>{need.kind==='feed'?'点一下，喂我小点心':'点一下，摸摸我'}</small></span><Icon name={need.kind==='feed'?'apple':'heart'} size={32}/></button>
-        <button className="care-later" aria-label="等一会再陪它" onClick={()=>useGame.getState().deferCare(need.id)}>等一会</button>
+        <button className="care-open" onClick={()=>startWish(need.id,need.play)}><CreatureImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}想{need.play.title}</strong><small>点一下，陪它去{placeOf(need.play.place).name}</small></span><Icon name={need.play.icon} size={32}/></button>
+        <button className="care-later" aria-label="等一会再陪它" onClick={()=>setLaterWish(l=>[...l,need.id])}>等一会</button>
       </aside>}
       {active&&area&&<section className="area-choices" aria-label={area.label}>
         <header className="panel-toolbar"><Icon name={area.icon} size={28}/><strong>{area.label}</strong><FeatureGuide compact id="area" autoVoice={false}/><button onClick={()=>{setAreaId(null);closePanel('area');}} aria-label="关闭活动选择"><Icon name="close" size={24}/></button></header>
@@ -554,12 +568,17 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {round?.play==='plant'&&panel==='ask'&&<section className="facility-panel island-ask-panel" aria-label="种一种水果"><strong>伙伴想种什么？</strong><IslandAskRound ask={round.ask} station="farm" onSolved={id=>plantSolved(round.index,id)} onClose={()=>{setRound(null);closePanel('ask');}}/></section>}
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
+        {placePlay&&life.manual&&life.active.some(v=>v.manual)?<IslandPlaySession play={placePlay} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlacePlay(null);setStationId(null);closePanel('facility');life.cancel();}}/>:<>
         <Icon name={station.icon} size={40}/>
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回冒险路线'}</button>}
+        {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId);return <button key={p.id} className={wish?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish&&<small>（它的小心愿）</small>}</button>;})}</div>}
+        {station.id==='ball'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openLiving();}}><Icon name="ball" size={28}/>一起玩球</button>}
+        {station.id==='farm'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openFarm();}}><Icon name="grass" size={28}/>去菜地种水果</button>}
         {captures.length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
+        </>}
       </section>}
       {active && evolving !== null && (
         <Evolution
@@ -594,7 +613,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
             </header>
 
             {!feedPicker&&!prompt&&<p className="living-preference">{PREFERENCE_LABEL[preference(selCap)]}{save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='ball'?' · 上次我们一起玩了球':save.islandLiving?.memories.find(m=>m.partners.includes(sel.id))?.kind==='rest'?' · 记得我们一起休息过':''}</p>}
-            {(selNeed || careThanks?.id===sel.id) && <div className="companion-wish" role="status"><Icon name={selNeed?.kind==='feed'?'apple':'heart'} size={24}/>{careThanks?.id===sel.id?careThanks.text:selNeed?.kind==='feed'?'我肚子饿啦，喂我一点点心吧！':'可以摸摸我吗？我想和你一起玩。'}</div>}
+            {careThanks?.id===sel.id ? <div className="companion-wish" role="status"><Icon name="heart" size={24}/>{careThanks.text}</div> : selWish && <button className="companion-wish" onClick={()=>startWish(sel.id,selWish)}><Icon name={selWish.icon} size={24}/>我今天想{selWish.title}，陪我去{placeOf(selWish.place).name}吧</button>}
             {round?.play==='feed'&&round.id===sel.id ? <IslandAskRound ask={round.ask} speaker={sel.id} station="companion" onClose={()=>setRound(null)} onSolved={id=>{setRound(null);if((CROP_KINDS as readonly string[]).includes(id)&&farm.basket[id as CropKind]>0)shareBerry(sel,id as CropKind);else void doInteract(sel,'feed');}}/> : feedPicker ? <div className="berry-menu">
               <h3>选一份小点心</h3><p>{CROP_KINDS.some(k=>farm.basket[k]>0)?'点一下，就能分享给伙伴。':'果篮还空着，可以先分享普通点心。'}</p>
               {CROP_KINDS.filter(k=>farm.basket[k]>0).map(k=><button key={k} onClick={()=>shareBerry(sel,k)}><CropBadge kind={k}/><span>{CROPS[k].name}<small>我的果篮 ×{farm.basket[k]}</small></span><Icon name="heart" size={23}/></button>)}
@@ -624,8 +643,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         </section>
         {!feedPicker&&!prompt&&!round&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions"><button className="act" onClick={()=>{stopSpeech();go({name:"careStory",companion:sel.id});}}><Icon name="book" size={32}/>一起过个小下午</button>
                 {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
-                <button className={`act pet-action ${selNeed?.kind==='pet'?'requested':''}`} onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
-                <button className={`act ${selNeed?.kind==='feed'?'requested':''}`} onClick={() => {const ask=feedAsk(save,seedOf(`feed-${sel.id}-${selCap.friendship}`));if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:sel.id,ask});}else void doInteract(sel,'feed');}}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
+                <button className="act pet-action" onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
+                <button className="act" onClick={() => {const ask=feedAsk(save,seedOf(`feed-${sel.id}-${selCap.friendship}`));if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:sel.id,ask});}else void doInteract(sel,'feed');}}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
                 <button className="act" onClick={()=>{setFeedPicker(true);setCareThanks(null);stopSpeech();}}><Icon name="bowl" size={32}/>分享水果</button>
                 <button className="act" onClick={()=>openLiving(sel.id)}><Icon name="balloon" size={32}/>一起玩</button>
                 {friendshipLevel(selCap.friendship) >= 5 && evoOptions(sel).length > 0 && (

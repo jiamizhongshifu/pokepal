@@ -29,7 +29,8 @@ export interface IslandMapProps {
  sky: Sky;
  weather: IslandWeather;
  effect: Effect | null;
- need?: { id: number; kind: 'feed' | 'pet' } | null;
+ /** A companion with a little wish shows the wished activity's icon. */
+ need?: { id: number; icon: string } | null;
  farm: { open: boolean; farm?: FarmState; clock: number; working: number | null; onPlot: (index: number) => void };
  active?: boolean;
  showInterface?: boolean;
@@ -96,7 +97,7 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
    const style = { left: `${target.spot[0]}%`, top: `${target.spot[1]}%`, '--size': `${STAGE_SIZE[creature.stage - 1] ?? 8}%`, '--walk': `${WALK_MS}ms` } as CSSProperties;
    return <button key={c.id} type="button" className="island-resident" data-selected={selected === c.id || undefined} style={style} aria-label={`${creature.nameZh} ${creature.nameEn}`} onClick={e => { e.stopPropagation(); onSelect(c.id); }}>
     <img src={creatureArt(c.id)} alt="" draggable={false} />
-    {need?.id === c.id && <span className="island-bubble" aria-hidden="true"><Icon name={need.kind === 'feed' ? 'apple' : 'heart'} size={24} /></span>}
+    {need?.id === c.id && <span className="island-bubble" aria-hidden="true"><Icon name={need.icon} size={24} /></span>}
     {effect?.id === c.id && <span key={effect.at} className="island-effect" aria-hidden="true"><Icon name={effect.icon} size={30} /></span>}
    </button>;
   })}
