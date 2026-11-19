@@ -9,7 +9,7 @@ import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergeInvites, invitePartner } from "./lib/invites";
-import { markPathSeen, claimChapterFriend } from "./lib/learningPath";
+import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
 import { ensureIslandProgress,claimIslandGift,grantNextIslandUpgrade,placeIslandDecoration } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
@@ -45,11 +45,9 @@ export interface DexBrowseState { onlyOwned:boolean; query:string; page:number; 
 export type Screen =
   | { name: "welcome" }
   | { name: "home"; view?:"island"; station?:string; companion?:number }
-  | { name: "journey"; completedUnit?:string }
   | { name: "lesson"; id:string }
-  | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'tasks'|'parent' }
-  | { name: "review"; keys:string[]; returnTo?:'tasks'|'parent' }
-  | { name: "tasks" }
+  | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'parent' }
+  | { name: "review"; keys:string[]; returnTo?:'home'|'parent' }
   | { name: "practice" }
   | { name: "diary"; id?:string }
   | { name: "adventure"; autoplay?:boolean }
@@ -131,6 +129,8 @@ interface State {
   celebratePath:(keys:string[])=>string[];
   /** Friend stop: one invite berry for meeting this chapter's new friend. */
   claimChapterFriend:(chapter:number)=>Promise<boolean>;
+  /** Diary stop: opening the chapter's diary completes it; telling anything is optional. */
+  openChapterDiary:(chapter:number)=>void;
   finishReview: () => Reward;
   markReviewAudio: (key:string,pending:boolean)=>void;
   noteStoryRead: (id:string,page:number) => void;
@@ -302,7 +302,7 @@ export const useGame = create<State>((set, get) => {
       trackLearningCompletion('lesson_completed',result);return result;
     },
     markReviewAudio(key,pending){mut(s=>markReviewAudio(s,key,pending));},
-    finishReview(){const reward=mut(s=>rewardParticipation(s,'review'));if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
+    finishReview(){const reward=mut(s=>{notePathReview(s);return rewardParticipation(s,'review');});if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
     async startCareStory(pokemonId){return await commit(s=>startCareStory(s,crypto.randomUUID(),pokemonId))??false;},
     async actCareStory(id,phase,action,expectedPlot){return await commit(s=>actCareStory(s,id,phase,action,Date.now(),expectedPlot))??false;},
     restoreAdventure(){mut(s=>{s.storyAdventure=restoreStory(PICNIC_ADVENTURE,s.storyAdventure);});},
@@ -340,6 +340,7 @@ export const useGame = create<State>((set, get) => {
     claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
     celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);for(const k of fresh)if(k.startsWith('island:'))grantNextIslandUpgrade(s);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
+    openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
     rememberTogether(memory){return mut(s=>rememberTogether(s,memory))??false;},
     beginPicnic(id,berry) {return mut(s=>beginPicnic(s,id,berry,crypto.randomUUID()))??false;},

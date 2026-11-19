@@ -67,11 +67,21 @@ button.path-stat { cursor: pointer; }
 .path-buddy.on-left { right: calc(100% + 18px); }
 .path-chest { margin-top: 18px; filter: drop-shadow(0 4px 0 var(--surface-border)); }
 .path-end { text-align: center; color: var(--muted); font-weight: 700; }
+.path-more { display: flex; justify-content: center; gap: 12px; margin-top: 8px; }
+.path-more button {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 56px; padding: 8px 18px;
+  border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-md); background: var(--surface);
+  box-shadow: 0 var(--brand-press) 0 var(--surface-border); color: var(--muted);
+  font: var(--brand-weight-display) var(--text-base)/1 var(--brand-font); cursor: pointer;
+}
 
 /* Story and friend stops read differently at a glance; a met friend shows on its stop. */
 .path-node.kind-story.is-done .path-node-button { background: var(--brand-gem); box-shadow: 0 6px 0 var(--brand-gem-deep); }
 .path-node.kind-island.is-done .path-node-button { background: var(--brand-sky); box-shadow: 0 6px 0 var(--brand-sky-deep); }
 .path-node.kind-friend .path-node-button { width: 88px; height: 82px; }
+.path-node.kind-diary.is-done .path-node-button { background: var(--brand-streak); box-shadow: 0 6px 0 var(--brand-streak-deep); }
+.path-node.kind-review.is-current .path-node-button { background: var(--brand-sky); box-shadow: 0 6px 0 var(--brand-sky-deep), 0 0 0 8px color-mix(in srgb, var(--brand-sky) 22%, transparent); }
+.path-node.kind-review .path-start { color: var(--brand-sky-deep); }
 .path-node-friend { width: 76px; height: 76px; object-fit: contain; translate: 0 -6px; }
 .path-node.is-lit .path-node-button { animation: path-lit 1.4s var(--brand-ease); }
 .path-node.is-lit::after { content: ""; position: absolute; top: -10px; left: 50%; width: 120px; height: 120px; translate: -50% 0; border-radius: 50%;

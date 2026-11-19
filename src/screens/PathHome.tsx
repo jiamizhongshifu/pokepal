@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useGame } from '../store';
-import { learningPath, pathStars, pathNodes, type PathNode } from '../lib/learningPath';
+import { learningPath, withReview, pathStars, pathNodes, type PathNode } from '../lib/learningPath';
 import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
 import { creatureArt } from '../data/creatures';
@@ -16,13 +16,14 @@ import './path-home.css';
 /** Gentle left-right sway of the stops, in px, like a winding path. */
 const SWAY = [0, 46, 70, 46, 0, -46, -70, -46];
 const CHAPTER_COLOR = ['primary', 'sky', 'gem', 'streak', 'sun', 'danger'] as const;
-const KIND_LABEL: Record<PathNode['kind'], string> = { lesson: '学一学', story: '听故事', island: '去小岛', friend: '新朋友' };
+const KIND_LABEL: Record<PathNode['kind'], string> = { lesson: '学一学', story: '听故事', island: '去小岛', friend: '新朋友', diary: '说一说', review: '再见面' };
 
 export function PathHome() {
  const save = useGame(s => s.save), go = useGame(s => s.go), start = useGame(s => s.startUnit);
- const celebrate = useGame(s => s.celebratePath), claimFriend = useGame(s => s.claimChapterFriend);
- const path = useMemo(() => learningPath(save), [save]);
- const stars = pathStars(path);
+ const celebrate = useGame(s => s.celebratePath), claimFriend = useGame(s => s.claimChapterFriend), openDiary = useGame(s => s.openChapterDiary);
+ const route = useMemo(() => learningPath(save), [save]);
+ const path = useMemo(() => withReview(save, route), [save, route]);
+ const stars = pathStars(route, save);
  const friend = save.captures.find(c => save.settings.favorites.includes(c.id)) ?? save.captures[0];
  const [editing, setEditing] = useState(false);
  const [nudge, setNudge] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export function PathHome() {
 
  // Stops finished since the last visit light up once; island stops hand out their upgrade at the same moment.
  useEffect(() => {
-  const done = pathNodes(path).filter(n => n.state === 'done').map(n => n.key);
+  const done = pathNodes(route).filter(n => n.state === 'done').map(n => n.key);
   const fresh = celebrate(done);
   if (fresh.length) { setLit(fresh); sfx('sparkle'); const t = setTimeout(() => setLit([]), 1600); return () => clearTimeout(t); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,6 +50,8 @@ export function PathHome() {
   if (node.kind === 'lesson') start(node.unit!.id);
   else if (node.kind === 'story') go({ name: 'story', id: node.storyId! });
   else if (node.kind === 'island') go({ name: 'home', station: node.station });
+  else if (node.kind === 'review') go({ name: 'review', keys: node.reviewKeys!, returnTo: 'home' });
+  else if (node.kind === 'diary') { openDiary(node.chapter); go({ name: 'diary' }); }
   else if (node.state === 'done') go({ name: 'dex' });
   else if (await claimFriend(node.chapter)) go({ name: 'catch' });
  };
@@ -66,7 +69,7 @@ export function PathHome() {
   <main className="path-main">
    {path.map(chapter => <section key={chapter.index} className={`path-chapter tone-${CHAPTER_COLOR[chapter.index % CHAPTER_COLOR.length]}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <div className="path-banner">
-     <small>第 {chapter.index + 1} 章 · {chapter.done} / {chapter.nodes.length}</small>
+     <small>第 {chapter.index + 1} 章 · {chapter.done} / {chapter.nodes.filter(n => n.kind !== 'review').length}</small>
      <h2>{chapter.title}</h2>
      <p>{chapter.goal}</p>
     </div>
@@ -79,7 +82,7 @@ export function PathHome() {
       return <li key={node.key} ref={current ? currentRef : undefined} className={`path-node kind-${node.kind} is-${node.state}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style}>
        {current && <span className="path-start" aria-hidden="true">{KIND_LABEL[node.kind]}！<small lang="en">Start</small></span>}
        <button type="button" className="path-node-button" onClick={() => void open(node)}
-        aria-label={`第 ${node.index + 1} 站，${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : '还没解锁'}`}>
+        aria-label={`${node.kind === 'review' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : '还没解锁'}`}>
         {met ? <CreatureImg className="path-node-friend" src={creatureArt(met)} alt="" />
          : <Icon name={node.state === 'locked' ? 'lock' : node.state === 'done' && node.kind === 'lesson' ? 'check' : node.icon} size={current ? 44 : 36} />}
        </button>
@@ -90,6 +93,10 @@ export function PathHome() {
     </ol>
    </section>)}
    <p className="path-end">走完这条路，伙伴们会一起庆祝哦！</p>
+   <nav className="path-more" aria-label="还想多玩一会儿">
+    <button type="button" onClick={() => go({ name: 'practice' })}><Icon name="target" size={32} />小游戏</button>
+    <button type="button" onClick={() => go({ name: 'stories' })}><Icon name="book" size={32} />故事书架</button>
+   </nav>
   </main>
   <BottomNav active="path" />
   {editing && <AvatarEditor onClose={() => setEditing(false)} />}

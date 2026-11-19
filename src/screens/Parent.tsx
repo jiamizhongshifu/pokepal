@@ -13,7 +13,8 @@ import { learningStageTitle } from '../lib/learningStage';
 import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
 import { DAILY_ENERGY_CAP, playLimitSeconds, useGame } from "../store";
-import { CREATURES, creatureAvatar } from "../data/creatures";
+import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
+import { learningPath, withReview, currentNode, pathNodes, pathStars } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
 import { listRecordings, type Recording } from "../lib/db";
 import { playUrl, say, voiceInfo } from "../lib/speech";
@@ -81,7 +82,7 @@ export function Parent() {
   };
 
   useEffect(()=>{bodyRef.current?.scrollTo({top:0});headingRef.current?.focus({preventScroll:true});},[tab]);
-  const current=selectedUnit(save);
+  const current=pathNodes(learningPath(save)).find(n=>n.unit&&n.state!=='done')?.unit??selectedUnit(save);
   const family=familyLearning(save);
   const todayWords=d.words.filter(w=>!w.startsWith('letter:'));
   const completed=LEARNING_UNITS.filter(u=>save.learning?.units[u.id]?.completedAt).length;
@@ -100,7 +101,8 @@ export function Parent() {
    <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/>{tab==='data'&&<><TrafficPreferences/><AnalyticsPreferences/></>}{tab==='data'&&<><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
    {tab==='report'&&<><section className="parent-learning-focus">
  <div className="parent-section-heading"><div><span className="parent-eyebrow">当前学习阶段 · {learningStageTitle(s)}</span><h3>{current.title}</h3></div><button className="parent-inline-action" onClick={()=>{setStageOpen(true);setTab('settings');}}><Icon name="gear" size={22}/>调整阶段</button></div>
- <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 站，不代表已经掌握。</p>
+ <ParentPathSummary/>
+ <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 个课程单元，不代表已经掌握。</p>
  <div className="parent-family-facts"><strong>今天留下的小发现</strong><p>{family.completed.length?`首次走完了「${family.completed[0].title}」${family.completed.length>1?`等 ${family.completed.length} 站`:''}。`:'今天还没有首次走完的新一站，听听、看看也可以。'}{family.words.length?`接触过 ${family.words.map(e=>e.en).join('、')}。`:''}</p><small>记录来自应用操作，无法判断是否由宝宝独自完成。</small></div>
  <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>下次生活里，可以一起试试</strong><p>{family.focus.homePlay}</p><small>让宝宝选，你来回应。中文也很好，不用考一考或回来打卡。</small></div></div>
  <p className="parent-review-note">{due?`${due} 个词可以再遇见，${retry} 个词可以再试试。`:'暂时没有到期的复习，轻松听一听、玩一玩就好。'}</p>
@@ -191,4 +193,18 @@ export function Parent() {
 <details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) {setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();} }}>清空全部数据</button></div></details></>}
    </div>
   </div>;
+}
+
+const NEXT_KIND:Record<string,string>={lesson:'学一站课',story:'听这一章的绘本',island:'带伙伴去小岛用一用',friend:'认识一位新朋友',diary:'说说这一章',review:'和学过的词再见面'};
+/** The learning path as a parent sees it: where the child is, what comes next, and the friends met on the way. */
+function ParentPathSummary(){
+ const save=useGame(s=>s.save);
+ const route=learningPath(save),path=withReview(save,route),next=currentNode(path);
+ const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length;
+ const friends=Object.entries(save.path?.friends??{}).sort(([a],[b])=>+a-+b);
+ return <div className="parent-path-summary">
+  <div className="parent-path-row"><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {path.length} 章</span><strong>{chapter.title}</strong><small>本章 {chapter.done} / {chapter.nodes.filter(n=>n.kind!=='review').length} 站 · 共点亮 {pathStars(route,save)} 颗星（路线 {total} 站）</small></div>
+  <p>{next?<>下一站：<b>{NEXT_KIND[next.kind]}</b>{next.kind==='lesson'||next.kind==='story'?`「${next.title}」`:''}</>:'整条路线已经走完，可以挑喜欢的站再玩一次。'}</p>
+  {friends.length>0&&<div className="parent-path-friends" aria-label="路线上认识的朋友">{friends.map(([c,id])=><span key={c}><CreatureImg src={creatureArt(id)} alt=""/>第 {+c+1} 章 · {getCreature(id).nameZh}</span>)}</div>}
+ </div>;
 }

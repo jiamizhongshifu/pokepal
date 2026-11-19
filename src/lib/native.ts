@@ -12,11 +12,10 @@ export function setupNative() {
     stopSpeech();releaseMic();
     switch(screen.name){
       case 'welcome':case 'home':void App.exitApp();break;
-      case 'story':go({name:'stories'});break;
-      case 'task':go({name:screen.practice?'practice':'tasks'});break;
-      case 'practice':go({name:'tasks'});break;
+      case 'story':go({name:'home'});break;
+      case 'task':go(screen.practice?{name:'practice'}:{name:'home'});break;
       case 'dexDetail':go({name:'dex',picking:screen.picking,browse:screen.browse});break;
-      case 'notebook':case 'review':go({name:screen.returnTo??'journey'});break;
+      case 'notebook':case 'review':go({name:screen.returnTo??'home'});break;
       default:go({name:'home'});
     }
   });

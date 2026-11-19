@@ -57,7 +57,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
 
   const back = () => {
     releaseMic();
-    go({ name: practice ? "practice" : "tasks" });
+    go(practice ? { name: "practice" } : { name: "home" });
   };
 
   return (
@@ -79,7 +79,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
           {!!discoveries.length&&<><p>刚才一起遇见了</p><div className="session-discoveries">{discoveries.map(key=>{const entry=learningEntry(key)!;return <span key={key}><LearningArt entry={entry}/><b lang="en">{entry.en}</b><small>{entry.zh}</small></span>;})}</div></>}
           <EnergyToast reward={reward}/>
           <div className="cel-actions completion-next">
-            <button className="btn-big" onClick={()=>go({name:'journey'})}><Icon name="sign" size={36}/>看看下一站</button>
+            <button className="btn-big" onClick={()=>go({name:'home'})}><Icon name="sign" size={36}/>回到学习路线</button>
             <button className="btn-big alt" onClick={()=>go({name:'home',station:sessionStart.unit.station})}><Icon name="island" size={28}/>回小岛玩</button>
           </div>
           </div>

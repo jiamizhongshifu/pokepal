@@ -63,17 +63,8 @@
 #root .progress-beads i.current { background:var(--brand-paper); box-shadow:0 0 0 3px var(--brand-primary); }
 #root .region-progress-dot { background:var(--brand-line); }
 
-/* ── Learning path nodes: round bubbles with a 6px underside ── */
-#root .adventure-stops .adventure-stop-pin { border:0; background:var(--brand-line); box-shadow:0 6px 0 var(--brand-line-deep); }
-#root .adventure-stops .adventure-stop.is-done .adventure-stop-pin { background:var(--brand-sun); border:0; box-shadow:0 6px 0 var(--brand-sun-deep); }
-#root .adventure-stops .adventure-stop.is-current .adventure-stop-pin { background:var(--brand-primary); border:0; box-shadow:0 6px 0 var(--brand-primary-deep); animation:brand-node-pulse 1.6s ease-in-out infinite; }
-#root .adventure-stops .adventure-stop.is-future .adventure-stop-pin { background:var(--brand-line); border:0; box-shadow:0 6px 0 var(--brand-line-deep); }
-#root .adventure-stops .adventure-stop-pin > b { background:var(--brand-ink); border-color:var(--brand-paper); }
-@keyframes brand-node-pulse { 0%, 100% { transform:scale(1); } 50% { transform:scale(1.05); } }
-
 @media (prefers-reduced-motion: reduce) {
   #root .screen :is(.btn-big, .farm-primary, .journey-primary, .ps-primary, .main-action, .wish-button, .today-start, .story-next) { transition:none; }
-  #root .adventure-stops .adventure-stop.is-current .adventure-stop-pin { animation:none; }
   #root .ep-bar > div { transition:none; }
 }
 

@@ -5,7 +5,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_CHAPTERS,LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {progressUnit,applyStation} from '../../src/lib/learningProgress';
-import {learningPath,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy} from '../../src/lib/learningPath';
+import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {validateSave} from '../../src/lib/saveValidation';
 import {BABY_CREATURES} from '../../src/data/creatures';
@@ -19,15 +19,16 @@ const walkChapter=(s:SaveData,c:number)=>{
   if(node.kind==='lesson')finishLesson(s,node.unit!);
   else if(node.kind==='story')readStory(s,node.storyId!);
   else if(node.kind==='island'){s.learning!.activeUnit=node.unit!.id;applyStation(s,node.station!,200);}
-  else{claimChapterFriend(s,c);invitePartner(s,BABY_CREATURES.find(b=>!s.captures.some(x=>x.id===b.id))!.id);}
+  else if(node.kind==='friend'){claimChapterFriend(s,c);invitePartner(s,BABY_CREATURES.find(b=>!s.captures.some(x=>x.id===b.id))!.id);}
+  else openChapterDiary(s,c);
  }
 };
 
-test('each chapter walks two lessons, its book, two lessons, the island and a new friend',()=>{
+test('each chapter walks two lessons, its book, two lessons, the island, a new friend and a chat about the chapter',()=>{
  const path=learningPath(fresh());
  assert.equal(path.length,LEARNING_CHAPTERS.length);
- for(const chapter of path)assert.deepEqual(chapter.nodes.map(n=>n.kind),['lesson','lesson','story','lesson','lesson','island','friend']);
- assert.equal(pathNodes(path).length,LEARNING_CHAPTERS.length*7);
+ for(const chapter of path)assert.deepEqual(chapter.nodes.map(n=>n.kind),['lesson','lesson','story','lesson','lesson','island','friend','diary']);
+ assert.equal(pathNodes(path).length,LEARNING_CHAPTERS.length*8);
  assert.equal(new Set(path.map(c=>c.nodes[2].storyId)).size,path.length,'every chapter has its own picture book');
 });
 
@@ -51,7 +52,7 @@ test('finishing stops in order moves the single current stop and earns one star 
 test('a whole chapter ends with the chapter friend recorded and the next chapter current',()=>{
  const s=fresh();walkChapter(s,0);
  const path=learningPath(s);
- assert.equal(path[0].done,7);assert.ok(s.path!.friends['0']);assert.equal(s.balls.poke,0);
+ assert.equal(path[0].done,8);assert.ok(s.path!.friends['0']);assert.equal(s.balls.poke,0);
  assert.equal(currentNode(path)?.unit?.id,lessonsOf(1)[0].id);
 });
 
@@ -77,4 +78,24 @@ test('every island place a lesson or the island uses has a spot on the 2D island
  const {STATIONS}=await import('../../src/scene/islandLife');
  for(const u of LEARNING_UNITS)assert.ok(stationSpot(u.station),u.station);
  for(const s of STATIONS)assert.ok(stationSpot(s.id),s.id);
+});
+
+test('due review waits as one stop just before the current stop, and earns a star when done',()=>{
+ const s=fresh();finishLesson(s,LEARNING_UNITS[0]);
+ const route=learningPath(s);
+ assert.equal(withReview(s,route,0),route,'nothing due yet');
+ const keys=['ball','book','hat','Hello!'];
+ for(const k of keys)s.learning!.records[k]={seen:1,spoken:0,attempts:1,misses:0,independent:1,streak:1,lastSeen:1,nextReview:1,needsPractice:false,actions:0,contexts:[]} as never;
+ const woven=pathNodes(withReview(s,route,10_000));
+ const at=woven.findIndex(n=>n.kind==='review');
+ assert.ok(at>0);assert.equal(woven[at].state,'current');assert.ok(woven[at].reviewKeys!.length>=REVIEW_THRESHOLD);
+ assert.equal(woven.filter(n=>n.state==='current').length,1);assert.equal(woven[at+1].unit?.id,LEARNING_UNITS[1].id);
+ notePathReview(s);assert.equal(pathStars(learningPath(s),s),2);
+});
+
+test('opening the chapter diary completes it once, without asking for any content',()=>{
+ const s=fresh();openChapterDiary(s,0);const first=s.path!.diaries!['0'];openChapterDiary(s,0);
+ assert.equal(s.path!.diaries!['0'],first);
+ assert.equal(learningPath(s)[0].nodes.find(n=>n.kind==='diary')!.state,'done');
+ assert.throws(()=>validateSave({...JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')),path:{version:1,friends:{},seen:[],reviews:-1}}));
 });
