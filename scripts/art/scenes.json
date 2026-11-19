@@ -414,7 +414,7 @@
   {
    "id": "ui-decor-stones",
    "group": "icon",
-   "prompt": "Three flat rounded stepping stones."
+   "prompt": "Three flat rounded GRAY stepping stones in a short diagonal row, light gray tops with a darker gray side, like garden path stones."
   },
   {
    "id": "ui-decor-flowers",
@@ -444,7 +444,7 @@
   {
    "id": "ui-decor-rainbow",
    "group": "icon",
-   "prompt": "A rainbow arch with two clouds."
+   "prompt": "A rainbow arch with five color bands and a small fluffy WHITE cloud at each end."
   },
   {
    "id": "ui-decor-track",
@@ -819,7 +819,7 @@
   {
    "id": "ui-egg",
    "group": "icon",
-   "prompt": "An egg."
+   "prompt": "A single whole chicken egg, oval, WHITE shell with a light gray-beige shade along the bottom; not yellow."
   },
   {
    "id": "ui-watermelon",
