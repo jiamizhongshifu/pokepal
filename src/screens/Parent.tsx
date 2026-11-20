@@ -4,6 +4,7 @@ import {setAnalyticsConsent} from '../lib/analytics';
 import {AnalyticsPreferences} from '../components/AnalyticsPreferences';
 import {DiaryBackup} from '../components/DiaryBackup';
 import {ParentLinks} from '../components/ParentSupport';
+import {AuthorContact, SourceRepositoryLink} from '../components/AuthorContact';
 import {clearParentNotice} from '../lib/parentNotice';
 import './parent-center.css';
 import {WeatherSettings} from '../components/WeatherBadge';
@@ -102,7 +103,7 @@ export function Parent() {
    <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={()=>go({name:'home'})} aria-label="返回"><Icon name="back" size={30}/></button><h2>家长中心</h2></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
    {msg&&<div className="toast" role="status">{msg}</div>}
    <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看看最近在接触什么，再决定怎样陪伴。':tab==='settings'?'常用设置优先，其余按需要展开。修改后自动保存。':'更新保留学习进度。备份和数据清理分开管理。'}</p></div>
-   <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/>{tab==='data'&&<><TrafficPreferences/><AnalyticsPreferences/></>}{tab==='data'&&<><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
+   <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div>{tab==='data'&&<><TrafficPreferences/><AnalyticsPreferences/></>}{tab==='data'&&<><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
    {tab==='report'&&<><section className="parent-learning-focus">
  <div className="parent-section-heading"><div><span className="parent-eyebrow">当前学习阶段 · {learningStageTitle(s)}</span><h3>{current.title}</h3></div><button className="parent-inline-action" onClick={()=>{setStageOpen(true);setTab('settings');}}><Icon name="gear" size={22}/>调整阶段</button></div>
  <ParentPathSummary/>

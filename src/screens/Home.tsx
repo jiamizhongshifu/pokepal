@@ -35,7 +35,6 @@ import { visitUnit,learningLevel } from '../data/curriculum';
 import { captionParts } from "../lib/captions";
 import { useIslandLife } from "../lib/useIslandLife";
 import { placeOf, placesIn, DISTRICTS, type Effect } from "../island/world";
-import {AuthorContact} from '../components/AuthorContact';
 import { IslandTaskCard } from '../components/IslandTaskCard';
 import { learningVoice } from '../lib/learningVoice';
 import { islandTask, nextDistrict, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
@@ -507,7 +506,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <button onClick={()=>openLiving()}><Icon name="ball" size={30}/><span>一起玩</span></button>
         <button className={open.has('leisure')?undefined:'is-locked'} onClick={()=>openPicnic()}><Icon name={open.has('leisure')?'bowl':'lock'} size={30}/><span>野餐</span></button>
         <button onClick={()=>openLiving(undefined,'build')}><Icon name="island" size={30}/><span>装扮</span></button>
-        <AuthorContact active={active&&!immersive}/>
         {evolving===null&&<button ref={immersiveEntry} aria-label="隐藏界面，观赏小岛" onClick={()=>{stopSpeech();ambient.poke();setFinderOpen(false);setAreaId(null);setImmersive(true);}}><Icon name="eye" size={28}/><span>看风景</span></button>}
         </div></details>
       </>:undefined} />}

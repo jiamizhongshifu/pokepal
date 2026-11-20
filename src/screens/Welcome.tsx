@@ -12,7 +12,6 @@ import { TrainerAvatar } from "../components/TrainerAvatar";
 import {useState} from 'react';
 import {ParentLinks, ParentNotice} from '../components/ParentSupport';
 import {hasReadParentNotice} from '../lib/parentNotice';
-import {AuthorContact, SourceRepositoryLink} from '../components/AuthorContact';
 import {MusicToggle} from '../components/MusicToggle';
 
 
@@ -46,7 +45,7 @@ export function Welcome() {
   return (
     <div className="screen welcome illustrated-welcome">
       <img className="welcome-landscape" src={worldArt('welcome')} alt="" aria-hidden="true" {...{fetchpriority:"high"}} draggable={false}/>
-      <nav className="welcome-tools" aria-label="音乐、项目与作者"><MusicToggle/><Announcements/><SourceRepositoryLink/><AuthorContact/></nav>
+      <nav className="welcome-tools" aria-label="音乐与公告"><MusicToggle/><Announcements/></nav>
       <div className="welcome-content">
       <div className="welcome-pokemon">
         {WELCOME_CAST.map((id, i) => (
@@ -64,6 +63,14 @@ export function Welcome() {
           <span className="enter-copy"><strong>一起出发</strong><span lang="en">Let’s play!</span></span>
           <span className="enter-arrow" aria-hidden="true">›</span>
         </button>
+      ) : !noticeRead ? (
+        // A new family: the grown-up reads the notice first, then hands the device to the child to choose a look.
+        <section className="avatar-pick welcome-parent-first" aria-labelledby="welcome-parent-title">
+          <p className="handoff-eyebrow">给陪伴的大人</p>
+          <h2 id="welcome-parent-title">先花一分钟看看试用须知</h2>
+          <p>看完后，再把设备交给孩子选一个喜欢的形象。</p>
+          <button className="btn-big" onClick={() => setNotice({})}><Icon name="book" size={36}/>先看须知</button>
+        </section>
       ) : (
         <div className="avatar-pick">
           <header className="help-heading avatar-heading"><div className="hint">选一个你喜欢的形象<small lang="en">Choose your look</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
@@ -86,7 +93,7 @@ export function Welcome() {
           <li><Icon name="ear" size={32}/><span>没听清时，点右上角<b>帮助</b>里的「听一听」再听一次。</span></li>
           <li><Icon name="rest" size={32}/><span>想停就停，进度会留在这台设备上。</span></li>
         </ul>
-        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);void begin(avatar);}}><Icon name="hand" size={36}/>交给孩子</button>
+        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);if(trainer||avatar)void begin(avatar);}}><Icon name="hand" size={36}/>交给孩子</button>
       </section></div>}
     </div>
   );
