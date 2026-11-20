@@ -3,7 +3,7 @@ import {validPath,migratePathEconomy} from './learningPath';
 import {OPPORTUNITY_LIMIT,validOpportunity} from './learningProgress';
 import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
-import { validOnboarding } from '../data/onboarding';
+import { validOnboarding, migrateOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
 import { mergeInvites } from "./invites";
 import { validIslandProgress } from './islandProgress';
@@ -30,7 +30,7 @@ function requireValue(ok:unknown,label:string):asserts ok {if(!ok)throw new Erro
  * original-creature rebrand are first rewritten on a copy, so the caller's object (an imported backup) stays intact.
  */
 export function validateSave(input:unknown):SaveData {
- const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);migrateCrops(value);
+ const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);migrateCrops(value);migrateOnboarding(value);
  requireValue(object(value)&&value.version===1,'版本');const s=value;
  requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'小岛主人');
  requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');

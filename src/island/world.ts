@@ -50,7 +50,7 @@ export const HOMES: Record<string, { home: string; favorite: string }> = {
  bubbo: { home: 'shells', favorite: 'pier' },
  drippy: { home: 'farm', favorite: 'farm' },
  shelly: { home: 'shells', favorite: 'sand' },
- berry: { home: 'picnic', favorite: 'picnic' },
+ berry: { home: 'picnic', favorite: 'tree' },
  leafy: { home: 'hammock', favorite: 'parasol' },
  petal: { home: 'tree', favorite: 'tree' },
  carro: { home: 'farm', favorite: 'farm' },

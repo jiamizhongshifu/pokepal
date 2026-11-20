@@ -21,8 +21,9 @@ export interface IslandMapProps {
  activeVisits: Visit[];
  onArrival: (id: number, key: string, ready: boolean) => void;
  onStation: (id: string) => void;
- /** Areas the learning path has not reached yet: shown with a lock, tapping says which lesson opens them. */
+ /** Areas the learning path has not reached yet; only `teaser` (the next one) shows locks, the others are not marked. */
  lockedDistricts?: ReadonlySet<string>;
+ teaser?: string;
  selected: number | null;
  onSelect: (id: number) => void;
  onDeselect: () => void;
@@ -41,7 +42,7 @@ export interface IslandMapProps {
 const offset = (spot: Spot, slot: number, of: number): Spot => of < 2 ? spot : [spot[0] + (slot - (of - 1) / 2) * 5, spot[1] + (slot % 2) * 1.5];
 
 /** Island home as one illustration: stations are tappable spots, creatures walk between them with a short glide. */
-export function IslandMap({ captures, visits, activeVisits, onArrival, onStation, lockedDistricts, stickers = [], selected, onSelect, onDeselect, sky, weather, effect, need, farm, active = true, showInterface = true }: IslandMapProps) {
+export function IslandMap({ captures, visits, activeVisits, onArrival, onStation, lockedDistricts, teaser, stickers = [], selected, onSelect, onDeselect, sky, weather, effect, need, farm, active = true, showInterface = true }: IslandMapProps) {
  // Everyone stands at the place of its visit, or at home; companions at the same place stand side by side.
  const targets = useMemo(() => {
   const at = (c: Capture) => visits.find(v => v.pokemonId === c.id);
@@ -87,8 +88,8 @@ export function IslandMap({ captures, visits, activeVisits, onArrival, onStation
  return <div ref={root} className={`island-map sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`} onClick={background} role="group" aria-label="我的小岛">
   <img className="island-map-art" src={worldArt('island-map')} alt="" draggable={false} onClick={onDeselect} />
   {stickers.map(k => <img key={k.id} className="island-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
-  {interactive && PLACES.map(s => { const locked = !!lockedDistricts?.has(s.district); return <button key={s.id} type="button" className={`island-station${locked ? ' is-locked' : ''}`} style={{ left: `${s.spot[0]}%`, top: `${s.spot[1]}%` }} aria-label={locked ? `${s.name}（还没开放）` : s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }}>{locked && <Icon name="lock" size={26} />}</button>; })}
-  {interactive && !farm.open && PLOT_SPOTS.map((spot, i) => {
+  {interactive && PLACES.filter(s => !lockedDistricts?.has(s.district) || s.district === teaser).map(s => { const locked = !!lockedDistricts?.has(s.district); return <button key={s.id} type="button" className={`island-station${locked ? ' is-locked' : ''}`} style={{ left: `${s.spot[0]}%`, top: `${s.spot[1]}%` }} aria-label={locked ? `${s.name}（还没开放）` : s.name} onClick={e => { e.stopPropagation(); onStation(s.id); }}>{locked && <Icon name="lock" size={26} />}</button>; })}
+  {interactive && !farm.open && (!lockedDistricts?.has('garden') || teaser === 'garden') && PLOT_SPOTS.map((spot, i) => {
    const stage = cropStage(farm.farm?.plots[i] ?? null, farm.clock);
    return <button key={i} type="button" className={`island-plot is-${stage}${lockedDistricts?.has('garden') ? ' is-locked' : ''}`} style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }} aria-label={`第 ${i + 1} 块地：${{ empty: '空地', thirsty: '口渴了', growing: '正在长', ripe: '可以收啦' }[stage]}`} aria-busy={farm.working === i} onClick={e => { e.stopPropagation(); farm.onPlot(i); }}>
     {stage !== 'empty' && <Icon name={stage === 'thirsty' ? 'water' : stage === 'ripe' ? 'strawberry' : 'grass'} size={26} />}

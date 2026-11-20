@@ -46,9 +46,9 @@ export const FIRST_FRIEND = 1001;
 /** The welcome cast shown before a child has met anyone: Bubbo, Carro, Sunny, Shelly and Berry. */
 export const WELCOME_CAST = [1001, 1151, 1041, 1101, 1011];
 /** Who can still be met in the meadow: unmet babies first; once every species is a friend, the other stages open up. */
+/** Friends come as babies; the older stages are reached only by growing up together. */
 export function meetableCreatures(owned: ReadonlySet<number>): Creature[] {
- const babies = BABY_CREATURES.filter(c => !owned.has(c.id));
- return babies.length ? babies : CREATURES.filter(c => !owned.has(c.id));
+ return BABY_CREATURES.filter(c => !owned.has(c.id));
 }
 
 const sprite = (c: Creature) => `/sprites/${c.species}`;

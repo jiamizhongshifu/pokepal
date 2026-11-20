@@ -13,9 +13,9 @@ import {validateSave} from '../src/lib/saveValidation';
 const fresh=():SaveData=>({version:1,trainer:null,energy:0,balls:{poke:1,great:0,ultra:0,master:0},captures:[],daily:{date:'2026-10-16',energyEarned:0,board:['listen','wordpic','repeat','trace'],boardDone:[false,false,false,false],bonusGiven:false,tasksCompleted:0,heard:0,spoken:0,words:[],caught:[],playSeconds:0,extraSeconds:0},streak:{lastDate:'',count:0},wordStats:{},settings:{dailyMinutes:15,tasksPerDay:4,level:1,favorites:[25],speechRate:1},history:[]});
 const s=fresh();
 for(const kind of ['course','story','review'] as const)rewardParticipation(s,kind);
-assert.equal(s.energy,7);assert.equal(s.participation?.days,1);assert(s.daily.goalDone);
-for(let i=0;i<20;i++)for(const kind of ['course','story','review'] as const)assert.equal(rewardParticipation(s,kind).gained,0);
-assert.equal(s.energy,7);assert.equal(s.balls.master,0);
+assert.equal(s.participation?.days,1);assert(s.daily.goalDone);
+for(let i=0;i<20;i++)for(const kind of ['course','story','review'] as const)assert.equal(rewardParticipation(s,kind).fresh,false);
+assert.equal(s.balls.master,0);
 for(const kind of PARTICIPATION_KINDS)rewardParticipation(s,kind);
 assert.equal(s.energy,15);assert.equal(s.daily.energyEarned,15);assert.equal(s.participation?.days,1);
 for(let day=1;day<=6;day++){

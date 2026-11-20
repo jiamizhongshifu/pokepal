@@ -3,13 +3,14 @@ import { activeResidentIds } from './activeResidents';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Capture } from '../types';
 import { getCreature } from '../data/creatures';
-import { placeById, whereNow, type Visit } from '../island/world';
+import { placeById, placeOf, whereNow, type District, type Visit } from '../island/world';
 
 /**
  * Who is where on the island: each companion at its home or favourite place, moved by time of day and weather
  * (`whereNow`), unless the child invited it somewhere or it is in shared play. Derived only; no save mutation.
  */
-export function useIslandLife(captures: Capture[], now: Date, paused: boolean, careId?: number, group: Visit[] = [], focus: readonly (number | null | undefined)[] = [], weather: WeatherKind = 'sunny') {
+/** `open`: areas the learning path has opened; a companion whose spot is still closed waits by the tent. */
+export function useIslandLife(captures: Capture[], now: Date, paused: boolean, careId?: number, group: Visit[] = [], focus: readonly (number | null | undefined)[] = [], weather: WeatherKind = 'sunny', open?: ReadonlySet<District>) {
  const [request, setRequest] = useState<{ stationId: string; pokemonId: number; nonce: number } | null>(null);
  const [arrivals, setArrivals] = useState<Record<number, string>>({});
  const [timedOut, setTimedOut] = useState(false);
@@ -27,13 +28,13 @@ export function useIslandLife(captures: Capture[], now: Date, paused: boolean, c
   if (!group.length && request && asked && captures.some(c => c.id === request.pokemonId)) result.push({ station: { ...asked, id: request.stationId }, pokemonId: request.pokemonId, manual: true, key: `manual-${request.nonce}` });
   for (const c of residents) {
    if (result.some(v => v.pokemonId === c.id)) continue;
-   const p = getCreature(c.id), station = whereNow(p.species, hour, weather, cycle, c.id);
+   const p = getCreature(c.id), there = whereNow(p.species, hour, weather, cycle, c.id), station = !open || open.has(there.district) ? there : placeOf('tent');
    result.push({ station, pokemonId: c.id, manual: false, key: `auto-${cycle}-${station.id}` });
   }
   return result;
   // Time changes within one two-minute cycle don't restart a journey.
   // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [residentKey, cycle, Math.floor(hour * 2), weather, request, paused, careId, group.map(v => v.key).join(',')]);
+ }, [residentKey, cycle, Math.floor(hour * 2), weather, request, paused, careId, group.map(v => v.key).join(','), [...(open ?? [])].join(',')]);
  const arrive = useCallback((id: number, key: string, ready: boolean) => setArrivals(old => {
   const value = ready ? key : '';
   return old[id] === value ? old : { ...old, [id]: value };

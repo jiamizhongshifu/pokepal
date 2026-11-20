@@ -50,7 +50,7 @@ export function LearningLesson({id}:{id:string}){
   advancing.current=true;setRetry(false);
   const result=await advance(id,round+1,skipped);advancing.current=false;
   const screen=useGame.getState().screen;if(screen.name!=='lesson'||screen.id!==id)return;
-  if(round+1>=total){if(!result){if(useGame.getState().save.learning?.units[id]?.pendingAudio?.length&&!useGame.getState().saveIssue){setFinish(true);return;}setRetry(true);return;}setReward(result);setFinish(true);if(result.gained+result.bonus>0)void say(['en','You did it!']);}
+  if(round+1>=total){if(!result){if(useGame.getState().save.learning?.units[id]?.pendingAudio?.length&&!useGame.getState().saveIssue){setFinish(true);return;}setRetry(true);return;}setReward(result);setFinish(true);if(result.fresh)void say(['en','You did it!']);}
   else{setResolvedRound(-1);setRound(n=>n+1);}
  };
  return <div className={`screen learning-lesson ${!finish?'lesson-playing':''} ${picnicLesson?'lesson-picnic-mode':''}`}><TopBar title={u.title} onBack={()=>go({name:'home'})} focused progress={!finish&&<RoundProgress index={round} total={total}/>} help={<FeatureGuide compact id="lesson" autoVoice={false} autoOpen={!picnicLesson} enabled={!finish}><p><strong>身边的大人可以这样陪：</strong>{u.homePlay}</p><p>让宝宝自己选择，你来回应。不用提问考一考；打开帮助会暂停自动翻题，关闭后点“接着玩”。</p></FeatureGuide>}/><main className="lesson-wrap">

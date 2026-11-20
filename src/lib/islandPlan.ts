@@ -91,3 +91,9 @@ export function learnedPlayLine(s: SaveData, play: PlayLine): LearningEntry | un
  const fits = new Set<string>(PLAY_LINES[play]);
  return learnedPhrases(s).find(e => fits.has(e.en));
 }
+
+/** The closed area the path opens next: the only one the island marks with locks, so day one is not a map of locks. */
+export function nextDistrict(s: SaveData): District | undefined {
+ const open = unlockedDistricts(s);
+ return LEARNING_UNITS.map(unitDistrict).find(d => !open.has(d));
+}

@@ -56,7 +56,7 @@ export function CareStoryScreen(){
  const missingFood=session?.food!=='plain'&&session&&!(save.farm?.basket[session.food]);
  const crop=session?.plot?save.farm?.plots[session.plot.index]:undefined;
  const seconds=crop?.wateredAt?Math.max(0,Math.ceil((GROW_MS-(now-crop.wateredAt))/1000)):0;
- const gardenLabel=p.stage==='empty'?`在第 ${p.index+1} 块空地种下蓝莓，浇一点水`:p.stage==='thirsty'?`给第 ${p.index+1} 块地浇水`:p.stage==='ripe'?`收好第 ${p.index+1} 块地的树果`:'让小苗慢慢长大';
+ const gardenLabel=p.stage==='empty'?`在第 ${p.index+1} 块空地种下苹果，浇一点水`:p.stage==='thirsty'?`给第 ${p.index+1} 块地浇水`:p.stage==='ripe'?`收好第 ${p.index+1} 块地的树果`:'让小苗慢慢长大';
  const text=phase==='snack'?`${pokemon?.nameZh}带来了小碗。一起分享一点${food}，再去花园看看。`:phase==='shared'?(session?.meal==='fed'?'小点心吃好了，谢谢你惦记着我。我们去看看小苗吧。':'点心先留着。我们一起去看看小苗。'):phase==='garden'?(p.stage==='empty'?'这里有一块空地。种下小种子，浇一点水，给它时间慢慢长大。':p.stage==='ripe'?'还记得照顾过的小苗吗？树果已经成熟，我们把它收进果篮。':p.stage==='thirsty'?'小苗的泥土有点干，我们给它浇一点水。':'小苗正在慢慢长大。我们先去玩一会儿，让它安心晒太阳。'):phase==='watered'?(session?.gardenResult==='harvested'?'树果已经放进真实果篮啦。现在一起玩吧。':session?.gardenResult==='full'?'果篮装满了，树果先留在枝头。我们一起去玩吧。':'小苗有水，也有阳光。等待的时候，我们一起玩吧。'):phase==='play'?'小球轻轻滚过来。你可以推一下，也可以看伙伴把球滚回去。':phase==='rolled'?'小球滚回来，快乐也回到我们身边。谢谢你陪我玩。':phase==='growing'?'我们陪小苗再待一会儿。果子长好了，就一起放进果篮。':session?.harvest==='collected'?'树果收好了，今天的小下午也记住了。下次再一起分享吧。':session?.harvest==='full'?'果篮满满的，成熟的树果还在原来的地里。下次再来。':'今天的小下午已经记住了。田地有了新的变化，我们把它留在原处。';
  return <div className="screen care-story"><TopBar title="和伙伴的小下午" onBack={()=>{stopSpeech();go({name:'home',companion:partner?.id});}} focused/>
  <main>

@@ -33,7 +33,6 @@ import { isAvatarPhoto } from "./lib/avatar";
 import { migrateLearning,ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
 import { learningEntry,unitUnlocked,unitById,unitRoundCount } from './data/curriculum';
 
-export const DAILY_ENERGY_CAP = 15;
 export const BOARD_BONUS = 1;
 export const TASK_ENERGY: Record<TaskKind, number> = { listen: 2, wordpic: 2, repeat: 2, trace: 2 };
 export const TASK_INFO: Record<TaskKind, { zh: string; en: string; icon: string; color: string }> = {

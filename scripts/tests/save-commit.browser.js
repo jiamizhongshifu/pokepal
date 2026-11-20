@@ -27,8 +27,8 @@
  check(disk.captures.length===1&&disk.balls.poke===2,'capture is atomic and durable');
  const reward=await g.getState().completeTask('listen',0);
  disk=(await readSaveSnapshot()).save;
- check(reward?.gained===2&&disk.daily.participated.includes('listen'),'task reward durable before result');
- check((await g.getState().completeTask('listen',0))?.gained===0,'same task no duplicate energy');
+ check(reward?.fresh===true&&disk.daily.participated.includes('listen'),'task reward durable before result');
+ check((await g.getState().completeTask('listen',0))?.fresh===false,'same task is not fresh twice');
  check(await g.getState().harvestCrop(0),'harvest succeeds');
  check(!await g.getState().harvestCrop(0),'repeat harvest rejected');
  disk=(await readSaveSnapshot()).save;

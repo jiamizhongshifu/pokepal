@@ -1,7 +1,7 @@
 import type {SaveData} from '../types';
 import {STORIES} from '../data/stories';
 import {beginStory,storyPlayback,type Adventure,type StoryEvent,type StoryPlayback} from './storyPlayer';
-import {DAILY_CAP,rewardParticipation,migrateParticipation,DAYS_FOR_GIFT} from './participation';
+import {rewardParticipation,migrateParticipation} from './participation';
 import {noteLearningStory} from './learningProgress';
 export const PICNIC_BOOK=STORIES.find(s=>s.id==='magic-words')!;
 export const PICNIC_ADVENTURE:Adventure={id:'apple-picnic-existing',taskId:PICNIC_BOOK.id,version:1,beats:PICNIC_BOOK.pages.map((_,i)=>({id:`page-${i+1}`,...(i===4?{invitation:{target:'basket',waitMs:6000}}:{})}))};
@@ -23,15 +23,10 @@ export function advanceAdventure(s:SaveData,event:StoryEvent){
  if(next.phase!=='completed'||previous.phase==='completed'||s.daily.adventureReward!==undefined)return;
  migrateParticipation(s);
  const legacy=s.daily.participated!.includes('story');
+ // The picture-book reader and this adventure share the day's story credit.
  const reward=rewardParticipation(s,'story');
- // The legacy reader and this adventure share the day's story credit (2 + 3 = 5).
- const extra=Math.min(3,Math.max(0,DAILY_CAP-s.daily.energyEarned));
- s.daily.energyEarned+=extra;
- s.daily.adventureReward=reward.gained+extra;
+ s.daily.adventureReward=1;
  s.daily.tasksCompleted++;
  noteLearningStory(s,PICNIC_BOOK.id);
- const p=s.participation!;
- if(p.lastDate!==s.daily.date){p.days++;p.lastDate=s.daily.date;}
- if(Math.floor(p.days/DAYS_FOR_GIFT)>p.gifts){p.gifts++;s.balls.poke++;}
- return {gained:s.daily.adventureReward,legacy,bonus:reward.bonus};
+ return {fresh:reward.fresh,legacy,ballGranted:reward.ballGranted};
 }

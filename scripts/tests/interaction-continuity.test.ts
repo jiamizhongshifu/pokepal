@@ -12,7 +12,7 @@ test('failed audio can be deferred without evidence, unlocking, or reward; survi
  assert.deepEqual(s.learning!.units[u.id].pendingAudio,[1]);assert.equal(s.learning!.units[u.id].round,1);
  assert(!s.learning!.units[u.id].completedAt);assert(!unitUnlocked(s,LEARNING_UNITS[1].id));assert.equal(rewardCourse(s,u.id),undefined);assert.deepEqual(s.learning!.records,{});assert.equal(s.energy,0);
  s=JSON.parse(JSON.stringify(s));for(let round=2;round<=total;round++)settleUnitRound(s,u.id,round);
- assert.deepEqual(s.learning!.units[u.id].pendingAudio,[]);assert(s.learning!.units[u.id].completedAt);assert(unitUnlocked(s,LEARNING_UNITS[1].id));assert.equal(rewardCourse(s,u.id)?.gained,2);
+ assert.deepEqual(s.learning!.units[u.id].pendingAudio,[]);assert(s.learning!.units[u.id].completedAt);assert(unitUnlocked(s,LEARNING_UNITS[1].id));assert.equal(rewardCourse(s,u.id)?.fresh,true);
 });
 test('multiple skipped rounds remain pending until each is revisited',()=>{
  const s=fresh(),u=LEARNING_UNITS[0];settleUnitRound(s,u.id,1,true);settleUnitRound(s,u.id,2,true);settleUnitRound(s,u.id,1);

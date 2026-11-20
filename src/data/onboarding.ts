@@ -17,11 +17,7 @@ export const GUIDES = {
  lesson:{icon:'ear',title:'听听伙伴，试一试',voice:'先听听伙伴说什么。你可以再听一次，再点图片试一试。不想说也没关系。',target:'.learning-choices, .guided-example',sequence:['ear','picture']},
  notebook:{icon:'book',title:'和认识的词再见面',voice:'这里住着你遇见的词。点小喇叭听一听，喜欢的词可以留下来。我们慢慢认识它们。',target:'.notebook-listen-card, .learning-empty .journey-primary',sequence:['book','speaker']},
  review:{icon:'heart',title:'和老朋友再玩一次',voice:'听听这个老朋友，再试着找一找。忘记了也没关系，我们一起再听一次。',target:'.learning-choices, .guided-example',sequence:['ear','picture']},
- energy:{icon:'bolt',title:'玩一玩，收集小能量',voice:'点一个喜欢的活动，听、找、读故事，都能收集能量。同一种活动今天只送一次。玩累了，休息也很好。',target:'.energy-next .btn-big',sequence:['ear','bolt']},
- shop:{icon:'gift',title:'五点能量，换一个邀请果',voice:'五点能量可以换一个邀请果。有了邀请果，就能邀请你喜欢的伙伴。能量还不够的话，先选个小游戏吧。',target:'.single-ball-card .btn-big',sequence:['bolt','gift','grass']},
  catch:{icon:'waves',title:'点点喜欢的伙伴',voice:'点一只你喜欢的小精灵。想找特别喜欢的那只，就点选个伙伴。想看看别的朋友，可以点再次探索。',target:'.friend-visit-boats',sequence:['waves','hand','invite-berry']},
- noBall:{icon:'gift',title:'先准备一个邀请果',voice:'先看看你喜欢谁，再去换一个邀请果。有了邀请果，就能邀请它回家。',target:'.field-kit button',sequence:['bolt','invite-berry']},
- throw:{icon:'hand',title:'轻点邀请果，邀请它',voice:'轻轻点一下邀请果，就能邀请这位伙伴。也可以把邀请果向上滑。',target:'.throw-ball',sequence:['hand','invite-berry']},
  dex:{icon:'dex',title:'点图片，认识伙伴',voice:'点开喜欢的小精灵，听听它的名字。还没有的伙伴，也可以选择去找它。',target:'.dex-cell',sequence:['dex','hand']},
  wish:{icon:'search',title:'你想和谁做朋友？',voice:'点开你喜欢的小精灵，再点我想找这只。我们去草丛找它。',target:'.dex-cell',sequence:['search','grass']},
  ownedDetail:{icon:'heart',title:'点爱心，回家陪它玩',voice:'这位已经是你的伙伴啦。点爱心，回家就能找到它。点它的名字，还能听听名字怎么说。',target:'.detail-wish .wish-button',sequence:['heart','island']},
@@ -43,6 +39,12 @@ export interface Onboarding {version:1;seen:Partial<Record<GuideId,boolean>>;com
 export function completeGuide(s:{onboarding?:Onboarding},id:GuideId){
  s.onboarding??={version:1,seen:{},automatic:true};
  (s.onboarding.completed??={})[id]=true;
+}
+/** Guides whose screens no longer exist (energy, exchange, throwing in the grass); old saves drop them on load. */
+const RETIRED_GUIDES=['energy','shop','noBall','throw'];
+export function migrateOnboarding(save:unknown){
+ const o=(save as {onboarding?:{seen?:Record<string,boolean>;completed?:Record<string,boolean>}})?.onboarding;
+ for(const flags of [o?.seen,o?.completed])if(flags&&typeof flags==='object')for(const k of RETIRED_GUIDES)delete flags[k];
 }
 export function validOnboarding(value:unknown):value is Onboarding {
  if(!value||typeof value!=='object')return false;

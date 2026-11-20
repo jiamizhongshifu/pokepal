@@ -203,6 +203,7 @@ function ParentPathSummary(){
  return <div className="parent-path-summary">
   <div className="parent-path-row"><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {path.length} 章</span><strong>{chapter.title}</strong><small>本章 {chapterProgress(chapter).done} / {chapterProgress(chapter).total} 站 · 共点亮 {pathStars(route,save)} 颗星（路线 {total} 站）</small></div>
   <p>{next?<>下一站：<b>{NEXT_KIND[next.kind]}</b>{next.kind==='lesson'||next.kind==='story'?`「${next.title}」`:''}</>:'整条路线已经走完，可以挑喜欢的站再玩一次。'}</p>
+  <small className="parent-friend-rule">新朋友怎么来：每章的“新朋友”站来一位；另外，孩子每玩满 7 天（每天至少三种活动），会多一个邀请果。小精灵在“好朋友”相册里，多一起玩会长大。</small>
   {friends.length>0&&<div className="parent-path-friends" aria-label="路线上认识的朋友">{friends.map(([c,id])=><span key={c}><CreatureImg src={creatureArt(id)} alt=""/>第 {+c+1} 章 · {getCreature(id).nameZh}</span>)}</div>}
  </div>;
 }

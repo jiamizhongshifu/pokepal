@@ -23,6 +23,9 @@ export const PLAYS: Play[] = [
  { id: 'dig', place: 'sand', title: '在沙坑找宝贝', pool: ['turtle', 'fish', 'bird', 'ball'], result: '宝贝都挖出来啦', icon: 'shovel' },
  { id: 'join', place: 'ball', title: '邀请朋友一起玩', pool: ['balloon', 'hat', 'ball'], result: '新朋友加入，一起玩啦', icon: 'balloon' },
  { id: 'sea', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search' },
+ { id: 'sky', place: 'windmill', title: '看看天上有什么', pool: ['sun', 'cloud', 'rainbow', 'bird', 'balloon', 'star'], result: '风车转呀转，天上真热闹', icon: 'wind' },
+ { id: 'boats', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
+ { id: 'nap', place: 'hammock', title: '吊床午睡', pool: ['I need a rest.', 'Good night!', 'Stay with me, please.', 'I feel sad.'], result: '伙伴在吊床上安心地睡着啦', icon: 'moon' },
 ];
 export const ROUNDS = 3;
 
@@ -97,3 +100,5 @@ export const GROW_AT: Record<number, number> = { 1: 5, 2: 15 };
 export const playedTogether = (c: { played?: number; friendship: number }) => c.played ?? Math.floor(c.friendship / 16);
 export function notePlayedTogether(c: { played?: number; friendship: number }) { c.played = Math.min(9999, playedTogether(c) + 1); }
 export const readyToGrow = (c: { played?: number; friendship: number }, stage: number) => GROW_AT[stage] !== undefined && playedTogether(c) >= GROW_AT[stage];
+/** Hearts show time spent together (the same count that leads to growing up): one heart per three, up to five. */
+export const togetherHearts = (c: { played?: number; friendship: number }) => Math.min(5, Math.ceil(playedTogether(c) / 3));

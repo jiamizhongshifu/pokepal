@@ -34,7 +34,7 @@ export function Welcome() {
       go({ name: "home" });
       await wait(300);
       if(useGame.getState().screen.name!=="home")return;
-      say(["zh", "欢迎你，小岛主人！"], ["en", "Welcome to Bubbly Isle!"], ["zh", "送你一个邀请果，去草丛里认识第一位小精灵朋友吧！"], ["en", "Here is an invite berry for you!"]);
+      say(["zh", "欢迎你，小岛主人！"], ["en", "Welcome to Bubbly Isle!"], ["en", "Here is an invite berry for you!"]);
     } else {
       go({ name: "home" });
       await wait(300);

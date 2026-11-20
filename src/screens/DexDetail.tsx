@@ -2,11 +2,13 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect } from "react";
 import { useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
-import { COLORS, RARITY, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, friendshipLevel, getCreature, hobby, kidDescription } from "../data/creatures";
+import { COLORS, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, getCreature, hobby, kidDescription } from "../data/creatures";
 import { INVITE_KINDS } from "../data/invites";
 import { say, playCry, stopSpeech } from "../lib/speech";
 import { InviteBerry } from "../components/InviteBerry";
-import { Icon, Stars, Hearts } from "../icons";
+import { Icon, Hearts } from "../icons";
+import { homeOf } from "../island/world";
+import { togetherHearts, playedTogether } from "../island/plays";
 import { CreatureImg } from "../components/CreatureImg";
 
 const KID_HEIGHT = 105;
@@ -43,7 +45,6 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           <button className="cry-btn" onClick={() => playCry(p.id)}><Icon name="speaker" size={30} /> 听听叫声</button>
         </div>
         <div className="detail-info">
-          <div className="detail-no">#{String(p.id).padStart(3, "0")} <Stars n={RARITY[p.rarity].stars} size={20} /> {RARITY[p.rarity].zh}</div>
           <Speak en={p.nameEn} zh={p.nameZh}>
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
@@ -52,11 +53,8 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">
-            {p.types.map((t) => (
-              <Speak key={t} en={CREATURE_TYPES[t as CreatureType]?.en ?? t} zh={`${CREATURE_TYPES[t as CreatureType]?.zh ?? t}属性`}>
-                <span className="type-chip" style={{ background: CREATURE_TYPES[t as CreatureType]?.color }}><Icon name={CREATURE_TYPES[t as CreatureType]?.icon ?? "normal"} size={26} /> {CREATURE_TYPES[t as CreatureType]?.zh} {CREATURE_TYPES[t as CreatureType]?.en}</span>
-              </Speak>
-            ))}
+            {p.types.map((t) => <span key={t} className="type-chip" style={{ background: CREATURE_TYPES[t as CreatureType]?.color }}><Icon name={CREATURE_TYPES[t as CreatureType]?.icon ?? "normal"} size={26} /> {CREATURE_TYPES[t as CreatureType]?.zh}</span>)}
+            <span className="type-chip home-chip"><Icon name={homeOf(p.species).icon} size={26} /> 家在{homeOf(p.species).name}</span>
             {COLORS[p.color] && (
               <Speak en={COLORS[p.color].en} zh={COLORS[p.color].zh}>
                 <span className="type-chip color" ><i style={{ background: COLORS[p.color].css }} />{COLORS[p.color].zh} {COLORS[p.color].en}</span>
@@ -78,13 +76,13 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           </div>
           {cap && (
             <div className="bond">
-              <Hearts n={friendshipLevel(cap.friendship)} />
+              <Hearts n={togetherHearts(cap)} /><span className="bond-meta">一起玩了 {playedTogether(cap)} 次</span>
               <span className="bond-meta"><InviteBerry type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>
             </div>
           )}
           <details className="official">
             <summary>给爸爸妈妈读</summary>
-            <p>{p.nameZh}是一只{speciesOf(p).genusZh}，{CREATURE_TYPES[p.types[0] as CreatureType].zh}属性。{p.isFinal ? "它已经长大成年。" : "多陪它学英语、照顾它，它会慢慢长大。"}</p>
+            <p>{p.nameZh}是一只{speciesOf(p).genusZh}，它的家在小岛的{homeOf(p.species).name}。{p.isFinal ? "它已经长大成年。" : "多和它一起玩，它会慢慢长大。"}</p>
             <p className="en">{p.nameEn} is a {speciesOf(p).genusEn.toLowerCase()}.</p>
           </details>
         </div>

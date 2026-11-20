@@ -70,3 +70,12 @@ test('activities and wishes only appear in areas the learning path has opened',a
  const first=fixture();for(const u of Object.keys(first.learning!.units))delete first.learning!.units[u];learn(first,1);
  assert.deepEqual(playsAt(first,'ball'),[],'the ball field waits for the play area even after ball/hat are learned');
 });
+
+// Audit P1-8: every place has something to do, and every companion has a wish once the path is walked.
+test('every one of the fourteen places has an activity, and every companion can have a wish',async()=>{
+ const {PLACES}=await import('../../src/island/world');
+ const special=new Set(['picnic']); // the picnic has its own flow
+ for(const p of PLACES)if(!special.has(p.id))assert.ok(PLAYS.some(x=>x.place===p.id),`${p.id} has an activity`);
+ const s=fixture();learn(s,24);
+ for(const species of new Set(CREATURES.map(c=>c.species)))assert.ok(wishFor(s,species),`${species} has a wish`);
+});

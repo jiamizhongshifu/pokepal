@@ -6,7 +6,7 @@ export function trackInteraction(event:InteractionEvent){
  try{sink?.(safe);}catch{/* Telemetry cannot break play or persistence. */}
 }
 export function connectInteractions(handler:(event:InteractionEvent)=>void){sink=handler;return()=>{if(sink===handler)sink=undefined;};}
-export function trackLearningCompletion(event:'lesson_completed'|'practice_completed'|'review_completed'|'story_completed',reward:{gained:number;bonus:number}|undefined){
+export function trackLearningCompletion(event:'lesson_completed'|'practice_completed'|'review_completed'|'story_completed',reward:unknown){
  if(!reward)return;
  trackInteraction(event);
 }

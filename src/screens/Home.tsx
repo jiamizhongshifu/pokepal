@@ -18,7 +18,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "../store";
 import { BottomNav } from '../components/BottomNav';
 import { TopBar } from "../components/TopBar";
-import { getCreature, favoriteFood, friendshipLevel, creatureArt } from "../data/creatures";
+import { getCreature, favoriteFood, creatureArt } from "../data/creatures";
 import { ACTIVITY, activityAt, skyFor } from "../lib/routine";
 import { BEHAVIORS } from "../data/behaviors";
 import { sfx, stopSpeech, type Part } from "../lib/speech";
@@ -38,13 +38,13 @@ import { placeOf, placesIn, DISTRICTS, type Effect } from "../island/world";
 import {AuthorContact} from '../components/AuthorContact';
 import { IslandTaskCard } from '../components/IslandTaskCard';
 import { learningVoice } from '../lib/learningVoice';
-import { islandTask, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
+import { islandTask, nextDistrict, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
 import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
 import { IslandPlaySession } from '../components/IslandPlaySession';
 import { shownStickers } from '../island/stickers';
-import { playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, GROW_AT, type Play } from '../island/plays';
+import { playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -105,7 +105,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       sfx('sparkle');
     }
   },[together.session?.id,together.phase,together.turn]);
-  const life = useIslandLife(save.captures,now,false,livingOpen?undefined:need?.id,together.visits,[selected],weather.kind);
+  const life = useIslandLife(save.captures,now,false,livingOpen?undefined:need?.id,together.visits,[selected],weather.kind,unlockedDistricts(save));
   useEffect(()=>{together.syncArrivals(life.active);},[life.active.map(v=>v.key).join(','),together.session?.id]);
   const finderOpen=panel==='finder';
   const setFinderOpen=(open:boolean)=>open?activatePanel('finder'):closePanel('finder');
@@ -298,7 +298,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   useEffect(() => {
     if(!active)return;
     if (captures.length === 0) {
-      const t = setTimeout(() => say(["zh", "家园里还空空的，去草丛认识新朋友吧！"], ["en", "Let's meet a new friend!"]), 1800);
+      const t = setTimeout(() => say(["en", "Let's meet a new friend!"]), 1800);
       return () => { clearTimeout(t); stopSpeech(); };
     }
     return () => stopSpeech();
@@ -405,11 +405,9 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
   const shareBerry=(p:Creature,berry:CropKind)=>{
     const run=++interactionRun.current;
-    const before=useGame.getState().save.captures.find(c=>c.id===p.id)?.friendship??0;
     if(!useGame.getState().feedCrop(p.id,berry))return;
-    const after=useGame.getState().save.captures.find(c=>c.id===p.id)!.friendship;
     setFeedPicker(false);ambient.poke();setEffect({id:p.id,kind:'feed',icon:'heart',at:performance.now()});
-    setCareThanks({id:p.id,text:`吃到你种的${CROPS[berry].name}啦！${after>before?`好感 +${after-before}`:'好感已满'}`});
+    setCareThanks({id:p.id,text:`吃到你种的${CROPS[berry].name}啦，谢谢你！`});
     sfx('sparkle');void say(['en','Yummy! Thank you!']).then(ok=>{if(ok&&run===interactionRun.current&&activeRef.current){noteWord('Yummy!','heard');useGame.getState().noteStationLearning('farm','Thank you!',true);}});
   };
   const openPicnic=(id?:number)=>{
@@ -522,6 +520,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
             stickers={shownStickers(save)}
+            teaser={nextDistrict(save)}
             lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'&&need?{id:need.id,icon:need.play.icon}:null}
             active={active} showInterface={!immersive&&!blocked&&panel!=='companion'&&!together.session}
@@ -570,7 +569,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
-        {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回冒险路线'}</button>}
+        {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回学习路线'}</button>}
         {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId);return <button key={p.id} className={wish?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish&&<small>（它的小心愿）</small>}</button>;})}</div>}
         {station.id==='ball'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openLiving();}}><Icon name="ball" size={28}/>一起玩球</button>}
         {station.id==='farm'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openFarm();}}><Icon name="grass" size={28}/>去菜地种水果</button>}
@@ -604,7 +603,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
           <div className="sheet-body">
             <header className="companion-heading help-heading">
               <CreatureImg className="sheet-art" src={creatureArt(sel.id)} alt="" />
-              <div><h2 className="sheet-name">{sel.nameZh}</h2><div className="companion-friendship" aria-label={`友好度 ${friendshipLevel(selCap.friendship)} 颗心`}><Hearts n={friendshipLevel(selCap.friendship)} /></div></div>
+              <div><h2 className="sheet-name">{sel.nameZh}</h2><div className="companion-friendship" aria-label={`一起玩了 ${playedTogether(selCap)} 次，${togetherHearts(selCap)} 颗心`}><Hearts n={togetherHearts(selCap)} /></div></div>
               {!feedPicker&&!prompt&&<FeatureGuide id="care" autoVoice={false}/>}
 
             </header>

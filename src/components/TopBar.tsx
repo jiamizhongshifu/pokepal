@@ -27,11 +27,11 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
       </div>
       {!home&&(help||progress)&&<div className="tb-learning-tools">{progress&&<div className="tb-progress">{progress}</div>}{help}</div>}
       {!focused && <div className="tb-right">
-        <button className="balls-chip" aria-label="有邀请果，去海边迎接新朋友" disabled={save.balls.poke<1} onClick={()=>{sfx("click");go({name:"catch"});}}>
+        {save.balls.poke>0&&<button className="balls-chip" aria-label="有邀请果，去海边迎接新朋友" onClick={()=>{sfx("click");go({name:"catch"});}}>
           <span className="ball-count" aria-label={`邀请果共 ${Object.values(save.balls).reduce((a, b) => a + b, 0)} 个`}>
             <InviteBerry type="poke" size={30} />×{Object.values(save.balls).reduce((a, b) => a + b, 0)}
           </span>
-        </button>
+        </button>}
         {home && <MusicToggle/>}
         <ParentButton onOpen={() => go({ name: "parent" })} />
       </div>}
