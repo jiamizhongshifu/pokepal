@@ -64,7 +64,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
         </details>
       </div>
       
-      {list.length === 0 ? <div className="center-msg dex-empty"><Icon name={onlyOwned && !caught.size ? "waves" : "dex"} size={72}/><p>{onlyOwned && !caught.size ? "去认识第一位伙伴吧" : "这里还没找到它，换个地方看看吧"}</p><button className="wish-button" onClick={()=>{setQuery("");setGeneration(0);setOnlyOwned(false);setPage(0);}}><Icon name="dex" size={28}/>看看全部伙伴</button>{onlyOwned && !caught.size && <button className="wish-button" onClick={()=>go({name:"catch"})}><Icon name="grass" size={28}/>去草丛</button>}</div> : <>
+      {list.length === 0 ? <div className="center-msg dex-empty"><Icon name={onlyOwned && !caught.size ? "waves" : "dex"} size={72}/><p>{onlyOwned && !caught.size ? "去认识第一位伙伴吧" : "这里还没找到它，换个地方看看吧"}</p><button className="wish-button" onClick={()=>{setQuery("");setGeneration(0);setOnlyOwned(false);setPage(0);}}><Icon name="dex" size={28}/>看看全部伙伴</button>{onlyOwned && !caught.size && <button className="wish-button" onClick={()=>go({name:"catch"})}><Icon name="waves" size={28}/>去码头等小船</button>}</div> : <>
       <div className="dex-grid">
         {list.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE).map((p) => {
           const has = caught.has(p.id);
