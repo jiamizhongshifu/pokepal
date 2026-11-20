@@ -13,7 +13,7 @@ import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergeInvites, invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
-import { ensureIslandProgress,claimIslandGift,grantNextIslandUpgrade,placeIslandDecoration } from './lib/islandProgress';
+import { ensureIslandProgress,claimIslandGift,placeIslandDecoration } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
@@ -352,7 +352,7 @@ export const useGame = create<State>((set, get) => {
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
     feedCrop(id,berry) {return mut(s=>{const ok=feedCrop(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
     claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
-    celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);for(const k of fresh)if(k.startsWith('island:'))grantNextIslandUpgrade(s);});return fresh;},
+    celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
     setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},

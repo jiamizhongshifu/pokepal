@@ -57,7 +57,8 @@ export default function App() {
   const load = useGame((s) => s.load);
   const addPlaySeconds = useGame((s) => s.addPlaySeconds);
   const noteHeard = useGame((s) => s.noteHeard);
-  const islandView=screen.name==='home'&&(screen.view==='island'||!!screen.station);
+  // Asking for a place or a companion on the island is the island, never the learning path.
+  const islandView=screen.name==='home'&&(screen.view==='island'||!!screen.station||screen.companion!==undefined);
   useSceneMusic({screen:screen.name,level:settings.backgroundMusic??'soft',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
   useEnvironmentAudio({screen:screen.name,level:settings.environmentSound??'soft',mode:settings.islandWeather??'auto',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
   const homeSeen = useRef(false);

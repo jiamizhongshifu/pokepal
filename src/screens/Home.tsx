@@ -338,8 +338,8 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   useEffect(()=>{
     if(!active||initialCompanion===undefined)return;
     if(save.captures.some(c=>c.id===initialCompanion))tapCreature(getCreature(initialCompanion),false);
-    // Consume the handoff. Reopening another panel must not select it again.
-    useGame.getState().go({name:'home'});
+    // Consume the handoff and stay on the island. Reopening another panel must not select it again.
+    useGame.getState().go({name:'home',view:'island'});
   },[active,initialCompanion]);
   useEffect(()=>{if(!careThanks)return;const timer=setTimeout(()=>setCareThanks(null),5000);return()=>clearTimeout(timer);},[careThanks]);
 

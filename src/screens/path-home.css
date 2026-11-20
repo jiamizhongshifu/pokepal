@@ -96,3 +96,11 @@ button.path-stat { cursor: pointer; }
 @keyframes path-nudge { 0%, 100% { translate: 0 0; } 25% { translate: -6px 0; } 75% { translate: 6px 0; } }
 @media (prefers-reduced-motion: reduce) { .path-node.is-current .path-node-button, .path-start, .path-node.is-nudged .path-node-button, .path-node.is-lit .path-node-button, .path-node.is-lit::after { animation: none; } }
 @media (max-width: 420px) { .path-buddy { width: 72px; height: 72px; } }
+/* The end of the path: one celebration, then where to go every day after. */
+.path-complete { position: relative; display: grid; justify-items: center; gap: 12px; margin: 8px 0 24px; padding: 24px 20px; border: var(--brand-border) solid var(--brand-sun-deep); border-radius: var(--radius-lg); background: var(--brand-sun-soft); box-shadow: 0 var(--brand-press) 0 var(--brand-sun-deep); text-align: center; color: var(--brand-ink); }
+.path-complete h2 { margin: 0; font-size: var(--text-2xl); font-weight: var(--brand-weight-display); }
+.path-complete p { margin: 0; font-size: var(--text-base); font-weight: 700; max-width: 420px; }
+.path-complete-friends { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.path-complete-friends img { width: 52px; height: 52px; object-fit: contain; }
+.path-complete-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.path-complete-actions .btn-big { min-width: 0; }

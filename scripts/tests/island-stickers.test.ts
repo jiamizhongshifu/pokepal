@@ -2,26 +2,45 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {STICKERS,shownStickers,toggleSticker,stickerEarned} from '../../src/island/stickers';
-import {grantNextIslandUpgrade,ensureIslandProgress,UPGRADE_ORDER} from '../../src/lib/islandProgress';
+import {ensureIslandProgress} from '../../src/lib/islandProgress';
+import {unitRoundCount} from '../../src/data/curriculum';
+import {STORIES,storyProgressKey} from '../../src/data/stories';
+import {progressUnit,applyStation} from '../../src/lib/learningProgress';
+import {learningPath,currentNode,claimChapterFriend,openChapterDiary} from '../../src/lib/learningPath';
+import {invitePartner} from '../../src/lib/invites';
+import {BABY_CREATURES} from '../../src/data/creatures';
+import {stickersEarnedCount} from '../../src/island/stickers';
 import {validateSave} from '../../src/lib/saveValidation';
 import {GROW_AT,playedTogether,readyToGrow,notePlayedTogether} from '../../src/island/plays';
 
 const fixture=()=>validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));
-test('each island stop earns the next sticker in order; all ten fit on the illustration',()=>{
- assert.equal(STICKERS.length,UPGRADE_ORDER.length);
- for(const [i,o] of UPGRADE_ORDER.entries())assert.deepEqual([STICKERS[i].area,STICKERS[i].level],[o.id,o.level+1]);
+/** Walk the whole learning path the way a child does, stop by stop. */
+function walk(s:any,stops=Infinity){
+ for(let k=0;k<stops;k++){const n=currentNode(learningPath(s));if(!n)return;
+  if(n.kind==='lesson')progressUnit(s,n.unit!.id,unitRoundCount(n.unit!),1000+k);
+  else if(n.kind==='story'){const b=STORIES.find(x=>x.id===n.storyId)!;(s.storyProgress??={})[storyProgressKey(b)]=b.pages.length+1;}
+  else if(n.kind==='island')applyStation(s,n.station!,2000+k);
+  else if(n.kind==='friend'){claimChapterFriend(s,n.chapter);invitePartner(s,BABY_CREATURES.find(b=>!s.captures.some((c:any)=>c.id===b.id))!.id);}
+  else openChapterDiary(s,n.chapter);
+ }
+}
+const blank=()=>{const s=fixture();s.learning={version:1,records:{},units:{}};s.storyProgress={};delete s.path;s.captures=[];return s;};
+// Audit P0-3: every sticker can be earned — two per chapter, all twelve by the end of the path.
+test('each chapter earns two stickers, in order, and the whole path earns all of them',()=>{
+ assert.equal(STICKERS.length,12);assert.equal(new Set(STICKERS.map(k=>k.id)).size,12);
  for(const k of STICKERS)assert.ok(k.spot[0]>0&&k.spot[0]<100&&k.spot[1]>0&&k.spot[1]<100&&k.size>0,k.id);
- const s=fixture();ensureIslandProgress(s).levels={camp:0,picnic:0,garden:0,play:0,island:0};
- assert.equal(shownStickers(s).length,0);
- grantNextIslandUpgrade(s);grantNextIslandUpgrade(s);
- assert.deepEqual(shownStickers(s).map(k=>k.id),['deco-camp-bunting','deco-picnic-basket']);
+ const s=blank();assert.equal(stickersEarnedCount(s),0);
+ walk(s,6);assert.equal(stickersEarnedCount(s),1,'the first island stop');assert.deepEqual(shownStickers(s).map(k=>k.id),['deco-camp-bunting']);
+ walk(s,2);assert.equal(stickersEarnedCount(s),2,'the first chapter talk');
+ walk(s);assert.equal(currentNode(learningPath(s)),undefined,'the path is finished');
+ assert.equal(shownStickers(s).length,STICKERS.length,'every sticker is earned');
 });
 test('an earned sticker can be put away and brought back, survives a reload; an unearned one cannot be toggled',()=>{
- const s=fixture();ensureIslandProgress(s).levels={camp:1,picnic:0,garden:0,play:0,island:0};
+ const s=blank();walk(s,6);ensureIslandProgress(s);
  assert.equal(toggleSticker(s,'deco-camp-bunting'),true);assert.equal(shownStickers(s).length,0);
  const back=validateSave(JSON.parse(JSON.stringify(s)));assert.deepEqual(back.islandProgress!.hidden,['deco-camp-bunting']);
  toggleSticker(back,'deco-camp-bunting');assert.equal(shownStickers(back).length,1);
- assert.equal(toggleSticker(back,'deco-beach-starfish'),false);assert.equal(stickerEarned(back,STICKERS[9]),false);
+ assert.equal(toggleSticker(back,'deco-beach-starfish'),false);assert.equal(stickerEarned(back,STICKERS[11]),false);
  const bad=JSON.parse(JSON.stringify(s));bad.islandProgress.hidden=[1];assert.throws(()=>validateSave(bad));
 });
 test('growing up follows activities done together; older saves start from friendship',()=>{

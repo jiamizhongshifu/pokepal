@@ -57,3 +57,16 @@ test('finishing the wished activity completes today\'s wish once; another activi
  assert.deepEqual(validateSave(JSON.parse(JSON.stringify(s))).islandWishes,s.islandWishes);
  const bad=JSON.parse(JSON.stringify(s));bad.islandWishes.done='x';assert.throws(()=>validateSave(bad));
 });
+
+// Audit P0-2: a wish never leads into an area the learning path has not opened.
+test('activities and wishes only appear in areas the learning path has opened',async()=>{
+ const {unlockedDistricts}=await import('../../src/lib/islandPlan');
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];
+ for(let n=1;n<=LEARNING_UNITS.length;n++){
+  learn(s,n);const open=unlockedDistricts(s);
+  for(const species of new Set(CREATURES.map(c=>c.species))){const w=wishFor(s,species);if(w)assert.ok(open.has(placeById(w.place)!.district),`${species} wishes for ${w.place} after lesson ${n}`);}
+  for(const p of PLAYS)for(const shown of playsAt(s,p.place))assert.ok(open.has(placeById(shown.place)!.district));
+ }
+ const first=fixture();for(const u of Object.keys(first.learning!.units))delete first.learning!.units[u];learn(first,1);
+ assert.deepEqual(playsAt(first,'ball'),[],'the ball field waits for the play area even after ball/hat are learned');
+});

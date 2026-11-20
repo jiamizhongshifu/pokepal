@@ -1,7 +1,8 @@
 import { LEARNING_UNITS } from '../data/curriculum';
 import { wordAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { SaveData } from '../types';
-import { HOMES } from './world';
+import { HOMES, placeById } from './world';
+import { unlockedDistricts } from '../lib/islandPlan';
 
 /**
  * What can be done at each island place, built from what the companions are like and what the path teaches.
@@ -31,7 +32,12 @@ export function learnedKeys(s: SaveData): Set<string> {
 }
 export const learnedFrom = (s: SaveData, play: Play) => { const k = learnedKeys(s); return play.pool.filter(w => k.has(w)); };
 export const playOpenFor = (s: SaveData, play: Play) => learnedFrom(s, play).length >= 2;
-export const playsAt = (s: SaveData, place: string) => PLAYS.filter(p => p.place === place && playOpenFor(s, p));
+/** Activities at a place: only in an area the learning path has opened, and only with two learned items. */
+export const playsAt = (s: SaveData, place: string) => {
+ const at = placeById(place);
+ if (!at || !unlockedDistricts(s).has(at.district)) return [];
+ return PLAYS.filter(p => p.place === at.id && playOpenFor(s, p));
+};
 export const playById = (id: string) => PLAYS.find(p => p.id === id);
 /** The lesson that opens an activity: the first one teaching a second word of its set. */
 export function playUnlockUnit(play: Play) {

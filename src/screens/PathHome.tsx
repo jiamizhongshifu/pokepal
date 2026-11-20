@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useGame } from '../store';
-import { learningPath, withReview, withWelcomeFriend, pathStars, pathNodes, chapterProgress, type PathNode } from '../lib/learningPath';
+import { learningPath, withReview, withWelcomeFriend, pathStars, pathNodes, chapterProgress, currentNode, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
+import { Confetti } from '../components/Celebration';
 import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
 import { creatureArt } from '../data/creatures';
@@ -31,10 +32,13 @@ export function PathHome() {
  const [lit, setLit] = useState<string[]>([]);
  const currentRef = useRef<HTMLLIElement>(null);
 
- // Stops finished since the last visit light up once; island stops hand out their upgrade at the same moment.
+ // Stops finished since the last visit light up once; finishing the whole path is celebrated once too.
+ const finished = !currentNode(route);
+ const [celebrating, setCelebrating] = useState(false);
  useEffect(() => {
   const done = pathNodes(route).filter(n => n.state === 'done').map(n => n.key);
-  const fresh = celebrate(done);
+  const fresh = celebrate(finished ? [...done, PATH_COMPLETE] : done);
+  if (fresh.includes(PATH_COMPLETE)) { setCelebrating(true); void say(['en', 'You did it!']); }
   if (fresh.length) { setLit(fresh); sfx('sparkle'); const t = setTimeout(() => setLit([]), 1600); return () => clearTimeout(t); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
@@ -94,7 +98,16 @@ export function PathHome() {
      })}
     </ol>
    </section>)}
-   <p className="path-end">走完这条路，伙伴们会一起庆祝哦！</p>
+   {finished ? <section className="path-complete" aria-labelledby="path-complete-title">
+    {celebrating && <Confetti />}
+    <div className="path-complete-friends" aria-hidden="true">{save.captures.slice(0, 8).map(c => <CreatureImg key={c.id} src={creatureArt(c.id)} alt="" />)}</div>
+    <h2 id="path-complete-title">整条小路都走完啦！</h2>
+    <p>一共点亮 {stars} 颗星星，认识了 {save.captures.length} 位朋友。接下来，每天来和老朋友见面，或者去小岛完成伙伴的小心愿。</p>
+    <div className="path-complete-actions">
+     <button className="btn-big" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={32} />和老朋友见面</button>
+     <button className="btn-big alt" onClick={() => go({ name: 'home', view: 'island' })}><Icon name="island" size={32} />去小岛</button>
+    </div>
+   </section> : <p className="path-end">走完整条小路，伙伴们会和你一起庆祝。</p>}
    <nav className="path-more" aria-label="还想多玩一会儿">
     <button type="button" onClick={() => go({ name: 'practice' })}><Icon name="target" size={32} />小游戏</button>
     <button type="button" onClick={() => go({ name: 'stories' })}><Icon name="book" size={32} />故事书架</button>

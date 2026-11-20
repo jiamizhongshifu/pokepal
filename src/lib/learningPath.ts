@@ -152,6 +152,8 @@ export function recordChapterFriend(s: SaveData, creatureId: number) {
  delete p.pendingFriend;
 }
 /** Newly finished stops are celebrated once; returns their keys. */
+/** Celebrated once, when every stop of the path is done. */
+export const PATH_COMPLETE = 'path-complete';
 export function markPathSeen(s: SaveData, keys: string[]) {
  const p = ensurePath(s);
  const fresh = keys.filter(k => !p.seen.includes(k));
