@@ -298,7 +298,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   useEffect(() => {
     if(!active)return;
     if (captures.length === 0) {
-      const t = setTimeout(() => say(["en", "Let's meet a new friend!"]), 1800);
+      const t = setTimeout(() => say(["zh", "家园里还空空的，去海边迎接新朋友吧！"], ["en", "Let's meet a new friend!"]), 1800);
       return () => { clearTimeout(t); stopSpeech(); };
     }
     return () => stopSpeech();

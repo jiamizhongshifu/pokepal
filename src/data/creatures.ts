@@ -1,3 +1,4 @@
+import { homeOf } from '../island/world';
 import species from './creatures.json';
 import type { Creature, Rarity } from '../types';
 import { withArticle } from './words';
@@ -105,9 +106,9 @@ const COLOR_FOOD: Record<string, Food> = {
   red: { en: 'strawberries', one: 'a strawberry', zh: '草莓', icon: 'strawberry' },
   orange: { en: 'carrots', one: 'a carrot', zh: '胡萝卜', icon: 'carrot' },
   yellow: { en: 'bananas', one: 'a banana', zh: '香蕉', icon: 'banana' },
-  blue: { en: 'blueberries', one: 'some blueberries', zh: '蓝莓', icon: 'blueberry' },
+  blue: { en: 'grapes', one: 'some grapes', zh: '葡萄', icon: 'grapes' },
   green: { en: 'apples', one: 'an apple', zh: '苹果', icon: 'apple-green' },
-  pink: { en: 'peaches', one: 'a peach', zh: '桃子', icon: 'peach' },
+  pink: { en: 'watermelon', one: 'a slice of watermelon', zh: '西瓜', icon: 'watermelon' },
   purple: { en: 'grapes', one: 'some grapes', zh: '葡萄', icon: 'grapes' },
   brown: { en: 'cookies', one: 'a cookie', zh: '饼干', icon: 'cookie' },
   white: { en: 'rice balls', one: 'a rice ball', zh: '饭团', icon: 'riceball' },
@@ -121,11 +122,11 @@ export const favoriteFood = (c: Creature): Food => COLOR_FOOD[c.color] ?? COLOR_
 /** 幼儿版描述：1–2 句中英对照，按颜色、属性、爱好模板生成，离线可用 */
 export function kidDescription(c: Creature): { en: string; zh: string } {
   const color = COLORS[c.color] ?? COLORS.yellow;
-  const type = CREATURE_TYPES[c.types[0] as CreatureType] ?? CREATURE_TYPES.plant;
+  const home = homeOf(c.species);
   const h = hobby(c), f = favoriteFood(c);
   return {
-    en: `${c.nameEn} is ${withArticle(color.en)} island friend. It is ${withArticle(type.en)} type. ${h.en} It likes ${f.en}.`,
-    zh: `${c.nameZh}是${color.zh}的小精灵，它是${type.zh}属性。${h.zh}它爱吃${f.zh}。`,
+    en: `${c.nameEn} is ${withArticle(color.en)} island friend. It lives at the ${home.en}. ${h.en} It likes ${f.en}.`,
+    zh: `${c.nameZh}是${color.zh}的小精灵，它的家在${home.name}。${h.zh}它爱吃${f.zh}。`,
   };
 }
 

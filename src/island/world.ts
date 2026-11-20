@@ -8,7 +8,8 @@ import type { WeatherKind } from '../lib/weather';
  */
 export type District = 'garden' | 'play' | 'leisure' | 'camp' | 'beach';
 export type Spot = readonly [x: number, y: number];
-export interface Place { id: string; district: District; name: string; icon: string; activity: Activity; action: string; spot: Spot }
+/** `en`: the place's English name, used when a description says where a companion lives. */
+export interface Place { id: string; district: District; name: string; en: string; icon: string; activity: Activity; action: string; spot: Spot }
 
 export const DISTRICTS: { id: District; name: string; icon: string }[] = [
  { id: 'camp', name: '营地区', icon: 'tent' },
@@ -18,22 +19,22 @@ export const DISTRICTS: { id: District; name: string; icon: string }[] = [
  { id: 'beach', name: '海岸区', icon: 'waves' },
 ];
 
-const P = (id: string, district: District, name: string, icon: string, activity: Activity, action: string, spot: Spot): Place => ({ id, district, name, icon, activity, action, spot });
+const P = (id: string, district: District, name: string, en: string, icon: string, activity: Activity, action: string, spot: Spot): Place => ({ id, district, name, en, icon, activity, action, spot });
 export const PLACES: Place[] = [
- P('tent', 'camp', '帐篷', 'tent', 'sleep', '在帐篷边歇歇', [79, 31]),
- P('fire', 'camp', '篝火', 'flame', 'eat', '在篝火边吃点心', [82, 36]),
- P('tree', 'garden', '果树', 'apple', 'explore', '看看果树', [24, 31]),
- P('farm', 'garden', '菜地', 'grass', 'play', '照料菜地', [17.5, 47]),
- P('windmill', 'garden', '风车', 'wind', 'play', '转转风车', [37.5, 20]),
- P('picnic', 'leisure', '野餐布', 'bowl', 'eat', '分享野餐点心', [54, 53]),
- P('bench', 'leisure', '长椅', 'sun', 'sunbathe', '在长椅上晒太阳', [43, 47]),
- P('parasol', 'leisure', '遮阳伞', 'sun', 'nap', '在伞下乘凉', [62, 47]),
- P('hammock', 'leisure', '吊床', 'moon', 'nap', '在吊床上睡午觉', [40, 80]),
- P('ball', 'play', '小球场', 'balloon', 'play', '玩小皮球', [47, 26]),
- P('music', 'play', '音乐舞台', 'music', 'sing', '在舞台上唱歌', [55, 18]),
- P('sand', 'play', '沙坑', 'shovel', 'collect', '在沙坑里挖宝贝', [63, 28]),
- P('shells', 'beach', '沙滩', 'search', 'collect', '在沙滩找贝壳', [18, 78]),
- P('pier', 'beach', '栈桥', 'waves', 'explore', '在栈桥看大海', [74, 81]),
+ P('tent', 'camp', '帐篷', 'tent', 'tent', 'sleep', '在帐篷边歇歇', [79, 31]),
+ P('fire', 'camp', '篝火', 'campfire', 'flame', 'eat', '在篝火边吃点心', [82, 36]),
+ P('tree', 'garden', '果树', 'fruit trees', 'apple', 'explore', '看看果树', [24, 31]),
+ P('farm', 'garden', '菜地', 'garden', 'grass', 'play', '照料菜地', [17.5, 47]),
+ P('windmill', 'garden', '风车', 'windmill', 'wind', 'play', '转转风车', [37.5, 20]),
+ P('picnic', 'leisure', '野餐布', 'picnic blanket', 'bowl', 'eat', '分享野餐点心', [54, 53]),
+ P('bench', 'leisure', '长椅', 'bench', 'sun', 'sunbathe', '在长椅上晒太阳', [43, 47]),
+ P('parasol', 'leisure', '遮阳伞', 'big umbrella', 'sun', 'nap', '在伞下乘凉', [62, 47]),
+ P('hammock', 'leisure', '吊床', 'hammock', 'moon', 'nap', '在吊床上睡午觉', [40, 80]),
+ P('ball', 'play', '小球场', 'ball field', 'balloon', 'play', '玩小皮球', [47, 26]),
+ P('music', 'play', '音乐舞台', 'music stage', 'music', 'sing', '在舞台上唱歌', [55, 18]),
+ P('sand', 'play', '沙坑', 'sandbox', 'shovel', 'collect', '在沙坑里挖宝贝', [63, 28]),
+ P('shells', 'beach', '沙滩', 'beach', 'search', 'collect', '在沙滩找贝壳', [18, 78]),
+ P('pier', 'beach', '栈桥', 'pier', 'waves', 'explore', '在栈桥看大海', [74, 81]),
 ];
 
 /** Lesson stations name a place, a numbered family of places (`bed-`), or a farm plot (`farm-2`). */

@@ -74,7 +74,7 @@ export const SCENE_LINES: SceneLine[] = [
   { en: ["I see flowers.", "Red, yellow, pink!"], zh: "我看到了花，红的、黄的、粉的！", echo: "Flowers!", when: ["morning", "day"] },
   { en: ["I see a tent.", "A red and white tent!"], zh: "我看到一顶红白色的帐篷。", echo: "Tent!", when: ["morning", "day", "evening"] },
   { en: ["Look at the clouds!", "White, fluffy clouds."], zh: "看，白白的、软软的云朵。", echo: "Clouds!", when: ["day"] },
-  { en: ["I see berries.", "Blue berries, pink berries!"], zh: "我看到了树果，有蓝色的，也有粉色的。", echo: "Berries!", when: ["morning", "day", "evening"] },
+  { en: ["I see fruit.", "Red apples, yellow bananas!"], zh: "我看到了水果，有红苹果，也有黄香蕉。", echo: "Apples!", when: ["morning", "day", "evening"] },
   { en: ["Listen! The waves.", "Swish, swish!"], zh: "听，海浪的声音。", echo: "Waves!", when: ["morning", "day", "evening", "night"] },
   { en: ["The fire is hot!", "Hot, hot, hot!"], zh: "篝火好烫！", echo: "Hot!", when: ["evening", "night"] },
   { en: ["Look at the moon!", "Hello, moon!"], zh: "看，月亮！", echo: "Moon!", when: ["night"] },
