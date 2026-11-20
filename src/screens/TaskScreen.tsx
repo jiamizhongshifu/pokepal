@@ -1,3 +1,5 @@
+import { CreatureImg } from "../components/CreatureImg";
+import { creatureArt, getCreature } from "../data/creatures";
 import {trackInteraction} from '../lib/interaction';
 import {EnergyToast} from '../components/EnergyToast';
 import {ProgressHost,RoundProgress} from '../components/RoundProgress';
@@ -26,6 +28,8 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
   const go = useGame((s) => s.go);
   const completeTask = useGame((s) => s.completeTask);
   const [reward, setReward] = useState<TaskReward | null>(null);
+  // One companion practises alongside for the whole set; finishing counts as time played together.
+  const [buddy]=useState(()=>{const ids=useGame.getState().save.captures.map(c=>c.id);return ids.length?ids[Math.floor(Math.random()*ids.length)]:undefined;});
   const info = TASK_INFO[kind];
   const passive=useGame(s=>learningProfile(s.save.settings).entry==='listen')&&(kind==='listen'||kind==='wordpic');
   const [sessionStart]=useState(()=>({unit:selectedUnit(useGame.getState().save),seen:Object.fromEntries(Object.entries(useGame.getState().save.learning?.records??{}).map(([key,r])=>[key,r.seen]))}));
@@ -44,7 +48,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
     if(!state.loaded||state.saveIssue||state.saveBusy)return;
     finished.current = true;
     releaseMic();
-    const r = await completeTask(kind, boardIndex);
+    const r = await completeTask(kind, boardIndex, buddy);
     if(!active.current||!r)return;
     setDiscoveries(Object.entries(useGame.getState().save.learning?.records??{})
       .filter(([key,record])=>record.seen>(sessionStart.seen[key]??0)&&learningEntry(key))
@@ -66,9 +70,10 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
         {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
       </FeatureGuide>}/>
 
+      {buddy!==undefined&&!reward&&<p className="task-buddy"><CreatureImg src={creatureArt(buddy)} alt=""/>{getCreature(buddy).nameZh}陪你练</p>}
       <div className="task-stage">
         {kind === "listen" && <ListenTask onFinish={finish} practice={practice} />}
-        {kind === "repeat" && <RepeatTask onFinish={finish} practice={practice} />}
+        {kind === "repeat" && <RepeatTask onFinish={finish} practice={practice} buddyId={buddy} />}
         {kind === "wordpic" && <WordPicTask onFinish={finish} practice={practice} />}
         {kind === "trace" && <div className="trace-session"><TraceTask key={traced.length} excluded={traced} onFinish={letter=>{if(practice && traced.length<2)setTraced(prev=>[...prev,letter]);else finish();}} /></div>}
       </div>
@@ -76,6 +81,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
         <Celebration onClose={back}>
           <div className="learning-reward">
           <div className="cel-title">这一小段完成啦！</div>
+          {buddy!==undefined&&<p className="task-buddy-done"><CreatureImg src={creatureArt(buddy)} alt=""/>和{getCreature(buddy).nameZh}一起练了一次</p>}
           {!!discoveries.length&&<><p>刚才一起遇见了</p><div className="session-discoveries">{discoveries.map(key=>{const entry=learningEntry(key)!;return <span key={key}><LearningArt entry={entry}/><b lang="en">{entry.en}</b><small>{entry.zh}</small></span>;})}</div></>}
           <EnergyToast reward={reward}/>
           <div className="cel-actions completion-next">

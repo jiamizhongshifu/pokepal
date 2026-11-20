@@ -160,7 +160,8 @@ interface State {
   load: () => Promise<void>;
   go: (s: Screen) => void;
   createTrainer: (avatar: string) => Promise<boolean>;
-  completeTask: (kind: TaskKind, boardIndex: number | null) => Promise<TaskReward | undefined>;
+  /** `partner`: the companion practising alongside; a finished set counts as time played together. */
+  completeTask: (kind: TaskKind, boardIndex: number | null, partner?: number) => Promise<TaskReward | undefined>;
   noteStoryPage: (id:string,page:number) => void;
   inviteFriend: (id: number) => Promise<boolean>;
   setCatchWish: (id: number | null) => void;
@@ -371,9 +372,11 @@ export const useGame = create<State>((set, get) => {
       if(created)trackInteraction('trainer_created');return created;
     },
 
-    async completeTask(kind, boardIndex) {
+    async completeTask(kind, boardIndex, partner) {
       const reward=await commit((s) => {
         const d=s.daily;
+        const buddy=partner===undefined?undefined:s.captures.find(c=>c.id===partner);
+        if(buddy)notePlayedTogether(buddy);
         if(boardIndex!==null&&Number.isInteger(boardIndex)&&boardIndex>=0&&d.board[boardIndex]===kind)d.boardDone[boardIndex]=true;
         d.tasksCompleted++;
         return rewardParticipation(s,kind);

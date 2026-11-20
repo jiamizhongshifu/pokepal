@@ -636,8 +636,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
 
           </div>
         </section>
-        {!feedPicker&&!prompt&&!round&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions"><button className="act" onClick={()=>{stopSpeech();go({name:"careStory",companion:sel.id});}}><Icon name="book" size={32}/>一起过个小下午</button>
-                {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
+        {!feedPicker&&!prompt&&!round&&<section className="camp-controls" aria-label="和伙伴互动">              <div className="actions camp-primary-actions">                {lastPhrase?.id===sel.id&&<button className="act" onClick={()=>{setPrompt(lastPhrase);void say(["en",lastPhrase.en]);}}><Icon name="speak" size={32}/>我想说一句</button>}
                 <button className="act pet-action" onClick={() => doInteract(sel, "pet")}><Icon name="hand" size={32} />摸摸</button>
                 <button className="act" onClick={() => {const ask=feedAsk(save,seedOf(`feed-${sel.id}-${selCap.friendship}`));if(ask){stopSpeech();setCareThanks(null);setRound({play:'feed',id:sel.id,ask});}else void doInteract(sel,'feed');}}><Icon name={favoriteFood(sel).icon} size={32} />喂点心</button>
                 <button className="act" onClick={()=>{setFeedPicker(true);setCareThanks(null);stopSpeech();}}><Icon name="bowl" size={32}/>分享水果</button>

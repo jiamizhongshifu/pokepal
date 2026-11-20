@@ -3,7 +3,7 @@ import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../../store";
-import { dailyLearningPlan } from '../../data/learning';
+import { dailyLearningPlan, practiceWordPool } from '../../data/learning';
 import { learningLevel } from '../../data/curriculum';
 import { CREATURES, COLORS, getCreature, creatureAvatar, WELCOME_CAST } from "../../data/creatures";
 import { PIC_WORDS, type PicWord, pickOne, pickRandom } from "../../data/words";
@@ -64,7 +64,7 @@ function makeRounds(caughtIds: number[], level: 1 | 2, practice:boolean): Round[
   });
   const focus=dailyLearningPlan(useGame.getState().save,practice).words;
   focus.slice(0,practice?4:2).forEach((target,i)=>{
-   const options=pickRandom([target,...pickRandom(PIC_WORDS.filter(w=>w!==target&&w.level<=level),choices-1)],choices).map(word=>({key:word.en,word}));
+   const options=pickRandom([target,...pickRandom(practiceWordPool(useGame.getState().save,choices).filter(w=>w!==target),choices-1)],choices).map(word=>({key:word.en,word}));
    rounds[i]={kind:'word',options,target:options.find(o=>o.key===target.en)!};
   });
   return rounds;

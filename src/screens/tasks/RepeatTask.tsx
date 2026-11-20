@@ -16,12 +16,12 @@ import type { Creature } from "../../types";
 import { Icon } from "../../icons";
 import { CreatureImg } from "../../components/CreatureImg";
 
-export function RepeatTask({ onFinish, practice=false }: { onFinish: () => void; practice?:boolean }) {
+export function RepeatTask({ onFinish, practice=false, buddyId }: { onFinish: () => void; practice?:boolean; buddyId?:number }) {
   const save = useGame((s) => s.save);
   const noteWord = useGame((s) => s.noteWord);
   const { buddy, phrases } = useMemo(() => {
     const ids = save.captures.map((c) => c.id);
-    const buddy = getCreature(ids.length ? pickOne(ids) : 25);
+    const buddy = getCreature(buddyId ?? (ids.length ? pickOne(ids) : 25));
     const picked = dailyLearningPlan(save,practice).phrases;
     // 第三句说小精灵的名字
     const nameP: SayPhrase = { en: `${buddy.nameEn}!`, zh: `${buddy.nameZh}！`, level: 1 };

@@ -2,10 +2,9 @@ import {RoundProgress} from '../../components/RoundProgress';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useMemo, useRef, useState } from "react";
-import { dailyLearningPlan } from "../../data/learning";
-import { learningLevel } from '../../data/curriculum';
+import { dailyLearningPlan, practiceWordPool } from "../../data/learning";
 import { useGame } from "../../store";
-import { PIC_WORDS, pickRandom, type PicWord } from "../../data/words";
+import { pickRandom, type PicWord } from "../../data/words";
 import { askParts, feedbackParts, picAsk, picNo, picYes } from "../../data/taskEnglish";
 import { say, wait, stopSpeech } from "../../lib/speech";
 import { useChoice } from "./useChoice";
@@ -13,10 +12,11 @@ import { Icon } from "../../icons";
 
 interface Round { options: PicWord[]; target: PicWord }
 
-function makeRounds(level:1|2,practice:boolean):Round[]{
+function makeRounds(practice:boolean):Round[]{
  const save=useGame.getState().save,choices=learningProfile(save.settings).choices;
  const targets=dailyLearningPlan(save,practice).words;
- return targets.map(target=>({target,options:pickRandom([target,...pickRandom(PIC_WORDS.filter(w=>w!==target&&w.level<=level),choices-1)],choices)}));
+ const pool=practiceWordPool(save,choices);
+ return targets.map(target=>({target,options:pickRandom([target,...pickRandom(pool.filter(w=>w!==target),choices-1)],choices)}));
 }
 
 export function WordPicTask({onFinish,practice=false}:{onFinish:()=>void;practice?:boolean}){
@@ -24,9 +24,8 @@ export function WordPicTask({onFinish,practice=false}:{onFinish:()=>void;practic
  return entry==='listen'?<ListeningDiscovery onFinish={onFinish} practice={practice} source="wordpictask:listening"/>:<WordPicTaskChoices onFinish={onFinish} practice={practice}/>;
 }
 function WordPicTaskChoices({ onFinish, practice=false }: { onFinish: () => void; practice?:boolean }) {
-  const level = useGame((s) => learningLevel(s.save));
   const noteWord = useGame((s) => s.noteWord);
-  const rounds = useMemo(() => makeRounds(level, practice), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const rounds = useMemo(() => makeRounds(practice), []); // eslint-disable-line react-hooks/exhaustive-deps
   const [idx, setIdx] = useState(0);
   return <PicRound key={idx} round={rounds[idx]} idx={idx} total={rounds.length} noteWord={noteWord} onNext={() => (idx + 1 < rounds.length ? setIdx(idx + 1) : onFinish())} />;
 }

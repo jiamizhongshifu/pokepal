@@ -1,8 +1,8 @@
 import { learningProfile } from '../../lib/learningStage';
 import { useEffect, useMemo, useRef, useState } from "react";
-import { dailyLearningPlan } from "../../data/learning";
+import { dailyLearningPlan, practiceWordPool } from '../../data/learning';
 import { useGame } from "../../store";
-import { LETTERS, PIC_WORDS, pickOne } from "../../data/words";
+import { LETTERS, pickOne } from "../../data/words";
 import { creatureArt } from "../../data/creatures";
 import { say, sfx, stopSpeech } from "../../lib/speech";
 import { Icon } from "../../icons";
@@ -27,7 +27,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
     const save=useGame.getState().save;
     const plan=dailyLearningPlan(save,excluded.length>0);
     if(learningProfile(save.settings).vocabulary===1 || plan.words.some(w=>w.icon&&!excluded.includes(w.en[0].toUpperCase()))){
-      const eligible=PIC_WORDS.filter(w=>w.icon && !excluded.includes(w.en[0].toUpperCase()));
+      const eligible=practiceWordPool(save).filter(w=>w.icon && !excluded.includes(w.en[0].toUpperCase()));
       const themed=eligible.filter(w=>plan.words.some(p=>p.en===w.en));
       const words=themed.length ? themed : eligible;
       const w=words[0];

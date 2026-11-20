@@ -79,3 +79,15 @@ test('every one of the fourteen places has an activity, and every companion can 
  const s=fixture();learn(s,24);
  for(const species of new Set(CREATURES.map(c=>c.species)))assert.ok(wishFor(s,species),`${species} has a wish`);
 });
+
+// Audit P2-15: mini-games practise what the learning path has taught.
+test('extra practice uses learned words and phrases once three are learned; the regular set follows the current lesson',async()=>{
+ const {dailyLearningPlan,practiceWordPool,pathLearned}=await import('../../src/data/learning');
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];
+ assert.ok(practiceWordPool(s).length>3,'nothing learned yet: the stage words');
+ learn(s,2);const words=new Set(pathLearned(s).words.map(w=>w.en));
+ assert.ok(dailyLearningPlan(s,true).words.every(w=>words.has(w.en)),'extra practice: learned words only');
+ assert.ok(practiceWordPool(s).every(w=>words.has(w.en)),'pictures to choose from: learned words only');
+ learn(s,3);const phrases=new Set(pathLearned(s).phrases.map(p=>p.en));
+ assert.equal(phrases.size,3);assert.ok(dailyLearningPlan(s,true).phrases.every(p=>phrases.has(p.en)));
+});

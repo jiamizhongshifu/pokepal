@@ -2,7 +2,7 @@ import { learningProfile } from '../lib/learningStage';
 import { PHRASES, PIC_WORDS, type SayPhrase, type PicWord } from './words';
 import type { District, Place } from '../island/world';
 import type { SaveData } from '../types';
-import { selectedUnit, unitSituations, type LearningUnit } from './curriculum';
+import { selectedUnit, unitSituations, LEARNING_UNITS, type LearningUnit } from './curriculum';
 
 export interface LearningTheme { id:District; zh:string; en:string; icon:string; words:string[]; phrases:string[]; focusPhrases?:string[] }
 export const LEARNING_THEMES:LearningTheme[]=[
@@ -62,6 +62,18 @@ export function facilityLesson(station:Place,level:1|2){
 /** Keep automatic daily work within parent readiness and the current island theme.
  * Extra play revisits familiar material; it does not open a second unrelated syllabus.
  */
+/** Words and phrases the learning path has taught, newest lesson first. */
+export function pathLearned(save:SaveData){
+ const units=LEARNING_UNITS.filter(u=>save.learning?.units[u.id]?.completedAt).sort((a,b)=>save.learning!.units[b.id].completedAt!-save.learning!.units[a.id].completedAt!);
+ const words=[...new Set(units.flatMap(u=>u.words))].flatMap(key=>PIC_WORDS.filter(w=>w.en===key));
+ const phrases=[...new Set(units.map(u=>u.phrase))].flatMap(key=>PHRASES.filter(p=>p.en===key));
+ return {words,phrases};
+}
+/** Pictures a mini-game may show: words learned on the path once there are enough, otherwise the stage's words. */
+export function practiceWordPool(save:SaveData,need=3):PicWord[]{
+ const learned=pathLearned(save).words;
+ return learned.length>=need?learned:PIC_WORDS.filter(w=>w.level<=learningProfile(save.settings).vocabulary);
+}
 export function dailyLearningPlan(save:SaveData,practice=false,now=Date.now()){
  const theme=learningTheme(save), records=save.learning?.records??{}, level=learningProfile(save.settings).vocabulary;
  const known=(key:string)=>!!(records[key]?.seen || save.wordStats[key]?.heard || save.wordStats[key]?.correct || save.wordStats[key]?.spoken);
@@ -79,7 +91,11 @@ export function dailyLearningPlan(save:SaveData,practice=false,now=Date.now()){
  const localPhrases=phrasePool.filter(p=>baseTheme.phrases.includes(p.en));
  const familiarPhrases=phrasePool.filter(p=>known(p.en)).sort((a,b)=>(records[a.en]?.lastSeen??0)-(records[b.en]?.lastSeen??0));
  const dailyPhrases=[...new Set([...duePhrases.slice(0,1),...focusPhrases,...localPhrases.filter(p=>known(p.en)),...localPhrases])].slice(0,3);
- const words=practice?[...new Set([...dueWords.slice(0,3),...dailyWords,...familiarWords])].slice(0,6):dailyWords;
- const phrases=practice?[...new Set([...duePhrases.slice(0,2),...dailyPhrases,...familiarPhrases])].slice(0,5):dailyPhrases;
+ // The regular set follows the lesson being learned now. Extra practice uses what the learning path has already
+ // taught once there is enough of it: due items first, then the newest.
+ const learned=pathLearned(save);
+ const fromPath=<T extends {en:string}>(items:T[],dueKeys:string[],count:number)=>[...new Set([...items.filter(i=>dueKeys.includes(i.en)),...items])].slice(0,count);
+ const words=!practice?dailyWords:learned.words.length>=3?fromPath(learned.words,due,6):[...new Set([...dueWords.slice(0,3),...dailyWords,...familiarWords])].slice(0,6);
+ const phrases=!practice?dailyPhrases:learned.phrases.length>=3?fromPath(learned.phrases,due,5):[...new Set([...duePhrases.slice(0,2),...dailyPhrases,...familiarPhrases])].slice(0,5);
  return {theme,words,phrases};
 }

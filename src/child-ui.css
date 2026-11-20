@@ -900,3 +900,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .save-recovery-parent { max-width:520px; text-align:left; border:2px dashed var(--brand-line); border-radius:var(--radius-md); padding:10px 16px; }
 .save-recovery-parent summary { cursor:pointer; font-weight:800; min-height:44px; display:flex; align-items:center; }
 .save-recovery-diagnostic { font-size:var(--text-sm); color:var(--muted); user-select:all; }
+/* The companion practising alongside in a mini-game. */
+.task-buddy,.task-buddy-done{display:flex;align-items:center;justify-content:center;gap:8px;margin:4px auto 0;font-size:var(--text-base);font-weight:800;color:var(--text)}
+.task-buddy img,.task-buddy-done img{width:44px;height:44px;object-fit:contain}
