@@ -126,7 +126,8 @@ export interface SaveData {
   storyProgress?: Record<string,number>;
   /** Learning path record: chapter friends, celebrated stops and the one-time energy retirement. */
   path?: import('./lib/learningPath').PathRecord;
-  careStory?: import("./lib/careStory").CareStory;
+  /** Retired care-afternoon story; kept as saved so older versions can still read it. */
+  careStory?: Record<string, unknown>;
   /** Today's little wishes already done (companion ids), by local date. */
   islandWishes?: import("./island/plays").WishState;
   storyAdventure?: import("./lib/storyPlayer").StoryPlayback;

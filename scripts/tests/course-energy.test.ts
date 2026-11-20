@@ -50,3 +50,10 @@ test('saves that saw the retired energy and grass guides still load',()=>{
  const back=validateSave(JSON.parse(JSON.stringify(s)));
  assert.deepEqual(back.onboarding!.seen,{path:true});assert.deepEqual(back.onboarding!.completed,{});
 });
+test('saves from older versions keep their retired stories and care timers, untouched',()=>{
+ const s=fresh() as any;
+ s.careStory={version:1,id:'old',pokemonId:1001,phase:'garden',food:'apple',meal:'fed'};
+ s.storyAdventure={episodeId:'apple-picnic',version:1,index:2,token:5,phase:'paused'};
+ const back=validateSave(JSON.parse(JSON.stringify(s)));
+ assert.deepEqual(back.careStory,s.careStory);assert.deepEqual(back.storyAdventure,s.storyAdventure);
+});

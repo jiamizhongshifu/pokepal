@@ -109,11 +109,6 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const finderOpen=panel==='finder';
   const setFinderOpen=(open:boolean)=>open?activatePanel('finder'):closePanel('finder');
   const [careThanks,setCareThanks]=useState<{id:number;text:string}|null>(null);
-  useEffect(()=>{
-    if(!active)return;
-    const timer=setInterval(()=>{if(!document.hidden)useGame.getState().tickCare(10);},10000);
-    return()=>clearInterval(timer);
-  },[active]);
   const [farmClock,setFarmClock]=useState(Date.now());
   const [farmNotice,setFarmNotice]=useState<FarmNotice>({text:''});
   const farmMessage=farmNotice.text;

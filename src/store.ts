@@ -1,11 +1,8 @@
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { toggleSticker } from './island/stickers';
 import { getCreature as creatureOf } from './data/creatures';
-import {startCareStory,actCareStory,type CareStory,type CareAction} from './lib/careStory';
-import {advanceAdventure,PICNIC_ADVENTURE} from './lib/storyAdventure';
-import {restoreStory,type StoryEvent} from './lib/storyPlayer';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
-import {advancePlayClock,advanceCareClock} from './lib/playClock';
+import {advancePlayClock} from './lib/playClock';
 import {markReviewAudio,settleUnitRound, recordOpportunity, markHomeTried, type Opportunity } from './lib/learningProgress';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
@@ -13,13 +10,13 @@ import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergeInvites, invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
-import { ensureIslandProgress,claimIslandGift,placeIslandDecoration } from './lib/islandProgress';
+import { ensureIslandProgress,placeIslandDecoration } from './lib/islandProgress';
 import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
 import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './lib/farm';
 import { beginPicnic, servePicnic, endPicnic } from './lib/picnic';
-import { advanceCare, comfortCompanion, deferCare } from "./lib/companionCare";
+import { comfortCompanion } from "./lib/companionCare";
 import { create } from "zustand";
 import type { Daily, DaySummary, InteractKind, SaveData, Settings, TaskKind } from "./types";
 import { todayStr } from "./lib/date";
@@ -52,8 +49,6 @@ export type Screen =
   | { name: "review"; keys:string[]; returnTo?:'home'|'parent' }
   | { name: "practice" }
   | { name: "diary"; id?:string }
-  | { name: "adventure"; autoplay?:boolean }
-  | { name: "careStory"; companion?:number; autoplay?:boolean }
   | { name: "stories" }
   | { name: "story"; id:string }
   | { name: "task"; kind: TaskKind; boardIndex: number | null; practice?:boolean; session?:number }
@@ -122,11 +117,6 @@ function rollover(s: SaveData) {
 export type TaskReward = Reward;
 
 interface State {
-  startCareStory:(pokemonId?:number)=>Promise<boolean>;
-  actCareStory:(id:string,phase:CareStory["phase"],action:CareAction,expectedPlot?:string)=>Promise<boolean>;
-  restoreAdventure:()=>void;
-  advanceAdventure:(event:StoryEvent)=>Promise<void>;
-  claimIslandGift:()=>boolean;
   /** Light up newly finished path stops once; island stops grant the next island upgrade. Returns the keys celebrated. */
   celebratePath:(keys:string[])=>string[];
   /** Friend stop: one invite berry for meeting this chapter's new friend. */
@@ -184,8 +174,6 @@ interface State {
   noteWord: (word: string, kind: "heard" | "spoken" | "correct") => void;
   addPlaySeconds: (sec: number) => void;
   grantExtraMinutes: (min: number) => void;
-  tickCare: (seconds:number) => void;
-  deferCare: (id:number) => void;
   grantMysteryGift: () => void;
   markGuideSeen: (id:GuideId)=>void;
   resetGuides: ()=>void;
@@ -313,10 +301,6 @@ export const useGame = create<State>((set, get) => {
     },
     markReviewAudio(key,pending){mut(s=>markReviewAudio(s,key,pending));},
     finishReview(){const reward=mut(s=>{notePathReview(s);return rewardParticipation(s,'review');});if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
-    async startCareStory(pokemonId){return await commit(s=>startCareStory(s,crypto.randomUUID(),pokemonId))??false;},
-    async actCareStory(id,phase,action,expectedPlot){return await commit(s=>actCareStory(s,id,phase,action,Date.now(),expectedPlot))??false;},
-    restoreAdventure(){mut(s=>{s.storyAdventure=restoreStory(PICNIC_ADVENTURE,s.storyAdventure);});},
-    async advanceAdventure(event){await commit(s=>advanceAdventure(s,event));},
     noteStoryRead(id,page){
       const reward=mut(s=>{
         const story=STORIES.find(st=>storyProgressKey(st)===id);
@@ -351,7 +335,6 @@ export const useGame = create<State>((set, get) => {
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
     feedCrop(id,berry) {return mut(s=>{const ok=feedCrop(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
-    claimIslandGift(){return !!mut(s=>claimIslandGift(s));},
     celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
@@ -418,12 +401,6 @@ export const useGame = create<State>((set, get) => {
       });
     },
 
-    tickCare(seconds) {
-      if(!get().loaded||get().saveIssue||get().saveBusy)return;
-      if(get().save.daily.date!==todayStr()){mut(s=>s.captures.forEach(c=>advanceCare(c,seconds)));return;}
-      const save=advanceCareClock(get().save,seconds);set({save});scheduleSave(save);
-    },
-    deferCare(id) { mut(s=>{const c=s.captures.find(c=>c.id===id);if(c)deferCare(c);}); },
 
     interact(id, kind) {
       const ok=mut((s) => {

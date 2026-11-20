@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {encodeDiaryBackup,decodeDiaryBackup} from '../../src/lib/diaryBackup';
 import {DIARY_PROMPTS} from '../../src/data/diaryPrompts';
 import {markReviewAudio,reviewKeys} from '../../src/lib/learningProgress';
-import {advancePlayClock,advanceCareClock} from '../../src/lib/playClock';
+import {advancePlayClock} from '../../src/lib/playClock';
 import {validateSave} from '../../src/lib/saveValidation';
 import type {SaveData} from '../../src/types';
 import type {DiaryEntry} from '../../src/lib/diary';
@@ -35,6 +35,4 @@ test('clock updates are immutable, capped and do not copy or mutate unrelated le
  const s=make();s.daily.playSeconds=30;
  const next=advancePlayClock(s,20,40);assert.equal(s.daily.playSeconds,30);assert.equal(next.daily.playSeconds,40);
  assert.equal(next.learning,s.learning);assert.equal(next.captures,s.captures);assert.equal(advancePlayClock(next,10,40),next);
- const before=JSON.stringify(s.captures),care=advanceCareClock(s,10);assert.equal(JSON.stringify(s.captures),before);assert.equal(care.learning,s.learning);assert.equal(care.daily,s.daily);
- for(let i=0;i<s.captures.length;i++)assert.notEqual(care.captures[i],s.captures[i]);
 });

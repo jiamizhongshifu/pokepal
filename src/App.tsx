@@ -24,8 +24,6 @@ const LearningNotebook=lazy(()=>import("./screens/LearningNotebook").then(m=>({d
 const LearningReview=lazy(()=>import("./screens/LearningNotebook").then(m=>({default:m.LearningReview})));
 
 const PathHome=lazy(()=>import("./screens/PathHome").then(m=>({default:m.PathHome})));
-const CareStoryScreen=lazy(()=>import("./screens/CareStory").then(m=>({default:m.CareStoryScreen})));
-const StoryAdventure=lazy(()=>import("./screens/StoryAdventure").then(m=>({default:m.StoryAdventure})));
 const StoryLibrary=lazy(()=>import("./screens/Stories").then(m=>({default:m.StoryLibrary})));
 const StoryReader=lazy(()=>import("./screens/Stories").then(m=>({default:m.StoryReader})));
 
@@ -133,8 +131,6 @@ export default function App() {
     case "review": return <LearningReview key={screen.keys.join('|')} keys={screen.keys} returnTo={screen.returnTo}/>;
     case "practice": return <Practice />;
     case "diary": return <Diary key={screen.id??"new"} id={screen.id}/>;
-    case "careStory": return <CareStoryScreen />;
-    case "adventure": return <StoryAdventure />;
     case "stories": return <StoryLibrary />;
     case "story": return <StoryReader key={screen.id} id={screen.id} />;
     case "task": return <TaskScreen key={`${screen.kind}-${screen.boardIndex}-${screen.session ?? 0}`} kind={screen.kind} boardIndex={screen.boardIndex} practice={screen.practice} />;

@@ -1,7 +1,5 @@
-import {validCareStory} from './careStory';
 import {validPath,migratePathEconomy} from './learningPath';
 import {OPPORTUNITY_LIMIT,validOpportunity} from './learningProgress';
-import {validAdventure} from './storyAdventure';
 import {validWeatherMode} from './weather';
 import { validOnboarding, migrateOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
@@ -77,8 +75,9 @@ export function validateSave(input:unknown):SaveData {
  if(s.islandLiving!==undefined)requireValue(validLiving(s.islandLiving,ids),'小岛生活');
  if(s.picnic!==undefined)requireValue(validPicnic(s.picnic,s.captures.map((c:any)=>c.id))&&s.picnic.memories.every((m:any)=>ids.has(m.pokemonId)),'野餐回忆');
  if(s.garden!==undefined)requireValue(object(s.garden)&&typeof s.garden.bloomed==='boolean','花园');
- if(s.careStory!==undefined)requireValue(validCareStory(s.careStory),'伙伴生活故事');
- if(s.storyAdventure!==undefined)requireValue(validAdventure(s.storyAdventure),'故事旅程');
+ // Retired stories (care afternoon, apple picnic adventure): kept untouched so an older version still reads them.
+ if(s.careStory!==undefined)requireValue(object(s.careStory),'伙伴生活故事');
+ if(s.storyAdventure!==undefined)requireValue(object(s.storyAdventure),'故事旅程');
  if(d.adventureReward!==undefined)requireValue(integer(d.adventureReward)&&d.adventureReward<=5,'故事奖励');
  if(s.storyProgress!==undefined)requireValue(object(s.storyProgress)&&Object.values(s.storyProgress).every(integer),'故事进度');
  if(s.path!==undefined)requireValue(validPath(s.path),'学习路线');

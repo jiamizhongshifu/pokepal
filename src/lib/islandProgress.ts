@@ -15,13 +15,6 @@ export function ensureIslandProgress(s:SaveData){
  const p=s.islandProgress??={version:1,owned:[...(s.islandLiving?.furniture??[])],nextGiftAt:120,levels:{camp:0,picnic:0,island:0,garden:0,play:0}};
  p.levels.garden??=0;p.levels.play??=0;return p;
 }
-/** Saved, active-play countdown. Gifts wait indefinitely; no streak, refresh or paid roll. */
-export function tickIslandGift(s:SaveData,seconds:number){
- const p=ensureIslandProgress(s);if(p.pending||p.owned.length===FURNITURE.length)return;
- p.nextGiftAt=Math.max(0,p.nextGiftAt-Math.min(10,Math.max(0,seconds)));
- if(!p.nextGiftAt){const choices=FURNITURE.filter(f=>!p.owned.includes(f.id));p.pending=choices[(s.trainer?.createdAt??0)%choices.length|0].id;}
-}
-export function claimIslandGift(s:SaveData){const p=ensureIslandProgress(s),id=p.pending;if(!id)return false;p.owned=[...new Set([...p.owned,id])];s.islandLiving??={version:1,furniture:[],memories:[]};s.islandLiving.furniture=[...new Set([...s.islandLiving.furniture,id])];delete p.pending;p.nextGiftAt=180+(p.owned.length*47)%180;return id;}
 export function validIslandProgress(p:any){return (p?.hidden===undefined||Array.isArray(p.hidden)&&p.hidden.length<=20&&p.hidden.every((h:any)=>typeof h==='string'&&h.length<=40))&&p&&p.version===1&&Array.isArray(p.owned)&&p.owned.length<=FURNITURE.length&&new Set(p.owned).size===p.owned.length&&p.owned.every((id:any)=>FURNITURE.some(f=>f.id===id))&&(p.pending===undefined||FURNITURE.some(f=>f.id===p.pending)&&!p.owned.includes(p.pending))&&Number.isFinite(p.nextGiftAt)&&p.nextGiftAt>=0&&p.nextGiftAt<=1000000&&p.levels&&UPGRADES.every(u=>(['garden','play'].includes(u.id)&&p.levels[u.id]===undefined)||(Number.isInteger(p.levels[u.id])&&p.levels[u.id]>=0&&p.levels[u.id]<=2));}
 
 /** Decorations are freely available: one tap places a fixed, reviewed layout. */
