@@ -71,3 +71,16 @@ test('without a settled check, a long break changes nothing (quiet moments only)
  const u=createAutoUpdate({isSafe:()=>false,beforeOpen:async()=>{},env});
  await u.check();u.resume(AWAY_MS);await u.open();assert.equal(st.opened,0);
 });
+test('browse-only screens count as quiet moments, and forced or failed checks do not wait a full cooldown',async()=>{
+ const {RETRY_AFTER_ERROR_MS}=await import('../../src/lib/autoUpdate');
+ for(const name of ['stories','notebook','dexDetail'])assert.equal(quietMoment({...base,screen:{name}}),true,name);
+ let now=1000,calls=0,fail=true;
+ const {st,env}=fakeEnv({now:()=>now,check:async()=>{calls++;if(fail)throw new Error('offline');return {id:'C',changed:calls>=3};}});
+ const u=createAutoUpdate({isSafe:()=>true,beforeOpen:async()=>{},env});
+ await u.check();assert.equal(calls,1);assert.equal(st.opened,0);
+ now+=RETRY_AFTER_ERROR_MS-1;await u.check();assert.equal(calls,1,'still within error backoff');
+ fail=false;now+=1;await u.check();assert.equal(calls,2,'retries after short error backoff');
+ await u.check();assert.equal(calls,2,'regular check respects cooldown');
+ await u.check(true);assert.equal(calls,3,'forced check bypasses cooldown on SW activation or return');
+ assert.equal(st.opened,1);
+});
