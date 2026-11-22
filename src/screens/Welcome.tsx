@@ -11,7 +11,8 @@ import { AVATARS, Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { TrainerAvatar } from "../components/TrainerAvatar";
-import {useMemo,useState} from 'react';
+import {useEffect,useMemo,useRef,useState} from 'react';
+import { BlockingDialog } from '../components/BlockingDialog';
 import {ParentLinks, ParentNotice} from '../components/ParentSupport';
 import {hasReadParentNotice} from '../lib/parentNotice';
 import {MusicToggle} from '../components/MusicToggle';
@@ -36,6 +37,15 @@ export function Welcome() {
   const [hop,setHop]=useState<number|null>(null),[adults,setAdults]=useState(false);
   // A new notice is shown on the corner button too, so a grown-up sees it without opening the panel.
   const {unread}=useNotices();
+  // The grown-ups panel is a popover on the gear: focus goes into it, Escape or a tap outside closes it, focus returns to the gear.
+  const gear=useRef<HTMLButtonElement>(null),panel=useRef<HTMLElement>(null);
+  const closeAdults=()=>{setAdults(false);gear.current?.focus();};
+  useEffect(()=>{
+    if(!adults)return;
+    panel.current?.querySelector<HTMLElement>('header button')?.focus();
+    const escape=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')){e.preventDefault();closeAdults();}};
+    window.addEventListener('keydown',escape);return()=>window.removeEventListener('keydown',escape);
+  },[adults]);
   const [noticeRead,setNoticeRead]=useState(()=>{try{return hasReadParentNotice(localStorage);}catch{return false;}});
   const requestBegin=(avatar?:string)=>{if(!noticeRead)setNotice({avatar});else void begin(avatar);};
 
@@ -78,12 +88,12 @@ export function Welcome() {
       <header className="start-title"><Icon name="leaf" size={34} className="start-title-leaf"/><h1>啵啵岛</h1><span lang="en">Bubbly Isle</span></header>
       <nav className="start-tools" aria-label="音乐和给大人的内容">
         <MusicToggle/>
-        <button type="button" className="start-adults" aria-expanded={adults} aria-label={`给大人${unread?'，有新公告':''}`} onClick={() => setAdults(a => !a)}><Icon name="gear" size={26}/><span>给大人</span>{unread&&<i className="start-adults-dot" aria-hidden="true"/>}</button>
+        <button ref={gear} type="button" className="start-adults" aria-expanded={adults} aria-haspopup="dialog" aria-label={`给大人${unread?'，有新公告':''}`} onClick={() => setAdults(a => !a)}><Icon name="gear" size={26}/><span>给大人</span>{unread&&<i className="start-adults-dot" aria-hidden="true"/>}</button>
       </nav>
       {adults && <>
-        <button type="button" className="start-adults-backdrop" aria-label="关闭给大人的内容" onClick={() => setAdults(false)}/>
-        <section className="start-adults-panel" role="dialog" aria-label="给大人">
-          <header><strong>给陪伴的大人</strong><button type="button" aria-label="关闭" onClick={() => setAdults(false)}><Icon name="close" size={24}/></button></header>
+        <button type="button" className="start-adults-backdrop" aria-label="关闭给大人的内容" tabIndex={-1} onClick={closeAdults}/>
+        <section ref={panel} className="start-adults-panel" role="dialog" aria-label="给大人">
+          <header><strong>给陪伴的大人</strong><button type="button" aria-label="关闭" onClick={closeAdults}><Icon name="close" size={24}/></button></header>
           <Announcements/>
           <DeviceSetup/>
           <ParentLinks/>
@@ -117,7 +127,7 @@ export function Welcome() {
       )}
       </div>
       {notice&&<ParentNotice onClose={()=>setNotice(null)} onContinue={()=>{const avatar=notice.avatar;setNoticeRead(true);setNotice(null);setHandoff({avatar});}}/>}
-      {handoff&&<div className="modal-backdrop handoff-backdrop"><section className="modal handoff-card" role="dialog" aria-modal="true" aria-labelledby="handoff-title">
+      {handoff&&<BlockingDialog className="modal-backdrop handoff-backdrop" label="设置好啦，可以交给孩子了" onClose={()=>setHandoff(null)}><section className="modal handoff-card" aria-labelledby="handoff-title">
         <p className="handoff-eyebrow">给陪伴的大人</p>
         <h2 id="handoff-title">设置好啦，可以交给孩子了</h2>
         <ul>
@@ -126,7 +136,7 @@ export function Welcome() {
           <li><Icon name="rest" size={32}/><span>想停就停，进度会留在这台设备上。</span></li>
         </ul>
         <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);if(trainer||avatar)void begin(avatar);}}><Icon name="hand" size={36}/>交给孩子</button>
-      </section></div>}
+      </section></BlockingDialog>}
     </div>
   );
 }

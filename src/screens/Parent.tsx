@@ -13,6 +13,7 @@ import { LearningStageSettings } from '../components/LearningStageSettings';
 import { learningStageTitle } from '../lib/learningStage';
 import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
+import { BlockingDialog } from "../components/BlockingDialog";
 import { playLimitSeconds, useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
 import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
@@ -42,6 +43,7 @@ export function Parent() {
   const resetAll = useGame((s) => s.resetAll);
   const importSave = useGame((s) => s.importSave);
   const [recCount, setRecCount] = useState(0);
+  const [clearing, setClearing] = useState(false);
   const [tab, setTab] = useState<"report" | "settings" | "data">("report");
   const saveBusy=useGame(s=>s.saveBusy);
   const hasBackup=useGame(s=>s.hasSaveBackup);
@@ -191,7 +193,7 @@ export function Parent() {
             <StorageFacts/>
             <DiaryBackup/></div></details>
 <details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
-<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => { if (confirm("确定清空全部存档、录音和小日记吗？此操作无法撤销。")) {setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();} }}>清空全部数据</button></div></details></>}
+<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => setClearing(true)}>清空全部数据</button>{clearing&&<BlockingDialog className="modal-backdrop" label="清空本机数据" onClose={()=>setClearing(false)}><section className="modal clear-confirm" aria-labelledby="clear-confirm-title"><h2 id="clear-confirm-title">清空这台设备上的全部数据？</h2><p>会删除本机存档、跟读录音和小日记（文字和原声），无法撤销。</p><div className="row"><button className="btn-small" autoFocus onClick={()=>setClearing(false)}>取消</button><button className="btn-small danger" onClick={()=>{setClearing(false);setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();}}>清空全部数据</button></div></section></BlockingDialog>}</div></details></>}
    </div>
   </div>;
 }
