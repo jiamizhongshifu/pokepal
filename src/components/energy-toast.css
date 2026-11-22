@@ -1,4 +1,6 @@
 #root .energy-receipt{position:fixed;z-index:300;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);box-sizing:border-box;pointer-events:none}
-#root .energy-receipt.is-visible{display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:var(--radius-lg);background:var(--brand-sun);color:var(--brand-ink);border:2px solid var(--brand-sun);box-shadow:0 4px 12px #273e4620;font-weight:800;font-size:var(--text-base)}
+#root .energy-receipt.is-visible{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);border:3px solid #fff;box-shadow:0 4px 0 var(--brand-sun-deep),0 10px 24px #273e4628;font-weight:800;font-size:var(--text-base);animation:receipt-pop .32s var(--brand-ease,ease-out) both}
+@keyframes receipt-pop{from{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.92)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){#root .energy-receipt.is-visible{animation:none}}
 #root .energy-receipt .icon{flex-shrink:0}
 @media(max-height:500px){#root .energy-receipt{top:calc(64px + env(safe-area-inset-top));font-size:var(--text-base)}}
