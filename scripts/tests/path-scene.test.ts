@@ -48,3 +48,14 @@ test('every chapter of the path has its own painting, listed in the art catalogu
   assert.ok(existsSync(`public${pathArt(i)}`),id);
  });
 });
+
+import {reviewScene,unitSituations} from '../../src/data/curriculum';
+import {storyBackground} from '../../src/data/sceneArt';
+test('a word comes back in the scene of the lesson it was last practised in, else its own lesson\'s',()=>{
+ for(const u of LEARNING_UNITS)for(const key of [...u.words,...unitSituations(u).map(x=>x.phrase)]){
+  const scene=reviewScene(key);assert.ok(existsSync(`public${storyBackground(scene)}`),`${key}: ${scene}`);
+ }
+ const [a,b]=[LEARNING_UNITS[0],LEARNING_UNITS.find(u=>u.scene!==LEARNING_UNITS[0].scene&&u.words.includes(LEARNING_UNITS[0].words[0]))];
+ if(b)assert.equal(reviewScene(a.words[0],[`unit:${a.id}`,`unit:${b.id}`]),b.scene);
+ assert.equal(reviewScene('not-a-word'),'meadow');
+});

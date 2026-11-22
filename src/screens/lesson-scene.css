@@ -61,3 +61,6 @@
  #root .lesson-staged .is-staged > h1 { max-width: 90%; top: 4px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) { #root .lesson-staged * { animation: none !important; } }
+/* Once a thing is chosen the others wait; in the scene they keep their own look instead of turning into grey cards. */
+#root .lesson-staged .is-staged .learning-choices > div > button:disabled:not(.faded) { opacity: 1; }
+#root .lesson-staged .is-staged .learning-choices:not(.phrase-choices) > div > button.chosen { background: transparent !important; }

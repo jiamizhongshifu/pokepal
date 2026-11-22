@@ -51,6 +51,12 @@ export const unitById=(id?:string)=>LEARNING_UNITS.find(u=>u.id===id);
  * Review prefers a scene the child has not met this phrase in (a new context), in curriculum order so it is the same
  * on every device; it falls back to the most recent familiar scene when the phrase only lives in one place.
  */
+/** Where a learned word or sentence is met again: the scene of the lesson it was last practised in, else its own lesson's. */
+export function reviewScene(key:string,contexts:string[]=[]):string{
+ for(const context of [...contexts].reverse()){const unit=context.startsWith('unit:')?unitById(context.slice(5)):undefined;if(unit)return unit.scene;}
+ const own=LEARNING_UNITS.find(u=>u.words.includes(key)||unitSituations(u).some(s=>s.phrase===key||s.alternative===key));
+ return own?.scene??'meadow';
+}
 export function reviewSituation(key:string,contexts:string[]=[]):LearningSituation|undefined {
  const met=new Set(contexts.filter(c=>c.startsWith('unit:')).map(c=>c.slice(5)));
  const fresh=LEARNING_UNITS.filter(u=>!met.has(u.id)).flatMap(unitSituations).find(s=>s.phrase===key);
