@@ -382,5 +382,437 @@
     "heightCm": 60
    }
   ]
+ },
+ {
+  "id": "pinny",
+  "type": "plant",
+  "color": "brown",
+  "genusEn": "Pinecone Pangolin",
+  "genusZh": "松果穿山甲",
+  "stages": [
+   {
+    "nameEn": "Pinny",
+    "nameZh": "松松",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Pinelet",
+    "nameZh": "松果果",
+    "heightCm": 40
+   },
+   {
+    "nameEn": "Pinegrove",
+    "nameZh": "松林穿山甲",
+    "heightCm": 90
+   }
+  ]
+ },
+ {
+  "id": "glowy",
+  "type": "light",
+  "color": "purple",
+  "genusEn": "Glow Lemur",
+  "genusZh": "萤光狐猴",
+  "stages": [
+   {
+    "nameEn": "Glowy",
+    "nameZh": "亮亮",
+    "heightCm": 25
+   },
+   {
+    "nameEn": "Glowtail",
+    "nameZh": "亮尾",
+    "heightCm": 45
+   },
+   {
+    "nameEn": "Lanternmur",
+    "nameZh": "灯尾狐猴",
+    "heightCm": 80
+   }
+  ]
+ },
+ {
+  "id": "breezy",
+  "type": "sky",
+  "color": "pink",
+  "genusEn": "Breeze Puffer",
+  "genusZh": "微风河豚",
+  "stages": [
+   {
+    "nameEn": "Breezy",
+    "nameZh": "呼呼",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Breezlet",
+    "nameZh": "呼啦",
+    "heightCm": 35
+   },
+   {
+    "nameEn": "Galefloat",
+    "nameZh": "风帆鲀",
+    "heightCm": 70
+   }
+  ]
+ },
+ {
+  "id": "pumpy",
+  "type": "earth",
+  "color": "orange",
+  "genusEn": "Pumpkin Wombat",
+  "genusZh": "南瓜袋熊",
+  "stages": [
+   {
+    "nameEn": "Pumpy",
+    "nameZh": "南南",
+    "heightCm": 25
+   },
+   {
+    "nameEn": "Pumpkit",
+    "nameZh": "南瓜瓜",
+    "heightCm": 50
+   },
+   {
+    "nameEn": "Pumplump",
+    "nameZh": "大南瓜袋熊",
+    "heightCm": 100
+   }
+  ]
+ },
+ {
+  "id": "splashy",
+  "type": "water",
+  "color": "gray",
+  "genusEn": "Lily Cygnet",
+  "genusZh": "睡莲小天鹅",
+  "stages": [
+   {
+    "nameEn": "Splashy",
+    "nameZh": "扑扑",
+    "heightCm": 25
+   },
+   {
+    "nameEn": "Splashwing",
+    "nameZh": "扑扑翅",
+    "heightCm": 50
+   },
+   {
+    "nameEn": "Lilyswan",
+    "nameZh": "莲天鹅",
+    "heightCm": 110
+   }
+  ]
+ },
+ {
+  "id": "shady",
+  "type": "night",
+  "color": "gray",
+  "genusEn": "Shadow Loris",
+  "genusZh": "影子懒猴",
+  "stages": [
+   {
+    "nameEn": "Shady",
+    "nameZh": "影影",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Shadelet",
+    "nameZh": "影儿",
+    "heightCm": 35
+   },
+   {
+    "nameEn": "Shadowplay",
+    "nameZh": "影戏懒猴",
+    "heightCm": 70
+   }
+  ]
+ },
+ {
+  "id": "wavy",
+  "type": "water",
+  "color": "blue",
+  "genusEn": "Wave Whale",
+  "genusZh": "浪花鲸",
+  "stages": [
+   {
+    "nameEn": "Wavy",
+    "nameZh": "浪浪",
+    "heightCm": 50
+   },
+   {
+    "nameEn": "Wavelet",
+    "nameZh": "浪花鲸",
+    "heightCm": 120
+   },
+   {
+    "nameEn": "Tidesong",
+    "nameZh": "潮歌鲸",
+    "heightCm": 300
+   }
+  ]
+ },
+ {
+  "id": "dewy",
+  "type": "sky",
+  "color": "black",
+  "genusEn": "Dew Magpie",
+  "genusZh": "露珠喜鹊",
+  "stages": [
+   {
+    "nameEn": "Dewy",
+    "nameZh": "露露",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Dewdrop",
+    "nameZh": "露珠鹊",
+    "heightCm": 35
+   },
+   {
+    "nameEn": "Dewgleam",
+    "nameZh": "晶露鹊",
+    "heightCm": 60
+   }
+  ]
+ },
+ {
+  "id": "mellow",
+  "type": "water",
+  "color": "green",
+  "genusEn": "Seaweed Manatee",
+  "genusZh": "海草海牛",
+  "stages": [
+   {
+    "nameEn": "Mellow",
+    "nameZh": "慢慢",
+    "heightCm": 80
+   },
+   {
+    "nameEn": "Kelpmellow",
+    "nameZh": "海草慢慢",
+    "heightCm": 180
+   },
+   {
+    "nameEn": "Kelpgentle",
+    "nameZh": "慢慢海牛",
+    "heightCm": 350
+   }
+  ]
+ },
+ {
+  "id": "mangi",
+  "type": "plant",
+  "color": "green",
+  "genusEn": "Mango Giraffe",
+  "genusZh": "芒果长颈鹿",
+  "stages": [
+   {
+    "nameEn": "Mangi",
+    "nameZh": "芒芒",
+    "heightCm": 80
+   },
+   {
+    "nameEn": "Mangilet",
+    "nameZh": "芒果芒",
+    "heightCm": 160
+   },
+   {
+    "nameEn": "Mangireach",
+    "nameZh": "芒树长颈鹿",
+    "heightCm": 320
+   }
+  ]
+ },
+ {
+  "id": "mossy",
+  "type": "earth",
+  "color": "brown",
+  "genusEn": "Moss Capybara",
+  "genusZh": "青苔水豚",
+  "stages": [
+   {
+    "nameEn": "Mossy",
+    "nameZh": "苔苔",
+    "heightCm": 30
+   },
+   {
+    "nameEn": "Mosslet",
+    "nameZh": "苔苔儿",
+    "heightCm": 60
+   },
+   {
+    "nameEn": "Mossferry",
+    "nameZh": "苔舟水豚",
+    "heightCm": 120
+   }
+  ]
+ },
+ {
+  "id": "twirly",
+  "type": "light",
+  "color": "pink",
+  "genusEn": "Sunset Flamingo",
+  "genusZh": "晚霞火烈鸟",
+  "stages": [
+   {
+    "nameEn": "Twirly",
+    "nameZh": "转转",
+    "heightCm": 40
+   },
+   {
+    "nameEn": "Twirlet",
+    "nameZh": "转转儿",
+    "heightCm": 80
+   },
+   {
+    "nameEn": "Sunsetwirl",
+    "nameZh": "霞舞火烈鸟",
+    "heightCm": 140
+   }
+  ]
+ },
+ {
+  "id": "sayo",
+  "type": "sky",
+  "color": "green",
+  "genusEn": "Echo Parrot",
+  "genusZh": "回声鹦鹉",
+  "stages": [
+   {
+    "nameEn": "Sayo",
+    "nameZh": "学学",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Sayolet",
+    "nameZh": "回声鹦",
+    "heightCm": 35
+   },
+   {
+    "nameEn": "Sayplume",
+    "nameZh": "百语鹦鹉",
+    "heightCm": 70
+   }
+  ]
+ },
+ {
+  "id": "dreamy",
+  "type": "night",
+  "color": "purple",
+  "genusEn": "Lavender Quokka",
+  "genusZh": "薰衣草短尾袋鼠",
+  "stages": [
+   {
+    "nameEn": "Dreamy",
+    "nameZh": "梦梦",
+    "heightCm": 30
+   },
+   {
+    "nameEn": "Dreamlet",
+    "nameZh": "薰衣梦",
+    "heightCm": 50
+   },
+   {
+    "nameEn": "Lavendream",
+    "nameZh": "薰衣草袋鼠",
+    "heightCm": 90
+   }
+  ]
+ },
+ {
+  "id": "blossy",
+  "type": "plant",
+  "color": "green",
+  "genusEn": "Blossom Swallow",
+  "genusZh": "樱花燕子",
+  "stages": [
+   {
+    "nameEn": "Blossy",
+    "nameZh": "樱樱",
+    "heightCm": 15
+   },
+   {
+    "nameEn": "Blossomwing",
+    "nameZh": "樱翅燕",
+    "heightCm": 25
+   },
+   {
+    "nameEn": "Springswift",
+    "nameZh": "春樱燕",
+    "heightCm": 45
+   }
+  ]
+ },
+ {
+  "id": "rimo",
+  "type": "snow",
+  "color": "white",
+  "genusEn": "Frost Hare",
+  "genusZh": "霜花雪兔",
+  "stages": [
+   {
+    "nameEn": "Rimo",
+    "nameZh": "霜霜",
+    "heightCm": 25
+   },
+   {
+    "nameEn": "Rimolet",
+    "nameZh": "霜花兔",
+    "heightCm": 45
+   },
+   {
+    "nameEn": "Rimoguide",
+    "nameZh": "霜引雪兔",
+    "heightCm": 80
+   }
+  ]
+ },
+ {
+  "id": "diggy",
+  "type": "earth",
+  "color": "brown",
+  "genusEn": "Clover Badger",
+  "genusZh": "幸运草獾",
+  "stages": [
+   {
+    "nameEn": "Diggy",
+    "nameZh": "挖挖",
+    "heightCm": 30
+   },
+   {
+    "nameEn": "Cloverdig",
+    "nameZh": "幸运挖挖",
+    "heightCm": 55
+   },
+   {
+    "nameEn": "Cloverburrow",
+    "nameZh": "四叶草獾",
+    "heightCm": 95
+   }
+  ]
+ },
+ {
+  "id": "rainbo",
+  "type": "light",
+  "color": "yellow",
+  "genusEn": "Rainbow Peafowl",
+  "genusZh": "彩虹孔雀",
+  "stages": [
+   {
+    "nameEn": "Rainbo",
+    "nameZh": "彩彩",
+    "heightCm": 20
+   },
+   {
+    "nameEn": "Rainbolet",
+    "nameZh": "彩翎",
+    "heightCm": 50
+   },
+   {
+    "nameEn": "Rainbowfan",
+    "nameZh": "彩虹孔雀",
+    "heightCm": 110
+   }
+  ]
  }
 ]

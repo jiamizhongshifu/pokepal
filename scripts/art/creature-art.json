@@ -271,5 +271,320 @@
     "body": "a grown GUINEA PIG with a crown of leafy carrot greens and a small woven garden basket on its back holding carrots"
    }
   ]
+ },
+ {
+  "id": "pinny",
+  "animal": "pangolin",
+  "word": "pinecone",
+  "not": "plant-on-back quadruped Pokémon (no bulb or seed on its back), armadillo or pangolin Pokémon, hedgehogs, turtles, frogs",
+  "stages": [
+   {
+    "body": "a tiny round baby PANGOLIN whose overlapping scales look like warm brown pinecone scales with cream tips, a cream face and belly, small rounded claws, and a little green pine sapling with two soft needle tufts sprouting from the tip of its curled tail; it is happily sunbathing"
+   },
+   {
+    "body": "a young PANGOLIN with bigger warm-brown pinecone scales with cream tips, the sapling on its tail has grown into a small pine branch holding two tiny pinecones, it can curl up into a pinecone-shaped ball"
+   },
+   {
+    "body": "a grown PANGOLIN standing proudly on its hind legs, armored in large pinecone scales with cream tips, a small but complete pine tree with little pinecones growing from the tip of its long tail like a banner"
+   }
+  ]
+ },
+ {
+  "id": "glowy",
+  "animal": "ring-tailed lemur",
+  "word": "glow",
+  "not": "electric mice or rodents, lightning-bolt tails, a yellow body with red cheeks, monkey Pokémon, Duolingo characters; the cheek glow must be round puffs of light, never feather or wing shapes",
+  "stages": [
+   {
+    "body": "a tiny baby RING-TAILED LEMUR with soft lavender-grey fur, a white face with big round amber eyes, and two small round fluffy cheek puffs that glow soft warm gold like little night-lights, each surrounded by a gentle round halo of light and a few tiny floating golden light dots (sunshine it has stored); its long tail is held straight up like a lookout flag with alternating lavender and soft-gold rings"
+   },
+   {
+    "body": "a young RING-TAILED LEMUR in lavender-grey with a white face and amber eyes, bigger glowing gold cheek puffs, and its tall upright tail rings now glow soft gold like a striped lantern"
+   },
+   {
+    "body": "a grown RING-TAILED LEMUR standing tall as a lookout, lavender-grey fur, glowing gold cheek puffs, a very long upright tail whose gold rings shine like a lantern pole with a soft round halo at the tip, a few small golden light orbs floating around"
+   }
+  ]
+ },
+ {
+  "id": "breezy",
+  "animal": "pufferfish",
+  "word": "wind",
+  "not": "spiky pufferfish Pokémon, purple gas-ball creatures, skulls, warning symbols, smoke; avoid teal, mint or seafoam green (that is Bubbo the otter's color); no tall spiky or pointed dorsal fin, no crown-like or crest fins, no red fish with a yellow belly crest",
+  "stages": [
+   {
+    "body": "a tiny round baby PUFFERFISH puffed up like a balloon and floating in the air, a soft peach-pink body with a creamy pale-yellow belly, clearly a fish: a fan-shaped tail fin, two small side fins and a little round fish mouth, soft rounded bumps instead of spikes, puffing out a gentle white swirl of breeze and two small white clouds"
+   },
+   {
+    "body": "a young PUFFERFISH floating in the air, peach-coral round body with a pale-yellow belly, its side fins have grown into little fan-shaped wings, puffing a bigger swirl of breeze with small clouds"
+   },
+   {
+    "body": "a grown PUFFERFISH floating high like a round balloon, peach-coral body with a pale-yellow belly and soft rounded bumps, a big ROUNDED fan-shaped sail on its back like a soft paper fan (smooth curved edge, no spikes, no points, no crest), wide round fan wings, blowing a strong friendly swirl of wind with several small clouds trailing behind"
+   }
+  ]
+ },
+ {
+  "id": "pumpy",
+  "animal": "wombat",
+  "word": "pumpkin",
+  "not": "big sleeping dark-teal giants, hippos, bears, pumpkin ghost Pokémon, Moony the sloth",
+  "stages": [
+   {
+    "body": "a tiny chubby baby WOMBAT with soft sandy-brown fur and a big round pumpkin-orange belly with gentle pumpkin segment lines, a little green pumpkin stem curl and one leaf on top of its head, sleepy half-closed happy eyes, hugging a small pumpkin snack"
+   },
+   {
+    "body": "a young WOMBAT with sandy-brown fur and a rounder pumpkin-orange belly with segment lines, a green pumpkin vine with a leaf wrapped round its neck like a scarf, hugging a small pumpkin as a pillow and yawning"
+   },
+   {
+    "body": "a grown chubby WOMBAT with sandy-brown fur and a huge round pumpkin-orange belly with segment lines, a crown of curly pumpkin vines and leaves, napping happily on top of a giant pumpkin with small pumpkins around it"
+   }
+  ]
+ },
+ {
+  "id": "splashy",
+  "animal": "cygnet (baby swan)",
+  "word": "lily",
+  "not": "ducks or ducklings (no flat orange duck bill, no short neck), geese, red or orange fish, swan or duck Pokémon, Duolingo characters, Snowy the penguin",
+  "stages": [
+   {
+    "body": "a tiny fluffy baby SWAN cygnet with soft silver-grey down, a long gracefully curved slender neck, a small narrow dark slate-grey swan beak (not flat, not orange), wearing a round green water-lily pad like a little cape with one pink water-lily flower, flapping its small wings and splashing clumsily but proudly in a puddle"
+   },
+   {
+    "body": "a young SWAN with grey down turning white in patches, a longer curved neck and slate-grey beak, practicing paddling across water while standing on a big green water-lily pad, wings growing bigger"
+   },
+   {
+    "body": "a grown elegant white SWAN with a long graceful curved neck and a slate-grey beak, gliding smoothly on calm water with wide graceful wings, wearing a small crown of pink water lilies on its head"
+   }
+  ],
+  "portrait": "Keep the narrow slate-grey swan beak clearly visible."
+ },
+ {
+  "id": "shady",
+  "animal": "slow loris",
+  "word": "shadow",
+  "not": "purple grinning spiky ghosts, ghost Pokémon, bats, cats, Moony the navy sloth",
+  "stages": [
+   {
+    "body": "a tiny baby SLOW LORIS with soft charcoal-grey fur, a peach-cream face with huge round gentle eyes in darker eye patches and a cream forehead stripe, followed by a soft translucent lilac shadow-puff shaped like a second little loris that copies its playful pose"
+   },
+   {
+    "body": "a young SLOW LORIS with charcoal-grey fur and a peach-cream face with big eyes, its soft lilac shadow twin has grown bigger and makes a playful bunny shape with its hands like a shadow puppet"
+   },
+   {
+    "body": "a grown SLOW LORIS standing upright, charcoal-grey fur and peach-cream face, holding a small glowing paper lantern while a big friendly lilac shadow behind it dances and copies its pose like a shadow-play show"
+   }
+  ]
+ },
+ {
+  "id": "wavy",
+  "animal": "humpback whale calf",
+  "word": "wave",
+  "not": "round blue whale Pokémon, pink singing balloon creatures, Bubbo the teal otter (avoid teal), microphones or music symbols",
+  "stages": [
+   {
+    "body": "a tiny chubby baby HUMPBACK WHALE calf in soft periwinkle blue with a pale lavender throat with gentle grooves, long rounded flippers like little arms, singing happily with its eyes closed while three small curling white wave crests float around it like a soft lullaby"
+   },
+   {
+    "body": "a young HUMPBACK WHALE in periwinkle blue with a pale lavender grooved throat, longer flippers, singing while its blowhole spout splashes up in the shape of a curling white wave"
+   },
+   {
+    "body": "a grown HUMPBACK WHALE in periwinkle blue with very long wing-like flippers and a curling white wave crest running along its back like a mane, singing with its eyes closed while gentle wave ripples spread around it"
+   }
+  ],
+  "portrait": "Keep the small splashing water spout on top of its head; small curling wave crests float around it, not on it."
+ },
+ {
+  "id": "dewy",
+  "animal": "magpie chick",
+  "word": "dew",
+  "not": "crows, coin-loving cat Pokémon, owls, penguins (Snowy), Duolingo characters, coins or money",
+  "stages": [
+   {
+    "body": "a tiny round baby MAGPIE chick with glossy black and white feathers and a shimmering blue-green sheen on its wing tips, carrying a little leaf pouch full of round sparkling dewdrops, one big shiny dewdrop balanced on its head"
+   },
+   {
+    "body": "a young MAGPIE with glossy black and white feathers and blue-green wing sheen, a longer tail, wearing a necklace of sparkling dewdrops and a leaf satchel full of dewdrops"
+   },
+   {
+    "body": "a grown MAGPIE with a long elegant iridescent blue-green tail, a small crown of sparkling round dewdrops, pouring dewdrops from a leaf cup onto a small flower"
+   }
+  ],
+  "portrait": "Keep the short dark magpie beak clearly visible."
+ },
+ {
+  "id": "mellow",
+  "animal": "manatee calf",
+  "word": "seaweed",
+  "not": "seals or sea lions (no pointed face, no whiskers), walruses, pink dopey tail-fishing Pokémon, dugong Pokémon, Bubbo the otter",
+  "stages": [
+   {
+    "body": "a tiny plump baby MANATEE calf in soft sage grey-green with a very wide, flat, rounded square snout like a soft bean shape and no whiskers, small eyes, a rounded paddle tail draped with ribbons of bright green seaweed, slowly waving one flipper hello with sleepy happy eyes, a tiny friendly fish swimming beside it"
+   },
+   {
+    "body": "a young MANATEE in sage grey-green with a wide flat bean-shaped snout and no whiskers, a seaweed scarf around its neck, two small friendly fish swimming beside it"
+   },
+   {
+    "body": "a grown MANATEE in sage grey-green with a wide flat bean-shaped snout and no whiskers, a flowing mantle of bright green seaweed over its shoulders, a small school of friendly fish swimming around it as it waves slowly"
+   }
+  ],
+  "portrait": "Keep the wide flat bean-shaped snout with no whiskers."
+ },
+ {
+  "id": "mangi",
+  "animal": "giraffe calf",
+  "word": "mango",
+  "not": "giraffe Pokémon with a second head on its tail, pink egg-nurse creatures, Twinkle the golden-yellow fawn (avoid an all-yellow or golden body)",
+  "stages": [
+   {
+    "body": "a tiny baby GIRAFFE calf with fresh lime-green fur and rounded mango-orange patches shaped like little mangoes, a creamy belly, two soft ossicone horns topped with tiny green leaves, holding out a ripe mango to share, with a long gentle neck"
+   },
+   {
+    "body": "a young GIRAFFE with lime-green fur and mango-orange patches, longer neck, its ossicones sprout small mango leaves with one tiny mango, carrying a small basket of mangoes"
+   },
+   {
+    "body": "a grown tall GIRAFFE with lime-green fur and mango-orange patches, its ossicones have grown into little leafy mango branches holding ripe mangoes, bending its long neck down to hand a mango to a small friend"
+   }
+  ]
+ },
+ {
+  "id": "mossy",
+  "animal": "capybara pup",
+  "word": "moss",
+  "not": "quadrupeds with a plant or bulb growing on the back (keep the back plain), blue sea-serpent ferry Pokémon, hippos, beavers, guinea pigs (Carro), hamsters (Dandy), bears, Pinny the pangolin",
+  "stages": [
+   {
+    "body": "a tiny calm baby CAPYBARA pup with warm caramel-brown fur, a blunt square snout and small round ears, wearing a little round cap of bright green moss with two tiny white flowers on top of its head, a small friend (a tiny ladybug) riding on its plain smooth back, smiling peacefully while wading in shallow water"
+   },
+   {
+    "body": "a young CAPYBARA with caramel-brown fur and a square snout, a bigger round moss cap with tiny white flowers on its head, two small friends (a ladybug and a little bird) riding on its plain back"
+   },
+   {
+    "body": "a grown CAPYBARA with caramel-brown fur calmly swimming across a pond, a large moss crown with white flowers on its head, several small friends (a ladybug, a little bird, a snail) riding happily on its plain back"
+   }
+  ]
+ },
+ {
+  "id": "twirly",
+  "animal": "flamingo chick",
+  "word": "sunset",
+  "not": "fire birds or phoenix chicks (no red or orange flame-like feathers), flamingo Pokémon, pink fairy moon-dancers, Petal the hummingbird, ducks",
+  "stages": [
+   {
+    "body": "a tiny fluffy baby FLAMINGO chick in soft bubblegum pink with a lighter pink face and belly, a big curved pink beak with a black tip bent downward, long thin pink legs drawn as chunky capsules, twirling on one leg in a happy dance with a small half-circle sunset glow (peach and lilac) behind it"
+   },
+   {
+    "body": "a young FLAMINGO in bubblegum pink with longer legs and neck, a bent pink beak with a black tip, twirling on one leg with a ribbon of peach-and-lilac sunset color swirling around it"
+   },
+   {
+    "body": "a grown elegant FLAMINGO in bubblegum pink with peach and lilac sunset-colored wing tips, a bent pink beak with a black tip, dancing on one long leg with wings open in front of a large half-circle sunset glow"
+   }
+  ],
+  "portrait": "Keep the bent pink black-tipped flamingo beak clearly visible, angled to one side."
+ },
+ {
+  "id": "sayo",
+  "animal": "parrot chick",
+  "word": "echo",
+  "not": "music-note parrot Pokémon, owls, Duolingo characters, speech bubbles with letters",
+  "stages": [
+   {
+    "body": "a tiny round baby PARROT chick with bright leaf-green body, a sunny yellow face, a few sky-blue wing feathers and a short curved peach beak, mouth open as if repeating a word, with three soft curved echo ripple shapes floating beside its beak"
+   },
+   {
+    "body": "a young PARROT with leaf-green body, sunny-yellow face and sky-blue wing feathers, longer tail feathers, talking into a small rolled leaf like a little megaphone with bigger echo ripples"
+   },
+   {
+    "body": "a grown PARROT with leaf-green body, sunny-yellow face, a tall crest and long sky-blue and green tail plumes, wings open while singing, with round echo ripples spreading out around it like a halo"
+   }
+  ],
+  "portrait": "Keep the curved peach beak clearly visible."
+ },
+ {
+  "id": "dreamy",
+  "animal": "quokka joey",
+  "word": "lavender",
+  "not": "bears, koalas (Leafy), teddy bears, tapir or dream-eating Pokémon, kangaroo Pokémon, hamsters (Dandy), Moony the sloth, Shady the loris",
+  "stages": [
+   {
+    "body": "a tiny smiling baby QUOKKA (a small kangaroo-like marsupial) with soft dusk-lilac fur, small round ears set high, a short pointed snout with a small dark nose, a big happy smile with chubby cheeks, standing upright on long hind feet with a thin short tail like a little kangaroo, holding a sprig of purple lavender flowers and sniffing it, a couple of tiny lavender sparkles drifting around"
+   },
+   {
+    "body": "a young QUOKKA with dusk-lilac fur, a short POINTED snout with a small dark nose, small round ears set close together high on the head, a slim upright kangaroo-like body with long hind feet and a thin tail (a quokka, NOT a bear: no round flat bear face, no big round ears), a big smile, holding a bundle of lavender flowers and wearing a small lavender sachet scarf"
+   },
+   {
+    "body": "a grown QUOKKA standing tall with dusk-lilac fur, a short POINTED snout with a small dark nose, small round ears set close together high on the head, a slim upright kangaroo-like body with long hind feet and a thin tail (a quokka, NOT a bear: no round flat bear face, no big round ears), a big smile, a wreath of lavender flowers on its head, carrying a little woven basket of lavender, tiny sweet-dream sparkles floating around"
+   }
+  ],
+  "portrait": "Keep the short pointed quokka snout and small round ears; it must not look like a bear."
+ },
+ {
+  "id": "blossy",
+  "animal": "swallow chick",
+  "word": "blossom",
+  "not": "swallow Pokémon (no dark navy back with red face), pink birds (Petal the hummingbird, Twirly the flamingo), lime-green parrots (Echo); the body is jade green, not pink and not lime",
+  "stages": [
+   {
+    "body": "a tiny round baby SWALLOW chick in fresh spring jade green (like new spring leaves, #3cc88c) with a white face and belly, a clearly visible small pointed sunny-yellow bird beak, a small forked swallow tail with lighter mint tips, flying with little pointed wings spread wide, scattering soft pink cherry blossom petals, one pink blossom tucked on its head"
+   },
+   {
+    "body": "a young SWALLOW in spring jade green with a white face and belly and a small pointed yellow beak, a longer forked tail, a little wreath of pink cherry blossoms on its head, scattering more pink petals as it flies"
+   },
+   {
+    "body": "a grown elegant SWALLOW in spring jade green with a white face and belly, a pointed yellow beak and very long forked tail streamers, carrying a small branch of pink cherry blossoms in its beak while a swirl of pink petals follows it"
+   }
+  ],
+  "portrait": "Keep the small pointed yellow beak clearly visible."
+ },
+ {
+  "id": "rimo",
+  "animal": "arctic hare leveret",
+  "word": "frost",
+  "not": "rabbit Pokémon, ice birds, Snowy the lilac penguin, Puffy the cloud lamb, Dreamy the lilac quokka; no lilac, lavender or purple anywhere, no sky blue, no cloud-like fluffy body",
+  "stages": [
+   {
+    "body": "a tiny fluffy baby ARCTIC HARE leveret in clean snowy white, with pale icy aqua ear tips, paws and pom-pom tail (a glacier-ice color like #9eeaf0), a little six-point icy aqua frost crystal on its forehead, long upright ears, hopping forward and leaving a little trail of sparkly icy aqua frost-flower footprints behind it"
+   },
+   {
+    "body": "a young ARCTIC HARE in snowy white with longer ears tipped in icy aqua, a bigger icy aqua frost crystal on its forehead, leaving glowing icy aqua frost-flower footprints"
+   },
+   {
+    "body": "a grown ARCTIC HARE standing tall in snowy white, very long ears tipped with icy aqua crystal shapes, a short scarf of frost, with a trail of softly glowing icy aqua frost flowers lighting a path behind it"
+   }
+  ]
+ },
+ {
+  "id": "diggy",
+  "animal": "badger cub",
+  "word": "clover",
+  "not": "moles or ground-burrowing Pokémon, raccoon Pokémon, Mushy the raccoon (no eye mask, no ringed tail), skunks",
+  "stages": [
+   {
+    "body": "a tiny chubby baby BADGER cub with warm brown-grey fur, a bold wide white stripe running from its nose over the top of its head between two black face stripes, short sturdy legs with big pale digging claws, popping happily out of a small hole of soft brown soil with a three-leaf green clover sprouting on its head and more clovers springing up around the hole"
+   },
+   {
+    "body": "a young BADGER with warm brown-grey fur and a bold wide white head stripe, a crown of green three-leaf clovers, big pale digging claws, standing by a small burrow with clovers sprouting around"
+   },
+   {
+    "body": "a grown sturdy BADGER with warm brown-grey fur and a bold wide white head stripe, a large four-leaf clover growing on its head like a crest, big digging claws, standing proudly at a burrow surrounded by a little clover meadow"
+   }
+  ]
+ },
+ {
+  "id": "rainbo",
+  "animal": "peachick (baby peafowl)",
+  "word": "rainbow",
+  "not": "fire lizards or flame tails, peacock or bird Pokémon, Petal the hummingbird, Blossy the swallow, Twirly the flamingo",
+  "stages": [
+   {
+    "body": "a tiny round baby PEACHICK with soft cream-and-tan fluffy down, a small crest of three little round-tipped feathers on its head, and a short fan of tail feathers, each feather tip a different soft rainbow color (red, orange, yellow, green, blue, purple) glowing gently, happily showing off its tail"
+   },
+   {
+    "body": "a young PEAFOWL with cream-and-tan feathers, a bigger crest of round-tipped feathers, longer tail feathers whose tips are six soft rainbow colors"
+   },
+   {
+    "body": "a grown PEACOCK with cream-and-tan body feathers and a crest of round-tipped feathers, proudly spreading a magnificent fan tail with rainbow-colored round feather tips (red, orange, yellow, green, blue, purple)"
+   }
+  ],
+  "portrait": "Keep the small yellow beak clearly visible."
  }
 ]

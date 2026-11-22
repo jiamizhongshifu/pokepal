@@ -4,7 +4,7 @@
 
 - 去掉宝可梦 IP：名称、角色、精灵球、图鉴、叫声、3D 模型、图标与绘本插画全部替换为原创内容。
 - 界面与交互（2026-11-19 起）按多邻国设计系统重构，依据 [nexu-io/open-design · duolingo](https://github.com/nexu-io/open-design/tree/main/design-systems/duolingo) 的 `DESIGN.md` 与 `tokens.css`（Apache-2.0）：色板、字号、2px 边框 + 4px 厚底、卡片、关卡节点、进度条、焦点光圈、动效都照该规范实现，配色也直接采用（产品负责人的决定，已知外观会非常接近多邻国）。
-- 不使用的部分：多邻国的猫头鹰角色、商标与专有字体 Feather Bold（以开源 Nunito 代替）；角色始终是本项目的 16 种原创小精灵。
+- 不使用的部分：多邻国的猫头鹰角色、商标与专有字体 Feather Bold（以开源 Nunito 代替）；角色始终是本项目的 34 种原创小精灵。
 
 ## 产品名候选
 

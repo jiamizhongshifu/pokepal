@@ -5,7 +5,7 @@ import { withArticle } from './words';
 import { LEGACY_CREATURE } from './legacyCreatureMap';
 
 /**
- * Original island creatures: 16 species, each a baby animal plus one nature element, growing through 3 stages.
+ * Original island creatures: 34 species, each a baby animal plus one nature element, growing through 3 stages.
  * Every stage is one collectible creature with a stable numeric id (1000 + species index * 10 + stage),
  * so saves, voice lines and tests can refer to it; ids below 1000 are legacy and only read by the save migration.
  */

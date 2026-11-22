@@ -1,4 +1,4 @@
-# 16 种原创小精灵（设定草案 v2 · 动物 + 属性）
+# 34 种原创小精灵（设定草案 v2 · 动物 + 属性）
 
 2026-11-18 调整：借鉴宝可梦 151 的**设计方法**，不借鉴具体物种——
 
@@ -21,7 +21,7 @@
 | earth | 大地 | 灰、棕 | 石头花园、小树林 |
 | snow | 冰雪 | 冰蓝、白 | 树荫、清凉处 |
 
-## 16 种精灵（宝宝期名称）
+## 第一批 16 种精灵（宝宝期名称）
 
 | # | 英文名 | 中文名 | 原型动物 | 元素 / 英文词 | 属性 | 标志特征 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -42,7 +42,32 @@
 | 15 | Nutty | 栗栗 | chipmunk 花栗鼠 | acorn 橡果 | earth | 戴着橡果帽，大蓬尾巴 |
 | 16 | Carro | 萝萝 | guinea pig 豚鼠 | carrot 胡萝卜 | plant | 胡萝卜叶子一样的头毛 |
 
-16 种的三阶段名称与外形描述都在 `src/data/creatures.json`。
+## 第二批 18 种精灵（宝宝期名称，2026-11-22）
+
+借鉴宝可梦初代图鉴的**设定内核**（习性、能力、小故事）重新设计：只留孩子能懂、能玩的内核，把危险设定改成友好的版本，换成不在 151 代表物种里的原型动物再配一个自然元素，并让进化过程“兑现”这个内核。外形、物种、配色都不沿用。每只都做过配色撞色检查（与全部 34 种），并与宝可梦及其他知名角色逐一比对；4 只风险为“中”（亮亮、扑扑、浪浪、转转），按区分点定稿：亮亮保持淡紫灰 + 金色环纹尾，扑扑成年期保持粉色睡莲冠且不加蓝色，浪浪保持淡紫喉褶和浪花，转转保持宝宝期的绒毛圆身和晚霞光环。设计过程与比对记录在本地 `output/pokedex-inspired/`（`README.md`、`review.md`），每种的生成记录旁有 `similarity.md`。
+
+| # | 英文名 | 中文名 | 原型动物 | 元素 / 英文词 | 属性 | 标志特征 | 灵感来源 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 17 | Pinny | 松松 | pangolin | pinecone | plant | 松果鳞片，尾尖长着小松苗 | #001 |
+| 18 | Glowy | 亮亮 | ring-tailed lemur | glow | light | 脸颊是存着阳光的发光绒球，环纹尾高高竖起 | #025 |
+| 19 | Breezy | 呼呼 | pufferfish | wind | sky | 像气球一样飘，吹出微风和小云朵 | #109 |
+| 20 | Pumpy | 南南 | wombat | pumpkin | earth | 南瓜肚皮，头顶南瓜藤 | #143 |
+| 21 | Splashy | 扑扑 | cygnet (baby swan) | lily | water | 睡莲叶披风，在水里扑腾 | #129 |
+| 22 | Shady | 影影 | slow loris | shadow | night | 身后跟着学它动作的淡紫影子 | #094 |
+| 23 | Wavy | 浪浪 | humpback whale calf | wave | water | 头顶小水柱，身边卷着浪花 | #039 |
+| 24 | Dewy | 露露 | magpie chick | dew | sky | 背着装露珠的叶子小包，头顶一颗大露珠 | #052 |
+| 25 | Mellow | 慢慢 | manatee calf | seaweed | water | 宽扁的豆形吻部，尾巴缠着海草 | #079 |
+| 26 | Mangi | 芒芒 | giraffe calf | mango | plant | 青柠绿身体，芒果形斑点，角上是小叶芽 | #113 |
+| 27 | Mossy | 苔苔 | capybara pup | moss | earth | 头戴开小白花的苔帽，背上驮着小伙伴 | #131 |
+| 28 | Twirly | 转转 | flamingo chick | sunset | light | 泡泡糖粉，单脚转圈，身后半圈晚霞 | #035 |
+| 29 | Sayo | 学学 | parrot chick | echo | sky | 绿身黄脸，身边有回声波纹 | #151 |
+| 30 | Dreamy | 梦梦 | quokka joey | lavender | night | 抱着薰衣草，小圆耳、短尖吻 | #096 |
+| 31 | Blossy | 樱樱 | swallow chick | blossom | plant | 翡翠春绿，头戴樱花，撒下樱花瓣 | #146 |
+| 32 | Rimo | 霜霜 | arctic hare leveret | frost | snow | 雪白身体，冰青耳尖和霜晶额饰，留下霜花脚印 | #144 |
+| 33 | Diggy | 挖挖 | badger cub | clover | earth | 醒目的白色头纹，头顶幸运草 | #050 |
+| 34 | Rainbo | 彩彩 | peachick (baby peafowl) | rainbow | light | 彩虹色的扇尾 | #004 |
+
+34 种的三阶段名称与外形描述都在 `src/data/creatures.json`。
 
 试点后的修正（避免与第四至六代宝可梦相近）：刺猬改为小熊猫（背上长叶开花的刺猬接近「谢米」）；水獭避开蓝身奶白肚的配色；星星小鹿成年期去掉满角发光与藏青长鬃。
 
