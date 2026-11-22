@@ -5,7 +5,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {progressUnit} from '../../src/lib/learningProgress';
 import {learningPath,withReview,withWelcomeFriend} from '../../src/lib/learningPath';
-import {sceneSpots,leftBehind,bubblePictures,LESSON_SPOTS} from '../../src/lib/pathScene';
+import {sceneSpots,leftBehind,bubbleWords,LESSON_SPOTS} from '../../src/lib/pathScene';
 import {validateSave} from '../../src/lib/saveValidation';
 import {ICON_ASSETS as ICONS} from '../../src/icons/generated';
 
@@ -30,9 +30,11 @@ test('what a stop shows is always a picture that exists',()=>{
  const icons=ICONS as Record<string,string>;
  for(const node of learningPath(s).flatMap(c=>c.nodes)){
   assert.ok(icons[leftBehind(node)],`${node.key}: ${leftBehind(node)}`);
-  const pictures=bubblePictures(node);
-  assert.ok(pictures.length>=1&&pictures.length<=2,node.key);
-  for(const p of pictures)assert.ok(icons[p],`${node.key}: ${p}`);
+  const words=bubbleWords(node);
+  assert.ok(words.length<=2,node.key);
+  if(node.kind==='lesson')assert.ok(words.length>=1,`${node.key}: a lesson shows its words`);
+  if(node.kind!=='lesson'&&node.kind!=='review')assert.equal(words.length,0,`${node.key}: no bubble without words`);
+  for(const e of words)assert.ok(e.css||icons[e.icon!],`${node.key}: ${e.key}`);
  }
 });
 

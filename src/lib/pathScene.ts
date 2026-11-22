@@ -1,4 +1,4 @@
-import { learningEntry } from '../data/curriculum';
+import { learningEntry, type LearningEntry } from '../data/curriculum';
 import { errandFor } from '../island/errands';
 import type { PathNode, PathNodeKind } from './learningPath';
 
@@ -18,8 +18,12 @@ export function sceneSpots(nodes: readonly PathNode[]): SceneSpot[] {
 }
 /** What a finished stop leaves in the scene: a lesson leaves the thing its island errand makes, others their own sign. */
 export const leftBehind = (node: PathNode) => node.kind === 'lesson' && node.unit ? errandFor(node.unit)?.trace.icon ?? node.icon : node.icon;
-/** The pictures in the bubble above today's stop: a lesson shows two of its words, other stops their sign. */
-export function bubblePictures(node: PathNode): string[] {
- const words = node.kind === 'lesson' && node.unit ? node.unit.words.map(w => learningEntry(w)).filter(e => e?.icon && !e.css).map(e => e!.icon!) : [];
- return words.length ? [...new Set(words)].slice(0, 2) : [node.icon];
+/**
+ * What the bubble above today's stop shows: the words it is about — a lesson's new words, or the old words a review
+ * brings back. A stop without words of its own (story, island, friend, talk) has no bubble: its medallion says it.
+ */
+export function bubbleWords(node: PathNode): LearningEntry[] {
+ const keys = node.kind === 'lesson' && node.unit ? node.unit.words : node.kind === 'review' ? node.reviewKeys ?? [] : [];
+ const seen = new Set<string>();
+ return keys.map(k => learningEntry(k)).filter((e): e is LearningEntry => !!e && (!!e.icon || !!e.css) && !seen.has(e.key) && !!seen.add(e.key)).slice(0, 2);
 }

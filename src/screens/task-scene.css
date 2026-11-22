@@ -1,0 +1,19 @@
+/* Practice games in a scene: the friend stands on the left, the game sits on one white card titled with what to do. */
+#root .screen.task-staged { background-size: cover; background-position: center bottom; }
+#root .task-staged .task-friend { position: absolute; z-index: 2; left: 15%; bottom: 14%; translate: -50% 0; display: grid; justify-items: center; gap: 6px; width: min(22vw, 30vh); pointer-events: none; }
+#root .task-staged .task-friend img { width: 100%; aspect-ratio: 1; object-fit: contain; transform-origin: 50% 100%; animation: task-idle 2.4s ease-in-out infinite; filter: drop-shadow(0 8px 0 rgba(0, 0, 0, .12)); }
+#root .task-staged .task-friend span { padding: 4px 12px; border-radius: 999px; background: rgba(255, 253, 244, .92); font-size: 14px; font-weight: 800; color: #24413a; }
+#root .task-staged .practice-card { position: absolute; z-index: 3; left: 30%; right: 3%; top: calc(84px + env(safe-area-inset-top)); bottom: calc(16px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; padding: 16px 20px 12px; border-radius: 30px; background: #fff; box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); overflow: auto; }
+#root .task-staged .practice-card > header { flex: none; display: grid; justify-items: start; gap: 4px; padding-bottom: 6px; text-align: left; }
+#root .task-staged .practice-card > header small { padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); color: var(--brand-primary-deep, #3f9a00); font-size: 13px; font-weight: 800; }
+#root .task-staged .practice-card > header h2 { margin: 0; font-size: clamp(18px, 1.8vw, 24px); line-height: 1.35; color: #24413a; }
+#root .task-staged .practice-card .task-stage { flex: 1 0 auto; padding: 0; background: transparent; }
+/* The friend already stands in the scene; the game does not draw it again. */
+#root .task-staged .say-round .buddy { display: none; }
+@keyframes task-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
+@media (max-width: 700px) {
+ #root .task-staged .task-friend { left: auto; right: 12px; bottom: auto; top: calc(70px + env(safe-area-inset-top)); translate: none; width: 76px; }
+ #root .task-staged .task-friend span { display: none; }
+ #root .task-staged .practice-card { left: 10px; right: 10px; top: calc(150px + env(safe-area-inset-top)); bottom: 10px; padding: 12px 12px 10px; border-radius: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { #root .task-staged .task-friend img { animation: none; } }

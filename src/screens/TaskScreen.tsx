@@ -1,3 +1,5 @@
+import { storyBackground } from '../data/sceneArt';
+import './task-scene.css';
 import { CreatureImg } from "../components/CreatureImg";
 import { creatureArt, getCreature } from "../data/creatures";
 import {trackInteraction} from '../lib/interaction';
@@ -21,6 +23,12 @@ import { TraceTask } from "./tasks/TraceTask";
 import type { TaskKind } from "../types";
 import { Icon } from "../icons";
 
+/** Each practice game is played in a scene of its own, with the friend beside a titled card holding the game. */
+const TASK_SCENE: Record<TaskKind, string> = { listen: 'meadow', wordpic: 'orchard', repeat: 'playground', trace: 'garden-path' };
+const TASK_TITLE: Record<TaskKind, [kind: string, title: string]> = {
+  listen: ['听一听', '听伙伴说，点出对的那个'], wordpic: ['认一认', '看看图，找出伙伴说的那个'],
+  repeat: ['说一说', '听一句，跟着伙伴说一说'], trace: ['写一写', '从小圆点出发，跟着写一写'],
+};
 export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKind; boardIndex: number | null; practice?:boolean }) {
  const trackedStart=useRef(false);
  useEffect(()=>{if(!trackedStart.current){trackedStart.current=true;trackInteraction('practice_started');}},[]);
@@ -65,18 +73,19 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
   };
 
   return (
-    <ProgressHost.Provider value={progressHost}><div className={`screen task task-${kind}`} >
+    <ProgressHost.Provider value={progressHost}><div className={`screen task task-${kind} task-staged`} style={{backgroundImage:`url(${storyBackground(TASK_SCENE[kind])})`}}>
       <TopBar icon={info.icon} title={practice ? `${info.zh} · 加练` : info.zh} onBack={back} focused progress={!reward&&(kind==='trace'?<RoundProgress index={traced.length} total={practice?3:1} unit="个字母"/>:<div ref={setProgressHost}/>)} help={<FeatureGuide compact id={passive?"lesson":kind} autoVoice={false} enabled={!reward}>
         {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
       </FeatureGuide>}/>
 
-      {buddy!==undefined&&!reward&&<p className="task-buddy"><CreatureImg src={creatureArt(buddy)} alt=""/>{getCreature(buddy).nameZh}陪你练</p>}
+      {buddy!==undefined&&!reward&&<div className="task-friend"><CreatureImg src={creatureArt(buddy)} alt=""/><span>{getCreature(buddy).nameZh}陪你练</span></div>}
+      <div className="practice-card"><header><small>{TASK_TITLE[kind][0]}</small><h2>{TASK_TITLE[kind][1]}</h2></header>
       <div className="task-stage">
         {kind === "listen" && <ListenTask onFinish={finish} practice={practice} />}
         {kind === "repeat" && <RepeatTask onFinish={finish} practice={practice} buddyId={buddy} />}
         {kind === "wordpic" && <WordPicTask onFinish={finish} practice={practice} />}
         {kind === "trace" && <div className="trace-session"><TraceTask key={traced.length} excluded={traced} onFinish={letter=>{if(practice && traced.length<2)setTraced(prev=>[...prev,letter]);else finish();}} /></div>}
-      </div>
+      </div></div>
       {reward && (
         <Celebration onClose={back}>
           <div className="learning-reward">

@@ -89,3 +89,8 @@
  .stop-bubble { padding: 4px 8px; border-width: 3px; } .stop-bubble .icon { width: 28px !important; height: 28px !important; }
 }
 @media (prefers-reduced-motion: reduce) { .path-scene * { animation: none !important; transition: none !important; } }
+.stop-bubble-word { display: grid; place-items: center; width: clamp(30px, 3.2vw, 46px); height: clamp(30px, 3.2vw, 46px); }
+.stop-bubble-word > * { width: 100% !important; height: 100% !important; }
+.stop-bubble-word .learning-color { border-radius: 50%; border: 3px solid #fff; }
+.stop-bubble-word .phrase-picture { display: flex; } .stop-bubble-word .phrase-picture .icon { width: 50% !important; height: auto !important; }
+@media (max-width: 700px) { .stop-bubble-word { width: 28px; height: 28px; } }
