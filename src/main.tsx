@@ -40,6 +40,8 @@ restoreEntryAddress();
 if (import.meta.env.VITE_ONLINE && !import.meta.env.DEV) installAutoUpdate({
   loadedBuild: import.meta.env.VITE_APP_BUILD_ID,
   isSafe: () => { const g = useGame.getState(); return quietMoment({ loaded: g.loaded, saveBusy: g.saveBusy, saveIssue: g.saveIssue, screen: g.screen, hasTrainer: !!g.save.trainer }); },
+  // Back after a long break, any screen will do once the save is safely written (a new family still setting up excepted).
+  isSettled: () => { const g = useGame.getState(); return !g.loaded || (!g.saveBusy && !g.saveIssue && !!g.save.trainer); },
   subscribe: listener => useGame.subscribe(listener),
   beforeOpen: flushPendingSave,
 });

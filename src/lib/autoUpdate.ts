@@ -1,12 +1,18 @@
 import { checkOnlineUpdate, onlineUpdateEntry } from './onlineUpdate';
 
 /**
- * Returning visitors get the newest release without a manual check: on opening and on coming back to the tab, the
- * release is compared with the one running; a newer one is prepared in the background and opened once, only at a
- * moment when nothing is in progress (never mid-lesson or mid-play). One attempt per release per tab session.
+ * Returning visitors get the newest release without a manual check: on opening, on coming back to the tab and every
+ * few minutes while it is in view, the release is compared with the one running; a newer one is prepared in the
+ * background and opened once, at a moment when nothing is in progress (never mid-lesson or mid-play). Coming back
+ * after a long break also counts as such a moment, wherever the app was left: a home-screen app on a phone or tablet
+ * is usually resumed, not reopened, so otherwise it would keep the old release until the child went back to the path.
+ * One attempt per release per tab session.
  */
 export const AUTO_UPDATE_KEY = 'pokepal-auto-update';
 export const RECHECK_MS = 10 * 60 * 1000;
+/** Away at least this long, the first minute back is a fresh start. */
+export const AWAY_MS = 20 * 60 * 1000, RESUME_WINDOW_MS = 60 * 1000;
+export const freshStart = (awayMs: number) => awayMs >= AWAY_MS;
 
 export interface UpdateState { ready?: string; tried?: string | null; safe: boolean }
 /** Open the prepared release only when it is not the one this tab already tried to open, and the moment is safe. */
@@ -33,13 +39,19 @@ const browserEnv = (loadedBuild: string): UpdateEnv => ({
  * The "already opened" mark is written only immediately before the page is replaced: a failed save or a moment that
  * stopped being quiet leaves the release waiting, and it opens at the next quiet moment instead of never.
  */
-export function createAutoUpdate({ isSafe, beforeOpen, env }: { isSafe: () => boolean; beforeOpen: () => Promise<void>; env: UpdateEnv }) {
- let ready: string | undefined, checking = false, opening = false, last = -Infinity;
+export function createAutoUpdate({ isSafe, isSettled = isSafe, beforeOpen, env }: {
+ isSafe: () => boolean;
+ /** True when the save is read and nothing is being written: enough for a reload right after a long break. */
+ isSettled?: () => boolean;
+ beforeOpen: () => Promise<void>; env: UpdateEnv;
+}) {
+ let ready: string | undefined, checking = false, opening = false, last = -Infinity, resumeUntil = -Infinity;
+ const safe = () => isSafe() || (env.now() < resumeUntil && isSettled());
  const open = async () => {
-  if (opening || !shouldOpen({ ready, tried: env.read(), safe: isSafe() })) return;
+  if (opening || !shouldOpen({ ready, tried: env.read(), safe: safe() })) return;
   opening = true;
   try { await beforeOpen(); } catch { opening = false; env.note('save-failed'); return; }
-  if (!shouldOpen({ ready, tried: env.read(), safe: isSafe() })) { opening = false; env.note('not-quiet'); return; }
+  if (!shouldOpen({ ready, tried: env.read(), safe: safe() })) { opening = false; env.note('not-quiet'); return; }
   env.write(ready!); env.note('opening'); env.open();
  };
  const check = async () => {
@@ -49,26 +61,37 @@ export function createAutoUpdate({ isSafe, beforeOpen, env }: { isSafe: () => bo
   catch { env.note('check-failed'); /* A failed check never interrupts play; the parent page keeps the manual check. */ }
   finally { checking = false; }
  };
- return { check, open, changed: () => { if (ready) void open(); } };
+ /** Back after `awayMs` hidden: after a long break, the next minute counts as a quiet moment anywhere. */
+ const resume = (awayMs: number) => { if (freshStart(awayMs)) resumeUntil = env.now() + RESUME_WINDOW_MS; };
+ return { check, open, resume, changed: () => { if (ready) void open(); } };
 }
 
-export function installAutoUpdate({ loadedBuild, isSafe, subscribe, beforeOpen }: {
+export function installAutoUpdate({ loadedBuild, isSafe, isSettled, subscribe, beforeOpen }: {
  loadedBuild: string;
  /** True when leaving the page loses nothing: no lesson, game or save in progress. */
  isSafe: () => boolean;
+ /** True when the save is read and nothing is being written. */
+ isSettled?: () => boolean;
  /** Called whenever the app state changes, so a waiting release opens as soon as the moment is safe. */
  subscribe: (listener: () => void) => () => void;
  /** Finish writing progress before the page is replaced. */
  beforeOpen: () => Promise<void>;
 }) {
  if (!('serviceWorker' in navigator)) return () => {};
- const updater = createAutoUpdate({ isSafe, beforeOpen, env: browserEnv(loadedBuild) });
- const visible = () => { if (!document.hidden) { void updater.check(); void updater.open(); } };
+ const updater = createAutoUpdate({ isSafe, isSettled, beforeOpen, env: browserEnv(loadedBuild) });
+ let hiddenAt = document.hidden ? Date.now() : -1;
+ const visible = () => {
+  if (document.hidden) { hiddenAt = Date.now(); return; }
+  if (hiddenAt >= 0) { updater.resume(Date.now() - hiddenAt); hiddenAt = -1; }
+  void updater.check(); void updater.open();
+ };
+ // A page left open and in view (a tablet on a stand, a desktop tab) still learns of a new release.
+ const timer = setInterval(() => { if (!document.hidden) void updater.check(); }, RECHECK_MS);
  document.addEventListener('visibilitychange', visible);
  window.addEventListener('online', visible);
  const unsubscribe = subscribe(updater.changed);
  void updater.check();
- return () => { document.removeEventListener('visibilitychange', visible); window.removeEventListener('online', visible); unsubscribe(); };
+ return () => { clearInterval(timer); document.removeEventListener('visibilitychange', visible); window.removeEventListener('online', visible); unsubscribe(); };
 }
 
 /** Screens a page reload cannot interrupt: a returning child's welcome, the learning path and the friends album. */

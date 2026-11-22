@@ -53,3 +53,21 @@ test('the same release never opens twice in a tab, and a busy moment waits',asyn
  const b=fakeEnv();let safe=false;const w=createAutoUpdate({isSafe:()=>safe,beforeOpen:async()=>{},env:b.env});
  await w.check();assert.equal(b.st.opened,0);safe=true;w.changed();await new Promise(r=>setTimeout(r,0));assert.equal(b.st.opened,1);
 });
+
+test('back after a long break, the release opens on any settled screen, but only in the first minute',async()=>{
+ const {AWAY_MS,RESUME_WINDOW_MS,freshStart}=await import('../../src/lib/autoUpdate');
+ assert.equal(freshStart(AWAY_MS-1),false);assert.equal(freshStart(AWAY_MS),true);
+ let now=0,settled=true;const {st,env}=fakeEnv({now:()=>now});
+ const u=createAutoUpdate({isSafe:()=>false,isSettled:()=>settled,beforeOpen:async()=>{},env});
+ await u.check();assert.equal(st.opened,0,'on the island, mid-play: waits');
+ u.resume(5*60*1000);await u.open();assert.equal(st.opened,0,'a short break is not a fresh start');
+ u.resume(AWAY_MS);settled=false;await u.open();assert.equal(st.opened,0,'not while saving');
+ now=RESUME_WINDOW_MS+1;settled=true;await u.open();assert.equal(st.opened,0,'the fresh-start minute has passed');
+ u.resume(AWAY_MS+1);await u.open();assert.equal(st.opened,1,'back after a long break: opens wherever the child is');
+});
+test('without a settled check, a long break changes nothing (quiet moments only)',async()=>{
+ const {AWAY_MS}=await import('../../src/lib/autoUpdate');
+ const {st,env}=fakeEnv();
+ const u=createAutoUpdate({isSafe:()=>false,beforeOpen:async()=>{},env});
+ await u.check();u.resume(AWAY_MS);await u.open();assert.equal(st.opened,0);
+});
