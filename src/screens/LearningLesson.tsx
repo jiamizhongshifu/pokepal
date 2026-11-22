@@ -56,7 +56,7 @@ export function LearningLesson({id}:{id:string}){
   else{setResolvedRound(-1);setRound(n=>n+1);}
  };
  const staged=!picnicLesson;
- return <div className={`screen learning-lesson ${!finish?'lesson-playing':''} ${picnicLesson?'lesson-picnic-mode':''} ${staged?'lesson-staged':''}`} style={staged?{backgroundImage:`url(${storyBackground(u.scene)})`}:undefined}><TopBar title={u.title} onBack={()=>go({name:'home'})} focused progress={!finish&&<RoundProgress index={round} total={total}/>} help={<FeatureGuide compact id="lesson" autoVoice={false} autoOpen={!picnicLesson} enabled={!finish}><p><strong>身边的大人可以这样陪：</strong>{u.homePlay}</p><p>让宝宝自己选择，你来回应。不用提问考一考；打开帮助会暂停自动翻题，关闭后点“接着玩”。</p></FeatureGuide>}/><main className="lesson-wrap">
+ return <div className={`screen learning-lesson ${!finish?'lesson-playing':''} ${picnicLesson?'lesson-picnic-mode':''} ${staged?'lesson-staged':''}`} style={staged?{backgroundImage:`url(${storyBackground(u.scene)})`}:undefined}><TopBar title={u.title} onBack={()=>go({name:'home'})} focused progress={!finish&&<RoundProgress index={round} total={total}/>} help={<FeatureGuide compact id="lesson" autoVoice={false} autoOpen={!picnicLesson} enabled={!finish}><p><strong>身边的大人可以这样陪：</strong>{u.homePlay}</p><p>让宝宝自己选择，你来回应。不用提问考一考；打开帮助时伙伴会停下来等，关闭后会接着玩。</p></FeatureGuide>}/><main className="lesson-wrap">
    {!picnicLesson&&<div className="lesson-breadcrumb"><span>{finish?(reward?'小冒险完成啦':'下次接着听'):phraseRound?(listenFirst?'听一句有用的话':round>u.words.length?'换个情境，用一用':'选一句有用的话'):listenFirst?'听听新的小发现':'帮伙伴找到它'}</span></div>}
    {picnicLesson?<LessonPicnic words={wordKeys} packed={packed} latest={resolvedRound>=0?wordKeys[resolvedRound]:undefined} buddy={buddy.id} finished={finish&&!!reward}/>:<div className="lesson-world buddy-strip"><CreatureImg src={finish&&reward?creatureExpression(buddy.id,'cheer'):creatureArt(buddy.id)} alt={buddy.nameZh}/><span>{buddy.nameZh}{s.captures.length?'陪你一起玩':'是这次的小向导'}</span></div>}
    {finish&&!reward?<section className="lesson-finished"><Icon name="speaker" size={48}/><h1>先把小发现留下来</h1><p>还有 {s.learning?.units[id]?.pendingAudio?.length??0} 段声音待补听。这次先不算完成。</p><p>不着急，声音准备好了再来。</p><div className="lesson-actions"><button className="journey-primary" onClick={()=>{setRound(s.learning?.units[id]?.pendingAudio?.[0]??0);setFinish(false);}}><Icon name="speaker" size={28}/>补听这些声音</button><button onClick={()=>go({name:'home'})}>回小岛休息</button></div></section>:finish?<section className="lesson-finished"><h1>我们一起做到了</h1>{reward&&<EnergyToast reward={reward}/>}<p>今天带回家这一句，点一下可以再听。</p><button className="lesson-phrase" onClick={()=>hearEntry(learningEntry(u.phrase)!)}><Icon name="speaker" size={28}/>{u.phrase}<small>{learningEntry(u.phrase)!.zh}</small></button><aside className="lesson-home-idea" aria-label="给大人"><strong>给大人：在家这样玩一次</strong><p>{u.homePlay}</p><small>不用录音、不用打卡。试过后，可以在家长中心记一笔；那里也能看到这一周孩子是怎样作答的（长按右上角齿轮进入）。</small></aside>
@@ -125,7 +125,14 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  useEffect(()=>{active.current=true;introTimer.current=setTimeout(()=>{if(situation&&!guided)void hearSituation();else void hear();},300);return()=>{active.current=false;audioRun.current++;clearTimeout(introTimer.current);narration.current?.cancel();
   // Only a real departure counts as leaving: a remount on the next tick (React StrictMode) is not one.
   setTimeout(()=>{if(!active.current)finishTrace('left');},0);};},[]);
- useEffect(()=>{if(!guideOpen)return;audioRun.current++;clearTimeout(introTimer.current);narration.current?.cancel();setPlaying(false);setAudioFailed(false);},[guideOpen]);
+ // Help cuts the friend's voice; when it closes, the friend says it again so the child knows where they are.
+ const helpWasOpen=useRef(guideOpen);
+ useEffect(()=>{
+  const was=helpWasOpen.current;helpWasOpen.current=guideOpen;
+  if(guideOpen){audioRun.current++;clearTimeout(introTimer.current);narration.current?.cancel();setPlaying(false);setAudioFailed(false);return;}
+  if(was&&!auto.paused&&!continued.current&&!busy.current){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[guideOpen]);
  const tap=(entry:LearningEntry)=>{
   if(busy.current)return;const result=choice.pick(entry);if(result==='ignored')return;
   const t=trace.current;t.tries++;t.asked=true;
