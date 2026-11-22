@@ -1,0 +1,12 @@
+/* The notebook's words as cards: the picture and the word to hear, a heart to keep it, a small button to meet it again. */
+#root .learning-notebook .notebook-entry { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: center; gap: 4px 8px; padding: 12px 12px 10px; border: 2px solid var(--surface-border, #e5ece9); border-radius: 22px; background: var(--surface, #fff); box-shadow: 0 4px 0 rgba(0, 0, 0, .06); }
+#root .learning-notebook .notebook-listen-card { grid-row: span 2; display: flex; align-items: center; gap: 12px; min-height: 0; padding: 4px; border: 0; background: transparent; box-shadow: none; text-align: left; }
+#root .learning-notebook .notebook-art { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 18px; background: #f3f8f6; flex: none; }
+#root .learning-notebook .notebook-art .icon, #root .learning-notebook .notebook-art img { width: 46px !important; height: 46px !important; }
+#root .learning-notebook .notebook-art .learning-color { width: 42px; height: 42px; border-radius: 50%; }
+#root .learning-notebook .notebook-art .phrase-picture { display: flex; gap: 1px; } #root .learning-notebook .notebook-art .phrase-picture .icon { width: 26px !important; height: 26px !important; }
+#root .learning-notebook .notebook-definition { flex: 1; }
+#root .learning-notebook .notebook-bookmark { justify-self: end; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; }
+#root .notebook-again { justify-self: end; display: flex; align-items: center; gap: 4px; min-height: 36px; padding: 4px 10px 4px 6px; border: 2px solid var(--brand-primary, #58cc02); border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); color: var(--brand-ink, #24413a); font-size: 13px; font-weight: 800; white-space: nowrap; }
+#root .notebook-again .icon { width: 22px !important; height: 22px !important; }
+

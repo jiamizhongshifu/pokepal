@@ -49,7 +49,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
-            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>有邀请果时，它会坐船来做客。<small lang="en">Bring an invite berry.</small></p></>}
+            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>有邀请果时，它会坐船来做客。<small lang="en">Bring an invite berry.</small></p></>}
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">
@@ -77,7 +77,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           {cap && (
             <div className="bond">
               <Hearts n={togetherHearts(cap)} /><span className="bond-meta">一起玩了 {playedTogether(cap)} 次</span>
-              <span className="bond-meta"><InviteBerry type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>
+              {cap.caughtAt > Date.UTC(2020, 0, 1) && <span className="bond-meta"><InviteBerry type="poke" size={24} /> {new Date(cap.caughtAt).toLocaleDateString("zh-CN")} 带着{INVITE_KINDS[cap.ball].zh}来到小岛</span>}
             </div>
           )}
           <details className="official">

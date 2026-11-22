@@ -16,6 +16,7 @@ import { LearningRound } from './LearningLesson';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import '../learning-journey.css';
+import './notebook-cards.css';
 
 export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'retry';returnTo?:'parent'}){
  const s=useGame(v=>v.save),go=useGame(v=>v.go),toggle=useGame(v=>v.saveLearningWord);
@@ -37,7 +38,7 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
   {!keys.length?<section className="learning-empty"><Icon name={filter==='retry'?'heart':'book'} size={70}/><h2>{query?'换个词找找看':filter==='retry'?'没有需要再试的小发现':filter==='saved'?'把喜欢的词放进来':'手册等着你的第一个发现'}</h2><p>{query?"可以试试中文，也可以看看已经发现的词。":filter==='saved'?"去全部发现，点一下词卡上的爱心。":filter==='retry'?"可以听听熟悉的词，也可以回小岛玩。":"和伙伴玩一站，听见的词就会来到这里。"}</p>{query||filter!=='all'?<button className="journey-primary" onClick={()=>{setQuery('');setFilter('all');setLimit(24);}}><Icon name="book" size={32}/>看看我的发现</button>:<button className="journey-primary" onClick={()=>useGame.getState().startUnit(recommendedUnit(s).id)}><Icon name="island" size={36}/>去小岛冒险</button>}</section>:<div className="notebook-entries">{keys.slice(0,limit).map(key=>{const e=learningEntry(key)!,r=records[key];return <article key={key} className="notebook-entry">
    <button className="notebook-listen-card" aria-label={`听${e.en}`} onClick={async()=>{if(await hearEntry(e))useGame.getState().noteWord(key,'heard');}}><span className="notebook-art"><LearningArt entry={e}/></span><span className="notebook-definition"><strong lang="en">{e.en}</strong><span>{e.zh}</span></span><Icon name="speaker" size={28}/></button>
    <button className="notebook-bookmark" aria-label={`${r.saved?'取消收藏':'收藏'}${e.en}`} aria-pressed={r.saved} onClick={()=>toggle(key)}><Icon name={r.saved?'heart':'heart-empty'} size={26}/></button>
-   <details className="notebook-word-more"><summary>再玩这个词</summary><button className="btn-small" onClick={()=>go({name:'review',keys:[key],returnTo})}><Icon name="refresh" size={26}/>陪我找一找</button></details>
+   <button className="notebook-again" aria-label={`陪我再找一找 ${e.en}`} onClick={()=>go({name:'review',keys:[key],returnTo})}><Icon name="refresh" size={24}/><span>再找找</span></button>
   </article>;})}</div>}
   {keys.length>limit&&<div className="lesson-actions"><button onClick={()=>setLimit(n=>n+24)}><Icon name="search" size={30}/>再看一些发现（{limit} / {keys.length}）</button></div>}
   <details className="quiet-disclosure notebook-parent"><summary>给家长 · 需要帮助的小发现</summary><p>重听不算答对；有无应用内提示分别记录，不代表识别了家长的帮助。</p><button className="btn-small" onClick={()=>{setFilter(filter==='retry'?'all':'retry');setQuery('');setLimit(24);requestAnimationFrame(()=>header.current?.scrollIntoView({block:'start'}));}}>{filter==='retry'?'返回全部发现':'看看需要再试的词'}</button>{filter==='retry'&&<p role="status">当前只显示需要帮助的小发现。</p>}</details>

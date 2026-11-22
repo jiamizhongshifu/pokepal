@@ -68,3 +68,6 @@
 #root .handoff-card .handoff-go { width: 100%; }
 #root .screen .handoff-backdrop { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; }
 /* New family on the welcome page: the grown-up reads the notice before the child chooses a look. */
+/* The main action on a friend's card is the brand's primary button. */
+#root .screen .wish-button.primary { background: var(--brand-primary); border-color: var(--brand-primary-deep); color: #fff; box-shadow: 0 4px 0 var(--brand-primary-deep); }
+#root .screen .wish-button.primary small { color: #eaffd9; }

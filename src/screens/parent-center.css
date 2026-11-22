@@ -129,3 +129,6 @@
 #root .parent-storage-facts p{margin:0 0 6px;font-size:var(--text-base)}
 #root .parent-storage-facts small{color:var(--brand-ink-muted);font-size:var(--text-sm)}
 #root .parent-project-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+/* Links and project buttons line up on the left like the rest of the page. */
+#root .parent-support-tools .parent-support-links { justify-content: flex-start; padding-left: 0; }

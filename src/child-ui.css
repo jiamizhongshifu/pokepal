@@ -112,7 +112,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .detail-desc { box-shadow: none; }
 .detail-desc .en { font-size:var(--text-2xl); line-height: 1.5; }
 .detail-desc .zh { font-size:var(--text-xl); line-height: 1.6; }
-.fact-row { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.fact-row { grid-template-columns: repeat(auto-fit,minmax(96px,1fr)); gap: 10px; }
 .fact { min-height: 120px; height: 100%; font-size:var(--text-xl); }
 .fact small { font-size:var(--text-lg); }
 .official summary { padding: 18px 0; min-height: 56px; }
