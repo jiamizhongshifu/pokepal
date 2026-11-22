@@ -84,3 +84,19 @@
 .island-ask-stage.is-free .learning-color{width:44px;height:44px;border-radius:50%}
 .island-ask-stage.is-free .island-ask-options small{font-size:var(--text-sm)}
 .island-free-done{justify-self:center;min-height:52px}
+
+/* A thing in a colour (combined instruction): the colour is the plate the thing sits on. */
+.island-ask-tinted{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;box-shadow:inset 0 0 0 4px rgb(255 255 255/.55)}
+.island-ask-tinted .icon{width:58px!important;height:58px!important}
+.island-ask-stage.is-find .island-ask-tinted{width:100%;height:100%}
+.island-ask-stage.is-find .island-ask-tinted .icon{width:68%!important;height:68%!important}
+.island-ask-stage.is-do .island-ask-options:has(.island-ask-tinted){grid-template-columns:repeat(2,minmax(0,1fr))!important}
+/* The child leads: sentences to tap, and what the friend then does. */
+.island-ask-stage.is-lead .island-ask-options{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.island-ask-stage.is-lead .phrase-picture{display:flex;gap:2px}
+.island-ask-stage.is-lead .phrase-picture .icon{width:30px!important;height:30px!important}
+.island-free-did{margin:0;text-align:center;font-weight:800;color:var(--text)}
+
+/* The group picture at the end of a chapter party. */
+.island-party-photo{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px;border-radius:var(--radius-lg);border:4px solid var(--surface);background:var(--brand-sun-soft);box-shadow:0 3px 0 rgb(0 0 0/.12);rotate:-2deg}
+.island-party-photo img{width:52px;height:52px;object-fit:contain}

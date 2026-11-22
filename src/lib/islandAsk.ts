@@ -10,12 +10,14 @@ import type { SaveData } from '../types';
 /** The island activity an answer belongs to: the farm/picnic/feed/ball rounds or one of the place activities. */
 export type IslandPlay = string;
 /** A picture to tap: a learned word, a friend's portrait, or the child's own avatar (`avatar`, with an optional photo). */
-export interface AskOption { id: string; entry?: LearningEntry; image?: string; avatar?: string; photo?: string; label: string }
+/** `tint`: the thing is shown in this colour (a combined instruction such as “red ball”). */
+export interface AskOption { id: string; entry?: LearningEntry; image?: string; avatar?: string; photo?: string; label: string; tint?: string }
 /**
  * `situation`: instead of hearing the answer, the child hears what is happening (in Chinese) and chooses what to say;
  * with `model` the sentence itself follows as an example, for a child who is still mostly listening.
  */
-export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string; situation?: string; model?: boolean }
+/** `also`: a second learned word said before the prompt (the colour of the thing); both count as answered. */
+export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string; situation?: string; model?: boolean; also?: LearningEntry }
 export const ISLAND_SOURCE = (play: IslandPlay) => `island:${play}`;
 export const isIslandSource = (source: string) => source.startsWith('island:');
 
@@ -45,6 +47,19 @@ export function wordAsk(play: IslandPlay, target: string, pool: string[], seed: 
  if (!others.length) return undefined;
  const options = rotate([target, ...others], seed + 1).map(w => learningEntry(w)!).filter(Boolean).map(e => ({ id: e.key, entry: e, label: e.zh }));
  return { play, prompt, options, answer: prompt.key };
+}
+
+/**
+ * A combined instruction from two learned words: a colour and a thing (“red … ball”). The four pictures are the two
+ * things in the two colours, so only a child who follows both words finds the one that is meant.
+ */
+export function comboAsk(play: IslandPlay, thing: string, color: string, things: string[], colors: string[], seed: number): IslandAsk | undefined {
+ const prompt = learningEntry(thing), also = learningEntry(color);
+ const otherThing = rotate(things.filter(t => t !== thing), seed)[0], otherColor = rotate(colors.filter(c => c !== color), seed)[0];
+ const t2 = otherThing ? learningEntry(otherThing) : undefined, c2 = otherColor ? learningEntry(otherColor) : undefined;
+ if (!prompt || !also?.css || !t2 || !c2?.css) return undefined;
+ const option = (c: LearningEntry, t: LearningEntry): AskOption => ({ id: `${c.key}|${t.key}`, entry: t, tint: c.css, label: `${c.zh}的${t.zh}` });
+ return { play, prompt, also, answer: `${also.key}|${prompt.key}`, options: rotate([option(also, prompt), option(also, t2), option(c2, prompt), option(c2, t2)], seed + 1) };
 }
 
 /** Picnic: the friend asks for one fruit in the basket; other learned foods are the other pictures. */

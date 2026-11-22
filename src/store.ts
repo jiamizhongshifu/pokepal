@@ -1,5 +1,6 @@
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { finishErrand } from './island/errands';
+import { finishParty } from './island/parties';
 import { toggleSticker } from './island/stickers';
 import { getCreature as creatureOf } from './data/creatures';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
@@ -136,6 +137,8 @@ interface State {
   finishIslandPlay: (playId:string,partner:number)=>boolean;
   /** A lesson's island errand got done with a companion: its island stop is complete and its trace stays for a while. */
   finishErrand: (unitId:string,partner?:number)=>boolean;
+  /** A chapter's island party was held. */
+  finishParty: (chapter:number)=>boolean;
   /** Put an earned island sticker away or bring it back. */
   toggleSticker: (id:string)=>boolean;
   markHomeTried: (id:string,tried:boolean)=>void;
@@ -322,6 +325,7 @@ export const useGame = create<State>((set, get) => {
     toggleSticker(id) {return !!mut(s=>toggleSticker(s,id));},
     finishIslandPlay(playId,partner) {const play=playById(playId,get().save);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
     finishErrand(unitId,partner) {return !!mut(s=>finishErrand(s,unitId,partner));},
+    finishParty(chapter) {return !!mut(s=>finishParty(s,chapter));},
     markHomeTried(id,tried) {mut(s=>markHomeTried(s,id,tried));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
     noteStationLearning(station,key,action=false) {const reward=mut(s=>{

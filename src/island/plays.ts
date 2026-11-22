@@ -1,5 +1,5 @@
 import { LEARNING_UNITS } from '../data/curriculum';
-import { wordAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
+import { wordAsk, comboAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { SaveData } from '../types';
 import { HOMES, placeById } from './world';
 import { unlockedDistricts, islandTask, type IslandTask } from '../lib/islandPlan';
@@ -18,15 +18,19 @@ import { learningEntry } from '../data/curriculum';
  * - `sort`: tap the named colour and it fills the next of the `slots` (lamps, boats);
  * - `say`: recognise a sentence from its picture;
  * - `echo`: no question at all: the child taps any learned thing, hears its word, and the friend answers back;
- * - `toy`: no question either: the child taps any learned colour and the next of the `slots` takes it.
+ * - `toy`: no question either: the child taps any learned colour and the next of the `slots` takes it;
+ * - `lead`: the child gives the instruction: taps a learned sentence, hears it, and the friend does it.
+ *
+ * `from`: the activity opens only once that many lessons are finished (the last chapters bring the island new ways
+ * to use old words instead of new words).
  *
  * `owner`: a companion's own activity (its little wish), grown from what that creature is like; it is offered only
  * with that companion, at the companion's favourite place or home.
  */
 export type AskKind = 'do' | 'find' | 'sort' | 'say';
-export type PlayKind = AskKind | 'echo' | 'toy';
-export const isFreePlay = (play: Play) => play.kind === 'echo' || play.kind === 'toy';
-export interface Play { id: string; kind: PlayKind; place: string; title: string; pool: string[]; result: string; icon: string; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; owner?: string }
+export type PlayKind = AskKind | 'echo' | 'toy' | 'lead';
+export const isFreePlay = (play: Play) => play.kind === 'echo' || play.kind === 'toy' || play.kind === 'lead';
+export interface Play { id: string; kind: PlayKind; place: string; title: string; pool: string[]; result: string; icon: string; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; owner?: string; from?: number }
 export const PLAYS: Play[] = [
  { id: 'greet', kind: 'say', place: 'tent', title: '在帐篷门口打招呼', pool: ['Hello!', 'Good night!', 'Bye-bye!'], result: '伙伴挥挥手，开心地进帐篷啦', icon: 'tent' },
  { id: 'tidy', kind: 'do', to: { icon: 'tent', label: '玩具箱' }, place: 'tent', title: '收拾小营地', pool: ['ball', 'book', 'hat'], result: '玩具都收好啦，营地干干净净', icon: 'check' },
@@ -44,6 +48,7 @@ export const PLAYS: Play[] = [
  { id: 'boats', kind: 'sort', slots: 'boat', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
  { id: 'stage-free', kind: 'toy', slots: 'lamp', place: 'music', title: '自己点彩灯', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '舞台被你点得亮闪闪的', icon: 'music' },
  { id: 'boats-free', kind: 'toy', slots: 'boat', place: 'pier', title: '自己给小船涂色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船都穿上了你选的颜色', icon: 'waves' },
+ { id: 'lead', kind: 'lead', from: 20, place: 'ball', title: '你来说，伙伴来做', pool: ['My turn!', 'Your turn!', "Let's play!", "Let's go!", "Let's tidy up!", 'Good night!', 'Hello!'], result: '你说什么，伙伴就做什么', icon: 'speak' },
  { id: 'nap', kind: 'say', place: 'hammock', title: '吊床午睡', pool: ['I need a rest.', 'Good night!', 'Stay with me, please.', 'I feel sad.'], result: '伙伴在吊床上安心地睡着啦', icon: 'moon' },
 ];
 export const ROUNDS = 3;
@@ -105,7 +110,21 @@ export function learnedKeys(s: SaveData): Set<string> {
  return new Set(LEARNING_UNITS.filter(u => s.learning?.units[u.id]?.completedAt).flatMap(u => [...u.words, u.phrase]));
 }
 export const learnedFrom = (s: SaveData, play: Play) => { const k = learnedKeys(s); return play.pool.filter(w => k.has(w)); };
-export const playOpenFor = (s: SaveData, play: Play) => learnedFrom(s, play).length >= 2;
+/** Lessons finished so far. */
+export const lessonsDone = (s: SaveData) => LEARNING_UNITS.filter(u => s.learning?.units[u.id]?.completedAt).length;
+export const playOpenFor = (s: SaveData, play: Play) => learnedFrom(s, play).length >= 2 && lessonsDone(s) >= (play.from ?? 0);
+/** What the friend does when the child gives the instruction. */
+export const LEAD_REACTIONS: Record<string, string> = {
+ 'My turn!': '伙伴把小球让给你啦', 'Your turn!': '伙伴接过小球，滚了起来', "Let's play!": '伙伴蹦蹦跳跳地玩起来', "Let's go!": '伙伴跟着你出发啦',
+ "Let's tidy up!": '伙伴把东西一件件收好', 'Good night!': '伙伴打了个哈欠，闭上眼睛', 'Hello!': '伙伴冲你挥挥手',
+};
+/** From the fifth chapter on (16 lessons), the last round of an activity with things combines a colour with the thing. */
+export const COMBO_FROM = 16;
+const learnedColors = (s: SaveData) => [...learnedKeys(s)].filter(k => !!learningEntry(k)?.css);
+export function comboReady(s: SaveData, play: Play) {
+ return (play.kind === 'do' || play.kind === 'find') && lessonsDone(s) >= COMBO_FROM && learnedColors(s).length >= 2
+  && learnedFrom(s, play).filter(k => { const e = learningEntry(k); return e?.kind === 'word' && !e.css; }).length >= 2;
+}
 /** Activities at a place: only in an area the learning path has opened, and only with two learned items. */
 export const playsAt = (s: SaveData, place: string) => {
  const at = placeById(place);
@@ -139,8 +158,13 @@ export function playOrder(s: SaveData, play: Play, session: string, now = Date.n
 export function playAsk(s: SaveData, play: Play, session: string, round: number, order = playOrder(s, play, session)): IslandAsk | undefined {
  const items = learnedFrom(s, play);
  if (items.length < 2 || !order.length) return undefined;
- const base = seedOf(`${play.id}-${session}`);
- return wordAsk(play.id, order[round % order.length], items, base + round, Math.min(playChoices(s, play), items.length));
+ const base = seedOf(`${play.id}-${session}`), target = order[round % order.length];
+ if (round === ROUNDS - 1 && comboReady(s, play) && !learningEntry(target)?.css) {
+  const colors = learnedColors(s), things = items.filter(k => !learningEntry(k)?.css);
+  const combo = comboAsk(play.id, target, colors[Math.abs(base + round) % colors.length], things, colors, base + round);
+  if (combo) return combo;
+ }
+ return wordAsk(play.id, target, items, base + round, Math.min(playChoices(s, play), items.length));
 }
 
 /** What a free activity (echo, toy) puts in front of the child: learned things, those due to be met again first. */

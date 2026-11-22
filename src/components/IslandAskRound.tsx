@@ -39,7 +39,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
  const spot = (i: number) => SPOTS[(i + Math.abs(seedOf(ask.answer))) % SPOTS.length];
  const hear = async (replay = false) => {
   if (replay && trace.current.firstAnswer === null) trace.current.replays++;
-  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...learningVoice(ask.prompt));
+  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...(ask.also ? [['en', ask.also.voiceEn ?? ask.also.en] as ['en', string], ['en', ask.prompt.voiceEn ?? ask.prompt.en] as ['en', string]] : learningVoice(ask.prompt)));
   if (ok && live.current) { trace.current.heard = true; useGame.getState().noteStationLearning(station, ask.prompt.key, false); }
  };
  const record = (outcome: 'solved' | 'left') => {
@@ -52,7 +52,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   if (done) return;
   const t = trace.current; t.tries++;
   if (t.firstAnswer === null) t.firstAnswer = id === ask.answer ? 'correct' : 'wrong';
-  useGame.getState().noteAttempt(ask.prompt.key, id === ask.answer, t.wrongs > 0 || shown || !t.heard || !!ask.model, ISLAND_SOURCE(ask.play));
+  for (const key of ask.also ? [ask.prompt.key, ask.also.key] : [ask.prompt.key]) useGame.getState().noteAttempt(key, id === ask.answer, t.wrongs > 0 || shown || !t.heard || !!ask.model, ISLAND_SOURCE(ask.play));
   if (id === ask.answer) {
    setDone(true); sfx('ding'); record('solved');
    // In a situation the chosen sentence is what gets said: the child hears their choice before the island answers.
@@ -70,7 +70,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   {ask.situation && <p className="island-ask-situation">{ask.situation}</p>}
   <div className={`island-ask-stage is-${kind}${ask.situation ? ' is-situation' : ''}`}>
    <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} onClick={() => tap(o.id)}>
-    {o.entry ? <LearningArt entry={o.entry} countIcon={countIcon} /> : o.avatar ? <TrainerAvatar avatar={o.avatar} photo={o.photo} size={80} /> : <CreatureImg src={o.image!} alt="" />}{!scene && <small>{ask.situation && o.entry ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
+    {o.entry && o.tint ? <span className="island-ask-tinted" style={{ background: o.tint }}><LearningArt entry={o.entry} /></span> : o.entry ? <LearningArt entry={o.entry} countIcon={countIcon} /> : o.avatar ? <TrainerAvatar avatar={o.avatar} photo={o.photo} size={80} /> : <CreatureImg src={o.image!} alt="" />}{!scene && !o.tint && <small>{ask.situation && o.entry ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
    {give && <div className="island-ask-target" aria-hidden="true"><span>›</span>{to ? <Icon name={to.icon} size={56} /> : speaker !== undefined ? <CreatureImg src={creatureArt(speaker)} alt="" /> : <Icon name="heart" size={56} />}<small>{to?.label ?? '给它'}</small></div>}
   </div>
   <p className="island-ask-hint" role="status">{shown ? '看，亮起来的就是它。' : ask.situation ? (wrong ? '再听一听，这时候说哪一句？' : '听一听，你想说哪一句？') : HINTS[kind][wrong ? 1 : 0]}</p>

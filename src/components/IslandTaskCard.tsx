@@ -13,7 +13,9 @@ export function IslandTaskCard({ task, onGo, onRoute, onHear }: { task: IslandTa
     <button className="island-task-hear" aria-label={`听一听 ${task.phrase.en}`} onClick={onHear}><Icon name="speaker" size={28} /></button>
     <button className="island-task-main" onClick={() => onGo(visitStation(task.station))}>
       <Icon name={place?.icon ?? 'island'} size={36} />
-      {task.kind === 'due'
+      {task.kind === 'party'
+        ? <span><strong>{task.title}</strong><small>带伙伴去{place?.name ?? '小岛'}，大家都在等你</small></span>
+        : task.kind === 'due'
         ? <span><strong>带伙伴去{place?.name ?? '小岛'}：{task.title}</strong><small><b lang="en">{task.phrase.en}</b> {task.phrase.zh} 想再见见你</small></span>
         : <span><strong>{task.kind === 'path' ? '路线任务：' : ''}带伙伴去{place?.name ?? '小岛'}</strong><small>用上 <b lang="en">{task.phrase.en}</b> {task.phrase.zh}</small></span>}
       <span aria-hidden="true">›</span>

@@ -10,6 +10,7 @@ import { PARTICIPATION_KINDS } from './participation';
 import { validFarm, migrateCrops } from './farm';
 import { validWishes } from '../island/plays';
 import { validTraces } from '../island/errands';
+import { validParties } from '../island/parties';
 import { validPicnic } from './picnic';
 import type { SaveData } from '../types';
 import { CREATURES } from '../data/creatures';
@@ -73,6 +74,7 @@ export function validateSave(input:unknown):SaveData {
  if(s.farm!==undefined)requireValue(validFarm(s.farm),'树果园');
  if(s.islandWishes!==undefined)requireValue(validWishes(s.islandWishes),'小心愿');
  if(s.islandTraces!==undefined)requireValue(validTraces(s.islandTraces),'小岛上留下的东西');
+ if(s.islandParties!==undefined)requireValue(validParties(s.islandParties),'小岛聚会');
  if(s.islandProgress!==undefined)requireValue(validIslandProgress(s.islandProgress),'岛屿礼物和升级');
  if(s.islandLiving!==undefined)requireValue(validLiving(s.islandLiving,ids),'小岛生活');
  if(s.picnic!==undefined)requireValue(validPicnic(s.picnic,s.captures.map((c:any)=>c.id))&&s.picnic.memories.every((m:any)=>ids.has(m.pokemonId)),'野餐回忆');

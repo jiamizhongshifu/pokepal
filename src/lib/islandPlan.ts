@@ -59,6 +59,8 @@ export type IslandTask =
  | { kind: 'revisit'; unit: LearningUnit; station: string; phrase: LearningEntry }
  /** A place where learned words are due to come back; `phrase` is the first of them, `play` the activity there. */
  | { kind: 'due'; station: string; play: string; title: string; phrase: LearningEntry }
+ /** A chapter's island party is waiting at `station`; `phrase` is the chapter's first sentence. */
+ | { kind: 'party'; station: string; chapter: number; title: string; phrase: LearningEntry }
  | { kind: 'route'; title: string };
 /**
  * One thing to do on the island. The path's island stop comes first; otherwise a lesson learned but not yet used on

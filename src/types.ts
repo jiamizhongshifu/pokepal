@@ -132,6 +132,8 @@ export interface SaveData {
   islandWishes?: import("./island/plays").WishState;
   /** What errands left on the island (lesson id → when), shown for a few days. */
   islandTraces?: import("./island/errands").IslandTraces;
+  /** Chapter parties held on the island (chapter index → when). */
+  islandParties?: import("./island/parties").IslandParties;
   storyAdventure?: import("./lib/storyPlayer").StoryPlayback;
   /** 可选字段兼容旧存档；花园不消耗能量，不绑定每日任务。 */
   /** Legacy flower-care save; retained for import compatibility, no longer used by gameplay. */

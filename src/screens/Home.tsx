@@ -44,8 +44,10 @@ import { IslandAskRound } from '../components/IslandAskRound';
 import { IslandPlaySession } from '../components/IslandPlaySession';
 import { IslandErrandSession } from '../components/IslandErrandSession';
 import { errandAt, shownTraces, type Errand } from '../island/errands';
+import { IslandPartySession } from '../components/IslandPartySession';
+import { islandNow, partyAt, type Party } from '../island/parties';
 import { shownStickers } from '../island/stickers';
-import { islandToday, playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
+import { playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -188,6 +190,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   /** The place activity being played in the place panel. */
   const [placePlay,setPlacePlay]=useState<Play|null>(null);
   const [placeErrand,setPlaceErrand]=useState<Errand|null>(null);
+  const [placeParty,setPlaceParty]=useState<Party|null>(null);
   const station = panel==='facility' && stationId ? placeOf(stationId) : null;
   const learningUnit=visitUnit(save);
   const courseVisit=station&&learningUnit.station===station.id&&!!save.learning?.units[learningUnit.id]?.completedAt;
@@ -301,13 +304,15 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
     return () => stopSpeech();
   }, [captures.length,active]);
 
+  /** A place with its own panel (ball field, picnic, farm) still opens as a place while something waits there. */
+  const waitsAt=(id:string)=>{const now=useGame.getState().save;return playsAt(now,id).length>0||!!errandAt(now,id)||!!partyAt(now,id);};
   const inviteStation = (id:string,cycle=false,preferred?:number) => {
-    setLockNote('');setPlacePlay(null);setPlaceErrand(null);
+    setLockNote('');setPlacePlay(null);setPlaceErrand(null);setPlaceParty(null);
     if(lockedAt(id.startsWith('area-')?id.slice(5) as District:stationDistrict(id==='together-ball'?'ball':id==='together-rest'?'bench':id)))return;
     if(id.startsWith('area-')){ambient.poke();stopSpeech();activatePanel('area');setAreaId(id.slice(5));return;}
     setAreaId(null);
     if(id==='upgrades'||id.startsWith('upgrades:')){openLiving(undefined,'build');return;}
-    if(id==='ball'&&playsAt(useGame.getState().save,'ball').length){openPlace('ball',cycle,preferred);return;}
+    if(id==='ball'&&waitsAt('ball')){openPlace('ball',cycle,preferred);return;}
     if(id==='ball'||id==='together-ball'||id==='together-rest'){
       openLiving();
       // A story's invitation already chose the activity; do not ask the child again.
@@ -315,9 +320,10 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       return;
     }
     setLivingOpen(false);together.cancel();
+    if(id==='picnic'&&waitsAt('picnic')){openPlace('picnic',cycle,preferred);return;}
     if(id==='picnic'){openPicnic();return;}
     setPicnicOpen(false);
-    if(id==='farm'&&playsAt(useGame.getState().save,'farm').length){openPlace('farm',cycle,preferred);return;}
+    if(id==='farm'&&waitsAt('farm')){openPlace('farm',cycle,preferred);return;}
     if(id==='farm'||id==='flowers'||/^farm-[0-2]$/.test(id)){openFarm(id==='flowers'||id==='farm'?0:Number(id.slice(-1)));return;}
     cancelWater();
     openPlace(id,cycle,preferred);
@@ -540,7 +546,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {active&&livingOpen&&<IslandLivingPanel save={save} together={together} initialId={livingInitialId} initialTab={livingTab} onBegin={beginTogether}
         onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();}}
         onPicnic={id=>openPicnic(id)}/>}
-      {hint==='task'&&<IslandTaskCard task={islandToday(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandToday(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
+      {hint==='task'&&<IslandTaskCard task={islandNow(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandNow(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
       {lockNote&&<p className="island-lock-note" role="status" onClick={()=>setLockNote('')}><Icon name="lock" size={24}/>{lockNote}</p>}
       {hint==='care' && need && <aside className="care-request" aria-label="伙伴的小心愿">
         <button className="care-open" onClick={()=>startWish(need.id,need.play)}><CreatureImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}想{need.play.title}</strong><small>点一下，陪它去{placeOf(need.play.place).name}</small></span><Icon name={need.play.icon} size={32}/></button>
@@ -561,16 +567,18 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {round?.play==='plant'&&panel==='ask'&&<section className="facility-panel island-ask-panel" aria-label="种一种水果"><strong>伙伴想种什么？</strong><IslandAskRound ask={round.ask} station="farm" onSolved={id=>plantSolved(round.index,id)} onClose={()=>{setRound(null);closePanel('ask');}}/></section>}
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
-        {placeErrand&&life.manual&&life.active.some(v=>v.manual)?<IslandErrandSession errand={placeErrand} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();}} onRoute={()=>{setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();stopSpeech();go({name:'home'});}}/>:placePlay&&life.manual&&life.active.some(v=>v.manual)?<IslandPlaySession play={placePlay} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlacePlay(null);setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();}}/>:<>
+        {placeParty&&life.manual&&life.active.some(v=>v.manual)?<IslandPartySession party={placeParty} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlaceParty(null);setStationId(null);closePanel('facility');life.cancel();}}/>:placeErrand&&life.manual&&life.active.some(v=>v.manual)?<IslandErrandSession errand={placeErrand} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlaceErrand(null);setPlaceParty(null);setStationId(null);closePanel('facility');life.cancel();}} onRoute={()=>{setPlaceErrand(null);setPlaceParty(null);setStationId(null);closePanel('facility');life.cancel();stopSpeech();go({name:'home'});}}/>:placePlay&&life.manual&&life.active.some(v=>v.manual)?<IslandPlaySession play={placePlay} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlacePlay(null);setPlaceErrand(null);setPlaceParty(null);setStationId(null);closePanel('facility');life.cancel();}}/>:<>
         <Icon name={station.icon} size={40}/>
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回学习路线'}</button>}
+        {life.manual&&life.active.some(v=>v.manual)&&(()=>{const party=partyAt(save,station.id);return party&&<div className="facility-plays"><button className="is-errand" onClick={()=>{stopSpeech();setPlaceParty(party);}}><Icon name="balloon" size={26}/>{party.title}</button></div>;})()}
         {life.manual&&life.active.some(v=>v.manual)&&(()=>{const errand=errandAt(save,station.id);return errand&&<div className="facility-plays"><button className="is-errand" onClick={()=>{stopSpeech();setPlaceErrand(errand);}}><Icon name="sign" size={26}/>{errand.title}<small>（用上 <b lang="en">{errand.unit.phrase}</b>）</small></button></div>;})()}
         {life.manual&&life.active.some(v=>v.manual)&&(()=>{const own=wishFor(save,getCreature(life.manual!.pokemonId).species);return own?.owner&&own.place===station.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId)&&<div className="facility-plays"><button className="is-wish" onClick={()=>{stopSpeech();setPlacePlay(own);}}><Icon name="heart" size={26}/>{own.title}<small>（它的小心愿）</small></button></div>;})()}
-        {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId),today=islandToday(save),due=today.kind==='due'&&today.play===p.id;return <button key={p.id} className={wish||due?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish?<small>（它的小心愿）</small>:due&&<small>（今天来这里）</small>}</button>;})}</div>}
+        {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId),today=islandNow(save),due=today.kind==='due'&&today.play===p.id;return <button key={p.id} className={wish||due?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish?<small>（它的小心愿）</small>:due&&<small>（今天来这里）</small>}</button>;})}</div>}
         {station.id==='ball'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openLiving();}}><Icon name="ball" size={28}/>一起玩球</button>}
+        {station.id==='picnic'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openPicnic();}}><Icon name="bowl" size={28}/>请伙伴来野餐</button>}
         {station.id==='farm'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openFarm();}}><Icon name="grass" size={28}/>去菜地种水果</button>}
         {captures.length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}
         </>}

@@ -31,7 +31,7 @@ export function IslandPlaySession({ play, partner, station, onClose }: { play: P
   {play.kind !== 'say' && <ol className={`island-play-made${play.slots ? ` is-${play.slots}` : ''}`} aria-label="已经做好的">{Array.from({ length: ROUNDS }, (_, i) => { const shown = free ? made.slice(-ROUNDS) : made, e = shown[i] ? learningEntry(shown[i]) : undefined; return <li key={i} className={e ? 'is-made' : undefined} style={play.slots && e?.css ? { background: e.css } : undefined} aria-label={e?.zh}>{!play.slots && e && <LearningArt entry={e} />}</li>; })}</ol>}
   {done ? <div className="island-play-done" role="status"><Icon name={play.icon} size={56} /><p>{play.result}</p>
    <div className="island-play-actions"><button className="farm-primary" onClick={onClose}><Icon name="island" size={28} />回小岛玩</button><button onClick={() => { setSession(crypto.randomUUID()); setRound(0); setDone(false); setMade([]); }}><Icon name="refresh" size={26} />再玩一次</button></div></div>
-   : play.kind === 'echo' || play.kind === 'toy' ? <IslandFreeRound key={session} kind={play.kind} items={items} speaker={partner} station={station} taps={made.length} onTap={key => setMade(m => [...m, key])} onDone={finish} onClose={onClose} />
+   : play.kind === 'echo' || play.kind === 'toy' || play.kind === 'lead' ? <IslandFreeRound key={session} kind={play.kind} items={items} speaker={partner} station={station} taps={made.length} onTap={key => setMade(m => [...m, key])} onDone={finish} onClose={onClose} />
    : ask ? <IslandAskRound key={`${session}-${round}`} ask={ask} speaker={partner} station={station} kind={play.kind} to={play.to} onSolved={solved} onClose={onClose} /> : null}
  </div>;
 }

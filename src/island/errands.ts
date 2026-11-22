@@ -59,17 +59,17 @@ export function errandAt(s: SaveData, placeId: string): Errand | undefined {
  const place = placeById(placeId);
  if (!place || !unlockedDistricts(s).has(place.district)) return undefined;
  const task = islandTask(s);
- const first = task.kind !== 'route' && task.kind !== 'due' && atStation(task.unit, place.id) && pending(s, task.unit) ? task.unit : LEARNING_UNITS.find(u => atStation(u, place.id) && pending(s, u));
+ const first = (task.kind === 'path' || task.kind === 'revisit') && atStation(task.unit, place.id) && pending(s, task.unit) ? task.unit : LEARNING_UNITS.find(u => atStation(u, place.id) && pending(s, u));
  return first && errandFor(first);
 }
 
 /** One step: choosing what to say in a situation, or acting on one of the lesson's words. */
 export interface ErrandStep { kind: AskKind; ask: IslandAsk }
-const sayStep = (scene: LearningSituation, seed: number, model: boolean): ErrandStep | undefined => {
+export const sayStep = (scene: LearningSituation, seed: number, model: boolean, play = 'errand'): ErrandStep | undefined => {
  const prompt = learningEntry(scene.phrase), other = learningEntry(scene.alternative);
  if (!prompt || !other) return undefined;
  const options = [prompt, other].map(e => ({ id: e.key, entry: e, label: e.zh }));
- return { kind: 'say', ask: { play: 'errand', prompt, options: seed % 2 ? options : [...options].reverse(), answer: prompt.key, situation: scene.situation, model } };
+ return { kind: 'say', ask: { play, prompt, options: seed % 2 ? options : [...options].reverse(), answer: prompt.key, situation: scene.situation, model } };
 };
 /**
  * The three steps of an errand: say the lesson's sentence in its situation; act on one of its words; then the
