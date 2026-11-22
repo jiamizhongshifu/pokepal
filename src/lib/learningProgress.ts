@@ -150,12 +150,14 @@ export function progressUnit(s:SaveData,id:string,round:number,now=Date.now()){
  p.round=Math.max(p.round,Math.min(unitRoundCount(unit),Math.max(0,round)));
  if(p.round===unitRoundCount(unit))p.completedAt??=now;
 }
-/** A visit is exposure. Only the actual named expression is recorded; no inferred speech. */
 /** A lesson happens at one island place; its station may name the place, a numbered spot there or a plot. */
 export const atStation=(unit:{station:string},stationId:string)=>{const a=placeById(unit.station),b=placeById(stationId);return !!a&&a.id===b?.id;};
-export function applyStation(s:SaveData,station:string,now=Date.now(),key?:string,action=false){
- const data=ensureLearning(s);
- for(const u of LEARNING_UNITS)if(atStation(u,station)&&data.units[u.id]?.completedAt)data.units[u.id].encounteredAt??=now;
+/**
+ * Hearing something at a place is exposure: only the named expression is recorded, no inferred speech. It does not
+ * complete a lesson's island stop; that takes the lesson's errand (`finishErrand`).
+ */
+export function applyStation(s:SaveData,_station:string,now=Date.now(),key?:string,action=false){
+ ensureLearning(s);
  if(!key)return;
  const entry=learningEntry(key);if(!entry)return;
  encounter(s,entry.key,'island',now);

@@ -39,7 +39,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
  const spot = (i: number) => SPOTS[(i + Math.abs(seedOf(ask.answer))) % SPOTS.length];
  const hear = async (replay = false) => {
   if (replay && trace.current.firstAnswer === null) trace.current.replays++;
-  const ok = await say(...learningVoice(ask.prompt));
+  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...learningVoice(ask.prompt));
   if (ok && live.current) { trace.current.heard = true; useGame.getState().noteStationLearning(station, ask.prompt.key, false); }
  };
  const record = (outcome: 'solved' | 'left') => {
@@ -52,21 +52,27 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   if (done) return;
   const t = trace.current; t.tries++;
   if (t.firstAnswer === null) t.firstAnswer = id === ask.answer ? 'correct' : 'wrong';
-  useGame.getState().noteAttempt(ask.prompt.key, id === ask.answer, t.wrongs > 0 || shown || !t.heard, ISLAND_SOURCE(ask.play));
-  if (id === ask.answer) { setDone(true); sfx('ding'); record('solved'); onSolved(id); return; }
+  useGame.getState().noteAttempt(ask.prompt.key, id === ask.answer, t.wrongs > 0 || shown || !t.heard || !!ask.model, ISLAND_SOURCE(ask.play));
+  if (id === ask.answer) {
+   setDone(true); sfx('ding'); record('solved');
+   // In a situation the chosen sentence is what gets said: the child hears their choice before the island answers.
+   if (ask.situation) void say(...learningVoice(ask.prompt)).then(() => { if (live.current) onSolved(id); }); else onSolved(id);
+   return;
+  }
   t.wrongs++; sfx('boop'); setWrong(id);
   if (t.wrongs >= 2) setShown(true);
   setTimeout(() => { if (!live.current) return; setWrong(null); setOrder(o => o + 1); void hear(); }, 600);
  };
  return <section className="island-ask" aria-label="伙伴想说一句">
   <header>{speaker !== undefined && <CreatureImg className="island-ask-speaker" src={creatureArt(speaker)} alt="" />}
-   <button className="island-ask-hear" onClick={() => void hear(true)} aria-label="再听一次"><Icon name="speaker" size={30} /><span>再听一次</span></button>
+   <button className="island-ask-hear" onClick={() => void hear(true)} aria-label="再听一次" disabled={done}><Icon name="speaker" size={30} /><span>再听一次</span></button>
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
-  <div className={`island-ask-stage is-${kind}`}>
+  {ask.situation && <p className="island-ask-situation">{ask.situation}</p>}
+  <div className={`island-ask-stage is-${kind}${ask.situation ? ' is-situation' : ''}`}>
    <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} onClick={() => tap(o.id)}>
-    {o.entry ? <LearningArt entry={o.entry} countIcon={countIcon} /> : o.avatar ? <TrainerAvatar avatar={o.avatar} photo={o.photo} size={80} /> : <CreatureImg src={o.image!} alt="" />}{!scene && <small>{o.label}</small>}</button>)}</div>
+    {o.entry ? <LearningArt entry={o.entry} countIcon={countIcon} /> : o.avatar ? <TrainerAvatar avatar={o.avatar} photo={o.photo} size={80} /> : <CreatureImg src={o.image!} alt="" />}{!scene && <small>{ask.situation && o.entry ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
    {give && <div className="island-ask-target" aria-hidden="true"><span>›</span>{to ? <Icon name={to.icon} size={56} /> : speaker !== undefined ? <CreatureImg src={creatureArt(speaker)} alt="" /> : <Icon name="heart" size={56} />}<small>{to?.label ?? '给它'}</small></div>}
   </div>
-  <p className="island-ask-hint" role="status">{shown ? '看，亮起来的就是它。' : HINTS[kind][wrong ? 1 : 0]}</p>
+  <p className="island-ask-hint" role="status">{shown ? '看，亮起来的就是它。' : ask.situation ? (wrong ? '再听一听，这时候说哪一句？' : '听一听，你想说哪一句？') : HINTS[kind][wrong ? 1 : 0]}</p>
  </section>;
 }

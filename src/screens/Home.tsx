@@ -42,6 +42,8 @@ import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
 import { IslandPlaySession } from '../components/IslandPlaySession';
+import { IslandErrandSession } from '../components/IslandErrandSession';
+import { errandAt, shownTraces, type Errand } from '../island/errands';
 import { shownStickers } from '../island/stickers';
 import { islandToday, playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
 
@@ -185,6 +187,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   const [stationId,setStationId] = useState<string|null>(null);
   /** The place activity being played in the place panel. */
   const [placePlay,setPlacePlay]=useState<Play|null>(null);
+  const [placeErrand,setPlaceErrand]=useState<Errand|null>(null);
   const station = panel==='facility' && stationId ? placeOf(stationId) : null;
   const learningUnit=visitUnit(save);
   const courseVisit=station&&learningUnit.station===station.id&&!!save.learning?.units[learningUnit.id]?.completedAt;
@@ -299,7 +302,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
   }, [captures.length,active]);
 
   const inviteStation = (id:string,cycle=false,preferred?:number) => {
-    setLockNote('');setPlacePlay(null);
+    setLockNote('');setPlacePlay(null);setPlaceErrand(null);
     if(lockedAt(id.startsWith('area-')?id.slice(5) as District:stationDistrict(id==='together-ball'?'ball':id==='together-rest'?'bench':id)))return;
     if(id.startsWith('area-')){ambient.poke();stopSpeech();activatePanel('area');setAreaId(id.slice(5));return;}
     setAreaId(null);
@@ -513,6 +516,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
         <IslandMap
             captures={life.residents} visits={life.visits} activeVisits={life.active} onArrival={life.arrive} onStation={inviteStation}
             stickers={shownStickers(save)}
+            traces={shownTraces(save)}
             teaser={nextDistrict(save)}
             lockedDistricts={new Set(['garden','play','leisure','camp','beach'].filter(d=>!open.has(d as District)))}
             sky={sky} weather={weather} selected={selected} effect={immersive?null:effect} need={hint==='care'&&need?{id:need.id,icon:need.play.icon}:null}
@@ -557,12 +561,13 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {round?.play==='plant'&&panel==='ask'&&<section className="facility-panel island-ask-panel" aria-label="种一种水果"><strong>伙伴想种什么？</strong><IslandAskRound ask={round.ask} station="farm" onSolved={id=>plantSolved(round.index,id)} onClose={()=>{setRound(null);closePanel('ask');}}/></section>}
       {!sel && station && <section className="facility-panel" aria-label={station.name}>
         <button className="facility-close" aria-label="结束设施互动" onClick={()=>{setStationId(null);closePanel('facility');life.cancel();}}><Icon name="close" size={26}/></button>
-        {placePlay&&life.manual&&life.active.some(v=>v.manual)?<IslandPlaySession play={placePlay} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlacePlay(null);setStationId(null);closePanel('facility');life.cancel();}}/>:<>
+        {placeErrand&&life.manual&&life.active.some(v=>v.manual)?<IslandErrandSession errand={placeErrand} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();}} onRoute={()=>{setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();stopSpeech();go({name:'home'});}}/>:placePlay&&life.manual&&life.active.some(v=>v.manual)?<IslandPlaySession play={placePlay} partner={life.manual.pokemonId} station={station.id} onClose={()=>{setPlacePlay(null);setPlaceErrand(null);setStationId(null);closePanel('facility');life.cancel();}}/>:<>
         <Icon name={station.icon} size={40}/>
         <div role="status" aria-live="polite"><strong>{life.manual ? `${getCreature(life.manual.pokemonId).nameZh}${life.active.some(v=>v.manual)?(station.action.startsWith('在')?station.action:'在'+station.action):'来啦…'}` : '一起找个小伙伴吧'}</strong>
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回学习路线'}</button>}
+        {life.manual&&life.active.some(v=>v.manual)&&(()=>{const errand=errandAt(save,station.id);return errand&&<div className="facility-plays"><button className="is-errand" onClick={()=>{stopSpeech();setPlaceErrand(errand);}}><Icon name="sign" size={26}/>{errand.title}<small>（用上 <b lang="en">{errand.unit.phrase}</b>）</small></button></div>;})()}
         {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId),today=islandToday(save),due=today.kind==='due'&&today.play===p.id;return <button key={p.id} className={wish||due?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish?<small>（它的小心愿）</small>:due&&<small>（今天来这里）</small>}</button>;})}</div>}
         {station.id==='ball'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openLiving();}}><Icon name="ball" size={28}/>一起玩球</button>}
         {station.id==='farm'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openFarm();}}><Icon name="grass" size={28}/>去菜地种水果</button>}

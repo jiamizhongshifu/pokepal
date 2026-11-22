@@ -11,7 +11,11 @@ import type { SaveData } from '../types';
 export type IslandPlay = string;
 /** A picture to tap: a learned word, a friend's portrait, or the child's own avatar (`avatar`, with an optional photo). */
 export interface AskOption { id: string; entry?: LearningEntry; image?: string; avatar?: string; photo?: string; label: string }
-export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string }
+/**
+ * `situation`: instead of hearing the answer, the child hears what is happening (in Chinese) and chooses what to say;
+ * with `model` the sentence itself follows as an example, for a child who is still mostly listening.
+ */
+export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string; situation?: string; model?: boolean }
 export const ISLAND_SOURCE = (play: IslandPlay) => `island:${play}`;
 export const isIslandSource = (source: string) => source.startsWith('island:');
 

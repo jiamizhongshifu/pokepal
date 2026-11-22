@@ -5,7 +5,8 @@ import {STICKERS,shownStickers,toggleSticker,stickerEarned} from '../../src/isla
 import {ensureIslandProgress} from '../../src/lib/islandProgress';
 import {unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
-import {progressUnit,applyStation} from '../../src/lib/learningProgress';
+import {progressUnit} from '../../src/lib/learningProgress';
+import {finishErrand} from '../../src/island/errands';
 import {learningPath,currentNode,claimChapterFriend,openChapterDiary} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {BABY_CREATURES} from '../../src/data/creatures';
@@ -19,7 +20,7 @@ function walk(s:any,stops=Infinity){
  for(let k=0;k<stops;k++){const n=currentNode(learningPath(s));if(!n)return;
   if(n.kind==='lesson')progressUnit(s,n.unit!.id,unitRoundCount(n.unit!),1000+k);
   else if(n.kind==='story'){const b=STORIES.find(x=>x.id===n.storyId)!;(s.storyProgress??={})[storyProgressKey(b)]=b.pages.length+1;}
-  else if(n.kind==='island')applyStation(s,n.station!,2000+k);
+  else if(n.kind==='island')finishErrand(s,n.unit!.id,undefined,2000+k);
   else if(n.kind==='friend'){claimChapterFriend(s,n.chapter);invitePartner(s,BABY_CREATURES.find(b=>!s.captures.some((c:any)=>c.id===b.id))!.id);}
   else openChapterDiary(s,n.chapter);
  }

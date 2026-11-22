@@ -98,3 +98,8 @@
 .island-sticker { position: absolute; z-index: 1; transform: translate(-50%, -100%); pointer-events: none; filter: drop-shadow(0 2px 0 rgba(0,0,0,.12)); animation: sticker-in .32s var(--brand-ease, ease-out) both; }
 @keyframes sticker-in { from { transform: translate(-50%, -100%) scale(.6); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .island-sticker { animation: none; } }
+
+/* What an errand left on the island: a small thing beside its place, gone again after a few days. */
+.island-trace { position: absolute; z-index: 1; display: grid; place-items: center; width: clamp(30px, 4.6%, 46px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: color-mix(in srgb, var(--surface, #fff) 82%, transparent); box-shadow: 0 2px 0 rgba(0,0,0,.14); pointer-events: none; animation: sticker-in .32s var(--brand-ease, ease-out) both; }
+.island-trace .icon { width: 72% !important; height: 72% !important; }
+@media (prefers-reduced-motion: reduce) { .island-trace { animation: none; } }

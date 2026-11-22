@@ -4,7 +4,8 @@ import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
 import {LEARNING_CHAPTERS,LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
-import {progressUnit,applyStation} from '../../src/lib/learningProgress';
+import {progressUnit} from '../../src/lib/learningProgress';
+import {finishErrand} from '../../src/island/errands';
 import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION,withWelcomeFriend} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {validateSave} from '../../src/lib/saveValidation';
@@ -18,7 +19,7 @@ const walkChapter=(s:SaveData,c:number)=>{
  for(const node of learningPath(s)[c].nodes){
   if(node.kind==='lesson')finishLesson(s,node.unit!);
   else if(node.kind==='story')readStory(s,node.storyId!);
-  else if(node.kind==='island'){s.learning!.activeUnit=node.unit!.id;applyStation(s,node.station!,200);}
+  else if(node.kind==='island'){s.learning!.activeUnit=node.unit!.id;finishErrand(s,node.unit!.id,undefined,200);}
   else if(node.kind==='friend'){claimChapterFriend(s,c);invitePartner(s,BABY_CREATURES.find(b=>!s.captures.some(x=>x.id===b.id))!.id);}
   else openChapterDiary(s,c);
  }

@@ -130,6 +130,8 @@ export interface SaveData {
   careStory?: Record<string, unknown>;
   /** Today's little wishes already done (companion ids), by local date. */
   islandWishes?: import("./island/plays").WishState;
+  /** What errands left on the island (lesson id → when), shown for a few days. */
+  islandTraces?: import("./island/errands").IslandTraces;
   storyAdventure?: import("./lib/storyPlayer").StoryPlayback;
   /** 可选字段兼容旧存档；花园不消耗能量，不绑定每日任务。 */
   /** Legacy flower-care save; retained for import compatibility, no longer used by gameplay. */

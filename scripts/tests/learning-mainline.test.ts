@@ -6,13 +6,15 @@ import {LEARNING_UNITS,selectedUnit,recommendedUnit,unitUnlocked,unitRoundCount,
 import {migrateLearning,progressUnit,applyStation,noteLearningStory,toggleSavedLearning,encounter,reviewKeys} from '../../src/lib/learningProgress';
 import {dailyLearningPlan,lessonWords} from '../../src/data/learning';
 import {WEATHER,CLEAR_NIGHT} from '../../src/lib/weather';
+import {finishErrand} from '../../src/island/errands';
 const fresh=()=>({version:1,settings:{level:1},wordStats:{},learning:{version:1,records:{},units:{}}} as unknown as SaveData);
 const first=LEARNING_UNITS[0],second=LEARNING_UNITS[1];
 test('snack lesson reconnects to an actual picnic without claiming speech or independent understanding',()=>{
  const s=fresh(),unit=LEARNING_UNITS.find(u=>u.id==='snack-discovery')!;
  for(const u of LEARNING_UNITS.slice(0,3))progressUnit(s,u.id,unitRoundCount(u),100);
  applyStation(s,'picnic',200,'Yummy!',true);
- assert.equal(s.learning!.units[unit.id].encounteredAt,200);
+ assert.equal(s.learning!.units[unit.id].encounteredAt,undefined,'a picnic is exposure; the island stop takes the lesson\'s errand');
+ finishErrand(s,unit.id,undefined,250);assert.equal(s.learning!.units[unit.id].encounteredAt,250);
  assert.equal(s.learning!.records['Yummy!'].actions,1);
  assert.equal(s.learning!.records['Yummy!'].spoken,0);
  assert.equal(s.learning!.records['Yummy!'].independent,0);
@@ -24,7 +26,8 @@ test('learning theme survives course completion until related island and story e
  assert.equal(learningTrail(s).phase,'island');assert.equal(selectedUnit(s).id,first.id);
  assert.deepEqual(dailyLearningPlan(s,false,200).words.map(w=>w.en),lessonWords(first,1));
  applyStation(s,'unrelated',300,'Look!',true);assert.equal(learningTrail(s).phase,'island');
- applyStation(s,first.station,400,'Welcome home!',true);assert.equal(learningTrail(s).phase,'story');
+ applyStation(s,first.station,350,'Welcome home!',true);assert.equal(learningTrail(s).phase,'island','hearing something at the place is not the errand');
+ finishErrand(s,first.id,undefined,400);assert.equal(learningTrail(s).phase,'story');
  noteLearningStory(s,first.story,500);assert.equal(selectedUnit(s).id,second.id);assert.equal(learningTrail(s).phase,'lesson');
  assert.equal(s.learning!.records['Hello!'],undefined,'scene visits do not invent course-phrase exposure');
 });
