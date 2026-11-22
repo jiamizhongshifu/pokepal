@@ -14,6 +14,7 @@ import { GardenPlots } from '../island/GardenPlots';
 import { BallTurns } from '../island/BallTurns';
 import { Confetti } from '../components/Celebration';
 import { InviteBerry } from '../components/InviteBerry';
+import { FeatureGuide } from '../components/FeatureGuide';
 import { firstFruitUnit, plantAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { CropKind } from '../lib/farm';
 import { Icon } from '../icons';
@@ -134,7 +135,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   if (ask) { sfx('click'); setPlanting({ index, ask }); return; }
   sfx('boop'); const unit = firstFruitUnit(); if (unit) void say(['zh', unit.mission]);
  };
- const corner = <div className="island-corner"><MusicToggle /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>;
+ const corner = <div className="island-corner"><FeatureGuide id="island" enabled={active && evolving === null && save.captures.length > 0} /><MusicToggle /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>;
  const growing = evolving !== null && <Evolution from={getCreature(evolving)} options={getCreature(evolving).evolvesTo.filter(id => !save.captures.some(c => c.id === id)).map(getCreature)}
   onDone={to => { const from = evolving; setEvolving(null); if (to) useGame.getState().evolve(from, to); else useGame.getState().stayAsIs(from); }} />;
 
@@ -187,6 +188,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     </section>}
     <div className="island-tint" aria-hidden="true" />
    </div>
+   {active && evolving === null && friends.length > 0 && <div className="island-scene-help"><FeatureGuide id={busy ? 'islandDo' : garden ? 'garden' : 'scene'} /></div>}
    {growing}
   </div>;
  }

@@ -41,3 +41,11 @@ test('automatic help yields to foreground audio and expires rather than interrup
  assert.equal(guideVoiceState(8000,0,true,true),'drop');
  assert.equal(guideVoiceState(1000,1000,false,false),'drop');
 });
+
+test('the island\'s help points at things that are on the new island and in its scenes',()=>{
+ const css=readFileSync('src/island/island-home.css','utf8')+readFileSync('src/screens/path-scene.css','utf8');
+ for(const id of ['island','scene','islandDo','garden','path'] as const){
+  const classes=[...GUIDES[id].target.matchAll(/\.([a-z][\w-]*)/g)].map(m=>m[1]);
+  for(const c of classes)assert.ok(css.includes(`.${c}`),`${id}: .${c}`);
+ }
+});

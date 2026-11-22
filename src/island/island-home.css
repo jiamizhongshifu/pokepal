@@ -26,6 +26,8 @@
 .island-invite.is-lesson { background: #ffe27a; border-color: #ffc531; }
 .island-invite .icon { width: 68% !important; height: 68% !important; }
 
+.island-scene-help { position: absolute; z-index: 21; left: calc(110px + env(safe-area-inset-left)); top: calc(16px + env(safe-area-inset-top)); }
+.island-scene:has(.garden-basket) ~ .island-scene-help { left: calc(112px + env(safe-area-inset-left)); top: calc(84px + env(safe-area-inset-top)); }
 .island-corner { position: absolute; z-index: 20; top: calc(10px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); display: flex; align-items: center; gap: 10px; }
 .island-first-friend { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 10; display: flex; align-items: center; gap: 12px; padding: 16px 26px; border: 5px solid #fff; border-radius: 40px; background: #58cc02; box-shadow: 0 7px 0 #3f9a00; animation: island-bob 1.2s ease-in-out infinite alternate; }
 .island-first-friend img { width: 110px; }
@@ -156,3 +158,14 @@
 }
 @media (prefers-reduced-motion: reduce) { .island-home * { animation: none !important; transition: none !important; } }
 #root .island-home.is-scene { padding-bottom: 0; }
+/* Help on the island: the compact help button; its card opens below it, inside the screen. */
+.island-corner .feature-guide, .island-scene-help .feature-guide { width: auto; margin: 0; }
+#root .island-scene-help .guide-content { left: 0; right: auto; }
+/* While doing something, the card opens to the side so the friend's speaker stays in view. */
+#root .island-scene.is-busy ~ .island-scene-help .guide-content { left: calc(100% + 10px); top: 0; }
+/* On a phone the card spans the screen just under the top row; while doing something it drops below the speaker. */
+@media (max-width: 700px) {
+ .island-scene-help { left: calc(84px + env(safe-area-inset-left)); top: calc(18px + env(safe-area-inset-top)); }
+ #root .island-scene-help .guide-content, #root .island-scene.is-busy ~ .island-scene-help .guide-content { left: calc(-72px - env(safe-area-inset-left)); width: calc(100vw - 24px); }
+ #root .island-scene.is-busy ~ .island-scene-help .guide-content { top: 44vh; }
+}
