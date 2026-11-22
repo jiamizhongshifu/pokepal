@@ -73,6 +73,7 @@ export function PathHome() {
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
  return <div className="screen path-scene">
   <div className="path-view" ref={view}>
+   <img className="scene-backdrop" src={pathArt(chapter.index)} alt="" aria-hidden="true" draggable={false} />
    <section className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} />
     {chapter.nodes.map((node, i) => {

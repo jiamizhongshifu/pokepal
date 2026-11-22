@@ -16,6 +16,8 @@ import './island-ask.css';
 
 /** Where the things of a "find" round lie in the scene (% of its box); the round's seed decides which goes where. */
 const SPOTS: ReadonlyArray<readonly [x: number, y: number, tilt: number]> = [[4, 8, -6], [38, 0, 5], [71, 10, -4], [18, 52, 7], [54, 50, -7]];
+/** The small label above a round's question: what kind of thing the child does. */
+const KIND_TAG: Record<PlayKind | 'cards', string> = { cards: '听音找一找', say: '选一句话', do: '拿给它', find: '找一找', sort: '选颜色' };
 const HINTS: Record<PlayKind | 'cards', [start: string, again: string]> = {
  cards: ['听伙伴说，点一点。', '再听一听。'], say: ['听伙伴说，点一点。', '再听一听。'],
  do: ['听伙伴说，把它送过去。', '再听一听，它想要哪个？'], find: ['听伙伴问，在画面里找到它。', '再听一听，再找找。'], sort: ['听伙伴说，点那个颜色。', '再听一听。'],
@@ -75,6 +77,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
   {ask.situation && <p className="island-ask-situation">{ask.situation}</p>}
   <div className={`island-ask-stage is-${kind}${ask.situation ? ' is-situation' : ''}`}>
+   <h2 className="island-ask-title"><small>{ask.situation ? '这时候说什么' : KIND_TAG[kind]}</small>{ask.situation ?? HINTS[kind][0]}</h2>
    <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} {...(give ? dragTo(receiver, () => tap(o.id)) : { onClick: () => tap(o.id) })}>
     {o.entry && o.tint ? <span className="island-ask-tinted" style={{ background: o.tint }}><LearningArt entry={o.entry} /></span> : <LearningArt entry={o.entry} countIcon={countIcon} />}{!scene && !o.tint && <small>{ask.situation ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
    {give && to && <div className="island-ask-target" aria-hidden="true"><Icon name={to.icon} size={56} /><small>{to.label}</small></div>}

@@ -19,12 +19,9 @@
 #root .lesson-staged .is-staged .round-hear { width: 92px; height: 92px; animation: lesson-bob 1.4s ease-in-out infinite alternate; }
 #root .lesson-staged .is-staged .round-hear .icon { width: 52px !important; height: 52px !important; }
 #root .lesson-staged .is-staged .round-pace { width: 56px; height: 56px; opacity: .9; }
-#root .lesson-staged .is-staged .learning-help { position: absolute; right: 3%; top: 20%; width: 72px; height: 72px; margin: 0; }
-#root .lesson-staged .is-staged .round-try { position: absolute; right: 3%; top: 20%; width: 84px; height: 84px; background: #58cc02; box-shadow: 0 6px 0 #3f9a00; }
 #root .lesson-staged .is-staged .round-try .icon, #root .lesson-staged .is-staged .learning-help .icon { width: 44px !important; height: 44px !important; }
 
 /* The things to choose from lie on the ground and stay where they are. */
-#root .lesson-staged .is-staged .learning-choices { position: absolute; left: 32%; right: 3%; bottom: 5%; display: flex; justify-content: center; align-items: flex-end; gap: 3%; margin: 0; }
 #root .lesson-staged .is-staged .learning-choices > div { flex: 0 1 min(21vw, 27vh); display: grid; justify-items: center; gap: 8px; min-width: 0; }
 #root .lesson-staged .is-staged .learning-choices > div > button:not(.learning-choice-audio) { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1; min-height: 0; padding: 0; border: 0; border-radius: 28px; background: transparent; box-shadow: none; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); transition: opacity .3s, scale .3s; }
 #root .lesson-staged .is-staged .learning-choices > div > button > .icon, #root .lesson-staged .is-staged .learning-choices > div > button > img { width: 88% !important; height: 88% !important; object-fit: contain; }
@@ -42,7 +39,6 @@
 #root .lesson-staged .is-staged .phrase-choices .chosen, #root .lesson-staged .is-staged .phrase-choices .is-explained { border-color: #ffc531; filter: none; }
 #root .lesson-staged .is-staged .learning-choice-audio { width: 60px; height: 60px; }
 /* Listening first: the thing itself, big, with its name for the grown-up. */
-#root .lesson-staged .is-staged .guided-example { position: absolute; left: 60%; bottom: 7%; translate: -50% 0; display: grid; justify-items: center; gap: 4px; margin: 0; padding: 0; border: 0; background: transparent; }
 #root .lesson-staged .is-staged .guided-example > .icon, #root .lesson-staged .is-staged .guided-example > img { width: min(30vw, 36vh) !important; height: min(30vw, 36vh) !important; object-fit: contain; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); animation: lesson-hop 1.6s ease-in-out infinite; }
 #root .lesson-staged .is-staged .guided-example .learning-color { width: min(24vw, 30vh); height: min(24vw, 30vh); border: 6px solid #fff; border-radius: 46% 54% 50% 50% / 58% 56% 44% 42%; }
 #root .lesson-staged .is-staged .guided-example .phrase-picture { display: flex; gap: 6px; padding: 14px 20px; border-radius: 34px 34px 34px 8px; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); }
@@ -64,3 +60,31 @@
 /* Once a thing is chosen the others wait; in the scene they keep their own look instead of turning into grey cards. */
 #root .lesson-staged .is-staged .learning-choices > div > button:disabled:not(.faded) { opacity: 1; }
 #root .lesson-staged .is-staged .learning-choices:not(.phrase-choices) > div > button.chosen { background: transparent !important; }
+
+/* ── The answer card: what to answer sits on one white card, titled with the question ── */
+#root .lesson-staged .is-staged > h1 { display: none; }
+#root .lesson-staged .round-card { position: absolute; z-index: 3; left: 31%; right: 3%; bottom: 4%; display: grid; gap: 12px; max-height: calc(100% - 120px); padding: 16px 22px 12px; border-radius: 30px; background: #fff; box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); overflow: auto; }
+#root .lesson-staged .round-card > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
+#root .lesson-staged .round-card > header small { display: inline-block; margin-bottom: 4px; padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); color: var(--brand-primary-deep, #3f9a00); font-size: 13px; font-weight: 800; }
+#root .lesson-staged .round-card > header h2 { margin: 0; font-size: clamp(18px, 1.8vw, 24px); line-height: 1.35; color: #24413a; }
+#root .lesson-staged .round-card-note { margin: 0; text-align: center; font-size: 14px; color: #7a8a86; }
+#root .lesson-staged .round-card .learning-choices { position: static; display: flex !important; justify-content: center; align-items: stretch; gap: 16px; margin: 0; }
+#root .lesson-staged .round-card .learning-choices > div { flex: 0 1 min(17vw, 24vh); }
+#root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio) { border-radius: 26px; background: #f3f8f6; box-shadow: inset 0 -5px 0 #e3ece8; filter: none; }
+#root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button.chosen { background: #fff6d6 !important; box-shadow: 0 0 0 4px #ffc531, inset 0 -5px 0 #f3dc8f; }
+#root .lesson-staged .round-card .phrase-choices > div { flex-basis: min(26vw, 34vh); }
+#root .lesson-staged .round-card .phrase-choices > div > button:not(.learning-choice-audio) { background: #f3f9ff; border-color: #e1effb; box-shadow: inset 0 -5px 0 #dde9f5; }
+#root .lesson-staged .round-card .learning-help, #root .lesson-staged .round-card .round-try { position: static; display: flex !important; align-items: center; gap: 6px; width: auto !important; height: auto !important; min-height: 48px; padding: 6px 16px 6px 10px; border: 3px solid #fff; border-radius: 999px; flex: none; }
+#root .lesson-staged .round-card .learning-help { background: #fff3c4; box-shadow: 0 3px 0 #f0d78a; }
+#root .lesson-staged .round-card .round-try { background: #58cc02; box-shadow: 0 4px 0 #3f9a00; color: #fff; }
+#root .lesson-staged .round-card .learning-help span, #root .lesson-staged .round-card .round-try span { display: inline !important; font-size: 15px; font-weight: 800; }
+#root .lesson-staged .round-card .lesson-actions { margin: 0; }
+#root .lesson-staged .round-card .guided-example { position: static; translate: none; display: grid; justify-items: center; gap: 4px; }
+#root .lesson-staged .round-card .guided-example > .icon, #root .lesson-staged .round-card .guided-example > img { width: min(18vw, 24vh) !important; height: min(18vw, 24vh) !important; }
+#root .lesson-staged .round-card .guided-example .learning-color { width: min(15vw, 20vh); height: min(15vw, 20vh); }
+@media (max-width: 700px) {
+ #root .lesson-staged .round-card { left: 12px; right: 12px; bottom: 12px; padding: 12px 14px 10px; border-radius: 24px; }
+ #root .lesson-staged .round-card .learning-choices > div { flex-basis: 30vw; }
+ #root .lesson-staged .round-card .phrase-choices > div { flex-basis: 44vw; }
+ #root .lesson-staged .round-card .learning-help span { display: none !important; }
+}

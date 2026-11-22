@@ -197,6 +197,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  for (const f of standing) groups.set(f.place, [...(groups.get(f.place) ?? []), f.id]);
  return <div className={`screen island-home sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`}>
   <div className="island-view" ref={view}>
+   <img className="scene-backdrop" src={worldArt('island-map')} alt="" aria-hidden="true" draggable={false} />
    <div className="island-world" role="group" aria-label="我的小岛">
     <img className="island-world-art" src={worldArt('island-map')} alt="" draggable={false} />
     {shownStickers(save).map(k => <img key={k.id} className="island-world-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
