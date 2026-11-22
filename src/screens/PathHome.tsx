@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGame } from '../store';
-import { learningPath, withReview, withWelcomeFriend, pathNodes, currentNode, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
+import { learningPath, withReview, withWelcomeFriend, pathNodes, currentNode, chapterProgress, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
 import { bubblePictures, leftBehind, sceneSpots } from '../lib/pathScene';
 import { Confetti } from '../components/Celebration';
 import { say, stopSpeech, sfx } from '../lib/speech';
@@ -80,31 +80,43 @@ export function PathHome() {
      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;
      const label = `${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : node.state === 'current' ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`;
      const style = { left: `${spots[i][0]}%`, top: `${spots[i][1]}%` };
-     if (node.state === 'current') return <div key={node.key} ref={here} className="path-stop is-current" style={style}>
-      <button type="button" className="path-bubble" aria-label="听一听这一站要做什么" onClick={() => hear(node)}>{bubblePictures(node).map(icon => <Icon key={icon} name={icon} size={52} />)}{node.unit && <Icon name="speaker" size={30} className="path-bubble-hear" />}</button>
-      {friend ? <CreatureImg className="path-friend" src={creatureExpression(friend.id, 'hello')} alt="" /> : <Icon name={node.icon} size={96} className="path-friend" />}
-      <button type="button" className="path-go" aria-label={label} onClick={() => void open(node)}><Icon name="play" size={56} /></button>
+     const name = <span className="stop-name">{node.state === 'current' && <small>{KIND_LABEL[node.kind]}</small>}{title}</span>;
+     if (node.state === 'current') return <div key={node.key} ref={here} className={`path-stop is-current kind-${node.kind}`} style={style}>
+      {friend && <CreatureImg className="stop-friend" src={creatureExpression(friend.id, 'hello')} alt="" />}
+      <button type="button" className="stop-bubble" aria-label="听一听这一站要做什么" onClick={() => hear(node)}>{bubblePictures(node).map(icon => <Icon key={icon} name={icon} size={44} />)}{node.unit && <Icon name="speaker" size={26} className="stop-bubble-hear" />}</button>
+      <button type="button" className="stop-token stop-go" aria-label={label} onClick={() => void open(node)}><Icon name="play" size={56} /></button>
+      {name}
      </div>;
      return <button key={node.key} type="button" className={`path-stop is-${node.state} kind-${node.kind}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style} aria-label={label} onClick={() => void open(node)}>
-      {met ? <CreatureImg className="path-stop-art" src={creatureArt(met)} alt="" /> : <Icon name={node.state === 'done' ? leftBehind(node) : node.icon} size={72} className="path-stop-art" />}
-      {node.state === 'done' && <Icon name="star" size={34} className="path-stop-star" />}
+      <span className="stop-token">{met ? <CreatureImg className="stop-art" src={creatureArt(met)} alt="" /> : <Icon name={node.state === 'done' ? leftBehind(node) : node.icon} size={64} className="stop-art" />}</span>
+      {node.state === 'done' && <Icon name="star" size={30} className="stop-badge is-star" />}
+      {node.state === 'locked' && <Icon name="lock" size={24} className="stop-badge is-lock" />}
+      {name}
      </button>;
     })}
    </section>
   </div>
 
   <header className="path-top">
-   <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
-   {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={34} /><b>{save.balls.poke}</b></button>}
-   <ol className="path-pages" aria-label="六章">{path.map(c => <li key={c.index}><button type="button" className={`tone-${c.index % 6}${c.index === chapter.index ? ' is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
+   <div className="path-me">
+    <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
+    {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>}
+   </div>
+   <div className="path-chapter">
+    <button type="button" className="path-turn" aria-label="上一章" disabled={chapter.index === 0} onClick={() => turn(chapter.index - 1)}><Icon name="back" size={30} /></button>
+    <div className={`path-plaque tone-${chapter.index % 6}`}>
+     <small>第 {chapter.index + 1} 章<i aria-hidden="true">·</i>{chapterProgress(chapter).done} / {chapterProgress(chapter).total}</small>
+     <strong>{chapter.title}</strong>
+     <ol className="path-pages" aria-label="六章">{path.map(c => <li key={c.index}><button type="button" className={`${c.index === chapter.index ? 'is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
+    </div>
+    <button type="button" className="path-turn is-next" aria-label="下一章" disabled={chapter.index === path.length - 1} onClick={() => turn(chapter.index + 1)}><Icon name="back" size={30} /></button>
+   </div>
    <div className="path-tools"><FeatureGuide id="path" compact /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>
   </header>
-  {chapter.index > 0 && <button type="button" className="path-turn is-back" aria-label="上一章" onClick={() => turn(chapter.index - 1)}><Icon name="back" size={44} /></button>}
-  {chapter.index < path.length - 1 && <button type="button" className="path-turn is-next" aria-label="下一章" onClick={() => turn(chapter.index + 1)}><Icon name="back" size={44} /></button>}
   <nav className="path-extra" aria-label="还想多玩一会儿">
-   <button type="button" aria-label="小游戏" onClick={() => go({ name: 'practice' })}><Icon name="target" size={40} /></button>
-   <button type="button" aria-label="故事书架" onClick={() => go({ name: 'stories' })}><Icon name="book" size={40} /></button>
-   {finished && <button type="button" aria-label="和老朋友见面" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={40} /></button>}
+   {finished && <button type="button" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={30} /><span>老朋友</span></button>}
+   <button type="button" onClick={() => go({ name: 'practice' })}><Icon name="target" size={30} /><span>小游戏</span></button>
+   <button type="button" onClick={() => go({ name: 'stories' })}><Icon name="book" size={30} /><span>故事书架</span></button>
   </nav>
   {celebrating && <Confetti />}
   <BottomNav active="path" />

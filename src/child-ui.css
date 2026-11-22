@@ -3,8 +3,6 @@
 
 .screen { isolation: isolate; }
 .screen:not(.home) { overflow-y: auto; overscroll-behavior: contain; }
-.screen:not(.home):not(.parent):not(.welcome) { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
-.screen:not(.home):not(.parent):not(.welcome)::before { display: none; }
 .screen:not(.home):not(.parent)::after { content: none; display: none; }
 button { transition: transform .16s ease-out, background-color .16s ease-out, box-shadow .16s ease-out; }
 button:focus-visible, summary:focus-visible { outline: 4px solid var(--coral); outline-offset: 5px; }
@@ -19,7 +17,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .hint { color: var(--text); font-size:var(--text-3xl); }
 .page-prompt { font-size: clamp(24px, 3vw, 34px); line-height: 1.4; text-align: center; margin: 22px 20px 14px; font-weight: 800; }
 /* 可预测的返回位置。学习页完全隐藏库存和家长按钮。 */
-.screen:not(.home):not(.parent):not(.welcome) > .topbar { margin-top: 0; }
 .topbar { flex: none; min-height: 92px; padding: 14px 24px; gap: 14px; }
 .screen:not(.home) > .topbar { position: relative; top: auto; background: transparent; }
 .tb-left { min-width: 0; gap: 16px; }
@@ -31,13 +28,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .parent-btn { flex: none; width: 52px; height: 52px; opacity: 1; }
 .parent-btn span { background: var(--surface); }
 /* 欢迎：先看伙伴，再选一个头像。 */
-.welcome { min-height: 100%; padding: 36px 20px; gap: 20px; }
-.welcome::before { width: min(760px,100vw); height: min(760px,100dvh); }
-.welcome-pokemon { max-width: 90vw; gap: 0; }
-.welcome-pokemon img:not(.icon):not(.invite-berry) { width: clamp(60px, 12vw, 130px); height: auto; animation: none; filter: drop-shadow(0 8px 8px #16384618); }
-.welcome-pokemon img:first-child { transform: scale(1.15); }
-.logo { font-size: clamp(30px, 5vw, 58px); color: var(--text); letter-spacing: 1px; text-shadow: none; text-align: center; }
-.logo-en { background: none; color: var(--accent-en); font-size: clamp(14px, 2.5vw, 22px); letter-spacing: 1px; padding: 0; margin: 0 0 18px; text-shadow: none; }
 .start { min-height: 168px; min-width: 220px; border-radius:var(--radius-xl); animation: none; }
 .avatar-row { justify-content: center; flex-wrap: wrap; gap: 20px; }
 .avatar-choice { width: 132px; height: 132px; }
@@ -95,7 +85,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .field > .center-msg { grid-column: 1/-1; }
 .center-msg { padding: 28px 20px; text-align: center; font-size:var(--text-3xl); min-height: 400px; }
 /* 好朋友相册：每页 8 只，可先看自己的伙伴。 */
-.screen:not(.home):not(.parent):not(.welcome).dex { padding-bottom: env(safe-area-inset-bottom); }
 .dex-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; width: min(1000px,92vw); margin: 12px auto 20px; }
 .collection-tabs { display: flex; gap: 10px; }
 .collection-tabs button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 64px; padding: 12px 24px; border-radius:var(--radius-pill); background: var(--surface); border: 2px solid var(--surface-border); font-size:var(--text-2xl); font-weight: 800; }
@@ -155,7 +144,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .evo-mon img:not(.icon):not(.invite-berry) { width: 130px; height: 130px; }
 .evo-mon.option img:not(.icon):not(.invite-berry) { width: 112px; height: 112px; }
 /* 控制环境动效，让触摸目标保持静止。 */
-.start,.welcome-pokemon img { animation: none; }
+.start { animation: none; }
 @media (max-width: 900px) {
   .topbar { padding: 12px 18px; }
   .tb-title { font-size:var(--text-2xl); }
@@ -185,10 +174,8 @@ button:not(:disabled):active { transform: scale(.97); }
   .actions { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
   .act { width: 100%; height: 88px; font-size:var(--text-lg); }
   .act .icon { width: 42px; height: 42px; }
-  .welcome { justify-content: center; gap: 16px; }
   .avatar-row { max-width: 340px; gap: 16px; }
   .avatar-choice { width: 120px; height: 120px; }
-  .logo-en { font-size:var(--text-base); }
   .avatar-pick .hint { font-size:var(--text-2xl); }
   .page-prompt { font-size:var(--text-2xl); margin-top: 16px; }
   .board { gap: 14px; padding: 0; align-content: start; margin:24px auto 12px; }
@@ -303,14 +290,8 @@ button:not(:disabled):active { transform: scale(.97); }
 
 /* Island districts: large picture buttons and one invitation at a time. */
 
-/* A friendly island invitation, with the same cream, mint and rounded woodlike depth as home. */
-.welcome .welcome-enter{display:flex;flex-direction:row;align-items:center;gap:18px;width:340px;max-width:90vw;min-width:0;min-height:108px;padding:14px 20px 14px 14px;border:3px solid var(--brand-primary);border-radius:var(--radius-xl);background:var(--surface);color:var(--text);box-shadow:0 7px 0 var(--brand-primary),0 14px 28px #396f4920;text-shadow:none;cursor:pointer;transition:transform .16s,box-shadow .16s}
-.welcome-enter .enter-avatar{display:grid;place-items:center;width:74px;height:74px;flex:none;border-radius:var(--radius-lg);background:var(--brand-primary-soft);border:2px solid var(--surface-border)}
-.enter-copy{display:flex;flex-direction:column;gap:3px;text-align:left}.enter-copy strong{font-size:var(--text-3xl);line-height:1.25}.enter-copy>span{font-size:var(--text-lg);font-weight:800;color:var(--muted);text-transform:none;letter-spacing:0}.enter-arrow{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--brand-sun);display:grid;place-items:center;font-size:var(--text-5xl);line-height:1;color:var(--brand-ink)}
-.welcome .welcome-enter:active{transform:translateY(5px);box-shadow:0 2px 0 var(--brand-primary)}.welcome-enter:focus-visible{outline:4px solid var(--brand-sky-deep);outline-offset:8px}.avatar-pick .hint small{display:block;font-size:var(--text-base);color:var(--muted);margin-top:8px}.act.following{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
+/* A friendly island invitation, with the same cream, mint and rounded woodlike depth as home. */.avatar-pick .hint small{display:block;font-size:var(--text-base);color:var(--muted);margin-top:8px}.act.following{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
 .round-instruction>span,.round-instruction>small{display:block}.round-instruction>span{font-size:clamp(22px,3vw,32px);color:var(--accent-en)}.round-instruction>small{font-size:clamp(17px,2vw,23px);font-weight:750;margin-top:5px}
-@media(max-width:600px){.welcome .welcome-enter{width:300px;min-height:98px;gap:12px}.enter-copy strong{font-size:var(--text-2xl)}.enter-copy>span{font-size:var(--text-base)}.welcome-enter .enter-avatar{width:64px;height:64px}.enter-avatar .icon{width:58px;height:58px}}
-@media(max-height:600px) and (min-width:601px){.welcome .welcome-enter{min-height:76px;padding:8px 16px}.welcome-enter .enter-avatar{width:52px;height:52px}.enter-avatar .icon{width:48px;height:48px}}
 .actions .act small{display:block;font-size:var(--text-sm);color:var(--muted);line-height:1.25}.trace-instruction small{display:block;text-align:left;font-size:var(--text-base);color:var(--muted);margin-top:4px}
 @media(max-width:600px){.tasks .task-card{height:208px;padding:32px 8px 60px}}
 @media(max-width:600px) and (max-height:780px){.tasks .task-card{height:194px}.tasks .page-prompt{margin:12px 16px 10px;font-size:var(--text-2xl)}.tasks .board{margin-top:16px}}

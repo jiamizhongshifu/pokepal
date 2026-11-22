@@ -11,7 +11,13 @@
 
 .island-place { position: absolute; z-index: 1; width: 13%; aspect-ratio: 1; translate: -50% -65%; border: 0; border-radius: 50%; background: transparent; }
 .island-place:focus-visible { outline: 4px solid #fff; outline-offset: -4px; }
-.island-place.is-locked { z-index: 5; width: 15%; aspect-ratio: 1.35; background: radial-gradient(circle at 35% 40%, #fff 0 45%, #eaf6ff 72%); box-shadow: 0 0 0 5px rgba(255, 255, 255, .8), 0 8px 16px rgba(0, 60, 120, .18); opacity: .94; }
+/* A place in an area not open yet is just quiet (tapping it says what to learn first). */
+.island-place.is-locked { z-index: 1; }
+.island-teaser { position: absolute; z-index: 5; translate: -50% -50%; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border: 3px solid #fff; border-radius: 999px; background: rgba(255, 253, 244, .94); box-shadow: 0 4px 0 rgba(0, 0, 0, .14); color: #4a5a66; white-space: nowrap; }
+.island-teaser .icon { padding: 4px; border-radius: 50%; background: #eef2f1; }
+.island-teaser span { display: grid; text-align: left; line-height: 1.2; }
+.island-teaser b { font-size: 16px; } .island-teaser small { font-size: 12px; color: #7a8a86; }
+.island-teaser.is-nudged { animation: island-wobble .6s ease-in-out; }
 .island-place.is-nudged { animation: island-wobble .6s ease-in-out; }
 
 .island-walker { position: absolute; z-index: 4; width: var(--size, 11%); aspect-ratio: 1; translate: -50% -92%; transition: left 2.2s ease-in-out, top 2.2s ease-in-out; }
@@ -21,7 +27,7 @@
 .is-growing img { filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px rgba(255, 197, 49, .95)); }
 
 /* What a friend would like to do: a picture above its head. A lesson's errand or a party is golden. */
-.island-invite { position: absolute; z-index: 6; left: 50%; bottom: 96%; translate: -50% 0; display: grid; place-items: center; width: 74%; min-width: 60px; aspect-ratio: 1; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); animation: island-bob 1.4s ease-in-out infinite alternate; }
+.island-invite { position: absolute; z-index: 6; left: 50%; bottom: 96%; translate: -50% 0; display: grid; place-items: center; width: 74%; min-width: 60px; max-width: 96px; aspect-ratio: 1; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); animation: island-bob 1.4s ease-in-out infinite alternate; }
 .island-invite::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 16px; height: 16px; translate: -50% 0; rotate: 45deg; background: inherit; border-radius: 3px; z-index: -1; }
 .island-invite.is-lesson { background: #ffe27a; border-color: #ffc531; }
 .island-invite .icon { width: 68% !important; height: 68% !important; }

@@ -1,55 +1,91 @@
-/* The learning path as a picture book: one scene per chapter. Positions are % of the 3:2 picture. */
-.path-scene { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
-.path-scene button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+/* The learning path as a picture book: one painted scene per chapter. Positions are % of the 3:2 picture. */
+.path-scene { --ink: #24413a; --paper: #fffdf4; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.path-scene button { -webkit-tap-highlight-color: transparent; cursor: pointer; font: inherit; }
 .path-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: #3bc3ee; }
 .path-view:has(.tone-4), .path-view:has(.tone-5) { background: #2b3f8f; }
-.path-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }
+.path-world { container-type: inline-size; position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }
 .path-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.path-stop { position: absolute; z-index: 2; display: grid; place-items: center; width: 12%; aspect-ratio: 1; translate: -50% -60%; padding: 0; border: 0; background: transparent; }
-.path-stop-art { width: 78% !important; height: 78% !important; object-fit: contain; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .16)); }
-.path-stop-star { position: absolute; right: 0; bottom: 2%; width: 36% !important; height: auto !important; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .18)); }
-.path-stop.is-open .path-stop-art { padding: 12%; border-radius: 50%; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); }
-.path-stop.is-lit { animation: path-hop .8s ease 2; }
-/* A stop not reached yet is under a cloud; what it is shows faintly through. */
-.path-stop.is-locked { width: 14%; aspect-ratio: 1.3; border-radius: 50%; background: radial-gradient(circle at 35% 40%, #fff 0 45%, #eaf6ff 72%); box-shadow: 0 0 0 5px rgba(255, 255, 255, .8), 0 8px 16px rgba(0, 60, 120, .18); opacity: .95; }
-.path-stop.is-locked .path-stop-art { width: 42% !important; height: auto !important; opacity: .4; filter: none; }
-.path-stop.is-nudged { animation: path-wobble .6s ease-in-out; }
 
-/* Today's stop: the friend waits there, a bubble shows what it is about, and one button starts it. */
-.path-stop.is-current { z-index: 4; width: 17%; translate: -50% -78%; display: block; }
-.path-friend { display: block; width: 100% !important; height: 100% !important; object-fit: contain; transform-origin: 50% 100%; animation: path-idle 2.4s ease-in-out infinite; pointer-events: none; }
-.path-bubble { position: absolute; left: 50%; bottom: 98%; translate: -50% 0; display: flex; align-items: center; gap: 4px; padding: 8px 14px; border: 4px solid #ffc531; border-radius: 30px; background: #ffe27a; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); animation: path-bob 1.4s ease-in-out infinite alternate; }
-.path-bubble::after { content: ""; position: absolute; left: 50%; bottom: -10px; width: 16px; height: 16px; translate: -50% 0; rotate: 45deg; background: #ffe27a; border-radius: 3px; z-index: -1; }
-.path-bubble .icon { flex: none; }
-.path-go { position: absolute; left: 66%; top: 62%; display: grid; place-items: center; width: 56%; min-width: 72px; aspect-ratio: 1; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #58cc02; box-shadow: 0 7px 0 #3f9a00; animation: path-pulse 1.2s ease-in-out infinite alternate; }
-.path-go .icon { width: 60% !important; height: 60% !important; }
-.path-go:active { translate: 0 5px; box-shadow: 0 2px 0 #3f9a00; }
+/* ── Stops: one medallion each, a coloured ring by kind, a name plate under it ── */
+.path-stop { --ring: #58cc02; --ring-deep: #3f9a00; --token: clamp(58px, 8.4cqw, 132px);
+ position: absolute; z-index: 2; display: grid; justify-items: center; gap: 6px; width: calc(var(--token) * 1.9); translate: -50% calc(var(--token) * -.62); padding: 0; border: 0; background: transparent; }
+.kind-story { --ring: #1cb0f6; --ring-deep: #1388c4; }
+.kind-island { --ring: #14c4a8; --ring-deep: #0c9883; }
+.kind-friend, .kind-welcome { --ring: #ff86b6; --ring-deep: #e0618f; }
+.kind-diary { --ring: #ff9f1a; --ring-deep: #d97c00; }
+.kind-review { --ring: #a87cf0; --ring-deep: #8257d1; }
+.stop-token { position: relative; display: grid; place-items: center; width: var(--token); aspect-ratio: 1; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px var(--ring), 0 9px 0 6px var(--ring-deep), 0 16px 22px rgba(20, 50, 40, .28); transition: transform .15s; }
+.path-stop:active .stop-token { transform: translateY(4px); }
+.stop-art { width: 70% !important; height: 70% !important; object-fit: contain; }
+.stop-badge { position: absolute; top: -4px; left: calc(50% + var(--token) * .26); width: calc(var(--token) * .36) !important; height: auto !important; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .2)); }
+.stop-badge.is-lock { padding: 5px; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 rgba(0, 0, 0, .15); width: calc(var(--token) * .3) !important; }
+.stop-name { position: relative; z-index: 1; display: grid; justify-items: center; max-width: 100%; margin-top: 10px; padding: 4px 12px 5px; border-radius: 999px; background: var(--paper); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); color: var(--ink); font-size: clamp(12px, 1.2cqw, 18px); font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stop-name small { font-size: .78em; font-weight: 800; color: var(--ring-deep); letter-spacing: .06em; }
 
-.path-top { position: absolute; z-index: 10; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left)); pointer-events: none; }
+.path-stop.is-done .stop-token { box-shadow: 0 0 0 6px #ffc531, 0 9px 0 6px #e0a100, 0 16px 22px rgba(20, 50, 40, .28); }
+.path-stop.is-open .stop-token { animation: stop-bob 1.8s ease-in-out infinite alternate; }
+/* Not yet: the medallion is frosted and the picture shows faintly through. */
+.path-stop.is-locked .stop-token { background: rgba(255, 255, 255, .72); box-shadow: 0 0 0 6px rgba(255, 255, 255, .85), 0 9px 0 6px rgba(160, 180, 190, .55), 0 12px 18px rgba(20, 50, 40, .15); backdrop-filter: blur(3px); }
+.path-stop.is-locked .stop-art { opacity: .35; filter: grayscale(.6); }
+.path-stop.is-locked .stop-name { background: rgba(255, 253, 244, .78); color: #7a8a86; box-shadow: none; }
+.path-stop.is-lit .stop-token { animation: stop-hop .8s ease 2; }
+.path-stop.is-nudged { animation: stop-wobble .6s ease-in-out; }
+
+/* ── Today's stop: a big green start medallion, the friend beside it, a picture bubble above ── */
+.path-stop.is-current { --token: clamp(76px, 11cqw, 168px); z-index: 4; display: grid; }
+.stop-go { padding: 0; border: 0; background: #58cc02; box-shadow: 0 0 0 7px #fff, 0 11px 0 7px #3f9a00, 0 0 0 18px rgba(88, 204, 2, .25), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
+.stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; filter: brightness(0) invert(1); }
+.stop-go:active { transform: translateY(5px); }
+.stop-friend { position: absolute; right: calc(50% + var(--token) * .5); bottom: 26px; width: calc(var(--token) * 1.15) !important; height: auto !important; object-fit: contain; transform-origin: 50% 100%; animation: stop-idle 2.4s ease-in-out infinite; pointer-events: none; }
+.stop-bubble { position: absolute; left: 50%; bottom: calc(100% + 10px); translate: -50% 0; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border: 4px solid #fff; border-radius: 24px; background: #fff3c4; box-shadow: 0 5px 0 rgba(0, 0, 0, .14); animation: stop-bob 1.4s ease-in-out infinite alternate; white-space: nowrap; }
+.stop-bubble::after { content: ""; position: absolute; left: 50%; bottom: -11px; width: 16px; height: 16px; translate: -50% 0; rotate: 45deg; background: #fff3c4; border-right: 4px solid #fff; border-bottom: 4px solid #fff; border-radius: 0 0 4px 0; }
+.stop-bubble .icon { width: clamp(30px, 3.2vw, 46px) !important; height: clamp(30px, 3.2vw, 46px) !important; }
+.stop-bubble-hear { width: clamp(20px, 2vw, 28px) !important; height: clamp(20px, 2vw, 28px) !important; opacity: .8; }
+.path-stop.is-current .stop-name { margin-top: 18px; padding: 5px 16px 6px; background: #58cc02; color: #fff; box-shadow: 0 4px 0 #3f9a00; font-size: clamp(14px, 1.45cqw, 21px); }
+.path-stop.is-current .stop-name small { color: #e3ffd0; }
+
+/* ── Top bar: me on the left, the chapter plaque in the middle, help on the right ── */
+.path-top { position: absolute; z-index: 10; left: 0; right: 0; top: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left)); pointer-events: none; }
 .path-top > * { pointer-events: auto; }
+.path-me { display: flex; align-items: center; gap: 8px; justify-self: start; }
 .path-avatar { display: grid; place-items: center; padding: 3px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); }
-.path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 20px; font-weight: 800; color: #5b4a2f; }
-.path-pages { display: flex; gap: 8px; margin: 0 auto; padding: 8px 12px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
-.path-pages button { display: block; width: 34px; height: 34px; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #9fd86a; opacity: .55; }
-.path-pages .tone-1 { background: #f6d76a; } .path-pages .tone-2 { background: #f7b267; } .path-pages .tone-3 { background: #f48c72; } .path-pages .tone-4 { background: #9a9ae6; } .path-pages .tone-5 { background: #f5a9d0; }
-.path-pages .is-done { opacity: 1; }
-.path-pages .is-here { opacity: 1; border-color: #ffb400; scale: 1.2; }
-.path-tools { display: flex; align-items: center; gap: 8px; }
-.path-turn { position: absolute; z-index: 9; top: 24%; display: grid; place-items: center; width: 76px; height: 76px; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .18); }
-.path-turn.is-back { left: calc(10px + env(safe-area-inset-left)); } .path-turn.is-next { right: calc(10px + env(safe-area-inset-right)); }
+.path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 18px; font-weight: 800; color: #5b4a2f; }
+.path-tools { display: flex; align-items: center; gap: 8px; justify-self: end; }
+.path-chapter { display: flex; align-items: center; gap: 8px; }
+.path-plaque { --tone: #58cc02; display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid #fff; border-radius: 22px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14), inset 0 -5px 0 var(--tone); color: var(--ink); }
+.path-plaque.tone-1 { --tone: #f2c230; } .path-plaque.tone-2 { --tone: #f59a3d; } .path-plaque.tone-3 { --tone: #f2735a; } .path-plaque.tone-4 { --tone: #8d8de6; } .path-plaque.tone-5 { --tone: #ef8cc4; }
+.path-plaque small { font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #6d8b7e; }
+.path-plaque small i { margin: 0 6px; font-style: normal; }
+.path-plaque strong { font-size: clamp(17px, 1.8vw, 22px); line-height: 1.2; letter-spacing: .04em; }
+.path-pages { display: flex; gap: 6px; margin: 3px 0 4px; padding: 0; list-style: none; }
+.path-pages button { display: block; width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: #d7dfdc; }
+.path-pages .is-done { background: #ffc531; }
+.path-pages .is-here { width: 24px; border-radius: 6px; background: var(--tone); }
+.path-turn { display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 4px solid #fff; border-radius: 50%; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14); }
 .path-turn.is-next .icon { transform: scaleX(-1); }
-.path-extra { position: absolute; z-index: 9; right: calc(12px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); display: flex; gap: 10px; }
-.path-extra button { display: grid; place-items: center; width: 64px; height: 64px; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #fff6dc; box-shadow: 0 5px 0 rgba(0, 0, 0, .14); }
+.path-turn:disabled { opacity: .35; box-shadow: none; }
 
-@keyframes path-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
-@keyframes path-bob { to { margin-bottom: 8px; } }
-@keyframes path-pulse { to { scale: 1.08; } }
-@keyframes path-hop { 40% { transform: translateY(-14%) scale(1.1); } }
-@keyframes path-wobble { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+/* ── More to do: labelled buttons in the corner ── */
+.path-extra { position: absolute; z-index: 9; right: calc(14px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); display: flex; gap: 10px; }
+.path-extra button { white-space: nowrap; display: flex; align-items: center; gap: 6px; min-height: 52px; padding: 6px 16px 6px 10px; border: 4px solid #fff; border-radius: 30px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14); color: var(--ink); font-size: 15px; font-weight: 800; }
+
+@keyframes stop-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
+@keyframes stop-bob { to { translate: 0 -6px; } }
+@keyframes stop-pulse { to { transform: scale(1.06); } }
+@keyframes stop-hop { 40% { transform: translateY(-14%) scale(1.1); } }
+@keyframes stop-wobble { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
 @media (max-width: 700px) {
- .path-turn { width: 56px; height: 56px; top: auto; bottom: calc(110px + env(safe-area-inset-bottom)); } .path-turn .icon { width: 32px !important; height: 32px !important; }
- .path-extra { bottom: auto; top: calc(112px + env(safe-area-inset-top)); } .path-extra button { width: 52px; height: 52px; } .path-extra .icon { width: 32px !important; height: 32px !important; }
- .path-top { justify-content: space-between; } .path-pages { position: absolute; left: 50%; top: calc(64px + env(safe-area-inset-top)); translate: -50% 0; margin: 0; gap: 5px; padding: 6px 8px; } .path-pages button { width: 24px; height: 24px; border-width: 3px; }
- .path-bubble .icon { width: 36px !important; height: 36px !important; }
+ .path-top { grid-template-columns: auto 1fr auto; }
+ .path-chapter { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+ .path-plaque { min-width: 0; padding: 5px 16px 6px; }
+ .path-turn { width: 44px; height: 44px; } .path-turn .icon { width: 24px !important; height: 24px !important; }
+ .path-extra { bottom: calc(96px + env(safe-area-inset-bottom)); right: 50%; translate: 50% 0; }
+ .path-extra button { min-height: 44px; padding: 4px 12px 4px 8px; font-size: 13px; }
+ .path-stop { --token: clamp(42px, 8.4cqw, 132px); gap: 4px; } .path-stop.is-current { --token: clamp(56px, 11cqw, 168px); }
+ .stop-token { box-shadow: 0 0 0 4px var(--ring), 0 6px 0 4px var(--ring-deep), 0 10px 14px rgba(20, 50, 40, .25); }
+ .path-stop.is-done .stop-token { box-shadow: 0 0 0 4px #ffc531, 0 6px 0 4px #e0a100, 0 10px 14px rgba(20, 50, 40, .25); }
+ .stop-name { margin-top: 6px; padding: 2px 8px 3px; font-size: 11px; }
+ .path-stop.is-current .stop-name { margin-top: 12px; font-size: 13px; }
+ .stop-bubble { padding: 4px 8px; border-width: 3px; } .stop-bubble .icon { width: 28px !important; height: 28px !important; }
 }
 @media (prefers-reduced-motion: reduce) { .path-scene * { animation: none !important; transition: none !important; } }

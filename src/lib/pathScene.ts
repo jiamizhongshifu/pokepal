@@ -10,7 +10,7 @@ import type { PathNode, PathNodeKind } from './learningPath';
 export type SceneSpot = readonly [x: number, y: number];
 export const LESSON_SPOTS: SceneSpot[] = [[20.5, 62], [40, 31], [61.5, 59], [83, 29]];
 const FIXED: Record<Exclude<PathNodeKind, 'lesson'>, SceneSpot> = {
- story: [50.5, 45], island: [19, 83], friend: [8, 55], diary: [74, 65], review: [29.5, 46], welcome: [35, 86],
+ story: [50.5, 45], island: [9, 80], friend: [8, 55], diary: [74, 65], review: [29, 43], welcome: [35, 86],
 };
 export function sceneSpots(nodes: readonly PathNode[]): SceneSpot[] {
  let lesson = 0;

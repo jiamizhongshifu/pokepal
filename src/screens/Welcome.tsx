@@ -2,25 +2,37 @@ import { worldArt } from '../data/sceneArt';
 import { Announcements } from '../components/Announcements';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useGame } from "../store";
-import { say, unlockAudio, sfx, wait } from "../lib/speech";
+import { say, unlockAudio, sfx, wait, playCry } from "../lib/speech";
 import { requestPersist } from "../lib/db";
-import { creatureAvatar, WELCOME_CAST } from "../data/creatures";
+import type React from 'react';
+import { creatureArt, getCreature, WELCOME_CAST } from "../data/creatures";
+import { homeOf, type Spot } from '../island/world';
 import { AVATARS, Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
 import { TrainerAvatar } from "../components/TrainerAvatar";
-import {useState} from 'react';
+import {useMemo,useState} from 'react';
 import {ParentLinks, ParentNotice} from '../components/ParentSupport';
 import {hasReadParentNotice} from '../lib/parentNotice';
 import {MusicToggle} from '../components/MusicToggle';
+import './welcome-start.css';
 
 
+const FRIENDS = 6;
+const side = (spot: Spot, slot: number, of: number): Spot => of < 2 ? spot : [spot[0] + (slot - (of - 1) / 2) * 6, spot[1] + (slot % 2) * 1.5];
+
+/**
+ * The front door is the island itself: the child's own friends wait at their homes, one big button (the child's
+ * face) goes in, and tapping a friend makes it hop and call. Everything for grown-ups sits behind one corner button.
+ */
 export function Welcome() {
   const trainer = useGame((s) => s.save.trainer);
   const createTrainer = useGame((s) => s.createTrainer);
   const go = useGame((s) => s.go);
   const [notice,setNotice]=useState<{avatar?:string}|null>(null);
   const [handoff,setHandoff]=useState<{avatar?:string}|null>(null);
+  const captures = useGame((s) => s.save.captures), favorites = useGame((s) => s.save.settings.favorites);
+  const [hop,setHop]=useState<number|null>(null),[adults,setAdults]=useState(false);
   const [noticeRead,setNoticeRead]=useState(()=>{try{return hasReadParentNotice(localStorage);}catch{return false;}});
   const requestBegin=(avatar?:string)=>{if(!noticeRead)setNotice({avatar});else void begin(avatar);};
 
@@ -42,48 +54,65 @@ export function Welcome() {
     }
   };
 
+  // A returning child sees their own friends; a new one sees who lives on the island.
+  const friends = useMemo(() => {
+    const ids = captures.length ? [...captures].sort((a, b) => Number(favorites.includes(b.id)) - Number(favorites.includes(a.id))).map(c => c.id).slice(0, FRIENDS) : WELCOME_CAST;
+    const groups = new Map<string, number[]>();
+    for (const id of ids) { const home = homeOf(getCreature(id).species).id; groups.set(home, [...(groups.get(home) ?? []), id]); }
+    return ids.map(id => { const home = homeOf(getCreature(id).species), group = groups.get(home.id)!; return { id, spot: side(home.spot, group.indexOf(id), group.length) }; });
+  }, [captures, favorites]);
+  const greet = (id: number) => { unlockAudio(); sfx('pop'); setHop(id); setTimeout(() => setHop(h => h === id ? null : h), 700); void playCry(id); };
+
   return (
-    <div className="screen welcome illustrated-welcome">
-      <img className="welcome-landscape" src={worldArt('welcome')} alt="" aria-hidden="true" {...{fetchpriority:"high"}} draggable={false}/>
-      <nav className="welcome-tools" aria-label="音乐与公告"><MusicToggle/><Announcements/></nav>
-      <div className="welcome-content">
-      <div className="welcome-pokemon">
-        {WELCOME_CAST.map((id, i) => (
-          <CreatureImg key={id} src={creatureAvatar(id)} alt="" style={{ animationDelay: `${i * 0.2}s` }} />
-        ))}
+    <div className="screen start-screen">
+      <div className="start-view">
+        <div className="start-world" aria-hidden={false}>
+          <img className="start-world-art" src={worldArt('island-map')} alt="" draggable={false} {...{fetchpriority:"high"}}/>
+          {friends.map(f => { const c = getCreature(f.id); return <button key={f.id} type="button" className={`start-friend${hop === f.id ? ' is-hopping' : ''}`} style={{ left: `${f.spot[0]}%`, top: `${f.spot[1]}%`, '--size': `${[10, 12, 14][c.stage - 1] ?? 10}%` } as React.CSSProperties} aria-label={`${c.nameZh} ${c.nameEn}`} onClick={() => greet(f.id)}><CreatureImg src={creatureArt(f.id)} alt=""/></button>; })}
+        </div>
       </div>
-      <div className="welcome-title-board">
-        <Icon name="leaf" size={40} className="welcome-title-leaf" />
-        <h1 className="logo">啵啵岛</h1>
-        <div className="logo-en">Bubbly Isle</div>
-      </div>
+
+      <header className="start-title"><Icon name="leaf" size={34} className="start-title-leaf"/><h1>啵啵岛</h1><span lang="en">Bubbly Isle</span></header>
+      <nav className="start-tools" aria-label="音乐和给大人的内容">
+        <MusicToggle/>
+        <button type="button" className="start-adults" aria-expanded={adults} onClick={() => setAdults(a => !a)}><Icon name="gear" size={26}/><span>给大人</span></button>
+      </nav>
+      {adults && <>
+        <button type="button" className="start-adults-backdrop" aria-label="关闭给大人的内容" onClick={() => setAdults(false)}/>
+        <section className="start-adults-panel" role="dialog" aria-label="给大人">
+          <header><strong>给陪伴的大人</strong><button type="button" aria-label="关闭" onClick={() => setAdults(false)}><Icon name="close" size={24}/></button></header>
+          <Announcements/>
+          <DeviceSetup/>
+          <ParentLinks/>
+        </section>
+      </>}
+
+      <div className="start-action">
       {trainer ? (
-        <button className="start welcome-enter" onClick={() => requestBegin()} aria-label="一起出发 Let’s play!">
-          <span className="enter-avatar"><TrainerAvatar avatar={trainer.avatar} photo={trainer.avatarPhoto} size={64}/></span>
-          <span className="enter-copy"><strong>一起出发</strong><span lang="en">Let’s play!</span></span>
-          <span className="enter-arrow" aria-hidden="true">›</span>
+        <button className="start-go" onClick={() => requestBegin()} aria-label="一起出发 Let’s play!">
+          <span className="start-go-face"><TrainerAvatar avatar={trainer.avatar} photo={trainer.avatarPhoto} size={84}/></span>
+          <span className="start-go-play" aria-hidden="true"><Icon name="play" size={52}/></span>
+          <span className="start-go-words"><strong>一起出发</strong><span lang="en">Let’s play!</span></span>
         </button>
       ) : !noticeRead ? (
         // A new family: the grown-up reads the notice first, then hands the device to the child to choose a look.
-        <section className="avatar-pick welcome-parent-first" aria-labelledby="welcome-parent-title">
+        <section className="start-card start-parent-first" aria-labelledby="welcome-parent-title">
           <p className="handoff-eyebrow">给陪伴的大人</p>
           <h2 id="welcome-parent-title">先花一分钟看看试用须知</h2>
           <p>看完后，再把设备交给孩子选一个喜欢的形象。</p>
           <button className="btn-big" onClick={() => setNotice({})}><Icon name="book" size={36}/>先看须知</button>
         </section>
       ) : (
-        <div className="avatar-pick">
-          <header className="help-heading avatar-heading"><div className="hint">选一个你喜欢的形象<small lang="en">Choose your look</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
-          <div className="avatar-row">
+        <section className="start-card start-pick" aria-label="选一个你喜欢的形象">
+          <header className="help-heading"><div className="start-pick-hint">选一个你喜欢的形象<small lang="en">Choose your look</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
+          <div className="start-pick-row">
             {AVATARS.map((a, i) => (
               <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label={`选择形象 ${i + 1}`}><Icon name={a} size={120} /></button>
             ))}
           </div>
-        </div>
+        </section>
       )}
       </div>
-      <DeviceSetup />
-      <ParentLinks/>
       {notice&&<ParentNotice onClose={()=>setNotice(null)} onContinue={()=>{const avatar=notice.avatar;setNoticeRead(true);setNotice(null);setHandoff({avatar});}}/>}
       {handoff&&<div className="modal-backdrop handoff-backdrop"><section className="modal handoff-card" role="dialog" aria-modal="true" aria-labelledby="handoff-title">
         <p className="handoff-eyebrow">给陪伴的大人</p>

@@ -68,7 +68,3 @@
 #root .handoff-card .handoff-go { width: 100%; }
 #root .screen .handoff-backdrop { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; }
 /* New family on the welcome page: the grown-up reads the notice before the child chooses a look. */
-#root .welcome-parent-first { display: grid; justify-items: center; gap: 10px; text-align: center; }
-#root .welcome-parent-first .handoff-eyebrow { margin: 0; color: var(--muted); font-size: var(--text-sm); font-weight: var(--brand-weight-display); }
-#root .welcome-parent-first h2 { margin: 0; font-size: var(--text-2xl); }
-#root .welcome-parent-first p { margin: 0; font-size: var(--text-base); }

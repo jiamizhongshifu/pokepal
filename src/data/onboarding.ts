@@ -7,7 +7,7 @@ export const GUIDES = {
  scene:{icon:'hand',title:'点东西，听英语',voice:'点地上的东西，听听它的英语。点点伙伴，听它说话。右上角的图画，也能一起玩。想回小岛，点左上角。',target:'.island-thing:not(.is-shadow)',sequence:['hand','ear','island']},
  islandDo:{icon:'ear',title:'听一听，拿给它',voice:'听伙伴说要什么，把它拖给伙伴，直接点一下也可以。没听清，就点小喇叭再听一次。',target:'.island-stage .island-ask-options',sequence:['ear','hand','speaker']},
  garden:{icon:'seed',title:'种下，浇水，摘果子',voice:'点空地，听伙伴想种什么，把它拖进地里。再点一下浇浇水，等水果长大，点一下就摘下来。',target:'.garden-plot',sequence:['seed','watering-can','strawberry']},
- path:{icon:'sign',title:'跟着路线，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.path-stop.is-current .path-go',sequence:['play','ear','hand']},
+ path:{icon:'sign',title:'跟着路线，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.path-stop.is-current .stop-go',sequence:['play','ear','hand']},
  tasks:{icon:'ear',title:'跟着伙伴，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.learning-trail-primary',sequence:['play','ear','hand']},
  listen:{icon:'ear',title:'先听，再点图片',voice:'先听听在找什么，再点你觉得对的图片。没听清，点喇叭再听一次。选错也没关系。',target:'.task-listen .choices',sequence:['ear','picture','hand']},
  repeat:{icon:'speak',title:'听一句，试着说一句',voice:'先听伙伴说。点麦克风，试着跟它说一句。说完可以点我说完啦。现在不想说，也可以换个游戏。',target:'.task-repeat .mic-btn:not(:disabled)',sequence:['ear','mic']},

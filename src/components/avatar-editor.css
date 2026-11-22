@@ -4,7 +4,6 @@
 .home .avatar.avatar-edit:active { transform:scale(.96); }
 .home .avatar.avatar-edit:focus-visible { outline:3px solid var(--brand-primary-deep); outline-offset:3px; }
 .home .avatar.avatar-edit .trainer-photo { width:44px; height:44px; }
-.enter-avatar .trainer-photo { width:100%; height:100%; }
 .avatar-editor { width:min(360px,calc(100vw - 32px)); max-height:calc(100dvh - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding:20px; border:2px solid var(--surface-border); border-radius:var(--radius-xl); background:var(--surface); color:var(--text); box-shadow:0 12px 40px #183f4533; overflow:auto; }
 .avatar-editor::backdrop { background:#153e4038; }
 .avatar-editor header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }

@@ -68,12 +68,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .wiggle { animation: wiggle 2.4s ease-in-out infinite; }
 
 /* ---------- 欢迎页 ---------- */
-.welcome { align-items: center; justify-content: center; gap: 14px; }
-.welcome::before { content: ""; position: absolute; width: 760px; height: 760px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 65%); top: 50%; left: 50%; transform: translate(-50%, -58%); pointer-events: none; }
-.welcome-pokemon { display: flex; gap: 6px; position: relative; }
-.welcome-pokemon img:not(.icon):not(.invite-berry) { width: 140px; height: 140px; animation: hop 1.6s ease-in-out infinite; filter: drop-shadow(0 10px 14px rgba(40, 40, 160, 0.35)); }
-.logo { position: relative; margin: 6px 0 0; font-size: 66px; font-weight: 900; letter-spacing: 4px; color: transparent; background: var(--grad-iris); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 4px 10px rgba(40, 30, 160, 0.45)); text-shadow: none; }
-.logo-en { position: relative; font-family: var(--font-num); font-size:var(--text-5xl); font-weight: 800; letter-spacing: 3px; color: var(--accent-en); text-transform: uppercase; text-shadow: 0 2px 0 rgba(110, 70, 220, 0.55), 0 0 16px rgba(255, 225, 77, 0.55); margin-top: -8px; }
 .start { flex-direction: column; min-height: 190px; padding: 22px 64px; border-radius:var(--radius-xl); font-size:var(--text-4xl); animation: breathe 2.4s ease-in-out infinite; }
 .avatar-xl { font-size: 92px; line-height: 1; }
 .avatar-pick { text-align: center; position: relative; }
@@ -320,22 +314,14 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .screen { color: var(--text); }
 
 /* 卷浪纹带：页面顶部薄荷绿、底部海蓝（自绘 SVG 纹样，家园和家长页除外） */
-.screen:not(.home):not(.parent):not(.welcome)::before,
 .screen:not(.home):not(.parent)::after {
   content: ""; position: absolute; left: 0; right: 0; pointer-events: none; z-index: -1; background-repeat: repeat-x;
-}
-.screen:not(.home):not(.parent):not(.welcome)::before {
-  top: 0; height: 30px;
-  background-color: var(--brand-primary);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='30' viewBox='0 0 64 30'%3E%3Cpath d='M0 18 C8 18 10 8 18 8 C26 8 28 16 24 19 C21 21 18 18 20 15' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M32 18 C40 18 42 8 50 8 C58 8 60 16 56 19 C53 21 50 18 52 15' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M0 26 Q16 20 32 26 T64 26' fill='none' stroke='%23d8fff0' stroke-width='2.5'/%3E%3C/svg%3E");
-  box-shadow: 0 6px 18px rgba(32, 198, 215, 0.25);
 }
 .screen:not(.home):not(.parent)::after {
   bottom: 0; height: 38px;
   background-color: var(--brand-sky);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='38' viewBox='0 0 72 38'%3E%3Cpath d='M0 14 C10 14 12 4 21 4 C30 4 32 13 27 16 C24 18 20 15 22 11' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M36 14 C46 14 48 4 57 4 C66 4 68 13 63 16 C60 18 56 15 58 11' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M0 26 Q18 18 36 26 T72 26' fill='none' stroke='%2383c7ff' stroke-width='3'/%3E%3C/svg%3E");
 }
-:root[data-theme="dark"] .screen:not(.home):not(.parent):not(.welcome)::before { background-color: var(--brand-sky-deep); opacity: 0.85; }
 :root[data-theme="dark"] .screen:not(.home):not(.parent)::after { background-color: var(--brand-sky-deep); }
 
 /* 白色粗边框卡片 */
@@ -358,10 +344,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .balls-chip { font-family: var(--font-num); }
 
 /* 欢迎页：白字海军蓝描边的标志 + 飘带副标题 */
-.logo { color: #fff; background: none; -webkit-background-clip: border-box; background-clip: border-box; filter: none; letter-spacing: 6px;
-  text-shadow: 0 4px 0 var(--navy), 4px 0 0 var(--navy), -4px 0 0 var(--navy), 0 -4px 0 var(--navy), 3px 3px 0 var(--navy), -3px 3px 0 var(--navy), 3px -3px 0 var(--navy), -3px -3px 0 var(--navy), 0 12px 24px rgba(32, 198, 215, 0.55); }
-.logo-en { font-family: var(--font-num); font-weight: 800; color: #fff; background: var(--ribbon); padding: 6px 70px; margin-top: 8px; letter-spacing: 4px; text-shadow: 0 1px 2px rgba(10, 30, 50, 0.45); font-size:var(--text-3xl); }
-.welcome::before { background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 62%); }
 
 /* 家园底栏：海军蓝胶囊导航 */
 
@@ -405,10 +387,8 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 /* 字体 */
 .gate-q, .hist td { font-family: var(--font-num); }
 /* 有卷浪纹带的页面，顶栏让出纹带高度 */
-.screen:not(.home):not(.parent):not(.welcome) > .topbar { margin-top: 22px; }
 :root[data-theme="dark"] .btn-big.alt { color: #fff; border-color: var(--surface-border); }
 /* 底部纹带不遮内容 */
-.screen:not(.home):not(.parent):not(.welcome) { padding-bottom: calc(env(safe-area-inset-bottom) + 40px); }
 
 /* 家园画面调色：提饱和与对比 + 暗角（代替后期处理，由浏览器合成器完成，几乎不耗性能） */
 .home-canvas canvas { filter: saturate(1.16) contrast(1.05); }

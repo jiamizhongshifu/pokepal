@@ -1,0 +1,59 @@
+/* The front door: the island fills the screen, friends wait at their homes, one big button goes in. */
+#root .start-screen { padding: 0; background: #22d3e6; user-select: none; -webkit-user-select: none; }
+.start-screen button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+.start-view { position: absolute; inset: 0; overflow: hidden; container-type: size; }
+/* Covers a wide screen; on a tall phone the whole island stays in view (most of it) and the sea fills above and below. */
+.start-world { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: max(100cqw, min(150cqh, 170cqw)); aspect-ratio: 3 / 2; animation: start-breathe 14s ease-in-out infinite alternate; }
+.start-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.start-friend { position: absolute; z-index: 2; width: var(--size, 11%); aspect-ratio: 1; translate: -50% -92%; padding: 0; border: 0; background: transparent; }
+.start-friend img { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; animation: start-idle 2.6s ease-in-out infinite; pointer-events: none; }
+.start-friend:nth-child(2n) img { animation-delay: -.9s; } .start-friend:nth-child(3n) img { animation-delay: -1.7s; }
+.start-friend::before { content: ""; position: absolute; left: 18%; right: 18%; bottom: 2%; height: 9%; border-radius: 50%; background: rgba(0, 0, 0, .16); }
+.start-friend.is-hopping img { animation: start-hop .7s ease; }
+
+.start-title { position: absolute; z-index: 5; left: calc(16px + env(safe-area-inset-left)); top: calc(14px + env(safe-area-inset-top)); display: grid; grid-template-columns: auto auto; align-items: center; column-gap: 8px; padding: 8px 20px 10px 14px; border: 5px solid #fff; border-radius: 28px; background: #fffdf4; box-shadow: 0 6px 0 rgba(0, 0, 0, .14); }
+.start-title h1 { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.05; letter-spacing: .04em; color: #2a4d3f; }
+.start-title span { grid-column: 2; font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #6d8b7e; }
+.start-title-leaf { grid-row: span 2; }
+
+.start-tools { position: absolute; z-index: 6; right: calc(14px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); display: flex; align-items: center; gap: 10px; }
+.start-adults { display: flex; align-items: center; gap: 6px; min-height: 48px; padding: 6px 14px 6px 10px; border: 3px solid #fff; border-radius: 28px; background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); font-size: 15px; font-weight: 800; color: #4a5a66; }
+.start-adults-backdrop { position: fixed; inset: 0; z-index: 7; border: 0; background: rgba(20, 50, 60, .25); }
+.start-adults-panel { position: absolute; z-index: 8; right: calc(14px + env(safe-area-inset-right)); top: calc(76px + env(safe-area-inset-top)); display: grid; gap: 12px; width: min(380px, calc(100vw - 28px)); max-height: calc(100dvh - 110px); overflow: auto; padding: 16px; border-radius: 24px; background: #fffdf4; box-shadow: 0 10px 30px rgba(0, 40, 60, .25); color: #2f3d45; }
+.start-adults-panel > header { display: flex; align-items: center; justify-content: space-between; font-size: 17px; }
+.start-adults-panel > header button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; }
+#root .start-adults-panel .notice-entry { position: relative; inset: auto; justify-self: start; translate: none; }
+.start-adults-panel .device-setup, .start-adults-panel .parent-support-links { position: static; margin: 0; width: auto; transform: none; }
+
+/* One big way in: the child's own face with a play mark. */
+.start-action { position: absolute; z-index: 4; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); translate: -50% 0; display: grid; justify-items: center; width: min(720px, calc(100vw - 24px)); }
+.start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid #fff; border-radius: 70px; background: #58cc02; box-shadow: 0 8px 0 #3f9a00, 0 14px 30px rgba(0, 60, 40, .25); color: #fff; animation: start-pulse 1.4s ease-in-out infinite alternate; }
+.start-go:active { translate: 0 6px; box-shadow: 0 2px 0 #3f9a00; }
+.start-go-face { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 50%; background: #fff; overflow: hidden; }
+.start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
+.start-go-play .icon { filter: brightness(10); }
+.start-go-words { display: grid; text-align: left; }
+.start-go-words strong { font-size: 28px; line-height: 1.1; }
+.start-go-words span { font-size: 16px; font-weight: 800; opacity: .9; }
+
+.start-card { padding: 18px 22px; border: 5px solid #fff; border-radius: 30px; background: #fffdf4; box-shadow: 0 8px 0 rgba(0, 0, 0, .12); color: #2f3d45; text-align: center; }
+.start-parent-first h2 { margin: 4px 0; font-size: 22px; } .start-parent-first p { margin: 4px 0 12px; }
+.start-pick > header { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.start-pick-hint { display: grid; font-size: 20px; font-weight: 800; } .start-pick-hint small { font-size: 13px; color: #6d8b7e; }
+.start-pick-row { display: flex; justify-content: center; gap: 14px; margin-top: 10px; }
+.start-pick .avatar-choice { display: grid; place-items: center; width: 108px; height: 108px; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #e9f8ff; box-shadow: 0 6px 0 rgba(0, 0, 0, .12); animation: start-idle 2.4s ease-in-out infinite; }
+.start-pick .avatar-choice:nth-child(2) { animation-delay: -.6s; } .start-pick .avatar-choice:nth-child(3) { animation-delay: -1.2s; } .start-pick .avatar-choice:nth-child(4) { animation-delay: -1.8s; }
+.start-pick .avatar-choice .icon { width: 86% !important; height: 86% !important; }
+
+@keyframes start-idle { 50% { transform: translateY(-4%) scaleY(1.02); } }
+@keyframes start-hop { 35% { transform: translateY(-22%) scale(1.08); } 70% { transform: translateY(0) scaleY(.94); } }
+@keyframes start-pulse { to { scale: 1.05; } }
+@keyframes start-breathe { to { scale: 1.04; } }
+@media (max-width: 700px) {
+ .start-title { padding: 6px 14px 8px 10px; border-width: 4px; } .start-title-leaf { width: 26px !important; height: 26px !important; }
+ .start-adults span { display: none; } .start-adults { padding: 6px 10px; }
+ .start-go { gap: 10px; padding: 8px 22px 8px 8px; } .start-go-face { width: 76px; height: 76px; } .start-go-play { width: 50px; height: 50px; }
+ .start-go-words strong { font-size: 22px; }
+ .start-pick .avatar-choice { width: 72px; height: 72px; } .start-pick-row { gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .start-screen * { animation: none !important; } }

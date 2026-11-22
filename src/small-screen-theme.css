@@ -9,7 +9,6 @@
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }
 #root .story-reader .theatre-word>.icon { flex:none; }
 #root .notebook-parent .btn-small { color:var(--brand-ink); }
-#root .welcome-title-board .logo-en { color:var(--muted); }
 #root .task-trace .trace-word b { color:var(--text); }
 #root .dex-detail .type-chip.color { color:var(--brand-ink); background:var(--brand-primary-soft); }
 #root .parent-organized .parent-fold-content { background:var(--brand-paper); border-radius:var(--radius-md); padding:16px; margin-bottom:16px; }

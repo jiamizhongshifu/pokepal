@@ -6,8 +6,6 @@
 #root .screen.sleepy { background:radial-gradient(ellipse at 50% 30%,#2f6b9188,transparent 65%),var(--brand-night); color:var(--brand-sky-deep); }
 #root .sleepy .sleepy-text { color:var(--brand-sky-deep); }
 /* Existing ocean-wave pseudo-elements clash with the quiet stationery surfaces. */
-#root .screen:not(.home):not(.welcome)::before,
-#root .screen:not(.home):not(.welcome)::after { display:none; }
 #root .screen .topbar { background:transparent; box-shadow:none; border:0; }
 #root .screen .tb-title { color:var(--text); letter-spacing:.01em; }
 #root .screen .btn-round.back {
@@ -38,20 +36,6 @@
 #root .screen .guide-reopen { background:var(--brand-sun-soft); border-color:var(--brand-line); }
 
 /* A sunlit sign with the original tactile grain and rounded silhouette. */
-#root .welcome-title-board {
-  position:relative; text-align:center; padding:24px 38px 19px; margin:8px 0 10px;
-  border:3px solid var(--brand-sky); border-top-color:var(--brand-paper); border-radius:24px 29px 24px 30px;
-  background:repeating-linear-gradient(0deg,transparent 0 34px,#68b9c910 35px 37px),linear-gradient(110deg,#eff9dd,var(--brand-paper) 52%,#ddf4fa);
-  box-shadow:0 6px 0 var(--brand-sky),0 13px 22px #214f6729,inset 0 0 0 4px #ffffff66;
-}
-#root .welcome-title-board .logo { color:var(--brand-ink); font-size:clamp(27px,4.3vw,54px); text-shadow:0 2px #fff4d4; }
-#root .welcome-title-board .logo-en { color:var(--brand-ink-muted); font-size:clamp(12px,1.6vw,18px); letter-spacing:.09em; margin:10px 0 0; }
-#root .welcome-title-leaf { position:absolute; left:calc(50% - 24px); top:-28px; width:48px; height:48px; transform:rotate(-16deg); }
-#root .illustrated-welcome .welcome-enter { background:linear-gradient(#ffed8a,var(--brand-sun)); color:var(--brand-ink); border:3px solid var(--brand-paper); box-shadow:0 5px 0 var(--brand-sun),0 10px 22px #214f6733; border-radius:var(--radius-xl); }
-#root .illustrated-welcome .enter-avatar { background:var(--brand-paper); border-color:var(--brand-sun); }
-#root .illustrated-welcome .enter-copy>span { color:var(--brand-ink); opacity:1; }
-#root .illustrated-welcome .enter-arrow { background:var(--brand-danger); color:var(--brand-ink); }
-#root .illustrated-welcome .avatar-choice { background:var(--brand-sun-soft); border-color:var(--brand-streak); box-shadow:0 3px 0 var(--brand-streak); }
 
 /* Notebook pages: one clear next step, with little picture tiles to explore. */
 #root .tasks .learning-trail {
@@ -97,9 +81,6 @@
 :root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:#f2fbff; color:var(--brand-sky-deep); }
 :root[data-theme="dark"] #root .screen .btn-big.alt { color:var(--brand-sky-ink); }
 @media(max-width:600px) {
-  #root .welcome-title-board { padding:20px 15px 16px; width:100%; margin-top:10px; }
-  #root .welcome-title-board .logo { font-size:clamp(24px,6.5vw,34px); }
-  #root .welcome-title-board .logo-en { font-size:var(--text-xs); letter-spacing:.04em; }
   #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
   #root .learning-trail header small { padding:5px 8px; white-space:nowrap; }
 }
@@ -156,11 +137,6 @@
 /* A consistent role for each celebration colour; never recolour teaching art. */
 #root .screen { --leaf:var(--brand-primary); --honey:var(--brand-sun); }
 #root .screen .journey-primary { --leaf:var(--brand-primary); box-shadow:0 4px 0 var(--brand-primary-deep); }
-#root .illustrated-welcome .avatar-pick { color:var(--brand-ink); background:#fffef7ef; border-color:var(--brand-line); box-shadow:0 5px 0 #70b8ca55; }
-#root .illustrated-welcome .avatar-pick .hint small { color:var(--brand-ink-muted); }
-#root .illustrated-welcome .avatar-choice { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 3px 0 var(--brand-primary); }
-#root .illustrated-welcome .device-setup>summary { color:var(--brand-ink); background:#fffef7ef; border-color:var(--brand-line); }
-#root .illustrated-welcome .device-setup[open] { --text:var(--brand-ink); --muted:var(--brand-ink-muted); --surface:var(--brand-paper); --surface-strong:var(--brand-paper); color:var(--brand-ink); background:var(--brand-paper); }
 #root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-sun); }
 #root .screen .guide-hear { background:var(--brand-sky-soft); border-color:var(--surface-border); }
 #root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }

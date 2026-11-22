@@ -22,7 +22,7 @@ import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
 import { storyBackground, storyProp, worldArt } from '../data/sceneArt';
 import { bi } from '../lib/bi';
-import { stationDistrict, unlockedDistricts, unlockingUnit } from '../lib/islandPlan';
+import { nextDistrict, stationDistrict, unlockedDistricts, unlockingUnit } from '../lib/islandPlan';
 import { cryOnIsland, sayOnIsland as say } from '../lib/islandSpeech';
 import { learningVoice } from '../lib/learningVoice';
 import { skyFor } from '../lib/routine';
@@ -32,7 +32,7 @@ import { shownTraces } from '../island/errands';
 import { learnedKeys, readyToGrow } from '../island/plays';
 import { ISLAND_DAY, SCENES, dayDone, inviteKey, islandDone, islandInvites, scenePlays, sceneThings, type Invite, type Standing } from '../island/scenes';
 import { shownStickers } from '../island/stickers';
-import { PLACES, placeOf, whereNow, type District, type Spot } from '../island/world';
+import { DISTRICTS, PLACES, placeOf, placesIn, whereNow, type District, type Spot } from '../island/world';
 import '../island/island-home.css';
 
 const RESIDENTS = 12, REACT_MS = 1400, PERIOD = 20 * 60 * 1000;
@@ -202,6 +202,15 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     {shownStickers(save).map(k => <img key={k.id} className="island-world-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
     {shownTraces(save, now).map(t => <span key={t.id} className="island-world-trace" role="img" aria-label={t.label} style={{ left: `${t.spot[0]}%`, top: `${t.spot[1]}%` }}><Icon name={t.icon} size={30} /></span>)}
     {PLACES.map(p => { const locked = !open.has(p.district); return <button key={p.id} type="button" className={`island-place${locked ? ' is-locked' : ''}${nudged === p.district ? ' is-nudged' : ''}`} style={{ left: `${p.spot[0]}%`, top: `${p.spot[1]}%` }} aria-label={locked ? `${p.name}（还没开放）` : `走进${p.name}`} onClick={() => enter(p.district)} />; })}
+    {(() => {
+     // Areas the path has not opened are simply quiet; only the next one shows a sign saying it opens with learning.
+     const d = nextDistrict(save), places = d ? placesIn(d) : [];
+     if (!d || !places.length) return null;
+     const at = [places.reduce((n, p) => n + p.spot[0], 0) / places.length, places.reduce((n, p) => n + p.spot[1], 0) / places.length];
+     return <button type="button" className={`island-teaser${nudged === d ? ' is-nudged' : ''}`} style={{ left: `${at[0]}%`, top: `${at[1]}%` }} aria-label={`${DISTRICTS.find(x => x.id === d)?.name}，学到这里就开放`} onClick={() => enter(d)}>
+      <Icon name="lock" size={30} /><span><b>{DISTRICTS.find(x => x.id === d)?.name}</b><small>学到这里就开放</small></span>
+     </button>;
+    })()}
     {standing.map(f => {
      const group = groups.get(f.place)!, spot = side(placeOf(f.place).spot, group.indexOf(f.id), group.length), creature = getCreature(f.id);
      const invite = invites.find(i => i.partner === f.id);
