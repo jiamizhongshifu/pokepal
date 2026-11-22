@@ -32,6 +32,7 @@ import {TrialSummaryCard} from '../components/TrialSummaryCard';
 import {ParentRecordings,ParentDiaries} from '../components/ParentRecordings';
 import {StorageFacts} from '../components/StorageFacts';
 import {downloadJson,exportableSave} from '../lib/saveExport';
+import {AlphabetGrid,ChapterProgressStrip,RingMeter,WeeklyBarChart} from '../components/ParentCharts';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -105,29 +106,44 @@ export function Parent() {
   return <div className="screen parent parent-organized">
    <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={()=>go({name:'home'})} aria-label="返回"><Icon name="back" size={30}/></button><h2>家长中心</h2></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
    {msg&&<div className="toast" role="status">{msg}</div>}
-   <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看看最近在接触什么，再决定怎样陪伴。':tab==='settings'?'常用设置优先，其余按需要展开。修改后自动保存。':'更新保留学习进度。备份和数据清理分开管理。'}</p></div>
-   <section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div>{tab==='data'&&<><TrafficPreferences/><AnalyticsPreferences/></>}{tab==='data'&&<><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></>}</section>
-   {tab==='report'&&<><section className="parent-learning-focus">
+   <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看今日数据与 7 天趋势，再按需展开明细。':tab==='settings'?'常用陪伴设置优先，修改后自动保存。':'更新保留学习进度，备份与清空分开管理。'}</p></div>
+   {tab==='data'&&<section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div><TrafficPreferences/><AnalyticsPreferences/><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></section>}
+   {tab==='report'&&<>
+   <section className="parent-kpi-grid" aria-label="今日学习快照">
+    <div className="parent-kpi-card is-ring">
+     <RingMeter value={Math.round(d.playSeconds/60)} max={Math.max(1,Math.round(playLimitSeconds(save)/60))} label={`${Math.round(d.playSeconds/60)}`} sub={`/${Math.round(playLimitSeconds(save)/60)}分`}/>
+     <div><small>今日游玩时长</small><strong>{Math.round(d.playSeconds/60)} 分钟</strong><span>每日上限 {Math.round(playLimitSeconds(save)/60)} 分钟</span></div>
+    </div>
+    <div className="parent-kpi-card">
+     <span className="parent-kpi-icon is-green"><Icon name="book" size={28}/></span>
+     <div><small>今日接触词汇</small><strong>{todayWords.length} <small>个</small></strong><span>累计不同日选对 {learned.length} 个</span></div>
+    </div>
+    <div className="parent-kpi-card">
+     <span className="parent-kpi-icon is-orange"><Icon name="speak" size={28}/></span>
+     <div><small>开口尝试</small><strong>{d.spoken} <small>次</small></strong><span>累计参与 {save.participation?.days??save.streak.count} 天</span></div>
+    </div>
+    <div className="parent-kpi-card">
+     <span className="parent-kpi-icon is-purple"><Icon name="dex" size={28}/></span>
+     <div><small>伙伴与课程</small><strong>{completed} <small>/ {LEARNING_UNITS.length} 课</small></strong><span>已认识 {save.captures.length} / {CREATURES.length} 位伙伴</span></div>
+    </div>
+   </section>
+   <WeeklyBarChart days={history} today={d.date}/>
+   <section className="parent-learning-focus">
  <div className="parent-section-heading"><div><span className="parent-eyebrow">当前学习阶段 · {learningStageTitle(s)}</span><h3>{current.title}</h3></div><button className="parent-inline-action" onClick={()=>{setStageOpen(true);setTab('settings');}}><Icon name="gear" size={22}/>调整阶段</button></div>
  <ParentPathSummary/>
- <p className="parent-course-progress">已体验 {completed} / {LEARNING_UNITS.length} 个课程单元，不代表已经掌握。</p>
- <div className="parent-family-facts"><strong>今天留下的小发现</strong><p>{family.completed.length?`首次走完了「${family.completed[0].title}」${family.completed.length>1?`等 ${family.completed.length} 站`:''}。`:'今天还没有首次走完的新一站，听听、看看也可以。'}{family.words.length?`接触过 ${family.words.map(e=>e.en).join('、')}。`:''}</p><small>记录来自应用操作，无法判断是否由宝宝独自完成。</small></div>
- <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>下次生活里，可以一起试试</strong><p><span lang="en">{family.focus.phrase}</span> · {family.focus.homePlay}</p><small>让宝宝选，你来回应。中文也很好，不用考一考。“试过了”只是家长自己的记录，和应用里的作答分开。</small>{save.learning?.units[family.focus.id]&&<button className="btn-small parent-home-tried" aria-pressed={!!save.learning.units[family.focus.id].homeTriedAt} onClick={()=>markHomeTried(family.focus.id,!save.learning!.units[family.focus.id].homeTriedAt)}><Icon name={save.learning.units[family.focus.id].homeTriedAt?'heart':'sparkle'} size={22}/>{save.learning.units[family.focus.id].homeTriedAt?`试过了 · ${new Date(save.learning.units[family.focus.id].homeTriedAt!).toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'})}（再点取消）`:'在家试过了'}</button>}</div></div>
- <p className="parent-review-note">{due?`${due} 个词可以再遇见，${retry} 个词可以再试试。`:'暂时没有到期的复习，轻松听一听、玩一玩就好。'}</p>
- <button className="btn-small" onClick={()=>go({name:'notebook',mode:retry?'retry':'all',returnTo:'parent'})}><Icon name="book" size={24}/>查看词汇与复习</button>
+ <div className="parent-home-idea"><Icon name="heart" size={28}/><div><strong>在家一起试试 · <span lang="en">{family.focus.phrase}</span></strong><p>{family.focus.homePlay}</p><div className="parent-idea-actions">{save.learning?.units[family.focus.id]&&<button className="btn-small parent-home-tried" aria-pressed={!!save.learning.units[family.focus.id].homeTriedAt} onClick={()=>markHomeTried(family.focus.id,!save.learning!.units[family.focus.id].homeTriedAt)}><Icon name={save.learning.units[family.focus.id].homeTriedAt?'heart':'sparkle'} size={22}/>{save.learning.units[family.focus.id].homeTriedAt?`试过了 · ${new Date(save.learning.units[family.focus.id].homeTriedAt!).toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'})}`:'在家试过了'}</button>}<button className="btn-small" onClick={()=>go({name:'notebook',mode:retry?'retry':'all',returnTo:'parent'})}><Icon name="book" size={22}/>词汇与复习{due?`（${due}）`:''}</button></div></div></div>
 </section>
-<section className="parent-today"><h3>今天的小足迹</h3><dl><div><dt>接触的词</dt><dd>{todayWords.length}<small> 个</small></dd></div><div><dt>开口尝试</dt><dd>{d.spoken}<small> 次</small></dd></div><div><dt>游玩时间</dt><dd>{Math.round(d.playSeconds/60)}<small> / {Math.round(playLimitSeconds(save)/60)} 分钟</small></dd></div></dl><p>开口包含手动确认，不作为发音评分。轻松参与比完成数量更重要。</p></section>
 <ParentEvidence/>
 <TrialSummaryCard/>
-<h3 className="parent-detail-heading">需要时，再看看</h3>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与书写记录<small>今天接触 {todayWords.length} 个词 · 不同日期都选对 {learned.length} 个词</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{d.words.filter((w) => !w.startsWith("letter:")).length}）</h3>
-              <div className="chips">{d.words.filter((w) => !w.startsWith("letter:")).map((w) => <button key={w} className="chip" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
-              <h3>在两个不同日期都没用提示选对的词（{learned.length}，不代表已经掌握）</h3>
+<h3 className="parent-detail-heading">需要时，再展开明细</h3>
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与字母墙<small>今日 {todayWords.length} 词 · 字母 {letters.length}/26</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{todayWords.length}）</h3>
+              <div className="chips">{todayWords.map((w) => <button key={w} className="chip" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
+              <h3>在两个不同日期都没用提示选对的词（{learned.length}，不代表已掌握）</h3>
               <div className="chips">{learned.map((w) => <button key={w} className="chip ok" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
               <h3>写过的字母（{letters.length} / 26）</h3>
-              <div className="chips">{letters.map((l) => <span key={l} className="chip letter">{l}</span>)}</div>
+              <AlphabetGrid traced={letters}/>
             {todayWords.length===0&&learned.length===0&&letters.length===0&&<p className="muted">还没有记录。听故事、玩课程或写字后，会慢慢积累在这里。</p>}</div></details>
-<details className="parent-fold"><summary><Icon name="tasks" size={28}/><span>最近 7 天<small>查看参与与游玩记录</small></span></summary><div className="parent-fold-content"><p className="parent-table-hint">表格可左右滑动，查看完整记录。</p><div className="parent-table-scroll" role="region" aria-label="最近七天学习记录，可左右滚动" tabIndex={0}><table className="hist">
+<details className="parent-fold"><summary><Icon name="tasks" size={28}/><span>最近 7 天明细表<small>查看播放、开口、新词与时长完整数据</small></span></summary><div className="parent-fold-content"><p className="parent-table-hint">表格可左右滑动，查看完整记录。</p><div className="parent-table-scroll" role="region" aria-label="最近七天学习记录，可左右滚动" tabIndex={0}><table className="hist">
                 <thead><tr><th>日期</th><th>播放次数</th><th>开口尝试</th><th>任务</th><th>新词</th><th>新伙伴</th><th>分钟</th></tr></thead>
                 <tbody>
                   {history.map((h) => (
@@ -136,7 +152,8 @@ export function Parent() {
                 </tbody>
               </table></div></div></details>
 <details className="parent-fold"><summary><Icon name="mic" size={28}/><span>跟读录音<small>{recCount} 条，仅保存在本机</small></span></summary><div className="parent-fold-content"><ParentRecordings onCount={setRecCount}/></div></details>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>怎样理解这些记录<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，这些记录不代表孩子独立完成。跟读只记录开口尝试；体验一站也不代表完全掌握。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details></>}
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>数据口径说明<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，跟读只记录开口尝试。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details>
+<section className="parent-support-tools parent-footer-links" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div></section></>}
    {tab==='settings'&&<><details className="parent-fold parent-stage-fold" open={stageOpen} onToggle={e=>setStageOpen(e.currentTarget.open)}><summary><Icon name="sign" size={28}/><span>英语学习阶段<small>当前：{learningStageTitle(s)}</small></span></summary><div className="parent-fold-content"><LearningStageSettings/></div></details>
 <section className="form parent-routine"><h3>游玩与休息</h3><label><span>每日游玩时长：<b>{s.dailyMinutes} 分钟</b></span>
                 <input type="range" min={5} max={60} step={5} value={s.dailyMinutes} onChange={(e) => updateSettings({ dailyMinutes: Number(e.target.value) })} />
@@ -191,12 +208,16 @@ const NEXT_KIND:Record<string,string>={lesson:'学一站课',story:'听这一章
 function ParentPathSummary(){
  const save=useGame(s=>s.save);
  const route=learningPath(save),path=withWelcomeFriend(save,withReview(save,route)),next=currentNode(path);
- const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length;
+ const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length,stars=pathStars(route,save);
  const friends=Object.entries(save.path?.friends??{}).sort(([a],[b])=>+a-+b);
+ const chapters=route.map(c=>{const p=chapterProgress(c);return {index:c.index,title:c.title,done:p.done,total:p.total};});
  return <div className="parent-path-summary">
-  <div className="parent-path-row"><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {path.length} 章</span><strong>{chapter.title}</strong><small>本章 {chapterProgress(chapter).done} / {chapterProgress(chapter).total} 站 · 共点亮 {pathStars(route,save)} 颗星（路线 {total} 站）</small></div>
+  <div className="parent-path-row">
+   <div><span className="parent-eyebrow">学习路线 · 第 {chapter.index+1} / {route.length} 章</span><strong>{chapter.title}</strong></div>
+   <span className="pchart-badge-pill">已点亮 {stars} / {total} 站</span>
+  </div>
+  <ChapterProgressStrip chapters={chapters} currentIndex={chapter.index}/>
   <p>{next?<>下一站：<b>{NEXT_KIND[next.kind]}</b>{next.kind==='lesson'||next.kind==='story'?`「${next.title}」`:''}</>:'整条路线已经走完，可以挑喜欢的站再玩一次。'}</p>
-  <small className="parent-friend-rule">新朋友怎么来：每章的“新朋友”站来一位；另外，孩子每玩满 7 天（每天至少三种活动），会多一个邀请果。小精灵在“好朋友”相册里，多一起玩会长大。</small>
   {friends.length>0&&<div className="parent-path-friends" aria-label="路线上认识的朋友">{friends.map(([c,id])=><span key={c}><CreatureImg src={creatureArt(id)} alt=""/>第 {+c+1} 章 · {getCreature(id).nameZh}</span>)}</div>}
  </div>;
 }
