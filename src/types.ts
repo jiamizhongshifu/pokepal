@@ -42,6 +42,8 @@ export interface Daily {
   participated?: import("./lib/participation").ParticipationKind[];
   goalDone?: boolean;
   courseUnits?: string[]; // Themes rewarded today; reset with the daily record.
+  /** Things finished on the island today (errands, parties, activities); three make the island's day. */
+  islandDone?: number;
   storyReadPages?: Record<string,number[]>;
   date: string;
   energyEarned: number;

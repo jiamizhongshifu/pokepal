@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGame } from '../store';
-import { learningPath, withReview, withWelcomeFriend, pathStars, pathNodes, chapterProgress, currentNode, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
+import { learningPath, withReview, withWelcomeFriend, pathNodes, currentNode, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
+import { bubblePictures, leftBehind, sceneSpots } from '../lib/pathScene';
 import { Confetti } from '../components/Celebration';
 import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
-import { creatureArt } from '../data/creatures';
+import { creatureArt, creatureExpression } from '../data/creatures';
+import { pathArt } from '../data/sceneArt';
 import { Icon } from '../icons';
 import { CreatureImg } from '../components/CreatureImg';
 import { TrainerAvatar } from '../components/TrainerAvatar';
@@ -13,24 +15,27 @@ import { ParentButton } from '../components/TopBar';
 import { InviteBerry } from '../components/InviteBerry';
 import { BottomNav } from '../components/BottomNav';
 import { FeatureGuide } from '../components/FeatureGuide';
-import './path-home.css';
+import './path-scene.css';
 
-/** Gentle left-right sway of the stops, in px, like a winding path. */
-const SWAY = [0, 46, 70, 46, 0, -46, -70, -46];
-const CHAPTER_COLOR = ['primary', 'sky', 'gem', 'streak', 'sun', 'danger'] as const;
 const KIND_LABEL: Record<PathNode['kind'], string> = { lesson: '学一学', story: '听故事', island: '去小岛', friend: '新朋友', diary: '说一说', review: '再见面', welcome: '交朋友' };
 
+/**
+ * The learning path as a picture book: one scene for each chapter, turned like pages. A stop is something in the
+ * scene. Today's stop is the friend waiting there with a picture of what it is about; finished stops show what was
+ * left behind; stops not reached yet are under a cloud.
+ */
 export function PathHome() {
  const save = useGame(s => s.save), go = useGame(s => s.go), start = useGame(s => s.startUnit);
  const celebrate = useGame(s => s.celebratePath), claimFriend = useGame(s => s.claimChapterFriend), openDiary = useGame(s => s.openChapterDiary);
  const route = useMemo(() => learningPath(save), [save]);
  const path = useMemo(() => withWelcomeFriend(save, withReview(save, route)), [save, route]);
- const stars = pathStars(route, save);
+ const now = pathNodes(path).find(n => n.state === 'current');
  const friend = save.captures.find(c => save.settings.favorites.includes(c.id)) ?? save.captures[0];
+ const [page, setPage] = useState(() => now?.chapter ?? path.length - 1);
  const [editing, setEditing] = useState(false);
  const [nudge, setNudge] = useState<string | null>(null);
  const [lit, setLit] = useState<string[]>([]);
- const currentRef = useRef<HTMLLIElement>(null);
+ const view = useRef<HTMLDivElement>(null), here = useRef<HTMLDivElement>(null);
 
  // Stops finished since the last visit light up once; finishing the whole path is celebrated once too.
  const finished = !currentNode(route);
@@ -42,15 +47,17 @@ export function PathHome() {
   if (fresh.length) { setLit(fresh); sfx('sparkle'); const t = setTimeout(() => setLit([]), 1600); return () => clearTimeout(t); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
- useEffect(() => { currentRef.current?.scrollIntoView({ block: 'center' }); }, []);
+ // On a tall phone the scene is wider than the screen: bring today's stop (or the middle) into view.
+ useEffect(() => {
+  const v = view.current;
+  if (!v || v.scrollWidth <= v.clientWidth) return;
+  if (here.current) here.current.scrollIntoView({ inline: 'center', block: 'nearest' }); else v.scrollLeft = (v.scrollWidth - v.clientWidth) / 2;
+ }, [page]);
  useEffect(() => () => stopSpeech(), []);
 
+ const hear = (node: PathNode) => { stopSpeech(); if (node.unit) void say(['zh', node.unit.mission]); };
  const open = async (node: PathNode) => {
-  if (node.state === 'locked') {
-   sfx('boop'); setNudge(node.key); setTimeout(() => setNudge(n => n === node.key ? null : n), 600);
-   if (node.unit) void say(['zh', node.unit.mission]);
-   return;
-  }
+  if (node.state === 'locked') { sfx('boop'); setNudge(node.key); setTimeout(() => setNudge(n => n === node.key ? null : n), 600); hear(node); return; }
   stopSpeech(); sfx('click');
   if (node.kind === 'lesson') start(node.unit!.id);
   else if (node.kind === 'story') go({ name: 'story', id: node.storyId! });
@@ -61,58 +68,45 @@ export function PathHome() {
   else if (node.state === 'done') go({ name: 'dex' });
   else if (await claimFriend(node.chapter)) go({ name: 'catch' });
  };
+ const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeech(); sfx('click'); setPage(to); };
 
- return <div className="screen path-home">
-  <header className="path-header">
+ const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
+ return <div className="screen path-scene">
+  <div className="path-view" ref={view}>
+   <section className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
+    <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} />
+    {chapter.nodes.map((node, i) => {
+     const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
+     const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;
+     const label = `${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : node.state === 'current' ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`;
+     const style = { left: `${spots[i][0]}%`, top: `${spots[i][1]}%` };
+     if (node.state === 'current') return <div key={node.key} ref={here} className="path-stop is-current" style={style}>
+      <button type="button" className="path-bubble" aria-label="听一听这一站要做什么" onClick={() => hear(node)}>{bubblePictures(node).map(icon => <Icon key={icon} name={icon} size={52} />)}{node.unit && <Icon name="speaker" size={30} className="path-bubble-hear" />}</button>
+      {friend ? <CreatureImg className="path-friend" src={creatureExpression(friend.id, 'hello')} alt="" /> : <Icon name={node.icon} size={96} className="path-friend" />}
+      <button type="button" className="path-go" aria-label={label} onClick={() => void open(node)}><Icon name="play" size={56} /></button>
+     </div>;
+     return <button key={node.key} type="button" className={`path-stop is-${node.state} kind-${node.kind}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style} aria-label={label} onClick={() => void open(node)}>
+      {met ? <CreatureImg className="path-stop-art" src={creatureArt(met)} alt="" /> : <Icon name={node.state === 'done' ? leftBehind(node) : node.icon} size={72} className="path-stop-art" />}
+      {node.state === 'done' && <Icon name="star" size={34} className="path-stop-star" />}
+     </button>;
+    })}
+   </section>
+  </div>
+
+  <header className="path-top">
    <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
-   <div className="path-stats">
-    <span className="path-stat" aria-label={`已经点亮 ${stars} 颗星星`}><Icon name="star" size={30} /><b>{stars}</b></span>
-    <button className="path-stat" aria-label={`邀请果 ${save.balls.poke} 个${save.balls.poke ? '，去海边迎接新朋友' : ''}`} disabled={save.balls.poke < 1} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>
-   </div>
-   <div className="path-header-tools"><FeatureGuide id="path" compact /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>
+   {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={34} /><b>{save.balls.poke}</b></button>}
+   <ol className="path-pages" aria-label="六章">{path.map(c => <li key={c.index}><button type="button" className={`tone-${c.index % 6}${c.index === chapter.index ? ' is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
+   <div className="path-tools"><FeatureGuide id="path" compact /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>
   </header>
-
-  <main className="path-main">
-   {path.map(chapter => <section key={chapter.index} className={`path-chapter tone-${CHAPTER_COLOR[chapter.index % CHAPTER_COLOR.length]}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
-    <div className="path-banner">
-     <small>第 {chapter.index + 1} 章 · {chapterProgress(chapter).done} / {chapterProgress(chapter).total}</small>
-     <h2>{chapter.title}</h2>
-     <p>{chapter.goal}</p>
-    </div>
-    <ol className="path-nodes">
-     {chapter.nodes.map(node => {
-      const style = { '--sway': `${SWAY[node.index % SWAY.length]}px` } as CSSProperties;
-      const current = node.state === 'current';
-      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;
-      const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
-      return <li key={node.key} ref={current ? currentRef : undefined} className={`path-node kind-${node.kind} is-${node.state}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style}>
-       {current && <span className="path-start" aria-hidden="true">{KIND_LABEL[node.kind]}！<small lang="en">Start</small></span>}
-       <button type="button" className="path-node-button" onClick={() => void open(node)}
-        aria-label={`${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : current ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`}>
-        {met ? <CreatureImg className="path-node-friend" src={creatureArt(met)} alt="" />
-         : <Icon name={node.state === 'locked' ? 'lock' : node.state === 'done' && node.kind === 'lesson' ? 'check' : node.icon} size={current ? 44 : 36} />}
-       </button>
-       <span className="path-node-title">{title}</span>
-       {current && friend && <CreatureImg className={`path-buddy ${SWAY[node.index % SWAY.length] > 0 ? 'on-left' : 'on-right'}`} src={creatureArt(friend.id)} alt="" />}
-      </li>;
-     })}
-    </ol>
-   </section>)}
-   {finished ? <section className="path-complete" aria-labelledby="path-complete-title">
-    {celebrating && <Confetti />}
-    <div className="path-complete-friends" aria-hidden="true">{save.captures.slice(0, 8).map(c => <CreatureImg key={c.id} src={creatureArt(c.id)} alt="" />)}</div>
-    <h2 id="path-complete-title">整条小路都走完啦！</h2>
-    <p>一共点亮 {stars} 颗星星，认识了 {save.captures.length} 位朋友。接下来，每天来和老朋友见面，或者去小岛完成伙伴的小心愿。</p>
-    <div className="path-complete-actions">
-     <button className="btn-big" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={32} />和老朋友见面</button>
-     <button className="btn-big alt" onClick={() => go({ name: 'home', view: 'island' })}><Icon name="island" size={32} />去小岛</button>
-    </div>
-   </section> : <p className="path-end">走完整条小路，伙伴们会和你一起庆祝。</p>}
-   <nav className="path-more" aria-label="还想多玩一会儿">
-    <button type="button" onClick={() => go({ name: 'practice' })}><Icon name="target" size={32} />小游戏</button>
-    <button type="button" onClick={() => go({ name: 'stories' })}><Icon name="book" size={32} />故事书架</button>
-   </nav>
-  </main>
+  {chapter.index > 0 && <button type="button" className="path-turn is-back" aria-label="上一章" onClick={() => turn(chapter.index - 1)}><Icon name="back" size={44} /></button>}
+  {chapter.index < path.length - 1 && <button type="button" className="path-turn is-next" aria-label="下一章" onClick={() => turn(chapter.index + 1)}><Icon name="back" size={44} /></button>}
+  <nav className="path-extra" aria-label="还想多玩一会儿">
+   <button type="button" aria-label="小游戏" onClick={() => go({ name: 'practice' })}><Icon name="target" size={40} /></button>
+   <button type="button" aria-label="故事书架" onClick={() => go({ name: 'stories' })}><Icon name="book" size={40} /></button>
+   {finished && <button type="button" aria-label="和老朋友见面" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={40} /></button>}
+  </nav>
+  {celebrating && <Confetti />}
   <BottomNav active="path" />
   {editing && <AvatarEditor onClose={() => setEditing(false)} />}
  </div>;

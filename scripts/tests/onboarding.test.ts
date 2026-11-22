@@ -11,10 +11,10 @@ test('guide preferences reject corrupted imports and prototype keys',()=>{
 test('operation success survives storage without inventing seen state or enabling automatic help',()=>{
  const s:{onboarding?:Onboarding}={onboarding:{version:1,automatic:false,seen:{lesson:true}}};
  assert.equal(s.onboarding!.completed?.lesson,undefined);
- completeGuide(s,'picnic');completeGuide(s,'picnic');
- assert.deepEqual(s.onboarding,{version:1,automatic:false,seen:{lesson:true},completed:{picnic:true}});
+ completeGuide(s,'catch');completeGuide(s,'catch');
+ assert.deepEqual(s.onboarding,{version:1,automatic:false,seen:{lesson:true},completed:{catch:true}});
  assert(validOnboarding(JSON.parse(JSON.stringify(s.onboarding))));
- for(const completed of [null,[],{picnic:1},{toString:true},{unknown:true}])assert.equal(validOnboarding({...s.onboarding,completed}),false);
+ for(const completed of [null,[],{catch:1},{toString:true},{unknown:true}])assert.equal(validOnboarding({...s.onboarding,completed}),false);
 });
 test('every guide uses an existing icon and a generated Volcengine voice asset',()=>{
  const manifest=JSON.parse(readFileSync('public/voice/manifest.json','utf8'));

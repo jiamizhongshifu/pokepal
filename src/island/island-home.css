@@ -1,0 +1,158 @@
+/* The island a child walks around: an overview and scenes to step into. Positions are % of the picture. */
+.island-home { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.island-home button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+/* On a tall phone the island keeps a readable size and is wider than the screen: it scrolls sideways. */
+.island-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: #22d3e6; }
+.island-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }
+.island-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.island-world-sticker, .island-world-trace { position: absolute; translate: -50% -50%; pointer-events: none; }
+.island-world-trace { display: grid; place-items: center; width: 5%; aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, .85); }
+.island-world-trace .icon { width: 70% !important; height: 70% !important; }
+
+.island-place { position: absolute; z-index: 1; width: 13%; aspect-ratio: 1; translate: -50% -65%; border: 0; border-radius: 50%; background: transparent; }
+.island-place:focus-visible { outline: 4px solid #fff; outline-offset: -4px; }
+.island-place.is-locked { z-index: 5; width: 15%; aspect-ratio: 1.35; background: radial-gradient(circle at 35% 40%, #fff 0 45%, #eaf6ff 72%); box-shadow: 0 0 0 5px rgba(255, 255, 255, .8), 0 8px 16px rgba(0, 60, 120, .18); opacity: .94; }
+.island-place.is-nudged { animation: island-wobble .6s ease-in-out; }
+
+.island-walker { position: absolute; z-index: 4; width: var(--size, 11%); aspect-ratio: 1; translate: -50% -92%; transition: left 2.2s ease-in-out, top 2.2s ease-in-out; }
+.island-walker-body, .island-friend-body { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; }
+.island-walker-body img, .island-friend-body img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; transform-origin: 50% 100%; animation: island-idle 2.6s ease-in-out infinite; }
+.island-walker::before, .island-friend::before { content: ""; position: absolute; left: 18%; right: 18%; bottom: 2%; height: 9%; border-radius: 50%; background: rgba(0, 0, 0, .16); }
+.is-growing img { filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px rgba(255, 197, 49, .95)); }
+
+/* What a friend would like to do: a picture above its head. A lesson's errand or a party is golden. */
+.island-invite { position: absolute; z-index: 6; left: 50%; bottom: 96%; translate: -50% 0; display: grid; place-items: center; width: 74%; min-width: 60px; aspect-ratio: 1; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); animation: island-bob 1.4s ease-in-out infinite alternate; }
+.island-invite::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 16px; height: 16px; translate: -50% 0; rotate: 45deg; background: inherit; border-radius: 3px; z-index: -1; }
+.island-invite.is-lesson { background: #ffe27a; border-color: #ffc531; }
+.island-invite .icon { width: 68% !important; height: 68% !important; }
+
+.island-corner { position: absolute; z-index: 20; top: calc(10px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); display: flex; align-items: center; gap: 10px; }
+.island-first-friend { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 10; display: flex; align-items: center; gap: 12px; padding: 16px 26px; border: 5px solid #fff; border-radius: 40px; background: #58cc02; box-shadow: 0 7px 0 #3f9a00; animation: island-bob 1.2s ease-in-out infinite alternate; }
+.island-first-friend img { width: 110px; }
+
+/* A scene: one picture, a few friends, the things that belong here. */
+.island-scene { position: relative; flex: 1; min-height: 0; background-size: cover; background-position: center bottom; overflow: hidden; }
+.island-back { position: absolute; z-index: 20; left: calc(14px + env(safe-area-inset-left)); top: calc(12px + env(safe-area-inset-top)); display: grid; place-items: center; width: 84px; height: 84px; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .18); }
+.island-back:active { translate: 0 4px; box-shadow: 0 2px 0 rgba(0, 0, 0, .18); }
+
+.island-friend { position: absolute; z-index: 4; width: min(26vw, 34vh); aspect-ratio: 1; translate: -50% -92%; transition: left .5s ease, top .5s ease, width .5s ease; }
+.island-friend:nth-of-type(n+2) { width: min(20vw, 26vh); }
+.island-friend.is-leading { width: min(24vw, 32vh); }
+#root .island-home .island-friend.is-guest { z-index: 3; width: min(13vw, 17vh); }
+.island-friend-body:active img { animation: island-hop .4s ease; }
+
+.island-thing { position: absolute; z-index: 5; display: grid; place-items: center; width: min(13vw, 17vh); aspect-ratio: 1; padding: 0; translate: -50% -50%; border: 0; background: transparent; filter: drop-shadow(0 5px 0 rgba(0, 0, 0, .16)); }
+.island-thing > * { width: 86% !important; height: 86% !important; }
+.island-thing .learning-color { border-radius: 46% 54% 50% 50% / 58% 56% 44% 42%; border: 4px solid #fff; }
+.island-thing.is-shadow > * { filter: brightness(0) opacity(.2); }
+.island-thing.is-tapped { animation: island-hop .5s ease; }
+.island-thing.is-shadow.is-tapped { animation: island-wobble .5s ease; }
+
+.island-shelf { position: absolute; z-index: 8; right: calc(14px + env(safe-area-inset-right)); top: calc(12px + env(safe-area-inset-top)); display: flex; gap: 12px; padding: 10px 14px; border-radius: 44px; background: rgba(255, 255, 255, .9); box-shadow: 0 6px 0 rgba(0, 0, 0, .14); }
+.island-shelf button { display: grid; place-items: center; width: 76px; height: 76px; padding: 0; border: 0; border-radius: 50%; background: #fff6dc; box-shadow: 0 4px 0 #f0d9a0; }
+.island-shelf button:active { translate: 0 3px; box-shadow: 0 1px 0 #f0d9a0; }
+
+/* The island's day: three stars, one for each thing done together. */
+.island-day { position: absolute; z-index: 20; left: 50%; top: calc(10px + env(safe-area-inset-top)); translate: -50% 0; display: flex; gap: 6px; margin: 0; padding: 6px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.island-day li { display: grid; place-items: center; }
+.island-day li:not(.is-done) { opacity: .45; }
+.island-day.is-done { background: #ffe27a; }
+.island-day.is-done li { animation: island-hop 1.2s ease-in-out infinite; }
+.island-day.is-done li:nth-child(2) { animation-delay: .15s; } .island-day.is-done li:nth-child(3) { animation-delay: .3s; }
+
+/* The ball rolls between the child (front) and the first friend. */
+.ball-turns { position: absolute; z-index: 6; left: 50%; top: 88%; width: min(15vw, 19vh); aspect-ratio: 1; translate: -50% -50%; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); transition: left .9s ease-in-out, top .9s ease-in-out, width .9s ease-in-out, rotate .9s linear; animation: island-bob 1.2s ease-in-out infinite alternate; }
+.ball-turns .icon { width: 100% !important; height: 100% !important; }
+.ball-turns.is-away { left: 58%; top: 60%; width: min(9vw, 12vh); rotate: 360deg; animation: none; }
+/* A boat at the beach when a new friend can be welcomed. */
+.beach-boat { position: absolute; z-index: 5; right: 4%; top: 52%; width: min(26vw, 30vh); padding: 0; border: 0; background: transparent; animation: island-bob 1.6s ease-in-out infinite alternate; }
+.beach-boat img { width: 100%; display: block; }
+.beach-boat .island-invite { width: 46%; bottom: 88%; }
+
+/* The garden's plots: soil in the scene, each showing what it needs. */
+.garden-plot { position: absolute; z-index: 5; top: 66%; width: min(17vw, 24vh); aspect-ratio: 1; translate: -50% -78%; padding: 0; border: 0; background: transparent; }
+.garden-soil { position: absolute; left: 0; right: 0; bottom: 0; height: 42%; border-radius: 50%; background: #8a5a33; box-shadow: inset 0 -10px 0 #6f4526, 0 5px 0 rgba(0, 0, 0, .15); }
+.garden-plot .garden-crop { position: absolute; left: 50%; bottom: 24%; translate: -50% 0; width: 62% !important; height: auto !important; transform-origin: 50% 100%; transition: scale 1s linear; }
+.garden-plot .garden-crop.is-ripe { width: 72% !important; animation: island-hop 1.1s ease-in-out infinite; }
+.garden-plot .garden-hint { position: absolute; left: 50%; top: -8%; translate: -50% 0; width: 44% !important; height: auto !important; padding: 6px; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); animation: island-bob 1.2s ease-in-out infinite alternate; }
+.garden-plot.is-empty .garden-hint { top: 24%; opacity: .92; }
+.garden-plot .garden-sparkle { position: absolute; right: 2%; top: 4%; width: 30% !important; height: auto !important; animation: island-bob .8s ease-in-out infinite alternate; }
+.garden-plot .garden-splash { position: absolute; left: 50%; top: 10%; translate: -50% 0; width: 40% !important; height: auto !important; animation: garden-drop .9s ease-in forwards; }
+.garden-basket { position: absolute; z-index: 8; left: calc(112px + env(safe-area-inset-left)); top: calc(16px + env(safe-area-inset-top)); display: flex; gap: 6px; margin: 0; padding: 8px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.garden-basket li { display: flex; align-items: center; gap: 2px; font-size: 20px; font-weight: 800; color: #5b4a2f; }
+@keyframes garden-drop { to { translate: -50% 120%; opacity: 0; } }
+
+/* Doing something together happens in the scene itself: the friend asks, the things lie on the ground. */
+.island-stage { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+.island-stage button, .island-stage .island-play-done, .island-stage .island-play-made { pointer-events: auto; }
+.island-stage .island-play { display: block; position: absolute; inset: 0; }
+.island-stage .island-play > header { position: absolute; top: calc(14px + env(safe-area-inset-top)); left: 50%; translate: -50% 0; }
+.island-stage .island-play > header strong, .island-stage .island-ask-speaker, .island-stage .island-ask-close, .island-stage .island-ask-hint, .island-stage .island-ask-options small,
+.island-stage .island-ask-target small, .island-stage .island-ask-hear span, .island-stage .island-free-note, .island-stage .island-free-did, .island-stage .island-play-actions span, .island-stage .island-free-done span { display: none; }
+.island-stage .island-ask-situation { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.island-stage .island-play-rounds { gap: 8px; }
+.island-stage .island-play-rounds i { width: 18px; height: 18px; border: 3px solid #fff; background: rgba(255, 255, 255, .6); }
+.island-stage .island-play-made { position: absolute; top: calc(44px + env(safe-area-inset-top)); left: 50%; translate: -50% 0; padding: 8px 12px; border-radius: 24px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.island-stage .island-ask { display: block; }
+.island-stage .island-ask > header { position: absolute; left: 16%; top: 20%; translate: -50% 0; display: block; }
+#root .island-home .island-stage .island-ask-hear { display: grid; place-items: center; width: 92px; height: 92px; min-height: 0; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); animation: island-bob 1.4s ease-in-out infinite alternate; }
+.island-stage .island-ask-hear .icon { width: 52px !important; height: 52px !important; }
+.island-stage .island-ask-stage { position: absolute; left: 32%; right: 3%; bottom: 5%; display: block; }
+.island-stage .island-ask-options { display: flex !important; justify-content: center; align-items: flex-end; gap: 3%; }
+#root .island-home .island-stage .island-ask-options button { flex: 0 1 min(21vw, 27vh); aspect-ratio: 1; min-height: 0; padding: 0; border: 0; border-radius: 28px; background: transparent; box-shadow: none; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); touch-action: none; }
+#root .island-home .island-stage .island-ask-options button > .icon, #root .island-home .island-stage .island-ask-options button > img { width: 88% !important; height: 88% !important; }
+.island-stage .island-ask-options .learning-color { display: block; width: 78%; height: 78%; border: 5px solid #fff; border-radius: 46% 54% 50% 50% / 58% 56% 44% 42%; }
+.island-stage .island-ask-options .island-ask-tinted { width: 86%; height: 86%; }
+.island-stage .island-ask-options .is-dragging { z-index: 30; scale: 1.12; transition: none; }
+#root .island-home .island-stage .island-ask-options .is-shown { filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px #ffc531); animation: island-hop 1s ease-in-out infinite; }
+.island-stage .island-ask-stage.is-do .is-taken { animation: island-give .45s ease-in forwards; }
+/* Choosing what to say: each sentence is a speech bubble of pictures. */
+#root .island-home .island-stage .island-ask-stage.is-situation .island-ask-options button { flex-basis: min(30vw, 30vh); aspect-ratio: 1.5; padding: 10px; background: #fff; border: 5px solid #fff; border-radius: 34px 34px 34px 8px; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); filter: none; }
+.island-stage .island-ask-options .phrase-picture { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; height: 100%; }
+.island-stage .island-ask-options .phrase-picture .icon { width: 42% !important; height: auto !important; max-height: 100%; }
+/* Finding: the things lie about the ground. */
+.island-stage .island-ask-stage.is-find { top: 34%; bottom: 3%; }
+.island-stage .island-ask-stage.is-find .island-ask-options { display: block !important; position: relative; height: 100%; border: 0; background: none; overflow: visible; }
+#root .island-home .island-stage .island-ask-stage.is-find .island-ask-options button { position: absolute; width: 24%; }
+/* Where a thing is taken when it is not for the friend: a place drawn in the scene. */
+.island-stage .island-ask-target { position: absolute; right: 2%; bottom: 112%; display: grid; place-items: center; width: min(18vw, 24vh); aspect-ratio: 1; padding: 0; border: 6px dashed #fff; border-radius: 50%; background: rgba(255, 255, 255, .55); }
+.island-stage .island-ask-target .icon { width: 62% !important; height: 62% !important; }
+.island-stage .island-ask-stage.is-free .island-ask-options { flex-wrap: wrap; row-gap: 8px; }
+#root .island-home .island-stage .island-ask-stage.is-free .island-ask-options button { flex-basis: min(15vw, 19vh); }
+#root .island-home .island-stage .island-ask-stage.is-lead .island-ask-options button { flex-basis: min(24vw, 22vh); aspect-ratio: 1.5; background: #fff; border-radius: 30px 30px 30px 8px; filter: none; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); }
+#root .island-home .island-stage .island-free-done, #root .island-home .island-stage .island-play-actions button { display: grid; place-items: center; width: 88px; height: 88px; min-height: 0; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #58cc02; box-shadow: 0 6px 0 #3f9a00; }
+#root .island-home .island-stage .island-play-actions button + button { background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); }
+.island-stage .island-free-done { position: absolute; right: 4%; top: 30%; }
+.island-stage .island-free-done .icon, .island-stage .island-play-actions .icon { width: 50px !important; height: 50px !important; }
+.island-stage .island-play-done { position: absolute; left: 58%; top: 50%; translate: -50% -50%; width: min(520px, 62%); padding: 22px 26px; border-radius: 36px; background: #fff; box-shadow: 0 8px 0 rgba(0, 0, 0, .14); }
+.island-stage .island-play-done > .icon { width: 96px !important; height: 96px !important; animation: island-hop 1.2s ease-in-out infinite; }
+.island-stage .island-play-actions { gap: 18px; margin-top: 6px; }
+@keyframes island-give { to { translate: -60vw -20vh; scale: .2; opacity: 0; } }
+
+.island-home .island-tint { position: absolute; inset: 0; z-index: 7; pointer-events: none; transition: background-color 1.2s ease; }
+.island-home.sky-morning .island-tint { background: rgba(255, 214, 160, .14); }
+.island-home.sky-evening .island-tint { background: rgba(255, 140, 90, .22); mix-blend-mode: multiply; }
+.island-home.sky-night .island-tint { background: rgba(28, 40, 110, .42); mix-blend-mode: multiply; }
+.island-home.is-cloudy .island-tint { background-color: rgba(120, 140, 160, .16); }
+
+@keyframes island-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
+@keyframes island-bob { to { margin-bottom: 8px; } }
+@keyframes island-hop { 40% { transform: translateY(-14%) scale(1.08); } }
+@keyframes island-wobble { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@media (max-width: 700px) {
+ .island-back { width: 64px; height: 64px; } .island-back .icon { width: 36px !important; height: 36px !important; }
+ .island-shelf { top: auto; bottom: calc(10px + env(safe-area-inset-bottom)); right: 50%; translate: 50% 0; gap: 8px; padding: 8px 10px; }
+ .island-shelf button { width: 58px; height: 58px; } .island-shelf .icon { width: 38px !important; height: 38px !important; }
+ .island-friend { width: min(44vw, 30vh); } .island-friend:nth-of-type(n+2) { width: min(32vw, 22vh); }
+ .island-thing { width: min(20vw, 13vh); }
+ .island-stage .island-ask-stage { left: 3%; }
+ .island-stage .island-ask > header { left: 22%; top: 27%; }
+ /* The row of activities sits at the bottom here; the things on the ground keep clear of it. */
+ .island-thing { margin-top: -10vh; } .garden-plot { top: 60%; width: 26vw; } .ball-turns { top: 76%; width: 22vw; }
+ .island-stage .island-ask-target { width: 26vw; }
+ #root .island-home .island-stage .island-ask-options button { flex-basis: 30vw; }
+ .island-stage .island-play-done { left: 50%; width: 88%; }
+ .island-friend.is-leading { left: 22% !important; top: 50% !important; width: min(34vw, 22vh); }
+}
+@media (prefers-reduced-motion: reduce) { .island-home * { animation: none !important; transition: none !important; } }
+#root .island-home.is-scene { padding-bottom: 0; }

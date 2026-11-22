@@ -14,11 +14,6 @@
 @keyframes island-ask-shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.island-ask-options .is-wrong{animation:none}}
 /* In the narrow companion card and corner panels, three pictures always fit on one row. */
-.companion-card .island-ask-options,.island-ask-panel .island-ask-options,.picnic-panel .island-ask-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.companion-card .island-ask-options button,.island-ask-panel .island-ask-options button,.picnic-panel .island-ask-options button{min-height:104px;padding:8px 4px}
-.companion-card .island-ask-options button .icon,.island-ask-panel .island-ask-options button .icon,.picnic-panel .island-ask-options button .icon{width:52px!important;height:52px!important}
-.companion-card .island-ask-speaker{width:48px;height:48px}
-.island-ask-panel{display:grid!important;gap:10px}
 #root .island-ask .island-ask-hear{display:inline-flex;min-height:52px;padding:8px 16px;border-radius:var(--radius-pill);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text)}
 .island-play{display:grid;gap:10px;width:100%}
 .island-play header{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -29,12 +24,6 @@
 .island-play-done p{margin:0;font-size:var(--text-lg);font-weight:800}
 .island-play-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .island-play-actions button{min-height:52px}
-.facility-plays{display:flex;flex-wrap:wrap;gap:8px;width:100%}
-.facility-plays button{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:8px 14px;border-radius:var(--radius-md);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text);font-weight:800;cursor:pointer}
-.facility-plays button.is-wish{border-color:var(--brand-sun-deep);background:var(--brand-sun-soft)}
-.facility-panel .island-play .island-ask-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.facility-panel .island-play .island-ask-options button{min-height:104px;padding:8px 4px}
-.facility-panel .island-play .island-ask-options button .icon{width:52px!important;height:52px!important}
 
 /* Island play by action: handing a thing over, finding it in a scene, choosing a colour. */
 .island-ask-stage{display:grid;gap:10px;align-items:center}
@@ -71,7 +60,6 @@
 .island-ask-stage.is-situation .island-ask-options{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .island-ask-stage.is-situation .island-ask-options button{border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;background:var(--surface)}
 .island-ask-stage.is-situation .island-ask-options small b{font-size:var(--text-base)}
-.facility-plays button.is-errand{border-color:var(--brand-sky);background:var(--brand-sky-soft);width:100%}
 .island-play-done small{color:var(--muted);font-size:var(--text-sm)}
 .island-play-made li .phrase-picture{display:flex;flex-wrap:nowrap;gap:1px}
 .island-play-made li .phrase-picture .icon{width:21px!important;height:21px!important}

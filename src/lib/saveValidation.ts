@@ -46,6 +46,7 @@ export function validateSave(input:unknown):SaveData {
  requireValue(['energyEarned','tasksCompleted','heard','spoken','playSeconds','extraSeconds'].every(k=>number(d[k]))&&strings(d.words)&&Array.isArray(d.caught)&&d.caught.every((id:any)=>ids.has(id)),'每日进度');
  if(d.participated!==undefined)requireValue(strings(d.participated)&&new Set(d.participated).size===d.participated.length&&d.participated.every((k:any)=>PARTICIPATION_KINDS.includes(k)),'参与奖励');
  if(d.courseUnits!==undefined)requireValue(strings(d.courseUnits)&&new Set(d.courseUnits).size===d.courseUnits.length&&d.courseUnits.every((id:string)=>!!unitById(id)),'课程奖励');
+ if(d.islandDone!==undefined)requireValue(integer(d.islandDone)&&d.islandDone<=9999,'小岛的一天');
  if(d.goalDone!==undefined)requireValue(typeof d.goalDone==='boolean','今日参与目标');
  if(d.storyReadPages!==undefined)requireValue(object(d.storyReadPages)&&Object.values(d.storyReadPages).every(v=>Array.isArray(v)&&v.length<=8&&new Set(v).size===v.length&&v.every(n=>Number.isInteger(n)&&n>=1&&n<=8)),'共读页数');
  if(s.participation!==undefined)requireValue(object(s.participation)&&s.participation.version===1&&['days','gifts'].every(k=>integer(s.participation[k]))&&s.participation.gifts<=Math.floor(s.participation.days/7)&&typeof s.participation.lastDate==='string','累计参与');

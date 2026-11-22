@@ -18,13 +18,6 @@
 #root .home .home-actions .guide-content .icon{width:26px;height:26px}
 #root .home .home-actions .guide-content .guide-more{margin-left:0;background:transparent;border:0;box-shadow:none}
 #root .home .home-actions .guide-content .guide-dismiss{padding:0;min-width:44px;background:transparent;border:0;box-shadow:none}
-#root .home .camp-summary .companion-heading.help-heading{padding-right:0}
-#root .home .companion-heading.help-heading>div{min-width:0;flex:1}
-#root .home .companion-heading.help-heading .sheet-name{overflow-wrap:anywhere}
-#root .home .companion-heading.help-heading .guide-reopen{width:48px;padding:2px;gap:0;flex-direction:column}
-#root .home .companion-heading.help-heading .guide-reopen>span:last-child{font-size:var(--text-xs);line-height:1.3}
-#root .home .companion-card .companion-heading.help-heading .guide-content{right:0;width:min(240px,calc(100vw - 64px))}
-#root .home .camp-summary:has(.help-heading .is-open){max-height:calc(100% - 120px)}
 @media(max-width:600px){
  #root .avatar-pick .avatar-heading{gap:8px}
  #root .avatar-pick .avatar-heading .hint{font-size:var(--text-lg)}

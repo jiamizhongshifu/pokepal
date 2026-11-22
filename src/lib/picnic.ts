@@ -1,5 +1,4 @@
 import type { SaveData } from '../types';
-import {completeGuide} from '../data/onboarding';
 import { CROP_KINDS, feedCrop, type CropKind } from './farm';
 
 export interface PicnicSession { id:string; pokemonId:number; berry:CropKind; createdAt:number; servedAt?:number }
@@ -23,7 +22,7 @@ export function servePicnic(s:SaveData,id:string,now=Date.now()) {
  const p=s.picnic,session=p?.session;
  if(!p||!session||session.id!==id||session.servedAt!==undefined||p.memories.some(m=>m.id===id))return false;
  if(!feedCrop(s,session.pokemonId,session.berry))return false;
- completeGuide(s,'picnic');
+
  session.servedAt=now;
  p.memories=[{id,pokemonId:session.pokemonId,berry:session.berry,at:now},...p.memories].slice(0,12);
  return true;

@@ -1,0 +1,55 @@
+/* The learning path as a picture book: one scene per chapter. Positions are % of the 3:2 picture. */
+.path-scene { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.path-scene button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+.path-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: #3bc3ee; }
+.path-view:has(.tone-4), .path-view:has(.tone-5) { background: #2b3f8f; }
+.path-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }
+.path-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.path-stop { position: absolute; z-index: 2; display: grid; place-items: center; width: 12%; aspect-ratio: 1; translate: -50% -60%; padding: 0; border: 0; background: transparent; }
+.path-stop-art { width: 78% !important; height: 78% !important; object-fit: contain; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .16)); }
+.path-stop-star { position: absolute; right: 0; bottom: 2%; width: 36% !important; height: auto !important; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .18)); }
+.path-stop.is-open .path-stop-art { padding: 12%; border-radius: 50%; background: #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); }
+.path-stop.is-lit { animation: path-hop .8s ease 2; }
+/* A stop not reached yet is under a cloud; what it is shows faintly through. */
+.path-stop.is-locked { width: 14%; aspect-ratio: 1.3; border-radius: 50%; background: radial-gradient(circle at 35% 40%, #fff 0 45%, #eaf6ff 72%); box-shadow: 0 0 0 5px rgba(255, 255, 255, .8), 0 8px 16px rgba(0, 60, 120, .18); opacity: .95; }
+.path-stop.is-locked .path-stop-art { width: 42% !important; height: auto !important; opacity: .4; filter: none; }
+.path-stop.is-nudged { animation: path-wobble .6s ease-in-out; }
+
+/* Today's stop: the friend waits there, a bubble shows what it is about, and one button starts it. */
+.path-stop.is-current { z-index: 4; width: 17%; translate: -50% -78%; display: block; }
+.path-friend { display: block; width: 100% !important; height: 100% !important; object-fit: contain; transform-origin: 50% 100%; animation: path-idle 2.4s ease-in-out infinite; pointer-events: none; }
+.path-bubble { position: absolute; left: 50%; bottom: 98%; translate: -50% 0; display: flex; align-items: center; gap: 4px; padding: 8px 14px; border: 4px solid #ffc531; border-radius: 30px; background: #ffe27a; box-shadow: 0 5px 0 rgba(0, 0, 0, .16); animation: path-bob 1.4s ease-in-out infinite alternate; }
+.path-bubble::after { content: ""; position: absolute; left: 50%; bottom: -10px; width: 16px; height: 16px; translate: -50% 0; rotate: 45deg; background: #ffe27a; border-radius: 3px; z-index: -1; }
+.path-bubble .icon { flex: none; }
+.path-go { position: absolute; left: 66%; top: 62%; display: grid; place-items: center; width: 56%; min-width: 72px; aspect-ratio: 1; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #58cc02; box-shadow: 0 7px 0 #3f9a00; animation: path-pulse 1.2s ease-in-out infinite alternate; }
+.path-go .icon { width: 60% !important; height: 60% !important; }
+.path-go:active { translate: 0 5px; box-shadow: 0 2px 0 #3f9a00; }
+
+.path-top { position: absolute; z-index: 10; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left)); pointer-events: none; }
+.path-top > * { pointer-events: auto; }
+.path-avatar { display: grid; place-items: center; padding: 3px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); }
+.path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 20px; font-weight: 800; color: #5b4a2f; }
+.path-pages { display: flex; gap: 8px; margin: 0 auto; padding: 8px 12px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.path-pages button { display: block; width: 34px; height: 34px; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #9fd86a; opacity: .55; }
+.path-pages .tone-1 { background: #f6d76a; } .path-pages .tone-2 { background: #f7b267; } .path-pages .tone-3 { background: #f48c72; } .path-pages .tone-4 { background: #9a9ae6; } .path-pages .tone-5 { background: #f5a9d0; }
+.path-pages .is-done { opacity: 1; }
+.path-pages .is-here { opacity: 1; border-color: #ffb400; scale: 1.2; }
+.path-tools { display: flex; align-items: center; gap: 8px; }
+.path-turn { position: absolute; z-index: 9; top: 24%; display: grid; place-items: center; width: 76px; height: 76px; padding: 0; border: 5px solid #fff; border-radius: 50%; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .18); }
+.path-turn.is-back { left: calc(10px + env(safe-area-inset-left)); } .path-turn.is-next { right: calc(10px + env(safe-area-inset-right)); }
+.path-turn.is-next .icon { transform: scaleX(-1); }
+.path-extra { position: absolute; z-index: 9; right: calc(12px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); display: flex; gap: 10px; }
+.path-extra button { display: grid; place-items: center; width: 64px; height: 64px; padding: 0; border: 4px solid #fff; border-radius: 50%; background: #fff6dc; box-shadow: 0 5px 0 rgba(0, 0, 0, .14); }
+
+@keyframes path-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
+@keyframes path-bob { to { margin-bottom: 8px; } }
+@keyframes path-pulse { to { scale: 1.08; } }
+@keyframes path-hop { 40% { transform: translateY(-14%) scale(1.1); } }
+@keyframes path-wobble { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@media (max-width: 700px) {
+ .path-turn { width: 56px; height: 56px; top: auto; bottom: calc(110px + env(safe-area-inset-bottom)); } .path-turn .icon { width: 32px !important; height: 32px !important; }
+ .path-extra { bottom: auto; top: calc(112px + env(safe-area-inset-top)); } .path-extra button { width: 52px; height: 52px; } .path-extra .icon { width: 32px !important; height: 32px !important; }
+ .path-top { justify-content: space-between; } .path-pages { position: absolute; left: 50%; top: calc(64px + env(safe-area-inset-top)); translate: -50% 0; margin: 0; gap: 5px; padding: 6px 8px; } .path-pages button { width: 24px; height: 24px; border-width: 3px; }
+ .path-bubble .icon { width: 36px !important; height: 36px !important; }
+}
+@media (prefers-reduced-motion: reduce) { .path-scene * { animation: none !important; transition: none !important; } }

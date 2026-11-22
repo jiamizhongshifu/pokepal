@@ -39,7 +39,6 @@
 /* One optional listening target, attached to a matching pictured object. */
 .theatre-word{position:absolute;left:var(--word-layout-x,var(--word-anchor-x,50%));z-index:4;transform:translateX(-50%);display:flex;align-items:center;gap:6px;min-height:48px;min-width:48px;padding:8px 12px;border:2px solid #d6b85e;border-radius:18px;background:#fff3b2;color:#163d50;font:inherit;font-weight:800;box-shadow:0 3px 0 #c6a84d;max-width:70%;overflow-wrap:anywhere}
 .theatre-word:focus-visible{outline:3px solid #176eaa;outline-offset:3px}
-.story-language-label{grid-column:1/-1;text-align:center;color:var(--text-secondary,var(--muted));font-size:14px;margin:0 0 10px}
 .story-language-options{border:0;padding:12px 0;margin:0;min-width:0}
 .story-language-options legend{font-weight:800}
 .story-language-options p,.story-language-options small{font-size:14px;line-height:1.6}

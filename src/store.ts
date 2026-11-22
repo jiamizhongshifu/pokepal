@@ -1,6 +1,7 @@
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { finishErrand } from './island/errands';
 import { finishParty } from './island/parties';
+import { noteIslandDone } from './island/scenes';
 import { toggleSticker } from './island/stickers';
 import { getCreature as creatureOf } from './data/creatures';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
@@ -323,9 +324,9 @@ export const useGame = create<State>((set, get) => {
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
     toggleSticker(id) {return !!mut(s=>toggleSticker(s,id));},
-    finishIslandPlay(playId,partner) {const play=playById(playId,get().save);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
-    finishErrand(unitId,partner) {return !!mut(s=>finishErrand(s,unitId,partner));},
-    finishParty(chapter) {return !!mut(s=>finishParty(s,chapter));},
+    finishIslandPlay(playId,partner) {const play=playById(playId,get().save);if(!play)return false;return !!mut(s=>{const ok=finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));if(ok)noteIslandDone(s);return ok;});},
+    finishErrand(unitId,partner) {return !!mut(s=>{const ok=finishErrand(s,unitId,partner);if(ok)noteIslandDone(s);return ok;});},
+    finishParty(chapter) {return !!mut(s=>{const ok=finishParty(s,chapter);if(ok)noteIslandDone(s);return ok;});},
     markHomeTried(id,tried) {mut(s=>markHomeTried(s,id,tried));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},
     noteStationLearning(station,key,action=false) {const reward=mut(s=>{
@@ -342,7 +343,7 @@ export const useGame = create<State>((set, get) => {
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
-    feedCrop(id,berry) {return mut(s=>{const ok=feedCrop(s,id,berry);if(ok)completeGuide(s,'feed');return ok;})??false;},
+    feedCrop(id,berry) {return mut(s=>{return feedCrop(s,id,berry);})??false;},
     celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
@@ -415,7 +416,6 @@ export const useGame = create<State>((set, get) => {
         const c = s.captures.find((x) => x.id === id);
         if (!c) return;
         comfortCompanion(c,kind);
-        completeGuide(s,kind==='feed'?'feed':'care');
         const gain = kind === "feed" ? 4 : kind === "pet" ? 2 : 3;
         c.friendship = Math.min(100, c.friendship + gain);
         return true;

@@ -17,7 +17,7 @@ test('furniture is reversible and alters automatic station ranking',()=>{
 test('cooperative completion rejects strangers and duplicates, caps memories, never grants mastery or currency',()=>{
  const s=make();const m={id:'one',kind:'ball' as const,partners:[25,7],context:'play' as const,at:100};
  assert.equal(rememberTogether(s,{...m,partners:[25,999999]}),false);assert.equal(rememberTogether(s,{...m,partners:[25,25]}),false);
- assert.equal(s.onboarding?.completed?.play,undefined);assert.equal(rememberTogether(s,m),true);assert.equal(s.onboarding?.completed?.play,true);assert.equal(rememberTogether(s,m),false);
+ assert.equal(rememberTogether(s,m),true);assert.equal(rememberTogether(s,m),false);
  for(let i=0;i<30;i++)rememberTogether(s,{...m,id:`event${i}`});
  assert.equal(s.islandLiving!.memories.length,18);assert.equal(s.learning,undefined);assert.equal(s.energy,undefined);
  assert.equal(validLiving(s.islandLiving,new Set([25,7])),true);s.islandLiving!.furniture=['bad' as any];assert.equal(validLiving(s.islandLiving,new Set([25,7])),false);

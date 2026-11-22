@@ -1,8 +1,5 @@
 /* Paper surfaces keep their own ink, independent of the island's time of day. */
-#root .screen :is(.lesson-wrap,.notebook-entry,.open-storybook,.ball-ready,.energy-next),
-#root .parent-organized .device-setup,
-#root .parent-organized .parent-body section,
-#root .parent-organized .parent-fold-content {
+#root .parent-organized .device-setup,#root .parent-organized .parent-body section,#root .parent-organized .parent-fold-content {
   --text:var(--brand-ink); --ink:var(--brand-ink); --navy:var(--brand-ink); --muted:var(--brand-ink-muted);
   --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper);
   color:var(--text);
@@ -13,15 +10,11 @@
 #root .story-reader .theatre-word>.icon { flex:none; }
 #root .notebook-parent .btn-small { color:var(--brand-ink); }
 #root .welcome-title-board .logo-en { color:var(--muted); }
-:root[data-theme="dark"] #root .energy-focused .quiet-disclosure { color:var(--night-muted); }
 #root .task-trace .trace-word b { color:var(--text); }
 #root .dex-detail .type-chip.color { color:var(--brand-ink); background:var(--brand-primary-soft); }
 #root .parent-organized .parent-fold-content { background:var(--brand-paper); border-radius:var(--radius-md); padding:16px; margin-bottom:16px; }
 /* A translucent white surface over the night sky made both labels and icons muddy. */
-:root[data-theme="dark"] #root :is(.learning-home-tools button,.energy-alternative) { background:var(--brand-paper); }
-:root[data-theme="dark"] #root :is(.learning-home-tools h2,.learning-home-extension,.energy-other h2,.ball-extra>summary,.route-heading p),
-:root[data-theme="dark"] #root .screen>:is(.quiet-disclosure),
-:root[data-theme="dark"] #root :is(.journey-wrap,.notebook-wrap,.energy-page)>.quiet-disclosure { color:var(--night-muted); }
+:root[data-theme="dark"] #root .screen>:is(.quiet-disclosure) { color:var(--night-muted); }
 :root[data-theme="dark"] #root .parent-organized { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro h2,.parent-fold>summary) { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro p,.parent-detail-heading,.parent-fold>summary small,.parent-fold>summary::after) { color:var(--night-muted); }
@@ -34,12 +27,6 @@
   #root .story-reader .theatre-word { --word-layout-x:50%; }
   #root .task-trace .trace-example>.trace-icon { width:56px; height:56px; grid-row:1/3; grid-column:1; }
   #root .task-trace .trace-example .trace-listen { grid-column:3; grid-row:1/3; width:auto; }
-}
-@media(max-width:360px) {
-  #root .learning-home-tools>div { grid-template-columns:1fr; }
-  #root .learning-home-tools button { display:grid; grid-template-columns:40px minmax(0,1fr); grid-template-rows:auto auto; text-align:left; min-height:72px; padding:10px 14px; column-gap:12px; }
-  #root .learning-home-tools button>.icon { grid-row:1/3; }
-  #root .learning-home-tools button strong,#root .learning-home-tools button small { grid-column:2; }
 }
 /* Short landscape screens use a single navigation row and a side-by-side book. */
 @media(min-width:601px) and (max-height:500px) {
@@ -60,6 +47,5 @@
   #root .story-reader .story-text-en { font-size:var(--text-2xl); }
   #root .story-reader .story-primary-controls { padding:4px 0; }
   #root .story-reader .story-primary-controls button { min-height:48px; }
-  #root .learning-lesson .lesson-world.has-learning-item { height:88px; }
   #root .learning-lesson .lesson-wrap { padding:12px 18px; margin-top:0; }
 }

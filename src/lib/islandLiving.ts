@@ -1,4 +1,3 @@
-import {completeGuide} from '../data/onboarding';
 import { STORIES,storyProgressKey } from '../data/stories';
 import type { Capture, SaveData } from '../types';
 export const PREFERENCES=['ball','shade','company'] as const;
@@ -36,7 +35,7 @@ export function rememberTogether(s:SaveData,m:LivingMemory){
  if(!m.id||!TOGETHER_KINDS.includes(m.kind)||!['play','shade','coast'].includes(m.context)||m.partners.length<1||m.partners.length>2||new Set(m.partners).size!==m.partners.length||!m.partners.every(id=>s.captures.some(c=>c.id===id)))return false;
  s.islandLiving??={version:1,furniture:[],memories:[]};
  if(s.islandLiving.memories.some(x=>x.id===m.id))return false;
- s.islandLiving.memories=[m,...s.islandLiving.memories].slice(0,18);completeGuide(s,'play');return true;
+ s.islandLiving.memories=[m,...s.islandLiving.memories].slice(0,18);return true;
 }
 export function furnitureAffinity(c:Capture,station:string,furniture:readonly FurnitureId[]){
  const pref=preference(c);let score=0;

@@ -38,6 +38,6 @@ export function IslandFreeRound({ kind, items, speaker, station, taps, onTap, on
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
   <div className={`island-ask-stage is-free${kind === 'lead' ? ' is-lead' : ''}`}><div className="island-ask-options">{items.map(key => { const e = learningEntry(key)!; return <button key={key} aria-label={e.zh} onClick={() => void tap(key)}><LearningArt entry={e} /><small>{kind === 'lead' ? <b lang="en">{e.en}</b> : e.zh}</small></button>; })}</div></div>
   {did && <p className="island-free-did" role="status">{did}</p>}
-  {taps > 0 ? <button className="farm-primary island-free-done" onClick={onDone}><Icon name="check" size={26} />玩好啦</button> : <p className="island-ask-hint" role="status">没有对错，想怎么玩都可以。</p>}
+  {taps > 0 ? <button className="farm-primary island-free-done" onClick={onDone}><Icon name="check" size={26} /><span>玩好啦</span></button> : <p className="island-ask-hint" role="status">没有对错，想怎么玩都可以。</p>}
  </section>;
 }

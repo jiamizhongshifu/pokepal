@@ -17,13 +17,15 @@ import { learningChoices } from '../lib/learningChoices';
 import { TopBar } from '../components/TopBar';
 import { LearningArt,hearEntry,learningVoice } from '../components/LearningItem';
 import { CreatureImg } from '../components/CreatureImg';
-import { creatureArt,getCreature, FIRST_FRIEND } from '../data/creatures';
+import { creatureArt,creatureExpression,getCreature, FIRST_FRIEND } from '../data/creatures';
 import { Icon } from '../icons';
 import { say,sayCancellableWhile,stopSpeech,isForegroundAudioActive } from '../lib/speech';
 import { learningExplanation } from '../lib/learningVoice';
 import { bi } from '../lib/bi';
 import { useChoice } from './tasks/useChoice';
+import { storyBackground } from '../data/sceneArt';
 import '../learning-journey.css';
+import './lesson-scene.css';
 
 export function LearningLesson({id}:{id:string}){
  const s=useGame(v=>v.save),go=useGame(v=>v.go),advance=useGame(v=>v.advanceUnit);
@@ -53,18 +55,23 @@ export function LearningLesson({id}:{id:string}){
   if(round+1>=total){if(!result){if(useGame.getState().save.learning?.units[id]?.pendingAudio?.length&&!useGame.getState().saveIssue){setFinish(true);return;}setRetry(true);return;}setReward(result);setFinish(true);if(result.fresh)void say(['en','You did it!']);}
   else{setResolvedRound(-1);setRound(n=>n+1);}
  };
- return <div className={`screen learning-lesson ${!finish?'lesson-playing':''} ${picnicLesson?'lesson-picnic-mode':''}`}><TopBar title={u.title} onBack={()=>go({name:'home'})} focused progress={!finish&&<RoundProgress index={round} total={total}/>} help={<FeatureGuide compact id="lesson" autoVoice={false} autoOpen={!picnicLesson} enabled={!finish}><p><strong>身边的大人可以这样陪：</strong>{u.homePlay}</p><p>让宝宝自己选择，你来回应。不用提问考一考；打开帮助会暂停自动翻题，关闭后点“接着玩”。</p></FeatureGuide>}/><main className="lesson-wrap">
+ const staged=!picnicLesson;
+ return <div className={`screen learning-lesson ${!finish?'lesson-playing':''} ${picnicLesson?'lesson-picnic-mode':''} ${staged?'lesson-staged':''}`} style={staged?{backgroundImage:`url(${storyBackground(u.scene)})`}:undefined}><TopBar title={u.title} onBack={()=>go({name:'home'})} focused progress={!finish&&<RoundProgress index={round} total={total}/>} help={<FeatureGuide compact id="lesson" autoVoice={false} autoOpen={!picnicLesson} enabled={!finish}><p><strong>身边的大人可以这样陪：</strong>{u.homePlay}</p><p>让宝宝自己选择，你来回应。不用提问考一考；打开帮助会暂停自动翻题，关闭后点“接着玩”。</p></FeatureGuide>}/><main className="lesson-wrap">
    {!picnicLesson&&<div className="lesson-breadcrumb"><span>{finish?(reward?'小冒险完成啦':'下次接着听'):phraseRound?(listenFirst?'听一句有用的话':round>u.words.length?'换个情境，用一用':'选一句有用的话'):listenFirst?'听听新的小发现':'帮伙伴找到它'}</span></div>}
-   {picnicLesson?<LessonPicnic words={wordKeys} packed={packed} latest={resolvedRound>=0?wordKeys[resolvedRound]:undefined} buddy={buddy.id} finished={finish&&!!reward}/>:<div className="lesson-world buddy-strip"><CreatureImg src={creatureArt(buddy.id)} alt={buddy.nameZh}/><span>{buddy.nameZh}{s.captures.length?'陪你一起玩':'是这次的小向导'}</span></div>}
+   {picnicLesson?<LessonPicnic words={wordKeys} packed={packed} latest={resolvedRound>=0?wordKeys[resolvedRound]:undefined} buddy={buddy.id} finished={finish&&!!reward}/>:<div className="lesson-world buddy-strip"><CreatureImg src={finish&&reward?creatureExpression(buddy.id,'cheer'):creatureArt(buddy.id)} alt={buddy.nameZh}/><span>{buddy.nameZh}{s.captures.length?'陪你一起玩':'是这次的小向导'}</span></div>}
    {finish&&!reward?<section className="lesson-finished"><Icon name="speaker" size={48}/><h1>先把小发现留下来</h1><p>还有 {s.learning?.units[id]?.pendingAudio?.length??0} 段声音待补听。这次先不算完成。</p><p>不着急，声音准备好了再来。</p><div className="lesson-actions"><button className="journey-primary" onClick={()=>{setRound(s.learning?.units[id]?.pendingAudio?.[0]??0);setFinish(false);}}><Icon name="speaker" size={28}/>补听这些声音</button><button onClick={()=>go({name:'home'})}>回小岛休息</button></div></section>:finish?<section className="lesson-finished"><h1>我们一起做到了</h1>{reward&&<EnergyToast reward={reward}/>}<p>今天带回家这一句，点一下可以再听。</p><button className="lesson-phrase" onClick={()=>hearEntry(learningEntry(u.phrase)!)}><Icon name="speaker" size={28}/>{u.phrase}<small>{learningEntry(u.phrase)!.zh}</small></button><aside className="lesson-home-idea" aria-label="给大人"><strong>给大人：在家这样玩一次</strong><p>{u.homePlay}</p><small>不用录音、不用打卡。试过后，可以在家长中心记一笔；那里也能看到这一周孩子是怎样作答的（长按右上角齿轮进入）。</small></aside>
     <div className="completion-next"><button className="journey-primary" onClick={()=>go({name:'home'})}><Icon name="sign" size={32}/>回到学习路线<span aria-hidden="true">›</span></button><div className="lesson-actions"><button onClick={()=>go({name:'home',station:u.station})}><Icon name={picnicLesson?'bowl':'island'} size={26}/>{picnicLesson?'去岛上分享':'回小岛玩'}</button><button onClick={()=>go({name:'story',id:u.story})}><Icon name="book" size={26}/>听配套故事</button><button onClick={()=>go({name:'task',kind:'repeat',boardIndex:null,session:Date.now()})}><Icon name="mic" size={26}/>和伙伴说一说</button></div></div></section>
-    :<LearningRound key={round} target={target} choices={phraseRound?[situation.phrase,situation.alternative]:wordKeys} listenFirst={listenFirst} count={profile.choices} situation={phraseRound?situation.situation:undefined} onNext={()=>next()} onSkip={()=>next(true)} source={`unit:${id}`} onReady={picnicLesson?()=>setResolvedRound(round):undefined} />}
+    :<LearningRound key={round} target={target} choices={phraseRound?[situation.phrase,situation.alternative]:wordKeys} listenFirst={listenFirst} count={profile.choices} situation={phraseRound?situation.situation:undefined} onNext={()=>next()} onSkip={()=>next(true)} source={`unit:${id}`} staged={staged} onReady={picnicLesson?()=>setResolvedRound(round):undefined} />}
   {retry&&<button className="journey-primary" onClick={()=>next()} disabled={!!saveIssue}>保存恢复后，领取这次的小收获</button>}
   </main>
  </div>;
 }
 
-export function LearningRound({target,choices,count,situation,listenFirst,onNext,onSkip,source,onReady}:{target:LearningEntry;choices?:string[];count?:number;situation?:string;listenFirst?:boolean;onNext:()=>void;onSkip?:()=>void;source:string;onReady?:()=>void}){
+/**
+ * One round. `staged` plays it inside the lesson's scene: the things lie on the ground and stay where they are, the
+ * controls are pictures, and the written lines are kept only for a grown-up reading along.
+ */
+export function LearningRound({target,choices,count,situation,listenFirst,onNext,onSkip,source,onReady,staged=false}:{staged?:boolean;target:LearningEntry;choices?:string[];count?:number;situation?:string;listenFirst?:boolean;onNext:()=>void;onSkip?:()=>void;source:string;onReady?:()=>void}){
  const note=useGame(s=>s.noteWord);
  const guideOpen=useSyncExternalStore(subscribeGuides,guideIsOpen);
  const narration=useRef<ReturnType<typeof sayCancellableWhile>|null>(null);
@@ -127,7 +134,7 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
   if(result==='wrong'){
    assisted.current=true;t.wrong++;
    if(retryMode&&t.wrong>=2){explainTarget();return;}
-   setFeedback('没关系，我们再听听。');if(retryMode)setTimeout(()=>setOrder(o=>o+1),520);void hear();
+   setFeedback('没关系，我们再听听。');if(retryMode&&!staged)setTimeout(()=>setOrder(o=>o+1),520);void hear();
   }
   else{busy.current=true;finishTrace('solved');setFeedback('找到啦！');void playEntry(target);}
  };
@@ -148,24 +155,25 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const notified=useRef(false);
  useEffect(()=>{if(ready&&!notified.current){notified.current=true;onReadyRef.current?.();}},[ready]);
  const auto=useRoundAdvance(ready,advance,guided||target.contextOnly?2400:1400,guideOpen);
- const pacing=<button className="round-pace" disabled={guideOpen} onClick={()=>{const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={auto.paused}><Icon name={auto.paused?'play':'hand'} size={26}/>{auto.paused?'接着玩':'慢一点'}</button>;
+ const pacing=<button className="round-pace" disabled={guideOpen} onClick={()=>{const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={auto.paused}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{auto.paused?'接着玩':'慢一点'}</span></button>;
  const fallback=audioFailed&&onSkip?<button className="learning-help" onClick={()=>{if(continued.current)return;continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
  const flow=<p className="round-flow-status" role="status">{guideOpen?'帮助打开时，伙伴会等你':audioFailed?'这段声音可以稍后补听':auto.paused?'慢慢来，伙伴等着你':playing?'先听一听…':ready?'马上去下一个小发现':'听听声音，再点图片'}</p>;
- if(guided)return <section className="learning-round learning-guided">
+ const stage=staged?' is-staged':'';
+ if(guided)return <section className={`learning-round learning-guided${stage}`}>
   <h1>和伙伴一起听</h1><p>看看图片，听听声音。不用着急回答。</p>
-  <div className="lesson-actions round-toolbar"><button onClick={hear}><Icon name="speaker" size={28}/>{playing?'正在说…':'再听一次'}</button>{pacing}</div>{flow}{fallback}
+  <div className="lesson-actions round-toolbar"><button className="round-hear" onClick={hear}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
   <div className="guided-example"><LearningArt entry={target}/><strong lang="en">{target.en}</strong><span>{target.zh}</span></div>
-  <div className="lesson-actions"><button onClick={()=>{trace.current.asked=true;setGuided(false);setFeedback('我们一起找，不着急。');}}><Icon name="search" size={28}/>试着找一找</button></div>
+  <div className="lesson-actions"><button className="round-try" onClick={()=>{trace.current.asked=true;setGuided(false);setFeedback('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>
   {feedback&&<p role="status">{feedback}</p>}
  </section>;
- if(target.contextOnly)return <section className="learning-round"><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button onClick={hear}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;
+ if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button onClick={hear}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;
 
- return <section className="learning-round"><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button onClick={()=>situation?hearSituation():replay()}><Icon name="speaker" size={28}/>{situation?'听听发生了什么':'再听一次'}</button>{pacing}</div>{flow}{fallback}
+ return <section className={`learning-round${situation?' is-situation':''}${stage}`}><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button className="round-hear" onClick={()=>situation?hearSituation():replay()}><Icon name="speaker" size={28}/><span>{situation?'听听发生了什么':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
   <div className={`learning-choices ${target.kind==='phrase'?'phrase-choices':''}`}>{shown.map(o=><div key={o.key}>
-   {target.kind==='phrase'&&<button className="learning-choice-audio" aria-label={`听听 ${o.en}`} onClick={()=>replay(o)}><Icon name="speaker" size={24}/>听这句话</button>}
+   {target.kind==='phrase'&&<button className="learning-choice-audio" aria-label={`听听 ${o.en}`} onClick={()=>replay(o)}><Icon name="speaker" size={24}/><span>听这句话</span></button>}
    <button className={`${choice.solved&&o.key===target.key?'chosen':''} ${choice.eliminated.includes(o)?'faded':''} ${explaining&&o.key===target.key?'is-explained':''}`} aria-label={`选择${o.zh}`} disabled={choice.solved||choice.shake!==null||choice.eliminated.includes(o)} onClick={()=>tap(o)}>{target.kind==='phrase'?<><LearningArt entry={o}/><strong lang="en">{o.en}</strong><small>{o.zh}</small></>:<><LearningArt entry={o}/>{explaining&&o.key===target.key&&<span className="learning-explanation-label"><strong lang="en">{o.en}</strong><small>{o.zh}</small></span>}</>}{explaining&&o.key===target.key&&<span className="learning-explanation-pointer" aria-hidden="true"><Icon name="hand" size={28}/></span>}</button>
   </div>)}</div>
-  {!choice.solved&&<button className="learning-help" onClick={explainTarget}><Icon name="hand" size={28}/>{explaining?'再讲一次':'帮我认识'}</button>}
+  {!choice.solved&&<button className="learning-help" onClick={explainTarget}><Icon name="hand" size={28}/><span>{explaining?'再讲一次':'帮我认识'}</span></button>}
   <p className="learning-feedback" role="status">{feedback|| (target.kind==='phrase'?'先听两句话，再选一句。':'不着急，伙伴等着你。')}</p>
 
  </section>;

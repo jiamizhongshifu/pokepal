@@ -5,7 +5,7 @@ import { playLimitSeconds, flushPendingSave, useGame } from "./store";
 import { stopSpeech, onEnglishSpoken } from "./lib/speech";
 import { skyFor } from "./lib/routine";
 import { Welcome } from "./screens/Welcome";
-import { Home } from "./screens/Home";
+import { Island } from "./screens/Island";
 import { Sleepy } from "./screens/Sleepy";
 import { SaveRecovery } from "./components/SaveRecovery";
 import { todayStr } from "./lib/date";
@@ -113,7 +113,7 @@ export default function App() {
           Hidden islands stop rendering and narration; other pages stay lightweight. */}
       {homeSeen.current && <div className="home-host" style={{display:homeActive?'contents':'none'}} aria-hidden={!homeActive}>
         <ErrorBoundary key={trainer?.createdAt} onReset={() => useGame.getState().go({name:'home'})}>
-          <Home initialCompanion={screen.name==='home'?screen.companion:undefined} active={homeActive} initialStation={screen.name==='home'?screen.station:undefined}/>
+          <Island initialCompanion={screen.name==='home'?screen.companion:undefined} active={homeActive} initialStation={screen.name==='home'?screen.station:undefined}/>
         </ErrorBoundary>
       </div>}
       {!homeActive && <ErrorBoundary key={resting?'sleepy':screen.name} onReset={() => useGame.getState().go({ name: "home" })}>

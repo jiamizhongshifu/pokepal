@@ -26,7 +26,7 @@ export function IslandPartySession({ party, partner, station, onClose }: { party
   {done ? <div className="island-play-done" role="status">
     <div className="island-party-photo" role="img" aria-label="大家的合影">{friends.map(c => <CreatureImg key={c.id} src={creatureAvatar(c.id)} alt="" />)}</div>
     <p>聚会真开心，大家拍了一张合影！</p><small>这一章的话，你都用上啦。</small>
-    <div className="island-play-actions"><button className="farm-primary" onClick={onClose}><Icon name="island" size={28} />回小岛玩</button></div></div>
+    <div className="island-play-actions"><button className="farm-primary" onClick={onClose}><Icon name="island" size={28} /><span>回小岛玩</span></button></div></div>
    : current ? <IslandAskRound key={`${session}-${step}`} ask={current.ask} speaker={partner} station={station} kind="say" onSolved={solved} onClose={onClose} /> : null}
  </div>;
 }

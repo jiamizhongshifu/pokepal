@@ -1,4 +1,4 @@
-import { LEARNING_UNITS } from '../data/curriculum';
+import { LEARNING_UNITS, unitSituations, type LearningEntry } from '../data/curriculum';
 import { wordAsk, comboAsk, comboLine, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { SaveData } from '../types';
 import { HOMES, placeById } from './world';
@@ -30,20 +30,26 @@ import { learningEntry } from '../data/curriculum';
 export type AskKind = 'do' | 'find' | 'sort' | 'say';
 export type PlayKind = AskKind | 'echo' | 'toy' | 'lead';
 export const isFreePlay = (play: Play) => play.kind === 'echo' || play.kind === 'toy' || play.kind === 'lead';
-export interface Play { id: string; kind: PlayKind; place: string; title: string; pool: string[]; result: string; icon: string; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; owner?: string; from?: number }
+export interface Play { id: string; kind: PlayKind; place: string; title: string; pool: string[]; result: string; icon: string; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; owner?: string; from?: number;
+ /** Sentences the friend says around the activity, once the path has taught them: before asking, after each thing, at the end. */
+ lines?: { start?: string; each?: string; end?: string };
+ /** What is handed over is eaten: fruit of that kind leaves the basket when there is some. */
+ eats?: boolean;
+ /** Finishing it puts the scene to sleep: the sky turns to night and the friends doze. */
+ sleeps?: boolean }
 export const PLAYS: Play[] = [
  { id: 'greet', kind: 'say', place: 'tent', title: '在帐篷门口打招呼', pool: ['Hello!', 'Good night!', 'Bye-bye!'], result: '伙伴挥挥手，开心地进帐篷啦', icon: 'tent' },
- { id: 'tidy', kind: 'do', to: { icon: 'tent', label: '玩具箱' }, place: 'tent', title: '收拾小营地', pool: ['ball', 'book', 'hat'], result: '玩具都收好啦，营地干干净净', icon: 'check' },
- { id: 'goodnight', kind: 'do', to: { icon: 'cloud', label: '天上' }, place: 'tent', title: '准备睡觉', pool: ['sun', 'moon', 'star'], result: '天空变成晚上啦，伙伴睡得香香的', icon: 'moon' },
- { id: 'meal', kind: 'do', place: 'fire', title: '开饭啦', pool: ['apple', 'banana', 'milk', 'cake', 'egg', 'cookie', 'water', 'strawberry', 'grapes', 'watermelon'], result: '伙伴吃饱啦，谢谢你', icon: 'heart' },
+ { id: 'tidy', kind: 'do', to: { icon: 'tent', label: '玩具箱' }, place: 'tent', title: '收拾小营地', pool: ['ball', 'book', 'hat'], result: '玩具都收好啦，营地干干净净', icon: 'check', lines: { start: "Let's tidy up!", end: 'All done!' } },
+ { id: 'goodnight', kind: 'do', to: { icon: 'cloud', label: '天上' }, place: 'tent', title: '准备睡觉', pool: ['sun', 'moon', 'star'], result: '天空变成晚上啦，伙伴睡得香香的', icon: 'moon', lines: { end: 'Good night!' }, sleeps: true },
+ { id: 'meal', kind: 'do', place: 'fire', title: '开饭啦', pool: ['apple', 'banana', 'milk', 'cake', 'egg', 'cookie', 'water', 'strawberry', 'grapes', 'watermelon'], result: '伙伴吃饱啦，谢谢你', icon: 'bowl', lines: { start: "I'm hungry.", each: 'Yummy!', end: 'Thank you!' }, eats: true },
  { id: 'colors', kind: 'find', place: 'tree', title: '在果园找颜色', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '果子掉进篮子里啦', icon: 'apple' },
- { id: 'flowers', kind: 'do', to: { icon: 'flower', label: '小花园' }, place: 'farm', title: '照顾小花', pool: ['water', 'flower', 'tree', 'green'], result: '小花开啦', icon: 'flower' },
+ { id: 'flowers', kind: 'do', to: { icon: 'flower', label: '小花园' }, place: 'farm', title: '照顾小花', pool: ['water', 'flower', 'tree', 'green'], result: '小花开啦', icon: 'flower', lines: { start: 'Help, please!', end: 'All done!' } },
  { id: 'feelings', kind: 'say', place: 'bench', title: '说说心情', pool: ["I'm happy!", 'I feel sad.', 'I need a rest.', 'I feel angry.'], result: '你听懂了伙伴的心情，它觉得好多啦', icon: 'heart' },
  { id: 'company', kind: 'do', place: 'parasol', title: '陪我坐一会', pool: ['book', 'tree', 'flower', 'cloud'], result: '我们一起安安静静地坐了一会', icon: 'sun' },
  { id: 'stage', kind: 'sort', slots: 'lamp', place: 'music', title: '舞台点彩灯', pool: ['purple', 'orange', 'pink', 'blue', 'red', 'yellow', 'green'], result: '彩灯亮啦，伙伴跳起舞来', icon: 'music' },
  { id: 'dig', kind: 'find', place: 'sand', title: '在沙坑找宝贝', pool: ['turtle', 'fish', 'bird', 'ball'], result: '宝贝都挖出来啦', icon: 'shovel' },
- { id: 'join', kind: 'do', place: 'ball', title: '邀请朋友一起玩', pool: ['balloon', 'hat', 'ball'], result: '新朋友加入，一起玩啦', icon: 'balloon' },
- { id: 'sea', kind: 'find', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search' },
+ { id: 'join', kind: 'do', place: 'ball', title: '邀请朋友一起玩', pool: ['balloon', 'hat', 'ball'], result: '新朋友加入，一起玩啦', icon: 'balloon', lines: { start: "Let's play!" } },
+ { id: 'sea', kind: 'find', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search', lines: { start: "Let's go!" } },
  { id: 'sky', kind: 'find', place: 'windmill', title: '看看天上有什么', pool: ['sun', 'cloud', 'rainbow', 'bird', 'balloon', 'star'], result: '风车转呀转，天上真热闹', icon: 'wind' },
  { id: 'boats', kind: 'sort', slots: 'boat', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
  { id: 'stage-free', kind: 'toy', slots: 'lamp', place: 'music', title: '自己点彩灯', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '舞台被你点得亮闪闪的', icon: 'music' },
@@ -109,7 +115,27 @@ export const OWN_SPECIES = Object.keys(OWN);
 export function learnedKeys(s: SaveData): Set<string> {
  return new Set(LEARNING_UNITS.filter(u => s.learning?.units[u.id]?.completedAt).flatMap(u => [...u.words, u.phrase]));
 }
+/** Sentences the path has taught so far: every sentence and its alternative in the situations of completed lessons. */
+export function taughtPhrases(s: SaveData): Set<string> {
+ return new Set(LEARNING_UNITS.filter(u => s.learning?.units[u.id]?.completedAt).flatMap(unitSituations).flatMap(x => [x.phrase, x.alternative]));
+}
+/** The sentence a friend says at one moment of an activity, when the child has met it on the path. */
+export function playLine(s: SaveData, play: Play, at: 'start' | 'each' | 'end'): LearningEntry | undefined {
+ const line = play.lines?.[at];
+ return line && taughtPhrases(s).has(line) ? learningEntry(line) : undefined;
+}
 export const learnedFrom = (s: SaveData, play: Play) => { const k = learnedKeys(s); return play.pool.filter(w => k.has(w)); };
+/** The activity in which a friend eats, when its words are learned and there is fruit from the garden to eat. */
+export function mealWaiting(s: SaveData): Play | undefined {
+ const meal = PLAYS.find(p => p.eats);
+ return meal && playsAt(s, meal.place).includes(meal) && Object.values(s.farm?.basket ?? {}).some(n => n > 0) ? meal : undefined;
+}
+/** What the time of day calls for: a meal at mealtimes, getting ready for bed in the evening. */
+export function rhythmPlay(s: SaveData, hour: number): Play | undefined {
+ const meal = hour >= 6.5 && hour < 8 || hour >= 11.5 && hour < 12.5 || hour >= 18 && hour < 19, night = hour >= 19.5 || hour < 6;
+ const play = PLAYS.find(p => night ? p.sleeps : meal ? p.eats : false);
+ return play && playsAt(s, play.place).includes(play) ? play : undefined;
+}
 /** Lessons finished so far. */
 export const lessonsDone = (s: SaveData) => LEARNING_UNITS.filter(u => s.learning?.units[u.id]?.completedAt).length;
 export const playOpenFor = (s: SaveData, play: Play) => learnedFrom(s, play).length >= 2 && lessonsDone(s) >= (play.from ?? 0);
@@ -160,7 +186,10 @@ export function playChoices(s: SaveData, play: Play) {
 export function playOrder(s: SaveData, play: Play, session: string, now = Date.now()): string[] {
  const items = learnedFrom(s, play), base = seedOf(`${play.id}-${session}`);
  const due = reviewKeys(s, 'due', now), rank = (k: string) => { const i = due.indexOf(learningEntry(k)?.key ?? k); return i < 0 ? due.length : i; };
- return [...items].sort((a, b) => rank(a) - rank(b) || seedOf(`${base}${a}`) - seedOf(`${base}${b}`));
+ const order = [...items].sort((a, b) => rank(a) - rank(b) || seedOf(`${base}${a}`) - seedOf(`${base}${b}`));
+ // A friend that eats asks first for one fruit the child has grown: what was picked in the garden gets eaten.
+ const grown = play.eats ? order.find(k => (s.farm?.basket as Record<string, number> | undefined)?.[k]) : undefined;
+ return grown ? [grown, ...order.filter(k => k !== grown)] : order;
 }
 /** Round `round` of one session: each round asks for a different learned item when there are enough. */
 export function playAsk(s: SaveData, play: Play, session: string, round: number, order = playOrder(s, play, session)): IslandAsk | undefined {

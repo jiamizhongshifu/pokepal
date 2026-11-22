@@ -2,10 +2,7 @@
 export const GUIDES = {
  welcome:{icon:'hand',title:'选一个喜欢的头像',voice:'点一点你喜欢的头像，我们就出发啦。',target:'.avatar-choice',sequence:['hand','play']},
  firstFriend:{icon:'waves',title:'交个新朋友',voice:'送你的邀请果已经准备好啦。去海边，迎接一位坐船来的新朋友。',target:'.empty-home .btn-big',sequence:['invite-berry','waves']},
- home:{icon:'ear',title:'和伙伴一起学英语',voice:'先在学习路线上学一点，再来小岛用一用。也能点点伙伴，摸摸它、喂它吃东西。',target:'.bottom-nav-tab:first-child',sequence:['ear','hand']},
- camera:{icon:'swipe',title:'小手逛小岛',voice:'一根手指转一转，两根手指一起拖动。两根手指分开，就能看近一点。想安静看风景，先点小岛生活，再点小眼睛。',target:'.home-more > summary',sequence:['swipe','eye']},
  music:{icon:'music',title:'音乐轻轻响',voice:'点小音符，可以打开或关掉音乐。想调小声音，请大人到家长设置里帮忙。',target:'.music-toggle',sequence:['music','speaker']},
- farm:{icon:'grass',title:'种下，等等，再摘果',voice:'点一块空地，听伙伴说想种什么，点对就种下，伙伴会来帮忙浇水。等水果长大，点一下就能收起来。不用一直等在这里哦。',target:'.plot-action:not(:disabled)',sequence:['grass','water','apple']},
  path:{icon:'sign',title:'跟着路线，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.path-node.is-current .path-node-button',sequence:['play','ear','hand']},
  tasks:{icon:'ear',title:'跟着伙伴，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.learning-trail-primary',sequence:['play','ear','hand']},
  listen:{icon:'ear',title:'先听，再点图片',voice:'先听听在找什么，再点你觉得对的图片。没听清，点喇叭再听一次。选错也没关系。',target:'.task-listen .choices',sequence:['ear','picture','hand']},
@@ -23,12 +20,6 @@ export const GUIDES = {
  ownedDetail:{icon:'heart',title:'点爱心，回家陪它玩',voice:'这位已经是你的伙伴啦。点爱心，回家就能找到它。点它的名字，还能听听名字怎么说。',target:'.detail-wish .wish-button',sequence:['heart','island']},
  detail:{icon:'heart',title:'听名字，再去找它',voice:'点喇叭，听听伙伴的名字。还没有它的话，可以点我想找这只，它会坐船来做客。',target:'.detail-wish .wish-button',sequence:['speaker','waves']},
  friends:{icon:'search',title:'点头像，马上见面',voice:'点一点伙伴的头像，镜头就会带你找到它。',target:'.companion-portraits button',sequence:['search','hand']},
- care:{icon:'hand',title:'陪伙伴玩一玩',voice:'点小手，摸摸伙伴。点食物，给它一点点心。想跟着它散步，就点跟着走。',target:'.camp-controls .pet-action',sequence:['hand','apple']},
- feed:{icon:'apple',title:'分享一点好吃的',voice:'点一份果篮里的水果，分享给伙伴。没有水果也没关系，可以给它普通点心。',target:'.berry-menu button:not(:disabled)',sequence:['apple','heart']},
- play:{icon:'ball',title:'点图片，就开始玩',voice:'点一张想玩的图片，伙伴就会自己走过去。你可以陪它玩，也可以安静看看。',target:'.living-play-choices button',sequence:['ball','hand']},
- gifts:{icon:'gift',title:'点装饰，看看小岛的新样子',voice:'点喜欢的装饰，它会自己摆好。我们一起看看它放在哪里。想升级，可以先看看升级后的样子，再请大人一起决定。',target:'.dress-catalog, .upgrade-choice',sequence:['gift','island']},
- picnic:{icon:'bowl',title:'听听伙伴想吃什么',voice:'请伙伴来野餐。伙伴坐好后会说想吃什么，听一听，点对的水果分给它。',target:'.picnic-start',sequence:['ear','apple']},
- area:{icon:'ball',title:'点张图片，伙伴就出发',voice:'点一张想玩的图片，伙伴就会自己走过去。你可以陪它玩，也可以安静看看。',target:'.area-choices > div button',sequence:['picture','hand']},
  stories:{icon:'book',title:'选本故事，一起读',voice:'点一本喜欢的故事，和大人一起看。我们可以听、可以聊，没有考试。',target:'.storybook',sequence:['book','ear']},
  story:{icon:'ear',title:'选耳朵听，选书本一起读',voice:'点耳朵，故事会自己慢慢翻页。点书本，就和大人一起读。想停下来，点暂停。遇到一起演一演，也可以直接点下一页。',target:'.story-mode',sequence:['ear','book']},
  diary:{icon:'mic',title:'今天的你，值得被听见',voice:'先听一个小问题，再点麦克风，说一点今天的事。说完再点一下。开心、难过都可以，不想说也可以跳过。',target:'.diary-record',sequence:['ear','mic','check']},
@@ -41,7 +32,7 @@ export function completeGuide(s:{onboarding?:Onboarding},id:GuideId){
  (s.onboarding.completed??={})[id]=true;
 }
 /** Guides whose screens no longer exist (energy, exchange, throwing in the grass); old saves drop them on load. */
-const RETIRED_GUIDES=['energy','shop','noBall','throw'];
+const RETIRED_GUIDES=['energy','shop','noBall','throw','home','camera','farm','care','feed','play','gifts','picnic','area'];
 export function migrateOnboarding(save:unknown){
  const o=(save as {onboarding?:{seen?:Record<string,boolean>;completed?:Record<string,boolean>}})?.onboarding;
  for(const flags of [o?.seen,o?.completed])if(flags&&typeof flags==='object')for(const k of RETIRED_GUIDES)delete flags[k];
