@@ -96,3 +96,5 @@
 #root .lesson-staged .lesson-mat li > span > * { width: 100% !important; height: 100% !important; }
 #root .lesson-staged .lesson-mat .is-new { animation: lesson-hop .7s ease; }
 @media (max-width: 700px) { #root .lesson-staged .lesson-mat { left: 50%; top: 53%; padding: 8px 12px 10px; } #root .lesson-staged .lesson-mat li { width: 13vw; } }
+
+@media (min-width: 1300px) { #root .lesson-staged .round-card { left: auto; width: min(62%, 880px); } }

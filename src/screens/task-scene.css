@@ -17,3 +17,8 @@
  #root .task-staged .practice-card { left: 10px; right: 10px; top: calc(150px + env(safe-area-inset-top)); bottom: 10px; padding: 12px 12px 10px; border-radius: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { #root .task-staged .task-friend img { animation: none; } }
+
+/* The card is as tall as its game and sits low beside the friend; a tall game (tracing) can still use the height. */
+#root .task-staged .practice-card { top: auto; max-height: calc(100% - 100px - env(safe-area-inset-top)); }
+@media (min-width: 1300px) { #root .task-staged .practice-card { left: auto; width: min(62%, 880px); } }
+@media (max-width: 700px) { #root .task-staged .practice-card { top: auto; max-height: calc(100% - 172px - env(safe-area-inset-top)); } }

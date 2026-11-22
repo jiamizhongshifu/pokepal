@@ -3,7 +3,7 @@
 .start-screen button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 .start-view { position: absolute; inset: 0; overflow: hidden; container-type: size; }
 /* Covers a wide screen; on a tall phone the whole island stays in view (most of it) and the sea fills above and below. */
-.start-world { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: max(100cqw, min(150cqh, 170cqw)); aspect-ratio: 3 / 2; animation: start-breathe 14s ease-in-out infinite alternate; }
+.start-world { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: min(max(100cqw, min(150cqh, 170cqw)), 172cqh); aspect-ratio: 3 / 2; animation: start-breathe 14s ease-in-out infinite alternate; }
 .start-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .start-friend { position: absolute; z-index: 2; width: var(--size, 11%); aspect-ratio: 1; translate: -50% -92%; padding: 0; border: 0; background: transparent; }
 .start-friend img { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; animation: start-idle 2.6s ease-in-out infinite; pointer-events: none; }

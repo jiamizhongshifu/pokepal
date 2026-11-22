@@ -190,3 +190,9 @@
  .island-stage .island-ask-stage { left: 12px; right: 12px; bottom: 12px; padding: 12px 14px 14px; border-radius: 24px; }
  #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: 28vw; }
 }
+
+/* Choosing what to say: each bubble carries its sentence, like in lessons. */
+.island-stage .island-ask-stage.is-situation .island-ask-options small, .island-stage .island-ask-stage.is-lead .island-ask-options small { display: block !important; margin-top: 2px; font-size: 15px; font-weight: 800; color: #24413a; }
+@media (max-width: 700px) { .island-stage .island-play > header { top: calc(70px + env(safe-area-inset-top)); } .island-stage .island-play-made { top: calc(98px + env(safe-area-inset-top)); } }
+/* On a wide screen the answer card keeps a comfortable width instead of stretching across. */
+@media (min-width: 1300px) { .island-stage .island-ask-stage { left: auto; width: min(62%, 880px); } }
