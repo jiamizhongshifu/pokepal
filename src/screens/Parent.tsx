@@ -111,7 +111,7 @@ export function Parent() {
    {tab==='report'&&<>
    <section className="parent-kpi-grid" aria-label="今日学习快照">
     <div className="parent-kpi-card is-ring">
-     <RingMeter value={Math.round(d.playSeconds/60)} max={Math.max(1,Math.round(playLimitSeconds(save)/60))} label={`${Math.round(d.playSeconds/60)}`} sub={`/${Math.round(playLimitSeconds(save)/60)}分`}/>
+     <RingMeter value={Math.round(d.playSeconds/60)} max={Math.max(1,Math.round(playLimitSeconds(save)/60))} label={`${Math.round(d.playSeconds/60)}`} sub="分钟"/>
      <div><small>今日游玩时长</small><strong>{Math.round(d.playSeconds/60)} 分钟</strong><span>每日上限 {Math.round(playLimitSeconds(save)/60)} 分钟</span></div>
     </div>
     <div className="parent-kpi-card">

@@ -17,16 +17,16 @@ export function RingMeter({ value, max, color = 'var(--brand-sky)', label, sub }
 }) {
   const safeMax = Math.max(1, max);
   const ratio = Math.max(0, Math.min(1, value / safeMax));
-  const r = 24;
+  const r = 27;
   const c = 2 * Math.PI * r;
   return (
     <div className="pchart-ring" aria-label={`${label} ${sub}`}>
-      <svg viewBox="0 0 60 60" width="60" height="60" aria-hidden="true">
-        <circle className="pchart-ring-track" cx="30" cy="30" r={r} />
+      <svg viewBox="0 0 68 68" width="68" height="68" aria-hidden="true">
+        <circle className="pchart-ring-track" cx="34" cy="34" r={r} />
         <circle
           className="pchart-ring-fill"
-          cx="30"
-          cy="30"
+          cx="34"
+          cy="34"
           r={r}
           style={{ stroke: color, strokeDasharray: `${c}`, strokeDashoffset: `${c * (1 - ratio)}` }}
         />
@@ -80,7 +80,7 @@ export function WeeklyBarChart({ days, today }: { days: DayMetric[]; today: stri
           const isToday = d.date === today;
           return (
             <div key={d.date} className={`pchart-bar-col${isToday ? ' is-today' : ''}`}>
-              <span className="pchart-bar-val">{v > 0 ? v : '·'}</span>
+              <span className={`pchart-bar-val${v === 0 ? ' is-zero' : ''}`}>{v}</span>
               <div className="pchart-bar-track">
                 <div
                   className={`pchart-bar-fill${v === 0 ? ' is-zero' : ''}`}
