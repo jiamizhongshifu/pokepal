@@ -29,12 +29,4 @@ export function stickersEarnedCount(s: SaveData) {
 export const stickerEarned = (s: SaveData, k: Sticker, earned = stickersEarnedCount(s)) => STICKERS.indexOf(k) < earned;
 export const stickerShown = (s: SaveData, k: Sticker, earned = stickersEarnedCount(s)) => stickerEarned(s, k, earned) && !(s.islandProgress?.hidden ?? []).includes(k.id);
 export const shownStickers = (s: SaveData) => { const earned = stickersEarnedCount(s); return STICKERS.filter(k => stickerShown(s, k, earned)); };
-export function toggleSticker(s: SaveData, id: string) {
- const k = STICKERS.find(k => k.id === id);
- if (!k || !stickerEarned(s, k)) return false;
- const p = s.islandProgress ??= { version: 1, owned: [], nextGiftAt: 120, levels: { camp: 0, picnic: 0, garden: 0, play: 0, island: 0 } };
- const hidden = new Set(p.hidden ?? []);
- if (hidden.has(id)) hidden.delete(id); else hidden.add(id);
- p.hidden = [...hidden];
- return true;
-}
+

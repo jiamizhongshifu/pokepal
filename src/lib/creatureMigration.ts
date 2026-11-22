@@ -41,15 +41,8 @@ export function migrateCreatureIds(save: unknown): boolean {
  if (s.catchWish !== undefined) {
   s.catchWish = remap(s.catchWish);
  }
- if (s.picnic && typeof s.picnic === 'object') {
-  if (s.picnic.session) s.picnic.session.pokemonId = remap(s.picnic.session.pokemonId);
-  if (Array.isArray(s.picnic.memories)) s.picnic.memories = s.picnic.memories.map((m: Raw) => m && typeof m === 'object' ? { ...m, pokemonId: remap(m.pokemonId) } : m);
- }
  if (s.careStory && typeof s.careStory === 'object') {
   s.careStory.pokemonId = remap(s.careStory.pokemonId);
- }
- if (s.islandLiving && Array.isArray(s.islandLiving.memories)) {
-  s.islandLiving.memories = s.islandLiving.memories.map((m: Raw) => m && typeof m === 'object' ? { ...m, partners: ids(m.partners) } : m);
  }
  return JSON.stringify(s) !== before;
 }

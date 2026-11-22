@@ -32,9 +32,6 @@ export function unlockingUnit(district: District): LearningUnit | undefined {
 }
 export const districtName = nameOfDistrict;
 
-/** Island play that belongs to an area: it opens with that area. */
-export const PLAY_DISTRICT = { picnic: 'leisure', farm: 'garden', ball: 'play', rest: 'leisure', bubbles: 'camp', jump: 'camp' } as const satisfies Record<string, District>;
-export const playOpen = (s: SaveData, play: keyof typeof PLAY_DISTRICT) => unlockedDistricts(s).has(PLAY_DISTRICT[play]);
 
 /** Completed lessons that happen at this place, in curriculum order. */
 export function learnedHere(s: SaveData, stationId: string): LearningUnit[] {
@@ -81,20 +78,6 @@ export function islandTask(s: SaveData): IslandTask {
 /** A lesson station family (`bed-`) is visited at its first place. */
 export const visitStation = (station: string) => station.endsWith('-') ? `${station}0` : station;
 
-/** Sentences each kind of island play can borrow from the path, once learned (newest lesson first). */
-const PLAY_LINES = {
- feed: ['More, please!', 'Thank you!', 'Yummy!', 'No, thank you.', "I'm thirsty.", 'Can I have an apple, please?'],
- pet: ["I'm happy!", 'Stay with me, please.', 'Thank you!'],
- sleep: ['Good night!', 'I need a rest.'],
- picnic: ['Thank you!', 'More, please!', 'Yummy!', 'Can I have an apple, please?'],
- farm: ['Help, please!', 'All done!', 'Sorry.'],
-} as const;
-export type PlayLine = keyof typeof PLAY_LINES;
-/** The learned sentence a play moment invites the child to try, or nothing if none of its sentences is learned yet. */
-export function learnedPlayLine(s: SaveData, play: PlayLine): LearningEntry | undefined {
- const fits = new Set<string>(PLAY_LINES[play]);
- return learnedPhrases(s).find(e => fits.has(e.en));
-}
 
 /** The closed area the path opens next: the only one the island marks with locks, so day one is not a map of locks. */
 export function nextDistrict(s: SaveData): District | undefined {

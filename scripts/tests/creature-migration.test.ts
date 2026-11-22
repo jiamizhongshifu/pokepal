@@ -31,14 +31,11 @@ test('friends that land on the same creature merge without losing friendship or 
  const [a, b] = Object.entries(LEGACY_CREATURE).reduce<[number, number] | undefined>((found, [id, to], _, all) => found ?? (() => { const twin = all.find(([o, t]) => t === to && o !== id); return twin ? [Number(id), Number(twin[0])] as [number, number] : undefined; })(), undefined)!;
  s.captures = [{ id: a, caughtAt: 200, ball: 'poke', friendship: 30 }, { id: b, caughtAt: 100, ball: 'poke', friendship: 80 }];
  s.settings.favorites = [a, b]; s.dex = [a, b]; s.daily.caught = [a, b]; s.catchWish = a;
- s.picnic = { version: 1, memories: [{ id: 'm1', pokemonId: a, berry: 'apple', at: 1 }], session: { id: 'p1', pokemonId: b, berry: 'apple', createdAt: 1 } };
- s.islandLiving = { ...(s.islandLiving ?? {}), memories: [{ id: 'l1', kind: 'ball', partners: [a, b], at: 1, context: 'play' }] };
  assert.equal(migrateCreatureIds(s), true);
  const to = LEGACY_CREATURE[a];
  assert.deepEqual(s.captures, [{ id: to, caughtAt: 100, ball: 'poke', friendship: 80 }]);
  assert.deepEqual(s.settings.favorites, [to]); assert.deepEqual(s.dex, [to]); assert.deepEqual(s.daily.caught, [to]);
- assert.equal(s.catchWish, to); assert.equal(s.picnic.memories[0].pokemonId, to); assert.equal(s.picnic.session.pokemonId, to);
- assert.deepEqual(s.islandLiving.memories[0].partners, [to]);
+ assert.equal(s.catchWish, to);
  assert.equal(migrateCreatureIds(s), false);
 });
 

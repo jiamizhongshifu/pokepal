@@ -1,5 +1,4 @@
 import type { SaveData } from '../types';
-import { comfortCompanion } from './companionCare';
 
 /** What grows on the farm: fruit words from the learning path. A kind can be planted once its lesson is learned. */
 export const CROPS = {
@@ -16,7 +15,7 @@ export const LEGACY_CROP: Record<string, CropKind> = { oran: 'grapes', pecha: 'a
 const legacy = (v: unknown) => typeof v === 'string' && LEGACY_CROP[v] ? LEGACY_CROP[v] : v;
 /** Runs on the raw save before validation; counts of the same fruit are added together. */
 export function migrateCrops(save: unknown) {
-  const s = save as { farm?: { plots?: unknown[]; basket?: Record<string, number> }; picnic?: { session?: { berry?: unknown }; memories?: { berry?: unknown }[] }; careStory?: { plot?: { berry?: unknown } } };
+  const s = save as { farm?: { plots?: unknown[]; basket?: Record<string, number> }; careStory?: { plot?: { berry?: unknown } } };
   if (!s || typeof s !== 'object') return;
   const basket = s.farm?.basket;
   if (basket && typeof basket === 'object') {
@@ -25,8 +24,6 @@ export function migrateCrops(save: unknown) {
     s.farm!.basket = next;
   }
   for (const p of s.farm?.plots ?? []) if (p && typeof p === 'object') (p as { berry?: unknown }).berry = legacy((p as { berry?: unknown }).berry);
-  if (s.picnic?.session) s.picnic.session.berry = legacy(s.picnic.session.berry);
-  for (const m of s.picnic?.memories ?? []) if (m) m.berry = legacy(m.berry);
   if (s.careStory?.plot) s.careStory.plot.berry = legacy(s.careStory.plot.berry);
   const story = s.careStory as { food?: unknown } | undefined;
   if (story) story.food = legacy(story.food);
@@ -74,7 +71,7 @@ export function feedCrop(s:SaveData,id:number,berry:CropKind) {
   if(!isBerry(berry))return false;
   const c=s.captures.find(c=>c.id===id),f=s.farm;
   if(!c||!f||f.basket[berry]<1)return false;
-  f.basket[berry]--;comfortCompanion(c,'feed');
+  f.basket[berry]--;
   c.friendship=Math.min(100,c.friendship+FRIENDSHIP_GAIN);return true;
 }
 

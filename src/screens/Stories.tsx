@@ -3,7 +3,6 @@ import './story-reader.css';
 import { SHORT_STORY_LINES, storyLanguage, storyEdition, storyBookmarkKey, storyInitialPage, type StoryLanguage } from '../data/storyLevels';
 import { learningProfile } from '../lib/learningStage';
 import { FeatureGuide } from '../components/FeatureGuide';
-import { LIFE_STORIES } from '../lib/islandLiving';
 import { learningEntry, selectedUnit } from '../data/curriculum';
 import { ParticipationNote } from '../components/ParticipationNote';
 import { useEffect, useRef, useState } from 'react';
@@ -151,7 +150,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
        {story.id==='keep-promise'&&<button className="btn-small" onClick={()=>go({name:'home',station:'farm'})}>陪伙伴照顾一颗小种子</button>}
        {story.id==='try-again'&&<button className="btn-small" onClick={()=>go({name:'home',station:'sand'})}>去沙坑慢慢玩，累了就休息</button>}
        {story.id==='tell-truth'&&<button className="btn-small" onClick={()=>go({name:'diary'})}>把今天的小事，说给我听</button>}
-       {LIFE_STORIES.filter(e=>e.story===story.id).map(e=><button key={e.id} className="btn-small" onClick={()=>go({name:'home',station:e.station})}>去岛上试试看 · {e.name}</button>)}<button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button><button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
+       <button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button><button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
    </main> : <main className="open-storybook">
      <header className="story-page-header"><h2 className="story-beat">{page.beat}</h2>
      <div className="story-mode" aria-label="阅读方式">{(['listen','read'] as const).map(mode=><button key={mode} aria-label={mode==='listen'?'听故事，自动翻页':'一起读，自己翻页'} aria-pressed={autoPlay===(mode==='listen')} onClick={()=>{setAutoPlay(mode==='listen');useGame.getState().updateSettings({storyMode:mode});read();}}><Icon name={mode==='listen'?'ear':'book'} size={26}/>{mode==='listen'?'听故事':'一起读'}<small>{mode==='listen'?'自动翻页':'自己翻页'}</small></button>)}</div>

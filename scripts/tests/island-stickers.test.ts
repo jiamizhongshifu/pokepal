@@ -1,8 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {STICKERS,shownStickers,toggleSticker,stickerEarned} from '../../src/island/stickers';
-import {ensureIslandProgress} from '../../src/lib/islandProgress';
+import {STICKERS,shownStickers,stickerEarned} from '../../src/island/stickers';
 import {unitRoundCount} from '../../src/data/curriculum';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {progressUnit} from '../../src/lib/learningProgress';
@@ -36,12 +35,11 @@ test('each chapter earns two stickers, in order, and the whole path earns all of
  walk(s);assert.equal(currentNode(learningPath(s)),undefined,'the path is finished');
  assert.equal(shownStickers(s).length,STICKERS.length,'every sticker is earned');
 });
-test('an earned sticker can be put away and brought back, survives a reload; an unearned one cannot be toggled',()=>{
- const s=blank();walk(s,6);ensureIslandProgress(s);
- assert.equal(toggleSticker(s,'deco-camp-bunting'),true);assert.equal(shownStickers(s).length,0);
- const back=validateSave(JSON.parse(JSON.stringify(s)));assert.deepEqual(back.islandProgress!.hidden,['deco-camp-bunting']);
- toggleSticker(back,'deco-camp-bunting');assert.equal(shownStickers(back).length,1);
- assert.equal(toggleSticker(back,'deco-beach-starfish'),false);assert.equal(stickerEarned(back,STICKERS[11]),false);
+test('a sticker a child put away stays away after a reload; anything else stored there is kept, never read',()=>{
+ const s=blank();walk(s,6);s.islandProgress={version:1,owned:['basket'],levels:{camp:1},hidden:['deco-camp-bunting']};
+ assert.equal(shownStickers(s).length,0);
+ const back=validateSave(JSON.parse(JSON.stringify(s)));assert.deepEqual(back.islandProgress,s.islandProgress);assert.equal(shownStickers(back).length,0);
+ assert.equal(stickerEarned(back,STICKERS[11]),false);
  const bad=JSON.parse(JSON.stringify(s));bad.islandProgress.hidden=[1];assert.throws(()=>validateSave(bad));
 });
 test('growing up follows activities done together; older saves start from friendship',()=>{

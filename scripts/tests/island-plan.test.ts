@@ -6,7 +6,7 @@ import {progressUnit,applyStation} from '../../src/lib/learningProgress';
 import {finishErrand} from '../../src/island/errands';
 import {learningPath,currentNode} from '../../src/lib/learningPath';
 import {placeById} from '../../src/island/world';
-import {unlockedDistricts,unlockingUnit,unitDistrict,learnedPhrase,learnedHere,islandTask,playOpen,visitStation} from '../../src/lib/islandPlan';
+import {unlockedDistricts,unlockingUnit,unitDistrict,learnedPhrase,learnedHere,islandTask,visitStation} from '../../src/lib/islandPlan';
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 
 const fresh=()=>({version:1,settings:{level:1},wordStats:{},energy:0,balls:{poke:0,great:0,ultra:0,master:0},captures:[],daily:{caught:[]},learning:{version:1,records:{},units:{}}} as unknown as SaveData);
@@ -21,7 +21,7 @@ test('every lesson happens at a real island place, and every area is opened by s
 test('a new child has only the first lesson\'s area; areas light up as the path reaches their first lesson',()=>{
  const s=fresh();
  assert.deepEqual([...unlockedDistricts(s)],[unitDistrict(LEARNING_UNITS[0])]);
- assert.equal(playOpen(s,'ball'),false,'ball games wait for the play area');
+ assert.equal(unlockedDistricts(s).has('play'),false,'the play area waits for its lesson');
  finish(s,'hello-island');
  assert.ok(unlockedDistricts(s).has(unitDistrict(unit('color-orchard'))),'the next lesson\'s area opens when it becomes reachable');
  assert.equal(unlockedDistricts(s).has('beach'),false);
@@ -67,11 +67,3 @@ test('a lesson\'s errand completes its island stop even after the next lesson wa
  assert.equal(s.learning!.units['garden-helper'],undefined,'lessons not learned are untouched');
 });
 
-test('play borrows only sentences already learned, newest first',async()=>{
- const {learnedPlayLine}=await import('../../src/lib/islandPlan');
- const s=fresh();
- assert.equal(learnedPlayLine(s,'feed'),undefined);
- for(const [i,id] of ['hello-island','color-orchard','snack-discovery'].entries())finish(s,id,100+i);assert.equal(learnedPlayLine(s,'feed')?.en,'Yummy!');
- for(const id of ['quiet-night','garden-helper','our-turn','sea-discovery'])finish(s,id,150);finish(s,'polite-snack',200);assert.equal(learnedPlayLine(s,'feed')?.en,'More, please!','the newest learned line');
- assert.equal(learnedPlayLine(s,'farm')?.en,'Help, please!','the garden lesson lends its sentence to the farm');
-});

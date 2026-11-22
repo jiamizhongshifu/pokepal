@@ -2,7 +2,6 @@ export type Lang = "en" | "zh";
 export type Rarity = "common" | "uncommon" | "rare" | "legend";
 export type BallType = "poke" | "great" | "ultra" | "master";
 export type TaskKind = "listen" | "repeat" | "wordpic" | "trace";
-export type InteractKind = "pet" | "feed" | "night";
 
 /** One growth stage of an original island creature (see src/data/creatures.ts). */
 export interface Creature {
@@ -24,14 +23,15 @@ export interface Creature {
 }
 
 export interface Capture {
-  personality?:{version:1;preference:import("./lib/islandLiving").Preference};
-  care?: import('./lib/companionCare').CompanionCare;
+  /** Retired with the old island screen (a liked activity, care timers); kept as stored, never read. */
+  personality?: Record<string, unknown>;
+  care?: Record<string, unknown>;
   id: number;
   caughtAt: number;
   ball: BallType;
   /** 0–100，每 20 点一级 */
   friendship: number;
-  /** Island activities, shared games and picnics done together; growing up follows it. */
+  /** Island activities and shared practice done together; growing up follows it. */
   played?: number;
   /** 满友好度时选择了“保持现在的样子”（之后仍可随时长大，只是不再提醒） */
   stay?: boolean;
@@ -104,9 +104,13 @@ export interface WordStat {
 
 export interface SaveData {
   onboarding?: import("./data/onboarding").Onboarding;
-  islandProgress?:import("./lib/islandProgress").IslandProgress;
-  islandLiving?:import("./lib/islandLiving").IslandLiving;
-  picnic?: import('./lib/picnic').PicnicState;
+  /**
+   * Retired with the old island screen (gifts and upgrades, furniture and shared-play memories, picnics): kept as
+   * stored so nothing a family made is deleted, but never read again — except the stickers a child hid (`hidden`).
+   */
+  islandProgress?: Record<string, unknown> & { hidden?: string[] };
+  islandLiving?: Record<string, unknown>;
+  picnic?: Record<string, unknown>;
   participation?: import("./lib/participation").Participation;
   /** Optional, migrated without changing existing captures or daily rewards. */
   learning?: import('./lib/learningProgress').LearningProgress;

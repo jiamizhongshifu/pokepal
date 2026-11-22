@@ -181,3 +181,10 @@
 - 作答记录、自动翻题、复习排期、帮助气泡的逻辑都没动，只在 `LearningRound` 上加了 `staged` 开关；样式在 `screens/lesson-scene.css`。
 - 没改的：完成页仍是一张文字卡片（盖在场景上，主要给家长看）；“树果点心时间”这一课本来就有自己的野餐画面，保持原样；“和老朋友见面”的复习回合仍是卡片式。
 - 验证：浏览器里走过第 1、2 课的听词、选句子、完成页，桌面和手机尺寸都看过。“先听后找”的模式（学习阶段设为听音探索时才出现）没有看到实际画面。
+
+### 清理旧小岛的逻辑层（2026-11-22）
+
+- 删掉：`islandLiving.ts`（家具、喜好、一起玩回忆、生活故事入口）、`picnic.ts`、`togetherTurn.ts`、`island/together.ts`、`homeOverlay.ts`、`activeResidents.ts`、`companionCare.ts`、`islandProgress.ts`；store 里的 `interact`、`setFurniture`、`rememberTogether`、`beginPicnic/servePicnic/endPicnic`、`toggleSticker`；出题里的 `picnicAsk`、`feedAsk`、`bubblesAsk`、`ballAsk`；`islandPlan` 里的 `playOpen`、`learnedPlayLine`；手册页的“我们在小岛的回忆”；故事页的“去岛上试试看”三个按钮；以及只测这些的 7 个测试文件。
+- **存档不删数据**：旧存档里的 `islandLiving`、`picnic`、`islandProgress` 和伙伴身上的 `personality`、`care` 原样保留，只检查是对象，不再读取，也不再在读档时补写。唯一还读的是 `islandProgress.hidden`（孩子收起的装饰，保持收起）。
+- 生活小故事读完后的“邀请伙伴玩球”“一起歇一歇”等按钮，改为指向真实地点（游乐场、遮阳伞），点了会直接走进对应场景。
+- 没动：统计用的 `together_*` 事件名（`interactionPolicy.ts`）、早已退役的 `careStory`。

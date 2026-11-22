@@ -9,9 +9,9 @@ import type { SaveData } from '../types';
  */
 /** The island activity an answer belongs to: the farm/picnic/feed/ball rounds or one of the place activities. */
 export type IslandPlay = string;
-/** A picture to tap: a learned word, a friend's portrait, or the child's own avatar (`avatar`, with an optional photo). */
+/** A picture to tap: a learned word, on a colour plate (`tint`) in a combined instruction. */
 /** `tint`: the thing is shown in this colour (a combined instruction such as “red ball”). */
-export interface AskOption { id: string; entry?: LearningEntry; image?: string; avatar?: string; photo?: string; label: string; tint?: string }
+export interface AskOption { id: string; entry: LearningEntry; label: string; tint?: string }
 /**
  * `situation`: instead of hearing the answer, the child hears what is happening (in Chinese) and chooses what to say;
  * with `model` the sentence itself follows as an example, for a child who is still mostly listening.
@@ -73,35 +73,9 @@ export function comboAsk(play: IslandPlay, thing: string, color: string, things:
  return { play, prompt, also, answer: `${also.key}|${prompt.key}`, options: rotate([option(also, prompt), option(also, t2), option(c2, prompt), option(c2, t2)], seed + 1) };
 }
 
-/** Picnic: the friend asks for one fruit in the basket; other learned foods are the other pictures. */
-export const picnicFruits = (s: SaveData) => CROP_KINDS.filter(k => (s.farm?.basket[k] ?? 0) > 0 && learnedWords(s).includes(k));
-export function picnicAsk(s: SaveData, seed: number, target?: CropKind): IslandAsk | undefined {
- const inBasket = picnicFruits(s);
- const fruit = target ? (learnedWords(s).includes(target) ? target : undefined) : inBasket.length ? pick(inBasket, seed) : undefined;
- if (!fruit) return undefined;
- return wordAsk('picnic', fruit, learnedFoods(s), seed, 3, learnedWords(s));
-}
 /** Planting: the friend names a fruit it wants to grow. */
 export function plantAsk(s: SaveData, seed: number): IslandAsk | undefined {
  const crops = plantableCrops(s);
  if (!crops.length) return undefined;
  return wordAsk('plant', pick(crops, seed), crops, seed, 3, [...learnedFoods(s), ...learnedWords(s)]);
-}
-/** Feeding from the companion card: the friend asks for a learned food. */
-export function feedAsk(s: SaveData, seed: number): IslandAsk | undefined {
- const foods = learnedFoods(s);
- if (!foods.length) return undefined;
- return wordAsk('feed', pick(foods, seed), foods, seed, 3, learnedWords(s));
-}
-/** Bubbles: the friend says a number, the child taps the picture with that many. */
-export function bubblesAsk(seed: number, max: 3 | 5 = 3): IslandAsk {
- const keys = Array.from({ length: max }, (_, i) => `count:${i + 1}`);
- return wordAsk('bubbles', pick(keys, seed), keys, seed, 3)!;
-}
-/** Ball: once "My turn! / Your turn!" is learned, the child decides who rolls next from what the friend says. */
-export function ballAsk(s: SaveData, childTurn: boolean, friend: { id: number; name: string; image: string }, me: { name: string; avatar: string; photo?: string }): IslandAsk | undefined {
- if (!s.learning?.units['our-turn']?.completedAt) return undefined;
- const prompt = learningEntry(childTurn ? 'Your turn!' : 'My turn!');
- if (!prompt) return undefined;
- return { play: 'ball', prompt, answer: childTurn ? 'me' : 'friend', options: [{ id: 'friend', image: friend.image, label: friend.name }, { id: 'me', avatar: me.avatar, photo: me.photo, label: me.name }] };
 }

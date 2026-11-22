@@ -2,7 +2,6 @@ import { playById, finishPlay, wishFor, notePlayedTogether } from './island/play
 import { finishErrand } from './island/errands';
 import { finishParty } from './island/parties';
 import { noteIslandDone } from './island/scenes';
-import { toggleSticker } from './island/stickers';
 import { getCreature as creatureOf } from './data/creatures';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
 import {advancePlayClock} from './lib/playClock';
@@ -13,15 +12,11 @@ import { completeGuide, type GuideId } from './data/onboarding';
 import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergeInvites, invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
-import { ensureIslandProgress,placeIslandDecoration } from './lib/islandProgress';
-import { migratePersonalities, rememberTogether, type FurnitureId, type LivingMemory } from './lib/islandLiving';
 import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
 import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './lib/farm';
-import { beginPicnic, servePicnic, endPicnic } from './lib/picnic';
-import { comfortCompanion } from "./lib/companionCare";
 import { create } from "zustand";
-import type { Daily, DaySummary, InteractKind, SaveData, Settings, TaskKind } from "./types";
+import type { Daily, DaySummary, SaveData, Settings, TaskKind } from "./types";
 import { todayStr } from "./lib/date";
 import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictError } from "./lib/db";
 import {clearParentNotice} from './lib/parentNotice';
@@ -141,7 +136,6 @@ interface State {
   /** A chapter's island party was held. */
   finishParty: (chapter:number)=>boolean;
   /** Put an earned island sticker away or bring it back. */
-  toggleSticker: (id:string)=>boolean;
   markHomeTried: (id:string,tried:boolean)=>void;
   restLearningWord: (word:string)=>void;
   saveLearningWord: (word:string)=>void;
@@ -166,18 +160,12 @@ interface State {
   evolve: (from: number, to: number) => void;
   /** 选择保持现在的样子（不再提醒，之后仍可长大） */
   stayAsIs: (id: number) => void;
-  interact: (id: number, kind: InteractKind) => boolean;
   noteHeard: (count?: number) => void;
   plantCrop: (index:number,berry:CropKind)=>boolean;
   waterCrop: (index:number,plantedAt:number,pokemonId:number)=>boolean;
   rainWaterCrops: ()=>number;
   harvestCrop: (index:number)=>Promise<boolean>;
   feedCrop: (id:number,berry:CropKind)=>boolean;
-  setFurniture:(id:FurnitureId,enabled:boolean)=>boolean;
-  rememberTogether:(memory:LivingMemory)=>boolean;
-  beginPicnic:(id:number,berry:CropKind)=>boolean;
-  servePicnic:(id:string)=>boolean;
-  endPicnic:(id:string)=>void;
   noteWord: (word: string, kind: "heard" | "spoken" | "correct") => void;
   addPlaySeconds: (sec: number) => void;
   grantExtraMinutes: (min: number) => void;
@@ -224,7 +212,7 @@ export const useGame = create<State>((set, get) => {
     rollover(s);
     mergeInvites(s);
     const r = fn(s);
-    migratePersonalities(s);ensureIslandProgress(s);
+    
     set({ save: s });
     scheduleSave(s);
     return r;
@@ -237,7 +225,7 @@ export const useGame = create<State>((set, get) => {
     const s=structuredClone(get().save);
     rollover(s);mergeInvites(s);
     const result=fn(s);
-    migratePersonalities(s);ensureIslandProgress(s);
+    
     set({saveBusy:true});
     pendingSave=s;
     try { await flushSave();set({save:s});return result; }
@@ -265,7 +253,7 @@ export const useGame = create<State>((set, get) => {
           s.settings=normalizeLearningSettings({...DEFAULT_SETTINGS,...s.settings});
           if(s.trainer&&!s.trainer.avatar.startsWith('avatar-'))s.trainer.avatar='avatar-red';
           if(s.trainer&&!isAvatarPhoto(s.trainer.avatarPhoto))delete s.trainer.avatarPhoto;
-          migratePersonalities(s);ensureIslandProgress(s);migrateLearning(s);migrateParticipation(s);rollover(s);setSpeechRate(s.settings.speechRate);
+          migrateLearning(s);migrateParticipation(s);rollover(s);setSpeechRate(s.settings.speechRate);
           revision=snapshot.revision;pendingSave=undefined;
           const backup=await loadSaveBackup().catch(()=>undefined);
           set({save:s,loaded:true,saveIssue:null,hasSaveBackup:!!backup});
@@ -323,7 +311,6 @@ export const useGame = create<State>((set, get) => {
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
-    toggleSticker(id) {return !!mut(s=>toggleSticker(s,id));},
     finishIslandPlay(playId,partner) {const play=playById(playId,get().save);if(!play)return false;return !!mut(s=>{const ok=finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));if(ok)noteIslandDone(s);return ok;});},
     finishErrand(unitId,partner) {return !!mut(s=>{const ok=finishErrand(s,unitId,partner);if(ok)noteIslandDone(s);return ok;});},
     finishParty(chapter) {return !!mut(s=>{const ok=finishParty(s,chapter);if(ok)noteIslandDone(s);return ok;});},
@@ -347,11 +334,6 @@ export const useGame = create<State>((set, get) => {
     celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);});return fresh;},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
-    setFurniture(id,enabled){return mut(s=>placeIslandDecoration(s,id,enabled))??false;},
-    rememberTogether(memory){return mut(s=>{const ok=rememberTogether(s,memory);if(ok)for(const id of memory.partners){const c=s.captures.find(c=>c.id===id);if(c)notePlayedTogether(c);}return ok;})??false;},
-    beginPicnic(id,berry) {return mut(s=>beginPicnic(s,id,berry,crypto.randomUUID()))??false;},
-    servePicnic(id) {return mut(s=>{const pid=s.picnic?.session?.pokemonId,ok=servePicnic(s,id);const c=ok?s.captures.find(c=>c.id===pid):undefined;if(c)notePlayedTogether(c);return ok;})??false;},
-    endPicnic(id) {mut(s=>endPicnic(s,id));},
 
     async createTrainer(avatar) {
       if(get().saveBusy||get().saveIssue)return false;
@@ -395,7 +377,6 @@ export const useGame = create<State>((set, get) => {
       mut((s) => {
         const c = s.captures.find((x) => x.id === from);
         if (!c || s.captures.some((x) => x.id === to)) return;
-        if(s.picnic?.session?.pokemonId===from)delete s.picnic.session;
         s.dex = [...new Set([...(s.dex ?? s.captures.map((x) => x.id)), from, to])];
         c.id = to;
         c.friendship = 60;
@@ -410,18 +391,6 @@ export const useGame = create<State>((set, get) => {
       });
     },
 
-
-    interact(id, kind) {
-      const ok=mut((s) => {
-        const c = s.captures.find((x) => x.id === id);
-        if (!c) return;
-        comfortCompanion(c,kind);
-        const gain = kind === "feed" ? 4 : kind === "pet" ? 2 : 3;
-        c.friendship = Math.min(100, c.friendship + gain);
-        return true;
-      })??false;
-      if(ok)trackInteraction('companion_interacted');return ok;
-    },
 
     noteHeard(count = 1) {
       mut((s) => {
@@ -518,7 +487,7 @@ export const useGame = create<State>((set, get) => {
       if(get().saveBusy||get().saveIssue||!get().loaded)throw new Error('请先完成存档重试，再导入。');
       s.settings=normalizeLearningSettings({...DEFAULT_SETTINGS,...s.settings});
       if(s.trainer&&!isAvatarPhoto(s.trainer.avatarPhoto))delete s.trainer.avatarPhoto;
-      migratePersonalities(s);ensureIslandProgress(s);migrateLearning(s);migrateParticipation(s);rollover(s);
+      migrateLearning(s);migrateParticipation(s);rollover(s);
       set({saveBusy:true});
       try{
         await flushSave();

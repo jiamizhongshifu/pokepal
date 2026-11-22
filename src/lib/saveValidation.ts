@@ -4,14 +4,11 @@ import {validWeatherMode} from './weather';
 import { validOnboarding, migrateOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
 import { mergeInvites } from "./invites";
-import { validIslandProgress } from './islandProgress';
-import { PREFERENCES,validLiving } from './islandLiving';
 import { PARTICIPATION_KINDS } from './participation';
 import { validFarm, migrateCrops } from './farm';
 import { validWishes } from '../island/plays';
 import { validTraces } from '../island/errands';
 import { validParties } from '../island/parties';
-import { validPicnic } from './picnic';
 import type { SaveData } from '../types';
 import { CREATURES } from '../data/creatures';
 import { migrateCreatureIds } from './creatureMigration';
@@ -37,8 +34,7 @@ export function validateSave(input:unknown):SaveData {
  requireValue(Array.isArray(s.captures)&&creatureIds(s.captures.map((c:any)=>c?.id)),'伙伴编号');
  for(const c of s.captures){
   requireValue(object(c)&&number(c.caughtAt)&&['poke','great','ultra','master'].includes(c.ball)&&number(c.friendship)&&c.friendship<=100&&(c.stay===undefined||typeof c.stay==='boolean')&&(c.played===undefined||Number.isInteger(c.played)&&c.played>=0&&c.played<=9999),'伙伴记录');
-  if(c.personality!==undefined)requireValue(object(c.personality)&&c.personality.version===1&&PREFERENCES.includes(c.personality.preference),'伙伴喜好');
-  if(c.care!==undefined)requireValue(object(c.care)&&['seconds','quietUntil'].every(k=>number(c.care[k]))&&['fedAt','petAt'].every(k=>typeof c.care[k]==='number'&&Number.isFinite(c.care[k])),'伙伴心愿');
+  for(const k of ['personality','care'])if(c[k]!==undefined)requireValue(object(c[k]),'旧的伙伴记录');
  }
  const d=s.daily;
  requireValue(object(d)&&typeof d.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)&&Number.isFinite(Date.parse(d.date)),'日期');
@@ -76,9 +72,9 @@ export function validateSave(input:unknown):SaveData {
  if(s.islandWishes!==undefined)requireValue(validWishes(s.islandWishes),'小心愿');
  if(s.islandTraces!==undefined)requireValue(validTraces(s.islandTraces),'小岛上留下的东西');
  if(s.islandParties!==undefined)requireValue(validParties(s.islandParties),'小岛聚会');
- if(s.islandProgress!==undefined)requireValue(validIslandProgress(s.islandProgress),'岛屿礼物和升级');
- if(s.islandLiving!==undefined)requireValue(validLiving(s.islandLiving,ids),'小岛生活');
- if(s.picnic!==undefined)requireValue(validPicnic(s.picnic,s.captures.map((c:any)=>c.id))&&s.picnic.memories.every((m:any)=>ids.has(m.pokemonId)),'野餐回忆');
+ // Retired with the old island screen: kept untouched; only the stickers a child hid are still read.
+ for(const k of ['islandProgress','islandLiving','picnic'])if(s[k]!==undefined)requireValue(object(s[k]),'旧的小岛记录');
+ if(s.islandProgress?.hidden!==undefined)requireValue(strings(s.islandProgress.hidden)&&s.islandProgress.hidden.length<=20,'收起的小岛装饰');
  if(s.garden!==undefined)requireValue(object(s.garden)&&typeof s.garden.bloomed==='boolean','花园');
  // Retired stories (care afternoon, apple picnic adventure): kept untouched so an older version still reads them.
  if(s.careStory!==undefined)requireValue(object(s.careStory),'伙伴生活故事');

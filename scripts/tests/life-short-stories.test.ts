@@ -5,7 +5,7 @@ import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {LIFE_SHORT_STORIES} from '../../src/data/lifeShortStories';
 import {STORY_SCENES} from '../../src/data/storyScenes';
 import {LEARNING_UNITS,learningEntry} from '../../src/data/curriculum';
-import {togetherSession} from '../../src/island/together';
+import {placeById} from '../../src/island/world';
 import {storyProp} from '../../src/data/sceneArt';
 
 test('every short story has bilingual pages, matching art assets and reusable learning words',()=>{
@@ -13,6 +13,7 @@ test('every short story has bilingual pages, matching art assets and reusable le
   assert.equal(STORIES.filter(s=>s.id===story.id).length,1);
   assert(LEARNING_UNITS.some(u=>u.story===story.id),'story has a relevant lesson');
   assert(story.activity,'story returns to a real activity');
+  assert(placeById(story.activity!.station),`${story.id}: its activity is a real island place`);
   assert.equal(STORY_SCENES[story.id].length,story.pages.length);
   assert(learningEntry(story.phrase.en));
   for(const [i,p] of story.pages.entries()){
@@ -22,12 +23,4 @@ test('every short story has bilingual pages, matching art assets and reusable le
   }
  }
  assert.equal(new Set(STORIES.map(storyProgressKey)).size,STORIES.length);
-});
-test('switching play to rest retains partners and releases old reservation identities',()=>{
- const play=togetherSession('ball',[1001,1011]);const rest=togetherSession('rest',play.partners,play.context==='coast');
- assert.deepEqual(rest.partners,play.partners);assert.notEqual(rest.id,play.id);
- for(const [i,v] of rest.visits.entries()){
-  assert.equal(v.station.activity,'nap');
-  assert.notEqual(v.key,play.visits[i].key);
- }
 });

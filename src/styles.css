@@ -166,7 +166,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .grass { background: radial-gradient(70% 45% at 50% 100%, rgba(0, 255, 120, 0.35), transparent 70%), var(--page-bg); }
 .center-msg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; font-size:var(--text-4xl); font-weight: 800; }
 .field { position: relative; flex: 1; }
-.bush { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 70px; white-space: nowrap; letter-spacing: -24px; }
 
 /* ---------- 好朋友相册 ---------- */
 .dex-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; padding: 10px 24px 40px; align-content: start; }
@@ -301,8 +300,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .mic-btn { gap: 2px; }
 .sleepy .moon { animation: float 5s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(255, 225, 120, 0.7)); }
 .sleepy .zz { position: absolute; top: -18px; right: -6px; animation: float 2s ease-in-out infinite; }
-.bush { display: flex; align-items: flex-end; letter-spacing: 0; bottom: -26px; }
-.bush .icon + .icon { margin-left: -34px; }
 .keypad button { display: grid; place-items: center; }
 .loading { background: var(--page-bg); }
 .ball-count.empty { opacity: 0.55; filter: grayscale(0.8); }

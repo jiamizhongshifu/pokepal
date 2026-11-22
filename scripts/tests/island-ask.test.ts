@@ -4,7 +4,7 @@ import type {SaveData} from '../../src/types';
 import {LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {progressUnit} from '../../src/lib/learningProgress';
 import {newFarm,migrateCrops} from '../../src/lib/farm';
-import {picnicAsk,plantAsk,feedAsk,bubblesAsk,ballAsk,plantableCrops,learnedWords,isIslandSource,ISLAND_SOURCE} from '../../src/lib/islandAsk';
+import {plantAsk,plantableCrops,learnedWords,isIslandSource,ISLAND_SOURCE} from '../../src/lib/islandAsk';
 import {validateSave} from '../../src/lib/saveValidation';
 import {readFileSync} from 'node:fs';
 
@@ -14,14 +14,14 @@ const learn=(s:SaveData,n:number)=>{for(const u of LEARNING_UNITS.slice(0,n))pro
 test('nothing is asked before it is learned; the farm grows one more fruit per fruit word learned',()=>{
  const s=fresh();
  assert.deepEqual(learnedWords(s),[]);assert.deepEqual(plantableCrops(s),[]);
- assert.equal(plantAsk(s,0),undefined);assert.equal(feedAsk(s,0),undefined);assert.equal(picnicAsk(s,0),undefined);
+ assert.equal(plantAsk(s,0),undefined);
  learn(s,3);
  assert.deepEqual(plantableCrops(s),['apple','banana'],'the snack lesson teaches apple and banana');
 });
 
 test('every option is a learned word, the answer is among them, and the target is what the friend says',()=>{
  const s=fresh();learn(s,8);const words=new Set(learnedWords(s));
- for(let seed=0;seed<12;seed++)for(const ask of [plantAsk(s,seed),feedAsk(s,seed)]){
+ for(let seed=0;seed<12;seed++)for(const ask of [plantAsk(s,seed)]){
   assert.ok(ask);assert.equal(ask!.options.length,3);
   assert.ok(ask!.options.every(o=>words.has(o.id)),'only learned pictures');
   assert.ok(ask!.options.some(o=>o.id===ask!.answer));assert.equal(ask!.prompt.key,ask!.answer);
@@ -30,22 +30,7 @@ test('every option is a learned word, the answer is among them, and the target i
  assert.deepEqual(plantAsk(s,5),plantAsk(s,5),'the same round after a reload');
 });
 
-test('the picnic asks only for a learned fruit that is in the basket',()=>{
- const s=fresh();learn(s,3);
- assert.equal(picnicAsk(s,0),undefined,'empty basket');
- s.farm!.basket.grapes=4;assert.equal(picnicAsk(s,0),undefined,'grapes are not learned yet');
- s.farm!.basket.banana=1;
- for(let seed=0;seed<6;seed++)assert.equal(picnicAsk(s,seed)!.answer,'banana');
-});
 
-test('bubbles ask for a number; ball turns are asked only after the turn-taking lesson',()=>{
- for(let seed=0;seed<6;seed++){const a=bubblesAsk(seed);assert.ok(a.options.some(o=>o.id===a.answer));assert.match(a.answer,/^count:[1-3]$/);}
- const s=fresh();const friend={id:1,name:'啵啵',image:'f.png'},me={name:'我',avatar:'avatar-red'};
- assert.equal(ballAsk(s,true,friend,me),undefined);
- learn(s,6);
- assert.equal(ballAsk(s,true,friend,me)!.answer,'me');assert.equal(ballAsk(s,true,friend,me)!.prompt.en,'Your turn!');
- assert.equal(ballAsk(s,false,friend,me)!.answer,'friend');assert.equal(ballAsk(s,false,friend,me)!.prompt.en,'My turn!');
-});
 
 test('island answers carry their own source',()=>{
  assert.equal(ISLAND_SOURCE('picnic'),'island:picnic');assert.ok(isIslandSource('island:ball'));assert.equal(isIslandSource('unit:x'),false);
