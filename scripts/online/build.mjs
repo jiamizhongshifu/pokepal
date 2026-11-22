@@ -1,6 +1,6 @@
 import {sourceSnapshot} from '../source-snapshot.mjs';
 import {execFileSync} from 'node:child_process';
-import {readFileSync,existsSync,renameSync,mkdirSync,writeFileSync,readdirSync,copyFileSync} from 'node:fs';
+import {readFileSync,existsSync,renameSync,mkdirSync,writeFileSync,readdirSync,copyFileSync,rmSync} from 'node:fs';
 import {resolve} from 'node:path';
 execFileSync('npm',['run','check'],{stdio:'inherit'});
 const sourceHash=sourceSnapshot();
@@ -27,4 +27,7 @@ if(existsSync('dist-online')){
 execFileSync(process.execPath,['scripts/online/verify.mjs',stage],{stdio:'inherit'});
 if(existsSync('dist-online'))renameSync('dist-online',resolve(`.build/online-previous-${Date.now()}`));
 renameSync(stage,'dist-online');
+// Keep only the latest 2 previous online backups so .build/ does not grow unboundedly. Never touch .build/releases/.
+const oldBackups=readdirSync('.build').filter(n=>/^online-previous-\d+$/.test(n)).sort();
+for(const name of oldBackups.slice(0,-2))rmSync(resolve('.build',name),{recursive:true,force:true});
 writeFileSync('.build/online-last-build.json',JSON.stringify({dir:resolve('dist-online'),...JSON.parse(readFileSync('dist-online/build-inventory.json'))},null,2));

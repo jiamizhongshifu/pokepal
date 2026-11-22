@@ -95,7 +95,6 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   cheered.current = done;
   if (done < ISLAND_DAY) return;
   setParty(true); sfx('sparkle'); void say(['en', 'You did it!']); later(() => setParty(false), 3200);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [district, active, done]);
 
  // The path's island stop hands over a place: walk into its scene and start the lesson's errand there.

@@ -55,7 +55,6 @@ return {
       workbox: online ? {
         cacheId: "pokepal-online-v1",
         globPatterns: ["index.html", "privacy/index.html", "terms/index.html", "feedback/index.html", "assets/*.{js,css,woff2}"],
-        globIgnores: ["**/HomeScene-*.js"],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/(api|voice|scenes|sprites|art|icons|music|environment|__ipad|release|privacy|terms|feedback)/],

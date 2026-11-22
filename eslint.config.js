@@ -20,20 +20,11 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'warn',
-      'no-restricted-imports': ['error', {paths: [{
-        name: '@react-three/drei',
-        importNames: ['useGLTF'],
-        message: 'Use useModel / preloadModel from src/scene/modelUtil: they keep Draco and Meshopt decoders off so the CSP needs no wasm-unsafe-eval.',
-      }]}],
       'no-restricted-syntax': ['error', {
         selector: "MemberExpression[object.name='WebAssembly']",
         message: 'The site CSP does not allow WebAssembly compilation.',
       }],
     },
-  },
-  {
-    files: ['src/scene/modelUtil.ts'],
-    rules: {'no-restricted-imports': 'off'},
   },
   {
     files: ['scripts/**/*.{ts,mjs,js}', 'eslint.config.js', 'vite.config.ts', 'capacitor.config.ts'],

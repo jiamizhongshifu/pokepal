@@ -21,7 +21,7 @@
     "preview:online": "NO_SSL=1 vite preview --mode online --host 127.0.0.1 --port 4190 --strictPort",
     "test": "node scripts/run-tests.mjs",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.scripts.json",
-    "lint": "eslint . --max-warnings 78",
+    "lint": "eslint . --max-warnings 39",
     "check": "npm run test && npm run typecheck && npm run lint",
     "build:ipad": "node scripts/build.mjs",
     "prebuild:ipad": "npm run voice:collect && npm run voice:coverage && npm run voice:verify && npm run voice:pack",

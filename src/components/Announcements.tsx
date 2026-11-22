@@ -14,7 +14,7 @@ export function Announcements({welcome=false,active=true}:{welcome?:boolean;acti
  const dialog=useRef<HTMLDialogElement>(null),entry=useRef<HTMLButtonElement>(null);
  const close=()=>{dialog.current?.close();setOpen(false);entry.current?.focus();};
  useEffect(()=>{if(!active){dialog.current?.close();setOpen(false);}},[active]);
- useEffect(()=>{if(open){stopSpeech();dialog.current?.showModal();markNoticesRead();}return()=>dialog.current?.close();},[open]);
+ useEffect(()=>{const node=dialog.current;if(open){stopSpeech();node?.showModal();markNoticesRead();}return()=>node?.close();},[open]);
  // Only mark a newly fetched feed when it is actually visible in the open panel.
  useEffect(()=>{if(open)markNoticesRead();},[open,feed]);
  return <><button ref={entry} className={`notice-entry ${welcome?'welcome-notice':''}`} aria-label={`小岛公告${unread?'，有新消息':''}`} onClick={()=>{setOpen(true);void checkNotices(true);}}><Icon name="speaker" size={30}/><span>公告</span>{unread&&<i className="notice-dot" aria-hidden="true"/>}</button>

@@ -83,7 +83,7 @@ function reportVoiceIssue(text: string, lang: Lang, reason: string) {
 function voiceBuffer(file: string): Promise<AudioBuffer | null> {
   let p = bufferCache.get(file);
   if (!p) {
-    p = (import.meta.env.VITE_ONLINE ? onlineVoiceBytes(file).then(ab=>{if(!ab)throw new Error("Recording unavailable");return ab;}) : fetchVoiceAsset(`/voice/${file}`, r => r.arrayBuffer()))
+    p = (import.meta.env.VITE_ONLINE ? onlineVoiceBytes(file).then(ab => { if (!ab) throw new Error("Recording unavailable"); return ab; }) : fetchVoiceAsset(`/voice/${file}`, r => r.arrayBuffer()))
       .then((ab) => getAudioContext().decodeAudioData(ab))
       .catch(() => {
         bufferCache.delete(file);
@@ -113,7 +113,7 @@ async function playVoice(text: string, lang: Lang, myToken: number, allowed: () 
   if (!buf) { reportVoiceIssue(text, lang, "download-or-decode"); return false; }
   const ac = getAudioContext();
   // 未解锁时 resume 可能一直挂起：最多等 300ms，仍未运行就保留字幕，等待用户点击重试
-  if (ac.state !== "running") await Promise.race([ac.resume().catch(() => {}), wait(300)]);
+  if (ac.state !== "running") await Promise.race([ac.resume().catch(() => { }), wait(300)]);
   if (myToken !== token || !allowed()) return false;
   if (ac.state !== "running") { reportVoiceIssue(text, lang, "audio-locked"); return false; }
   if (lang === "en") onEnglish?.(text);
@@ -127,6 +127,7 @@ async function playVoice(text: string, lang: Lang, myToken: number, allowed: () 
     const done = () => {
       if (settled) return;
       settled = true;
+      clearTimeout(fallbackTimer);
       if (currentSource === src) currentSource = null;
       emitPlayback(null);
       resolve(true);
@@ -135,7 +136,7 @@ async function playVoice(text: string, lang: Lang, myToken: number, allowed: () 
     const startedAt = ac.currentTime;
     src.start(startedAt);
     emitPlayback({ lang, text, key, startedAt, rate, timing });
-    setTimeout(done, buf.duration * 1000 / rate + 800);
+    const fallbackTimer = setTimeout(done, buf.duration * 1000 / rate + 800);
   });
 }
 
@@ -184,7 +185,7 @@ export function sayCancellable(...parts: Part[]) {
 }
 
 export function sayCancellableWhile(allowed: () => boolean, ...parts: Part[]) {
-  if (!allowed()) return { done: Promise.resolve(false), cancel: () => {} };
+  if (!allowed()) return { done: Promise.resolve(false), cancel: () => { } };
   const done = sayWhile(allowed, ...parts);
   const owner = token;
   return { done, cancel: () => { if (owner === token) stopSpeech(); } };
@@ -205,7 +206,7 @@ export function stopSpeech() {
 
 /** 在第一次点击时调用，解锁 iOS 的语音与音频 */
 export function unlockAudio() {
-  getAudioContext().resume().catch(() => {});
+  getAudioContext().resume().catch(() => { });
 }
 
 export const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -219,30 +220,30 @@ export function getAudioContext(): AudioContext {
   return ctx;
 }
 
-let cancelCry:(()=>void)|null=null;
+let cancelCry: (() => void) | null = null;
 /** Music ducks for teaching speech, cries and recorded playback. */
 export const isForegroundAudioActive = () => busy || cancelCry !== null;
-export function playCry(id:number,volume=.55):Promise<void>{
+export function playCry(id: number, volume = .55): Promise<void> {
   cancelCry?.();
-  const ac=getAudioContext();
-  if(ac.state!=="running")ac.resume().catch(()=>{});
-  const voice=playCreatureVoice(ac,id,volume);
-  const finish=()=>{voice.stop();if(cancelCry===finish)cancelCry=null;};
-  cancelCry=finish;
-  return voice.done.then(()=>{if(cancelCry===finish)cancelCry=null;});
+  const ac = getAudioContext();
+  if (ac.state !== "running") ac.resume().catch(() => { });
+  const voice = playCreatureVoice(ac, id, volume);
+  const finish = () => { voice.stop(); if (cancelCry === finish) cancelCry = null; };
+  cancelCry = finish;
+  return voice.done.then(() => { if (cancelCry === finish) cancelCry = null; });
 }
-export function playUrl(url:string,volume=1):Promise<void>{
+export function playUrl(url: string, volume = 1): Promise<void> {
   cancelCry?.();
-  return new Promise(resolve=>{
-    const audio=new Audio(url);let settled=false;
-    const finish=()=>{
-      if(settled)return;settled=true;clearTimeout(timer);
-      audio.pause();audio.onended=null;audio.onerror=null;
-      if(cancelCry===finish)cancelCry=null;
+  return new Promise(resolve => {
+    const audio = new Audio(url); let settled = false;
+    const finish = () => {
+      if (settled) return; settled = true; clearTimeout(timer);
+      audio.pause(); audio.onended = null; audio.onerror = null;
+      if (cancelCry === finish) cancelCry = null;
       resolve();
     };
-    const timer=setTimeout(finish,6000);
-    cancelCry=finish;audio.volume=volume;audio.onended=finish;audio.onerror=finish;
+    const timer = setTimeout(finish, 6000);
+    cancelCry = finish; audio.volume = volume; audio.onended = finish; audio.onerror = finish;
     audio.play().catch(finish);
   });
 }
@@ -250,7 +251,7 @@ export function playUrl(url:string,volume=1):Promise<void>{
 /** 简单合成音效，不依赖音频文件 */
 export function sfx(kind: "ding" | "boop" | "pop" | "sparkle" | "click" | "whoosh") {
   const ac = getAudioContext();
-  if (ac.state !== "running") ac.resume().catch(() => {});
+  if (ac.state !== "running") ac.resume().catch(() => { });
   const now = ac.currentTime;
   const tone = (freq: number, start: number, dur: number, type: OscillatorType = "sine", vol = 0.18, slideTo?: number) => {
     const o = ac.createOscillator();

@@ -20,7 +20,7 @@ import { LearningArt,hearEntry,learningVoice } from '../components/LearningItem'
 import { CreatureImg } from '../components/CreatureImg';
 import { creatureArt,creatureExpression,getCreature, FIRST_FRIEND } from '../data/creatures';
 import { Icon } from '../icons';
-import { say,sayCancellableWhile,stopSpeech,isForegroundAudioActive } from '../lib/speech';
+import { say,sayCancellableWhile,stopSpeech,isForegroundAudioActive,sfx } from '../lib/speech';
 import { learningExplanation } from '../lib/learningVoice';
 import { bi } from '../lib/bi';
 import { useChoice } from './tasks/useChoice';
@@ -165,27 +165,27 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const notified=useRef(false);
  useEffect(()=>{if(ready&&!notified.current){notified.current=true;onReadyRef.current?.();}},[ready]);
  const auto=useRoundAdvance(ready,advance,guided||target.contextOnly?2400:1400,guideOpen);
- const pacing=<button className="round-pace" disabled={guideOpen} onClick={()=>{const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={auto.paused}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{auto.paused?'接着玩':'慢一点'}</span></button>;
- const fallback=audioFailed&&onSkip?<button className="learning-help" onClick={()=>{if(continued.current)return;continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
+ const pacing=<button className="round-pace" disabled={guideOpen} onClick={()=>{sfx('click');const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={auto.paused}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{auto.paused?'接着玩':'慢一点'}</span></button>;
+ const fallback=audioFailed&&onSkip?<button className="learning-help" onClick={()=>{if(continued.current)return;sfx('click');continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
  const flow=<p className="round-flow-status" role="status">{guideOpen?'帮助打开时，伙伴会等你':audioFailed?'这段声音可以稍后补听':auto.paused?'慢慢来，伙伴等着你':playing?'先听一听…':ready?'马上去下一个小发现':'听听声音，再点图片'}</p>;
  const stage=staged?' is-staged':'';
  // In a scene, what to answer sits on one white card with the question as its title; the friend and its voice stay in the scene.
  const card=(kind:string,title:string,body:React.ReactNode,tools?:React.ReactNode)=>staged?<div className="round-card"><header><div><small>{kind}</small><h2>{title}</h2></div>{tools}</header>{body}<p className="round-card-note">{feedback||(target.kind==='phrase'?'先听两句话，再选一句。':'听伙伴说，再点一点。')}</p></div>:<>{body}{tools}</>;
  if(guided)return <section className={`learning-round learning-guided${stage}`}>
   <h1>和伙伴一起听</h1><p>看看图片，听听声音。不用着急回答。</p>
-  <div className="lesson-actions round-toolbar"><button className="round-hear" onClick={hear}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
+  <div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
   {card('先听一听','认识它，不用着急回答',<div className="guided-example"><LearningArt entry={target}/><strong lang="en">{target.en}</strong><span>{target.zh}</span></div>,
-   <div className="lesson-actions"><button className="round-try" onClick={()=>{trace.current.asked=true;setGuided(false);setFeedback('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>)}
+   <div className="lesson-actions"><button className="round-try" onClick={()=>{sfx('click');trace.current.asked=true;setGuided(false);setFeedback('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>)}
   {feedback&&<p role="status">{feedback}</p>}
  </section>;
- if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button onClick={hear}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;
+ if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;
 
- return <section className={`learning-round${situation?' is-situation':''}${stage}`}><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button className="round-hear" onClick={()=>situation?hearSituation():replay()}><Icon name="speaker" size={28}/><span>{situation?'听听发生了什么':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
+ return <section className={`learning-round${situation?' is-situation':''}${stage}`}><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void (situation?hearSituation():replay());}}><Icon name="speaker" size={28}/><span>{situation?'听听发生了什么':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
   {card(situation?'这时候说什么':target.kind==='phrase'?'选一句话':'听音找一找',situation??(target.kind==='phrase'?'听一听，选出伙伴说的话':'听伙伴说，点出对的那个'),<div className={`learning-choices ${target.kind==='phrase'?'phrase-choices':''}`}>{shown.map(o=><div key={o.key}>
-   {target.kind==='phrase'&&<button className="learning-choice-audio" aria-label={`听听 ${o.en}`} onClick={()=>replay(o)}><Icon name="speaker" size={24}/><span>听这句话</span></button>}
-   <button className={`${choice.solved&&o.key===target.key?'chosen':''} ${choice.eliminated.includes(o)?'faded':''} ${explaining&&o.key===target.key?'is-explained':''}`} aria-label={`选择${o.zh}`} disabled={choice.solved||choice.shake!==null||choice.eliminated.includes(o)} onClick={()=>tap(o)}>{target.kind==='phrase'?<><LearningArt entry={o}/><strong lang="en">{o.en}</strong><small>{o.zh}</small></>:<><LearningArt entry={o}/>{explaining&&o.key===target.key&&<span className="learning-explanation-label"><strong lang="en">{o.en}</strong><small>{o.zh}</small></span>}</>}{explaining&&o.key===target.key&&<span className="learning-explanation-pointer" aria-hidden="true"><Icon name="hand" size={28}/></span>}</button>
+   {target.kind==='phrase'&&<button className="learning-choice-audio" aria-label={`听听 ${o.en}`} onClick={()=>{sfx('click');void replay(o);}}><Icon name="speaker" size={24}/><span>听这句话</span></button>}
+   <button className={`${choice.shake===o?'shake':''} ${choice.solved&&o.key===target.key?'chosen':''} ${choice.eliminated.includes(o)?'faded':''} ${explaining&&o.key===target.key?'is-explained':''}`} aria-label={`选择${o.zh}`} disabled={choice.solved||choice.shake!==null||choice.eliminated.includes(o)} onClick={()=>tap(o)}>{target.kind==='phrase'?<><LearningArt entry={o}/><strong lang="en">{o.en}</strong><small>{o.zh}</small></>:<><LearningArt entry={o}/>{explaining&&o.key===target.key&&<span className="learning-explanation-label"><strong lang="en">{o.en}</strong><small>{o.zh}</small></span>}</>}{explaining&&o.key===target.key&&<span className="learning-explanation-pointer" aria-hidden="true"><Icon name="hand" size={28}/></span>}</button>
   </div>)}</div>,
-  !choice.solved&&<button className="learning-help" onClick={explainTarget}><Icon name="hand" size={28}/><span>{explaining?'再讲一次':'帮我认识'}</span></button>)}
+  !choice.solved&&<button className="learning-help" onClick={()=>{sfx('click');explainTarget();}}><Icon name="hand" size={28}/><span>{explaining?'再讲一次':'帮我认识'}</span></button>)}
   <p className="learning-feedback" role="status">{feedback|| (target.kind==='phrase'?'先听两句话，再选一句。':'不着急，伙伴等着你。')}</p>
 
  </section>;

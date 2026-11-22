@@ -14,7 +14,7 @@ import { CreatureImg } from '../components/CreatureImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import { useGame } from '../store';
-import { say, setVoicePace, stopSpeech } from '../lib/speech';
+import { say, setVoicePace, stopSpeech, sfx } from '../lib/speech';
 import { EchoPractice, ReadAlongText, WordCard, useSpokenWord } from '../components/StoryReadAlong';
 import { storyWordEntry, storyWordVoice } from '../lib/storyWords';
 import { PIC_WORDS } from '../data/words';
@@ -140,8 +140,8 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
      <nav className="story-ending-destinations" aria-label="故事读完后去哪里">
-       <button className="btn-big story-ending-primary" onClick={()=>{pause();go({name:'home'});}}><Icon name="sign" size={32}/>回到学习路线</button>
-       <button className="btn-small story-ending-island" onClick={()=>{pause();go({name:'home'});}}><Icon name="island" size={28}/>回小岛上玩</button>
+       <button className="btn-big story-ending-primary" onClick={()=>{sfx('click');pause();go({name:'home'});}}><Icon name="sign" size={32}/>回到学习路线</button>
+       <button className="btn-small story-ending-island" onClick={()=>{sfx('click');pause();go({name:'home',view:'island'});}}><Icon name="island" size={28}/>回小岛上玩</button>
      </nav>
      <details className="quiet-disclosure"><summary>还想一起做点什么？</summary><button className="btn-small" onClick={()=>useGame.getState().saveLearningWord(story.phrase.en)}>把这句话放进手册</button><div className="story-talk"><b>和大人聊一聊</b><p>{story.question.zh}</p><span lang="en">{story.question.en}</span><button className="replay" onClick={()=>readPair(story.question)}><Icon name="speaker" size={24}/>听一听</button></div>
      <div className="story-family"><h2>今天一起试试</h2><p>{story.practice}</p><details onToggle={e=>{if(e.currentTarget.open)trackInteraction('family_tip_opened');}}><summary>给陪读大人的小提示</summary><p>{story.parentTip}</p></details></div>
@@ -161,7 +161,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <StoryReading page={page} spoken={spoken} selected={word?.index} onWord={pickWord}/>
      {word&&<WordCard word={word.word} onHear={()=>void hearWord(word.word)} onClose={()=>setWord(null)}/>}
      <EchoPractice key={`${story.id}:${idx}`} en={page.en} onStart={()=>{pause();setWord(null);}}/>
-     {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
+     {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{sfx('click');setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
      </div>
      <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · {story.themeEn}{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>
      <div className="story-options"><button aria-pressed={bilingual} onClick={()=>setBilingual(v=>!v)}>{bilingual?'中英朗读':'只听英文'}<small lang="en">{bilingual?'English + Chinese':'English audio'}</small></button></div></details>
@@ -170,9 +170,9 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
    </main>}
    </div>
    {!ended&&<div className="story-controls story-primary-controls" aria-label="阅读操作">
-       <button onClick={()=>turn(idx-1)} disabled={idx===0} aria-label="上一页 Previous page"><span aria-hidden="true">‹</span><small>上一页</small></button>
-       <button className="story-listen" onClick={status==='playing'?pause:read}><Icon name={status==='playing'?'ear':'speaker'} size={30}/><span>{status==='playing'?'暂停朗读':'再听一次'}<small lang="en">{status==='playing'?'Pause':'Listen again'}</small></span></button>
-       <button className="story-next" onClick={()=>idx+1<story.pages.length?turn(idx+1):finish()} aria-label={idx+1<story.pages.length?'下一页 Next page':'读完啦 Finish story'}><small>{idx+1<story.pages.length?'下一页':'读完啦'}</small><span aria-hidden="true">›</span></button>
+       <button onClick={()=>{sfx('click');turn(idx-1);}} disabled={idx===0} aria-label="上一页 Previous page"><span aria-hidden="true">‹</span><small>上一页</small></button>
+       <button className={`story-listen${status==='playing'?' is-speaking':''}`} onClick={()=>{sfx('click');if(status==='playing')pause();else read();}}><Icon name={status==='playing'?'ear':'speaker'} size={32}/><span>{status==='playing'?'暂停朗读':'再听一次'}<small lang="en">{status==='playing'?'Pause':'Listen again'}</small></span></button>
+       <button className="story-next" onClick={()=>{sfx('click');if(idx+1<story.pages.length)turn(idx+1);else finish();}} aria-label={idx+1<story.pages.length?'下一页 Next page':'读完啦 Finish story'}><small>{idx+1<story.pages.length?'下一页':'读完啦'}</small><span aria-hidden="true">›</span></button>
      </div>}
  </div>;
 }

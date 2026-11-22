@@ -29,7 +29,7 @@ function requireValue(ok:unknown,label:string):asserts ok {if(!ok)throw new Erro
 export function validateSave(input:unknown):SaveData {
  const value=object(input)?structuredClone(input):input;migrateCreatureIds(value);migrateCrops(value);migrateOnboarding(value);
  requireValue(object(value)&&value.version===1,'版本');const s=value;
- requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'小岛主人');
+ requireValue(s.trainer===null||(object(s.trainer)&&typeof s.trainer.name==='string'&&s.trainer.name.length<=40&&typeof s.trainer.avatar==='string'&&number(s.trainer.createdAt)),'小岛主人');
  requireValue(integer(s.energy)&&object(s.balls)&&['poke','great','ultra','master'].every(k=>integer(s.balls[k])),'能量或邀请果');
  requireValue(Array.isArray(s.captures)&&creatureIds(s.captures.map((c:any)=>c?.id)),'伙伴编号');
  for(const c of s.captures){

@@ -10,7 +10,7 @@ export function diaryPages(text:string):DiaryPage[]{
  return chunks.map(zh=>{const phrase=/谢|分享|帮助/.test(zh)?['Thank you!','谢谢你！']:/生气|难过|休息|累/.test(zh)?['I need a rest.','我需要休息一下。']:/玩|轮流|球/.test(zh)?['Your turn!','轮到你啦！']:['Hello!','你好！'];return {zh,en:phrase[0],hint:phrase[1]};});
 }
 export async function toDiaryWav(blob:Blob):Promise<Blob>{
- const Audio=window.AudioContext||(window as any).webkitAudioContext;if(!Audio)throw new Error('这个设备暂时不能转换录音，可以请大人帮忙写下来。');
+ const Audio=window.AudioContext||(window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;if(!Audio)throw new Error('这个设备暂时不能转换录音，可以请大人帮忙写下来。');
  const context=new Audio();let buffer:AudioBuffer;try{buffer=await context.decodeAudioData(await blob.arrayBuffer());}finally{await context.close();}
  if(buffer.duration>61)throw new Error('录音超过一分钟，请缩短后再试。');
  const rate=16000,length=Math.ceil(buffer.duration*rate),bytes=new ArrayBuffer(44+length*2),v=new DataView(bytes);

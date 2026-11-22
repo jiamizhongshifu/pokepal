@@ -31,6 +31,7 @@ import {ParentEvidence} from '../components/ParentEvidence';
 import {TrialSummaryCard} from '../components/TrialSummaryCard';
 import {ParentRecordings,ParentDiaries} from '../components/ParentRecordings';
 import {StorageFacts} from '../components/StorageFacts';
+import {downloadJson,exportableSave} from '../lib/saveExport';
 
 export function Parent() {
   const save = useGame((s) => s.save);
@@ -69,18 +70,17 @@ export function Parent() {
   };
 
   const exportSave = () => {
-    const blob = new Blob([JSON.stringify(save, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `pokepal-save-${d.date}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    downloadJson(exportableSave(save), `pokepal-save-${d.date}.json`);
   };
   const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     // Allow retrying the same file after a validation error.
     e.target.value = "";
     if (!f) return;
+    if (f.size > 2 * 1024 * 1024) {
+      flash("导入失败：存档文件过大（不能超过 2 MB）");
+      return;
+    }
     try {
       await importSave(JSON.parse(await f.text()) as SaveData);
       flash("已导入存档");
@@ -162,19 +162,7 @@ export function Parent() {
                 </div>
                 <span className="muted">小岛配乐随设备当地时间变化：6–9 点晨光、9–17 点白天、17–21 点傍晚、21–6 点星夜。配音时自动降低，答题、跟读和日记录音时暂停。锁屏或切到后台也会暂停。</span>
               </label><details className="parent-inner-fold"><summary>配音来源</summary><p>英文 {voiceInfo().en}，中文 {voiceInfo().zh}。统一使用火山引擎离线配音，角色使用对应音色，不切换设备系统语音。</p></details></div></details>
-<details className="parent-fold"><summary><Icon name="island" size={28}/><span>小岛环境与画面<small>天气、自然声音、镜头与画质</small></span></summary><div className="parent-fold-content"><WeatherSettings/><div className="form"><label>闲置时观察伙伴
-                <div className="seg">
-                  <button aria-label="开启闲置观察" aria-pressed={s.idleCamera!==false} className={s.idleCamera!==false?'on':''} onClick={()=>updateSettings({idleCamera:true})}>开启</button>
-                  <button aria-label="关闭闲置观察" aria-pressed={s.idleCamera===false} className={s.idleCamera===false?'on':''} onClick={()=>updateSettings({idleCamera:false})}>关闭</button>
-                </div>
-                <span className="muted">45 秒没有操作时，镜头会慢慢看看伙伴们在做什么；轻触屏幕立即交还控制。互动或学习时暂停；系统开启减少动态效果时使用固定机位，不飞行或持续追踪。</span>
-              </label><label>家园画质
-                <div className="seg">
-                  <button aria-label="流畅" aria-pressed={!s.hqLighting} className={!s.hqLighting ? "on" : ""} onClick={() => updateSettings({ hqLighting: false })}>流畅</button>
-                  <button aria-label="高画质光影" aria-pressed={s.hqLighting} className={s.hqLighting ? "on" : ""} onClick={() => updateSettings({ hqLighting: true })}>高画质光影</button>
-                </div>
-                <span className="muted">高画质会开启实时环境光遮蔽，物体之间的阴影更真实，但更耗电，建议 iPad Pro 使用；卡顿时会自动关闭。</span>
-              </label></div></div></details>
+<details className="parent-fold"><summary><Icon name="island" size={28}/><span>小岛天气与声音<small>天气、自然环境声音</small></span></summary><div className="parent-fold-content"><WeatherSettings/></div></details>
 <details className="parent-fold"><summary><Icon name="hand" size={28}/><span>操作引导<small>{save.onboarding?.automatic!==false?'首次使用主动提示':'按需点“帮助”'}</small></span></summary><div className="parent-fold-content"><GuideSettings/></div></details>
 <details className="parent-fold" onToggle={e=>setFavoritesOpen(e.currentTarget.open)}><summary><Icon name="invite-berry" size={28}/><span>偏爱的伙伴<small>已置顶 {s.favorites.length} 只 · 优先坐船来做客</small></span></summary>{favoritesOpen&&<div className="parent-fold-content"><p>只影响谁更常坐船来小岛做客，以及学习路线上陪在旁边的伙伴；不影响孩子自己选择和谁玩。</p><label className="parent-search">找一个伙伴<input type="search" value={favoriteQuery} placeholder="中文、英文或编号" onChange={e=>{setFavoriteQuery(e.target.value);setFavoriteLimit(24);}}/></label><label className="parent-fav-filter"><input type="checkbox" checked={onlyFavorites} onChange={e=>{setOnlyFavorites(e.target.checked);setFavoriteLimit(24);}}/>只看已置顶</label><div className="fav-grid">{favoriteOptions.slice(0,favoriteLimit).map(p=>{const on=s.favorites.includes(p.id);return <button key={p.id} className={`fav ${on?'on':''}`} aria-pressed={on} aria-label={`${p.nameZh}，${on?'已置顶，点击取消':'点击置顶'}`} onClick={()=>updateSettings({favorites:on?s.favorites.filter(x=>x!==p.id):[...s.favorites,p.id]})}><CreatureImg src={creatureAvatar(p.id)} alt=""/><span>{p.nameZh}</span>{on&&<small>已置顶</small>}</button>;})}</div>{!favoriteOptions.length&&<p role="status">{onlyFavorites?'没有符合条件的已置顶伙伴，可以取消筛选看看。':'没有找到，试试其他名字或编号。'}</p>}{favoriteOptions.length>favoriteLimit&&<button className="btn-small" onClick={()=>setFavoriteLimit(n=>n+24)}>再看一些（{Math.min(favoriteLimit,favoriteOptions.length)} / {favoriteOptions.length}）</button>}</div>}</details>
 <details className="parent-fold"><summary><Icon name="avatar-red" size={28}/><span>小岛主人的名字<small>{save.trainer?.name||'小岛主人'}</small></span></summary><div className="parent-fold-content form"><label>小岛主人的名字
