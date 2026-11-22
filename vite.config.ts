@@ -58,7 +58,12 @@ return {
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/(api|voice|scenes|sprites|art|icons|music|environment|__ipad|release|privacy|terms|feedback)/],
-        runtimeCaching: [{urlPattern:/\/environment\/[a-z-]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-nature-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:6,maxAgeSeconds:365*24*60*60}}},{urlPattern:/\/music\/[a-z]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-music-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:8,maxAgeSeconds:365*24*60*60}}}],
+        runtimeCaching: [
+          {urlPattern:/\/scenes\/flat-v1\/.*\.(?:webp|png)$/,handler:'StaleWhileRevalidate',options:{cacheName:'pokepal-scenes-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:280,maxAgeSeconds:30*24*60*60}}},
+          {urlPattern:/\/sprites\/.*\.(?:webp|png)$/,handler:'StaleWhileRevalidate',options:{cacheName:'pokepal-sprites-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:300,maxAgeSeconds:30*24*60*60}}},
+          {urlPattern:/\/environment\/[a-z-]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-nature-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:6,maxAgeSeconds:365*24*60*60}}},
+          {urlPattern:/\/music\/[a-z]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-music-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:8,maxAgeSeconds:365*24*60*60}}}
+        ],
         cleanupOutdatedCaches: true
       } : {
         cacheId: "pokepal-core-v2",

@@ -6,8 +6,10 @@ const target=resolve(process.env.ONLINE_STAGE || `.build/online-${Date.now()}`);
 await mkdir(target,{recursive:true});
 await cp(resolve('public/_routes.json'),resolve(target,'_routes.json'));
 const hash=b=>createHash('sha256').update(b).digest('hex').slice(0,24);
-// Only runtime media is admitted. Never copy public/voice wholesale or local server/config files.
-for(const dir of ['art/contact','icons','scenes','sprites','music','environment'])await cp(resolve('public',dir),resolve(target,dir),{recursive:true});
+// Only runtime media is admitted. Never copy public/voice wholesale, legacy PNG icon sets, or local server/config files.
+for(const dir of ['art/contact','scenes','sprites','music','environment'])await cp(resolve('public',dir),resolve(target,dir),{recursive:true});
+await mkdir(resolve(target,'icons'),{recursive:true});
+for(const icon of ['icon-192.png','icon-512.png'])await cp(resolve('public/icons',icon),resolve(target,'icons',icon));
 const manifest=JSON.parse(await readFile('public/voice/manifest.json','utf8'));
 const groups=new Map(),entries={};
 for(const file of [...new Set(Object.values(manifest))].sort()){

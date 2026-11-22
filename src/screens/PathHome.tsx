@@ -57,6 +57,14 @@ export function PathHome() {
   if (!v || v.scrollWidth <= v.clientWidth) return;
   if (here.current) here.current.scrollIntoView({ inline: 'center', block: 'nearest' }); else v.scrollLeft = (v.scrollWidth - v.clientWidth) / 2;
  }, [page]);
+ // Warm adjacent chapter paintings in the background so turning pages feels instant.
+ useEffect(() => {
+  const urls = [page - 1, page + 1].filter(i => i >= 0 && i < path.length).map(i => pathArt(path[i].index));
+  const timer = setTimeout(() => {
+   for (const url of urls) { const img = new Image(); img.decoding = 'async'; img.src = url; }
+  }, 400);
+  return () => clearTimeout(timer);
+ }, [page, path]);
  useEffect(() => () => stopSpeech(), []);
 
  // Today's bubble: a lesson says what it is about; a review says the old words it brings back.
@@ -92,7 +100,7 @@ export function PathHome() {
   <div className="path-view" ref={view}>
    <img className="scene-backdrop" src={pathArt(chapter.index)} alt="" aria-hidden="true" draggable={false} />
    <section className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
-    <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} />
+    <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} decoding="async" {...{fetchpriority:'high'}} />
     {chapter.nodes.map((node, i) => {
      const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;

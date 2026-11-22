@@ -8,9 +8,9 @@ import { CreatureImg } from './CreatureImg';
 import './story-stage.css';
 
 const places:Record<Story['scene'],string>={orchard:'苹果树下',playground:'小小游乐场',beach:'柔软的沙滩',meadow:'花儿小路',garden:'朋友的小花园'};
-function Prop({item,castle,pot}:{item:SceneItem;castle?:string;pot?:string}){
+function Prop({item,castle,pot,cover}:{item:SceneItem;castle?:string;pot?:string;cover?:boolean}){
  const asset=item.kind==='castle'?`castle-${castle??'tall'}`:item.kind==='pot'?`pot-${pot??'upright'}`:item.kind;
- return <img className="theatre-painted-prop" src={storyProp(asset)} alt="" draggable={false}/>;
+ return <img className="theatre-painted-prop" src={storyProp(asset)} alt="" draggable={false} decoding="async" loading={cover?'lazy':undefined}/>;
 }
 
 /** Generated scenery and transparent props, composed with existing character art. */
@@ -44,13 +44,13 @@ export function StoryStage({story,page,cover=false,onWord}:{story:Story;page:Sto
  return <div ref={element} className={`story-stage story-theatre scene-${story.scene} mood-${scene.mood??'day'} ${cover?'cover-scene':''} ${visible&&active?'':'scene-offscreen'}`} data-story={story.id} data-page={index+1}>
   <div key={`${index}-${replay}`} className="theatre-picture" role="img" aria-label={scene.description}>
    <div className="theatre-backdrop" aria-hidden="true">
-    <img className="theatre-painted-background" src={storyBackground(background)} alt="" draggable={false}/>
+    <img className="theatre-painted-background" src={storyBackground(background)} alt="" draggable={false} decoding="async" loading={cover?'lazy':undefined}/>
    </div>
    {scene.actors.map((actor,i)=><div key={i} className="theatre-actor" aria-hidden="true" style={{left:`${actor.x}%`,bottom:`${actor.y}%`,width:`${actor.size}%`,'--from-x':`${((actor.fromX??actor.x)-actor.x)/actor.size*100}%`,'--lean':`${actor.lean??0}deg`} as CSSProperties}>
     <span className="actor-shadow"/>
-    <div className={`theatre-actor-art move-${actor.motion??'none'}`}><CreatureImg src={creatureArt(story.cast[i])} alt=""/></div>
+    <div className={`theatre-actor-art move-${actor.motion??'none'}`}><CreatureImg src={creatureArt(story.cast[i])} alt="" loading={cover?'lazy':undefined}/></div>
    </div>)}
-   {scene.items.map((item,i)=><div key={i} className={`theatre-item item-${item.kind}`} aria-hidden="true" style={{left:`${item.x}%`,bottom:`${item.y}%`,width:`${item.size}%`,'--from-x':`${((item.fromX??item.x)-item.x)/item.size*100}%`,'--prop-turn':`${item.rotate??0}deg`} as CSSProperties}><div className={`theatre-item-art move-${item.motion??'none'}`}><Prop item={item} castle={scene.castle} pot={scene.pot}/></div></div>)}
+   {scene.items.map((item,i)=><div key={i} className={`theatre-item item-${item.kind}`} aria-hidden="true" style={{left:`${item.x}%`,bottom:`${item.y}%`,width:`${item.size}%`,'--from-x':`${((item.fromX??item.x)-item.x)/item.size*100}%`,'--prop-turn':`${item.rotate??0}deg`} as CSSProperties}><div className={`theatre-item-art move-${item.motion??'none'}`}><Prop item={item} castle={scene.castle} pot={scene.pot} cover={cover}/></div></div>)}
   </div>
   {!cover&&onWord&&wordItem&&page.pictureWord&&<button className="theatre-word" style={{"--word-anchor-x":`${Math.min(84,Math.max(16,wordItem.x))}%`,bottom:`${Math.min(70,Math.max(18,wordItem.y+wordItem.size))}%`} as React.CSSProperties} aria-label={`听听 ${page.pictureWord.en}`} onClick={()=>onWord(page.pictureWord!)}><Icon name="speaker" size={24}/><span>{page.pictureWord.en}</span></button>}
   {!cover&&<span className="theatre-place">{places[story.scene]}</span>}

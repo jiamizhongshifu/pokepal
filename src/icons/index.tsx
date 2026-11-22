@@ -7,26 +7,34 @@ export { AVATARS } from "./avatars";
 export const ICONS = ICON_ASSETS;
 export type IconName = keyof typeof ICONS;
 
+const loadedIcons = new Set<string>();
+
 /** Square icon picture. While it loads it shows a soft placeholder; if it fails it retries once, then falls back to a neutral face, so a slot is never blank or the wrong character. */
 export function Icon({ name, size = 48, className = "", style, label }: { name: string; size?: number | string; className?: string; style?: CSSProperties; label?: string }) {
   const wanted = ICONS[name] ?? ICONS.star;
-  const [state, setState] = useState<{ src: string; tries: number; loaded: boolean }>({ src: wanted, tries: 0, loaded: false });
-  const current = state.src.startsWith(wanted) || state.src === ICONS.face ? state : { src: wanted, tries: 0, loaded: false };
+  const [state, setState] = useState<{ src: string; tries: number; loaded: boolean }>(() => ({ src: wanted, tries: 0, loaded: loadedIcons.has(wanted) }));
+  const current = state.src.startsWith(wanted) || state.src === ICONS.face ? state : { src: wanted, tries: 0, loaded: loadedIcons.has(wanted) };
   const ref = useRef<HTMLImageElement>(null);
-  useEffect(() => { if (ref.current?.complete && ref.current.naturalWidth) setState(s => s.loaded ? s : { ...s, loaded: true }); }, [current.src]);
-  const failed = () => setState(s => s.tries < 1 ? { src: `${wanted}?retry=1`, tries: 1, loaded: false } : { src: ICONS.face, tries: 2, loaded: false });
+  useEffect(() => {
+    if (ref.current?.complete && ref.current.naturalWidth) {
+      loadedIcons.add(current.src);
+      setState(s => s.loaded ? s : { ...s, loaded: true });
+    }
+  }, [current.src]);
+  const failed = () => setState(s => s.tries < 1 ? { src: `${wanted}?retry=1`, tries: 1, loaded: false } : { src: ICONS.face, tries: 2, loaded: loadedIcons.has(ICONS.face) });
   return (
     <img
       ref={ref}
       src={current.src}
       width={size}
       height={size}
+      decoding="async"
       className={`icon ${current.loaded ? "" : "is-loading "}${className}`}
       style={style}
       alt={label ?? ""}
       aria-hidden={label ? undefined : true}
       draggable={false}
-      onLoad={() => setState(s => ({ ...s, loaded: true }))}
+      onLoad={() => { loadedIcons.add(current.src); setState(s => s.loaded ? s : { ...s, loaded: true }); }}
       onError={failed}
     />
   );

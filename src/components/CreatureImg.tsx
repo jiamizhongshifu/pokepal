@@ -28,5 +28,5 @@ export function CreatureImg({ src, className, alt = "", ...rest }: ImgHTMLAttrib
       </span>
     );
   }
-  return <img {...rest} className={className} src={url} alt={alt} onError={() => setFailed(true)} />;
+  return <img decoding="async" {...rest} className={className} src={url} alt={alt} onError={() => setFailed(true)} />;
 }
