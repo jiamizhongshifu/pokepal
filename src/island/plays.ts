@@ -2,30 +2,40 @@ import { LEARNING_UNITS } from '../data/curriculum';
 import { wordAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { SaveData } from '../types';
 import { HOMES, placeById } from './world';
-import { unlockedDistricts } from '../lib/islandPlan';
+import { unlockedDistricts, islandTask, type IslandTask } from '../lib/islandPlan';
+import { reviewKeys } from '../lib/learningProgress';
+import { learningProfile } from '../lib/learningStage';
+import { learningEntry } from '../data/curriculum';
 
 /**
  * What can be done at each island place, built from what the companions are like and what the path teaches.
- * Every activity is three rounds of "the friend says one learned word or sentence, the child taps its picture";
- * the pictures come only from the activity's own set, and the activity appears once two of them are learned.
+ * Every activity is three rounds in which the friend says one learned word or sentence and the child acts on it;
+ * the things come only from the activity's own set, and the activity appears once two of them are learned.
+ *
+ * `kind` is how the child acts, so the same words are met through different actions:
+ * - `do`: hand the named thing over (to the friend, or `to` a place such as the toy box);
+ * - `find`: spot the named thing among several scattered in the scene;
+ * - `sort`: tap the named colour and it fills the next of the `slots` (lamps, boats);
+ * - `say`: recognise a sentence from its picture.
  */
-export interface Play { id: string; place: string; title: string; pool: string[]; result: string; icon: string }
+export type PlayKind = 'do' | 'find' | 'sort' | 'say';
+export interface Play { id: string; kind: PlayKind; place: string; title: string; pool: string[]; result: string; icon: string; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat' }
 export const PLAYS: Play[] = [
- { id: 'greet', place: 'tent', title: '在帐篷门口打招呼', pool: ['Hello!', 'Good night!', 'Bye-bye!'], result: '伙伴挥挥手，开心地进帐篷啦', icon: 'tent' },
- { id: 'tidy', place: 'tent', title: '收拾小营地', pool: ['ball', 'book', 'hat'], result: '玩具都收好啦，营地干干净净', icon: 'check' },
- { id: 'goodnight', place: 'tent', title: '准备睡觉', pool: ['sun', 'moon', 'star'], result: '天空变成晚上啦，伙伴睡得香香的', icon: 'moon' },
- { id: 'meal', place: 'fire', title: '开饭啦', pool: ['apple', 'banana', 'milk', 'cake', 'egg', 'cookie', 'water', 'strawberry', 'grapes', 'watermelon'], result: '伙伴吃饱啦，谢谢你', icon: 'heart' },
- { id: 'colors', place: 'tree', title: '在果园找颜色', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '果子掉进篮子里啦', icon: 'apple' },
- { id: 'flowers', place: 'farm', title: '照顾小花', pool: ['water', 'flower', 'tree', 'green'], result: '小花开啦', icon: 'flower' },
- { id: 'feelings', place: 'bench', title: '说说心情', pool: ["I'm happy!", 'I feel sad.', 'I need a rest.', 'I feel angry.'], result: '你听懂了伙伴的心情，它觉得好多啦', icon: 'heart' },
- { id: 'company', place: 'parasol', title: '陪我坐一会', pool: ['book', 'tree', 'flower', 'cloud'], result: '我们一起安安静静地坐了一会', icon: 'sun' },
- { id: 'stage', place: 'music', title: '舞台点彩灯', pool: ['purple', 'orange', 'pink', 'blue', 'red', 'yellow', 'green'], result: '彩灯亮啦，伙伴跳起舞来', icon: 'music' },
- { id: 'dig', place: 'sand', title: '在沙坑找宝贝', pool: ['turtle', 'fish', 'bird', 'ball'], result: '宝贝都挖出来啦', icon: 'shovel' },
- { id: 'join', place: 'ball', title: '邀请朋友一起玩', pool: ['balloon', 'hat', 'ball'], result: '新朋友加入，一起玩啦', icon: 'balloon' },
- { id: 'sea', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search' },
- { id: 'sky', place: 'windmill', title: '看看天上有什么', pool: ['sun', 'cloud', 'rainbow', 'bird', 'balloon', 'star'], result: '风车转呀转，天上真热闹', icon: 'wind' },
- { id: 'boats', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
- { id: 'nap', place: 'hammock', title: '吊床午睡', pool: ['I need a rest.', 'Good night!', 'Stay with me, please.', 'I feel sad.'], result: '伙伴在吊床上安心地睡着啦', icon: 'moon' },
+ { id: 'greet', kind: 'say', place: 'tent', title: '在帐篷门口打招呼', pool: ['Hello!', 'Good night!', 'Bye-bye!'], result: '伙伴挥挥手，开心地进帐篷啦', icon: 'tent' },
+ { id: 'tidy', kind: 'do', to: { icon: 'tent', label: '玩具箱' }, place: 'tent', title: '收拾小营地', pool: ['ball', 'book', 'hat'], result: '玩具都收好啦，营地干干净净', icon: 'check' },
+ { id: 'goodnight', kind: 'do', to: { icon: 'cloud', label: '天上' }, place: 'tent', title: '准备睡觉', pool: ['sun', 'moon', 'star'], result: '天空变成晚上啦，伙伴睡得香香的', icon: 'moon' },
+ { id: 'meal', kind: 'do', place: 'fire', title: '开饭啦', pool: ['apple', 'banana', 'milk', 'cake', 'egg', 'cookie', 'water', 'strawberry', 'grapes', 'watermelon'], result: '伙伴吃饱啦，谢谢你', icon: 'heart' },
+ { id: 'colors', kind: 'find', place: 'tree', title: '在果园找颜色', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '果子掉进篮子里啦', icon: 'apple' },
+ { id: 'flowers', kind: 'do', to: { icon: 'flower', label: '小花园' }, place: 'farm', title: '照顾小花', pool: ['water', 'flower', 'tree', 'green'], result: '小花开啦', icon: 'flower' },
+ { id: 'feelings', kind: 'say', place: 'bench', title: '说说心情', pool: ["I'm happy!", 'I feel sad.', 'I need a rest.', 'I feel angry.'], result: '你听懂了伙伴的心情，它觉得好多啦', icon: 'heart' },
+ { id: 'company', kind: 'do', place: 'parasol', title: '陪我坐一会', pool: ['book', 'tree', 'flower', 'cloud'], result: '我们一起安安静静地坐了一会', icon: 'sun' },
+ { id: 'stage', kind: 'sort', slots: 'lamp', place: 'music', title: '舞台点彩灯', pool: ['purple', 'orange', 'pink', 'blue', 'red', 'yellow', 'green'], result: '彩灯亮啦，伙伴跳起舞来', icon: 'music' },
+ { id: 'dig', kind: 'find', place: 'sand', title: '在沙坑找宝贝', pool: ['turtle', 'fish', 'bird', 'ball'], result: '宝贝都挖出来啦', icon: 'shovel' },
+ { id: 'join', kind: 'do', place: 'ball', title: '邀请朋友一起玩', pool: ['balloon', 'hat', 'ball'], result: '新朋友加入，一起玩啦', icon: 'balloon' },
+ { id: 'sea', kind: 'find', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search' },
+ { id: 'sky', kind: 'find', place: 'windmill', title: '看看天上有什么', pool: ['sun', 'cloud', 'rainbow', 'bird', 'balloon', 'star'], result: '风车转呀转，天上真热闹', icon: 'wind' },
+ { id: 'boats', kind: 'sort', slots: 'boat', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
+ { id: 'nap', kind: 'say', place: 'hammock', title: '吊床午睡', pool: ['I need a rest.', 'Good night!', 'Stay with me, please.', 'I feel sad.'], result: '伙伴在吊床上安心地睡着啦', icon: 'moon' },
 ];
 export const ROUNDS = 3;
 
@@ -49,13 +59,46 @@ export function playUnlockUnit(play: Play) {
  return undefined;
 }
 
+/** How many things a round shows: fewer for a child who is still mostly listening; a scene to search holds more. */
+export function playChoices(s: SaveData, play: Play) {
+ const few = learningProfile(s.settings).entry === 'listen';
+ return play.kind === 'find' ? (few ? 3 : 5) : few ? 2 : 3;
+}
+/**
+ * What one session asks for, in order: items due for review first (the island is where learned words come back),
+ * then the rest in a per-session shuffle. Fixed for the session, so answering one never brings it straight back.
+ */
+export function playOrder(s: SaveData, play: Play, session: string, now = Date.now()): string[] {
+ const items = learnedFrom(s, play), base = seedOf(`${play.id}-${session}`);
+ const due = reviewKeys(s, 'due', now), rank = (k: string) => { const i = due.indexOf(learningEntry(k)?.key ?? k); return i < 0 ? due.length : i; };
+ return [...items].sort((a, b) => rank(a) - rank(b) || seedOf(`${base}${a}`) - seedOf(`${base}${b}`));
+}
 /** Round `round` of one session: each round asks for a different learned item when there are enough. */
-export function playAsk(s: SaveData, play: Play, session: string, round: number): IslandAsk | undefined {
+export function playAsk(s: SaveData, play: Play, session: string, round: number, order = playOrder(s, play, session)): IslandAsk | undefined {
  const items = learnedFrom(s, play);
- if (items.length < 2) return undefined;
+ if (items.length < 2 || !order.length) return undefined;
  const base = seedOf(`${play.id}-${session}`);
- const order = [...items].sort((a, b) => seedOf(`${base}${a}`) - seedOf(`${base}${b}`));
- return wordAsk(play.id, order[round % order.length], items, base + round, Math.min(3, items.length));
+ return wordAsk(play.id, order[round % order.length], items, base + round, Math.min(playChoices(s, play), items.length));
+}
+
+/** The open activity with the most learned items waiting for review, so the island can invite the child back to it. */
+export function duePlay(s: SaveData, now = Date.now()): { play: Play; keys: string[] } | undefined {
+ const due = new Set(reviewKeys(s, 'due', now));
+ if (!due.size) return undefined;
+ const open = unlockedDistricts(s);
+ return PLAYS.filter(p => open.has(placeById(p.place)!.district) && playOpenFor(s, p))
+  .map(play => ({ play, keys: learnedFrom(s, play).filter(k => due.has(learningEntry(k)?.key ?? k)) }))
+  .filter(x => x.keys.length).sort((a, b) => b.keys.length - a.keys.length)[0];
+}
+/**
+ * The one thing the island suggests: the path's island stop first; then a place where learned words are due to be
+ * met again; then a lesson not yet used on the island; otherwise back to the path.
+ */
+export function islandToday(s: SaveData, now = Date.now()): IslandTask {
+ const task = islandTask(s);
+ if (task.kind === 'path') return task;
+ const due = duePlay(s, now), entry = due && learningEntry(due.keys[0]);
+ return due && entry ? { kind: 'due', station: due.play.place, play: due.play.id, title: due.play.title, phrase: entry } : task;
 }
 
 /**

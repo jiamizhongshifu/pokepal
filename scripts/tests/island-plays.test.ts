@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
 import {LEARNING_UNITS,unitRoundCount,learningEntry} from '../../src/data/curriculum';
-import {progressUnit} from '../../src/lib/learningProgress';
-import {PLAYS,ROUNDS,playAsk,playsAt,playUnlockUnit,learnedFrom,wishFor,finishPlay,wishDone} from '../../src/island/plays';
+import {progressUnit,attempt} from '../../src/lib/learningProgress';
+import {stageProfile} from '../../src/lib/learningStage';
+import {islandTask} from '../../src/lib/islandPlan';
+import {PLAYS,ROUNDS,playAsk,playsAt,playUnlockUnit,learnedFrom,wishFor,finishPlay,wishDone,playOrder,playChoices,duePlay,islandToday,playById} from '../../src/island/plays';
 import {placeById,HOMES} from '../../src/island/world';
 import {validateSave} from '../../src/lib/saveValidation';
 import {CREATURES} from '../../src/data/creatures';
@@ -90,4 +92,58 @@ test('extra practice uses learned words and phrases once three are learned; the 
  assert.ok(practiceWordPool(s).every(w=>words.has(w.en)),'pictures to choose from: learned words only');
  learn(s,3);const phrases=new Set(pathLearned(s).phrases.map(p=>p.en));
  assert.equal(phrases.size,3);assert.ok(dailyLearningPlan(s,true).phrases.every(p=>phrases.has(p.en)));
+});
+
+const DAY=86400000,NOW=Date.UTC(2026,10,22,10);
+/** Every learned item was met and answered at `at`, so nothing is due until a day later. */
+const meet=(s:SaveData,keys:string[],at:number)=>{for(const k of keys)attempt(s,k,true,false,'lesson',at);};
+
+test('the same words are met through different actions: hand over, find, choose a colour, recognise a sentence',()=>{
+ const kinds=new Set(PLAYS.map(p=>p.kind));
+ for(const k of ['do','find','sort','say'] as const)assert.ok(kinds.has(k),k);
+ for(const p of PLAYS.filter(p=>p.kind==='sort')){assert.ok(p.slots,p.id);for(const k of p.pool)assert.ok(learningEntry(k)!.css,`${p.id}: ${k} is a colour`);}
+ for(const p of PLAYS.filter(p=>p.kind==='say'))for(const k of p.pool)assert.equal(learningEntry(k)!.kind,'phrase',`${p.id}: ${k}`);
+});
+
+test('a session asks first for what is due for review, keeps its order, and never repeats within three rounds',()=>{
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];s.learning!.records={};
+ learn(s,4);const tidy=playById('tidy')!;
+ meet(s,['ball','book','hat'],NOW);
+ s.learning!.records['hat'].nextReview=NOW-DAY;
+ assert.equal(playOrder(s,tidy,'a',NOW)[0],'hat');assert.equal(playOrder(s,tidy,'b',NOW)[0],'hat');
+ const order=playOrder(s,tidy,'a',NOW);
+ assert.deepEqual([...order].sort(),['ball','book','hat']);
+ // Answering the due item must not reshuffle the session: the stored order is what the rounds follow.
+ attempt(s,'hat',true,false,'island:tidy',NOW);
+ const asked=[0,1,2].map(r=>playAsk(s,tidy,'a',r,order)!.prompt.key);
+ assert.deepEqual(asked,order);assert.equal(new Set(asked).size,3);
+});
+
+test('a child who is mostly listening sees fewer things; a scene to search holds more',()=>{
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];learn(s,24);
+ const tidy=playById('tidy')!,sky=playById('sky')!;
+ s.settings.learningProfile=stageProfile('express');
+ assert.equal(playChoices(s,tidy),3);assert.equal(playChoices(s,sky),5);
+ assert.equal(playAsk(s,sky,'x',0)!.options.length,5);
+ s.settings.learningProfile=stageProfile('listen');
+ assert.equal(playAsk(s,tidy,'x',0)!.options.length,2);assert.equal(playAsk(s,sky,'x',0)!.options.length,3);
+ for(const a of [playAsk(s,tidy,'x',0)!,playAsk(s,sky,'x',0)!])assert.ok(a.options.some(o=>o.id===a.answer));
+});
+
+test('the island invites the child to the place where learned words are due, after the path stop and before a revisit',()=>{
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];s.learning!.records={};
+ learn(s,4);
+ const learned=LEARNING_UNITS.slice(0,4).flatMap(u=>[...u.words,u.phrase]);
+ meet(s,learned,NOW);
+ assert.equal(duePlay(s,NOW),undefined,'nothing is due on the day it was answered');
+ assert.deepEqual(islandToday(s,NOW),islandTask(s));
+ for(const k of ['sun','moon'])s.learning!.records[k].nextReview=NOW-DAY;
+ const due=duePlay(s,NOW)!;
+ assert.equal(due.play.id,'goodnight');assert.deepEqual([...due.keys].sort(),['moon','sun']);
+ const today=islandToday(s,NOW);
+ if(islandTask(s).kind==='path')assert.equal(today.kind,'path');
+ else{assert.equal(today.kind,'due');if(today.kind==='due'){assert.equal(today.station,'tent');assert.equal(today.play,'goodnight');assert.ok(['sun','moon'].includes(today.phrase.key));}}
+ // A place whose area the path has not opened yet is never suggested.
+ for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];
+ assert.equal(duePlay(s,NOW),undefined);
 });

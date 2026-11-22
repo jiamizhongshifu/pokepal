@@ -37,13 +37,13 @@ import { useIslandLife } from "../lib/useIslandLife";
 import { placeOf, placesIn, DISTRICTS, type Effect } from "../island/world";
 import { IslandTaskCard } from '../components/IslandTaskCard';
 import { learningVoice } from '../lib/learningVoice';
-import { islandTask, nextDistrict, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
+import { nextDistrict, unlockedDistricts, unlockingUnit, districtName, stationDistrict, playOpen, learnedPhrase, learnedPlayLine, type PLAY_DISTRICT } from '../lib/islandPlan';
 import type { District } from '../island/world';
 import { picnicAsk, picnicFruits, plantAsk, feedAsk, firstFruitUnit, seedOf, type IslandAsk } from '../lib/islandAsk';
 import { IslandAskRound } from '../components/IslandAskRound';
 import { IslandPlaySession } from '../components/IslandPlaySession';
 import { shownStickers } from '../island/stickers';
-import { playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
+import { islandToday, playsAt, wishFor, wishDone, nextWish, readyToGrow, playedTogether, togetherHearts, GROW_AT, type Play } from '../island/plays';
 
 
 // 3D 场景单独分包，首页和任务页不用等 Three.js 加载
@@ -536,7 +536,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
       {active&&livingOpen&&<IslandLivingPanel save={save} together={together} initialId={livingInitialId} initialTab={livingTab} onBegin={beginTogether}
         onClose={()=>{setLivingOpen(false);together.cancel();life.cancel();stopSpeech();}}
         onPicnic={id=>openPicnic(id)}/>}
-      {hint==='task'&&<IslandTaskCard task={islandTask(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandTask(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
+      {hint==='task'&&<IslandTaskCard task={islandToday(save)} onGo={inviteStation} onRoute={()=>{stopSpeech();go({name:'home'});}} onHear={()=>{const t=islandToday(useGame.getState().save);if(t.kind!=='route')void say(...learningVoice(t.phrase));}}/>}
       {lockNote&&<p className="island-lock-note" role="status" onClick={()=>setLockNote('')}><Icon name="lock" size={24}/>{lockNote}</p>}
       {hint==='care' && need && <aside className="care-request" aria-label="伙伴的小心愿">
         <button className="care-open" onClick={()=>startWish(need.id,need.play)}><CreatureImg src={creatureArt(need.id)} alt=""/><span><strong>{getCreature(need.id).nameZh}想{need.play.title}</strong><small>点一下，陪它去{placeOf(need.play.place).name}</small></span><Icon name={need.play.icon} size={32}/></button>
@@ -563,7 +563,7 @@ export function Home({initialStation,initialCompanion,active=true}:{initialStati
           <span>{life.timedOut?'这条路有点挤，可以换个伙伴，或先回小岛。':life.manual ? life.active.some(v=>v.manual)?'你也来看看它的发现吧！':'伙伴正在走过来，等一等哦' : captures.length ? '点一下，请伙伴过来':'先去认识新朋友'}</span></div>
         {lesson && life.active.some(v=>v.manual) && <button className="facility-lesson" onClick={readLesson}><Icon name="speaker" size={28}/><span><b lang="en">{lesson.en}</b><small>{lesson.zh}</small></span></button>}
         {courseVisit&&<button className="facility-learning-link" onClick={()=>go({name:'home'})}>{save.learning?.units[learningUnit.id]?.encounteredAt?'到过对应场景啦':'回学习路线'}</button>}
-        {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId);return <button key={p.id} className={wish?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish&&<small>（它的小心愿）</small>}</button>;})}</div>}
+        {life.manual&&life.active.some(v=>v.manual)&&playsAt(save,station.id).length>0&&<div className="facility-plays">{playsAt(save,station.id).map(p=>{const wish=wishFor(save,getCreature(life.manual!.pokemonId).species)?.id===p.id&&!wishDone(save,save.daily.date,life.manual!.pokemonId),today=islandToday(save),due=today.kind==='due'&&today.play===p.id;return <button key={p.id} className={wish||due?'is-wish':undefined} onClick={()=>{stopSpeech();setPlacePlay(p);}}><Icon name={wish?'heart':p.icon} size={26}/>{p.title}{wish?<small>（它的小心愿）</small>:due&&<small>（今天来这里）</small>}</button>;})}</div>}
         {station.id==='ball'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openLiving();}}><Icon name="ball" size={28}/>一起玩球</button>}
         {station.id==='farm'&&<button className="facility-next" onClick={()=>{closePanel('facility');setStationId(null);life.cancel();openFarm();}}><Icon name="grass" size={28}/>去菜地种水果</button>}
         {captures.length>1 ? <button className="facility-next" onClick={()=>inviteStation(station.id,true)}><Icon name="refresh" size={28}/>换个伙伴</button> : !life.manual ? <button className="facility-next" onClick={()=>go({name:'catch'})}><Icon name="grass" size={28}/>去找伙伴</button> : null}

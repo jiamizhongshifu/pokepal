@@ -57,6 +57,8 @@ export function learnedPhrases(s: SaveData, district?: District): LearningEntry[
 export type IslandTask =
  | { kind: 'path'; unit: LearningUnit; station: string; phrase: LearningEntry }
  | { kind: 'revisit'; unit: LearningUnit; station: string; phrase: LearningEntry }
+ /** A place where learned words are due to come back; `phrase` is the first of them, `play` the activity there. */
+ | { kind: 'due'; station: string; play: string; title: string; phrase: LearningEntry }
  | { kind: 'route'; title: string };
 /**
  * One thing to do on the island. The path's island stop comes first; otherwise a lesson learned but not yet used on
