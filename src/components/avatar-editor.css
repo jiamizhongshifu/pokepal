@@ -17,7 +17,7 @@
 .avatar-presets { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
 .avatar-presets button { display:grid; place-items:center; min-width:44px; height:60px; padding:2px; border:2px solid transparent; border-radius:var(--radius-md); background:var(--brand-primary-soft); }
 .avatar-presets button[aria-pressed=true] { border-color:var(--brand-primary-deep); background:var(--brand-primary-soft); }
-.avatar-save { width:100%; min-height:52px; border:0; border-radius:var(--radius-md); margin-top:18px; background:var(--brand-primary-deep); color:var(--brand-sun-ink); font-size:var(--text-xl); font-weight:800; }
+.avatar-save { width:100%; min-height:54px; border:0; border-radius:var(--radius-md); margin-top:18px; background:var(--brand-primary); color:#fff; box-shadow:0 4px 0 var(--brand-primary-deep); font-size:var(--text-xl); font-weight:800; }
 .avatar-editor button:focus-visible { outline:3px solid var(--brand-streak); outline-offset:2px; }
 .avatar-editor button:disabled { opacity:.55; }
 .avatar-editor .avatar-error { color:var(--brand-danger-deep); font-size:var(--text-base); line-height:1.5; }

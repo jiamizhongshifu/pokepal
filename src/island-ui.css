@@ -6,7 +6,7 @@
 /* One gentle invitation at a time; never covers the island's main controls. */
 
 /* Orchard cards share the island's warm paper, sage wood and rounded touch targets. */
-.farm-primary{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;width:100%;border:0;border-radius:var(--radius-md);background:var(--brand-primary-deep);color:var(--brand-sun-ink);font-size:var(--text-lg);font-weight:750;box-shadow:0 3px 0 var(--brand-primary-deep);cursor:pointer}.farm-primary.harvest{background:var(--brand-sun);color:var(--brand-ink);box-shadow:0 3px 0 var(--brand-streak)}.farm-primary:disabled{background:var(--brand-primary-soft);color:var(--brand-ink);box-shadow:none;cursor:default}
+.farm-primary{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;width:100%;border:0;border-radius:var(--radius-md);background:var(--brand-primary);color:#fff;font-size:var(--text-lg);font-weight:750;box-shadow:0 3px 0 var(--brand-primary-deep);cursor:pointer}.farm-primary.harvest{background:var(--brand-sun);color:var(--brand-ink);box-shadow:0 3px 0 var(--brand-streak)}.farm-primary:disabled{background:var(--brand-primary-soft);color:var(--brand-ink);box-shadow:none;cursor:default}
 @media(prefers-reduced-motion:no-preference){.farm-primary.harvest .icon{animation:orchard-ready 2.5s ease-in-out infinite}@keyframes orchard-ready{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}}
 
 /* A quiet camera status, outside the lower-right controls and left companion request. */

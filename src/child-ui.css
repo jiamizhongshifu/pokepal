@@ -366,7 +366,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .trace-steps { display:flex;align-items:center;justify-content:center;gap:8px;min-height:32px;flex-wrap:wrap; }
 .trace-steps>span:not(.trace-steps-label) { width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--brand-primary-soft);color:var(--brand-ink);font-size:var(--text-base);font-weight:800; }
 .trace-steps>span.current { background:var(--brand-sun);color:var(--brand-ink); }
-.trace-steps>span.done { background:var(--brand-primary-deep);color:var(--brand-sun-ink); }
+.trace-steps>span.done { background:var(--brand-primary);color:#fff; }
 .trace-steps-label { font-size:var(--text-base);color:var(--text);font-weight:700; }
 .trace-steps button { min-height:44px;padding:6px 14px;border-radius:var(--radius-sm);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--brand-ink);font:inherit;font-weight:800; }
 .trace-status { min-height:24px;max-width:420px;text-align:center;font-size:var(--text-base);color:var(--text); }

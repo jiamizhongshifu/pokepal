@@ -4,7 +4,7 @@ import { useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
 import { COLORS, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, getCreature, hobby, kidDescription } from "../data/creatures";
 import { INVITE_KINDS } from "../data/invites";
-import { say, playCry, stopSpeech } from "../lib/speech";
+import { say, playCry, stopSpeech, sfx } from "../lib/speech";
 import { InviteBerry } from "../components/InviteBerry";
 import { Icon, Hearts } from "../icons";
 import { homeOf } from "../island/world";
@@ -49,7 +49,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
-            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>go({name:"home",companion:p.id})}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>有邀请果时，它会坐船来做客。<small lang="en">Bring an invite berry.</small></p></>}
+            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>{sfx("click");go({name:"home",companion:p.id});}}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{sfx("click");setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>有邀请果时，它会坐船来做客。<small lang="en">Bring an invite berry.</small></p></>}
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">

@@ -4,7 +4,7 @@ import { dexOwned, useGame, type DexBrowseState } from "../store";
 import { TopBar } from "../components/TopBar";
 import { BottomNav } from "../components/BottomNav";
 import { CREATURES, creatureAvatar, CREATURE_TYPES, type CreatureType } from "../data/creatures";
-import { say } from "../lib/speech";
+import { say, sfx } from "../lib/speech";
 import { useIntro } from "../lib/hooks";
 import { CreatureImg } from "../components/CreatureImg";
 import { Icon } from "../icons";
@@ -48,8 +48,8 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
       <TopBar icon="dex" title={picking ? "挑选想找的伙伴" : "好朋友相册"} onBack={() => go({ name: picking ? "catch" : "home" })} focused help={<FeatureGuide id={picking?"wish":"dex"} compact/>}/>
       <div className="dex-toolbar">
         <div className="collection-tabs" aria-label="相册范围">
-          <button aria-pressed={!onlyOwned} onClick={() => { setOnlyOwned(false); setPage(0); }}><Icon name="dex" size={28} />全部小精灵</button>
-          <button aria-pressed={onlyOwned} onClick={() => { setOnlyOwned(true); setPage(0); }}><Icon name="heart" size={28} />我的伙伴 <small>{caught.size}</small></button>
+          <button aria-pressed={!onlyOwned} onClick={() => { sfx("click"); setOnlyOwned(false); setPage(0); }}><Icon name="dex" size={28} />全部小精灵</button>
+          <button aria-pressed={onlyOwned} onClick={() => { sfx("click"); setOnlyOwned(true); setPage(0); }}><Icon name="heart" size={28} />我的伙伴 <small>{caught.size}</small></button>
         </div>
       </div>
       <div className="dex-discovery-tools">
@@ -74,7 +74,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
               data-pokemon-id={p.id}
               className={`dex-cell ${has ? "has" : "discover"}`}
               aria-label={`${p.nameZh} ${p.nameEn}`}
-              onClick={() => go({ name: "dexDetail", id: p.id, picking, browse:{onlyOwned,query,page:currentPage,generation,scrollTop:screenRef.current?.scrollTop??0,filtersOpen:!!screenRef.current?.querySelector('details')?.open,focusId:p.id} })}
+              onClick={() => { sfx("click"); go({ name: "dexDetail", id: p.id, picking, browse:{onlyOwned,query,page:currentPage,generation,scrollTop:screenRef.current?.scrollTop??0,filtersOpen:!!screenRef.current?.querySelector('details')?.open,focusId:p.id} }); }}
             >
               <span className="dex-no">#{String(p.id).padStart(3, "0")}</span>
               <CreatureImg src={creatureAvatar(p.id)} alt="" draggable={false} />
@@ -85,9 +85,9 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
         })}
       </div>
       <nav className="dex-pagination" aria-label="翻阅相册">
-        <button className="replay" disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)}><Icon name="back" size={28} />上一页</button>
+        <button className="replay" disabled={currentPage === 0} onClick={() => { sfx("click"); setPage(currentPage - 1); }}><Icon name="back" size={28} />上一页</button>
         <span aria-live="polite">{currentPage + 1} / {pages}</span>
-        <button className="replay" disabled={currentPage + 1 === pages} onClick={() => setPage(currentPage + 1)}>下一页<Icon name="back" size={28} className="next-icon" /></button>
+        <button className="replay" disabled={currentPage + 1 === pages} onClick={() => { sfx("click"); setPage(currentPage + 1); }}>下一页<Icon name="back" size={28} className="next-icon" /></button>
       </nav>
       </>}
       {!picking && <BottomNav active="friends" />}

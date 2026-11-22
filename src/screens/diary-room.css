@@ -23,8 +23,9 @@
 #root .diary-room .diary-question h2 { font-size:clamp(23px,2.5vw,32px); margin:14px 0 10px; }
 #root .diary-room .diary-question-heading { justify-content:center; gap:20px; }
 #root .diary-room .diary-question-icon { background:#ead9ac80; }
-#root .diary-room .diary-record { background:var(--brand-primary-deep); border-color:var(--brand-primary-deep); box-shadow:0 5px 0 var(--brand-primary-deep); color:var(--brand-sun-ink); margin:22px auto 16px; }
-#root .diary-room .diary-record[aria-pressed=true] { background:var(--brand-danger); border-color:var(--brand-danger-deep); box-shadow:0 5px 0 var(--brand-streak-deep); }
+#root .diary-room .diary-record { background:var(--brand-primary); border-color:var(--brand-primary-deep); box-shadow:0 5px 0 var(--brand-primary-deep); color:#fff; margin:22px auto 16px; }
+#root .diary-room .diary-record:not(:disabled):active { transform:translateY(3px) scale(.98); box-shadow:0 2px 0 var(--brand-primary-deep); }
+#root .diary-room .diary-record[aria-pressed=true] { background:var(--brand-danger); border-color:var(--brand-danger-deep); box-shadow:0 5px 0 var(--brand-danger-deep); color:#fff; }
 #root .diary-room .diary-hear { background:var(--brand-sun-soft); border-color:var(--brand-sun); color:var(--brand-ink); }
 #root .diary-room .diary-guide-actions { margin-top:16px; }
 #root .diary-room .diary-guide-actions>button.diary-skip {
