@@ -59,3 +59,24 @@ test('old berries become the closest learned fruit, and counts of the same fruit
  assert.equal(s.farm!.plots[0]!.berry,'grapes');assert.equal(s.farm!.plots[2]!.berry,'strawberry');
  const again=structuredClone(s);migrateCrops(again);assert.deepEqual(again.farm,s.farm,'running twice changes nothing');
 });
+
+test('island answers are read as two kinds: heard and acted on, or chose what to say in a situation',async()=>{
+ const {islandAnswerKind}=await import('../../src/lib/islandAsk');
+ const {summarizeOpportunities}=await import('../../src/lib/learningProgress');
+ const {trialSummary,trialSummaryText}=await import('../../src/lib/trialSummary');
+ assert.equal(islandAnswerKind({source:'unit:hello-island',key:'Hello!'}),undefined,'a lesson answer is not an island answer');
+ assert.equal(islandAnswerKind({source:'island:errand',key:'Hello!'}),'said');
+ assert.equal(islandAnswerKind({source:'island:party',key:'Good night!'}),'said');
+ assert.equal(islandAnswerKind({source:'island:errand',key:'ball'}),'did','the word step of an errand is acting, not saying');
+ assert.equal(islandAnswerKind({source:'island:greet',key:'Hello!'}),'did','recognising a sentence the friend said is not choosing what to say');
+ assert.equal(islandAnswerKind({source:'island:ball',key:'My turn!'}),'did');
+ assert.equal(islandAnswerKind({source:'island:tidy',key:'hat'}),'did');
+ const now=new Date(2026,10,22,12).getTime(),o=(source:string,key:string,kind:string)=>({v:1 as const,at:now-3600000,source,key,kind:kind as any,tries:1,replays:0});
+ const list=[o('island:errand','Hello!','independent'),o('island:party','Yummy!','after-hint'),o('island:errand','ball','independent'),o('island:tidy','hat','independent'),o('island:colors','red','after-model'),o('unit:x','apple','independent')];
+ const did=summarizeOpportunities(list.filter(x=>islandAnswerKind(x)==='did'),now-86400000),said=summarizeOpportunities(list.filter(x=>islandAnswerKind(x)==='said'),now-86400000);
+ assert.equal(did.decidable,3);assert.equal(did.independent,2);assert.equal(said.decidable,2);assert.equal(said.independent,1);
+ const s={settings:{level:1,dailyMinutes:15},daily:{date:'2026-11-22',heard:1,tasksCompleted:0,playSeconds:60,words:[],spoken:0},history:[],learning:{version:1,records:{},units:{},opportunities:list}} as any;
+ const t=trialSummary(s,now);
+ assert.equal(t.island.decidable,5);assert.equal(t.islandDid.decidable,3);assert.equal(t.islandSaid.decidable,2);
+ const text=trialSummaryText(t);assert.match(text,/小岛上听懂后去做：/);assert.match(text,/小岛上选对了要说的话：/);
+});

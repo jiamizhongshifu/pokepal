@@ -20,6 +20,15 @@ export interface AskOption { id: string; entry?: LearningEntry; image?: string; 
 export interface IslandAsk { play: IslandPlay; prompt: LearningEntry; options: AskOption[]; answer: string; situation?: string; model?: boolean; also?: LearningEntry }
 export const ISLAND_SOURCE = (play: IslandPlay) => `island:${play}`;
 export const isIslandSource = (source: string) => source.startsWith('island:');
+/**
+ * Two different things happen on the island, and a parent reads them apart: the child heard a learned word or
+ * sentence and acted on it (`did`), or the child was in a situation and chose what to say (`said`: the sentence
+ * steps of an errand or a chapter party). Free play asks nothing and records no answers.
+ */
+export function islandAnswerKind(o: { source: string; key: string }): 'did' | 'said' | undefined {
+ if (!isIslandSource(o.source)) return undefined;
+ return (o.source === ISLAND_SOURCE('errand') || o.source === ISLAND_SOURCE('party')) && learningEntry(o.key)?.kind === 'phrase' ? 'said' : 'did';
+}
 
 /** Picture words from completed lessons, in curriculum order. */
 export function learnedWords(s: SaveData): string[] {

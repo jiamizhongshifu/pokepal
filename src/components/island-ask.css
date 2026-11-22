@@ -100,3 +100,7 @@
 /* The group picture at the end of a chapter party. */
 .island-party-photo{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px;border-radius:var(--radius-lg);border:4px solid var(--surface);background:var(--brand-sun-soft);box-shadow:0 3px 0 rgb(0 0 0/.12);rotate:-2deg}
 .island-party-photo img{width:52px;height:52px;object-fit:contain}
+
+/* After an errand: one line for the grown-up, the same thing to try at home. */
+.island-home-idea{display:grid;gap:2px;padding:8px 12px;border-radius:var(--radius-md);background:var(--brand-sun-soft);text-align:left;font-size:var(--text-sm);line-height:1.5}
+.parent-evidence-island-note{display:block;color:var(--muted)}

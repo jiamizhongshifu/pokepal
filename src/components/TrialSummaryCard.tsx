@@ -20,7 +20,8 @@ export function TrialSummaryCard() {
     <div><dt>这两周新走完</dt><dd>{t.lessons.length} 课</dd></div>
     <div><dt>课程里作答</dt><dd>{ratioText(t.lesson)}</dd></div>
     <div><dt>隔天复习</dt><dd>{ratioText(t.review)}</dd></div>
-    <div><dt>小岛上用一用</dt><dd>{ratioText(t.island)}</dd></div>
+    <div><dt>小岛上听懂后去做</dt><dd>{ratioText(t.islandDid)}</dd></div>
+    <div><dt>小岛上选对了要说的话</dt><dd>{ratioText(t.islandSaid)}</dd></div>
     <div><dt>在家试过的句子</dt><dd>{t.homeTried} 句</dd></div>
    </dl>
    <p>参加试用的家庭，可以把这份小结复制到“联系与反馈”里发给我们，再补充几句自己的观察。小结只有次数和课名，不含名字、录音、照片和日记；不复制就不会离开这台设备。</p>

@@ -1,7 +1,7 @@
 import type { SaveData } from '../types';
 import { LEARNING_UNITS } from '../data/curriculum';
 import { summarizeDelayed, summarizeOpportunities } from './learningProgress';
-import { isIslandSource } from './islandAsk';
+import { isIslandSource, islandAnswerKind } from './islandAsk';
 import { learningStageTitle } from './learningStage';
 import { todayStr } from './date';
 
@@ -16,7 +16,7 @@ export interface TrialSummary {
  from: string; to: string; stage: string;
  activeDays: number; minutes: number;
  lessons: string[]; lessonsDone: number; lessonsTotal: number;
- lesson: Ratio; review: Ratio; island: Ratio;
+ lesson: Ratio; review: Ratio; island: Ratio; islandDid: Ratio; islandSaid: Ratio;
  homeTried: number;
 }
 
@@ -40,6 +40,8 @@ export function trialSummary(s: SaveData, now = Date.now()): TrialSummary {
   lesson: ratio(summarizeOpportunities(opps.filter(o => !isIslandSource(o.source) && o.source !== 'review'), since)),
   review: ratio(summarizeDelayed(opps, since)),
   island: ratio(summarizeOpportunities(opps.filter(o => isIslandSource(o.source)), since)),
+  islandDid: ratio(summarizeOpportunities(opps.filter(o => islandAnswerKind(o) === 'did'), since)),
+  islandSaid: ratio(summarizeOpportunities(opps.filter(o => islandAnswerKind(o) === 'said'), since)),
   homeTried: Object.values(units).filter(u => (u.homeTriedAt ?? 0) >= since).length,
  };
 }
@@ -55,7 +57,8 @@ export function trialSummaryText(t: TrialSummary): string {
   `这两周新走完：${t.lessons.length} 课${t.lessons.length ? `（${t.lessons.join('、')}）` : ''}；累计 ${t.lessonsDone} / ${t.lessonsTotal} 课`,
   `课程里作答：${ratioText(t.lesson)}`,
   `隔天复习：${ratioText(t.review)}`,
-  `小岛上用一用：${ratioText(t.island)}`,
+  `小岛上听懂后去做：${ratioText(t.islandDid)}`,
+  `小岛上选对了要说的话：${ratioText(t.islandSaid)}`,
   `在家试过的句子：${t.homeTried} 句`,
   '以上只来自这台设备的记录，看不出是否有大人帮忙，也不代表已经掌握；不含名字、录音、照片和日记。',
   '',
