@@ -10,7 +10,7 @@ import { sayOnIsland as say } from '../lib/islandSpeech';
 import { sfx } from '../lib/speech';
 import { classifyResponse } from '../lib/learningProgress';
 import { ISLAND_SOURCE, seedOf, type IslandAsk } from '../lib/islandAsk';
-import type { PlayKind } from '../island/plays';
+import type { AskKind as PlayKind } from '../island/plays';
 import './island-ask.css';
 
 /** Where the things of a "find" round lie in the scene (% of its box); the round's seed decides which goes where. */

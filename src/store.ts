@@ -320,7 +320,7 @@ export const useGame = create<State>((set, get) => {
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
     noteOpportunity(o) {mut(s=>recordOpportunity(s,{...o,at:Date.now()}));},
     toggleSticker(id) {return !!mut(s=>toggleSticker(s,id));},
-    finishIslandPlay(playId,partner) {const play=playById(playId);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
+    finishIslandPlay(playId,partner) {const play=playById(playId,get().save);if(!play)return false;return !!mut(s=>{return finishPlay(s,play,partner,s.daily.date,wishFor(s,creatureOf(partner).species));});},
     finishErrand(unitId,partner) {return !!mut(s=>finishErrand(s,unitId,partner));},
     markHomeTried(id,tried) {mut(s=>markHomeTried(s,id,tried));},
     saveLearningWord(word) {const entry=learningEntry(word);if(!entry)return;word=entry.key;mut(s=>{toggleSavedLearning(s,word);});},

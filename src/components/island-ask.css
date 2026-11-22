@@ -75,3 +75,12 @@
 .island-play-done small{color:var(--muted);font-size:var(--text-sm)}
 .island-play-made li .phrase-picture{display:flex;flex-wrap:nowrap;gap:1px}
 .island-play-made li .phrase-picture .icon{width:21px!important;height:21px!important}
+
+/* Free play (echo, toy): no question, more things to tap, a way to say "done". */
+.island-free-note{font-weight:800;color:var(--text)}
+.island-ask-stage.is-free .island-ask-options{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px}
+.island-ask-stage.is-free .island-ask-options button{min-height:84px!important;padding:6px 2px!important}
+.island-ask-stage.is-free .island-ask-options button .icon{width:44px!important;height:44px!important}
+.island-ask-stage.is-free .learning-color{width:44px;height:44px;border-radius:50%}
+.island-ask-stage.is-free .island-ask-options small{font-size:var(--text-sm)}
+.island-free-done{justify-self:center;min-height:52px}

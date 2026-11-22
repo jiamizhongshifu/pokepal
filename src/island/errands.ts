@@ -4,7 +4,7 @@ import { islandTask, unlockedDistricts } from '../lib/islandPlan';
 import { atStation, reviewKeys } from '../lib/learningProgress';
 import { learningProfile } from '../lib/learningStage';
 import type { SaveData } from '../types';
-import { notePlayedTogether, type PlayKind } from './plays';
+import { notePlayedTogether, type AskKind } from './plays';
 import { placeById, type Place, type Spot } from './world';
 
 /**
@@ -13,7 +13,7 @@ import { placeById, type Place, type Spot } from './world';
  * lesson's words, and what was done stays on the island for a few days. The situation, sentences and words are the
  * lesson's own (already recorded), so an errand never asks for anything the path has not taught.
  */
-export interface ErrandDetail { title: string; act: Exclude<PlayKind, 'say'>; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; result: string; trace: { icon: string; label: string } }
+export interface ErrandDetail { title: string; act: Exclude<AskKind, 'say'>; to?: { icon: string; label: string }; slots?: 'lamp' | 'boat'; result: string; trace: { icon: string; label: string } }
 export interface Errand extends ErrandDetail { unit: LearningUnit; place: Place }
 
 const TOYBOX = { icon: 'tent', label: '帐篷里' }, SKY = { icon: 'cloud', label: '天上' }, GARDEN = { icon: 'flower', label: '小花园' };
@@ -64,7 +64,7 @@ export function errandAt(s: SaveData, placeId: string): Errand | undefined {
 }
 
 /** One step: choosing what to say in a situation, or acting on one of the lesson's words. */
-export interface ErrandStep { kind: PlayKind; ask: IslandAsk }
+export interface ErrandStep { kind: AskKind; ask: IslandAsk }
 const sayStep = (scene: LearningSituation, seed: number, model: boolean): ErrandStep | undefined => {
  const prompt = learningEntry(scene.phrase), other = learningEntry(scene.alternative);
  if (!prompt || !other) return undefined;

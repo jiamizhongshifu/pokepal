@@ -6,10 +6,11 @@ import {LEARNING_UNITS,unitRoundCount,learningEntry} from '../../src/data/curric
 import {progressUnit,attempt} from '../../src/lib/learningProgress';
 import {stageProfile} from '../../src/lib/learningStage';
 import {islandTask} from '../../src/lib/islandPlan';
-import {PLAYS,ROUNDS,playAsk,playsAt,playUnlockUnit,learnedFrom,wishFor,finishPlay,wishDone,playOrder,playChoices,duePlay,islandToday,playById} from '../../src/island/plays';
+import {PLAYS,ROUNDS,playAsk,playsAt,playUnlockUnit,learnedFrom,wishFor,finishPlay,wishDone,playOrder,playChoices,duePlay,islandToday,playById,ownPlay,OWN_SPECIES,freeItems,isFreePlay} from '../../src/island/plays';
 import {placeById,HOMES} from '../../src/island/world';
 import {validateSave} from '../../src/lib/saveValidation';
-import {CREATURES} from '../../src/data/creatures';
+import {CREATURES,SPECIES} from '../../src/data/creatures';
+import {unlockedDistricts} from '../../src/lib/islandPlan';
 
 const fixture=()=>validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));
 const learn=(s:SaveData,n:number)=>{for(const u of LEARNING_UNITS.slice(0,n))progressUnit(s,u.id,unitRoundCount(u),100);};
@@ -100,8 +101,8 @@ const meet=(s:SaveData,keys:string[],at:number)=>{for(const k of keys)attempt(s,
 
 test('the same words are met through different actions: hand over, find, choose a colour, recognise a sentence',()=>{
  const kinds=new Set(PLAYS.map(p=>p.kind));
- for(const k of ['do','find','sort','say'] as const)assert.ok(kinds.has(k),k);
- for(const p of PLAYS.filter(p=>p.kind==='sort')){assert.ok(p.slots,p.id);for(const k of p.pool)assert.ok(learningEntry(k)!.css,`${p.id}: ${k} is a colour`);}
+ for(const k of ['do','find','sort','say','toy'] as const)assert.ok(kinds.has(k),k);
+ for(const p of PLAYS.filter(p=>p.kind==='sort'||p.kind==='toy')){assert.ok(p.slots,p.id);for(const k of p.pool)assert.ok(learningEntry(k)!.css,`${p.id}: ${k} is a colour`);}
  for(const p of PLAYS.filter(p=>p.kind==='say'))for(const k of p.pool)assert.equal(learningEntry(k)!.kind,'phrase',`${p.id}: ${k}`);
 });
 
@@ -146,4 +147,58 @@ test('the island invites the child to the place where learned words are due, aft
  // A place whose area the path has not opened yet is never suggested.
  for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];
  assert.equal(duePlay(s,NOW),undefined);
+});
+
+test('every companion has its own little wish, built from learnable words, and each way of playing has several companions',()=>{
+ assert.deepEqual([...OWN_SPECIES].sort(),SPECIES.map(x=>x.id).sort());
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];learn(s,24);
+ const count:Record<string,number>={};
+ for(const species of OWN_SPECIES){
+  const p=ownPlay(s,species)!;assert.ok(p,species);
+  assert.equal(p.owner,species);assert.equal(p.id,`own-${species}`);
+  assert.ok([HOMES[species].favorite,HOMES[species].home].includes(p.place),species);
+  for(const k of p.pool)assert.ok(learningEntry(k),`${species}: ${k}`);
+  assert.ok(playUnlockUnit(p),`${species}: some lesson opens it`);
+  assert.equal(new Set(p.pool).size,p.pool.length,`${species}: no repeats`);
+  if(p.kind==='sort'||p.kind==='toy'){assert.ok(p.slots,species);for(const k of p.pool)assert.ok(learningEntry(k)!.css,`${species}: ${k} is a colour`);}
+  if(p.kind==='say')for(const k of p.pool)assert.equal(learningEntry(k)!.kind,'phrase',`${species}: ${k}`);
+  if(p.kind==='do'||p.kind==='find'||p.kind==='echo')for(const k of p.pool)assert.equal(learningEntry(k)!.kind,'word',`${species}: ${k}`);
+  assert.equal(wishFor(s,species)!.id,p.id,`${species}: with everything learned the wish is its own`);
+  assert.deepEqual(playById(p.id,s),p);
+  count[p.kind]=(count[p.kind]??0)+1;
+ }
+ for(const k of ['do','find','say','echo','toy'])assert.ok(count[k]>=3,`${k}: ${count[k]}`);
+});
+
+test('a companion\'s own wish waits for its words and for an open place; until then its place\'s activity stands in',()=>{
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];
+ learn(s,1);
+ // Only the camp is open: a companion living elsewhere has no place for its own wish yet.
+ const open=unlockedDistricts(s);
+ for(const species of OWN_SPECIES){
+  const p=ownPlay(s,species);
+  if(p)assert.ok(open.has(placeById(p.place)!.district),species);
+  const w=wishFor(s,species);
+  if(w?.owner)assert.ok(learnedFrom(s,w).length>=2,species);
+ }
+ // Sayo repeats what the child taps: its wish is its own once two of its words are learned, and doing it is the wish.
+ learn(s,7);
+ const own=ownPlay(s,'sayo')!;assert.equal(own.kind,'echo');assert.ok(learnedFrom(s,own).length>=2);
+ assert.equal(wishFor(s,'sayo')!.id,'own-sayo');
+ const sayo=CREATURES.find(c=>c.species==='sayo'&&c.stage===1)!;
+ s.captures.push({...s.captures[0],id:sayo.id,friendship:10,played:0});
+ assert.equal(finishPlay(s,own,sayo.id,'2026-11-22',wishFor(s,'sayo')),true);
+ assert.equal(wishDone(s,'2026-11-22',sayo.id),true);
+});
+
+test('free play offers only learned things, has no questions, and is never what the island calls due',()=>{
+ const s=fixture();for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];s.learning!.records={};learn(s,24);
+ for(const p of [...PLAYS,...OWN_SPECIES.map(x=>ownPlay(s,x)!)].filter(isFreePlay)){
+  const items=freeItems(s,p,'x',NOW);
+  assert.ok(items.length>=2&&items.length<=7,p.id);
+  for(const k of items)assert.ok(p.pool.includes(k));
+ }
+ for(const k of ['red','blue'])attempt(s,k,true,false,'lesson',NOW-3*DAY);
+ const due=duePlay(s,NOW);
+ assert.ok(due&&!isFreePlay(due.play),'colours due lead to an activity that asks, not to a toy');
 });
