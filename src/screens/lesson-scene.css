@@ -88,3 +88,11 @@
  #root .lesson-staged .round-card .phrase-choices > div { flex-basis: 44vw; }
  #root .lesson-staged .round-card .learning-help span { display: none !important; }
 }
+
+/* The snack lesson: a picnic cloth beside the friend, each found snack set down on its plate. */
+#root .lesson-staged .lesson-mat { position: absolute; z-index: 2; left: 16%; top: 70%; translate: -50% 0; display: flex; gap: 10px; margin: 0; padding: 14px 18px 18px; list-style: none; border-radius: 22px; background: repeating-linear-gradient(45deg, #f6d6d0 0 14px, #fff7f2 14px 28px); box-shadow: 0 6px 0 rgba(0, 0, 0, .1); }
+#root .lesson-staged .lesson-mat li { display: grid; place-items: center; width: min(7vw, 9vh); aspect-ratio: 1; border-radius: 50%; background: #fff; box-shadow: inset 0 -4px 0 #ece4dc; }
+#root .lesson-staged .lesson-mat li > span { display: grid; place-items: center; width: 82%; height: 82%; }
+#root .lesson-staged .lesson-mat li > span > * { width: 100% !important; height: 100% !important; }
+#root .lesson-staged .lesson-mat .is-new { animation: lesson-hop .7s ease; }
+@media (max-width: 700px) { #root .lesson-staged .lesson-mat { left: 50%; top: 53%; padding: 8px 12px 10px; } #root .lesson-staged .lesson-mat li { width: 13vw; } }
