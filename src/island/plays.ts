@@ -1,5 +1,5 @@
 import { LEARNING_UNITS } from '../data/curriculum';
-import { wordAsk, comboAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
+import { wordAsk, comboAsk, comboLine, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { SaveData } from '../types';
 import { HOMES, placeById } from './world';
 import { unlockedDistricts, islandTask, type IslandTask } from '../lib/islandPlan';
@@ -118,6 +118,14 @@ export const LEAD_REACTIONS: Record<string, string> = {
  'My turn!': '伙伴把小球让给你啦', 'Your turn!': '伙伴接过小球，滚了起来', "Let's play!": '伙伴蹦蹦跳跳地玩起来', "Let's go!": '伙伴跟着你出发啦',
  "Let's tidy up!": '伙伴把东西一件件收好', 'Good night!': '伙伴打了个哈欠，闭上眼睛', 'Hello!': '伙伴冲你挥挥手',
 };
+/**
+ * Every combined instruction the island can give: each colour the path teaches with each thing of an activity that
+ * hands things over or finds them. The voice scripts record exactly these.
+ */
+export function comboLines(): string[] {
+ const things = new Set([...PLAYS, ...Object.values(OWN)].filter(p => p.kind === 'do' || p.kind === 'find').flatMap(p => p.pool).filter(k => { const e = learningEntry(k); return e?.kind === 'word' && !e.css; }));
+ return COLORS.flatMap(c => [...things].map(t => comboLine(c, t)));
+}
 /** From the fifth chapter on (16 lessons), the last round of an activity with things combines a colour with the thing. */
 export const COMBO_FROM = 16;
 const learnedColors = (s: SaveData) => [...learnedKeys(s)].filter(k => !!learningEntry(k)?.css);

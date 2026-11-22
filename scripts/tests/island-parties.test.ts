@@ -6,8 +6,9 @@ import {LEARNING_UNITS,LEARNING_CHAPTERS,unitRoundCount,learningEntry} from '../
 import {progressUnit} from '../../src/lib/learningProgress';
 import {finishErrand} from '../../src/island/errands';
 import {partyReady,partyAt,partySteps,finishParty,islandNow,chapterUsed,validParties,PARTY_WEEK} from '../../src/island/parties';
-import {PLAYS,ROUNDS,playAsk,playById,playsAt,comboReady,COMBO_FROM,lessonsDone,freeItems,LEAD_REACTIONS,islandToday} from '../../src/island/plays';
+import {PLAYS,ROUNDS,playAsk,playById,playsAt,comboReady,COMBO_FROM,lessonsDone,freeItems,LEAD_REACTIONS,islandToday,comboLines,ownPlay,OWN_SPECIES} from '../../src/island/plays';
 import {validateSave} from '../../src/lib/saveValidation';
+import {comboLine} from '../../src/lib/islandAsk';
 
 const DAY=86400000,NOW=Math.floor(Date.UTC(2026,10,22,10)/PARTY_WEEK)*PARTY_WEEK+DAY;
 const fixture=()=>{const s=validateSave(JSON.parse(readFileSync('scripts/tests/fixtures/save.json','utf8')));for(const u of Object.keys(s.learning!.units))delete s.learning!.units[u];s.learning!.records={};delete s.islandTraces;delete s.islandParties;return s;};
@@ -78,4 +79,17 @@ test('the child gives the instruction only in the last chapter, with learned sen
  const items=freeItems(s,lead,'x',NOW);assert.ok(items.length>=2);
  for(const k of lead.pool){assert.equal(learningEntry(k)!.kind,'phrase');assert.ok(LEAD_REACTIONS[k],k);}
  for(const k of items)assert.ok(LEARNING_UNITS.slice(0,20).some(u=>u.phrase===k),`${k} is learned`);
+});
+
+test('a combined instruction is one natural phrase, and every one the island can give is in the recorded list',()=>{
+ assert.equal(comboLine('red','ball'),'a red ball');assert.equal(comboLine('orange','hat'),'an orange hat');
+ assert.equal(comboLine('blue','water'),'blue water');assert.equal(comboLine('purple','grapes'),'purple grapes');assert.equal(comboLine('green','milk'),'green milk');
+ const lines=new Set(comboLines());assert.equal(lines.size,comboLines().length,'no duplicates');
+ const voiced=new Set((JSON.parse(readFileSync('voice/lines.json','utf8')) as {lang:string;text:string}[]).filter(l=>l.lang==='en').map(l=>l.text));
+ for(const l of lines)assert.ok(voiced.has(l),`recorded: ${l}`);
+ const s=fixture();learn(s,24);
+ for(const p of [...PLAYS,...OWN_SPECIES.map(x=>ownPlay(s,x)!)].filter(p=>comboReady(s,p)))for(const session of ['a','b','c','d','e','f']){
+  const ask=playAsk(s,p,session,ROUNDS-1)!;
+  if(ask.also)assert.ok(lines.has(comboLine(ask.also.key,ask.prompt.key)),`${p.id}: ${ask.also.key} ${ask.prompt.key}`);
+ }
 });

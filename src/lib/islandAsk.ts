@@ -58,6 +58,8 @@ export function wordAsk(play: IslandPlay, target: string, pool: string[], seed: 
  return { play, prompt, options, answer: prompt.key };
 }
 
+/** How a combined instruction is said, as one natural phrase: “a red ball”, “an orange hat”, “blue water”. */
+export const comboLine = (color: string, thing: string) => { const bare = ['milk', 'water', 'grapes'].includes(thing); return bare ? `${color} ${thing}` : `${/^[aeiou]/i.test(color) ? 'an' : 'a'} ${color} ${thing}`; };
 /**
  * A combined instruction from two learned words: a colour and a thing (“red … ball”). The four pictures are the two
  * things in the two colours, so only a child who follows both words finds the one that is meant.

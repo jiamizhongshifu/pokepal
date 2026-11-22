@@ -9,7 +9,7 @@ import { learningVoice } from '../lib/learningVoice';
 import { sayOnIsland as say } from '../lib/islandSpeech';
 import { sfx } from '../lib/speech';
 import { classifyResponse } from '../lib/learningProgress';
-import { ISLAND_SOURCE, seedOf, type IslandAsk } from '../lib/islandAsk';
+import { ISLAND_SOURCE, comboLine, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { AskKind as PlayKind } from '../island/plays';
 import './island-ask.css';
 
@@ -39,7 +39,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
  const spot = (i: number) => SPOTS[(i + Math.abs(seedOf(ask.answer))) % SPOTS.length];
  const hear = async (replay = false) => {
   if (replay && trace.current.firstAnswer === null) trace.current.replays++;
-  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...(ask.also ? [['en', ask.also.voiceEn ?? ask.also.en] as ['en', string], ['en', ask.prompt.voiceEn ?? ask.prompt.en] as ['en', string]] : learningVoice(ask.prompt)));
+  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...(ask.also ? [['en', comboLine(ask.also.key, ask.prompt.key)] as ['en', string]] : learningVoice(ask.prompt)));
   if (ok && live.current) { trace.current.heard = true; useGame.getState().noteStationLearning(station, ask.prompt.key, false); }
  };
  const record = (outcome: 'solved' | 'left') => {

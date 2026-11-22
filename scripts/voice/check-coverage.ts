@@ -18,6 +18,7 @@ import { ACTIVITY } from '../../src/lib/routine';
 import type { Part } from '../../src/lib/speech';
 import { storyLineWords, storyWordVoice } from '../../src/lib/storyWords';
 import { voiceKey } from '../../src/lib/voiceKey';
+import { comboLines } from '../../src/island/plays';
 const lines = JSON.parse(readFileSync('voice/lines.json','utf8')) as {lang:string;text:string;key?:string;timed?:boolean}[];
 const keys = new Set(lines.map(l=>l.key??`${l.lang}|${l.text}`));
 const timed = new Set(lines.filter(l=>l.timed).map(l=>l.key??`${l.lang}|${l.text}`));
@@ -28,6 +29,7 @@ const parts = (ps:Part[]) => ps.forEach(p=>{if(typeof p!=='number')check(p[0],p[
 for(const w of [...Object.values(WEATHER),CLEAR_NIGHT]){check('en',w.en);check('zh',w.voice);}
 for(const guide of Object.values(GUIDES))check('zh',guide.voice);
 for(const prompt of DIARY_PROMPTS)check('zh',prompt.voice);
+for(const line of comboLines())check('en',line);
 for(const actual of CREATURES)for(const target of CREATURES)parts(feedbackParts(nameNo(actual,target),true));
 for(const actual of PIC_WORDS)for(const target of PIC_WORDS)parts(feedbackParts(picNo(actual,target),true));
 for(const station of STATIONS){

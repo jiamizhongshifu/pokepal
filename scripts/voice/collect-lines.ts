@@ -15,6 +15,7 @@ import { learningExplanation } from '../../src/lib/learningVoice';
 import { LEARNING_UNITS, unitSituations, learningEntry } from '../../src/data/curriculum';
 import { facilityLesson } from "../../src/data/learning";
 import { PLACES as STATIONS } from "../../src/island/world";
+import { comboLines } from "../../src/island/plays";
 import { CREATURES, COLORS, CREATURE_TYPES, kidDescription, hobby, favoriteFood } from "../../src/data/creatures";
 import { INVITE_KINDS } from "../../src/data/invites";
 import { PIC_WORDS, PHRASES, LETTERS, PRAISE } from "../../src/data/words";
@@ -119,6 +120,8 @@ for (const p of CREATURES) {
   // 说一说
   zh(`跟${p.nameZh}一起说：`); en(`${p.nameEn}!`);
 }
+// 小岛上的组合指令（颜色 + 东西），第五章起出现
+for (const line of comboLines()) en(line);
 for (const t of Object.values(CREATURE_TYPES)) { en(t.en); zh(`${t.zh}属性`); }
 for (const c of Object.values(COLORS)) { en(c.en); zh(c.zh); }
 for (const pr of PRAISE) { en(pr.en); zh(pr.zh); }
