@@ -37,6 +37,8 @@ export function PathHome() {
  const [editing, setEditing] = useState(false);
  const [nudge, setNudge] = useState<string | null>(null);
  const [lit, setLit] = useState<string[]>([]);
+ const [speakingKey, setSpeakingKey] = useState<string | null>(null);
+ const speakRun = useRef(0);
  const view = useRef<HTMLDivElement>(null), here = useRef<HTMLDivElement>(null);
 
  // Stops finished since the last visit light up once; finishing the whole path is celebrated once too.
@@ -58,10 +60,22 @@ export function PathHome() {
  useEffect(() => () => stopSpeech(), []);
 
  // Today's bubble: a lesson says what it is about; a review says the old words it brings back.
- const hear = (node: PathNode) => { stopSpeech(); if (node.kind === 'review') void say(...bubbleWords(node).flatMap(e => [...learningVoice(e), 400])); else if (node.unit) void say(['zh', node.unit.mission]); };
+ const stopSpeaking = () => { speakRun.current++; setSpeakingKey(null); stopSpeech(); };
+ const hear = async (node: PathNode) => {
+  const ticket = ++speakRun.current;
+  stopSpeech();
+  sfx('click');
+  setSpeakingKey(node.key);
+  try {
+   if (node.kind === 'review') await say(...bubbleWords(node).flatMap(e => [...learningVoice(e), 400]));
+   else if (node.unit) await say(['zh', node.unit.mission]);
+  } finally {
+   if (speakRun.current === ticket) setSpeakingKey(null);
+  }
+ };
  const open = async (node: PathNode) => {
-  if (node.state === 'locked') { sfx('boop'); setNudge(node.key); setTimeout(() => setNudge(n => n === node.key ? null : n), 600); hear(node); return; }
-  stopSpeech(); sfx('click');
+  if (node.state === 'locked') { sfx('boop'); setNudge(node.key); setTimeout(() => setNudge(n => n === node.key ? null : n), 600); void hear(node); return; }
+  stopSpeaking(); sfx('click');
   if (node.kind === 'lesson') start(node.unit!.id);
   else if (node.kind === 'story') go({ name: 'story', id: node.storyId! });
   else if (node.kind === 'island') go({ name: 'home', station: node.station });
@@ -71,7 +85,7 @@ export function PathHome() {
   else if (node.state === 'done') go({ name: 'dex' });
   else if (await claimFriend(node.chapter)) go({ name: 'catch' });
  };
- const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeech(); sfx('click'); setPage(to); };
+ const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeaking(); sfx('click'); setPage(to); };
 
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
  return <div className="screen path-scene">
@@ -85,12 +99,22 @@ export function PathHome() {
      const label = `${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : node.state === 'current' ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`;
      const style = { left: `${spots[i][0]}%`, top: `${spots[i][1]}%` };
      const name = <span className="stop-name">{node.state === 'current' && <small>{KIND_LABEL[node.kind]}</small>}{title}</span>;
-     if (node.state === 'current') return <div key={node.key} ref={here} className={`path-stop is-current kind-${node.kind}`} style={style}>
-      {friend && <CreatureImg className="stop-friend" src={creatureExpression(friend.id, 'hello')} alt="" />}
-      {bubbleWords(node).length > 0 && <button type="button" className="stop-bubble" aria-label={node.kind === 'review' ? '听一听要再见面的词' : '听一听这一站要做什么'} onClick={() => hear(node)}>{bubbleWords(node).map(e => <span key={e.key} className="stop-bubble-word"><LearningArt entry={e} /></span>)}<Icon name="speaker" size={26} className="stop-bubble-hear" /></button>}
-      <button type="button" className="stop-token stop-go" aria-label={label} onClick={() => void open(node)}><Icon name="play" size={56} /></button>
-      {name}
-     </div>;
+     if (node.state === 'current') {
+      const words = bubbleWords(node);
+      const talking = speakingKey === node.key;
+      return <div key={node.key} ref={here} className={`path-stop is-current kind-${node.kind}${friend ? ' has-friend' : ''}`} style={style}>
+       {friend && (words.length > 0
+        ? <button type="button" className={`stop-friend-btn${talking ? ' is-talking' : ''}`} aria-label="点一点伙伴，听听这一站玩什么" onClick={() => void hear(node)}><CreatureImg className="stop-friend" src={creatureExpression(friend.id, talking ? 'cheer' : 'hello')} alt="" /></button>
+        : <CreatureImg className="stop-friend" src={creatureExpression(friend.id, 'hello')} alt="" />)}
+       {words.length > 0 && <button type="button" className={`stop-bubble${talking ? ' is-speaking' : ''}`} aria-label={node.kind === 'review' ? '听一听要再见面的词' : '听一听这一站要做什么'} aria-pressed={talking} onClick={() => void hear(node)}>
+        <span className="stop-bubble-hear" aria-hidden="true"><Icon name="speaker" size={24} /></span>
+        <span className="stop-bubble-text">{talking ? '正在说…' : '听一听'}</span>
+        <span className="stop-bubble-preview" aria-hidden="true">{words.map(e => <span key={e.key} className="stop-bubble-word"><LearningArt entry={e} /></span>)}</span>
+       </button>}
+       <button type="button" className="stop-token stop-go" aria-label={label} onClick={() => void open(node)}><Icon name="play" size={56} /></button>
+       {name}
+      </div>;
+     }
      return <button key={node.key} type="button" className={`path-stop is-${node.state} kind-${node.kind}${nudge === node.key ? ' is-nudged' : ''}${lit.includes(node.key) ? ' is-lit' : ''}`} style={style} aria-label={label} onClick={() => void open(node)}>
       <span className="stop-token">{met ? <CreatureImg className="stop-art" src={creatureArt(met)} alt="" /> : <Icon name={node.state === 'done' ? leftBehind(node) : node.icon} size={64} className="stop-art" />}</span>
       {node.state === 'done' && <Icon name="star" size={30} className="stop-badge is-star" />}
