@@ -18,6 +18,8 @@
 
 .start-tools { position: absolute; z-index: 6; right: calc(14px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); display: flex; align-items: center; gap: 10px; }
 .start-adults { display: flex; align-items: center; gap: 6px; min-height: 48px; padding: 6px 14px 6px 10px; border: 3px solid #fff; border-radius: 28px; background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); font-size: 15px; font-weight: 800; color: #4a5a66; }
+.start-adults { position: relative; }
+.start-adults-dot { position: absolute; top: -3px; right: -3px; width: 14px; height: 14px; border: 3px solid #fff; border-radius: 50%; background: var(--brand-danger, #ff4b4b); }
 .start-adults-backdrop { position: fixed; inset: 0; z-index: 7; border: 0; background: rgba(20, 50, 60, .25); }
 .start-adults-panel { position: absolute; z-index: 8; right: calc(14px + env(safe-area-inset-right)); top: calc(76px + env(safe-area-inset-top)); display: grid; gap: 12px; width: min(380px, calc(100vw - 28px)); max-height: calc(100dvh - 110px); overflow: auto; padding: 16px; border-radius: 24px; background: #fffdf4; box-shadow: 0 10px 30px rgba(0, 40, 60, .25); color: #2f3d45; }
 .start-adults-panel > header { display: flex; align-items: center; justify-content: space-between; font-size: 17px; }

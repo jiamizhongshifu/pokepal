@@ -15,6 +15,7 @@ import {useMemo,useState} from 'react';
 import {ParentLinks, ParentNotice} from '../components/ParentSupport';
 import {hasReadParentNotice} from '../lib/parentNotice';
 import {MusicToggle} from '../components/MusicToggle';
+import { useNotices } from '../lib/announcements';
 import './welcome-start.css';
 
 
@@ -33,6 +34,8 @@ export function Welcome() {
   const [handoff,setHandoff]=useState<{avatar?:string}|null>(null);
   const captures = useGame((s) => s.save.captures), favorites = useGame((s) => s.save.settings.favorites);
   const [hop,setHop]=useState<number|null>(null),[adults,setAdults]=useState(false);
+  // A new notice is shown on the corner button too, so a grown-up sees it without opening the panel.
+  const {unread}=useNotices();
   const [noticeRead,setNoticeRead]=useState(()=>{try{return hasReadParentNotice(localStorage);}catch{return false;}});
   const requestBegin=(avatar?:string)=>{if(!noticeRead)setNotice({avatar});else void begin(avatar);};
 
@@ -75,7 +78,7 @@ export function Welcome() {
       <header className="start-title"><Icon name="leaf" size={34} className="start-title-leaf"/><h1>啵啵岛</h1><span lang="en">Bubbly Isle</span></header>
       <nav className="start-tools" aria-label="音乐和给大人的内容">
         <MusicToggle/>
-        <button type="button" className="start-adults" aria-expanded={adults} onClick={() => setAdults(a => !a)}><Icon name="gear" size={26}/><span>给大人</span></button>
+        <button type="button" className="start-adults" aria-expanded={adults} aria-label={`给大人${unread?'，有新公告':''}`} onClick={() => setAdults(a => !a)}><Icon name="gear" size={26}/><span>给大人</span>{unread&&<i className="start-adults-dot" aria-hidden="true"/>}</button>
       </nav>
       {adults && <>
         <button type="button" className="start-adults-backdrop" aria-label="关闭给大人的内容" onClick={() => setAdults(false)}/>
