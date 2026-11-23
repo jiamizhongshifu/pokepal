@@ -2,7 +2,7 @@
 .friend-visit-sea{position:relative;min-height:calc(100dvh - 96px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:16px}
 .friend-visit-title,.friend-visit-status{margin:0;padding:10px 18px;border-radius:var(--radius-lg);background:var(--surface-strong);box-shadow:var(--soft-shadow);font-size:var(--text-xl);font-weight:800;text-align:center}
 .friend-visit-boats{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
-.friend-boat{position:relative;display:grid;justify-items:center;width:min(220px,28vw);min-width:150px;padding:0 0 8px;border:0;background:none;cursor:pointer;animation:friend-bob 3s ease-in-out infinite;transition:transform .14s ease-out}
+.friend-boat{position:relative;display:grid;justify-items:center;width:clamp(150px,min(28vw,36vh),300px);padding:0 0 8px;border:0;background:none;cursor:pointer;animation:friend-bob 3s ease-in-out infinite;transition:transform .14s ease-out}
 .friend-boat:active{transform:scale(.95)}
 .friend-boat-guest{position:absolute;z-index:1;left:8%;bottom:27%;width:44%}
 .friend-pier-boat,.friend-boat{position:relative}

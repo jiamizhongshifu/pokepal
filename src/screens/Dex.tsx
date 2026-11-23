@@ -84,11 +84,11 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
           );
         })}
       </div>
-      <nav className="dex-pagination" aria-label="翻阅相册">
+      {pages > 1 && <nav className="dex-pagination" aria-label="翻阅相册">
         <button className="replay" disabled={currentPage === 0} onClick={() => { sfx("click"); setPage(currentPage - 1); }}><Icon name="back" size={28} />上一页</button>
         <span aria-live="polite">{currentPage + 1} / {pages}</span>
         <button className="replay" disabled={currentPage + 1 === pages} onClick={() => { sfx("click"); setPage(currentPage + 1); }}>下一页<Icon name="back" size={28} className="next-icon" /></button>
-      </nav>
+      </nav>}
       </>}
       {!picking && <BottomNav active="friends" />}
     </div>

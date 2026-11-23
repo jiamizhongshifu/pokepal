@@ -452,6 +452,13 @@ button:not(:disabled):active { transform: scale(.97); }
 .dex-discovery-tools { width:min(1000px,92vw); margin:0 auto 16px; display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px; flex:none; }
 .dex-discovery-tools>.wish-button { min-height:54px; flex:none; }
 .dex-filters { flex:1; min-width:240px; color:var(--text); }
+#root .screen .collection-tabs button[aria-pressed=true] { background:var(--brand-primary); border-color:var(--brand-primary-deep); color:#fff; box-shadow:0 3px 0 var(--brand-primary-deep); }
+:is(.dex-filters, .diary-parent)>summary { display:flex; align-items:center; gap:8px; list-style:none; cursor:pointer; }
+:is(.dex-filters, .diary-parent)>summary::-webkit-details-marker { display:none; }
+:is(.dex-filters, .diary-parent)>summary::after { content:""; flex:none; width:8px; height:8px; margin:-4px 4px 0; border:solid currentColor; border-width:0 3px 3px 0; border-radius:1px; rotate:45deg; transition:rotate .15s, margin .15s; }
+:is(.dex-filters, .diary-parent)[open]>summary::after { rotate:-135deg; margin-top:4px; }
+.diary-parent>summary { min-height:48px; font-weight:800; }
+.diary-parent>summary::after { margin-left:auto; }
 .dex-filters summary { min-height:54px; padding:14px 12px; cursor:pointer; font-size:var(--text-base); font-weight:700; }
 .dex-filters summary span { color:var(--accent-en); overflow-wrap:anywhere; }
 .dex-filters .wish-search { padding:4px 12px 12px; width:100%; }

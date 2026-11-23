@@ -11,7 +11,7 @@
 /* ── Buttons ──────────────────────────────────────────── */
 
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)) {
-  background:var(--surface); color:var(--muted); text-shadow:none;
+  background:var(--surface); color:var(--text); text-shadow:none;
   border:var(--brand-border) solid var(--surface-border); border-radius:var(--brand-radius-button);
   box-shadow:0 var(--brand-press) 0 var(--surface-border);
   font-weight:var(--brand-weight-display);

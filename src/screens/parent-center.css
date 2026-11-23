@@ -247,7 +247,10 @@
 #root .parent-path-row > div { display: flex; flex-direction: column; gap: 2px; }
 
 @media (max-width: 680px) {
-  #root .parent-organized .parent-body section.parent-kpi-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  #root .parent.parent-organized .parent-body section.parent-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #root .parent-kpi-card { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px; }
+  #root .parent-kpi-icon { width: 54px; height: 54px; }
+  #root .parent-kpi-card .pchart-ring { zoom: .8; }
   .pchart-bars { gap: 6px; }
   .pchart-bar-track { height: 92px; }
   .pchart-hbars li { grid-template-columns: minmax(96px, 124px) minmax(0, 1fr) 48px; gap: 8px; }

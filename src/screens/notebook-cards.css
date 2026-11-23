@@ -11,3 +11,5 @@
 #root .notebook-again:active { transform: translateY(2px) scale(.97); box-shadow: 0 1px 0 #b4e890; }
 #root .notebook-again .icon { width: 22px !important; height: 22px !important; }
 
+#root .learning-notebook .notebook-listen-card .notebook-definition { flex: 0 1 auto; min-width: 0; }
+#root .learning-notebook .notebook-listen-card > .icon { flex: none; width: 24px !important; height: 24px !important; opacity: .85; }
