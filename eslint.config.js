@@ -15,16 +15,25 @@ export default tseslint.config(
   },
   {
     files: ['src/**/*.{ts,tsx}', 'functions/**/*.ts'],
+    // Rules are settled here, not silenced line by line. A value an effect should read without re-running goes
+    // through useEvent (src/lib/hooks.ts); a value fixed on arrival goes in useState's initializer.
+    linterOptions: {noInlineConfig: true},
     languageOptions: {globals: globals.browser},
     plugins: {'react-hooks': reactHooks},
     rules: {
       ...reactHooks.configs.recommended.rules,
-      '@typescript-eslint/no-explicit-any': 'warn',
+      'react-hooks/exhaustive-deps': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       'no-restricted-syntax': ['error', {
         selector: "MemberExpression[object.name='WebAssembly']",
         message: 'The site CSP does not allow WebAssembly compilation.',
       }],
     },
+  },
+  {
+    // gtag only accepts the Arguments object, not an array copy.
+    files: ['src/lib/analytics.ts'],
+    rules: {'prefer-rest-params': 'off'},
   },
   {
     files: ['scripts/**/*.{ts,mjs,js}', 'eslint.config.js', 'vite.config.ts', 'capacitor.config.ts'],

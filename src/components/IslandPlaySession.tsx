@@ -19,10 +19,11 @@ export function IslandPlaySession({ play, partner, station, onClose, onFinished 
  const [session, setSession] = useState(() => crypto.randomUUID());
  const [round, setRound] = useState(0), [done, setDone] = useState(false), [made, setMade] = useState<string[]>([]);
  const save = useGame(s => s.save);
- const order = useMemo(() => playOrder(save, play, session), [session]); // eslint-disable-line react-hooks/exhaustive-deps
- const ask = useMemo(() => playAsk(save, play, session, round, order), [session, round]); // eslint-disable-line react-hooks/exhaustive-deps
+ // Each session is planned from the save as it stood when it began, so finishing a round never reshuffles the rest.
+ const order = useMemo(() => playOrder(useGame.getState().save, play, session), [play, session]);
+ const ask = useMemo(() => playAsk(useGame.getState().save, play, session, round, order), [play, session, round, order]);
  const free = isFreePlay(play);
- const items = useMemo(() => free ? freeItems(save, play, session) : [], [session]); // eslint-disable-line react-hooks/exhaustive-deps
+ const items = useMemo(() => free ? freeItems(useGame.getState().save, play, session) : [], [free, play, session]);
  const finish = () => { useGame.getState().finishIslandPlay(play.id, partner); sfx('sparkle'); setDone(true); onFinished?.(play); const end = playLine(save, play, 'end'); if (end) void say(...learningVoice(end)); };
  // The friend answers what it was given with a learned sentence; the next round waits until it has said it.
  const solved = async (id: string) => {

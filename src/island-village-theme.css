@@ -144,7 +144,7 @@
 #root .screen .story-word-saves button[aria-pressed=true] { background:var(--brand-sun-soft); }
 #root .screen .learning-stage-settings { --ink:var(--brand-ink); }
 #root .screen .stage-presets>button[aria-pressed=true] { background:var(--brand-primary-soft); outline-color:#70b99b; }
-#root .screen .stage-current { color:var(--brand-success); background:var(--brand-primary-soft); }
+#root .screen .stage-current { color:var(--brand-primary-ink); background:var(--brand-primary-soft); }
 #root .screen .stage-preview { background:var(--surface); border-color:var(--brand-sky); }
 #root .screen .guide-target { outline-color:#e6bc37!important; }
 #root .screen .diary-friend { background:var(--brand-primary-soft); }
@@ -156,8 +156,8 @@
 :root .device-setup[open]>summary{border:0;border-radius:18px 18px 0 0;background:var(--brand-primary-soft)}
 :root .device-setup .offline-update{border:2px solid var(--brand-line);border-radius:var(--radius-lg);background:var(--surface);color:var(--text)}
 :root .offline-update .offline-update-symbol{width:56px;height:56px;border-radius:var(--radius-md);background:var(--brand-sun);flex:none}
-:root .offline-update-heading strong{font-size:var(--text-xl);color:var(--brand-ink)}
-:root .offline-update-heading small,:root .offline-update-detail,:root .offline-update-time,:root .device-capabilities,:root .device-setup-body>small{color:var(--brand-ink-muted)}
+:root .offline-update-heading strong{font-size:var(--text-xl);color:var(--text)}
+:root .offline-update-heading small,:root .offline-update-detail,:root .offline-update-time,:root .device-capabilities,:root .device-setup-body>small{color:var(--muted)}
 :root .offline-update .offline-update-steps{display:flex;align-items:stretch;margin:16px 0;gap:8px;font-size:var(--text-sm)}
 :root .offline-update-steps li{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column;text-align:center;padding:10px 4px;background:var(--brand-sky-soft);border-radius:var(--radius-sm);color:var(--brand-ink-muted)}
 :root .offline-update-steps li.current{background:var(--brand-sun-soft);color:var(--text)}:root .offline-update-steps li.finished{background:var(--brand-primary-soft);color:var(--text)}

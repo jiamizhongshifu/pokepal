@@ -7,7 +7,7 @@ import {ParentLinks} from '../components/ParentSupport';
 import {AuthorContact, SourceRepositoryLink} from '../components/AuthorContact';
 import {clearParentNotice} from '../lib/parentNotice';
 import './parent-center.css';
-import {WeatherSettings} from '../components/WeatherBadge';
+import {WeatherSettings} from '../components/WeatherSettings';
 import {GuideSettings} from '../components/GuideSettings';
 import { LearningStageSettings } from '../components/LearningStageSettings';
 import { learningStageTitle } from '../lib/learningStage';

@@ -11,7 +11,8 @@ import { lessonWords } from '../data/learning';
 import { PHRASES } from '../data/words';
 import type {Reward} from '../lib/participation';
 import {RoundProgress} from '../components/RoundProgress';
-import { useEffect,useMemo,useRef,useState,useSyncExternalStore } from 'react';
+import { useEffect,useRef,useState,useSyncExternalStore } from 'react';
+import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
 import { learningEntry,unitById,unitUnlocked,unitSituations,unitRoundCount,type LearningEntry } from '../data/curriculum';
 import { learningChoices } from '../lib/learningChoices';
@@ -31,7 +32,9 @@ import './lesson-scene.css';
 export function LearningLesson({id}:{id:string}){
  const s=useGame(v=>v.save),go=useGame(v=>v.go),advance=useGame(v=>v.advanceUnit);
  const trackedStart=useRef(false);
- useEffect(()=>{if(!trackedStart.current&&unitById(id)&&unitUnlocked(s,id)){trackedStart.current=true;trackInteraction('lesson_started');}},[]);
+ // Counted once, for a lesson that was open to the child when they arrived.
+ const [openOnArrival]=useState(()=>!!unitById(id)&&unitUnlocked(s,id));
+ useEffect(()=>{if(openOnArrival&&!trackedStart.current){trackedStart.current=true;trackInteraction('lesson_started');}},[openOnArrival]);
  const saveIssue=useGame(v=>v.saveIssue);
  const u=unitById(id);
  const [round,setRound]=useState(()=>s.learning?.units[id]?.pendingAudio?.length?s.learning.units[id].pendingAudio![0]:s.learning?.units[id]?.completedAt?0:Math.min(s.learning?.units[id]?.round??0,u?unitRoundCount(u)-1:0));
@@ -81,7 +84,8 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const speakOwned=(...parts:Parameters<typeof say>)=>{narration.current?.cancel();const run=sayCancellableWhile(()=>active.current&&!guideIsOpen(),...parts);narration.current=run;return run.done;};
  const settings=useGame(s=>s.save.settings),profile=learningProfile(settings);
  const initialListening=listenFirst??startsWithListening(profile,target.kind,PHRASES.find(p=>p.en===target.en)?.level);
- const options=useMemo(()=>learningChoices(target,choices,count??profile.choices,profile.vocabulary),[]);
+ // Chosen once per round so the pictures never reshuffle under the child's finger.
+ const [options]=useState(()=>learningChoices(target,choices,count??profile.choices,profile.vocabulary));
  // useChoice uses identity: resolve the canonical target from this stable options array.
  const right=options.find(o=>o.key===target.key)!;
  // Lessons and review keep every option on a wrong answer and move them, so a second try is a real choice (T05).
@@ -125,17 +129,18 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  };
  const hear=()=>playEntry(target,explaining);
  const hearSituation=async()=>{if(guideIsOpen())return;auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);const ok=await speakOwned(['zh',situation!]);if(active.current&&ticket===audioRun.current){setPlaying(false);if(!ok){setAudioFailed(true);setFeedback('声音暂时没准备好，可以稍后再听。');}}};
- useEffect(()=>{active.current=true;introTimer.current=setTimeout(()=>{if(situation&&!guided)void hearSituation();else void hear();},300);return()=>{active.current=false;audioRun.current++;clearTimeout(introTimer.current);narration.current?.cancel();
+ const intro=useEvent(()=>{if(situation&&!guided)void hearSituation();else void hear();}),leave=useEvent(()=>finishTrace('left'));
+ useEffect(()=>{const runs=audioRun,timer=introTimer,voice=narration;active.current=true;timer.current=setTimeout(intro,300);return()=>{active.current=false;runs.current++;clearTimeout(timer.current);voice.current?.cancel();
   // Only a real departure counts as leaving: a remount on the next tick (React StrictMode) is not one.
-  setTimeout(()=>{if(!active.current)finishTrace('left');},0);};},[]);
+  setTimeout(()=>{if(!active.current)leave();},0);};},[intro,leave]);
  // Help cuts the friend's voice; when it closes, the friend says it again so the child knows where they are.
  const helpWasOpen=useRef(guideOpen);
+ const afterHelp=useEvent(()=>{if(!auto.paused&&!continued.current&&!busy.current){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}});
  useEffect(()=>{
   const was=helpWasOpen.current;helpWasOpen.current=guideOpen;
   if(guideOpen){audioRun.current++;clearTimeout(introTimer.current);narration.current?.cancel();setPlaying(false);setAudioFailed(false);return;}
-  if(was&&!auto.paused&&!continued.current&&!busy.current){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- },[guideOpen]);
+  if(was)afterHelp();
+ },[guideOpen,afterHelp]);
  const tap=(entry:LearningEntry)=>{
   if(busy.current)return;const result=choice.pick(entry);if(result==='ignored')return;
   const t=trace.current;t.tries++;t.asked=true;

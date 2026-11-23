@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
 import { learningPath, withReview, withWelcomeFriend, pathNodes, currentNode, chapterProgress, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
 import { bubbleWords, leftBehind, sceneSpots } from '../lib/pathScene';
@@ -45,13 +46,13 @@ export function PathHome() {
  // Stops finished since the last visit light up once; finishing the whole path is celebrated once too.
  const finished = !currentNode(route);
  const [celebrating, setCelebrating] = useState(false);
- useEffect(() => {
+ const lightUp = useEvent(() => {
   const done = pathNodes(route).filter(n => n.state === 'done').map(n => n.key);
   const fresh = celebrate(finished ? [...done, PATH_COMPLETE] : done);
   if (fresh.includes(PATH_COMPLETE)) { setCelebrating(true); void say(['en', 'You did it!']); }
   if (fresh.length) { setLit(fresh); sfx('sparkle'); const t = setTimeout(() => setLit([]), 1600); return () => clearTimeout(t); }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, []);
+ });
+ useEffect(() => lightUp(), [lightUp]);
  // On a tall phone the scene is wider than the screen: bring today's stop (or the middle) into view.
  useEffect(() => {
   const v = view.current;

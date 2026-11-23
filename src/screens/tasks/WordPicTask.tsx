@@ -1,7 +1,8 @@
 import {RoundProgress} from '../../components/RoundProgress';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useEvent } from '../../lib/hooks';
 import { dailyLearningPlan, practiceWordPool } from "../../data/learning";
 import { useGame } from "../../store";
 import { pickRandom, type PicWord } from "../../data/words";
@@ -25,7 +26,7 @@ export function WordPicTask({onFinish,practice=false}:{onFinish:()=>void;practic
 }
 function WordPicTaskChoices({ onFinish, practice=false }: { onFinish: () => void; practice?:boolean }) {
   const noteWord = useGame((s) => s.noteWord);
-  const rounds = useMemo(() => makeRounds(practice), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [rounds] = useState(() => makeRounds(practice));
   const [idx, setIdx] = useState(0);
   return <PicRound key={idx} round={rounds[idx]} idx={idx} total={rounds.length} noteWord={noteWord} onNext={() => (idx + 1 < rounds.length ? setIdx(idx + 1) : onFinish())} />;
 }
@@ -41,14 +42,14 @@ function PicRound({ round, idx, total, onNext, noteWord }: { round: Round; idx: 
   const [help,setHelp]=useState(false);
   const bilingual = () => (useGame.getState().save.settings.englishMode ?? "bilingual") === "bilingual";
   // 先英文（Apple! Find the apple!）→ 中文提示 → 再说一遍指令
-  const ask = async (withHelp=help) => {const ok=await say(...askParts(picAsk(t),withHelp));if(ok&&active.current){heard.current=true;noteWord(t.en,'heard');}};
+  const ask = useEvent(async (withHelp:boolean=help) => {const ok=await say(...askParts(picAsk(t),withHelp));if(ok&&active.current){heard.current=true;noteWord(t.en,'heard');}});
   const active = useRef(true);
   const introTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => {
     active.current = true;
     introTimer.current = setTimeout(()=>ask(), 300);
     return () => { active.current = false; clearTimeout(introTimer.current); stopSpeech(); };
-  }, [round]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [round, ask]);
 
   const tap = async (w: PicWord) => {
     clearTimeout(introTimer.current);

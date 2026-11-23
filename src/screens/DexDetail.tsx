@@ -25,6 +25,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
 
   useEffect(() => {
     let active=true;
+    const p=getCreature(id),desc=kidDescription(p);
     const timer=setTimeout(async()=>{
       await playCry(p.id);
       if(active)void say(["zh", `${p.nameZh}！`], ["en", `${p.nameEn}!`], 300, ["en", desc.en], ["zh", desc.zh]).then(ok=>{if(ok&&active)useGame.getState().noteWord(p.nameEn,"heard");});

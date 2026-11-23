@@ -7,6 +7,7 @@ import {useGame} from '../store';
 import {Icon} from '../icons';
 import {isForegroundAudioActive,sayCancellableWhile,unlockAudio} from '../lib/speech';
 import {isMicActive} from '../lib/mic';
+import {useEvent} from '../lib/hooks';
 import './feature-guide.css';
 
 /** Contextual, non-modal help: one real action, no rewards, no focus stealing. */
@@ -52,9 +53,9 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   fit();window.addEventListener('resize',fit);
   return()=>window.removeEventListener('resize',fit);
  },[compact,open]);
- const allowed=()=>live.current&&!modalIsOpen()&&!document.hidden&&!isMicActive()&&useGame.getState().screen===scope.current&&!useGame.getState().saveIssue;
- const cancel=()=>{sequence.current++;run.current?.cancel();run.current=null;if(live.current)setSpeaking(false);};
- const hear=async(manual=false)=>{
+ const allowed=useEvent(()=>live.current&&!modalIsOpen()&&!document.hidden&&!isMicActive()&&useGame.getState().screen===scope.current&&!useGame.getState().saveIssue);
+ const cancel=useEvent(()=>{sequence.current++;run.current?.cancel();run.current=null;if(live.current)setSpeaking(false);});
+ const hear=useEvent(async(manual=false)=>{
   if(!allowed())return;
   if(manual)unlockAudio();
   onVoiceStart?.();
@@ -64,28 +65,28 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   if(!live.current||sequence.current!==ticket)return;
   run.current=null;setSpeaking(false);
   if(manual&&!ok&&allowed()&&!isForegroundAudioActive())setUnavailable(true);
- };
+ });
+ const close=useEvent(()=>{autoCancelled.current=true;cancel();setOpen(false);setMore(false);});
  const previousCompletion=useRef(completed);
  useEffect(()=>{
   if(completed&&!previousCompletion.current)close();
   previousCompletion.current=completed;
- },[completed]);
- const close=()=>{autoCancelled.current=true;cancel();setOpen(false);setMore(false);};
+ },[completed,close]);
+ const outside=useEvent((event:Event)=>{
+  if(root.current?.contains(event.target as Node))return;
+  // Keep the pressed target in place until its click lands, especially in bottom-anchored panels.
+  autoCancelled.current=true;cancel();if(compact&&event.type!=='pointerdown')setOpen(false);
+ });
  useEffect(()=>{
   live.current=true;
-  const outside=(event:Event)=>{
-   if(root.current?.contains(event.target as Node))return;
-   // Keep the pressed target in place until its click lands, especially in bottom-anchored panels.
-   autoCancelled.current=true;cancel();if(compact&&event.type!=='pointerdown')setOpen(false);
-  };
   const otherGuide=(event:Event)=>{if((event as CustomEvent).detail!==root.current)close();};
   window.addEventListener('pokepal:guide-open',otherGuide);
   const hidden=()=>{if(document.hidden){autoCancelled.current=true;cancel();}};
   window.addEventListener('pointerdown',outside,true);window.addEventListener('click',outside,true);window.addEventListener('keydown',outside,true);document.addEventListener('visibilitychange',hidden);
   return()=>{live.current=false;cancel();window.removeEventListener('pokepal:guide-open',otherGuide);window.removeEventListener('pointerdown',outside,true);window.removeEventListener('click',outside,true);window.removeEventListener('keydown',outside,true);document.removeEventListener('visibilitychange',hidden);};
- },[]);
- useEffect(()=>{
-  if(!open)return;
+ },[outside,cancel,close]);
+ // Runs each time the bubble opens; reads this render's settings without re-queuing when they change.
+ const announce=useEvent(()=>{
   window.dispatchEvent(new CustomEvent('pokepal:guide-open',{detail:root.current}));
   mark(id);
   const queuedAt=Date.now();
@@ -99,7 +100,8 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
    if(state==='play'){clearInterval(timer);void hear();}
   },200);}
   return()=>{clearInterval(timer);cancel();};
- },[open]);
+ });
+ useEffect(()=>open?announce():undefined,[open,announce]);
  useEffect(()=>{
   if(!open)return;
   setHasTarget(false);
@@ -112,7 +114,7 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   locate();const observer=new MutationObserver(locate);observer.observe(document.getElementById('root')!,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','disabled','aria-hidden','data-stage']});
   document.addEventListener('click',act,true);
   return()=>{target?.classList.remove('guide-target');targetRef.current=null;observer.disconnect();document.removeEventListener('click',act,true);};
- },[open,id]);
+ },[open,guide.target,close]);
  return <aside ref={root} className={`feature-guide ${floating?'guide-floating':''} ${compact?'guide-compact':''} ${open?'is-open':'is-closed'}`} aria-label="操作小帮手" data-guide={id}>
   {(!open||compact)&&<button className="guide-reopen" onClick={()=>{if(open){close();return;}autoCancelled.current=true;trackInteraction('help_opened');setOpen(true);void hear(true);}} aria-label="帮助" aria-expanded={open} aria-controls={panelId}><span className="help-symbol" aria-hidden="true">?</span><span>帮助</span></button>}
   {open&&<div id={panelId} className="guide-content" onKeyDown={e=>{if(e.key==='Escape'){close();root.current?.querySelector<HTMLButtonElement>('.guide-reopen')?.focus();}}}>

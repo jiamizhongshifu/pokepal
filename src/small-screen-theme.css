@@ -4,7 +4,7 @@
   --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper); --surface-border:var(--brand-line);
   color:var(--text);
 }
-#root .parent-organized .parent-fold-content { --p-ink:var(--brand-ink); --p-muted:var(--brand-ink-muted); }
+#root .parent-organized .parent-fold-content { --p-ink:var(--brand-ink); --p-muted:var(--brand-ink-muted); --p-card:#ffffff; --p-well:#f2f6f8; --p-border:#e2eaed; }
 #root .story-reader .story-page-count { color:var(--brand-ink); }
 #root .story-reader .theatre-word { width:max-content; max-width:calc(100% - 24px); }
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }
@@ -18,7 +18,7 @@
 :root[data-theme="dark"] #root .parent-organized { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro h2,.parent-fold>summary) { color:var(--night-ink); }
 :root[data-theme="dark"] #root .parent-organized :is(.parent-page-intro p,.parent-detail-heading,.parent-fold>summary small,.parent-fold>summary::after) { color:var(--night-muted); }
-:root[data-theme="dark"] #root .parent-organized .parent-danger>summary { color:var(--brand-danger-deep); }
+:root[data-theme="dark"] #root .parent-organized .parent-danger>summary { color:var(--brand-danger); }
 :root[data-theme="dark"] #root .parent-organized .parent-fold-content .parent-inner-fold { color:var(--brand-ink); }
 
 /* Keep illustrated word labels readable as words, even on a 320px screen. */

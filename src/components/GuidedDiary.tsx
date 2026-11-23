@@ -6,6 +6,7 @@ import {DIARY_PROMPTS} from '../data/diaryPrompts';
 import {diaryAnswerText,pendingDiaryAnswers,toDiaryWav,type DiaryAnswer,type DiaryEntry} from '../lib/diary';
 import {say,stopSpeech} from '../lib/speech';
 import {useClipRecorder,type ClipFailure} from '../lib/clipRecorder';
+import {useEvent} from '../lib/hooks';
 
 const RECORDING_FAILURES:Partial<Record<ClipFailure,string>>={unsupported:'请大人打开受信任的 HTTPS 并允许麦克风，也可以用下面的文字框记录。',permission:'麦克风还没有打开，请大人在系统设置里允许。也可以先用文字记录。',interrupted:'这次没有录好，原来的回答还在，请再试一次。',empty:'这次没有录好，原来的回答还在，请再试一次。'};
 
@@ -24,13 +25,14 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
   onFailure:(kind,e)=>fail(RECORDING_FAILURES[kind]?new Error(RECORDING_FAILURES[kind]):e)});
  const {recording,seconds,stop}=rec,busy=saving||rec.busy;
  const prompt=DIARY_PROMPTS[step];const answer=entry.answers?.find(a=>a.question===prompt?.id);
- const silence=()=>{voiceToken.current++;stopSpeech();if(live.current)setSpeaking(false);};
- useEffect(()=>{live.current=true;const hide=()=>{if(document.hidden)silence();};document.addEventListener('visibilitychange',hide);return()=>{live.current=false;controller.current?.abort();silence();document.removeEventListener('visibilitychange',hide);};},[]);
+ const silence=useEvent(()=>{voiceToken.current++;stopSpeech();if(live.current)setSpeaking(false);});
+ useEffect(()=>{live.current=true;const hide=()=>{if(document.hidden)silence();};document.addEventListener('visibilitychange',hide);return()=>{live.current=false;controller.current?.abort();silence();document.removeEventListener('visibilitychange',hide);};},[silence]);
  const save=async(next:DiaryEntry)=>{current.current=next;await onSave(next);};
  const update=async(a:DiaryAnswer)=>{const base=current.current;await save({...base,answers:[...(base.answers??[]).filter(x=>x.question!==a.question),a]});};
  const fail=(e:unknown)=>{if(live.current)setError(e instanceof Error?e.message:'没有保存成功，先留在这里再试一次。');};
- const hear=async()=>{silence();document.querySelectorAll('audio').forEach(a=>a.pause());const token=voiceToken.current;setSpeaking(true);const ok=await say(['zh',prompt.voice]);if(live.current&&token===voiceToken.current){setSpeaking(false);if(!ok&&![...document.querySelectorAll('audio')].some(a=>!a.paused))setStatus('这段声音暂时没有准备好，可以请大人读给你听。');}};
- useEffect(()=>{if(!prompt)return;const t=setTimeout(()=>{if(live.current&&!lock.current&&!document.hidden&&!rec.isCapturing())void hear();},120);return()=>{clearTimeout(t);silence();};},[step]);
+ const hear=useEvent(async()=>{silence();document.querySelectorAll('audio').forEach(a=>a.pause());const token=voiceToken.current;setSpeaking(true);const ok=await say(['zh',prompt.voice]);if(live.current&&token===voiceToken.current){setSpeaking(false);if(!ok&&![...document.querySelectorAll('audio')].some(a=>!a.paused))setStatus('这段声音暂时没有准备好，可以请大人读给你听。');}});
+ const speakPrompt=useEvent(()=>{if(live.current&&!lock.current&&!document.hidden&&!rec.isCapturing())void hear();});
+ useEffect(()=>{if(!prompt)return;const t=setTimeout(speakPrompt,120);return()=>{clearTimeout(t);silence();};},[prompt,speakPrompt,silence]);
  const move=async(next:number,skip=false)=>{
   if(lock.current||rec.isCapturing())return;lock.current=true;setSaving(true);setError('');silence();
   try{const base=current.current;const answers=skip?[...(base.answers??[]).filter(a=>a.question!==prompt.id),{question:prompt.id,skipped:true}]:base.answers;await save({...base,answers,guidedStep:next});if(live.current){setStep(next);setStatus('');}}

@@ -11,7 +11,7 @@ import './lesson-picnic.css';
 export function LessonPicnic({words,packed,latest,buddy,finished}:{words:string[];packed:string[];latest?:string;buddy:number;finished:boolean}){
  const [shared,setShared]=useState<string>(),[unavailable,setUnavailable]=useState(false);
  const voice=useRef<ReturnType<typeof sayCancellableWhile>|null>(null),live=useRef(true),run=useRef(0),invited=useRef(false);
- useEffect(()=>{live.current=true;return()=>{live.current=false;run.current++;voice.current?.cancel();};},[]);
+ useEffect(()=>{const runs=run,speaking=voice;live.current=true;return()=>{live.current=false;runs.current++;speaking.current?.cancel();};},[]);
  const share=async(word:string)=>{
   if(!finished||!packed.includes(word))return;
   unlockAudio();voice.current?.cancel();const ticket=++run.current;

@@ -21,9 +21,10 @@ export function AvatarEditor({onClose}:{onClose:()=>void}) {
   const job=useRef(0);
   useEffect(()=>{
     stopSpeech();
-    const el=dialog.current;
+    const el=dialog.current,jobs=job;
     el?.showModal();
-    return ()=>{job.current++;el?.close();};
+    // Bump the counter at close time so a photo still being prepared is dropped.
+    return ()=>{jobs.current++;el?.close();};
   },[]);
   const choose=async(event:ChangeEvent<HTMLInputElement>)=>{
     const file=event.target.files?.[0];event.target.value='';

@@ -1,5 +1,6 @@
 import { learningProfile } from '../../lib/learningStage';
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useEvent } from '../../lib/hooks';
 import { dailyLearningPlan, practiceWordPool } from '../../data/learning';
 import { useGame } from "../../store";
 import { LETTERS, pickOne } from "../../data/words";
@@ -23,7 +24,8 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
   const caught = useMemo(() => captures.map((c) => c.id), [captures]);
   const stats = useGame((s) => s.save.wordStats);
   const noteWord = useGame((s) => s.noteWord);
-  const item = useMemo(() => {
+  // One letter per visit, chosen on arrival.
+  const [item] = useState(() => {
     const save=useGame.getState().save;
     const plan=dailyLearningPlan(save,excluded.length>0);
     if(learningProfile(save.settings).vocabulary===1 || plan.words.some(w=>w.icon&&!excluded.includes(w.en[0].toUpperCase()))){
@@ -38,7 +40,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
     const mine = pool.filter((l) => l.creatureId && caught.includes(l.creatureId));
     const fresh = pool.filter((l) => !stats[`letter:${l.letter}`]);
     return pickOne(mine.length && Math.random() < 0.6 ? mine : fresh.length ? fresh : pool);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const strokes = LETTER_STROKES[item.letter];
   const paths = useRef<(SVGPathElement|null)[]>([]);
@@ -53,7 +55,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
   const [hint,setHint] = useState(''), [reduced,setReduced] = useState(false);
   const introTimer=useRef<ReturnType<typeof setTimeout>>();
   const shown = demo ?? step;
-  const intro = () => say(...bi(...traceIntro(item)));
+  const intro = useEvent(() => say(...bi(...traceIntro(item))));
 
   useEffect(() => {
     alive.current=true;
@@ -70,7 +72,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
     const motion=()=>setReduced(media.matches);motion();media.addEventListener('change',motion);
     introTimer.current=setTimeout(intro,300);
     return()=>{alive.current=false;clearTimeout(introTimer.current);media.removeEventListener('change',motion);stopSpeech();};
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [intro]);
 
   // Animate only the small guide, without rerendering React on every frame.
   useEffect(()=>{

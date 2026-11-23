@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useEvent } from '../lib/hooks';
 import { deleteDiary, deleteRecording, db, listRecordings, RECORDING_LIMIT, type Recording } from '../lib/db';
 import type { DiaryEntry } from '../lib/diary';
 import { playUrl } from '../lib/speech';
@@ -21,8 +22,8 @@ function useConfirm() {
 export function ParentRecordings({ onCount }: { onCount?: (n: number) => void }) {
   const [recs, setRecs] = useState<Recording[]>([]), [status, setStatus] = useState('');
   const confirm = useConfirm();
-  const refresh = () => listRecordings().then(r => { setRecs(r); onCount?.(r.length); }).catch(() => setStatus('暂时读不到录音，原有录音没有改动。'));
-  useEffect(() => { void refresh(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const refresh = useEvent(() => listRecordings().then(r => { setRecs(r); onCount?.(r.length); }).catch(() => setStatus('暂时读不到录音，原有录音没有改动。')));
+  useEffect(() => { void refresh(); }, [refresh]);
   const remove = async (r: Recording) => {
     if (!confirm.ask(`rec-${r.id}`)) return;
     try { await deleteRecording(r.id!); setStatus(`已删除 ${r.phrase}（${when(r.createdAt)}）。`); await refresh(); }

@@ -7,6 +7,7 @@ import { sayCancellableWhile, unlockAudio, type Part } from "../lib/speech";
 import { modalIsOpen } from '../lib/modalLayer';
 import { restPeriod, restingFriends } from '../lib/rest';
 import { Icon } from "../icons";
+import { useEvent } from "../lib/hooks";
 import { CreatureImg } from "../components/CreatureImg";
 import './sleepy.css';
 
@@ -23,7 +24,7 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
   const voice=useRef<ReturnType<typeof sayCancellableWhile>|null>(null),sequence=useRef(0);
   const ids=restingFriends(captures),night=period==='night';
   const cancel=()=>{sequence.current++;voice.current?.cancel();voice.current=null;};
-  const hear=async(manual=false,closing=false)=>{
+  const hear=useEvent(async(manual=false,closing=false)=>{
     if(manual)unlockAudio();
     cancel();setSpeaking(true);setUnavailable(false);const ticket=sequence.current;
     const parts:Part[]=closing?(night?[["en","Good night!"],["zh","晚安，明天见。"]]:[["zh","好呀，放心去休息吧。小伙伴们也会好好休息。"]]):night?[
@@ -37,7 +38,7 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
     const ok=await run.done;
     if(!live.current||ticket!==sequence.current)return;
     setSpeaking(false);setUnavailable(!ok&&!document.hidden&&!modalIsOpen());
-  };
+  });
   useEffect(()=>{
     live.current=true;
     setPeriod(restPeriod(clock()));
@@ -49,7 +50,7 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
   useEffect(()=>{
     setResting(false);const timer=setTimeout(()=>void hear(),500);
     return()=>{clearTimeout(timer);cancel();};
-  },[period]);
+  },[period,hear]);
   const updateMore=()=>{const el=gallery.current;if(el)setMore(el.scrollHeight-el.clientHeight-el.scrollTop>8);};
   useEffect(()=>{
     const el=gallery.current;if(!el)return;

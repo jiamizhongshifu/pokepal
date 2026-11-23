@@ -28,11 +28,13 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
   const screenRef = useRef<HTMLDivElement>(null);
   const filtersKey=JSON.stringify([page,onlyOwned,generation,query]);
   const previousFilters=useRef(filtersKey);
+  // Return to where the child left the album, once, on arrival.
+  const [arrival]=useState(browse);
   useLayoutEffect(() => {
-    if(!browse)return;
-    screenRef.current?.scrollTo({top:browse.scrollTop});
-    screenRef.current?.querySelector<HTMLButtonElement>(`[data-pokemon-id="${browse.focusId}"]`)?.focus({preventScroll:true});
-  }, []);
+    if(!arrival)return;
+    screenRef.current?.scrollTo({top:arrival.scrollTop});
+    screenRef.current?.querySelector<HTMLButtonElement>(`[data-pokemon-id="${arrival.focusId}"]`)?.focus({preventScroll:true});
+  }, [arrival]);
   useLayoutEffect(() => {
     if(previousFilters.current!==filtersKey)screenRef.current?.scrollTo({top:0});
     previousFilters.current=filtersKey;

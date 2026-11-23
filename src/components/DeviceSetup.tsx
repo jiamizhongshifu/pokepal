@@ -75,7 +75,7 @@ function OfflineSetup({initiallyOpen,compactTools}:{initiallyOpen:boolean;compac
       void navigator.storage?.persisted?.().then(setPersisted).catch(()=>{});
       return ()=>cancelAnimationFrame(frame);
     }
-  },[open]);
+  },[open,initiallyOpen]);
   const install=async()=>{
     const prompt=installPrompt;
     if(!prompt)return;

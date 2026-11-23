@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
 import { Icon } from '../icons';
 import { CreatureImg } from './CreatureImg';
@@ -52,7 +53,8 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   const t = trace.current;
   useGame.getState().noteOpportunity({ source: ISLAND_SOURCE(ask.play), key: ask.prompt.key, kind: classifyResponse({ firstAnswer: t.firstAnswer, replays: t.replays, modelShown: shown, heardBeforeAnswer: t.heard, outcome }), tries: t.tries, replays: t.replays });
  };
- useEffect(() => { live.current = true; const start = setTimeout(() => void hear(), 250); return () => { clearTimeout(start); live.current = false; if (trace.current.tries) setTimeout(() => record('left'), 0); }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
+ const begin = useEvent(() => void hear()), leave = useEvent(() => record('left'));
+ useEffect(() => { const traced = trace; live.current = true; const start = setTimeout(begin, 250); return () => { clearTimeout(start); live.current = false; if (traced.current.tries) setTimeout(leave, 0); }; }, [begin, leave]);
  const tap = (id: string) => {
   if (done) return;
   const t = trace.current; t.tries++;

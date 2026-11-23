@@ -3,7 +3,7 @@ import {RoundProgress} from '../components/RoundProgress';
 import { FeatureGuide } from '../components/FeatureGuide';
 import '../components/island-living.css';
 import { ParticipationNote } from '../components/ParticipationNote';
-import { useMemo,useState,useRef,useEffect } from 'react';
+import { useState,useRef,useEffect } from 'react';
 import { useGame } from '../store';
 import { learningEntry,reviewSituation,reviewScene,recommendedUnit } from '../data/curriculum';
 import { storyBackground } from '../data/sceneArt';
@@ -47,11 +47,13 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
 
 export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'home'|'parent'}){
  const trackedStart=useRef(false);
- useEffect(()=>{if(!trackedStart.current&&keys.some(k=>learningEntry(k))){trackedStart.current=true;trackInteraction('review_started');}},[]);
+ const [startable]=useState(()=>keys.some(k=>learningEntry(k)));
+ useEffect(()=>{if(startable&&!trackedStart.current){trackedStart.current=true;trackInteraction('review_started');}},[startable]);
  const go=useGame(s=>s.go),records=useGame(s=>s.save.learning?.records);
  const buddy=useGame(s=>s.save.captures.find(c=>s.save.settings.favorites.includes(c.id))?.id??s.save.captures[0]?.id??FIRST_FRIEND);
  const groupSize=useGame(s=>reviewGroupSize(s.save));
- const entries=useMemo(()=>[...new Set(keys)].map(learningEntry).filter((e):e is NonNullable<typeof e>=>!!e).slice(0,groupSize),[]);
+ // The group is fixed on arrival; finishing words must not reshape it mid-review.
+ const [entries]=useState(()=>[...new Set(keys)].map(learningEntry).filter((e):e is NonNullable<typeof e>=>!!e).slice(0,groupSize));
  const [idx,setIdx]=useState(0);
  const deferred=useRef<string[]>([]);
  const next=(skip=false)=>{if(skip)deferred.current.push(e.key);useGame.getState().markReviewAudio(e.key,skip);if(idx+1===entries.length&&!deferred.current.length)useGame.getState().finishReview();setIdx(i=>i+1);};

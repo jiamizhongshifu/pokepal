@@ -6,6 +6,7 @@ import { FeatureGuide } from '../components/FeatureGuide';
 import { learningEntry, selectedUnit } from '../data/curriculum';
 import { ParticipationNote } from '../components/ParticipationNote';
 import { useEffect, useRef, useState } from 'react';
+import { useEvent } from '../lib/hooks';
 import { StoryStage } from '../components/StoryStage';
 import { STORY_COVER_PAGE } from '../data/storyScenes';
 import { STORIES, STORY_THEMES, storyProgressKey, type StoryTheme, type Story, type StoryPage } from '../data/stories';
@@ -95,8 +96,8 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const [slow,setSlow]=useState(useGame.getState().save.settings.storyPace==='slow');
  useEffect(()=>{setVoicePace(slow?'slow':'normal');return()=>setVoicePace('normal');},[slow]);
  const finish=()=>{stopSpeech();setEnded(true);noteStoryPage(bookmark,story.pages.length+1);};
- useEffect(()=>{
-   if(ended)return;
+ // Narrates the page shown when it starts; status updates and a new parent render must not restart it.
+ const narrate=useEvent(()=>{
    noteStoryPage(bookmark,idx+1);
    const ticket=++run.current;
    setStatus('playing');
@@ -112,7 +113,8 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      if(ok && auto.current && !page.pause)timer.current=setTimeout(()=>{if(run.current!==ticket)return;if(idx+1<story.pages.length)setIdx(i=>i+1);else finish();},1200);
    },200);
    return ()=>{run.current++;clearTimeout(timer.current);stopSpeech();};
- },[idx,replay,bilingual,ended,story.id]); // page is determined by idx and story; narration must not restart on status updates.
+ });
+ useEffect(()=>ended?undefined:narrate(),[idx,replay,bilingual,ended,story.id,narrate]);
  const pause=()=>{run.current++;clearTimeout(timer.current);stopSpeech();setStatus('idle');};
  const read=()=>setReplay(n=>n+1);
  const readPair=async(line:{en:string;zh:string})=>{

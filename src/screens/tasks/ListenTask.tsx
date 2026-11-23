@@ -2,6 +2,7 @@ import {RoundProgress} from '../../components/RoundProgress';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useEvent } from "../../lib/hooks";
 import { useGame } from "../../store";
 import { dailyLearningPlan, practiceWordPool } from '../../data/learning';
 import { learningLevel } from '../../data/curriculum';
@@ -79,7 +80,7 @@ function ListenTaskChoices({ onFinish, practice=false }: { onFinish: () => void;
   const level = useGame((s) => learningLevel(s.save));
   const caughtIds = useMemo(() => captures.map((c) => c.id), [captures]);
   const noteWord = useGame((s) => s.noteWord);
-  const rounds = useMemo(() => makeRounds(caughtIds, level, practice), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [rounds] = useState(() => makeRounds(caughtIds, level, practice));
   const [idx, setIdx] = useState(0);
   return <ListenRound key={idx} round={rounds[idx]} idx={idx} total={rounds.length} noteWord={noteWord} onNext={() => (idx + 1 < rounds.length ? setIdx(idx + 1) : onFinish())} />;
 }
@@ -126,13 +127,13 @@ function ListenRound({ round, idx, total, onNext, noteWord }: { round: Round; id
   const active = useRef(true);
   const missed=useRef(false),heard=useRef(false);
   const [help,setHelp]=useState(false);
-  const hear=async(withHelp=help)=>{const ok=await ask(round,()=>active.current,withHelp);if(ok&&active.current)heard.current=true;};
+  const hear=useEvent(async(withHelp:boolean=help)=>{const ok=await ask(round,()=>active.current,withHelp);if(ok&&active.current)heard.current=true;});
   const introTimer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => {
     active.current = true;
     introTimer.current = setTimeout(() => hear(), 300);
     return () => { active.current = false; clearTimeout(introTimer.current); stopSpeech(); };
-  }, [round]);
+  }, [round, hear]);
 
   const tap = async (o: Opt) => {
     clearTimeout(introTimer.current);

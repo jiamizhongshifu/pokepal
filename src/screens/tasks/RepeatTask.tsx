@@ -1,6 +1,7 @@
 import {RoundProgress} from '../../components/RoundProgress';
 import { learningProfile } from '../../lib/learningStage';
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useEvent } from "../../lib/hooks";
 import { dailyLearningPlan } from "../../data/learning";
 import { useGame } from "../../store";
 import { getCreature, creatureArt } from "../../data/creatures";
@@ -19,14 +20,15 @@ import { CreatureImg } from "../../components/CreatureImg";
 export function RepeatTask({ onFinish, practice=false, buddyId }: { onFinish: () => void; practice?:boolean; buddyId?:number }) {
   const save = useGame((s) => s.save);
   const noteWord = useGame((s) => s.noteWord);
-  const { buddy, phrases } = useMemo(() => {
+  // Chosen once on arrival so the phrases stay put while the child practises.
+  const [{ buddy, phrases }] = useState(() => {
     const ids = save.captures.map((c) => c.id);
     const buddy = getCreature(buddyId ?? (ids.length ? pickOne(ids) : 25));
     const picked = dailyLearningPlan(save,practice).phrases;
     // 第三句说小精灵的名字
     const nameP: SayPhrase = { en: `${buddy.nameEn}!`, zh: `${buddy.nameZh}！`, level: 1 };
     return { buddy, phrases: !practice && learningProfile(save.settings).vocabulary===2 && ids.length ? [...picked.slice(0,2),nameP] : picked };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
   const [idx, setIdx] = useState(0);
   return (
     <SayRound
@@ -50,19 +52,19 @@ function SayRound({ buddy, phrase, idx, total, onNext, onSpoken }: { buddy: Crea
   const [modelHeard,setModelHeard]=useState(false);
   const [busy, setBusy] = useState(false);
 
-  const model = async () => {
+  const model = useEvent(async () => {
     const ticket=++run.current;
     setReady(false);
     // 示范两遍（英文）→ 中文意思 → Your turn!
     const ok = await say(...bi(["en", phrase.en, phrase], 600, ["en", phrase.en, phrase], 400, ["zh", phrase.zh, phrase], 300, ["en", SAY.yourTurn.en[0], {en:SAY.yourTurn.en[0],zh:SAY.yourTurn.zh!}]));
     if (active.current&&ticket===run.current) {setReady(true);setModelHeard(ok);if(ok)useGame.getState().noteWord(phrase.en,'heard');}
     return ok;
-  };
+  });
   useEffect(() => {
-    active.current=true;
+    const runs=run;active.current=true;
     const t = setTimeout(model, 300);
-    return () => { active.current=false;run.current++;clearTimeout(t); stopSpeech(); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => { active.current=false;runs.current++;clearTimeout(t); stopSpeech(); };
+  }, [model]);
 
   const onResult = async (r: RecordResult) => {
     if (processing.current||!active.current) return;

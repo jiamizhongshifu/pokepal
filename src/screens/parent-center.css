@@ -1,6 +1,8 @@
 /* Parent tools share the island palette, with a clean dashboard hierarchy and dark-mode support. */
 #root .parent-organized{--p-card:#ffffff;--p-well:#f2f6f8;--p-border:#e2eaed;--p-ink:#3c3c3c;--p-muted:#6f7c82;--p-path-bg:#dbf8c5;--p-path-border:#bfe89e;background:var(--page-bg);color:var(--p-ink);padding-bottom:0;overflow:hidden;min-height:0}
 :root[data-theme="dark"] #root .parent-organized{--p-card:#1d2d35;--p-well:#131f24;--p-border:#31454f;--p-ink:#f1f7fb;--p-muted:#9eb3be;--p-path-bg:#1b3528;--p-path-border:#366945}
+/* Night cards: what sits inside a card takes the card's own well, not the daytime paper. */
+:root[data-theme="dark"] #root .parent.parent-organized .parent-body section{--surface:var(--p-well);--surface-strong:var(--p-well);--surface-border:var(--p-border)}
 #root .parent-organized .parent-head{flex:none;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) 14px max(24px,env(safe-area-inset-left));backdrop-filter:none;box-shadow:none;border-bottom:1px solid var(--p-border);z-index:2}
 #root .parent-title-row{display:flex;align-items:center;gap:14px}
 #root .parent-title-row .back{width:48px;height:48px;min-width:48px}
@@ -55,7 +57,7 @@
 #root .parent-organized .seg button{font-size:var(--text-base);padding:10px 16px;min-height:46px}
 #root .parent-inner-fold{margin:8px 0;font-size:var(--text-base);border-top:1px solid var(--brand-line)}
 #root .parent-inner-fold>summary{padding:14px 0;min-height:48px;cursor:pointer;font-weight:600}
-#root .parent-inner-fold p{font-size:var(--text-base);color:var(--brand-ink-muted)}
+#root .parent-inner-fold p{font-size:var(--text-base);color:var(--muted)}
 #root .parent-organized .parent-voice-preview{align-self:flex-start}
 #root .parent-table-scroll{max-width:100%;overflow-x:auto}
 #root .parent-table-scroll table{min-width:620px}
@@ -115,10 +117,10 @@
 #root .parent-evidence{background:var(--surface);border:2px solid var(--brand-line);border-radius:var(--brand-radius-lg,20px);padding:20px;margin:0 0 20px}
 #root .parent-evidence h3{margin:0 0 10px}
 #root .parent-evidence-lead{font-size:var(--text-lg);margin:0 0 12px}
-#root .parent-evidence>small,#root .parent-evidence-tip{display:block;font-size:var(--text-sm);color:var(--brand-ink-muted);margin:12px 0 0}
+#root .parent-evidence>small,#root .parent-evidence-tip{display:block;font-size:var(--text-sm);color:var(--muted);margin:12px 0 0}
 #root .parent-evidence-lessons{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
 #root .parent-evidence-lessons li{display:grid;gap:2px}
-#root .parent-evidence-lessons span{font-size:var(--text-sm);color:var(--brand-ink-muted)}
+#root .parent-evidence-lessons span{font-size:var(--text-sm);color:var(--muted)}
 #root .parent-home-tried{margin-top:10px}#root .parent-home-tried[aria-pressed=true]{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
 #root .parent-evidence-delayed{font-size:var(--text-base);margin:12px 0 0}
 #root .parent-media-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}

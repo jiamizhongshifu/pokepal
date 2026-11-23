@@ -13,7 +13,7 @@
 .stage-presets strong { font-size:var(--text-xl); margin-bottom:6px; }
 .stage-presets>button>span>span { font-size:var(--text-base); font-weight:500; line-height:1.6; }
 .stage-presets small { color:var(--muted); font-size:var(--text-base); font-weight:500; margin-top:6px; line-height:1.6; }
-.stage-check { color:var(--brand-primary-deep); font-size:var(--text-3xl); flex-shrink:0; }
+.stage-check { color:var(--brand-primary-ink); font-size:var(--text-3xl); flex-shrink:0; }
 .stage-custom { margin-top:18px; }
 .stage-custom summary { min-height:54px; display:flex; align-items:center; gap:8px; padding:10px 0; font-weight:800; cursor:pointer; }
 .stage-custom summary:after { content:'＋'; margin-left:auto; font-size:var(--text-2xl); }

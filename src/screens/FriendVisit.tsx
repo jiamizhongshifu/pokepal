@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
 import { TopBar } from '../components/TopBar';
 import { FeatureGuide } from '../components/FeatureGuide';
@@ -31,16 +32,19 @@ export function FriendVisit() {
  useEffect(() => { live.current = true; return () => { live.current = false; stopSpeech(); }; }, []);
  const ready = save.balls.poke > 0;
  // Babies not yet met first, favourites first; "other boats" brings different friends when there are enough.
+ // Boats are picked from the save as it stands when a round begins; later saves don't swap them under the child.
  const boats = useMemo(() => {
   if (wish) return [wish];
+  const save = useGame.getState().save;
   const allowed = visitors(save);
   if (round.n > 0) { const fresh = pickRandom(allowed.filter(p => !round.previous.includes(p.id)), 3); return [...fresh, ...pickRandom(allowed.filter(p => !fresh.includes(p)), 3 - fresh.length)]; }
   // The first three boats bring friends whose home is already open (favourites first), so they can be found at home.
   const atHome = allowed.filter(p => homeOpen(save, p)), first = atHome.length >= 3 ? atHome : allowed;
   const fav = first.filter(p => save.settings.favorites.includes(p.id));
   return [...fav, ...pickRandom(first.filter(p => !fav.includes(p)), 3)].slice(0, 3);
- }, [wish?.id, round]); // eslint-disable-line react-hooks/exhaustive-deps
- useEffect(() => { if (phase === 'choose' && ready && boats.length) void say(['en', 'Which one do you like?']); }, [phase, ready]); // eslint-disable-line react-hooks/exhaustive-deps
+ }, [wish, round]);
+ const invite = useEvent(() => { if (boats.length) void say(['en', 'Which one do you like?']); });
+ useEffect(() => { if (phase === 'choose' && ready) invite(); }, [phase, ready, invite]);
 
  const welcome = (p: Creature) => {
   if (!ready || busy.current) return;

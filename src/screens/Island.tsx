@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
 import { BottomNav } from '../components/BottomNav';
 import { ParentButton } from '../components/TopBar';
@@ -99,20 +100,18 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  }, [district, active, done]);
 
  // The path's island stop hands over a place: walk into its scene and start the lesson's errand there.
- useEffect(() => {
-  if (!active || !initialStation) return;
-  const d = stationDistrict(initialStation);
+ const enterStation = useEvent((station: string) => {
+  const d = stationDistrict(station);
   if (!d || !open.has(d)) return;
   const waiting = islandInvites(save, standing, save.daily.date).find(i => i.kind === 'errand' && i.district === d);
   setDistrict(d); setSession(waiting ?? null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [initialStation, active]);
- useEffect(() => {
-  if (!active || initialCompanion === undefined) return;
-  const friend = standing.find(f => f.id === initialCompanion);
+ });
+ useEffect(() => { if (active && initialStation) enterStation(initialStation); }, [initialStation, active, enterStation]);
+ const meetCompanion = useEvent((id: number) => {
+  const friend = standing.find(f => f.id === id);
   if (friend) { setSession(null); setDistrict(placeOf(friend.place).district); }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [initialCompanion, active]);
+ });
+ useEffect(() => { if (active && initialCompanion !== undefined) meetCompanion(initialCompanion); }, [initialCompanion, active, meetCompanion]);
 
  const grows = (id: number) => { const c = save.captures.find(c => c.id === id), creature = getCreature(id); return !!c && readyToGrow(c, creature.stage) && !c.stay && creature.evolvesTo.some(to => !save.captures.some(x => x.id === to)); };
  const tapFriend = (id: number) => {

@@ -116,5 +116,6 @@ class SceneMusicPlayer {
 export function useSceneMusic(config:Config){
   const player=useRef<SceneMusicPlayer|null>(null);
   useEffect(()=>{player.current=new SceneMusicPlayer();return()=>{player.current?.dispose();player.current=null;};},[]);
-  useEffect(()=>{player.current?.configure(config);},[config.screen,config.level,config.blocked]);
+  const {screen,level,blocked}=config;
+  useEffect(()=>{player.current?.configure({screen,level,blocked});},[screen,level,blocked]);
 }
