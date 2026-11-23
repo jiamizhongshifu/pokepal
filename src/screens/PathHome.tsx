@@ -57,6 +57,21 @@ export function PathHome() {
   if (!v || v.scrollWidth <= v.clientWidth) return;
   if (here.current) here.current.scrollIntoView({ inline: 'center', block: 'nearest' }); else v.scrollLeft = (v.scrollWidth - v.clientWidth) / 2;
  }, [page]);
+ // Which sides still have more of the scene off screen, so the edge arrows can say "there is more this way".
+ const [more, setMore] = useState({ left: false, right: false });
+ useEffect(() => {
+  const v = view.current;
+  if (!v) return;
+  const check = () => setMore(m => {
+   const left = v.scrollLeft > 8, right = v.scrollLeft + v.clientWidth < v.scrollWidth - 8;
+   return m.left === left && m.right === right ? m : { left, right };
+  });
+  check();
+  v.addEventListener('scroll', check, { passive: true });
+  const ro = new ResizeObserver(check); ro.observe(v);
+  return () => { v.removeEventListener('scroll', check); ro.disconnect(); };
+ }, [page]);
+ const peek = (dir: -1 | 1) => { const v = view.current; if (!v) return; sfx('click'); v.scrollBy({ left: dir * v.clientWidth * .6, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); };
  // Warm adjacent chapter paintings in the background so turning pages feels instant.
  useEffect(() => {
   const urls = [page - 1, page + 1].filter(i => i >= 0 && i < path.length).map(i => pathArt(path[i].index));
@@ -132,6 +147,8 @@ export function PathHome() {
     })}
    </section>
   </div>
+  {more.left && <button type="button" className="path-peek is-left" aria-label="往左边看看" onClick={() => peek(-1)}><i aria-hidden="true" /></button>}
+  {more.right && <button type="button" className="path-peek is-right" aria-label="往右边看看" onClick={() => peek(1)}><i aria-hidden="true" /></button>}
 
   <header className="path-top">
    <div className="path-me">
