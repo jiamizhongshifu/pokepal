@@ -59,5 +59,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jiamizhongshifu/pokepal.git"
+  },
+  "overrides": {
+    "workbox-build": {
+      "glob": "^14.0.6"
+    }
   }
 }
