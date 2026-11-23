@@ -71,3 +71,9 @@
 /* The main action on a friend's card is the brand's primary button. */
 #root .screen .wish-button.primary { background: var(--brand-primary); border-color: var(--brand-primary-deep); color: #fff; box-shadow: 0 4px 0 var(--brand-primary-deep); }
 #root .screen .wish-button.primary small { color: #eaffd9; }
+
+/* Fold-outs: one chevron for every <details> that has no marker of its own (parent rows use +/−, quiet ones ⌄). */
+#root details:not(.parent-fold):not(.quiet-disclosure)>summary { display:flex; align-items:center; gap:8px; list-style:none; cursor:pointer; }
+#root details:not(.parent-fold):not(.quiet-disclosure)>summary::-webkit-details-marker { display:none; }
+#root details:not(.parent-fold):not(.quiet-disclosure)>summary::after { content:""; flex:none; width:8px; height:8px; margin:-4px 4px 0 auto; border:solid currentColor; border-width:0 3px 3px 0; border-radius:1px; rotate:45deg; transition:rotate .15s, margin .15s; }
+#root details:not(.parent-fold):not(.quiet-disclosure)[open]>summary::after { rotate:-135deg; margin-top:4px; }

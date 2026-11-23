@@ -15,6 +15,7 @@ import { BallTurns } from '../island/BallTurns';
 import { Confetti } from '../components/Celebration';
 import { InviteBerry } from '../components/InviteBerry';
 import { FeatureGuide } from '../components/FeatureGuide';
+import { ScrollPeek } from '../components/ScrollPeek';
 import { firstFruitUnit, plantAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { CropKind } from '../lib/farm';
 import { Icon } from '../icons';
@@ -223,6 +224,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
    </div>
    {active && save.captures.length === 0 && <button type="button" className="island-first-friend" aria-label="去海边迎接新朋友" onClick={() => go({ name: 'catch' })}><img src={storyProp('visit-boat')} alt="" /><Icon name="play" size={44} /></button>}
   </div>
+  {active && <ScrollPeek target={view} watch={district} />}
   {save.captures.length > 0 && <ol className={`island-day${dayDone(save) ? ' is-done' : ''}`} aria-label={`今天在小岛做了 ${done} 件事，一共 ${ISLAND_DAY} 件`}>{Array.from({ length: ISLAND_DAY }, (_, i) => <li key={i} className={i < done ? 'is-done' : undefined}><Icon name={i < done ? 'star' : 'star-empty'} size={40} /></li>)}</ol>}
   {party && <Confetti />}
   {corner}

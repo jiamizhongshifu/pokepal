@@ -107,3 +107,12 @@
 @media (max-width: 700px) { #root .lesson-staged .lesson-mat { left: 50%; top: 53%; padding: 8px 12px 10px; } #root .lesson-staged .lesson-mat li { width: 13vw; } }
 
 @media (min-width: 1300px) { #root .lesson-staged .round-card { left: auto; width: min(62%, 880px); } }
+/* A tablet held upright: the friend stands big in the upper half with its voice above it, the answer card spans the bottom. */
+@media (min-width: 701px) and (orientation: portrait) {
+ #root .lesson-playing.lesson-staged .lesson-world.buddy-strip { left: 30%; top: 52%; width: min(36vw, 30vh); }
+ #root .lesson-staged .is-staged .round-toolbar { left: 30%; top: 9%; }
+ #root .lesson-staged .round-card { left: 24px; right: 24px; bottom: 24px; padding: 20px 26px 14px; }
+ #root .lesson-staged .round-card .learning-choices > div { flex-basis: min(27vw, 22vh); }
+ #root .lesson-staged .round-card .phrase-choices > div { flex-basis: min(40vw, 30vh); }
+ #root .lesson-staged .lesson-mat { left: 70%; top: 40%; }
+}

@@ -22,3 +22,9 @@
 #root .task-staged .practice-card { top: auto; max-height: calc(100% - 100px - env(safe-area-inset-top)); }
 @media (min-width: 1300px) { #root .task-staged .practice-card { left: auto; width: min(62%, 880px); } }
 @media (max-width: 700px) { #root .task-staged .practice-card { top: auto; max-height: calc(100% - 172px - env(safe-area-inset-top)); } }
+/* A tablet held upright: the friend in the upper half, the game card across the bottom. */
+@media (min-width: 701px) and (orientation: portrait) {
+ #root .task-staged .task-friend { left: 30%; bottom: auto; top: calc(84px + env(safe-area-inset-top)); width: min(28vw, 18vh); }
+ #root .task-staged .practice-card { left: 24px; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom)); max-height: calc(100% - 18vh - 112px - env(safe-area-inset-top)); }
+ #root .task-staged .task-friend span { display: none; }
+}

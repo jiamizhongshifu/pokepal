@@ -200,3 +200,7 @@
 @media (max-width: 700px) { .island-stage .island-play > header { top: calc(70px + env(safe-area-inset-top)); } .island-stage .island-play-made { top: calc(98px + env(safe-area-inset-top)); } }
 /* On a wide screen the answer card keeps a comfortable width instead of stretching across. */
 @media (min-width: 1300px) { .island-stage .island-ask-stage { left: auto; width: min(62%, 880px); } }
+/* A tablet held upright: the island fills more of the height and slides sideways like on a phone. */
+@media (min-width: 701px) and (orientation: portrait) { .island-world { width: max(100cqw, 110cqh); } }
+/* On a phone the corner buttons reach the middle: the day's stars move to the free top-left corner. */
+@media (max-width: 560px) { .island-day { left: calc(12px + env(safe-area-inset-left)); translate: none; } }
