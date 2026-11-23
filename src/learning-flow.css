@@ -10,7 +10,7 @@
 .progress-beads i.done{background:var(--brand-primary-deep)}
 .progress-beads i.current{width:20px;height:20px;background:var(--brand-sun);border:2px solid var(--brand-sun-deep);box-shadow:inset 0 0 0 3px var(--brand-sun-soft)}
 #root .feature-guide.guide-compact{position:relative;flex:none;width:auto;max-width:none;margin:0;padding:0;border:0;background:none;box-shadow:none;z-index:5}
-.guide-compact .guide-content{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 32px));padding:10px;border:2px solid var(--brand-sun);border-radius:var(--radius-lg);background:var(--surface);box-shadow:0 6px 20px #234b4626;color:var(--text)}
+.guide-compact .guide-content{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 32px));padding:10px;border:2px solid var(--brand-sun);border-radius:var(--radius-lg);background:var(--surface);box-shadow:0 6px 20px #234b4626;color:var(--text);--guide-ink:var(--text)}
 .guide-compact .guide-picture{display:none}
 .guide-compact .guide-main strong{font-size:var(--text-base)}
 .guide-compact .guide-main{gap:6px}

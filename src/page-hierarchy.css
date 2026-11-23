@@ -16,7 +16,7 @@
 #root .story-ending-primary{margin:24px auto;min-height:68px}
 #root .story-ending>.quiet-disclosure{text-align:left}
 #root .learning-notebook .notebook-entry{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:8px;padding:16px}
-#root .notebook-listen-card{grid-column:1;display:flex;align-items:center;gap:14px;text-align:left;border:0;background:transparent;color:var(--brand-ink);font:inherit;cursor:pointer;padding:4px;min-width:0;min-height:100px}
+#root .notebook-listen-card{grid-column:1;display:flex;align-items:center;gap:14px;text-align:left;border:0;background:transparent;color:var(--text);font:inherit;cursor:pointer;padding:4px;min-width:0;min-height:100px}
 #root .notebook-listen-card .notebook-definition{min-width:0;flex:1}
 #root .notebook-listen-card .notebook-definition strong{font-size:var(--text-2xl);line-height:1.4;display:block;overflow-wrap:anywhere}
 #root .notebook-listen-card .notebook-definition>span{display:block;margin-top:5px;font-size:var(--text-lg)}

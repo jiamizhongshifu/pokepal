@@ -48,7 +48,6 @@
 #root .diary-room .diary-books small { display:block; font-size:var(--text-sm); color:var(--muted); margin-top:6px; }
 #root .diary-room .diary-empty { text-align:center; padding:28px 0; }
 #root .diary-room button:focus-visible { outline:3px solid var(--brand-primary-deep); outline-offset:4px; }
-:root[data-theme="dark"] #root .diary-room { --text:var(--brand-ink); --muted:var(--brand-ink-muted); }
 :root[data-theme="dark"] .diary-desk { filter:brightness(.65) saturate(.8); }
 :root[data-theme="dark"] #root .diary-room .child-page { background:linear-gradient(90deg,#d1c09b,#f1e4cc 18px,#f4ead5); }
 @media(max-width:700px) {

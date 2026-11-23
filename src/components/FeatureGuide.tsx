@@ -38,6 +38,20 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   measure();const observer=new ResizeObserver(measure);observer.observe(panel);
   return()=>{observer.disconnect();host.style.removeProperty('--guide-space');};
  },[compact,open]);
+ // A help bubble hangs from its button; keep it on screen wherever that button sits.
+ useLayoutEffect(()=>{
+  if(!compact||!open)return;
+  const panel=root.current?.querySelector<HTMLElement>('.guide-content');
+  if(!panel)return;
+  const fit=()=>{
+   panel.style.translate='';
+   const r=panel.getBoundingClientRect(),edge=12,room=document.documentElement.clientWidth;
+   const shift=r.left<edge?edge-r.left:r.right>room-edge?room-edge-r.right:0;
+   if(shift)panel.style.translate=`${Math.round(shift)}px 0`;
+  };
+  fit();window.addEventListener('resize',fit);
+  return()=>window.removeEventListener('resize',fit);
+ },[compact,open]);
  const allowed=()=>live.current&&!modalIsOpen()&&!document.hidden&&!isMicActive()&&useGame.getState().screen===scope.current&&!useGame.getState().saveIssue;
  const cancel=()=>{sequence.current++;run.current?.cancel();run.current=null;if(live.current)setSpeaking(false);};
  const hear=async(manual=false)=>{

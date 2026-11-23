@@ -1,10 +1,11 @@
 /* Paper surfaces keep their own ink, independent of the island's time of day. */
-#root .parent-organized .device-setup,#root .parent-organized .parent-body section,#root .parent-organized .parent-fold-content {
+#root .parent-organized .device-setup,#root .parent-organized .parent-body section,#root .parent-organized .parent-fold-content,#root :is(.storybook,.open-storybook,.diary-room,.practice-card) {
   --text:var(--brand-ink); --ink:var(--brand-ink); --navy:var(--brand-ink); --muted:var(--brand-ink-muted);
-  --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper);
+  --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper); --surface-border:var(--brand-line);
   color:var(--text);
 }
-#root .story-reader .story-page-count { color:var(--text); }
+#root .parent-organized .parent-fold-content { --p-ink:var(--brand-ink); --p-muted:var(--brand-ink-muted); }
+#root .story-reader .story-page-count { color:var(--brand-ink); }
 #root .story-reader .theatre-word { width:max-content; max-width:calc(100% - 24px); }
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }
 #root .story-reader .theatre-word>.icon { flex:none; }
