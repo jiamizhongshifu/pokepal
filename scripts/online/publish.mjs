@@ -1,5 +1,6 @@
 // Explicit publishing entrypoint. Never called by build or release:prepare.
 import {execFileSync} from 'node:child_process';
+import {cpSync,rmSync} from 'node:fs';
 const git=args=>execFileSync('git',args,{encoding:'utf8'}).trim();
 if(git(['status','--porcelain']))throw new Error('Commit reviewed source and docs before publishing.');
 if(git(['branch','--show-current'])!=='main')throw new Error('Production release requires main.');
@@ -9,4 +10,7 @@ if(git(['status','--porcelain'])||git(['rev-parse','HEAD'])!==commit)throw new E
 // Additive counter schema must exist before a release can accept traffic.
 execFileSync('wrangler',['d1','migrations','apply','TRAFFIC_DB','--remote'],{stdio:'inherit'});
 execFileSync('wrangler',['pages','deploy','dist-online','--project-name','pokepal-online','--branch','main','--commit-hash',commit],{stdio:'inherit'});
+// The next release must keep this one's files for open pages; build pruning only removes online-previous-<timestamp>.
+const kept='.build/online-previous-production-current';
+rmSync(kept,{recursive:true,force:true});cpSync('dist-online',kept,{recursive:true});
 console.log('Upload finished. Verify production release.json, resources and user flows before reporting acceptance.');

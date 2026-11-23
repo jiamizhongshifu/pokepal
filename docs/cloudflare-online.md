@@ -18,7 +18,7 @@ npm run release:publish
 
 环境：Node、项目依赖、`cwebp`（macOS 可通过 Homebrew 安装）。使用现有 `public/voice/manifest.json` 及其指向的火山 MP3，不调用收费生音接口。新台词仍须先按照家庭版既有流程生成并验证。
 
-构建先生成 `.build/online-时间戳`，通过测试、类型检查、Vite 构建和完整资源校验后才切换 `dist-online`。上一份 online 产物移到 `.build/online-previous-时间戳`，可以用于回滚；不会修改 `dist`。不要向公网发布仓库根目录、`.build`、`certs` 或完整 `public/voice`。
+构建先生成 `.build/online-时间戳`，通过测试、类型检查、Vite 构建和完整资源校验后才切换 `dist-online`。上一份 online 产物移到 `.build/online-previous-时间戳`（只留最近两份），可以用于回滚；不会修改 `dist`。每次 `release:publish` 成功后，这次上线的产物另存为 `.build/online-previous-production-current`，不受构建清理影响，下一次发布靠它保留旧页面仍要加载的文件。不要向公网发布仓库根目录、`.build`、`certs` 或完整 `public/voice`。
 
 初次试运行使用 **Cloudflare Pages 静态托管**，包含模型、图片及约 4,096 个小语音包，约 6,100 个文件，低于 Pages 免费文件数限制。它无需 R2 或每次资源请求调用 Worker。与评估中的 R2 拆分方案相比，这一步减少了首轮验证所需的基础设施；大规模发布或区域分发时仍可迁移资源。
 
