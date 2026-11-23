@@ -29,8 +29,8 @@
 
 /* One big way in: the child's own face with a play mark. */
 .start-action { position: absolute; z-index: 4; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); translate: -50% 0; display: grid; justify-items: center; width: min(720px, calc(100vw - 24px)); }
-.start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid #fff; border-radius: 70px; background: #58cc02; box-shadow: 0 8px 0 #3f9a00, 0 14px 30px rgba(0, 60, 40, .25); color: #fff; animation: start-pulse 1.4s ease-in-out infinite alternate; }
-.start-go:active { translate: 0 6px; box-shadow: 0 2px 0 #3f9a00; }
+.start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid #fff; border-radius: 70px; background: var(--brand-primary); box-shadow: 0 8px 0 var(--brand-primary-deep), 0 14px 30px rgba(0, 60, 40, .25); color: #fff; animation: start-pulse 1.4s ease-in-out infinite alternate; }
+.start-go:active { translate: 0 6px; box-shadow: 0 2px 0 var(--brand-primary-deep); }
 .start-go-face { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 50%; background: #fff; overflow: hidden; }
 .start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
 .start-go-play .icon { filter: brightness(10); }

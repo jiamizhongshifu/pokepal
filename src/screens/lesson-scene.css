@@ -69,7 +69,7 @@
 #root .lesson-staged .is-staged > h1 { display: none; }
 #root .lesson-staged .round-card { position: absolute; z-index: 3; left: 31%; right: 3%; bottom: 4%; display: grid; gap: 12px; max-height: calc(100% - 120px); padding: 16px 22px 12px; border-radius: 30px; background: #fff; box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); overflow: auto; }
 #root .lesson-staged .round-card > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
-#root .lesson-staged .round-card > header small { display: inline-block; margin-bottom: 4px; padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); color: var(--brand-primary-deep, #3f9a00); font-size: 13px; font-weight: 800; }
+#root .lesson-staged .round-card > header small { display: inline-block; margin-bottom: 4px; padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft); color: var(--brand-primary-deep); font-size: 13px; font-weight: 800; }
 #root .lesson-staged .round-card > header h2 { margin: 0; font-size: clamp(18px, 1.8vw, 24px); line-height: 1.35; color: #24413a; }
 #root .lesson-staged .round-card-note { margin: 0; text-align: center; font-size: 14px; color: #7a8a86; }
 #root .lesson-staged .round-card .learning-choices { position: static; display: flex !important; justify-content: center; align-items: stretch; gap: 16px; margin: 0; }
@@ -84,8 +84,8 @@
 #root .lesson-staged .round-card .learning-help, #root .lesson-staged .round-card .round-try { position: static; display: flex !important; align-items: center; gap: 6px; width: auto !important; height: auto !important; min-height: 52px; padding: 8px 18px 8px 12px; border: 3px solid #fff; border-radius: 999px; flex: none; transition: transform .14s ease-out, box-shadow .14s ease-out; }
 #root .lesson-staged .round-card .learning-help { background: #fff3c4; box-shadow: 0 4px 0 #e8c96b; color: #5b4a1f; }
 #root .lesson-staged .round-card .learning-help:active { transform: translateY(3px); box-shadow: 0 1px 0 #e8c96b; }
-#root .lesson-staged .round-card .round-try { background: #58cc02; box-shadow: 0 5px 0 #3f9a00; color: #fff; }
-#root .lesson-staged .round-card .round-try:active { transform: translateY(4px); box-shadow: 0 1px 0 #3f9a00; }
+#root .lesson-staged .round-card .round-try { background: var(--brand-primary); box-shadow: 0 5px 0 var(--brand-primary-deep); color: #fff; }
+#root .lesson-staged .round-card .round-try:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--brand-primary-deep); }
 #root .lesson-staged .round-card .learning-help span, #root .lesson-staged .round-card .round-try span { display: inline !important; font-size: 15px; font-weight: 800; }
 #root .lesson-staged .round-card .lesson-actions { margin: 0; }
 #root .lesson-staged .round-card .guided-example { position: static; translate: none; display: grid; justify-items: center; gap: 4px; }

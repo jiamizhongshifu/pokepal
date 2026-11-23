@@ -7,7 +7,7 @@
 .path-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* ── Stops: one medallion each, a coloured ring by kind, a name plate under it ── */
-.path-stop { --ring: #58cc02; --ring-deep: #3f9a00; --token: clamp(58px, 8.4cqw, 132px);
+.path-stop { --ring: var(--brand-primary); --ring-deep: var(--brand-primary-deep); --token: clamp(58px, 8.4cqw, 132px);
  position: absolute; z-index: 2; display: grid; justify-items: center; gap: 6px; width: calc(var(--token) * 1.9); translate: -50% calc(var(--token) * -.62); padding: 0; border: 0; background: transparent; }
 .kind-story { --ring: #1cb0f6; --ring-deep: #1388c4; }
 .kind-island { --ring: #14c4a8; --ring-deep: #0c9883; }
@@ -33,7 +33,7 @@
 
 /* ── Today's stop: a big green start medallion, the friend beside it, a picture bubble above ── */
 .path-stop.is-current { --token: clamp(76px, 11cqw, 168px); z-index: 4; display: grid; }
-.stop-go { padding: 0; border: 0; background: #58cc02; box-shadow: 0 0 0 7px #fff, 0 11px 0 7px #3f9a00, 0 0 0 18px rgba(88, 204, 2, .25), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
+.stop-go { padding: 0; border: 0; background: var(--brand-primary); box-shadow: 0 0 0 7px #fff, 0 11px 0 7px var(--brand-primary-deep), 0 0 0 18px rgba(58, 132, 0, .25), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
 .stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; filter: brightness(0) invert(1); }
 .stop-go:active { transform: translateY(5px); }
 .stop-friend-btn { position: absolute; right: calc(50% + var(--token) * .48); bottom: 24px; width: calc(var(--token) * 1.15); aspect-ratio: 1; padding: 0; border: 0; background: transparent; }
@@ -48,13 +48,13 @@
 .path-stop.has-friend .stop-bubble::after { left: 26%; }
 .stop-bubble-hear { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #e1f5fe; flex: none; }
 .stop-bubble-hear .icon { width: 22px !important; height: 22px !important; }
-.stop-bubble-text { font-size: clamp(13px, 1.3cqw, 16px); font-weight: 800; color: #1899d6; letter-spacing: .02em; }
+.stop-bubble-text { font-size: clamp(13px, 1.3cqw, 16px); font-weight: 800; color: var(--brand-sky-ink); letter-spacing: .02em; }
 .stop-bubble-preview { display: flex; align-items: center; gap: 4px; padding-left: 4px; border-left: 2px solid #edf5f8; }
-.stop-bubble.is-speaking { border-color: #1cb0f6; background: #f3fbff; box-shadow: 0 5px 0 #1899d6, 0 0 0 8px rgba(28, 176, 246, .22); }
+.stop-bubble.is-speaking { border-color: #1cb0f6; background: #f3fbff; box-shadow: 0 5px 0 var(--brand-sky-deep), 0 0 0 8px rgba(28, 176, 246, .22); }
 .stop-bubble.is-speaking::after { background: #f3fbff; border-color: #1cb0f6; }
 .stop-bubble.is-speaking .stop-bubble-hear { background: #1cb0f6; animation: bubble-pulse 1s ease-in-out infinite; }
 .stop-bubble.is-speaking .stop-bubble-hear .icon { filter: brightness(0) invert(1); }
-.path-stop.is-current .stop-name { margin-top: 18px; padding: 5px 16px 6px; background: #58cc02; color: #fff; box-shadow: 0 4px 0 #3f9a00; font-size: clamp(14px, 1.45cqw, 21px); }
+.path-stop.is-current .stop-name { margin-top: 18px; padding: 5px 16px 6px; background: var(--brand-primary); color: #fff; box-shadow: 0 4px 0 var(--brand-primary-deep); font-size: clamp(14px, 1.45cqw, 21px); }
 .path-stop.is-current .stop-name small { color: #e3ffd0; }
 
 /* ── Top bar: me on the left, the chapter plaque in the middle, help on the right ── */
@@ -65,7 +65,7 @@
 .path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 18px; font-weight: 800; color: #5b4a2f; }
 .path-tools { display: flex; align-items: center; gap: 8px; justify-self: end; }
 .path-chapter { display: flex; align-items: center; gap: 8px; }
-.path-plaque { --tone: #58cc02; display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid #fff; border-radius: 22px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14), inset 0 -5px 0 var(--tone); color: var(--ink); }
+.path-plaque { --tone: var(--brand-primary); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid #fff; border-radius: 22px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14), inset 0 -5px 0 var(--tone); color: var(--ink); }
 .path-plaque.tone-1 { --tone: #f2c230; } .path-plaque.tone-2 { --tone: #f59a3d; } .path-plaque.tone-3 { --tone: #f2735a; } .path-plaque.tone-4 { --tone: #8d8de6; } .path-plaque.tone-5 { --tone: #ef8cc4; }
 .path-plaque small { font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #6d8b7e; }
 .path-plaque small i { margin: 0 6px; font-style: normal; }

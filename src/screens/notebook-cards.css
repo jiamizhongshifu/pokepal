@@ -7,7 +7,7 @@
 #root .learning-notebook .notebook-art .phrase-picture { display: flex; align-items: center; justify-content: center; gap: 3px; padding: 4px; } #root .learning-notebook .notebook-art .phrase-picture .icon { width: 24px !important; height: 24px !important; }
 #root .learning-notebook .notebook-definition { flex: 1; }
 #root .learning-notebook .notebook-bookmark { justify-self: end; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; }
-#root .notebook-again { justify-self: end; display: flex; align-items: center; gap: 5px; min-height: 44px; padding: 6px 12px 6px 8px; border: 2px solid var(--brand-primary, #58cc02); border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); box-shadow: 0 3px 0 #b4e890; color: var(--brand-ink, #24413a); font-size: 14px; font-weight: 800; white-space: nowrap; transition: transform .14s ease-out, box-shadow .14s ease-out; }
+#root .notebook-again { justify-self: end; display: flex; align-items: center; gap: 5px; min-height: 44px; padding: 6px 12px 6px 8px; border: 2px solid var(--brand-primary); border-radius: 999px; background: var(--brand-primary-soft, #dbf8c5); box-shadow: 0 3px 0 #b4e890; color: var(--brand-ink, #24413a); font-size: 14px; font-weight: 800; white-space: nowrap; transition: transform .14s ease-out, box-shadow .14s ease-out; }
 #root .notebook-again:active { transform: translateY(2px) scale(.97); box-shadow: 0 1px 0 #b4e890; }
 #root .notebook-again .icon { width: 22px !important; height: 22px !important; }
 

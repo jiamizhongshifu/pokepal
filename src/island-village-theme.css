@@ -79,7 +79,7 @@
 
 /* Night ocean surroundings keep reading cards light, with explicit dark ink. */
 :root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:#f2fbff; color:var(--brand-sky-deep); }
-:root[data-theme="dark"] #root .screen .btn-big.alt { color:var(--brand-sky-ink); }
+:root[data-theme="dark"] #root .screen .btn-big.alt { color:var(--accent-en); }
 @media(max-width:600px) {
   #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
   #root .learning-trail header small { padding:5px 8px; white-space:nowrap; }
