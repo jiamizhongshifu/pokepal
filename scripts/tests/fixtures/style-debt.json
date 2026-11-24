@@ -97,7 +97,7 @@
  },
  "src/screens/parent-center.css": {
   "colours": 3,
-  "blurs": 1
+  "blurs": 0
  },
  "src/screens/path-scene.css": {
   "colours": 2,
@@ -121,6 +121,6 @@
  },
  "src/styles.css": {
   "colours": 19,
-  "blurs": 35
+  "blurs": 34
  }
 }

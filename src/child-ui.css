@@ -73,9 +73,9 @@ button:not(:disabled):active { transform: scale(.97); }
 .bubble-zh { font-size:var(--text-2xl); }
 .bubble-replay { right: 12px; top: 8px; }
 .bubble-replay .icon { width: 26px; height: 26px; }
-.mic-btn { background: var(--brand-sky-deep); box-shadow: 0 0 0 8px #087f8718,0 5px 0 #165d64; }
+.mic-btn { background: var(--brand-sky-ink); color: var(--brand-paper); box-shadow: 0 0 0 8px #087f8718,0 5px 0 #165d64; }
 .mic-btn.idle:not(:disabled) { animation: none; }
-.mic-btn.listening { background: var(--brand-primary-deep); }
+.mic-btn.listening { background: var(--brand-primary-ink); }
 .mic-icon { padding: 7px; background: var(--surface); border-radius: 50%; }
 .trace-round { gap: 24px; min-height: 500px; padding-top: 20px; padding-bottom: 40px; }
 .trace-side { width: 260px; background: none; box-shadow: none; border: 0; }
@@ -385,12 +385,10 @@ button:not(:disabled):active { transform: scale(.97); }
 
 /* Capture uses one measured impact point on every viewport. Travel and spin
    live on separate elements so Safari never replaces one transform with another. */
-@keyframes captureTravel{0%{transform:translate3d(0,var(--capture-start-y,0px),0) scale(1)}60%{transform:translate3d(calc(var(--capture-x) * .6),calc(var(--capture-y) - 65px),0) scale(.73)}100%{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6)}}
 @keyframes captureSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes inviteHappy{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-8%) scale(1.06,.96)}70%{transform:translateY(0) scale(.97,1.03)}100%{transform:translateY(0) scale(1)}}
 @keyframes inviteNod{0%,100%{transform:rotate(0) translateY(0)}40%{transform:rotate(-4deg) translateY(3%)}70%{transform:rotate(2deg) translateY(0)}}
 @keyframes inviteTaken{0%{transform:scale(1);opacity:1}70%{transform:scale(.4);opacity:.8}100%{transform:scale(0);opacity:0}}
-@keyframes captureLand{0%{transform:translate3d(var(--capture-x),var(--capture-y),0) scale(.6)}78%{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6)}90%{transform:translate3d(var(--capture-x),calc(var(--capture-land-y) - 12px),0) scale(.6)}100%{transform:translate3d(var(--capture-x),var(--capture-land-y),0) scale(.6)}}
 @keyframes captureGlow{0%{opacity:0;transform:scale(.6)}35%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
 /* The meadow keeps a light paper header in both day and night themes. */
 

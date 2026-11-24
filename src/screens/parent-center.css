@@ -147,7 +147,7 @@
 #root .parent-kpi-card {
   display: flex; align-items: center; gap: 14px; padding: 16px 18px;
   border: 2px solid var(--p-border); border-radius: var(--radius-lg);
-  background: var(--p-card); box-shadow: 0 3px 0 var(--p-border);
+  background: var(--p-card); box-shadow: 0 var(--brand-press) 0 var(--p-border);
 }
 #root .parent-kpi-card > div:last-child { display: grid; gap: 2px; min-width: 0; }
 #root .parent-kpi-card small { font-size: var(--text-sm); color: var(--p-muted); font-weight: 700; }
@@ -184,7 +184,6 @@
   min-height: 36px; padding: 4px 12px; border: 0; border-radius: 10px; background: transparent;
   color: var(--p-muted); font-size: var(--text-sm); font-weight: 700; cursor: pointer;
 }
-.pchart-switch button[aria-pressed="true"] { background: var(--p-card); color: var(--p-ink); box-shadow: 0 2px 6px rgba(0, 0, 0, .14); }
 
 /* 7-day vertical bar chart */
 .pchart-bars { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; align-items: end; padding-top: 6px; }
