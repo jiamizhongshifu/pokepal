@@ -1,4 +1,5 @@
 import {RoundProgress} from '../../components/RoundProgress';
+import {noteFirstAnswer} from '../../lib/roundStreak';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useRef, useState } from "react";
@@ -54,6 +55,7 @@ function PicRound({ round, idx, total, onNext, noteWord }: { round: Round; idx: 
   const tap = async (w: PicWord) => {
     clearTimeout(introTimer.current);
     const res = pick(w);
+    if(res!=='ignored'&&!missed.current)noteFirstAnswer(res==='correct');
     if(res!=='ignored'){useGame.getState().noteAttempt(t.en,res==='correct',missed.current||help||!heard.current,'wordpic');if(res==='wrong')missed.current=true;}
     if (res === "correct") {
       noteWord(t.en, "correct");

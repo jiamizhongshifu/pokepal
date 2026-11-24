@@ -44,10 +44,6 @@
 #root .island-ask-options button.is-wrong { background:var(--brand-sky-soft); border-color:var(--brand-sky); }
 #root .screen .choice.glow { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
 
-/* ── Progress: 16px pill bar, beads for rounds ────────── */
-#root .progress-beads i { background:var(--brand-line); border:0; box-shadow:none; }
-#root .progress-beads i.done { background:var(--brand-primary); }
-#root .progress-beads i.current { background:var(--brand-paper); box-shadow:0 0 0 3px var(--brand-primary); }
 
 /* ── Icon buttons and navigation ─────────────────────── */
 

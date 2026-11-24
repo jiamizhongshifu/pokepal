@@ -36,7 +36,6 @@
   #root .topbar.has-learning-tools .back { width:48px; min-width:48px; height:48px; padding:0; }
   #root .topbar.has-learning-tools .back span { display:none; }
   #root .topbar.has-learning-tools .tb-learning-tools { gap:12px; }
-  #root .topbar .progress-beads { display:none; }
   #root .parent-organized .parent-head { flex-wrap:nowrap; padding:6px 14px; gap:12px; }
   #root .parent-organized .parent-title-row { gap:8px; }
   #root .parent-organized .parent-title-row h2 { font-size:var(--text-xl); white-space:nowrap; }

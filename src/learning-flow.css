@@ -5,10 +5,6 @@
 .tb-learning-tools{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex:none;margin-left:auto}
 .tb-progress:empty{display:none}
 .round-progress{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--brand-ink,var(--text));white-space:nowrap;font-size:var(--text-base)}
-.progress-beads{display:flex;align-items:center;gap:7px}
-.progress-beads i{width:10px;height:10px;border-radius:50%;background:var(--brand-sky)}
-.progress-beads i.done{background:var(--brand-primary-deep)}
-.progress-beads i.current{width:20px;height:20px;background:var(--brand-sun);border:2px solid var(--brand-sun-deep);box-shadow:inset 0 0 0 3px var(--brand-sun-soft)}
 #root .feature-guide.guide-compact{position:relative;flex:none;width:auto;max-width:none;margin:0;padding:0;border:0;background:none;box-shadow:none;z-index:5}
 .guide-compact .guide-content{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 32px));padding:10px;border:2px solid var(--brand-sun);border-radius:var(--radius-lg);background:var(--surface);box-shadow:0 6px 20px #234b4626;color:var(--text);--guide-ink:var(--text)}
 .guide-compact .guide-picture{display:none}
@@ -34,7 +30,7 @@
  #root .screen .topbar.has-learning-tools{gap:8px;padding:10px 12px;min-height:70px}
  #root .topbar.has-learning-tools .tb-left{gap:8px;flex:1;min-width:120px}
  #root .topbar.has-learning-tools .tb-title>.icon{display:none}
- .tb-learning-tools{gap:10px}.progress-beads{display:none}.round-progress{font-size:var(--text-base)}
+ .tb-learning-tools{gap:10px}.round-progress{font-size:var(--text-base)}
  #root .guide-compact .guide-reopen{padding:6px 9px;gap:4px}
  #root .topbar.has-learning-tools .guide-reopen span{display:none}
  #root .learning-lesson .lesson-wrap{padding:14px;width:calc(100% - 24px)}
@@ -63,3 +59,14 @@
 #root .home .panel-toolbar .guide-content{right:-52px;width:min(300px,calc(100vw - 64px));box-sizing:border-box}
 #root .home .panel-toolbar:has(.guide-compact.is-open){padding-bottom:calc(var(--guide-space,130px) + 12px)}
 /* The meadow's old floating-help offsets must not move its toolbar button. */
+
+/* Round progress: a pill bar with a shine; it turns gold and names the run while the child keeps finding the answer first time. */
+.progress-bar{position:relative;display:block;width:clamp(96px,16vw,180px);height:16px;border-radius:var(--radius-pill);background:var(--brand-line);overflow:hidden}
+.progress-bar>i{position:relative;display:block;height:100%;min-width:16px;border-radius:inherit;background:var(--brand-primary);transition:width var(--brand-motion-base) var(--brand-ease),background-color var(--brand-motion-base)}
+.progress-bar>i::after{content:"";position:absolute;left:7px;right:7px;top:4px;height:4px;border-radius:4px;background:rgba(255,255,255,.4)}
+.round-progress.is-streak .progress-bar>i{background:var(--brand-sun)}
+.round-streak{display:inline-flex;padding:2px 10px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);font-size:var(--text-sm);font-weight:800;line-height:1.5;animation:round-streak-in var(--brand-motion-base) var(--brand-ease)}
+.round-streak>i{display:none;font-style:normal}
+@keyframes round-streak-in{from{transform:scale(.6);opacity:0}}
+@media(max-width:600px){.progress-bar{width:64px}.round-streak>span{display:none}.round-streak>i{display:inline}}
+@media(prefers-reduced-motion:reduce){.round-streak{animation:none}.progress-bar>i{transition:none}}

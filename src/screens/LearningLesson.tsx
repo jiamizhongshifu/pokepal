@@ -11,6 +11,7 @@ import { lessonWords } from '../data/learning';
 import { PHRASES } from '../data/words';
 import type {Reward} from '../lib/participation';
 import {RoundProgress} from '../components/RoundProgress';
+import {noteFirstAnswer} from '../lib/roundStreak';
 import { useEffect,useRef,useState,useSyncExternalStore } from 'react';
 import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
@@ -144,7 +145,7 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const tap=(entry:LearningEntry)=>{
   if(busy.current)return;const result=choice.pick(entry);if(result==='ignored')return;
   const t=trace.current;t.tries++;t.asked=true;
-  if(t.firstAnswer===null){t.firstAnswer=result==='correct'?'correct':'wrong';t.heardBeforeAnswer=heardTarget.current;}
+  if(t.firstAnswer===null){noteFirstAnswer(result==='correct');t.firstAnswer=result==='correct'?'correct':'wrong';t.heardBeforeAnswer=heardTarget.current;}
   useGame.getState().noteAttempt(target.key,result==='correct',assisted.current||!heardTarget.current,source);
   if(result==='wrong'){
    assisted.current=true;t.wrong++;

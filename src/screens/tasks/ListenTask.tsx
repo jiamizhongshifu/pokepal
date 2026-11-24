@@ -1,4 +1,5 @@
 import {RoundProgress} from '../../components/RoundProgress';
+import {noteFirstAnswer} from '../../lib/roundStreak';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -141,7 +142,9 @@ function ListenRound({ round, idx, total, onNext, noteWord }: { round: Round; id
     const bl = bilingual();
     const t = round.target;
     const key=round.kind==='word'?t.word!.en:round.kind==='color'?COLORS[t.pokemon!.color].en:round.kind==='count'?`count:${t.count}`:round.kind==='size'?(t.big?'big':'small'):t.pokemon!.nameEn;
-    if(res!=='ignored'&&round.kind!=='cry'){useGame.getState().noteAttempt(key,res==='correct',missed.current||help||!heard.current,'listen');if(res==='wrong')missed.current=true;}
+    if(res!=='ignored'&&!missed.current)noteFirstAnswer(res==='correct');
+    if(res!=='ignored'&&round.kind!=='cry'){useGame.getState().noteAttempt(key,res==='correct',missed.current||help||!heard.current,'listen');}
+    if(res==='wrong')missed.current=true;
     if (res === "correct") {
       let fb: Lines;
       if(round.kind==="word"){fb=picYes(t.word!);noteWord(t.word!.en,"correct");}
