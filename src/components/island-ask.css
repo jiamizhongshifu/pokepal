@@ -4,7 +4,7 @@
 .island-ask-hear{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:8px 16px;border-radius:var(--radius-pill);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text);font-weight:800;cursor:pointer}
 .island-ask-close{margin-left:auto;min-width:44px;min-height:44px;border:0;background:none;cursor:pointer;color:var(--muted)}
 .island-ask-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:12px}
-.island-ask-options button{display:grid;place-items:center;gap:6px;min-height:132px;padding:10px;border-radius:var(--radius-lg);border:2px solid var(--surface-border);background:var(--brand-sun-soft);color:var(--text);cursor:pointer;transition:transform .2s}
+.island-ask-options button{position:relative;display:grid;place-items:center;gap:6px;min-height:132px;padding:10px;border-radius:var(--radius-lg);border:2px solid var(--surface-border);background:var(--brand-sun-soft);color:var(--text);cursor:pointer;transition:transform .2s}
 .island-ask-options button .icon{width:72px!important;height:72px!important}
 .island-ask-options button img{width:80px;height:80px;object-fit:contain}
 .island-ask-options small{font-size:var(--text-base);font-weight:700}
