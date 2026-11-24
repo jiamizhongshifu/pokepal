@@ -7,8 +7,8 @@ import { useState,useRef,useEffect } from 'react';
 import { useGame } from '../store';
 import { learningEntry,reviewSituation,reviewScene,recommendedUnit } from '../data/curriculum';
 import { storyBackground } from '../data/sceneArt';
-import { creatureArt,FIRST_FRIEND } from '../data/creatures';
-import { CreatureImg } from '../components/CreatureImg';
+import { FIRST_FRIEND } from '../data/creatures';
+import { BuddyImg } from '../components/BuddyImg';
 import '../screens/lesson-scene.css';
 import { reviewKeys,recommendedReviewKeys,reviewGroupSize } from '../lib/learningProgress';
 import { LearningArt,hearEntry } from '../components/LearningItem';
@@ -61,6 +61,6 @@ export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'home'|'
  // Each word is met again in the scene of the lesson it comes from, with a friend, like in the lesson itself.
  const scene=storyBackground(e?reviewScene(e.key,records?.[e.key]?.contexts):entries[0]?reviewScene(entries[0].key,records?.[entries[0].key]?.contexts):'meadow');
  return <div className={`screen learning-review learning-lesson lesson-staged${e?' lesson-playing':''}`} style={{backgroundImage:`url(${scene})`}}><TopBar title="和老朋友见面" onBack={()=>go(returnTo?{name:returnTo}:{name:'notebook',mode:'retry'})} focused progress={e&&<RoundProgress index={idx} total={entries.length}/>} help={<FeatureGuide compact id="review" autoVoice={false} enabled={!!e}/>}/><main className="lesson-wrap">
-  {!e?<section className="learning-empty"><Icon name="heart" size={80}/><h1>{deferred.current.length?'声音准备好后，再一起听':entries.length?'又多认识了一点':'现在可以自由玩耍啦'}</h1><p>{deferred.current.length?"已经帮你记好啦，联网后可以回来继续。":"今天先到这里。过几天，我们再和这些词见面。"}</p>{entries.length>0&&!deferred.current.length&&<ParticipationNote kind="review"/>}{deferred.current.length>0&&<p>有 {deferred.current.length} 个小发现留在手册里，补听前不会算作完成。</p>}<div className="lesson-actions">{deferred.current.length>0&&<button onClick={()=>go({name:'notebook',mode:'retry',returnTo:returnTo==='home'?undefined:returnTo})}>看看待补听的小发现</button>}<button className="journey-primary" onClick={()=>go({name:returnTo??'home'})}>{returnTo==='parent'?'回家长中心':'回到学习路线'}</button><button onClick={()=>go({name:'home'})}>回小岛玩</button></div></section>:<><div className="lesson-breadcrumb"><span>陪伙伴找一找</span></div><div className="lesson-world buddy-strip"><CreatureImg src={creatureArt(buddy)} alt=""/><span/></div><LearningRound key={idx} staged target={e} situation={unit?.situation} choices={unit?[unit.phrase,unit.alternative]:undefined} onNext={()=>next()} onSkip={()=>next(true)} source="review"/></>}
+  {!e?<section className="learning-empty"><Icon name="heart" size={80}/><h1>{deferred.current.length?'声音准备好后，再一起听':entries.length?'又多认识了一点':'现在可以自由玩耍啦'}</h1><p>{deferred.current.length?"已经帮你记好啦，联网后可以回来继续。":"今天先到这里。过几天，我们再和这些词见面。"}</p>{entries.length>0&&!deferred.current.length&&<ParticipationNote kind="review"/>}{deferred.current.length>0&&<p>有 {deferred.current.length} 个小发现留在手册里，补听前不会算作完成。</p>}<div className="lesson-actions">{deferred.current.length>0&&<button onClick={()=>go({name:'notebook',mode:'retry',returnTo:returnTo==='home'?undefined:returnTo})}>看看待补听的小发现</button>}<button className="journey-primary" onClick={()=>go({name:returnTo??'home'})}>{returnTo==='parent'?'回家长中心':'回到学习路线'}</button><button onClick={()=>go({name:'home'})}>回小岛玩</button></div></section>:<><div className="lesson-breadcrumb"><span>陪伙伴找一找</span></div><div className="lesson-world buddy-strip"><BuddyImg id={buddy} alt=""/><span/></div><LearningRound key={idx} staged target={e} situation={unit?.situation} choices={unit?[unit.phrase,unit.alternative]:undefined} onNext={()=>next()} onSkip={()=>next(true)} source="review"/></>}
  </main></div>;
 }

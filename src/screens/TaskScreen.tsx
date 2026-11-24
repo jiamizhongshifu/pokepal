@@ -2,6 +2,7 @@ import { storyBackground } from '../data/sceneArt';
 import './task-scene.css';
 import { CreatureImg } from "../components/CreatureImg";
 import { creatureArt, getCreature } from "../data/creatures";
+import { BuddyImg } from "../components/BuddyImg";
 import {trackInteraction} from '../lib/interaction';
 import {EnergyToast} from '../components/EnergyToast';
 import {ProgressHost,RoundProgress} from '../components/RoundProgress';
@@ -78,7 +79,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
         {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
       </FeatureGuide>}/>
 
-      {buddy!==undefined&&!reward&&<div className="task-friend"><CreatureImg src={creatureArt(buddy)} alt=""/><span>{getCreature(buddy).nameZh}陪你练</span></div>}
+      {buddy!==undefined&&!reward&&<div className="task-friend"><BuddyImg id={buddy} alt=""/><span>{getCreature(buddy).nameZh}陪你练</span></div>}
       <div className="practice-card"><header><small>{TASK_TITLE[kind][0]}</small><h2>{TASK_TITLE[kind][1]}</h2></header>
       <div className="task-stage">
         {kind === "listen" && <ListenTask onFinish={finish} practice={practice} />}
