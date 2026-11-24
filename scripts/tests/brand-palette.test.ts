@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 // Brand colours live only in src/brand-tokens.css; screens read the variables so a palette fix reaches every page.
-const RETIRED = /#(58cc02|58a700|3f9a00|89e219|777777)\b|rgba\(88,\s*204,\s*2\b/i;
+const RETIRED = /#(58cc02|58a700|3f9a00|89e219|777777|7a8a86|6d8b7e)\b|rgba\(88,\s*204,\s*2\b/i;
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap(name => {

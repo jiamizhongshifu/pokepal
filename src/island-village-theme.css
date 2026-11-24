@@ -63,7 +63,7 @@
 #root .dex .dex-cell { background:var(--brand-paper); border:2px solid var(--brand-line); border-radius:23px 27px 23px 26px; box-shadow:var(--village-shadow); color:var(--brand-ink); }
 #root .dex .dex-cell.has { background:var(--brand-primary-soft); border-color:var(--brand-primary); }
 #root .dex .dex-name { color:var(--brand-ink); }
-#root .dex .dex-cell>small,#root .dex .dex-cell .dex-no { color:var(--brand-ink-muted); }
+#root .dex .dex-cell>small,#root .dex .dex-cell .dex-no { color:var(--brand-ink); }
 #root .dex .dex-meet-status { color:var(--brand-primary-ink); background:var(--brand-primary-soft); }
 #root .screen .collection-tabs button { color:var(--brand-ink); background:var(--brand-paper); border-color:var(--brand-line); }
 #root .screen .storybook { background:var(--brand-paper); border:2px solid var(--brand-line); box-shadow:4px 5px 0 #d4c5a0,0 9px 17px #214f670d; border-radius:12px 25px 25px 12px; }

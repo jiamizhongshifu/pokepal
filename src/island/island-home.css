@@ -16,7 +16,7 @@
 .island-teaser { position: absolute; z-index: 5; translate: -50% -50%; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border: 3px solid #fff; border-radius: 999px; background: rgba(255, 253, 244, .94); box-shadow: 0 4px 0 rgba(0, 0, 0, .14); color: #4a5a66; white-space: nowrap; }
 .island-teaser .icon { padding: 4px; border-radius: 50%; background: #eef2f1; }
 .island-teaser span { display: grid; text-align: left; line-height: 1.2; }
-.island-teaser b { font-size: 16px; } .island-teaser small { font-size: 12px; color: #7a8a86; }
+.island-teaser b { font-size: 16px; } .island-teaser small { font-size: 14px; color: var(--brand-ink-muted); }
 .island-teaser.is-nudged { animation: island-wobble .6s ease-in-out; }
 .island-place.is-nudged { animation: island-wobble .6s ease-in-out; }
 
@@ -182,7 +182,7 @@
 /* ── The answer card on the island: the question as a title, the things to choose on one white card ── */
 .island-stage .island-ask-stage { left: 30%; right: 3%; bottom: 4%; display: grid; gap: 10px; padding: 14px 20px 18px; border-radius: 30px; background: #fff; box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); pointer-events: auto; }
 .island-stage .island-ask-title { margin: 0; display: grid; justify-items: start; gap: 4px; font-size: clamp(17px, 1.7vw, 22px); line-height: 1.35; color: #24413a; text-align: left; }
-.island-stage .island-ask-title small { padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft); color: var(--brand-primary-deep); font-size: 13px; font-weight: 800; }
+.island-stage .island-ask-title small { padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft); color: var(--brand-primary-deep); font-size: var(--text-base); font-weight: 800; }
 .island-stage .island-ask-stage .island-ask-options { gap: 16px; }
 #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: min(15vw, 21vh); border-radius: 26px; background: #f3f8f6; border: 3px solid #e3ece8; box-shadow: 0 5px 0 #dce7e2; filter: none; transition: transform .14s ease-out, box-shadow .14s ease-out; }
 #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button:not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 #dce7e2; }
