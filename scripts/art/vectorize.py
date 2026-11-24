@@ -95,9 +95,17 @@ def layered(scene):
     base = s['group'] == 'layer-base'
     im, size = prepare(png, work / f"{s['id']}.png", cut=not base)
     name = s.get('piece') or s['id'].removeprefix(scene.split('-')[0] + '-')
-    raw, gz = trace(work / f"{s['id']}.png", out_dir / f'{name}.svg', size)
+    # A painted ground has dark, close colours at dusk and night: finer colour steps keep a tree apart from its lawn.
+    raw, gz = trace(work / f"{s['id']}.png", out_dir / f'{name}.svg', size, **(dict(layer_difference=7, color_precision=7) if base else {}))
     total += gz
-    if not base: layout[name] = locate(im, original, s.get('near'))
+    if not base:
+      box = locate(im, original, s.get('near'))
+      # A redrawn piece can match its spot but come out thinner than the painting (the sails): `fitWidth` (% of the
+      # picture, measured on the painting) sets its size about the matched centre.
+      if s.get('fitWidth'):
+        k = s['fitWidth'] / box['w']
+        box.update(x=round(box['x'] - box['w'] * (k - 1) / 2, 2), y=round(box['y'] - box['h'] * (k - 1) / 2, 2), w=round(box['w'] * k, 2), h=round(box['h'] * k, 2))
+      layout[name] = box
     print(f"{scene}/{name:18s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB  {layout.get(name, '底图')}")
   print(f'{scene} 合计压缩后 {total // 1024}KB')
   if layout:
