@@ -19,7 +19,7 @@
 .stop-art { width: 70% !important; height: 70% !important; object-fit: contain; }
 .stop-badge { position: absolute; top: -4px; left: calc(50% + var(--token) * .26); width: calc(var(--token) * .36) !important; height: auto !important; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .2)); }
 .stop-badge.is-lock { padding: 5px; border-radius: 50%; background: var(--brand-paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .15); width: calc(var(--token) * .3) !important; }
-.stop-name { position: relative; z-index: 1; display: grid; justify-items: center; max-width: 100%; margin-top: 10px; padding: 4px 12px 5px; border-radius: 999px; background: var(--paper); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); color: var(--ink); font-size: clamp(14px, 1.5cqw, 18px); font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stop-name { position: relative; z-index: 1; display: grid; justify-items: center; max-width: 100%; margin-top: 10px; padding: 4px 12px 5px; border-radius: 999px; background: var(--paper); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); color: var(--brand-ink); font-size: clamp(14px, 1.5cqw, 18px); font-weight: 800; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stop-name small { font-size: .86em; font-weight: 800; color: var(--ring-deep); letter-spacing: .06em; }
 
 .path-stop.is-done .stop-token { box-shadow: 0 0 0 6px var(--scene-gold), 0 9px 0 6px var(--scene-gold-deep), 0 16px 22px rgba(20, 50, 40, .28); }
@@ -65,7 +65,7 @@
 .path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: var(--brand-paper); box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 18px; font-weight: 800; color: var(--scene-wood); }
 .path-tools { display: flex; align-items: center; gap: 8px; justify-self: end; }
 .path-chapter { display: flex; align-items: center; gap: 8px; }
-.path-plaque { --tone: var(--brand-primary); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid var(--brand-paper); border-radius: 22px; background: var(--paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .1), inset 0 -5px 0 var(--tone); color: var(--ink); }
+.path-plaque { --tone: var(--brand-primary); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid var(--brand-paper); border-radius: 22px; background: var(--paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .1), inset 0 -5px 0 var(--tone); color: var(--brand-ink); }
 .path-plaque.tone-1 { --tone: var(--scene-gold); } .path-plaque.tone-2 { --tone: var(--brand-streak); } .path-plaque.tone-3 { --tone: var(--scene-coral); } .path-plaque.tone-4 { --tone: var(--scene-periwinkle); } .path-plaque.tone-5 { --tone: var(--scene-pink); }
 .path-plaque small { font-size: 14px; font-weight: 800; letter-spacing: .08em; color: var(--brand-ink-muted); }
 .path-plaque small i { margin: 0 6px; font-style: normal; }
@@ -82,7 +82,7 @@
 
 /* ── More to do: labelled buttons in the corner ── */
 .path-extra { position: absolute; z-index: 9; right: calc(14px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); display: flex; gap: 10px; }
-.path-extra button { white-space: nowrap; display: flex; align-items: center; gap: 6px; min-height: 54px; padding: 6px 18px 6px 12px; border: 4px solid var(--brand-paper); border-radius: 30px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14); color: var(--ink); font-size: 16px; font-weight: 800; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
+.path-extra button { white-space: nowrap; display: flex; align-items: center; gap: 6px; min-height: 54px; padding: 6px 18px 6px 12px; border: 4px solid var(--brand-paper); border-radius: 30px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14); color: var(--brand-ink); font-size: 16px; font-weight: 800; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 .path-extra button:active { transform: translateY(3px) scale(.97); box-shadow: 0 2px 0 rgba(0, 0, 0, .14); }
 
 @keyframes stop-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }

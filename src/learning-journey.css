@@ -1,4 +1,4 @@
-.screen.learning-journey,.screen.learning-lesson,.screen.learning-notebook,.screen.learning-review{background:var(--surface);color:var(--text);overflow-y:auto;--ink:var(--text);--paper:var(--surface);--leaf:var(--brand-primary);--honey:var(--brand-sun)}
+.screen.learning-journey,.screen.learning-lesson,.screen.learning-notebook,.screen.learning-review{background:var(--surface);color:var(--text);overflow-y:auto;--paper:var(--surface);--leaf:var(--brand-primary);--honey:var(--brand-sun)}
 .journey-wrap{width:min(960px,calc(100% - 40px));margin:22px auto 70px}.journey-wrap h1,.lesson-wrap h1{font-size:clamp(25px,3vw,34px);line-height:1.35;margin:12px 0}.journey-wrap p{line-height:1.7}
 .journey-primary{display:inline-flex;justify-content:center;align-items:center;gap:10px;border:0;border-radius:var(--radius-md);padding:15px 24px;min-height:56px;background:var(--brand-primary)!important;color:var(--brand-on-primary)!important;font-size:var(--text-xl);font-weight:800;cursor:pointer;box-shadow:0 4px 0 var(--brand-primary-deep)}
 .lesson-wrap{width:min(820px,calc(100% - 32px));margin:20px auto 60px;padding:24px;border-radius:var(--radius-xl);background:var(--paper,var(--surface))}.lesson-breadcrumb{display:flex;justify-content:space-between;gap:16px;font-size:var(--text-base);font-weight:800;margin-bottom:18px}.lesson-world{height:255px;border-radius:var(--radius-lg);background-size:cover;background-position:center 60%;position:relative;overflow:hidden}.lesson-world>img{position:absolute;width:30%;height:73%;object-fit:contain;left:7%;bottom:8%}.lesson-world>span{position:absolute;top:12px;left:12px;padding:7px 12px;background:#fffbeddd;border-radius:var(--radius-sm);font-size:var(--text-sm)}.learning-color{display:block;width:110px;height:110px;max-width:100%;border-radius:50%;box-shadow:inset 0 0 0 6px #fffbed80}.learning-count{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:190px}
@@ -16,7 +16,7 @@
 .phrase-choices>div{display:grid;grid-template-rows:auto 1fr;min-width:0}
 .phrase-choices strong{overflow-wrap:break-word}
 
-.participation-note{max-width:760px;margin:12px auto;padding:10px 16px;color:var(--ink,var(--text));font-size:var(--text-base);line-height:1.7;text-align:center}
+.participation-note{max-width:760px;margin:12px auto;padding:10px 16px;color:var(--text);font-size:var(--text-base);line-height:1.7;text-align:center}
 .say-participation{display:flex;align-items:center;gap:12px;color:var(--text);font-weight:800;font-size:var(--text-2xl)}
 @media(max-width:600px){.participation-note{font-size:var(--text-sm);padding:8px 12px}}
 

@@ -26,3 +26,5 @@
 }
 
 .stage-legacy { margin:12px 0 0; padding:10px 14px; border-radius:var(--radius-sm); background:var(--brand-sun-soft); font-size:var(--text-base); }
+
+.stage-presets>button[aria-pressed=true] small { color:var(--brand-ink); }

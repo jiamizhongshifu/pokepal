@@ -1,5 +1,5 @@
 /* Page jobs: one primary action; optional tools stay reachable through disclosure. */
-#root .quiet-disclosure{margin:16px 0;color:var(--brand-ink-muted);grid-column:1/-1}
+#root .quiet-disclosure{margin:16px 0;color:var(--muted);grid-column:1/-1}
 #root .quiet-disclosure>summary{display:flex;align-items:center;gap:10px;min-height:52px;cursor:pointer;font-size:var(--text-base);font-weight:700;list-style:none;border-top:1px solid var(--brand-line);padding:8px 0}
 #root .quiet-disclosure>summary::after{content:'⌄';margin-left:auto}
 #root .quiet-disclosure[open]>summary::after{content:'⌃'}

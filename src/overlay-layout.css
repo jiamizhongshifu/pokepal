@@ -25,7 +25,7 @@ dialog.blocking-dialog>.modal{max-width:min(640px,100%);max-height:100%;overflow
 
 /* Continuity: compact result controls, explicit partner selection and scene previews. */
 .story-mode{display:flex;justify-content:center;gap:10px;margin:12px auto;flex-wrap:wrap}
-.story-mode button{display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;border:2px solid var(--border,var(--surface-border));border-radius:var(--radius-md);background:var(--paper,var(--brand-paper));color:var(--ink,var(--text));font-weight:800}
+.story-mode button{display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px;border:2px solid var(--border,var(--surface-border));border-radius:var(--radius-md);background:var(--paper,var(--brand-paper));color:var(--text);font-weight:800}
 .story-mode button[aria-pressed=true]{background:var(--brand-primary-soft);border-color:var(--brand-primary);color:var(--brand-ink)}
 .story-mode small{font-weight:500}
 .diary-voice-finished{max-width:650px;margin:auto}.diary-voice-finished>h1,.diary-voice-finished>p{text-align:center}

@@ -15,21 +15,47 @@
   border:var(--brand-border) solid var(--surface-border); border-radius:var(--brand-radius-button);
   box-shadow:0 var(--brand-press) 0 var(--surface-border);
   font-weight:var(--brand-weight-display);
-  transition:transform var(--brand-motion-fast) var(--ease-spring), box-shadow var(--brand-motion-fast) var(--ease-spring), color var(--brand-motion-fast) var(--ease-standard);
+  transition:transform var(--motion-quick) var(--ease-spring), box-shadow var(--motion-quick) var(--ease-spring), color var(--motion-quick) var(--ease-standard);
 }
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)):not(:disabled):hover { color:var(--text); border-color:var(--brand-ink-meta); }
 
 /* Icons on a green fill: an action mark (Icon's is-glyph: play, mic, check…) turns white over a hard deep-green edge;
    a picture keeps its colours on a white chip, so nothing blends into the green. */
 #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
-  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
-  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon:not(.is-glyph) {
+  .avatar-save, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
+  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true], .parent-organized .tabs button.on) > .icon:not(.is-glyph) {
   background:var(--brand-paper); border-radius:var(--radius-sm); padding:4px; box-sizing:content-box; flex:none;
 }
 #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
-  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
-  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon.is-glyph {
+  .avatar-save, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
+  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true], .parent-organized .tabs button.on) > .icon.is-glyph {
   background:none; padding:0; filter:brightness(0) invert(1) drop-shadow(0 3px 0 var(--brand-primary-deep));
+}
+
+/* One green primary button everywhere a page moves on: 64px tall (56 on a phone), 20px bold, 16px corners, no outline,
+   a 4px deep-green edge. Shaped exceptions keep their own form: the welcome button, path stops, the recorder, pills. */
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .learning-trail-primary, .wish-button.primary, .avatar-save) {
+  min-height: 64px; padding: 10px 24px; border: 0; border-radius: var(--radius-md);
+  background: var(--brand-primary); color: var(--brand-on-primary); text-shadow: none;
+  box-shadow: 0 var(--brand-press) 0 var(--brand-primary-deep);
+  font-size: var(--text-xl); font-weight: var(--brand-weight-display); line-height: 1.2;
+}
+@media (max-width: 600px) { #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .learning-trail-primary, .wish-button.primary, .avatar-save) { min-height: 56px; padding: 8px 18px; } }
+
+/* One segmented choice everywhere (notebook, album, story shelf, grown-ups' tabs): 56px, 16px corners, 2px outline,
+   18px bold; the chosen one is green with a 3px deep edge. */
+#root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs) button {
+  min-height: 56px; border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text); box-shadow: 0 3px 0 var(--surface-border);
+  font-size: var(--text-lg); font-weight: var(--brand-weight-display); padding: 8px 16px; gap: 8px;
+}
+#root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs) button > .icon { width: 28px !important; height: 28px !important; }
+#root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs) button:is([aria-pressed=true], .on) {
+  background: var(--brand-primary); border-color: var(--brand-primary-deep); color: var(--brand-on-primary); box-shadow: 0 3px 0 var(--brand-primary-deep);
+}
+@media (max-width: 600px) {
+  #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs) button { flex-direction: row; font-size: var(--text-base); padding: 6px 8px; gap: 6px; white-space: nowrap; }
+  #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs) button > .icon { width: 22px !important; height: 22px !important; }
 }
 
 /* Reward moments use the yellow "streak" recipe. */
