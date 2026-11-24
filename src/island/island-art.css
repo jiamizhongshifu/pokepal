@@ -1,0 +1,18 @@
+/* The island as vector pieces: the ground fills the frame, each piece sits at its own % box. */
+.island-art { position: absolute; inset: 0; pointer-events: none; }
+.island-art img { position: absolute; display: block; user-select: none; -webkit-user-drag: none; }
+.island-art-ground { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.island-art-piece { object-fit: fill; transform-origin: 50% 100%; }
+
+/* The little life of the island: slow, small, and only on things that would move anyway. */
+.island-art-piece[data-piece="windmill-sails"] { transform-origin: 50% 50%; animation: island-sails 16s linear infinite; }
+.island-art-piece[data-piece="flame"] { animation: island-flame 900ms var(--ease-breathe) infinite alternate; }
+.island-art-piece[data-piece="boat"] { transform-origin: 50% 80%; animation: island-boat 3.2s var(--ease-breathe) infinite alternate; }
+.island-art.is-still .island-art-piece { animation-play-state: paused; }
+/* A tapped area answers: its pieces hop once. */
+.island-art-piece.is-nudged { animation: island-hop var(--motion-reward) var(--ease-spring); }
+
+@keyframes island-sails { to { rotate: 360deg; } }
+@keyframes island-flame { from { scale: 1 1; } to { scale: 1.06 1.14; } }
+@keyframes island-boat { from { translate: 0 0; rotate: -2deg; } to { translate: 0 -3%; rotate: 2deg; } }
+@keyframes island-hop { 40% { translate: 0 -6%; scale: 1.03 .97; } }

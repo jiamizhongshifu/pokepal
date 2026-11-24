@@ -950,9 +950,129 @@
    "id": "visit-boat",
    "group": "prop",
    "prompt": "A small friendly wooden sailboat with a white triangular sail with one round sun patch, empty deck, floating, seen from the side."
+  },
+  {
+   "id": "island-base",
+   "group": "layer-base",
+   "layerOf": "island-map",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached island picture with the same camera, island outline, cliffs, sea, waves, sandy paths, grass, bushes, flowers, rocks, ball field, vegetable plots, wooden fence, signpost, shells, starfish and checkered picnic blanket at exactly the same positions and sizes, but REMOVE these objects and paint the plain ground that would be under them (grass, sand or sea, continuing the surroundings, with no shadows or marks left): the three fruit trees, the windmill, the round music stage with its awning and the bunting poles, the sandbox, the yellow tent, the campfire with its ring of stones, the wooden bench, the striped parasol, the two palm trees with the hammock, the wooden pier and the rowboat."
+  },
+  {
+   "id": "island-orchard",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the three fruit trees of the orchard at the upper left (red apples, yellow fruit, orange fruit), standing together exactly as arranged there, including their trunks."
+  },
+  {
+   "id": "island-windmill",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the windmill tower at the upper middle WITHOUT its four sails: the round cream tower, its red dome roof and its brown door, and the yellow round hub at the front of the roof.",
+   "near": [
+    38,
+    11,
+    8
+   ]
+  },
+  {
+   "id": "island-windmill-sails",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "only the four cream windmill sails with the yellow round hub in the middle, seen straight from the front, arranged as an even X with the hub exactly at the centre of the image, without the tower.",
+   "near": [
+    38.4,
+    9.3,
+    9
+   ]
+  },
+  {
+   "id": "island-stage",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the round wooden music stage with its red and cream striped awning, and the two wooden poles with the colourful bunting between them."
+  },
+  {
+   "id": "island-sandbox",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the wooden sandbox with its sand, the red pail and the blue spade."
+  },
+  {
+   "id": "island-tent",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the yellow triangle tent of the camping corner (without the fence)."
+  },
+  {
+   "id": "island-campfire-stones",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the ring of grey stones of the campfire with the logs in the middle, WITHOUT any flame.",
+   "near": [
+    82.4,
+    34.7,
+    8
+   ]
+  },
+  {
+   "id": "island-flame",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "only the orange and yellow campfire flame, without stones or logs, its base flat at the bottom."
+  },
+  {
+   "id": "island-bench",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the wooden bench on the picnic lawn."
+  },
+  {
+   "id": "island-parasol",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the red and cream striped parasol with its pole."
+  },
+  {
+   "id": "island-palms",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the two palm trees on the beach with the striped hammock hanging between them."
+  },
+  {
+   "id": "island-pier",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the wooden pier with its posts (without the boat and without the water).",
+   "near": [
+    73,
+    76,
+    19
+   ]
+  },
+  {
+   "id": "island-boat",
+   "group": "layer",
+   "layerOf": "island-map",
+   "size": "square 1024x1024",
+   "prompt": "the small red and cream rowboat (without its rope and without the water)."
   }
  ],
  "iconStyle": "A single game UI icon for a children's language-learning app, in the bold flat sticker icon language of modern gamified learning apps. Shape: one chunky, very rounded silhouette, front or slight three-quarter view, centred, filling about 80% of the canvas, nothing cropped, instantly readable at 32 pixels. Colour: flat fills only, 2 to 4 colours per icon, picked from this exact palette where every colour is always paired with its own fixed darker shade: green #58cc02 / #58a700, blue #1cb0f6 / #1899d6, yellow #ffc800 / #e0a800, red #ff4b4b / #d93a3a, orange #ff9600 / #d97f00, purple #ce82ff / #a568cc, pink #ff86d0 / #e06bb4, brown #a5642c / #7d4a1f, skin exactly as the description says (light, tan, brown or deep brown) with one darker shade of that same skin, white #ffffff / #e5e5e5, grey #afafaf / #8a8a8a, and dark ink #4b4b4b only for eyes and small marks. The icon sits on a white card, so its main shape is never plain white: white things (rice, eggs, clouds, snow, petals, feathers, paper) are cream #fff4d6 with a light grey #d9d2bf shade, or pale blue #ddf4ff with a #b6e3fa shade. Shading: each colour area gets exactly one darker hard-edged shade shape along its lower-right side, about a fifth of that area; no gradients, no glossy highlights, no white shine spots (the only exception: things made of glass, water or soap bubbles get one small white rounded shine so they read as shiny), no outlines, no texture, no 3D or clay look, no drop shadow. Details: few and large. Any line inside the icon (strings, whiskers, veins, stitches, ribs) is a thick rounded-cap stroke at least one sixteenth of the icon width (draw fewer, thicker strings or lines rather than many thin ones); no thin lines, no tiny dots, no small marks that look like writing. Faces appear only where the description asks for a face or names an animal or a person: dark oval eyes looking straight at the viewer, each with one small white catchlight, and a simple smile; food, plants and objects otherwise have no face. Fully transparent background (PNG with alpha), no backdrop, no circle badge, no ground shadow. No text, letters or numbers.",
  "appStyle": "A square app icon that fills the whole canvas edge to edge with a solid bright background color (no transparency, no rounded corners drawn, no border); one bold centered subject, simple rounded shapes, flat fills with one darker hard-edged shade shape per color, no outlines. Same flat vector style as the attached style reference. No text, letters or numbers.",
- "sameLayout": "The second attached image is the LAYOUT reference and must be followed closely: the same camera, the same island outline and sea, the same wide sandy path, the same four large empty round sandy clearings at exactly the same positions and sizes, the stream with its small wooden bridge, the triangle tent at the left edge, the wooden pier with the rowboat at the lower left, the checkered picnic blanket under the round tree, and the windmill on the hill at the upper right. Repaint that same place for the time of day and theme described above; add the described details only beside the path, never on the clearings, the bridge, the tent, the boat or the picnic blanket."
+ "sameLayout": "The second attached image is the LAYOUT reference and must be followed closely: the same camera, the same island outline and sea, the same wide sandy path, the same four large empty round sandy clearings at exactly the same positions and sizes, the stream with its small wooden bridge, the triangle tent at the left edge, the wooden pier with the rowboat at the lower left, the checkered picnic blanket under the round tree, and the windmill on the hill at the upper right. Repaint that same place for the time of day and theme described above; add the described details only beside the path, never on the clearings, the bridge, the tent, the boat or the picnic blanket.",
+ "layerStyle": "Copy the attached picture's drawing exactly: the same shapes, outlines of shapes, colours, darker shade shapes, highlights, proportions and viewing angle, as if cut out of that picture. Do not restyle, simplify, add or move anything. No text, letters, characters or faces.",
+ "layerCut": "Show ONLY the object described, alone, centered with generous margin and nothing cropped, on a fully transparent background (PNG with alpha): no ground, grass, sand, water, shadow on the ground, backdrop or frame around it."
 }

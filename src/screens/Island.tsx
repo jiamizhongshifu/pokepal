@@ -24,7 +24,8 @@ import { withTransition } from '../lib/viewTransition';
 import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
 import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
-import { storyBackground, storyProp, worldArt } from '../data/sceneArt';
+import { layerArt, storyBackground, storyProp } from '../data/sceneArt';
+import { IslandArt } from '../island/IslandArt';
 import { bi } from '../lib/bi';
 import { nextDistrict, stationDistrict, unlockedDistricts, unlockingUnit } from '../lib/islandPlan';
 import { cryOnIsland, sayOnIsland as say } from '../lib/islandSpeech';
@@ -207,9 +208,9 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  for (const f of standing) groups.set(f.place, [...(groups.get(f.place) ?? []), f.id]);
  return <div className={`screen island-home sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`}>
   <div className="island-view" ref={view}>
-   <img className="scene-backdrop" src={worldArt('island-map')} alt="" aria-hidden="true" draggable={false} />
+   <img className="scene-backdrop" src={layerArt('island-map', 'base')} alt="" aria-hidden="true" draggable={false} />
    <div className="island-world" role="group" aria-label="我的小岛">
-    <img className="island-world-art" src={worldArt('island-map')} alt="" draggable={false} />
+    <IslandArt className="island-world-art" nudged={nudged} still={!active} />
     {shownStickers(save).map(k => <img key={k.id} className="island-world-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
     {shownTraces(save, now).map(t => <span key={t.id} className="island-world-trace" role="img" aria-label={t.label} style={{ left: `${t.spot[0]}%`, top: `${t.spot[1]}%` }}><Icon name={t.icon} size={30} /></span>)}
     {PLACES.map(p => { const locked = !open.has(p.district); return <button key={p.id} type="button" className={`island-place${locked ? ' is-locked' : ''}${nudged === p.district ? ' is-nudged' : ''}`} style={{ left: `${p.spot[0]}%`, top: `${p.spot[1]}%` }} aria-label={locked ? `${p.name}（还没开放）` : `走进${p.name}`} onClick={() => enter(p.district)} />; })}

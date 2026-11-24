@@ -5,7 +5,7 @@
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs line [id...]         三阶段进化线（设定图，白底）
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs stage [id...]        每个阶段的标准立绘（透明底，需先有 line）
  *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs expressions [id...]  宝宝期 8 个表情（透明底，需先有 stage-1）
- *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs scene [id...]        小岛与绘本的场景、道具（清单见 scenes.json）
+ *   CODEX_MODEL=gpt-6-sol node scripts/art/generate.mjs scene [id...]        小岛与绘本的场景、道具，以及从场景里取出的分层（清单见 scenes.json）
  * 选项：--force 覆盖已有图片；--jobs=4 并发数；--stage=1 只生成某个阶段。
  * 画风参考图：output/rebrand/style-reference.png（本地美术资料，不入库）。
  * 产物：output/rebrand/sprites/<id>/ 与 output/rebrand/scenes/<id>/，每张图旁的 .json 记录提示词、参考图、模型与时间，作为生成来源记录。
@@ -52,10 +52,13 @@ const KINDS = {
  scene: {
   items: () => sceneCatalog.scenes,
   variants: sc => [{
-   dir: resolve(sceneRoot, sc.id), file: `${sc.id}.png`, size: ['prop', 'icon', 'app'].includes(sc.group) ? 'square 1024x1024' : sc.size,
+   dir: resolve(sceneRoot, sc.id), file: `${sc.id}.png`, size: ['prop', 'icon', 'app', 'layer'].includes(sc.group) ? 'square 1024x1024' : sc.size,
    // `layoutOf` names an already painted scene whose composition this one repeats (the chapters of the learning path share one map).
-   refs: [styleReference, ...(sc.layoutOf ? [resolve(sceneRoot, sc.layoutOf, `${sc.layoutOf}.png`)] : [])],
-   prompt: sc.group === 'prop'
+   refs: sc.layerOf ? [resolve(sceneRoot, sc.layerOf, `${sc.layerOf}.png`)] : [styleReference, ...(sc.layoutOf ? [resolve(sceneRoot, sc.layoutOf, `${sc.layoutOf}.png`)] : [])],
+   // A layer is one piece of an already painted scene (`layerOf`), taken out so it can be drawn as vectors and move on its own.
+   prompt: sc.group === 'layer' ? `From the attached picture, draw ${sc.prompt}\n${sceneCatalog.layerCut}\n${sceneCatalog.layerStyle}`
+    : sc.group === 'layer-base' ? `${sc.prompt}\nFill the whole canvas edge to edge, no border or frame.\n${sceneCatalog.layerStyle}`
+    : sc.group === 'prop'
     ? `Draw a picture-book prop: ${sc.prompt}\n${sceneCatalog.propStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
     : sc.group === 'icon' ? `Draw a game icon: ${sc.prompt}\n${sceneCatalog.iconStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
     : sc.group === 'app' ? `Draw an app icon: ${sc.prompt}\n${sceneCatalog.appStyle}\nThe attached image is the STYLE reference only; do not draw its characters.`
