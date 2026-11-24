@@ -3,7 +3,12 @@
 .island-home button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 /* On a tall phone the island keeps a readable size and is wider than the screen: it scrolls sideways. */
 .island-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: var(--scene-water); }
-.island-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }
+.island-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; overflow: clip; }
+/* three.js draws the island here (IslandDepth); until it is ready the flat pieces show in its place. */
+.island-depth { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
+.island-depth.is-ready { opacity: 1; }
+.island-world .island-place, .island-world .island-walker { transform-origin: 50% 92%; }
+.island-world .island-place { transform-origin: 50% 65%; }
 .island-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .island-world-sticker, .island-world-trace { position: absolute; translate: -50% -50%; pointer-events: none; }
 .island-world-trace { display: grid; place-items: center; width: 5%; aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, .85); }
