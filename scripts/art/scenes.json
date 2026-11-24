@@ -1068,6 +1068,93 @@
    "layerOf": "island-map",
    "size": "square 1024x1024",
    "prompt": "the small red and cream rowboat (without its rope and without the water)."
+  },
+  {
+   "id": "path-base-1",
+   "group": "layer-base",
+   "layerOf": "learning-path",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-base-2",
+   "group": "layer-base",
+   "layerOf": "learning-path-2",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-base-3",
+   "group": "layer-base",
+   "layerOf": "learning-path-3",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-base-4",
+   "group": "layer-base",
+   "layerOf": "learning-path-4",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-base-5",
+   "group": "layer-base",
+   "layerOf": "learning-path-5",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-base-6",
+   "group": "layer-base",
+   "layerOf": "learning-path-6",
+   "piece": "base",
+   "size": "landscape 1536x1024",
+   "prompt": "Repaint the whole attached picture with the same camera, hills, sky, sea, cliffs, river, waterfall, bridge, paths, the four empty round sandy clearings, trees, bushes, flowers, tent, pier, picnic blanket and every other detail at exactly the same positions, sizes and colours, but REMOVE the windmill (its tower and its sails) on the hill at the upper right and the small rowboat next to the pier, and paint the plain ground, hill, sky or sea that would be behind them, continuing the surroundings with no marks left."
+  },
+  {
+   "id": "path-windmill",
+   "group": "layer",
+   "layerOf": "learning-path",
+   "piece": "windmill",
+   "size": "square 1024x1024",
+   "prompt": "the windmill on the hill at the upper right WITHOUT its four sails: the cream tower, its red roof and its door, and the round hub at the front of the roof.",
+   "near": [
+    89,
+    13,
+    9
+   ]
+  },
+  {
+   "id": "path-windmill-sails",
+   "group": "layer",
+   "layerOf": "learning-path",
+   "piece": "windmill-sails",
+   "size": "square 1024x1024",
+   "prompt": "only the four cream windmill sails with the round hub in the middle, seen straight from the front, arranged as an even X with the hub exactly at the centre of the image, without the tower.",
+   "near": [
+    89,
+    9,
+    11
+   ]
+  },
+  {
+   "id": "path-boat",
+   "group": "layer",
+   "layerOf": "learning-path",
+   "piece": "boat",
+   "size": "square 1024x1024",
+   "prompt": "the small red rowboat next to the pier (without the pier and without the water).",
+   "near": [
+    19,
+    82,
+    10
+   ]
   }
  ],
  "iconStyle": "A single game UI icon for a children's language-learning app, in the bold flat sticker icon language of modern gamified learning apps. Shape: one chunky, very rounded silhouette, front or slight three-quarter view, centred, filling about 80% of the canvas, nothing cropped, instantly readable at 32 pixels. Colour: flat fills only, 2 to 4 colours per icon, picked from this exact palette where every colour is always paired with its own fixed darker shade: green #58cc02 / #58a700, blue #1cb0f6 / #1899d6, yellow #ffc800 / #e0a800, red #ff4b4b / #d93a3a, orange #ff9600 / #d97f00, purple #ce82ff / #a568cc, pink #ff86d0 / #e06bb4, brown #a5642c / #7d4a1f, skin exactly as the description says (light, tan, brown or deep brown) with one darker shade of that same skin, white #ffffff / #e5e5e5, grey #afafaf / #8a8a8a, and dark ink #4b4b4b only for eyes and small marks. The icon sits on a white card, so its main shape is never plain white: white things (rice, eggs, clouds, snow, petals, feathers, paper) are cream #fff4d6 with a light grey #d9d2bf shade, or pale blue #ddf4ff with a #b6e3fa shade. Shading: each colour area gets exactly one darker hard-edged shade shape along its lower-right side, about a fifth of that area; no gradients, no glossy highlights, no white shine spots (the only exception: things made of glass, water or soap bubbles get one small white rounded shine so they read as shiny), no outlines, no texture, no 3D or clay look, no drop shadow. Details: few and large. Any line inside the icon (strings, whiskers, veins, stitches, ribs) is a thick rounded-cap stroke at least one sixteenth of the icon width (draw fewer, thicker strings or lines rather than many thin ones); no thin lines, no tiny dots, no small marks that look like writing. Faces appear only where the description asks for a face or names an animal or a person: dark oval eyes looking straight at the viewer, each with one small white catchlight, and a simple smile; food, plants and objects otherwise have no face. Fully transparent background (PNG with alpha), no backdrop, no circle badge, no ground shadow. No text, letters or numbers.",

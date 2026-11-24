@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-把一张场景插画的分层（scenes.json 里 layerOf 指向它的 layer / layer-base 条目）转成矢量图，并量出每层在原画里的位置。
-用法：python3 scripts/art/vectorize.py island-map
+把场景插画转成矢量图。
+  python3 scripts/art/vectorize.py island-map [learning-path ...]
+    分层：scenes.json 里 layerOf 指向这张画的 layer / layer-base 条目，各自转成矢量，并量出每块在原画里的位置。
+  python3 scripts/art/vectorize.py --whole beach orchard ...
+    整张：没有要单独动的东西的画，整张转成 public/scenes/flat-v1/<group>/<id>.svg。
 依赖：pip install vtracer opencv-python pillow numpy
 输入：output/rebrand/scenes/<id>/<id>.png（generate.mjs scene 生成）
 输出：public/scenes/flat-v1/layers/<scene>/<id>.svg（本地媒体，不入库）
@@ -15,12 +18,6 @@ from PIL import Image, ImageFilter
 ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / 'output/rebrand/scenes'
 catalog = json.loads((Path(__file__).parent / 'scenes.json').read_text())
-scene = sys.argv[1] if len(sys.argv) > 1 else 'island-map'
-items = [s for s in catalog['scenes'] if s.get('layerOf') == scene]
-out_dir = ROOT / 'public/scenes/flat-v1/layers' / scene
-out_dir.mkdir(parents=True, exist_ok=True)
-work = SRC / scene / 'layers'
-work.mkdir(exist_ok=True)
 
 # Tracing settings: upscale 2x and smooth first so edges come out clean, then trace in stacked colour layers.
 TRACE = dict(colormode='color', hierarchical='stacked', mode='spline', filter_speckle=12, color_precision=6,
@@ -39,8 +36,8 @@ def prepare(png: Path, dst: Path, cut: bool):
   rgb.save(dst)
   return im, big.size
 
-def trace(src: Path, dst: Path, size):
-  vtracer.convert_image_to_svg_py(str(src), str(dst), **TRACE)
+def trace(src: Path, dst: Path, size, **finer):
+  vtracer.convert_image_to_svg_py(str(src), str(dst), **{**TRACE, **finer})
   svg = dst.read_text()
   svg = re.sub(r'<svg [^>]*>', f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size[0]} {size[1]}">', svg, count=1)
   # Drop what a browser does not need: the XML prolog, the generator comment, empty moves and the space before Z.
@@ -81,21 +78,42 @@ def locate(layer: Image.Image, original: np.ndarray, near=None):
   score, (x, y), (w, h) = max(fine, key=lambda h: h[0])
   return dict(x=round((x + ox) / FW * 100, 2), y=round((y + oy) / FH * 100, 2), w=round(w / FW * 100, 2), h=round(h / FH * 100, 2), fit=round(score, 2))
 
-original = cv2.cvtColor(np.array(Image.open(SRC / scene / f'{scene}.png').convert('RGB')), cv2.COLOR_RGB2BGR)
-layout, total = {}, 0
-for s in items:
-  png = SRC / s['id'] / f"{s['id']}.png"
-  if not png.exists(): print('缺少', s['id']); continue
-  base = s['group'] == 'layer-base'
-  im, size = prepare(png, work / f"{s['id']}.png", cut=not base)
-  name = s['id'].removeprefix(scene.split('-')[0] + '-')
-  raw, gz = trace(work / f"{s['id']}.png", out_dir / f'{name}.svg', size)
-  total += gz
-  if not base: layout[name] = locate(im, original, s.get('near'))
-  print(f"{name:20s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB  {layout.get(name, '底图')}")
-print(f'合计压缩后 {total // 1024}KB')
+def layered(scene):
+  items = [s for s in catalog['scenes'] if s.get('layerOf') == scene]
+  out_dir = ROOT / 'public/scenes/flat-v1/layers' / scene
+  out_dir.mkdir(parents=True, exist_ok=True)
+  work = SRC / scene / 'layers'
+  work.mkdir(exist_ok=True)
+  original = cv2.cvtColor(np.array(Image.open(SRC / scene / f'{scene}.png').convert('RGB')), cv2.COLOR_RGB2BGR)
+  layout, total = {}, 0
+  for s in items:
+    png = SRC / s['id'] / f"{s['id']}.png"
+    if not png.exists(): print('缺少', s['id']); continue
+    base = s['group'] == 'layer-base'
+    im, size = prepare(png, work / f"{s['id']}.png", cut=not base)
+    name = s.get('piece') or s['id'].removeprefix(scene.split('-')[0] + '-')
+    raw, gz = trace(work / f"{s['id']}.png", out_dir / f'{name}.svg', size)
+    total += gz
+    if not base: layout[name] = locate(im, original, s.get('near'))
+    print(f"{scene}/{name:18s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB  {layout.get(name, '底图')}")
+  print(f'{scene} 合计压缩后 {total // 1024}KB')
+  if layout:
+    gen = ROOT / 'src/data/sceneLayers.generated.json'
+    data = json.loads(gen.read_text()) if gen.exists() else {}
+    data[scene] = layout
+    gen.write_text(json.dumps(data, ensure_ascii=False, indent=1) + '\n')
 
-gen = ROOT / 'src/data/sceneLayers.generated.json'
-data = json.loads(gen.read_text()) if gen.exists() else {}
-data[scene] = layout
-gen.write_text(json.dumps(data, ensure_ascii=False, indent=1) + '\n')
+def whole(id):
+  s = next(s for s in catalog['scenes'] if s['id'] == id)
+  work = SRC / id / 'vector.png'
+  _, size = prepare(SRC / id / f'{id}.png', work, cut=False)
+  out = ROOT / 'public/scenes/flat-v1' / s['group'] / f'{id}.svg'
+  # A whole background is mostly large soft areas: finer colour steps keep its faint light patches.
+  raw, gz = trace(work, out, size, layer_difference=7, color_precision=7)
+  print(f"{s['group']}/{id:16s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB")
+
+args = sys.argv[1:] or ['island-map']
+if args[0] == '--whole':
+  for id in args[1:]: whole(id)
+else:
+  for scene in args: layered(scene)

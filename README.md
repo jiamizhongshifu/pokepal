@@ -8,7 +8,7 @@
 
 - 2026-11 起，角色、场景、图标、绘本插画、叫声与应用图标全部替换为本项目原创内容，不再使用任何第三方游戏的角色、名称、图片、模型或音频。
 - 34 种动物小精灵，各有 3 个成长阶段（宝宝 → 长大了 → 成年了），7 种自然属性：水、植物、天空、阳光、夜晚、大地、雪。设定见 [角色设定](docs/rebrand/creatures.md)，品牌与界面规范见 [品牌规范](docs/rebrand/brand-brief.md)。
-- 美术是 2D 平涂插画，由 `scripts/art/` 的生图流程批量生成：`style.txt` 画风规范、`src/data/creatures.json` 与 `scripts/art/creature-art.json` 角色描述、`scenes.json` 场景/道具/图标清单；`generate.mjs` 为每张图保留提示词、参考图、模型和时间记录，`package.mjs` 统一裁切并输出到 `public/sprites/` 与 `public/scenes/flat-v1/`。小岛全景改用矢量分层：`scenes.json` 里 `layerOf` 指向原画的条目（空底图与各个物件）由 `generate.mjs scene` 从原画取出，`vectorize.py`（需 `pip install vtracer opencv-python pillow numpy`）转成 `public/scenes/flat-v1/layers/` 下的 SVG，并把每块在原画里的位置写进 `src/data/sceneLayers.generated.json`；风车、篝火、小船因此能单独动。
+- 美术是 2D 平涂插画，由 `scripts/art/` 的生图流程批量生成：`style.txt` 画风规范、`src/data/creatures.json` 与 `scripts/art/creature-art.json` 角色描述、`scenes.json` 场景/道具/图标清单；`generate.mjs` 为每张图保留提示词、参考图、模型和时间记录，`package.mjs` 统一裁切并输出到 `public/sprites/` 与 `public/scenes/flat-v1/`。场景改用矢量图：小岛全景和学习路线 6 章是矢量分层，`scenes.json` 里 `layerOf` 指向原画的条目（空底图与各个物件）由 `generate.mjs scene` 从原画取出，`vectorize.py`（需 `pip install vtracer opencv-python pillow numpy`）转成 `public/scenes/flat-v1/layers/` 下的 SVG，并把每块在原画里的位置写进 `src/data/sceneLayers.generated.json`；风车、篝火、小船因此能单独动；6 张绘本背景和日记书桌用 `vectorize.py --whole` 整张转成矢量。道具、界面图标和小精灵仍是图片。
 - 小精灵叫声由 `src/lib/creatureVoice.ts` 按物种实时合成（音高、音色、音节轮廓各不相同，长大后声音更低），不依赖音频文件。
 - 旧存档中的角色编号会在读取时迁移到新的小精灵（`src/lib/creatureMigration.ts`），伙伴、好感、相册与回忆都会保留。
 

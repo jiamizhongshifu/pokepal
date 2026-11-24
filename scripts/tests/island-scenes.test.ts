@@ -19,7 +19,7 @@ const friends:Standing[]=[{id:1001,species:'bubbo',place:'tent'},{id:1041,specie
 
 test('every area of the island is a scene with its own picture',()=>{
  assert.deepEqual([...SCENE_ORDER].sort(),DISTRICTS.map(d=>d.id).sort());
- for(const d of SCENE_ORDER)assert.ok(existsSync(`public/scenes/flat-v1/story-bg/${SCENES[d].background}.webp`),d);
+ for(const d of SCENE_ORDER)assert.ok(existsSync(`public/scenes/flat-v1/story-bg/${SCENES[d].background}.svg`),d);
 });
 
 test('a scene shows the words of its own lessons: learned ones to touch, the next ones as shadows',()=>{

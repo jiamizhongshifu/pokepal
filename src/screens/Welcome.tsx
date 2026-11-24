@@ -1,6 +1,6 @@
 import { withTransition } from '../lib/viewTransition';
 import { layerArt } from '../data/sceneArt';
-import { IslandArt } from '../island/IslandArt';
+import { LayeredArt } from '../components/LayeredArt';
 import { Announcements } from '../components/Announcements';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useGame } from "../store";
@@ -82,7 +82,7 @@ export function Welcome() {
       <div className="start-view">
         <img className="scene-backdrop" src={layerArt('island-map', 'base')} alt="" aria-hidden="true" draggable={false}/>
         <div className="start-world" aria-hidden={false}>
-          <IslandArt className="start-world-art"/>
+          <LayeredArt className="start-world-art" ground={layerArt('island-map', 'base')} scene="island-map"/>
           {friends.map(f => { const c = getCreature(f.id); return <button key={f.id} type="button" className={`start-friend${hop === f.id ? ' is-hopping' : ''}`} style={{ left: `${f.spot[0]}%`, top: `${f.spot[1]}%`, '--size': `${[10, 12, 14][c.stage - 1] ?? 10}%` } as React.CSSProperties} aria-label={`${c.nameZh} ${c.nameEn}`} onClick={() => greet(f.id)}><CreatureImg src={creatureArt(f.id)} alt=""/></button>; })}
         </div>
       </div>

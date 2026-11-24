@@ -1,0 +1,18 @@
+/* A painted scene as vector pieces: the ground fills the frame, each piece sits at its own % box. */
+.layered-art { position: absolute; inset: 0; pointer-events: none; }
+.layered-art img { position: absolute; display: block; user-select: none; -webkit-user-drag: none; }
+.layered-art-ground { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.layered-art-piece { object-fit: fill; transform-origin: 50% 100%; }
+
+/* The little life of a scene: slow, small, and only on things that would move anyway. */
+.layered-art-piece[data-piece="windmill-sails"] { transform-origin: 50% 50%; animation: scene-sails 16s linear infinite; }
+.layered-art-piece[data-piece="flame"] { animation: scene-flame 900ms var(--ease-breathe) infinite alternate; }
+.layered-art-piece[data-piece="boat"] { transform-origin: 50% 80%; animation: scene-boat 3.2s var(--ease-breathe) infinite alternate; }
+.layered-art.is-still .layered-art-piece { animation-play-state: paused; }
+/* A tapped area answers: its pieces hop once. */
+.layered-art-piece.is-nudged { animation: scene-hop var(--motion-reward) var(--ease-spring); }
+
+@keyframes scene-sails { to { rotate: 360deg; } }
+@keyframes scene-flame { from { scale: 1 1; } to { scale: 1.06 1.14; } }
+@keyframes scene-boat { from { translate: 0 0; rotate: -2deg; } to { translate: 0 -3%; rotate: 2deg; } }
+@keyframes scene-hop { 40% { translate: 0 -6%; scale: 1.03 .97; } }

@@ -11,6 +11,7 @@ import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
 import { creatureArt, creatureExpression } from '../data/creatures';
 import { pathArt } from '../data/sceneArt';
+import { LayeredArt } from '../components/LayeredArt';
 import { Icon } from '../icons';
 import { ScrollPeek } from '../components/ScrollPeek';
 import { CreatureImg } from '../components/CreatureImg';
@@ -106,7 +107,7 @@ export function PathHome() {
   <div className="path-view" ref={view}>
    <img className="scene-backdrop" src={pathArt(chapter.index)} alt="" aria-hidden="true" draggable={false} />
    <section data-turn={turnDir} className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
-    <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} decoding="async" {...{fetchpriority:'high'}} />
+    <LayeredArt className="path-world-art" ground={pathArt(chapter.index)} scene="learning-path" />
     {chapter.nodes.map((node, i) => {
      const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;

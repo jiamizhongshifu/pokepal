@@ -5,7 +5,7 @@
   text-shadow:none; isolation:isolate;
 }
 .diary-scenery { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
-.diary-desk { position:absolute; inset:0; background:#c59c66 url('/scenes/flat-v1/world/diary-desk.webp') center / cover no-repeat; }
+.diary-desk { position:absolute; inset:0; background:#c59c66 url('/scenes/flat-v1/world/diary-desk.svg') center / cover no-repeat; }
 .diary-room-friend { position:absolute; width:clamp(100px,18vw,270px); height:clamp(120px,27vh,290px); object-fit:contain; filter:drop-shadow(0 12px 7px #55381c45); }
 .diary-room-friend.friend-0 { left:0; bottom:20%; }
 .diary-room-friend.friend-1 { right:0; bottom:20%; }
