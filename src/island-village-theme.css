@@ -16,7 +16,7 @@
 #root .screen .parent-btn { background:#fffef7c9; border:1px solid var(--brand-line); border-radius:50%; }
 #root .screen button:focus-visible,#root .screen summary:focus-visible { outline:3px solid var(--brand-primary); outline-offset:4px; }
 #root .screen .btn-big:not(.alt),#root .screen .learning-trail-primary {
-  background:linear-gradient(var(--brand-primary),var(--brand-primary)); color:var(--brand-paper); border:2px solid var(--brand-primary-deep);
+  background:linear-gradient(var(--brand-primary),var(--brand-primary)); color:var(--brand-on-primary); border:2px solid var(--brand-primary-deep);
   border-top-color:#76bed3; border-radius:24px 27px 23px 26px;
   box-shadow:0 5px 0 var(--brand-primary-deep),0 8px 16px #214f6718; text-shadow:none;
 }
@@ -43,7 +43,7 @@
   border-radius:25px 25px 30px 30px; padding:24px; box-shadow:var(--village-shadow);
 }
 #root .learning-trail header { color:var(--brand-ink-muted); }
-#root .learning-trail header small { background:var(--brand-primary-soft); color:var(--brand-success); padding:6px 10px; border-radius:var(--radius-sm); }
+#root .learning-trail header small { background:var(--brand-primary-soft); color:var(--brand-primary-ink); padding:6px 10px; border-radius:var(--radius-sm); }
 #root .learning-trail h1 { color:var(--brand-ink); }
 #root .learning-trail footer,#root .learning-trail footer button { color:var(--brand-ink-muted); }
 #root .tasks .task-games>summary { color:var(--text); }
@@ -101,13 +101,13 @@
 #root .diary-screen .diary-question { color:var(--brand-ink); background:var(--brand-paper); border:2px solid var(--brand-line); border-top:7px solid var(--brand-primary); border-radius:23px 23px 29px 29px; box-shadow:var(--village-shadow); }
 #root .diary-screen .diary-question-icon { width:76px; height:76px; border-radius:var(--radius-lg); background:var(--brand-sun-soft); }
 #root .diary-screen :is(.diary-hear,.diary-return,.diary-answer-list button) { background:var(--brand-sky-soft); border-color:var(--brand-line); color:var(--brand-ink); min-height:48px; }
-#root .diary-screen .diary-record { background:var(--brand-primary-soft); border:2px solid var(--brand-primary); color:var(--brand-success); box-shadow:0 4px 0 var(--brand-primary); min-height:84px; }
+#root .diary-screen .diary-record { background:var(--brand-primary-soft); border:2px solid var(--brand-primary); color:var(--brand-primary-ink); box-shadow:0 4px 0 var(--brand-primary); min-height:84px; }
 #root .diary-screen .diary-record[aria-pressed=true] { background:var(--brand-coral-soft); border-color:var(--brand-danger); color:var(--brand-sun-ink); box-shadow:0 4px 0 var(--brand-streak); }
 #root .diary-screen .diary-parent { color:var(--brand-ink-muted); border-top:1px dashed var(--brand-line); }
 #root .diary-screen .diary-parent textarea { color:var(--brand-ink); border-color:var(--surface-border); background:var(--brand-sky-soft); }
 #root .diary-screen .diary-guide-actions>button { display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 14px; }
 #root .diary-screen .diary-guide-actions>button:not(.farm-primary) { color:var(--brand-ink); background:var(--brand-sky-soft); border-color:var(--brand-line); }
-#root .diary-screen .farm-primary { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
+#root .diary-screen .farm-primary { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
 #root .diary-screen .diary-paper { color:var(--brand-ink); background:var(--brand-paper); border-color:var(--brand-line); box-shadow:-7px 0 0 #98d9c1; }
 #root .screen :is(.diary-entry,.diary-books button) { color:var(--brand-ink); background:var(--brand-sun-soft); border-color:var(--brand-sun); box-shadow:0 3px 0 var(--brand-line-deep); }
 
@@ -140,7 +140,7 @@
 #root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-sun); }
 #root .screen .guide-hear { background:var(--brand-sky-soft); border-color:var(--surface-border); }
 #root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }
-#root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-paper); border-color:var(--brand-primary-deep); }
+#root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
 #root .screen .story-word-saves button[aria-pressed=true] { background:var(--brand-sun-soft); }
 #root .screen .learning-stage-settings { --ink:var(--brand-ink); }
 #root .screen .stage-presets>button[aria-pressed=true] { background:var(--brand-primary-soft); outline-color:#70b99b; }

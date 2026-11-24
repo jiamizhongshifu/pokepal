@@ -19,7 +19,7 @@
 .avatar-presets button { display:grid; place-items:center; min-width:44px; height:62px; padding:2px; border:2px solid transparent; border-radius:var(--radius-md); background:var(--brand-primary-soft); transition:transform .14s ease-out,border-color .16s,box-shadow .14s; }
 .avatar-presets button:active { transform:scale(.95); }
 .avatar-presets button[aria-pressed=true] { border-color:var(--brand-primary-deep); background:var(--brand-primary-soft); box-shadow:0 3px 0 var(--brand-primary-deep); }
-.avatar-save { width:100%; min-height:54px; border:0; border-radius:var(--radius-md); margin-top:18px; background:var(--brand-primary); color:#fff; box-shadow:0 4px 0 var(--brand-primary-deep); font-size:var(--text-xl); font-weight:800; transition:transform .14s ease-out,box-shadow .14s ease-out; }
+.avatar-save { width:100%; min-height:54px; border:0; border-radius:var(--radius-md); margin-top:18px; background:var(--brand-primary); color:var(--brand-on-primary); box-shadow:0 4px 0 var(--brand-primary-deep); font-size:var(--text-xl); font-weight:800; transition:transform .14s ease-out,box-shadow .14s ease-out; }
 .avatar-save:not(:disabled):active { transform:translateY(3px) scale(.98); box-shadow:0 1px 0 var(--brand-primary-deep); }
 .avatar-editor button:focus-visible { outline:3px solid var(--brand-streak); outline-offset:2px; }
 .avatar-editor button:disabled { opacity:.55; }

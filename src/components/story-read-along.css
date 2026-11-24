@@ -27,7 +27,7 @@
 #root .story-word-card-close { margin-left:auto; display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:50%; background:transparent; cursor:pointer; }
 
 #root .story-echo { display:flex; align-items:center; flex-wrap:wrap; gap:10px 12px; margin:14px 0 4px; padding:12px; border-radius:var(--radius-md); background:var(--surface); border:2px solid var(--surface-border); }
-#root .story-echo-main { display:inline-flex; align-items:center; gap:10px; min-height:60px; padding:8px 20px; border:0; border-radius:var(--radius-md); background:var(--brand-primary); color:#fff; box-shadow:0 4px 0 var(--brand-primary-deep); font:inherit; font-size:var(--text-xl); font-weight:800; text-align:left; cursor:pointer; transition:transform .14s ease-out,box-shadow .14s ease-out; }
+#root .story-echo-main { display:inline-flex; align-items:center; gap:10px; min-height:60px; padding:8px 20px; border:0; border-radius:var(--radius-md); background:var(--brand-primary); color:var(--brand-on-primary); box-shadow:0 4px 0 var(--brand-primary-deep); font:inherit; font-size:var(--text-xl); font-weight:800; text-align:left; cursor:pointer; transition:transform .14s ease-out,box-shadow .14s ease-out; }
 #root .story-echo-main:not(:disabled):active { transform:translateY(3px) scale(.98); box-shadow:0 1px 0 var(--brand-primary-deep); }
 #root .story-echo-main small { display:block; font-size:var(--text-sm); font-weight:600; opacity:.9; }
 #root .story-echo-main[data-phase=recording] { background:var(--brand-danger); box-shadow:0 4px 0 var(--brand-danger-deep); }

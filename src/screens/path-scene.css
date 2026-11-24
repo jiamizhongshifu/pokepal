@@ -33,8 +33,9 @@
 
 /* ── Today's stop: a big green start medallion, the friend beside it, a picture bubble above ── */
 .path-stop.is-current { --token: clamp(76px, 11cqw, 168px); z-index: 4; display: grid; }
-.stop-go { padding: 0; border: 0; background: var(--brand-primary); box-shadow: 0 0 0 7px #fff, 0 11px 0 7px var(--brand-primary-deep), 0 0 0 18px rgba(58, 132, 0, .25), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
-.stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; filter: brightness(0) invert(1); }
+.stop-go { padding: 0; border: 0; background: var(--brand-primary); box-shadow: 0 0 0 7px #fff, 0 11px 0 7px var(--brand-primary-deep), 0 0 0 18px color-mix(in srgb, var(--brand-primary) 25%, transparent), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
+/* The arrow is the picture darkened to the deep green of text on the fill, so it reads at 3:1 without a white chip. */
+.stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; filter: brightness(0) opacity(.7); }
 .stop-go:active { transform: translateY(5px); }
 .stop-friend-btn { position: absolute; right: calc(50% + var(--token) * .48); bottom: 24px; width: calc(var(--token) * 1.15); aspect-ratio: 1; padding: 0; border: 0; background: transparent; }
 .stop-friend-btn .stop-friend { position: static; width: 100% !important; height: 100% !important; pointer-events: none; }
@@ -54,8 +55,8 @@
 .stop-bubble.is-speaking::after { background: #f3fbff; border-color: #1cb0f6; }
 .stop-bubble.is-speaking .stop-bubble-hear { background: #1cb0f6; animation: bubble-pulse 1s ease-in-out infinite; }
 .stop-bubble.is-speaking .stop-bubble-hear .icon { filter: brightness(0) invert(1); }
-.path-stop.is-current .stop-name { margin-top: 18px; padding: 5px 16px 6px; background: var(--brand-primary); color: #fff; box-shadow: 0 4px 0 var(--brand-primary-deep); font-size: clamp(16px, 1.8cqw, 21px); }
-.path-stop.is-current .stop-name small { color: #fff; }
+.path-stop.is-current .stop-name { margin-top: 18px; padding: 5px 16px 6px; background: var(--brand-primary); color: var(--brand-on-primary); box-shadow: 0 4px 0 var(--brand-primary-deep); font-size: clamp(16px, 1.8cqw, 21px); }
+.path-stop.is-current .stop-name small { color: var(--brand-on-primary); }
 
 /* ── Top bar: me on the left, the chapter plaque in the middle, help on the right ── */
 .path-top { position: absolute; z-index: 10; left: 0; right: 0; top: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left)); pointer-events: none; }

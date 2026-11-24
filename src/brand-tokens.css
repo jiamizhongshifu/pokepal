@@ -8,11 +8,12 @@
 @import "@fontsource/nunito/latin-900.css";
 
 :root {
-  /* Owl green: primary action, progress, correct answer. Darkened from #58cc02 so white text on it reaches 4.5:1. */
-  --brand-primary:#3a8400;
-  --brand-primary-deep:#2c6500;
-  --brand-primary-hover:#449500;
-  --brand-primary-soft:#dbf8c5; --brand-primary-ink:#3f7a00;
+  /* Owl green: primary action, progress, correct answer. Text on the green fill is --brand-on-primary (4.74:1), never white (2.09:1);
+     --brand-primary-deep is the edge under the fill, --brand-primary-ink is green text on light grounds. */
+  --brand-primary:#58cc02;
+  --brand-primary-deep:#58a700;
+  --brand-primary-hover:#61e002;
+  --brand-primary-soft:#dbf8c5; --brand-primary-ink:#2c6500; --brand-on-primary:#1f4d00;
   --brand-success:var(--brand-primary);
   --brand-lagoon:var(--brand-primary);
   /* Secondary accents. */

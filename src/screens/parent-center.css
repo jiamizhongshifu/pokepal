@@ -241,7 +241,7 @@
   background: var(--p-well); border: 1px solid var(--p-border);
   font-size: var(--text-base); font-weight: 800; color: var(--p-muted);
 }
-.pchart-az span.is-done { background: var(--brand-primary); border-color: var(--brand-primary-deep); color: #fff; box-shadow: 0 2px 0 var(--brand-primary-deep); }
+.pchart-az span.is-done { background: var(--brand-primary); border-color: var(--brand-primary-deep); color: var(--brand-on-primary); box-shadow: 0 2px 0 var(--brand-primary-deep); }
 
 /* Companion action row in home idea */
 .parent-idea-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
