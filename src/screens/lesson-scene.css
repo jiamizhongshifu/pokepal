@@ -115,3 +115,11 @@
  #root .lesson-staged .round-card .phrase-choices > div { flex-basis: min(40vw, 30vh); }
  #root .lesson-staged .lesson-mat { left: 70%; top: 40%; }
 }
+/* The round moves on by itself: a bar fills along the pause button. Paused with the round done, it is the green way on. */
+#root .learning-round .round-pace { position: relative; overflow: hidden; }
+#root .learning-round .round-pace .round-pace-bar { position: absolute; left: 0; bottom: 0; height: 6px; width: 0; background: var(--brand-primary); animation: round-count var(--advance, 1.4s) linear forwards; }
+@keyframes round-count { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { #root .learning-round .round-pace .round-pace-bar { animation: none; width: 100%; } }
+#root .learning-round .round-pace.is-next, #root .lesson-staged .is-staged .round-pace.is-next { background: var(--brand-primary); border-color: var(--brand-paper); color: var(--brand-on-primary); box-shadow: 0 5px 0 var(--brand-primary-deep); }
+#root .lesson-staged .is-staged .round-pace.is-next { width: 84px; height: 84px; }
+#root .lesson-staged .is-staged .round-pace.is-next > .icon { width: 44px !important; height: 44px !important; }

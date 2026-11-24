@@ -20,6 +20,7 @@ import { ScrollPeek } from '../components/ScrollPeek';
 import { firstFruitUnit, plantAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { CropKind } from '../lib/farm';
 import { Icon } from '../icons';
+import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
 import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
 import { storyBackground, storyProp, worldArt } from '../data/sceneArt';
@@ -59,6 +60,8 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  const [session, setSession] = useState<Invite | null>(null);
  const [react, setReact] = useState<{ id: number | string; at: number } | null>(null);
  const [nudged, setNudged] = useState<District | null>(null);
+ // A closed area, once tapped, offers its lesson: a second tap goes there.
+ const [armed, setArmed] = useState<District | null>(null), armTicket = useRef(0);
  const [evolving, setEvolving] = useState<number | null>(null);
  const [asleep, setAsleep] = useState(false), [party, setParty] = useState(false);
  const [planting, setPlanting] = useState<{ index: number; ask: IslandAsk } | null>(null);
@@ -83,9 +86,16 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  const enter = (d: District) => {
   stopSpeech();
   if (open.has(d)) { sfx('click'); setSession(null); setDistrict(d); return; }
-  sfx('boop'); setNudged(d); later(() => setNudged(n => n === d ? null : n), 700);
   const unit = unlockingUnit(d);
-  if (unit) void say(['zh', unit.mission]);
+  if (unit && armed === d) {
+   // The lesson opens only when the learning path itself lets it; otherwise the path shows where the child is.
+   sfx('click'); armTicket.current++; setArmed(null);
+   const stop = pathNodes(withWelcomeFriend(save, withReview(save, learningPath(save)))).find(n => n.kind === 'lesson' && n.unit?.id === unit.id);
+   if (stop && stop.state !== 'locked') useGame.getState().startUnit(unit.id); else go({ name: 'home' });
+   return;
+  }
+  sfx('boop'); setNudged(d); later(() => setNudged(n => n === d ? null : n), 700);
+  if (unit) { const ticket = ++armTicket.current; setArmed(d); later(() => { if (armTicket.current === ticket) setArmed(null); }, 8000); void say(['zh', unit.mission]); }
  };
  const begin = (invite: Invite) => { if (invite.partner === undefined) return; stopSpeech(); sfx('sparkle'); setDistrict(invite.district); setSession(invite); };
  // The way back: out of what is being done first, then out of the scene.
@@ -207,8 +217,9 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
      const d = nextDistrict(save), places = d ? placesIn(d) : [];
      if (!d || !places.length) return null;
      const at = [places.reduce((n, p) => n + p.spot[0], 0) / places.length, places.reduce((n, p) => n + p.spot[1], 0) / places.length];
-     return <button type="button" className={`island-teaser${nudged === d ? ' is-nudged' : ''}`} style={{ left: `${at[0]}%`, top: `${at[1]}%` }} aria-label={`${DISTRICTS.find(x => x.id === d)?.name}，学到这里就开放`} onClick={() => enter(d)}>
-      <Icon name="lock" size={30} /><span><b>{DISTRICTS.find(x => x.id === d)?.name}</b><small>学到这里就开放</small></span>
+     return <button type="button" className={`island-teaser${nudged === d ? ' is-nudged' : ''}`} style={{ left: `${at[0]}%`, top: `${at[1]}%` }} aria-label={armed === d ? `${DISTRICTS.find(x => x.id === d)?.name}，再点一下去学这一课` : `${DISTRICTS.find(x => x.id === d)?.name}，学到这里就开放`} onClick={() => enter(d)}>
+      <Icon name="lock" size={30} /><span><b>{DISTRICTS.find(x => x.id === d)?.name}</b><small>{armed === d ? '再点一下，去学这一课' : '学到这里就开放'}</small></span>
+      {armed === d && <span className="island-teaser-go" aria-hidden="true"><Icon name="play" size={26} /></span>}
      </button>;
     })()}
     {standing.map(f => {

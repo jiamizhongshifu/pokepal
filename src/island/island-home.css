@@ -204,3 +204,5 @@
 /* On a phone the corner buttons reach the middle: the day's stars move to the free top-left corner. */
 @media (max-width: 560px) { .island-day { left: calc(12px + env(safe-area-inset-left)); translate: none; } }
 #root .island-home .island-stage .island-ask-options .is-reading { filter: drop-shadow(0 5px 0 var(--brand-sky)); scale: 1.08; }
+.island-teaser-go { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--brand-primary); box-shadow: 0 3px 0 var(--brand-primary-deep); }
+.island-teaser .island-teaser-go .icon { padding: 0; }

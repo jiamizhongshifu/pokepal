@@ -22,12 +22,12 @@
 /* Icons on a green fill: an action mark (Icon's is-glyph: play, mic, check…) turns white over a hard deep-green edge;
    a picture keeps its colours on a white chip, so nothing blends into the green. */
 #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
-  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now,
+  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
   :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon:not(.is-glyph) {
   background:var(--brand-paper); border-radius:var(--radius-sm); padding:4px; box-sizing:content-box; flex:none;
 }
 #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
-  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now,
+  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
   :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon.is-glyph {
   background:none; padding:0; filter:brightness(0) invert(1) drop-shadow(0 3px 0 var(--brand-primary-deep));
 }

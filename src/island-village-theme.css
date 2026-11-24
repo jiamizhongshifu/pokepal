@@ -137,7 +137,7 @@
 #root .screen .guide-hear { background:var(--brand-sky-soft); border-color:var(--surface-border); }
 #root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }
 #root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
-#root .screen .story-word-saves button[aria-pressed=true] { background:var(--brand-sun-soft); }
+
 #root .screen .learning-stage-settings { --ink:var(--brand-ink); }
 #root .screen .stage-presets>button[aria-pressed=true] { background:var(--brand-primary-soft); outline-color:#70b99b; }
 #root .screen .stage-current { color:var(--brand-primary-ink); background:var(--brand-primary-soft); }

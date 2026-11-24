@@ -179,9 +179,13 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const onReadyRef=useRef(onReady);onReadyRef.current=onReady;
  const notified=useRef(false);
  useEffect(()=>{if(ready&&!notified.current){notified.current=true;onReadyRef.current?.();}},[ready]);
- const auto=useRoundAdvance(ready,advance,guided||target.contextOnly?2400:1400,guideOpen);
- const pacing=<button className="round-pace" disabled={guideOpen} onClick={()=>{sfx('click');const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={auto.paused}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{auto.paused?'接着玩':'慢一点'}</span></button>;
+ const advanceDelay=guided||target.contextOnly?2400:1400;
+ const auto=useRoundAdvance(ready,advance,advanceDelay,guideOpen);
+ // Paused with the round done, the pause button becomes the way on; while the round is about to move on, a bar fills along it.
+ const next=auto.paused&&ready&&!guideOpen,counting=auto.counting;
+ const pacing=<button className={`round-pace${next?' is-next':''}`} style={{'--advance':`${advanceDelay}ms`} as React.CSSProperties} disabled={guideOpen} onClick={()=>{sfx('click');if(next){advance();return;}const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={next?undefined:auto.paused} aria-label={next?'下一个':auto.paused?'接着玩':'慢一点'}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{next?'下一个':auto.paused?'接着玩':'慢一点'}</span>{counting&&<i key={auto.run} className="round-pace-bar" aria-hidden="true"/>}</button>;
  const fallback=audioFailed&&onSkip?<button className="learning-help" onClick={()=>{if(continued.current)return;sfx('click');continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
+ // The pace line (waiting, paused, about to move on) is for screen readers in a scene; the answer feedback is the strip's alone.
  const flow=<p className="round-flow-status" role="status">{guideOpen?'帮助打开时，伙伴会等你':audioFailed?'这段声音可以稍后补听':auto.paused?'慢慢来，伙伴等着你':playing?'先听一听…':ready?'马上去下一个小发现':'听听声音，再点图片'}</p>;
  const stage=staged?' is-staged':'';
  // In a scene, what to answer sits on one white card with the question as its title; the friend and its voice stay in the scene.
@@ -201,7 +205,7 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
    <button className={`${choice.shake===o?'shake':''} ${choice.solved&&o.key===target.key?'chosen':''} ${choice.eliminated.includes(o)?'faded':''} ${explaining&&o.key===target.key?'is-explained':''}`} aria-label={`选择${o.zh}`} disabled={choice.solved||choice.shake!==null||choice.eliminated.includes(o)} onClick={()=>tap(o)}>{target.kind==='phrase'?<><LearningArt entry={o}/><strong lang="en">{o.en}</strong><small>{o.zh}</small></>:<><LearningArt entry={o}/>{explaining&&o.key===target.key&&<span className="learning-explanation-label"><strong lang="en">{o.en}</strong><small>{o.zh}</small></span>}</>}{explaining&&o.key===target.key&&<span className="learning-explanation-pointer" aria-hidden="true"><Icon name="hand" size={28}/></span>}</button>
   </div>)}</div>,
   !choice.solved&&<button className="learning-help" onClick={()=>{sfx('click');explainTarget();}}><Icon name="hand" size={28}/><span>{explaining?'再讲一次':'帮我认识'}</span></button>)}
-  <p className="learning-feedback" role="status">{feedback|| (target.kind==='phrase'?'先听两句话，再选一句。':'不着急，伙伴等着你。')}</p>
+  {!staged&&<p className="learning-feedback" role="status">{feedback|| (target.kind==='phrase'?'先听两句话，再选一句。':'不着急，伙伴等着你。')}</p>}
 
  </section>;
 }

@@ -97,9 +97,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .dex-cell.unknown img:not(.icon):not(.invite-berry) { filter: brightness(0) opacity(.24); }
 .dex-name { font-size:var(--text-2xl); }
 .dex-no { font-size:var(--text-base); }
-.dex-pagination { display: flex; gap: 30px; align-items: center; justify-content: center; padding: 18px 20px; flex: none; position: sticky; bottom: 0; z-index: 2; background: var(--browser); }
-.dex-pagination > span { font-size:var(--text-xl); color: var(--muted); font-weight: 800; }
-.next-icon { transform: rotate(180deg); }
 /* 伙伴资料：图像优先，听读操作保持一致。 */
 .detail { overflow: visible; gap: 28px; width: min(1200px,100%); margin: 0 auto; align-items: start; padding: 20px 32px 32px; }
 .detail-art { flex: 0 0 36%; min-height: 400px; padding: 24px; background: var(--surface); border: 2px solid var(--surface-border); }
@@ -217,9 +214,6 @@ button:not(:disabled):active { transform: scale(.97); }
   .dex-cell { min-height: 174px; padding: 24px 10px 12px; }
   .dex-cell img:not(.icon):not(.invite-berry) { width: 110px; height: 110px; }
   .dex-name { font-size:var(--text-xl); }
-  .dex-pagination { gap: 12px; padding: 20px 12px; }
-  .dex-pagination .replay { font-size:var(--text-lg); padding: 10px 12px; }
-  .dex-pagination > span { font-size:var(--text-lg); }
   .detail { padding: 6px 16px 24px; gap: 22px; }
   .detail-art { min-height: 240px; flex-direction: column; gap: 10px; padding: 16px; }
   .detail-art img:not(.icon):not(.invite-berry) { width: 190px; max-height: 190px; }
@@ -341,7 +335,6 @@ button:not(:disabled):active { transform: scale(.97); }
 @media (max-width: 600px) { .dex-generations { gap: 6px; } .dex-generations button { min-width: 0; padding: 8px; font-size:var(--text-base); } }
 
 /* Keep the footer below the cards; a sticky footer hid the next row on short tablets. */
-.dex-pagination { position: static; }
 
 .mic-control{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%}.mic-status{font-size:var(--text-base);line-height:1.5;max-width:310px;text-align:center;margin:6px 0;color:var(--text)}.mic-finish{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border:2px solid var(--brand-primary);border-radius:var(--radius-md);background:var(--surface);color:var(--text);font-weight:800;font-size:var(--text-lg)}.mic-finish:focus-visible{outline:3px solid var(--brand-sun);outline-offset:4px}.home .mic-control{gap:7px}.home .mic-status{font-size:var(--text-sm);margin:2px 0}
 
@@ -461,7 +454,9 @@ button:not(:disabled):active { transform: scale(.97); }
 .dex .dex-generations { width:auto; margin:0 12px; gap:8px; }
 .dex .dex-generations button { flex:none; min-width:0; min-height:48px; white-space:nowrap; padding:8px 16px; font-size:var(--text-base); }
 .dex-filter-count { margin:12px; color:var(--muted); font-size:var(--text-base); }
-.dex .dex-grid { flex:0 0 auto; align-content:start; }
+.dex .dex-grid { flex:0 0 auto; align-content:start; padding-bottom: calc(108px + env(safe-area-inset-bottom)); }
+/* Picking a friend has no bottom navigation. */
+.dex.is-picking .dex-grid { padding-bottom: 24px; }
 .dex .dex-cell { gap:3px; }
 .dex .dex-cell.discover { color:var(--text); }
 .dex .dex-cell.discover .dex-no { color:var(--muted); }
@@ -471,7 +466,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .dex .dex-meet-status { font-size:var(--text-base); }
 .dex-empty { display:flex; flex-direction:column; align-items:center; gap:16px; min-height:280px; }
 .dex-empty p { font-size:var(--text-2xl); margin:0; line-height:1.6; }
-.dex-pagination .replay:disabled { box-shadow:none; opacity:.45; }
 .dex-detail .detail-wish .wish-button { flex-wrap:wrap; }
 .dex-detail .detail-wish .wish-button>small { flex-basis:100%; margin:0; }
 .dex-detail .official summary { min-height:48px; display:flex; align-items:center; cursor:pointer; }

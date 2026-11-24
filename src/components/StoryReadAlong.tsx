@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from '../icons';
 import { useGame } from '../store';
-import { getAudioContext, onVoicePlayback, say, stopSpeech } from '../lib/speech';
+import { getAudioContext, onVoicePlayback, sayCancellableWhile, stopSpeech } from '../lib/speech';
 import { alignTiming, storyTokens, storyWordEntry, storyWordGloss, storyWordVoice, wordAt } from '../lib/storyWords';
 import { useClipRecorder, type ClipFailure } from '../lib/clipRecorder';
 import './story-read-along.css';
@@ -56,11 +56,14 @@ const ECHO_FAILURES:Record<ClipFailure,string>={
 /** Listen, say it yourself, hear yourself. No score; the clip lives only on this page and is never saved. */
 export function EchoPractice({en,onStart}:{en:string;onStart:()=>void}){
  const [phase,setPhase]=useState<'idle'|'model'|'turn'|'mine'|'done'>('idle'),[note,setNote]=useState('');
- const live=useRef(true),clip=useRef(''),player=useRef<HTMLAudioElement|null>(null);
+ const live=useRef(true),clip=useRef(''),player=useRef<HTMLAudioElement|null>(null),run=useRef(0);
+ // The example this button started, so stopping it cancels only that; and the end of my own playback, so stopping it early ends it the same way.
+ const model=useRef<{cancel:()=>void}|null>(null),mineDone=useRef<(()=>void)|null>(null);
  const playMine=()=>new Promise<void>(resolve=>{
   stopSpeech();player.current?.pause();
   const audio=new Audio(clip.current);player.current=audio;
-  audio.onended=()=>resolve();audio.onerror=()=>resolve();audio.play().catch(()=>resolve());
+  const end=()=>{if(mineDone.current===end)mineDone.current=null;resolve();};mineDone.current=end;
+  audio.onended=end;audio.onerror=end;audio.play().catch(end);
  });
  const rec=useClipRecorder({maxSeconds:8,
   onRecorded:async audio=>{
@@ -72,18 +75,23 @@ export function EchoPractice({en,onStart}:{en:string;onStart:()=>void}){
   onFailure:kind=>{if(live.current){setPhase('idle');setNote(ECHO_FAILURES[kind]);}}});
  useEffect(()=>{live.current=true;return()=>{live.current=false;player.current?.pause();if(clip.current){URL.revokeObjectURL(clip.current);clip.current='';}};},[]);
  const begin=async()=>{
-  onStart();setNote('');player.current?.pause();setPhase('model');
-  const ok=await say(['en',en]);
-  if(!live.current)return;
+  onStart();setNote('');player.current?.pause();setPhase('model');const ticket=++run.current;
+  const example=sayCancellableWhile(()=>true,['en',en]);model.current=example;
+  const ok=await example.done;
+  if(model.current===example)model.current=null;
+  if(!live.current||ticket!==run.current)return;
   if(!ok){setPhase('idle');setNote('这句声音暂时没准备好，可以先请大人读一遍。');return;}
   setPhase('turn');
   if(!await rec.start()&&live.current)setPhase(p=>p==='turn'?'idle':p);
  };
  const hearMine=async()=>{setPhase('mine');await playMine();if(live.current)setPhase('done');};
+ // Tapping again while the model or my own voice plays stops it: the example goes back to the start, my voice to "done".
+ const stopModel=()=>{run.current++;model.current?.cancel();model.current=null;setPhase('idle');};
+ const stopMine=()=>{player.current?.pause();mineDone.current?.();setPhase('done');};
  const label=phase==='model'?'先听一听…':rec.recording?`说完啦 · ${rec.seconds} 秒`:phase==='turn'?'正在打开麦克风…':phase==='mine'?'听听我的声音…':phase==='done'?'再说一次':'我来说一说';
  return <section className="story-echo" aria-label="跟着说一说">
-  <button className="story-echo-main" data-phase={rec.recording?'recording':phase} aria-pressed={rec.recording} disabled={phase==='model'||phase==='mine'||(phase==='turn'&&!rec.recording)} onClick={rec.recording?rec.stop:begin}>
-   <Icon name={rec.recording?'check':phase==='model'||phase==='mine'?'ear':'mic'} size={30}/><span>{label}<small>{rec.recording?'轮到你说啦，说完点一下':phase==='done'?'像故事里一样，再说一遍':'先听这一句，再自己说'}</small></span>
+  <button className="story-echo-main" data-phase={rec.recording?'recording':phase} aria-pressed={rec.recording} disabled={phase==='turn'&&!rec.recording} onClick={rec.recording?rec.stop:phase==='model'?stopModel:phase==='mine'?stopMine:begin}>
+   <Icon name={rec.recording?'check':phase==='model'||phase==='mine'?'ear':'mic'} size={30}/><span>{label}<small>{rec.recording?'轮到你说啦，说完点一下':phase==='model'||phase==='mine'?'再点一下就停下':phase==='done'?'像故事里一样，再说一遍':'先听这一句，再自己说'}</small></span>
   </button>
   {phase==='done'&&<button className="story-echo-mine" onClick={hearMine}><Icon name="play" size={24}/>听我的声音</button>}
   {rec.recording&&<span className="story-echo-meter" aria-hidden="true"><span style={{width:`${Math.min(100,rec.seconds/8*100)}%`}}/></span>}

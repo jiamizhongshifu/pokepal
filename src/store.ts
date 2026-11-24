@@ -37,7 +37,7 @@ export const TASK_INFO: Record<TaskKind, { zh: string; en: string; icon: string;
   trace: { zh: "写一写", en: "Write", icon: "pencil", color: "#ba68c8" }
 };
 
-export interface DexBrowseState { onlyOwned:boolean; query:string; page:number; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
+export interface DexBrowseState { onlyOwned:boolean; query:string; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
 
 export type Screen =
   | { name: "welcome" }

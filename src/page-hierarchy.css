@@ -11,8 +11,8 @@
 #root .story-primary-controls button{min-width:0;min-height:62px}
 #root .story-parent-options{margin:22px 0 4px}
 #root .story-parent-options .participation-note{flex-wrap:wrap;margin:10px 0;line-height:1.6}
-#root .story-word-disclosure{margin-top:12px}
-#root .story-word-disclosure>summary{display:flex;align-items:center;gap:8px;min-height:48px;font-size:var(--text-base);color:var(--brand-ink-muted);cursor:pointer}
+
+
 #root .story-ending-primary{margin:24px auto;min-height:68px}
 #root .story-ending>.quiet-disclosure{text-align:left}
 #root .learning-notebook .notebook-entry{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:8px;padding:16px}

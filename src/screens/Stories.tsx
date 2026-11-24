@@ -22,14 +22,10 @@ import { PIC_WORDS } from '../data/words';
 
 /** Keep the full sentence readable; emphasis never changes narration or wording. */
 function StoryReading({page,spoken,selected,onWord}:{page:StoryPage;spoken:number;selected?:number;onWord:(word:string,index:number)=>void}){
- const keys=[page.keyword.en,...PIC_WORDS.filter(w=>new RegExp(`\\b${w.en}(?:s|es)?\\b`,'i').test(page.en)).map(w=>w.en)];
- const words=[...new Map(keys.flatMap(key=>{const e=learningEntry(key);return e?[[e.key,e] as const]:[];})).values()].slice(0,3);
- const records=useGame(s=>s.save.learning?.records);
  return <section className="story-reading-text" aria-label="中英对照故事正文">
   <ReadAlongText en={page.en} keyword={page.keyword.en} active={spoken} selected={selected} onWord={onWord}/>
   <p className="story-text-zh" lang="zh-CN">{page.zh}</p>
   <p className="story-keyword"><span>一起认识</span><b lang="en">{page.keyword.en}</b><span lang="zh-CN">{page.keyword.zh}</span></p>
-  {!!words.length&&<details className="story-word-disclosure"><summary><Icon name="book" size={22}/>这页的小词</summary><div className="story-word-saves" aria-label="把故事里的词放进手册">{words.map(w=><button key={w.key} aria-pressed={!!records?.[w.key]?.saved} onClick={()=>useGame.getState().saveLearningWord(w.key)}><Icon name="book" size={19}/>{records?.[w.key]?.saved?'已收藏':'收藏'} {w.en}</button>)}</div></details>}
  </section>;
 }
 
