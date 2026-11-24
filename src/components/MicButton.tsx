@@ -6,7 +6,9 @@ import { Icon } from '../icons';
 /** A short listening turn with a visible, always-available manual completion. */
 export function MicButton({onResult,disabled,size=140,onRecordingChange}:{onResult:(r:RecordResult)=>void;disabled?:boolean;size?:number;onRecordingChange?:(active:boolean)=>void}){
  const [state,setState]=useState<'idle'|'preparing'|'listening'|'finishing'>('idle');
- const [level,setLevel]=useState(0),[heard,setHeard]=useState(false);
+ const [heard,setHeard]=useState(false);
+ // The loudness ring follows the voice every frame without re-rendering: the level is written straight to a CSS variable.
+ const button=useRef<HTMLButtonElement>(null);
  const [unavailable,setUnavailable]=useState(!micSupported()),[notice,setNotice]=useState('');
  const running=useRef(false),alive=useRef(true),delivered=useRef(false),manual=useRef(false),control=useRef<AbortController>();
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;control.current?.abort();};},[]);
@@ -16,7 +18,7 @@ export function MicButton({onResult,disabled,size=140,onRecordingChange}:{onResu
   running.current=true;delivered.current=false;manual.current=false;control.current=new AbortController();
   stopSpeech();setState('preparing');setHeard(false);setNotice('');onRecordingChange?.(true);
   try{
-    const r=await record({signal:control.current.signal,onLevel:v=>{if(alive.current)setLevel(v);},onState:v=>{if(alive.current)setState(v);},onVoice:v=>{if(alive.current)setHeard(v);}});
+    const r=await record({signal:control.current.signal,onLevel:v=>{if(alive.current)button.current?.style.setProperty('--level',v.toFixed(3));},onState:v=>{if(alive.current)setState(v);},onVoice:v=>{if(alive.current)setHeard(v);}});
     if(!alive.current)return;
     setState('idle');
     if(manual.current){deliver({...r,blob:r.voiced?r.blob:undefined,confirmed:true});return;}
@@ -37,7 +39,7 @@ export function MicButton({onResult,disabled,size=140,onRecordingChange}:{onResu
  // A completed silent attempt may be retried after the parent's encouragement.
  useEffect(()=>{if(!disabled&&!running.current){delivered.current=false;manual.current=false;}},[disabled]);
  return <div className="mic-control">
-  {!unavailable&&<button className={`mic-btn ${state}`} disabled={disabled||state==='preparing'||state==='finishing'} onClick={state==='listening'?finish:start} style={{width:size,height:size,boxShadow:state==='listening'?`0 0 0 ${8+level*35}px rgba(22,120,98,.22)`:undefined}} aria-label={state==='listening'?'说完啦，点一下结束':state==='preparing'?'正在打开麦克风':state==='finishing'?'正在结束录音':disabled?'先听一听':'点我开始说'}>
+  {!unavailable&&<button className={`mic-btn ${state}`} disabled={disabled||state==='preparing'||state==='finishing'} onClick={state==='listening'?finish:start} ref={button} style={{width:size,height:size}} aria-label={state==='listening'?'说完啦，点一下结束':state==='preparing'?'正在打开麦克风':state==='finishing'?'正在结束录音':disabled?'先听一听':'点我开始说'}>
    <Icon name={state==='listening'?'check':'mic'} size={size*.46} className="mic-icon"/><span className="mic-label">{state==='listening'?'说完啦':state==='preparing'?'准备中…':state==='finishing'?'听到啦…':disabled?'先听一听':'点我说'}</span>
   </button>}
   {!disabled&&<><p className="mic-status" role="status">{notice||(state==='listening'?(heard?'听到你啦，停一下就会结束。':'轻轻说就好，说完也可以点下面。'):state==='preparing'?'请允许使用麦克风。':'跟读过了，也可以自己点一下。')}</p><button className="mic-finish" disabled={state==='finishing'} onClick={finish}><Icon name="check" size={24}/>我说完啦</button></>}

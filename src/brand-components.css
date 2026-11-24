@@ -15,7 +15,7 @@
   border:var(--brand-border) solid var(--surface-border); border-radius:var(--brand-radius-button);
   box-shadow:0 var(--brand-press) 0 var(--surface-border);
   font-weight:var(--brand-weight-display);
-  transition:transform var(--brand-motion-fast) var(--brand-ease), box-shadow var(--brand-motion-fast) var(--brand-ease), color var(--brand-motion-fast);
+  transition:transform var(--brand-motion-fast) var(--ease-spring), box-shadow var(--brand-motion-fast) var(--ease-spring), color var(--brand-motion-fast) var(--ease-standard);
 }
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)):not(:disabled):hover { color:var(--text); border-color:var(--brand-ink-meta); }
 
@@ -93,5 +93,84 @@
 /* Fold-outs: one chevron for every <details> that has no marker of its own (parent rows use +/−, quiet ones ⌄). */
 #root details:not(.parent-fold):not(.quiet-disclosure)>summary { display:flex; align-items:center; gap:8px; list-style:none; cursor:pointer; }
 #root details:not(.parent-fold):not(.quiet-disclosure)>summary::-webkit-details-marker { display:none; }
-#root details:not(.parent-fold):not(.quiet-disclosure)>summary::after { content:""; flex:none; width:8px; height:8px; margin:-4px 4px 0 auto; border:solid currentColor; border-width:0 3px 3px 0; border-radius:1px; rotate:45deg; transition:rotate .15s, margin .15s; }
-#root details:not(.parent-fold):not(.quiet-disclosure)[open]>summary::after { rotate:-135deg; margin-top:4px; }
+#root details:not(.parent-fold):not(.quiet-disclosure)>summary::after { content:""; flex:none; width:8px; height:8px; margin:0 4px 0 auto; translate:0 -2px; border:solid currentColor; border-width:0 3px 3px 0; border-radius:1px; rotate:45deg; transition:rotate var(--motion-quick) var(--ease-standard), translate var(--motion-quick) var(--ease-standard); }
+#root details:not(.parent-fold):not(.quiet-disclosure)[open]>summary::after { rotate:-135deg; translate:0 2px; }
+
+/* ── Motion ─────────────────────────────────────────────
+   Every button, link and fold-out answers a press the same way unless it says otherwise: it goes down at press speed
+   and comes back at quick speed with a small spring; colours and edges follow at quick speed. */
+:where(button, summary, a) {
+  transition: transform var(--motion-quick) var(--ease-spring), translate var(--motion-quick) var(--ease-spring), scale var(--motion-quick) var(--ease-spring),
+    box-shadow var(--motion-quick) var(--ease-standard), background-color var(--motion-quick) var(--ease-standard), border-color var(--motion-quick) var(--ease-standard),
+    color var(--motion-quick) var(--ease-standard), opacity var(--motion-quick) var(--ease-standard), filter var(--motion-quick) var(--ease-standard);
+}
+:where(button, summary, a):active { transition-duration: var(--motion-press); transition-timing-function: var(--ease-standard); }
+
+/* Page changes crossfade (lib/viewTransition.ts); the bottom navigation is the same on every page, so it stays put. */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--motion-base); animation-timing-function: var(--ease-standard); }
+/* Taps during a crossfade reach the new page underneath instead of being swallowed. */
+::view-transition { pointer-events: none; }
+.bottom-nav { view-transition-name: bottom-nav; }
+::view-transition-group(bottom-nav) { animation: none; }
+/* Shared moves, so the same kind of change looks the same everywhere. */
+@keyframes motion-fade-in { from { opacity: 0; } }
+@keyframes motion-sheet-in { from { opacity: 0; transform: translateY(8px) scale(.96); } }
+@keyframes motion-rise-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes motion-pop-in { from { opacity: 0; transform: scale(.6); } }
+@keyframes motion-tick { from { opacity: .3; transform: translateY(35%) scale(.9); } }
+@keyframes motion-from-right { from { opacity: 0; transform: translateX(16px); } }
+@keyframes motion-from-left { from { opacity: 0; transform: translateX(-16px); } }
+@keyframes motion-from-right-again { from { opacity: 0; transform: translateX(16px); } }
+@keyframes motion-from-left-again { from { opacity: 0; transform: translateX(-16px); } }
+/* "Try again": one gentle shake, the same in every game (a small no, never a jolt). */
+@keyframes motion-shake { 20% { transform: translateX(-6px); } 45% { transform: translateX(6px); } 70% { transform: translateX(-3px); } 90% { transform: translateX(2px); } }
+/* Dialogs arrive (backdrop fades, the sheet rises a little); full-screen blocking dialogs only fade, their card rises. */
+dialog[open]:not(.blocking-dialog) { animation: motion-sheet-in var(--motion-base) var(--ease-standard); }
+dialog[open]::backdrop { animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+dialog.blocking-dialog[open] { animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+
+/* Reduced motion: nothing slides, bounces or loops; changes are short fades. The countdown before the next round is
+   information, not decoration, so it keeps running. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: var(--motion-quick) !important; transition-delay: 0ms !important; scroll-behavior: auto !important; }
+  #root .lesson-staged .round-pace .round-pace-bar, #root .round-pace .round-pace-bar { animation-name: round-count !important; animation-duration: var(--advance, 1.4s) !important; }
+  .parent-btn.is-holding .parent-btn-ring circle { transition-duration: 3s !important; }
+}
+
+/* Content that is replaced by the next one comes in from the side it was turned to: the next round, the next
+   story page, another chapter of the path. A first visit arrives with the page itself. */
+/* A round fades in; in a scene only the positioned answer card moves (moving the round would shift the card's anchor). */
+#root .learning-round { animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+#root .lesson-staged .round-card { animation: motion-from-right var(--motion-base) var(--ease-standard); }
+#root .open-storybook[data-turn="next-a"], #root .path-world[data-turn="next-a"] { animation: motion-from-right var(--motion-base) var(--ease-standard); }
+#root .open-storybook[data-turn="next-b"], #root .path-world[data-turn="next-b"] { animation: motion-from-right-again var(--motion-base) var(--ease-standard); }
+#root .open-storybook[data-turn="prev-a"], #root .path-world[data-turn="prev-a"] { animation: motion-from-left var(--motion-base) var(--ease-standard); }
+#root .open-storybook[data-turn="prev-b"], #root .path-world[data-turn="prev-b"] { animation: motion-from-left-again var(--motion-base) var(--ease-standard); }
+#root .story-ending { animation: motion-rise-in var(--motion-base) var(--ease-standard); }
+
+/* Things that appear on their own: help bubbles, word cards, island panels and the grown-ups' panel rise into place;
+   marks on an answer pop in; new buttons offered in place (back to today's stop, go to the lesson) pop in. */
+#root .feature-guide .guide-content, #root .story-word-card, #root .start-adults-panel { animation: motion-sheet-in var(--motion-base) var(--ease-standard); }
+#root .island-stage { animation: motion-rise-in var(--motion-base) var(--ease-standard); }
+#root .choice.right::after, #root :is(.screen .choice.shake, .lesson-staged .learning-choices > div > button.shake, .island-ask-options button.is-wrong)::after { animation: motion-pop-in var(--motion-quick) var(--ease-spring); }
+#root .island-teaser-go, #root .path-extra .path-now { animation: motion-pop-in var(--motion-base) var(--ease-spring); }
+/* A number that changes rolls up into place instead of being swapped. */
+.motion-tick { display: inline-block; animation: motion-tick var(--motion-base) var(--ease-standard); }
+
+/* Fold-outs open and close smoothly where the browser can size to their content; elsewhere they simply open. */
+@supports selector(::details-content) {
+  :root { interpolate-size: allow-keywords; }
+  #root details::details-content { block-size: 0; overflow: clip; transition: block-size var(--motion-base) var(--ease-standard), content-visibility var(--motion-base) allow-discrete var(--ease-standard); }
+  #root details[open]::details-content { block-size: auto; }
+}
+/* Whole-page moments that are not navigation: the rest page settles in slowly, growing up fades in, and a page still
+   loading shows its placeholder only if loading takes a moment (no flash on a quick load). */
+/* A grown-ups' tab swaps its content in place (the page is long: a whole-page crossfade would cost a frame). */
+#root .parent-body > * { animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+#root .screen.sleepy { animation: motion-fade-in var(--motion-move) var(--ease-standard); }
+.evo-overlay { animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+.screen.loading { animation: motion-fade-in var(--motion-base) var(--ease-standard) var(--motion-base) both; }
+/* With a mouse or trackpad, a button brightens a little under the pointer. */
+@media (hover: hover) and (pointer: fine) {
+  :where(button, summary):not(:disabled):hover { filter: brightness(1.04); }
+}

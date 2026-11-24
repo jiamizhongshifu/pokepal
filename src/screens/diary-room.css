@@ -10,7 +10,7 @@
 .diary-room-friend.friend-0 { left:0; bottom:20%; }
 .diary-room-friend.friend-1 { right:0; bottom:20%; }
 .diary-room-friend.friend-2 { right:2%; top:22%; width:clamp(80px,12vw,160px); height:20vh; }
-#root .diary-room .topbar { position:sticky; top:0; z-index:5; background:linear-gradient(#f9eed9ed,#f9eed9b8); backdrop-filter:blur(12px); margin-bottom:0; }
+#root .diary-room .topbar { position:sticky; top:0; z-index:5; background:linear-gradient(#f9eed9ed,#f9eed9b8); margin-bottom:0; }
 #root .diary-room .tb-title { color:var(--text); }
 #root .diary-room .tb-progress { display:flex; align-items:center; gap:12px; }
 #root .diary-room .diary-shelf-toggle { display:inline-flex; align-items:center; gap:7px; min-height:44px; border:1px solid var(--brand-primary); border-radius:var(--radius-md); padding:8px 14px; background:var(--surface); color:var(--text); font:inherit; font-size:var(--text-base); font-weight:800; cursor:pointer; }

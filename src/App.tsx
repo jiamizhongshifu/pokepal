@@ -1,3 +1,4 @@
+import { withTransition } from "./lib/viewTransition";
 import {useEnvironmentAudio} from './lib/environmentAudio';
 import { useSceneMusic } from './lib/music';
 import { useEffect, useLayoutEffect, useRef } from "react";
@@ -85,7 +86,9 @@ export default function App() {
   useEffect(() => {
     const apply = () => {
       const theme = skyFor() === "night" ? "dark" : "light";
-      document.documentElement.dataset.theme = theme;
+      // Dusk and dawn fade the whole page over instead of switching it in one frame.
+      if (document.documentElement.dataset.theme && document.documentElement.dataset.theme !== theme) withTransition(() => { document.documentElement.dataset.theme = theme; });
+      else document.documentElement.dataset.theme = theme;
       document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#14303f" : "#f3f8f8");
     };
     apply();

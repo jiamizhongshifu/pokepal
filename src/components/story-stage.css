@@ -14,13 +14,13 @@
 .theatre-place{position:absolute;left:12px;top:12px;padding:5px 10px;background:#fffbedce;border-radius:10px;font-size:12px;color:var(--muted);z-index:5;pointer-events:none}
 .theatre-replay{position:absolute;right:8px;top:6px;z-index:6;display:flex;align-items:center;gap:5px;min-height:44px;padding:6px 10px;border:0;border-radius:14px;background:#fffbeddf;color:var(--muted);font-size:12px}.theatre-replay:hover{background:var(--surface)}.theatre-replay:active{transform:scale(.97)}
 .mood-quiet .theatre-painted-background,.mood-worried .theatre-painted-background{filter:saturate(.88)}
-.move-arrive{animation:story-walk-in 1.2s cubic-bezier(.22,1,.36,1) both}
-.move-roll{animation:story-ball-roll 1.6s cubic-bezier(.22,1,.36,1) both}
-.move-offer{animation:story-offer 1.5s cubic-bezier(.22,1,.36,1) both}
-.move-nod{animation:story-gentle-nod 1.2s ease-in-out both}
-.move-settle{animation:story-settle .9s cubic-bezier(.22,1,.36,1) both}
-.move-breathe{animation:story-breath 4.8s ease-in-out both}
-.move-water{animation:story-water-drop 1.3s ease-in-out 2 both}
+.move-arrive{animation:story-walk-in 1.2s var(--ease-standard) both}
+.move-roll{animation:story-ball-roll 1.6s var(--ease-standard) both}
+.move-offer{animation:story-offer 1.5s var(--ease-standard) both}
+.move-nod{animation:story-gentle-nod 1.2s var(--ease-standard) both}
+.move-settle{animation:story-settle .9s var(--ease-standard) both}
+.move-breathe{animation:story-breath 4.8s var(--ease-standard) both}
+.move-water{animation:story-water-drop 1.3s var(--ease-standard) 2 both}
 @keyframes story-walk-in{from{transform:translateX(var(--from-x));opacity:.65}to{transform:translateX(0);opacity:1}}
 @keyframes story-ball-roll{from{transform:translateX(var(--from-x)) rotate(-140deg)}to{transform:translateX(0) rotate(0)}}
 @keyframes story-offer{from{transform:translateX(var(--from-x)) translateY(-12%)}to{transform:translateX(0) translateY(0)}}

@@ -1,12 +1,15 @@
 import { BlockingDialog } from "./BlockingDialog";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { sfx } from "../lib/speech";
 import { Icon } from "../icons";
 
+/** A short shower: fewer pieces on a phone, and gone from the page once the last one has fallen. */
 export function Confetti({ count = 36 }: { count?: number }) {
+  const [falling, setFalling] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setFalling(false), 3600); return () => clearTimeout(t); }, []);
   const pieces = useMemo(
     () =>
-      Array.from({ length: count }, (_, i) => ({
+      Array.from({ length: typeof innerWidth === "number" && innerWidth < 600 ? Math.min(count, 18) : count }, (_, i) => ({
         left: Math.random() * 100,
         delay: Math.random() * 0.6,
         dur: 1.6 + Math.random() * 1.2,
@@ -15,6 +18,7 @@ export function Confetti({ count = 36 }: { count?: number }) {
       })),
     [count]
   );
+  if (!falling) return null;
   return (
     <div className="confetti" aria-hidden>
       {pieces.map((p, i) => (

@@ -3,13 +3,13 @@
 .start-screen button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 .start-view { position: absolute; inset: 0; overflow: hidden; container-type: size; }
 /* Covers a wide screen; on a tall phone the whole island stays in view (most of it) and the sea fills above and below. */
-.start-world { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: min(max(100cqw, min(150cqh, 170cqw)), 172cqh); aspect-ratio: 3 / 2; animation: start-breathe 14s ease-in-out infinite alternate; }
+.start-world { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: min(max(100cqw, min(150cqh, 170cqw)), 172cqh); aspect-ratio: 3 / 2; animation: none; }
 .start-world-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .start-friend { position: absolute; z-index: 2; width: var(--size, 11%); aspect-ratio: 1; translate: -50% -92%; padding: 0; border: 0; background: transparent; }
-.start-friend img { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; animation: start-idle 2.6s ease-in-out infinite; pointer-events: none; }
+.start-friend img { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; animation: start-idle 2.6s var(--ease-breathe) infinite; pointer-events: none; }
 .start-friend:nth-child(2n) img { animation-delay: -.9s; } .start-friend:nth-child(3n) img { animation-delay: -1.7s; }
 .start-friend::before { content: ""; position: absolute; left: 18%; right: 18%; bottom: 2%; height: 9%; border-radius: 50%; background: rgba(0, 0, 0, .16); }
-.start-friend.is-hopping img { animation: start-hop .7s ease; }
+.start-friend.is-hopping img { animation: start-hop .7s var(--ease-standard); }
 
 .start-title { position: absolute; z-index: 5; left: calc(16px + env(safe-area-inset-left)); top: calc(14px + env(safe-area-inset-top)); display: grid; grid-template-columns: auto auto; align-items: center; column-gap: 8px; padding: 8px 20px 10px 14px; border: 5px solid var(--brand-paper); border-radius: 28px; background: var(--scene-paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
 .start-title h1 { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.05; letter-spacing: .04em; color: var(--scene-ink); }
@@ -29,7 +29,7 @@
 
 /* One big way in: the child's own face with a play mark. */
 .start-action { position: absolute; z-index: 4; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); translate: -50% 0; display: grid; justify-items: center; width: min(720px, calc(100vw - 24px)); }
-.start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid var(--brand-paper); border-radius: 70px; background: var(--brand-primary); box-shadow: 0 8px 0 var(--brand-primary-deep), 0 14px 30px rgba(0, 60, 40, .25); color: var(--brand-on-primary); animation: start-pulse 1.4s ease-in-out infinite alternate; }
+.start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid var(--brand-paper); border-radius: 70px; background: var(--brand-primary); box-shadow: 0 8px 0 var(--brand-primary-deep), 0 14px 30px rgba(0, 60, 40, .25); color: var(--brand-on-primary); animation: start-pulse 1.4s var(--ease-breathe) infinite alternate; }
 .start-go:active { translate: 0 6px; box-shadow: 0 2px 0 var(--brand-primary-deep); }
 .start-go-face { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 50%; background: var(--brand-paper); overflow: hidden; }
 .start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--brand-primary-deep); }
@@ -42,7 +42,7 @@
 .start-pick > header { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .start-pick-hint { display: grid; font-size: 20px; font-weight: 800; } .start-pick-hint small { font-size: var(--text-base); color: var(--brand-ink-muted); }
 .start-pick-row { display: flex; justify-content: center; gap: 14px; margin-top: 10px; }
-.start-pick .avatar-choice { display: grid; place-items: center; width: 108px; height: 108px; padding: 0; border: 5px solid var(--brand-paper); border-radius: 50%; background: var(--scene-paper-cool); box-shadow: 0 6px 0 rgba(0, 0, 0, .14); animation: start-idle 2.4s ease-in-out infinite; transition: transform .14s ease-out, box-shadow .14s ease-out; }
+.start-pick .avatar-choice { display: grid; place-items: center; width: 108px; height: 108px; padding: 0; border: 5px solid var(--brand-paper); border-radius: 50%; background: var(--scene-paper-cool); box-shadow: 0 6px 0 rgba(0, 0, 0, .14); animation: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 .start-pick .avatar-choice:active { transform: translateY(4px) scale(.94); box-shadow: 0 2px 0 rgba(0, 0, 0, .14); }
 .start-pick .avatar-choice:nth-child(2) { animation-delay: -.6s; } .start-pick .avatar-choice:nth-child(3) { animation-delay: -1.2s; } .start-pick .avatar-choice:nth-child(4) { animation-delay: -1.8s; }
 .start-pick .avatar-choice .icon { width: 86% !important; height: 86% !important; }

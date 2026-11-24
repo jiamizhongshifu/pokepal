@@ -62,10 +62,11 @@
 
 /* Round progress: a pill bar with a shine; it turns gold and names the run while the child keeps finding the answer first time. */
 .progress-bar{position:relative;display:block;width:clamp(96px,16vw,180px);height:16px;border-radius:var(--radius-pill);background:var(--brand-line);overflow:hidden}
-.progress-bar>i{position:relative;display:block;height:100%;min-width:16px;border-radius:inherit;background:var(--brand-primary);transition:width var(--brand-motion-base) var(--brand-ease),background-color var(--brand-motion-base)}
+.progress-bar>i{position:relative;display:block;height:100%;min-width:16px;border-radius:inherit;background:var(--brand-primary);transition:width var(--motion-move) var(--ease-standard),background-color var(--motion-move) var(--ease-standard)}
+.progress-bar{contain:layout paint}
 .progress-bar>i::after{content:"";position:absolute;left:7px;right:7px;top:4px;height:4px;border-radius:4px;background:rgba(255,255,255,.4)}
 .round-progress.is-streak .progress-bar>i{background:var(--brand-sun)}
-.round-streak{display:inline-flex;padding:2px 10px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);font-size:var(--text-sm);font-weight:800;line-height:1.5;animation:round-streak-in var(--brand-motion-base) var(--brand-ease)}
+.round-streak{display:inline-flex;padding:2px 10px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);font-size:var(--text-sm);font-weight:800;line-height:1.5;animation:round-streak-in var(--brand-motion-base) var(--ease-spring)}
 .round-streak>i{display:none;font-style:normal}
 @keyframes round-streak-in{from{transform:scale(.6);opacity:0}}
 @media(max-width:600px){.progress-bar{width:64px}.round-streak>span{display:none}.round-streak>i{display:inline}}

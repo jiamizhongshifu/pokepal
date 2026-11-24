@@ -80,9 +80,6 @@
   #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
   #root .learning-trail header small { padding:5px 8px; white-space:nowrap; }
 }
-@media(prefers-reduced-motion:reduce) {
-  #root .screen button { transition:none; }
-}
 
 /* Small island moments: a diary, a photo frame and a parcel on the same desk. */
 

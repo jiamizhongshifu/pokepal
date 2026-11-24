@@ -4,14 +4,14 @@
 .island-ask-hear{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:8px 16px;border-radius:var(--radius-pill);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text);font-weight:800;cursor:pointer}
 .island-ask-close{margin-left:auto;min-width:44px;min-height:44px;border:0;background:none;cursor:pointer;color:var(--muted)}
 .island-ask-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:12px}
-.island-ask-options button{position:relative;display:grid;place-items:center;gap:6px;min-height:132px;padding:10px;border-radius:var(--radius-lg);border:2px solid var(--surface-border);background:var(--brand-sun-soft);color:var(--text);cursor:pointer;transition:transform .2s}
+.island-ask-options button{position:relative;display:grid;place-items:center;gap:6px;min-height:132px;padding:10px;border-radius:var(--radius-lg);border:2px solid var(--surface-border);background:var(--brand-sun-soft);color:var(--text);cursor:pointer;transition:transform var(--motion-quick) var(--ease-standard)}
 .island-ask-options button .icon{width:72px!important;height:72px!important}
 .island-ask-options button img{width:80px;height:80px;object-fit:contain}
 .island-ask-options small{font-size:var(--text-base);font-weight:700}
-.island-ask-options .is-wrong{animation:island-ask-shake .4s}
+.island-ask-options .is-wrong{animation:motion-shake var(--motion-move) var(--ease-standard)}
 .island-ask-options .is-shown{border-color:var(--brand-primary);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand-primary) 35%,transparent);background:var(--brand-primary-soft)}
 .island-ask-hint{margin:0;text-align:center;color:var(--muted);font-size:var(--text-base)}
-@keyframes island-ask-shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
 @media (prefers-reduced-motion:reduce){.island-ask-options .is-wrong{animation:none}}
 /* In the narrow companion card and corner panels, three pictures always fit on one row. */
 #root .island-ask .island-ask-hear{display:inline-flex;min-height:52px;padding:8px 16px;border-radius:var(--radius-pill);border:2px solid var(--brand-primary);background:var(--brand-primary-soft);color:var(--text)}
@@ -33,16 +33,16 @@
 .island-ask-target span{position:absolute;left:-14px;top:50%;translate:0 -50%;font-size:28px;font-weight:800;color:var(--brand-sun-deep)}
 .island-ask-target small{font-size:var(--text-sm);font-weight:800}
 .island-ask-stage.is-do .island-ask-options button{border-style:dashed;background:var(--surface)}
-.island-ask-stage.is-do .is-taken{animation:island-ask-give .45s ease-in forwards}
+.island-ask-stage.is-do .is-taken{animation:island-ask-give var(--motion-reward) var(--ease-exit) forwards}
 .island-ask-stage.is-find .island-ask-options{display:block;position:relative;height:230px;border-radius:var(--radius-lg);border:2px solid var(--surface-border);background:linear-gradient(var(--brand-sky-soft,var(--brand-sky-soft)) 0 45%,var(--brand-primary-soft) 45% 100%);overflow:hidden}
 .island-ask-stage.is-find .island-ask-options button{position:absolute;width:25%;min-width:76px;min-height:0;aspect-ratio:1;padding:6px;border:2px solid transparent;background:none}
 .island-ask-stage.is-find .island-ask-options button .icon{width:100%!important;height:100%!important}
 .island-ask-stage.is-find .is-shown{border-color:var(--brand-primary);background:color-mix(in srgb,var(--surface) 70%,transparent)}
-.island-ask-stage.is-find .is-taken{animation:island-ask-found .45s ease-out forwards}
+.island-ask-stage.is-find .is-taken{animation:island-ask-found var(--motion-reward) var(--ease-standard) forwards}
 .island-ask-stage.is-sort .island-ask-options button{min-height:104px;border-radius:50% 50% var(--radius-lg) var(--radius-lg)}
 .island-ask-stage.is-sort .learning-color{width:64px;height:64px;border-radius:50%}
 .island-play-made{display:flex;justify-content:center;gap:10px;margin:0;padding:0;list-style:none}
-.island-play-made li{display:grid;place-items:center;width:52px;height:52px;border-radius:var(--radius-md);border:2px dashed var(--surface-border);transition:background .3s}
+.island-play-made li{display:grid;place-items:center;width:52px;height:52px;border-radius:var(--radius-md);border:2px dashed var(--surface-border);transition:background var(--motion-move) var(--ease-standard)}
 .island-play-made li.is-made{border-style:solid;border-color:var(--brand-primary);background:var(--brand-primary-soft)}
 .island-play-made li .icon{width:40px!important;height:40px!important}.island-play-made li img{width:40px;height:40px;object-fit:contain}
 .island-play-made li .learning-color{width:32px;height:32px;border-radius:50%}

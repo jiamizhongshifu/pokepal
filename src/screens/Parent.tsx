@@ -1,3 +1,4 @@
+import { withTransition } from '../lib/viewTransition';
 import {setAggregateEnabled} from '../lib/traffic';
 import {TrafficPreferences} from '../components/TrafficPreferences';
 import {setAnalyticsConsent} from '../lib/analytics';
@@ -201,7 +202,7 @@ export function Parent() {
             <StorageFacts/>
             <DiaryBackup/></div></details>
 <details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
-<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => setClearing(true)}>清空全部数据</button>{clearing&&<BlockingDialog className="modal-backdrop" label="清空本机数据" onClose={()=>setClearing(false)}><section className="modal clear-confirm" aria-labelledby="clear-confirm-title"><h2 id="clear-confirm-title">清空这台设备上的全部数据？</h2><p>会删除本机存档、跟读录音和小日记（文字和原声），无法撤销。</p><div className="row"><button className="btn-small" autoFocus onClick={()=>setClearing(false)}>取消</button><button className="btn-small danger" onClick={()=>{setClearing(false);setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();}}>清空全部数据</button></div></section></BlockingDialog>}</div></details></>}
+<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => setClearing(true)}>清空全部数据</button>{clearing&&<BlockingDialog className="modal-backdrop" label="清空本机数据" onClose={()=>withTransition(()=>setClearing(false))}><section className="modal clear-confirm" aria-labelledby="clear-confirm-title"><h2 id="clear-confirm-title">清空这台设备上的全部数据？</h2><p>会删除本机存档、跟读录音和小日记（文字和原声），无法撤销。</p><div className="row"><button className="btn-small" autoFocus onClick={()=>withTransition(()=>setClearing(false))}>取消</button><button className="btn-small danger" onClick={()=>{setClearing(false);setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();}}>清空全部数据</button></div></section></BlockingDialog>}</div></details></>}
    </div>
   </div>;
 }

@@ -16,8 +16,8 @@
 
 #root .lesson-staged .is-staged .round-toolbar { position: absolute; left: 16%; top: 16%; translate: -50% 0; display: flex; align-items: center; gap: 10px; margin: 0; }
 #root .lesson-staged .is-staged .round-hear, #root .lesson-staged .is-staged .round-pace, #root .lesson-staged .is-staged .round-try, #root .lesson-staged .is-staged .learning-help, #root .lesson-staged .is-staged .learning-choice-audio { display: grid; place-items: center; min-width: 0; min-height: 0; padding: 0; border: 5px solid var(--brand-paper); border-radius: 50%; background: var(--brand-paper); box-shadow: 0 6px 0 rgba(0, 0, 0, .16); }
-#root .lesson-staged .is-staged .round-hear { width: 92px; height: 92px; animation: lesson-bob 1.4s ease-in-out infinite alternate; transition: transform .14s ease-out, box-shadow .14s ease-out; }
-#root .lesson-staged .is-staged .round-hear.is-speaking { background: var(--scene-moss); border-color: var(--brand-sun, var(--brand-sun)); box-shadow: 0 6px 0 var(--brand-sun-deep, var(--brand-sun-deep)), 0 0 0 12px rgba(255, 200, 0, .28); animation: lesson-speak 1s ease-in-out infinite; }
+#root .lesson-staged .is-staged .round-hear { width: 92px; height: 92px; animation: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
+#root .lesson-staged .is-staged .round-hear.is-speaking { background: var(--scene-moss); border-color: var(--brand-sun, var(--brand-sun)); box-shadow: 0 6px 0 var(--brand-sun-deep, var(--brand-sun-deep)), 0 0 0 12px rgba(255, 200, 0, .28); animation: lesson-speak 1s var(--ease-breathe) infinite; }
 #root .lesson-staged .is-staged .round-hear:active, #root .lesson-staged .is-staged .round-pace:active, #root .lesson-staged .is-staged .learning-choice-audio:active { transform: translateY(4px) scale(.96); box-shadow: 0 2px 0 rgba(0, 0, 0, .16); }
 #root .lesson-staged .is-staged .round-hear .icon { width: 52px !important; height: 52px !important; }
 #root .lesson-staged .is-staged .round-pace { width: 58px; height: 58px; opacity: .92; }
@@ -25,11 +25,11 @@
 
 /* The things to choose from lie on the ground and stay where they are. */
 #root .lesson-staged .is-staged .learning-choices > div { flex: 0 1 min(21vw, 27vh); display: grid; justify-items: center; gap: 8px; min-width: 0; }
-#root .lesson-staged .is-staged .learning-choices > div > button:not(.learning-choice-audio) { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1; min-height: 0; padding: 0; border: 0; border-radius: 28px; background: transparent; box-shadow: none; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); transition: opacity .3s, scale .3s; }
+#root .lesson-staged .is-staged .learning-choices > div > button:not(.learning-choice-audio) { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1; min-height: 0; padding: 0; border: 0; border-radius: 28px; background: transparent; box-shadow: none; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); transition: opacity var(--motion-move) var(--ease-standard), scale var(--motion-move) var(--ease-standard); }
 #root .lesson-staged .is-staged .learning-choices > div > button > .icon, #root .lesson-staged .is-staged .learning-choices > div > button > img { width: 88% !important; height: 88% !important; object-fit: contain; }
 #root .lesson-staged .is-staged .learning-choices .learning-color { display: block; width: 78%; height: 78%; border: 5px solid var(--brand-paper); border-radius: 46% 54% 50% 50% / 58% 56% 44% 42%; }
 #root .lesson-staged .is-staged .learning-choices .faded { opacity: .3; scale: .85; }
-#root .lesson-staged .is-staged .learning-choices .chosen, #root .lesson-staged .is-staged .learning-choices .is-explained { filter: drop-shadow(0 0 6px var(--brand-paper)) drop-shadow(0 0 16px var(--scene-gold)); animation: lesson-hop 1s ease-in-out infinite; }
+#root .lesson-staged .is-staged .learning-choices .chosen, #root .lesson-staged .is-staged .learning-choices .is-explained { filter: drop-shadow(0 0 6px var(--brand-paper)) drop-shadow(0 0 16px var(--scene-gold)); animation: lesson-hop 1s var(--ease-breathe) 1; }
 #root .lesson-staged .is-staged .learning-explanation-label { position: absolute; left: 50%; top: 100%; translate: -50% 0; display: grid; padding: 4px 12px; border-radius: 16px; background: var(--brand-paper); white-space: nowrap; font-size: 15px; }
 #root .lesson-staged .is-staged .learning-explanation-pointer { position: absolute; right: -6%; top: -6%; }
 /* Choosing a sentence: two speech bubbles of pictures, each with its own voice. */
@@ -41,7 +41,7 @@
 #root .lesson-staged .is-staged .phrase-choices .chosen, #root .lesson-staged .is-staged .phrase-choices .is-explained { border-color: var(--scene-gold); filter: none; }
 #root .lesson-staged .is-staged .learning-choice-audio { width: 60px; height: 60px; }
 /* Listening first: the thing itself, big, with its name for the grown-up. */
-#root .lesson-staged .is-staged .guided-example > .icon, #root .lesson-staged .is-staged .guided-example > img { width: min(30vw, 36vh) !important; height: min(30vw, 36vh) !important; object-fit: contain; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); animation: lesson-hop 1.6s ease-in-out infinite; }
+#root .lesson-staged .is-staged .guided-example > .icon, #root .lesson-staged .is-staged .guided-example > img { width: min(30vw, 36vh) !important; height: min(30vw, 36vh) !important; object-fit: contain; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .16)); animation: lesson-hop 1.6s var(--ease-breathe) 3; }
 #root .lesson-staged .is-staged .guided-example .learning-color { width: min(24vw, 30vh); height: min(24vw, 30vh); border: 6px solid var(--brand-paper); border-radius: 46% 54% 50% 50% / 58% 56% 44% 42%; }
 #root .lesson-staged .is-staged .guided-example .phrase-picture { display: flex; gap: 6px; padding: 14px 20px; border-radius: 34px 34px 34px 8px; background: var(--brand-paper); box-shadow: 0 6px 0 rgba(0, 0, 0, .16); }
 #root .lesson-staged .is-staged .guided-example strong, #root .lesson-staged .is-staged .guided-example > span:not(.learning-color):not(.phrase-picture) { padding: 2px 14px; border-radius: 16px; background: rgba(255, 255, 255, .9); }
@@ -50,7 +50,6 @@
 @keyframes lesson-bob { to { translate: 0 -8px; } }
 @keyframes lesson-hop { 40% { transform: translateY(-10%) scale(1.06); } }
 @keyframes lesson-speak { 0%, 100% { transform: scale(1); box-shadow: 0 6px 0 var(--brand-sun-deep, var(--brand-sun-deep)), 0 0 0 8px rgba(255, 200, 0, .35); } 50% { transform: scale(1.06); box-shadow: 0 6px 0 var(--brand-sun-deep, var(--brand-sun-deep)), 0 0 0 18px rgba(255, 200, 0, 0); } }
-@keyframes lesson-shake { 20% { transform: translateX(-8px) rotate(-2deg); } 45% { transform: translateX(8px) rotate(2deg); } 70% { transform: translateX(-5px) rotate(-1deg); } 90% { transform: translateX(4px); } }
 @media (max-width: 700px) {
  #root .lesson-playing.lesson-staged .lesson-world.buddy-strip { left: 24%; top: 50%; width: min(38vw, 24vh); }
  #root .lesson-staged .is-staged .round-toolbar { left: 24%; top: 9%; }
@@ -73,14 +72,14 @@
 #root .lesson-staged .round-card > header h2 { margin: 0; font-size: clamp(18px, 1.8vw, 24px); line-height: 1.35; color: var(--scene-ink); }
 #root .lesson-staged .round-card .learning-choices { position: static; display: flex !important; justify-content: center; align-items: stretch; gap: 16px; margin: 0; }
 #root .lesson-staged .round-card .learning-choices > div { flex: 0 1 min(17vw, 24vh); }
-#root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio) { border-radius: 26px; background: var(--brand-section); border: 3px solid var(--scene-line); box-shadow: 0 5px 0 var(--scene-line); filter: none; transition: transform .14s ease-out, box-shadow .14s ease-out, background-color .2s, border-color .2s, opacity .25s; }
+#root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio) { border-radius: 26px; background: var(--brand-section); border: 3px solid var(--scene-line); box-shadow: 0 5px 0 var(--scene-line); filter: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard), background-color var(--motion-quick) var(--ease-standard), border-color var(--motion-quick) var(--ease-standard), opacity var(--motion-base) var(--ease-standard); }
 #root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio):not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 var(--scene-line); }
-#root .lesson-staged .round-card .learning-choices > div > button.shake { background: var(--brand-sky-soft) !important; border-color: var(--brand-sky) !important; box-shadow: 0 4px 0 var(--brand-sky-deep) !important; animation: lesson-shake .45s ease-in-out; }
+#root .lesson-staged .round-card .learning-choices > div > button.shake { background: var(--brand-sky-soft) !important; border-color: var(--brand-sky) !important; box-shadow: 0 4px 0 var(--brand-sky-deep) !important; animation: motion-shake var(--motion-move) var(--ease-standard); }
 #root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button.chosen { background: var(--scene-moss) !important; border-color: var(--scene-gold) !important; box-shadow: 0 0 0 4px rgba(255, 197, 49, .35), 0 5px 0 var(--brand-sun-deep); }
 #root .lesson-staged .round-card .phrase-choices > div { flex-basis: min(26vw, 34vh); }
-#root .lesson-staged .round-card .phrase-choices > div > button:not(.learning-choice-audio) { background: var(--scene-paper-cool); border: 3px solid var(--scene-sky-line); box-shadow: 0 5px 0 var(--scene-sky-line); transition: transform .14s ease-out, box-shadow .14s ease-out; }
+#root .lesson-staged .round-card .phrase-choices > div > button:not(.learning-choice-audio) { background: var(--scene-paper-cool); border: 3px solid var(--scene-sky-line); box-shadow: 0 5px 0 var(--scene-sky-line); transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 #root .lesson-staged .round-card .phrase-choices > div > button:not(.learning-choice-audio):not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 var(--scene-sky-line); }
-#root .lesson-staged .round-card .learning-help, #root .lesson-staged .round-card .round-try { position: static; display: flex !important; align-items: center; gap: 6px; width: auto !important; height: auto !important; min-height: 52px; padding: 8px 18px 8px 12px; border: 3px solid var(--brand-paper); border-radius: 999px; flex: none; transition: transform .14s ease-out, box-shadow .14s ease-out; }
+#root .lesson-staged .round-card .learning-help, #root .lesson-staged .round-card .round-try { position: static; display: flex !important; align-items: center; gap: 6px; width: auto !important; height: auto !important; min-height: 52px; padding: 8px 18px 8px 12px; border: 3px solid var(--brand-paper); border-radius: 999px; flex: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 #root .lesson-staged .round-card .learning-help { background: var(--brand-sun-soft); box-shadow: 0 4px 0 var(--scene-gold-edge); color: var(--scene-wood); }
 #root .lesson-staged .round-card .learning-help:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--scene-gold-edge); }
 #root .lesson-staged .round-card .round-try { background: var(--brand-primary); box-shadow: 0 5px 0 var(--brand-primary-deep); color: var(--brand-on-primary); }
@@ -102,7 +101,7 @@
 #root .lesson-staged .lesson-mat li { display: grid; place-items: center; width: min(7vw, 9vh); aspect-ratio: 1; border-radius: 50%; background: var(--brand-paper); box-shadow: inset 0 -4px 0 var(--scene-line); }
 #root .lesson-staged .lesson-mat li > span { display: grid; place-items: center; width: 82%; height: 82%; }
 #root .lesson-staged .lesson-mat li > span > * { width: 100% !important; height: 100% !important; }
-#root .lesson-staged .lesson-mat .is-new { animation: lesson-hop .7s ease; }
+#root .lesson-staged .lesson-mat .is-new { animation: lesson-hop .7s var(--ease-standard); }
 @media (max-width: 700px) { #root .lesson-staged .lesson-mat { left: 50%; top: 53%; padding: 8px 12px 10px; } #root .lesson-staged .lesson-mat li { width: 13vw; } }
 
 @media (min-width: 1300px) { #root .lesson-staged .round-card { left: auto; width: min(62%, 880px); } }
@@ -117,9 +116,9 @@
 }
 /* The round moves on by itself: a bar fills along the pause button. Paused with the round done, it is the green way on. */
 #root .learning-round .round-pace { position: relative; overflow: hidden; }
-#root .learning-round .round-pace .round-pace-bar { position: absolute; left: 0; bottom: 0; height: 6px; width: 0; background: var(--brand-primary); animation: round-count var(--advance, 1.4s) linear forwards; }
-@keyframes round-count { to { width: 100%; } }
-@media (prefers-reduced-motion: reduce) { #root .learning-round .round-pace .round-pace-bar { animation: none; width: 100%; } }
+#root .learning-round .round-pace .round-pace-bar { position: absolute; left: 0; bottom: 0; height: 6px; width: 100%; background: var(--brand-primary); transform-origin: left; animation: round-count var(--advance, 1.4s) linear forwards; }
+@keyframes round-count { from { transform: scaleX(0); } }
 #root .learning-round .round-pace.is-next, #root .lesson-staged .is-staged .round-pace.is-next { background: var(--brand-primary); border-color: var(--brand-paper); color: var(--brand-on-primary); box-shadow: 0 5px 0 var(--brand-primary-deep); }
-#root .lesson-staged .is-staged .round-pace.is-next { width: 84px; height: 84px; }
-#root .lesson-staged .is-staged .round-pace.is-next > .icon { width: 44px !important; height: 44px !important; }
+/* Growing into the way on: a scale, so the speaker beside it does not move. */
+#root .lesson-staged .is-staged .round-pace { transition: scale var(--motion-move) var(--ease-spring), translate var(--motion-move) var(--ease-spring), background-color var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
+#root .lesson-staged .is-staged .round-pace.is-next { scale: 1.3; translate: 12px 0; }

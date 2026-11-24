@@ -1,3 +1,4 @@
+import { withTransition } from '../lib/viewTransition';
 import { worldArt } from '../data/sceneArt';
 import { Announcements } from '../components/Announcements';
 import { FeatureGuide } from '../components/FeatureGuide';
@@ -38,7 +39,7 @@ export function Welcome() {
   const {unread}=useNotices();
   // The grown-ups panel is a popover on the gear: focus goes into it, Escape or a tap outside closes it, focus returns to the gear.
   const gear=useRef<HTMLButtonElement>(null),panel=useRef<HTMLElement>(null);
-  const closeAdults=()=>{setAdults(false);gear.current?.focus();};
+  const closeAdults=()=>{withTransition(()=>setAdults(false));gear.current?.focus();};
   useEffect(()=>{
     if(!adults)return;
     panel.current?.querySelector<HTMLElement>('header button')?.focus();
@@ -125,8 +126,8 @@ export function Welcome() {
         </section>
       )}
       </div>
-      {notice&&<ParentNotice onClose={()=>setNotice(null)} onContinue={()=>{const avatar=notice.avatar;setNoticeRead(true);setNotice(null);setHandoff({avatar});}}/>}
-      {handoff&&<BlockingDialog className="modal-backdrop handoff-backdrop" label="设置好啦，可以交给孩子了" onClose={()=>setHandoff(null)}><section className="modal handoff-card" aria-labelledby="handoff-title">
+      {notice&&<ParentNotice onClose={()=>withTransition(()=>setNotice(null))} onContinue={()=>{const avatar=notice.avatar;withTransition(()=>{setNoticeRead(true);setNotice(null);setHandoff({avatar});});}}/>}
+      {handoff&&<BlockingDialog className="modal-backdrop handoff-backdrop" label="设置好啦，可以交给孩子了" onClose={()=>withTransition(()=>setHandoff(null))}><section className="modal handoff-card" aria-labelledby="handoff-title">
         <p className="handoff-eyebrow">给陪伴的大人</p>
         <h2 id="handoff-title">设置好啦，可以交给孩子了</h2>
         <ul>
@@ -135,7 +136,7 @@ export function Welcome() {
           <li><Icon name="ear" size={32}/><span>没听清时，点右上角<b>帮助</b>里的「听一听」再听一次。</span></li>
           <li><Icon name="rest" size={32}/><span>想停就停，进度会留在这台设备上。</span></li>
         </ul>
-        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);if(trainer||avatar){void begin(avatar);return;}
+        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;withTransition(()=>setHandoff(null));if(trainer||avatar){void begin(avatar);return;}
           // The child cannot read the picker's title: the friend says it as the device is handed over.
           unlockAudio();void say(["zh","选一个你喜欢的样子吧！"],["en","Choose your look!"]);}}><Icon name="hand" size={36}/>交给孩子</button>
       </section></BlockingDialog>}

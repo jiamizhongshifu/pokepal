@@ -1,6 +1,6 @@
-#root .energy-receipt{position:fixed;z-index:300;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);box-sizing:border-box;pointer-events:none}
-#root .energy-receipt.is-visible{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);border:3px solid var(--brand-paper);box-shadow:0 4px 0 var(--brand-sun-deep),0 10px 24px #273e4628;font-weight:800;font-size:var(--text-base);animation:receipt-pop .32s var(--brand-ease,ease-out) both}
-@keyframes receipt-pop{from{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.92)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){#root .energy-receipt.is-visible{animation:none}}
+#root .energy-receipt{position:fixed;z-index:300;top:calc(82px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-10px);max-width:calc(100% - 32px);box-sizing:border-box;pointer-events:none;display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--radius-pill);background:var(--brand-sun);color:var(--brand-ink);border:3px solid var(--brand-paper);box-shadow:0 4px 0 var(--brand-sun-deep),0 10px 24px #273e4628;font-weight:800;font-size:var(--text-base);opacity:0;visibility:hidden;transition:opacity var(--motion-quick) var(--ease-exit),transform var(--motion-quick) var(--ease-exit),visibility 0s linear var(--motion-quick)}
+#root .energy-receipt.is-visible{opacity:1;visibility:visible;transform:translateX(-50%);transition:opacity var(--motion-base) var(--ease-standard),transform var(--motion-move) var(--ease-spring),visibility 0s var(--ease-standard)}
+/* It arrives from just above and leaves the same way, faster. */
+@starting-style{#root .energy-receipt.is-visible{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.92)}}
 #root .energy-receipt .icon{flex-shrink:0}
 @media(max-height:500px){#root .energy-receipt{top:calc(64px + env(safe-area-inset-top));font-size:var(--text-base)}}

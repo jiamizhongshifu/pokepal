@@ -1,3 +1,4 @@
+import { withTransition } from '../lib/viewTransition';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
@@ -95,13 +96,16 @@ export function PathHome() {
   else if (node.state === 'done') go({ name: 'dex' });
   else if (await claimFriend(node.chapter)) go({ name: 'catch' });
  };
- const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeaking(); sfx('click'); setPage(to); };
+ // The chapter slides in from the side it was turned to. The scene is kept (no rebuild); the move restarts by
+ // alternating between two identical animations.
+ const [turnDir, setTurnDir] = useState<string | undefined>();
+ const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeaking(); sfx('click'); setTurnDir(d => `${to < page ? 'prev' : 'next'}-${d?.endsWith('a') ? 'b' : 'a'}`); setPage(to); };
 
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
  return <div className="screen path-scene">
   <div className="path-view" ref={view}>
    <img className="scene-backdrop" src={pathArt(chapter.index)} alt="" aria-hidden="true" draggable={false} />
-   <section className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
+   <section data-turn={turnDir} className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <img className="path-world-art" src={pathArt(chapter.index)} alt="" draggable={false} decoding="async" {...{fetchpriority:'high'}} />
     {chapter.nodes.map((node, i) => {
      const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
@@ -139,7 +143,7 @@ export function PathHome() {
   <header className="path-top">
    <div className="path-me">
     <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
-    {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b>{save.balls.poke}</b></button>}
+    {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b key={save.balls.poke} className="motion-tick">{save.balls.poke}</b></button>}
    </div>
    <div className="path-chapter">
     <button type="button" className="path-turn" aria-label="上一章" disabled={chapter.index === 0} onClick={() => turn(chapter.index - 1)}><Icon name="back" size={30} /></button>
@@ -160,6 +164,6 @@ export function PathHome() {
   </nav>
   {celebrating && <Confetti />}
   <BottomNav active="path" />
-  {editing && <AvatarEditor onClose={() => setEditing(false)} />}
+  {editing && <AvatarEditor onClose={() => withTransition(() => setEditing(false))} />}
  </div>;
 }

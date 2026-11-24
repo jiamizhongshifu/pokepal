@@ -20,6 +20,7 @@ import { ScrollPeek } from '../components/ScrollPeek';
 import { firstFruitUnit, plantAsk, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { CropKind } from '../lib/farm';
 import { Icon } from '../icons';
+import { withTransition } from '../lib/viewTransition';
 import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
 import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
@@ -85,7 +86,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
 
  const enter = (d: District) => {
   stopSpeech();
-  if (open.has(d)) { sfx('click'); setSession(null); setDistrict(d); return; }
+  if (open.has(d)) { sfx('click'); withTransition(() => { setSession(null); setDistrict(d); }); return; }
   const unit = unlockingUnit(d);
   if (unit && armed === d) {
    // The lesson opens only when the learning path itself lets it; otherwise the path shows where the child is.
@@ -97,9 +98,9 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   sfx('boop'); setNudged(d); later(() => setNudged(n => n === d ? null : n), 700);
   if (unit) { const ticket = ++armTicket.current; setArmed(d); later(() => { if (armTicket.current === ticket) setArmed(null); }, 8000); void say(['zh', unit.mission]); }
  };
- const begin = (invite: Invite) => { if (invite.partner === undefined) return; stopSpeech(); sfx('sparkle'); setDistrict(invite.district); setSession(invite); };
+ const begin = (invite: Invite) => { if (invite.partner === undefined) return; stopSpeech(); sfx('sparkle'); withTransition(() => { setDistrict(invite.district); setSession(invite); }); };
  // The way back: out of what is being done first, then out of the scene.
- const leave = () => { stopSpeech(); sfx('click'); if (session || planting) { setSession(null); setPlanting(null); } else { setDistrict(null); setAsleep(false); } };
+ const leave = () => { stopSpeech(); sfx('click'); withTransition(() => { if (session || planting) { setSession(null); setPlanting(null); } else { setDistrict(null); setAsleep(false); } }); };
  // The third thing of the day: back on the island everyone cheers, once.
  const done = islandDone(save), cheered = useRef(done);
  useEffect(() => {
@@ -187,9 +188,9 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
      {plays.map(p => <button key={p.id} type="button" aria-label={p.title} onClick={() => begin({ kind: 'play', play: p, district, place: p.place, partner: friends[0], icon: p.icon, lesson: false })}><Icon name={p.icon} size={52} /></button>)}
     </nav>}
     {session && partner !== undefined && <section className="island-stage" aria-label="一起做的事">
-     {session.kind === 'party' ? <IslandPartySession key={inviteKey(session)} party={session.party} partner={partner} station={session.place} onClose={() => setSession(null)} />
-      : session.kind === 'errand' ? <IslandErrandSession key={inviteKey(session)} errand={session.errand} partner={partner} station={session.place} onClose={() => setSession(null)} onRoute={() => { stopSpeech(); go({ name: 'home' }); }} />
-      : <IslandPlaySession key={inviteKey(session)} play={session.play} partner={partner} station={session.place} onClose={() => setSession(null)} onFinished={play => { if (play.sleeps) setAsleep(true); }} />}
+     {session.kind === 'party' ? <IslandPartySession key={inviteKey(session)} party={session.party} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} />
+      : session.kind === 'errand' ? <IslandErrandSession key={inviteKey(session)} errand={session.errand} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onRoute={() => { stopSpeech(); go({ name: 'home' }); }} />
+      : <IslandPlaySession key={inviteKey(session)} play={session.play} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onFinished={play => { if (play.sleeps) setAsleep(true); }} />}
     </section>}
     {planting && friends.length > 0 && <section className="island-stage" aria-label="种一种水果">
      <IslandAskRound key={`plant-${planting.index}`} ask={planting.ask} speaker={friends[0]} station="farm" kind="do" to={SOIL} onClose={() => setPlanting(null)}

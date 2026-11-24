@@ -3,7 +3,7 @@
 .guide-main{display:flex;align-items:center;gap:10px;min-height:48px}
 .guide-picture{flex:none;display:grid;place-items:center;width:46px;height:46px}
 .guide-main strong{flex:1;font-size:clamp(16px,2vw,20px);line-height:1.4;text-wrap:balance}
-.feature-guide button{font:inherit;cursor:pointer;touch-action:manipulation;color:var(--guide-ink);transition:transform .14s ease-out,box-shadow .14s ease-out}
+.feature-guide button{font:inherit;cursor:pointer;touch-action:manipulation;color:var(--guide-ink);transition:transform var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
 .guide-hear{display:flex;align-items:center;justify-content:center;gap:5px;min-height:48px;min-width:48px;padding:6px 12px;background:var(--brand-primary-soft);color:var(--brand-ink)!important;border:2px solid var(--brand-primary);border-radius:var(--radius-md);box-shadow:0 3px 0 var(--brand-primary-deep);font-size:var(--text-base)!important;font-weight:800}
 .guide-hear:active{transform:translateY(2px) scale(.97);box-shadow:0 1px 0 var(--brand-primary-deep)}
 .guide-dismiss{display:grid;place-items:center;flex:none;min-width:44px;min-height:48px;padding:0;background:transparent;border:0}

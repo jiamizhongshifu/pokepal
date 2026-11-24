@@ -82,9 +82,24 @@
   --brand-press:4px;
   --brand-elev:0 4px 0 var(--brand-line-deep);
   --brand-focus:0 0 0 3px rgba(28, 176, 246, .2);
-  --brand-motion-fast:180ms;
-  --brand-motion-base:320ms;
-  --brand-ease:cubic-bezier(.34, 1.56, .64, 1);
+  /* Motion: one language for the whole app. A change explains itself (where from, where to) and stays out of the way.
+     Durations: press 90ms (going down; it comes back at quick), quick 160ms (colour, icon, hover, small toggles),
+     base 240ms (appear/disappear, content swaps, page change), move 320ms (position and size), reward 480ms.
+     Curves: standard (fast start, soft landing) for anything arriving, moving or changing; exit for things leaving;
+     spring (a small overshoot) only for rewards, a found answer and a released button; breathe for the few slow loops. Reduced motion keeps fades and drops movement (brand-components.css). */
+  --motion-press:90ms;
+  --motion-quick:160ms;
+  --motion-base:240ms;
+  --motion-move:320ms;
+  --motion-reward:480ms;
+  --ease-standard:cubic-bezier(.22, 1, .36, 1);
+  --ease-enter:var(--ease-standard);
+  --ease-exit:cubic-bezier(.32, 0, .67, 0);
+  --ease-spring:cubic-bezier(.34, 1.32, .64, 1);
+  --ease-breathe:cubic-bezier(.45, 0, .55, 1);
+  --brand-motion-fast:var(--motion-quick);
+  --brand-motion-base:var(--motion-move);
+  --brand-ease:var(--ease-spring);
   /* Type: Nunito stands in for the proprietary Feather Bold; Chinese falls back to rounded system faces. */
   --brand-font:"Nunito", "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Hiragino Sans GB", system-ui, sans-serif;
   --brand-weight-display:800;

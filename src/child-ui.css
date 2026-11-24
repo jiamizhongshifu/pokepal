@@ -4,7 +4,7 @@
 .screen { isolation: isolate; }
 .screen:not(.home) { overflow-y: auto; overscroll-behavior: contain; }
 .screen:not(.home):not(.parent)::after { content: none; display: none; }
-button { transition: transform .16s ease-out, background-color .16s ease-out, box-shadow .16s ease-out; }
+button { transition: transform var(--motion-quick) var(--ease-standard), background-color var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 button:focus-visible, summary:focus-visible { outline: 4px solid var(--coral); outline-offset: 5px; }
 button:disabled { opacity: .55; cursor: default; }
 button:not(:disabled):active { transform: scale(.97); }
@@ -28,7 +28,8 @@ button:not(:disabled):active { transform: scale(.97); }
 .parent-btn { flex: none; width: 52px; height: 52px; opacity: 1; }
 .parent-btn span { background: var(--surface); }
 .parent-btn { position: relative; }
-.parent-btn-hint { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--brand-ink); color: var(--brand-paper); font-size: var(--text-sm); font-weight: 800; white-space: nowrap; pointer-events: none; }
+.parent-btn-hint { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--brand-ink); color: var(--brand-paper); font-size: var(--text-sm); font-weight: 800; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(-4px); transition: opacity var(--motion-quick) var(--ease-exit), transform var(--motion-quick) var(--ease-exit); }
+.parent-btn-hint.is-shown { opacity: 1; transform: none; transition-timing-function: var(--ease-standard); transition-duration: var(--motion-base); }
 /* 欢迎：先看伙伴，再选一个头像。 */
 .start { min-height: 168px; min-width: 220px; border-radius:var(--radius-xl); animation: none; }
 .avatar-row { justify-content: center; flex-wrap: wrap; gap: 20px; }
@@ -253,7 +254,6 @@ button:not(:disabled):active { transform: scale(.97); }
   .empty-home .sign { font-size:var(--text-2xl); }
 }
 @media (prefers-reduced-motion: reduce) {
-  *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .evo-overlay.flash::after { display: none; }
 }
 
@@ -493,3 +493,11 @@ button:not(:disabled):active { transform: scale(.97); }
 /* The companion practising alongside in a mini-game. */
 .task-buddy,.task-buddy-done{display:flex;align-items:center;justify-content:center;gap:8px;margin:4px auto 0;font-size:var(--text-base);font-weight:800;color:var(--text)}
 .task-buddy img,.task-buddy-done img{width:44px;height:44px;object-fit:contain}
+/* While listening, a soft ring grows with the child's voice (a transform, so it costs no repaint). */
+.mic-control { position: relative; isolation: isolate; }
+.mic-btn { position: relative; }
+.mic-btn.listening::before { content: ""; position: absolute; inset: -10px; z-index: -1; border-radius: 50%; background: color-mix(in srgb, var(--brand-primary-deep) 22%, transparent); transform: scale(calc(1 + var(--level, 0) * .6)); transition: transform var(--motion-press) linear; pointer-events: none; }
+/* Holding the grown-ups' button fills a ring around it over the 3 seconds; letting go runs it back quickly. */
+.parent-btn-ring { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; pointer-events: none; }
+.parent-btn-ring circle { fill: none; stroke: var(--brand-sun); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset var(--motion-quick) var(--ease-exit); }
+.parent-btn.is-holding .parent-btn-ring circle { stroke-dashoffset: 0; transition: stroke-dashoffset 3s linear; }

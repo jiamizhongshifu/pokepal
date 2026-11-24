@@ -1,3 +1,4 @@
+import { withTransition } from './lib/viewTransition';
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { finishErrand } from './island/errands';
 import { finishParty } from './island/parties';
@@ -185,6 +186,15 @@ interface State {
 
 /** Pages visited before the current one, for `back`. Only pages to browse are kept: back never re-enters a lesson, a game, a story, a diary or a visit already left. */
 let trail: Screen[] = [];
+/** The page asked for while its crossfade has not swapped it in yet, so quick taps read where the child is going. */
+let heading: Screen | null = null;
+/** Bumped whenever the page is set outright (a save imported or cleared): page changes still waiting for their crossfade are dropped. */
+let navigation = 0;
+const show = (screen: Screen) => {
+  heading = screen; const ticket = navigation;
+  withTransition(() => { if (ticket !== navigation) return; useGame.setState({ screen }); if (heading === screen) heading = null; });
+};
+const resetNavigation = () => { navigation++; heading = null; trail = []; };
 const BROWSE: ReadonlySet<Screen['name']> = new Set(['home', 'stories', 'dex', 'dexDetail', 'notebook', 'practice', 'parent', 'catch']);
 const sameScreen = (a: Screen, b: Screen) => JSON.stringify(a) === JSON.stringify(b);
 let saveTimer: ReturnType<typeof setTimeout> | undefined;
@@ -284,20 +294,20 @@ export const useGame = create<State>((set, get) => {
     },
 
     go(screen) {
-      const from = get().screen;
+      const from = heading ?? get().screen;
       // Going to the page just left is going back: it is taken off the trail instead of stacking a loop (相册 ⇄ 资料).
       if (trail.length && trail[trail.length - 1].name === screen.name) trail = trail.slice(0, -1);
       else if (BROWSE.has(from.name) && !sameScreen(from, screen)) trail = [...trail.slice(-19), from];
-      set({ screen });
+      show(screen);
     },
     back() {
-      const here = get().screen;
+      const here = heading ?? get().screen;
       let to = trail.pop();
       while (to && sameScreen(to, here)) to = trail.pop();
-      set({ screen: to ?? { name: 'home' } });
+      show(to ?? { name: 'home' });
     },
 
-    startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});set({screen:{name:'lesson',id}}); },
+    startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});show({name:'lesson',id}); },
     async advanceUnit(id,round,skipped=false) {
       const u=unitById(id);if(!u||!unitUnlocked(get().save,id))return;
       if(round!==unitRoundCount(u)){mut(s=>{settleUnitRound(s,id,round,skipped);});return;}
@@ -492,7 +502,7 @@ export const useGame = create<State>((set, get) => {
         await flushSave();const s=newSave();
         revision=await resetSave(s,revision);
         try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}
-        trail=[];set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
+        resetNavigation();set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
       }catch(error){set({saveIssue:error instanceof SaveConflictError?'conflict':'write'});}
       finally{set({saveBusy:false});}
     },
@@ -509,7 +519,7 @@ export const useGame = create<State>((set, get) => {
         await flushSave();
         revision=await writeSave(s,revision,true);
         setSpeechRate(s.settings.speechRate);
-        trail=[];set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
+        resetNavigation();set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
       }catch(error){
         if(error instanceof SaveConflictError)set({saveIssue:'conflict'});
         throw error;

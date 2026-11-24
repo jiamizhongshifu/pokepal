@@ -1,3 +1,4 @@
+import { withTransition } from '../lib/viewTransition';
 import {trackInteraction} from '../lib/interaction';
 import './story-reader.css';
 import { SHORT_STORY_LINES, storyLanguage, storyEdition, storyBookmarkKey, storyInitialPage, type StoryLanguage } from '../data/storyLevels';
@@ -106,7 +107,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
        for(const key of new Set(keys.map(k=>learningEntry(k)?.key).filter((k):k is string=>!!k)))useGame.getState().noteWord(key,'heard');
      }
      setStatus(ok?'idle':'unavailable');
-     if(ok && auto.current && !page.pause)timer.current=setTimeout(()=>{if(run.current!==ticket)return;if(idx+1<story.pages.length)setIdx(i=>i+1);else finish();},1200);
+     if(ok && auto.current && !page.pause)timer.current=setTimeout(()=>{if(run.current!==ticket)return;if(idx+1<story.pages.length){turnTo("next");setIdx(i=>i+1);}else finish();},1200);
    },200);
    return ()=>{run.current++;clearTimeout(timer.current);stopSpeech();};
  });
@@ -118,7 +119,11 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
    const ok=await say(["en",line.en,line],...(bilingual ? [["zh",line.zh,line]] as Parameters<typeof say> : []));
    if(run.current===ticket){setStatus(ok?'idle':'unavailable');if(ok)useGame.getState().noteWord(line.en,'heard');}
  };
- const turn=(next:number)=>{pause();setIdx(next);};
+ // Which way the page turns, so the new page comes in from that side.
+ const [dir,setDir]=useState<string|undefined>();
+ // The page is kept (open settings stay open); the slide restarts by alternating two identical animations.
+ const turnTo=(d:'next'|'prev')=>setDir(v=>`${d}-${v?.endsWith('a')?'b':'a'}`);
+ const turn=(next:number)=>{pause();turnTo(next<idx?'prev':'next');setIdx(next);};
  const hearWord=async(next:string)=>{
    pause();const ticket=++run.current;setStatus('playing');
    const ok=await say(['en',storyWordVoice(next)]);
@@ -149,7 +154,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
        {story.id==='try-again'&&<button className="btn-small" onClick={()=>go({name:'home',station:'sand'})}>去沙坑慢慢玩，累了就休息</button>}
        {story.id==='tell-truth'&&<button className="btn-small" onClick={()=>go({name:'diary'})}>把今天的小事，说给我听</button>}
        {!timeUp&&<button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button>}<button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
-   </main> : <main className="open-storybook">
+   </main> : <main className="open-storybook" data-turn={dir}>
      <header className="story-page-header"><h2 className="story-beat">{page.beat}</h2>
      <div className="story-mode" aria-label="阅读方式">{(['listen','read'] as const).map(mode=><button key={mode} aria-label={mode==='listen'?'听故事，自动翻页':'一起读，自己翻页'} aria-pressed={autoPlay===(mode==='listen')} onClick={()=>{setAutoPlay(mode==='listen');useGame.getState().updateSettings({storyMode:mode});read();}}><Icon name={mode==='listen'?'ear':'book'} size={26}/>{mode==='listen'?'听故事':'一起读'}<small>{mode==='listen'?'自动翻页':'自己翻页'}</small></button>)}</div>
      </header>
@@ -157,7 +162,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <div className="story-reading">
      <div className="story-reading-tools"><button className="story-pace" aria-pressed={slow} onClick={toggleSlow}><Icon name="ear" size={22}/>{slow?'慢慢读':'慢一点'}<small lang="en">Slow</small></button></div>
      <StoryReading page={page} spoken={spoken} selected={word?.index} onWord={pickWord}/>
-     {word&&<WordCard word={word.word} onHear={()=>void hearWord(word.word)} onClose={()=>setWord(null)}/>}
+     {word&&<WordCard word={word.word} onHear={()=>void hearWord(word.word)} onClose={()=>withTransition(()=>setWord(null))}/>}
      <EchoPractice key={`${story.id}:${idx}`} en={page.en} onStart={()=>{pause();setWord(null);}}/>
      {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{sfx('click');setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
      </div>

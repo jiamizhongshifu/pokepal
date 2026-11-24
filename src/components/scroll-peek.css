@@ -1,9 +1,9 @@
 /* Edge tabs on a scene wider than the screen: each side with more to see gets a tab that slides it. */
-.scroll-peek { position: absolute; z-index: 8; top: 50%; display: grid; place-items: center; width: 30px; height: 68px; padding: 0; border: 3px solid rgba(255, 255, 255, .9); background: rgba(255, 253, 244, .72); box-shadow: 0 3px 0 rgba(0, 0, 0, .12); translate: 0 -50%; animation: scroll-peek-in .25s ease-out both; }
+.scroll-peek { position: absolute; z-index: 8; top: 50%; display: grid; place-items: center; width: 30px; height: 68px; padding: 0; border: 3px solid rgba(255, 255, 255, .9); background: rgba(255, 253, 244, .72); box-shadow: 0 3px 0 rgba(0, 0, 0, .12); translate: 0 -50%; animation: scroll-peek-in var(--motion-base) var(--ease-standard) both; }
 .scroll-peek::before { content: ""; position: absolute; inset: -12px -10px; }
 .scroll-peek.is-left { left: env(safe-area-inset-left); border-left: 0; border-radius: 0 20px 20px 0; }
 .scroll-peek.is-right { right: env(safe-area-inset-right); border-right: 0; border-radius: 20px 0 0 20px; }
-.scroll-peek i { width: 12px; height: 12px; border: solid var(--scene-ink); border-width: 0 0 4px 4px; border-radius: 2px; rotate: 45deg; margin-left: 5px; animation: scroll-peek-nudge-left 1.4s ease-in-out infinite; }
+.scroll-peek i { width: 12px; height: 12px; border: solid var(--scene-ink); border-width: 0 0 4px 4px; border-radius: 2px; rotate: 45deg; margin-left: 5px; animation: scroll-peek-nudge-left 1.4s var(--ease-breathe) 3; }
 .scroll-peek.is-right i { rotate: -135deg; margin: 0 5px 0 0; animation-name: scroll-peek-nudge-right; }
 .scroll-peek:active { scale: .94; }
 @keyframes scroll-peek-in { from { opacity: 0; } }

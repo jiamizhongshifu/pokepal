@@ -2,7 +2,7 @@
 .source-symbol{font-family:ui-monospace,monospace;font-weight:800;font-size:var(--text-2xl);line-height:1}
 .author-entry:focus-visible,.author-dialog :focus-visible{outline:3px solid var(--brand-primary);outline-offset:3px}
 .author-dialog{box-sizing:border-box;width:min(760px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;margin:auto;padding:22px;border:2px solid var(--brand-line);border-radius:var(--radius-lg);background:var(--brand-paper);color:var(--brand-ink);text-align:left;font:500 16px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;box-shadow:0 16px 60px #102b4255;color-scheme:light}
-.author-dialog::backdrop{background:#102b4266;backdrop-filter:blur(3px)}
+.author-dialog::backdrop{background:#102b4266;}
 .author-dialog header{position:sticky;top:-22px;z-index:1;background:inherit;display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:14px;padding:8px 0}
 .author-dialog header small{color:var(--brand-ink-muted)}.author-dialog h2{margin:0;font-size:var(--text-2xl);line-height:1.4}.author-dialog p{margin:12px 0}
 .author-dialog button,.author-contact-actions a{display:inline-flex;justify-content:center;align-items:center;min-height:48px;box-sizing:border-box;border:1px solid var(--surface-border);border-radius:var(--radius-sm);padding:8px 12px;background:var(--brand-primary-soft);color:var(--brand-ink);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}

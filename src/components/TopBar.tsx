@@ -1,3 +1,4 @@
+import { withTransition } from '../lib/viewTransition';
 import {MusicToggle} from './MusicToggle';
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useGame } from "../store";
@@ -37,37 +38,27 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
       </div>}
       {homeActions && <nav className="home-actions" aria-label="小岛陪伴">{homeActions}{home&&help}</nav>}
     </div>
-    {editingAvatar && <AvatarEditor onClose={()=>setEditingAvatar(false)}/>}
+    {editingAvatar && <AvatarEditor onClose={()=>withTransition(()=>setEditingAvatar(false))}/>}
     </>
   );
 }
 
 /** 家长入口：长按 3 秒后再答一道算术题 */
 export function ParentButton({ onOpen }: { onOpen: () => void }) {
-  const [progress, setProgress] = useState(0);
+  // The ring fills by itself in CSS while the button is held (no per-frame rendering); letting go runs it back quickly.
+  const [holding, setHolding] = useState(false);
   const [gate, setGate] = useState(false), [hint, setHint] = useState(false);
-  const timer = useRef<number | undefined>(undefined), hintTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined), pressed = useRef(false);
-  useEffect(()=>()=>{if(timer.current)cancelAnimationFrame(timer.current);clearTimeout(hintTimer.current);},[]);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined), hintTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined), pressed = useRef(false);
+  useEffect(()=>()=>{clearTimeout(timer.current);clearTimeout(hintTimer.current);},[]);
   const start = () => {
     pressed.current = true;
-    if(timer.current)cancelAnimationFrame(timer.current);
-    const t0 = performance.now();
-    const tick = () => {
-      const p = Math.min(1, (performance.now() - t0) / 3000);
-      setProgress(p);
-      if (p >= 1) {
-        pressed.current = false;
-        setProgress(0);
-        setGate(true);
-        return;
-      }
-      timer.current = requestAnimationFrame(tick);
-    };
-    timer.current = requestAnimationFrame(tick);
+    clearTimeout(timer.current);
+    setHolding(true);
+    timer.current = setTimeout(() => { pressed.current = false; setHolding(false); setGate(true); }, 3000);
   };
   const cancel = () => {
-    if (timer.current) cancelAnimationFrame(timer.current);
-    setProgress(0);
+    clearTimeout(timer.current);
+    setHolding(false);
   };
   // A short tap says how to get in, so a grown-up does not think the button is broken.
   const release = () => {
@@ -78,7 +69,7 @@ export function ParentButton({ onOpen }: { onOpen: () => void }) {
   return (
     <>
       <button
-        className="parent-btn"
+        className={`parent-btn${holding ? " is-holding" : ""}`}
         onPointerDown={start}
         onClick={e=>{if(e.detail===0){cancel();setGate(true);}}}
         onPointerUp={release}
@@ -86,12 +77,12 @@ export function ParentButton({ onOpen }: { onOpen: () => void }) {
         onPointerCancel={cancel}
         onContextMenu={(e) => e.preventDefault()}
         aria-label="家长入口，长按三秒或按回车验证"
-        style={{ background: `conic-gradient(var(--brand-sun) ${progress * 360}deg, rgba(255,255,255,.5) 0)` }}
       >
+        <svg className="parent-btn-ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16.5" pathLength={100} /></svg>
         <span><Icon name="gear" size={28} /></span>
-        {hint && <small className="parent-btn-hint" role="status">给大人：按住 3 秒</small>}
+        <small className={`parent-btn-hint${hint ? " is-shown" : ""}`} role="status" aria-hidden={!hint}>{hint ? "给大人：按住 3 秒" : ""}</small>
       </button>
-      {gate && <ParentGate onPass={() => { setGate(false); onOpen(); }} onCancel={() => setGate(false)} />}
+      {gate && <ParentGate onPass={() => withTransition(() => { setGate(false); onOpen(); })} onCancel={() => withTransition(() => setGate(false))} />}
     </>
   );
 }

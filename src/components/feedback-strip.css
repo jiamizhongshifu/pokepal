@@ -1,8 +1,8 @@
 /* One height in every state, so the card never jumps when the answer lands; the last 4px hold the edge of the pressable state. */
 .feedback-strip-host{width:100%;padding-bottom:var(--brand-press)}
 .feedback-strip{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;width:100%;min-height:48px;margin:0;padding:6px 16px;border:var(--brand-border) solid transparent;border-radius:var(--radius-md);background:transparent;color:var(--brand-ink-muted);font-family:inherit;font-size:var(--text-lg);font-weight:800;line-height:1.3;text-align:center}
-.feedback-strip.is-good{background:var(--brand-primary-soft);border-color:var(--brand-primary);color:var(--brand-primary-ink);font-size:var(--text-xl);animation:feedback-strip-in var(--brand-motion-base) var(--brand-ease)}
-.feedback-strip.is-again{background:var(--brand-sky-soft);border-color:var(--brand-sky);color:var(--brand-sky-ink);font-size:var(--text-xl);animation:feedback-strip-in var(--brand-motion-base) var(--brand-ease)}
+.feedback-strip.is-good{background:var(--brand-primary-soft);border-color:var(--brand-primary);color:var(--brand-primary-ink);font-size:var(--text-lg);font-weight:800;animation:feedback-strip-in var(--brand-motion-base) var(--ease-spring)}
+.feedback-strip.is-again{background:var(--brand-sky-soft);border-color:var(--brand-sky);color:var(--brand-sky-ink);font-size:var(--text-lg);font-weight:800;animation:feedback-strip-in var(--brand-motion-base) var(--ease-spring)}
 /* Pressable, so it carries the solid edge every pressable thing has. */
 #root button.feedback-strip.is-tappable{box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep);cursor:pointer}
 #root button.feedback-strip.is-tappable:active{transform:translateY(var(--brand-press));box-shadow:none}
