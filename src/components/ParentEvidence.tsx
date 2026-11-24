@@ -24,6 +24,8 @@ export function ParentEvidence() {
   }
   const c = sum.count;
   const later = summarizeDelayed(list, since);
+  // Anything answered anywhere this week (lessons, later review or the island) shows the cards; nothing shows one line.
+  const anything = sum.total > 0 || later.total > 0 || did.total > 0 || said.total > 0;
   const items = [
     { key: 'independent', label: '听到后第一次选对', value: c.independent, color: 'var(--brand-primary)' },
     { key: 'after-replay', label: '重听后选对', value: c['after-replay'], color: 'var(--brand-sky)' },
@@ -42,12 +44,13 @@ export function ParentEvidence() {
       </div>
       {pct !== null && <span className="pchart-badge-pill">首次选对 {pct}%</span>}
     </div>
+    {/* Nothing answered yet: one line instead of empty charts and zero cards. */}
     {sum.total === 0 ? <p className="muted">还没有记录。完成课程或复习后，这里会自动生成作答分布图。</p> : <>
       <p className="parent-evidence-lead">{sum.enough ? <>听到后第一次就选对 <b>{sum.independent}</b> / {sum.decidable} 次</> : <>记录不足（可判断作答 {sum.decidable} 次，满 {EVIDENCE_MIN_SAMPLE} 次显示比例）</>}</p>
       <BreakdownChart items={items} total={barTotal} />
       <details className="parent-inner-fold"><summary>按课题查看明细</summary><ul className="parent-evidence-lessons">{[...lessons].reverse().map(([k, os]) => { const [d, src] = k.split('|'); const n = (kind: Opportunity['kind']) => os.filter(o => o.kind === kind).length; return <li key={k}><b>{d} · {sourceTitle(src)}</b><span>参与 {os.filter(o => o.kind !== 'left').length} 题 · 首次对 {n('independent')} · 重听 {n('after-replay')} · 提示 {n('after-hint')} · 示范 {n('after-model')} · 跳过 {n('skipped')}</span></li>; })}</ul></details>
     </>}
-    <div className="parent-mini-grid">
+    {anything && <><div className="parent-mini-grid">
       <div className="parent-mini-card">
         <small>隔天再遇见（复习）</small>
         <strong>{later.total === 0 ? '暂无记录' : later.enough ? `${later.independent} / ${later.decidable} 次` : `${later.decidable} 次（样本少）`}</strong>
@@ -65,6 +68,6 @@ export function ParentEvidence() {
       </div>
     </div>
     <p className="parent-evidence-tip">陪伴小贴士：挑一个「先看示范」或「先跳过」的词，在生活里指一指、说一说，不用考一考。</p>
-    <small>注：“第一次选对”仅指未使用应用内提示，无法判断是否由大人协助，也不代表已完全掌握。</small>
+    <small>注：“第一次选对”仅指未使用应用内提示，无法判断是否由大人协助，也不代表已完全掌握。</small></>}
   </section>;
 }

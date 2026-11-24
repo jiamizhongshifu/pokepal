@@ -122,7 +122,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  };
  const tapThing = (key: string, en: string) => {
   const entry = sceneThings(save, district!).find(t => t.entry.key === key);
-  if (!entry?.learned) { sfx('boop'); setReact({ id: key, at: Date.now() }); later(() => setReact(r => r?.id === key ? null : r), 500); return; }
+  if (!entry?.learned) { sfx('boop'); setReact({ id: key, at: Date.now() }); later(() => setReact(r => r?.id === key ? null : r), 500); void say(['zh', '学到它，它就会亮起来。']); return; }
   stopSpeech(); sfx('pop'); setReact({ id: key, at: Date.now() }); later(() => setReact(r => r?.id === key ? null : r), 900);
   void say(...learningVoice(entry.entry)).then(heard => { if (heard) useGame.getState().noteWord(en, 'heard'); });
  };
@@ -187,7 +187,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     </section>}
     <div className="island-tint" aria-hidden="true" />
    </div>
-   {active && evolving === null && friends.length > 0 && <div className="island-scene-help"><FeatureGuide id={busy ? 'islandDo' : garden ? 'garden' : 'scene'} /></div>}
+   {active && evolving === null && friends.length > 0 && <div className="island-scene-help"><FeatureGuide id={busy ? 'islandDo' : garden ? 'garden' : 'scene'} autoOpen={busy || garden || things.some(t => t.learned)} /></div>}
    {growing}
   </div>;
  }

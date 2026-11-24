@@ -17,7 +17,7 @@ const REGIONS: { name: string; type?: CreatureType }[] = [
 
 export function Dex({ picking = false, browse }: { picking?: boolean; browse?:DexBrowseState }) {
   const save = useGame((s) => s.save);
-  const go = useGame((s) => s.go);
+  const go = useGame((s) => s.go), back = useGame((s) => s.back);
   // 现在的伙伴 + 长大前的形态都算“已拥有”
   const caught = dexOwned(save);
   // 先看到熟悉的伙伴；空好朋友相册仍可浏览全部小精灵。
@@ -40,19 +40,19 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
     previousFilters.current=filtersKey;
   }, [filtersKey]);
   const region = REGIONS[generation];
-  const list = CREATURES.filter((p) => (!onlyOwned || caught.has(p.id)) && (!region.type || p.types.includes(region.type)) && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const list = CREATURES.filter((p) => (picking ? !caught.has(p.id) : !onlyOwned || caught.has(p.id)) && (!region.type || p.types.includes(region.type)) && `${p.nameZh} ${p.nameEn} ${p.id}`.toLowerCase().includes(query.trim().toLowerCase()));
   const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
   const currentPage = Math.min(page, pages - 1);
   useIntro(() => picking ? say(["zh", "挑一只你喜欢的小精灵吧！"], ["en", "Pick a friend you love!", {en:"Pick a friend you love!",zh:"挑一只你喜欢的小精灵吧！"}]) : say(["zh", `好朋友相册。你已经有${caught.size}只小精灵啦！`], ["en", `You have ${caught.size} friends!`]));
 
   return (
     <div className="screen dex" ref={screenRef}>
-      <TopBar icon="dex" title={picking ? "挑选想找的伙伴" : "好朋友相册"} onBack={() => go({ name: picking ? "catch" : "home" })} focused help={<FeatureGuide id={picking?"wish":"dex"} compact/>}/>
+      <TopBar icon="dex" title={picking ? "挑选想找的伙伴" : "好朋友相册"} onBack={back} focused help={<FeatureGuide id={picking?"wish":"dex"} compact/>}/>
       <div className="dex-toolbar">
-        <div className="collection-tabs" aria-label="相册范围">
+        {!picking && <div className="collection-tabs" aria-label="相册范围">
           <button aria-pressed={!onlyOwned} onClick={() => { sfx("click"); setOnlyOwned(false); setPage(0); }}><Icon name="dex" size={28} />全部小精灵</button>
           <button aria-pressed={onlyOwned} onClick={() => { sfx("click"); setOnlyOwned(true); setPage(0); }}><Icon name="heart" size={28} />我的伙伴 <small>{caught.size}</small></button>
-        </div>
+        </div>}
       </div>
       <div className="dex-discovery-tools">
         {!picking && <button className="wish-button" onClick={() => go({name:"dex", picking:true})}><Icon name="grass" size={32}/><span>找新伙伴</span><span aria-hidden="true">›</span></button>}
@@ -81,7 +81,7 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
               <span className="dex-no">#{String(p.id).padStart(3, "0")}</span>
               <CreatureImg src={creatureAvatar(p.id)} alt="" draggable={false} />
               <span className="dex-name">{p.nameZh}</span><small lang="en">{p.nameEn}</small>
-              <span className="dex-meet-status">{save.captures.some(c=>c.id===p.id) ? "已经是伙伴" : "可以去找它"}</span>
+              <span className="dex-meet-status">{save.captures.some(c=>c.id===p.id) ? "已经是伙伴" : has ? "已经长大啦" : "可以去找它"}</span>
             </button>
           );
         })}

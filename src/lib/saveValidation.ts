@@ -63,6 +63,7 @@ export function validateSave(input:unknown):SaveData {
  if(cfg.storyMode!==undefined)requireValue(oneOf(['listen','read'],cfg.storyMode),'故事阅读模式');
  if(cfg.storyPace!==undefined)requireValue(oneOf(['normal','slow'],cfg.storyPace),'故事朗读速度');
  if(cfg.englishMode!==undefined)requireValue(oneOf(['english','bilingual'],cfg.englishMode),'语言设置');
+ if(cfg.storyVoice!==undefined)requireValue(oneOf(['english','bilingual'],cfg.storyVoice),'故事朗读语言');
  if(cfg.idleCamera!==undefined)requireValue(typeof cfg.idleCamera==='boolean','自动观察设置');
  if(cfg.hqLighting!==undefined)requireValue(typeof cfg.hqLighting==='boolean','画质设置');
  requireValue(Array.isArray(s.history)&&s.history.every((h:unknown)=>object(h)&&typeof h.date==='string'&&['energyEarned','tasksCompleted','heard','spoken','words','caught','playMinutes'].every(k=>number(h[k]))),'历史记录');

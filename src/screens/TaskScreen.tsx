@@ -75,8 +75,8 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
 
   return (
     <ProgressHost.Provider value={progressHost}><div className={`screen task task-${kind} task-staged`} style={{backgroundImage:`url(${storyBackground(TASK_SCENE[kind])})`}}>
-      <TopBar icon={info.icon} title={practice ? `${info.zh} · 加练` : info.zh} onBack={back} focused progress={!reward&&(kind==='trace'?<RoundProgress index={traced.length} total={practice?3:1} unit="个字母"/>:<div ref={setProgressHost}/>)} help={<FeatureGuide compact id={passive?"lesson":kind} autoVoice={false} enabled={!reward}>
-        {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go({name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
+      <TopBar icon={info.icon} title={info.zh} onBack={back} focused progress={!reward&&(kind==='trace'?<RoundProgress index={traced.length} total={practice?3:1} unit="个字母"/>:<div ref={setProgressHost}/>)} help={<FeatureGuide compact id={passive?"lesson":kind} autoVoice={false} enabled={!reward}>
+        {(kind==='trace'||kind==='repeat')&&!reward&&<div className="guide-alternative">说和写都可以稍后再试。<button className="btn-small" onClick={()=>{releaseMic();go(practice?{name:'practice'}:{name:'task',kind:'wordpic',boardIndex:null,session:Date.now()});}}><Icon name="picture" size={28}/>换个游戏</button></div>}
       </FeatureGuide>}/>
 
       {buddy!==undefined&&!reward&&<div className="task-friend"><BuddyImg id={buddy} alt=""/><span>{getCreature(buddy).nameZh}陪你练</span></div>}
@@ -95,7 +95,9 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
           {!!discoveries.length&&<><p>刚才一起遇见了</p><div className="session-discoveries">{discoveries.map(key=>{const entry=learningEntry(key)!;return <span key={key}><LearningArt entry={entry}/><b lang="en">{entry.en}</b><small>{entry.zh}</small></span>;})}</div></>}
           <EnergyToast reward={reward}/>
           <div className="cel-actions completion-next">
-            <button className="btn-big" onClick={()=>go({name:'home'})}><Icon name="sign" size={36}/>回到学习路线</button>
+            {/* A practice game ends back at the games; one from the path ends back on the path. */}
+            {practice?<button className="btn-big" onClick={()=>go({name:'practice'})}><Icon name="target" size={36}/>再选一个小游戏</button>
+            :<button className="btn-big" onClick={()=>go({name:'home'})}><Icon name="sign" size={36}/>回到学习路线</button>}
             <button className="btn-big alt" onClick={()=>go({name:'home',station:sessionStart.unit.station})}><Icon name="island" size={28}/>回小岛玩</button>
           </div>
           </div>

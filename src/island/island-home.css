@@ -98,8 +98,7 @@
 .island-stage .island-play { display: block; position: absolute; inset: 0; }
 .island-stage .island-play > header { position: absolute; top: calc(14px + env(safe-area-inset-top)); left: 50%; translate: -50% 0; }
 .island-stage .island-play > header strong, .island-stage .island-ask-speaker, .island-stage .island-ask-close, .island-stage .island-ask-hint, .island-stage .island-ask-options small,
-.island-stage .island-ask-target small, .island-stage .island-ask-hear span, .island-stage .island-free-note, .island-stage .island-free-did, .island-stage .island-play-actions span, .island-stage .island-free-done span { display: none; }
-.island-stage .island-ask-situation { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.island-stage .island-ask-target small, .island-stage .island-ask-hear span, .island-stage .island-free-did, .island-stage .island-play-actions span, .island-stage .island-free-done span { display: none; }
 .island-stage .island-play-rounds { gap: 8px; }
 .island-stage .island-play-rounds i { width: 18px; height: 18px; border: 3px solid var(--brand-paper); background: rgba(255, 255, 255, .6); }
 .island-stage .island-play-made { position: absolute; top: calc(44px + env(safe-area-inset-top)); left: 50%; translate: -50% 0; padding: 8px 12px; border-radius: 24px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
@@ -204,3 +203,4 @@
 @media (min-width: 701px) and (orientation: portrait) { .island-world { width: max(100cqw, 110cqh); } }
 /* On a phone the corner buttons reach the middle: the day's stars move to the free top-left corner. */
 @media (max-width: 560px) { .island-day { left: calc(12px + env(safe-area-inset-left)); translate: none; } }
+#root .island-home .island-stage .island-ask-options .is-reading { filter: drop-shadow(0 5px 0 var(--brand-sky)); scale: 1.08; }

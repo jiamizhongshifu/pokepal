@@ -150,6 +150,8 @@ interface State {
   screen: Screen;
   load: () => Promise<void>;
   go: (s: Screen) => void;
+  /** Back to the page the child came from (the shelf a story was opened on, the island the grown-up left); the learning path when there is none. */
+  back: () => void;
   createTrainer: (avatar: string) => Promise<boolean>;
   /** `partner`: the companion practising alongside; a finished set counts as time played together. */
   completeTask: (kind: TaskKind, boardIndex: number | null, partner?: number) => Promise<TaskReward | undefined>;
@@ -181,6 +183,10 @@ interface State {
   importSave: (data: unknown) => Promise<void>;
 }
 
+/** Pages visited before the current one, for `back`. Only pages to browse are kept: back never re-enters a lesson, a game, a story, a diary or a visit already left. */
+let trail: Screen[] = [];
+const BROWSE: ReadonlySet<Screen['name']> = new Set(['home', 'stories', 'dex', 'dexDetail', 'notebook', 'practice', 'parent', 'catch']);
+const sameScreen = (a: Screen, b: Screen) => JSON.stringify(a) === JSON.stringify(b);
 let saveTimer: ReturnType<typeof setTimeout> | undefined;
 let revision=0;
 let pendingSave:SaveData|undefined;
@@ -278,7 +284,17 @@ export const useGame = create<State>((set, get) => {
     },
 
     go(screen) {
+      const from = get().screen;
+      // Going to the page just left is going back: it is taken off the trail instead of stacking a loop (相册 ⇄ 资料).
+      if (trail.length && trail[trail.length - 1].name === screen.name) trail = trail.slice(0, -1);
+      else if (BROWSE.has(from.name) && !sameScreen(from, screen)) trail = [...trail.slice(-19), from];
       set({ screen });
+    },
+    back() {
+      const here = get().screen;
+      let to = trail.pop();
+      while (to && sameScreen(to, here)) to = trail.pop();
+      set({ screen: to ?? { name: 'home' } });
     },
 
     startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});set({screen:{name:'lesson',id}}); },
@@ -476,7 +492,7 @@ export const useGame = create<State>((set, get) => {
         await flushSave();const s=newSave();
         revision=await resetSave(s,revision);
         try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}
-        set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
+        trail=[];set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
       }catch(error){set({saveIssue:error instanceof SaveConflictError?'conflict':'write'});}
       finally{set({saveBusy:false});}
     },
@@ -493,7 +509,7 @@ export const useGame = create<State>((set, get) => {
         await flushSave();
         revision=await writeSave(s,revision,true);
         setSpeechRate(s.settings.speechRate);
-        set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
+        trail=[];set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
       }catch(error){
         if(error instanceof SaveConflictError)set({saveIssue:'conflict'});
         throw error;
@@ -504,6 +520,8 @@ export const useGame = create<State>((set, get) => {
 });
 
 export const playLimitSeconds = (s: SaveData) => s.settings.dailyMinutes * 60 + s.daily.extraSeconds;
+/** Today's play time is used up: the activity under way finishes, nothing new starts. */
+export const timeIsUp = (s: SaveData) => !!s.trainer && s.daily.playSeconds >= playLimitSeconds(s);
 
 /** 好朋友相册里“已拥有”的小精灵：现在的伙伴 + 长大前的形态 */
 export const dexOwned = (s: SaveData) => new Set([...(s.dex ?? []), ...s.captures.map((c) => c.id)]);

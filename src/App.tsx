@@ -1,7 +1,7 @@
 import {useEnvironmentAudio} from './lib/environmentAudio';
 import { useSceneMusic } from './lib/music';
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { playLimitSeconds, flushPendingSave, useGame } from "./store";
+import { playLimitSeconds, flushPendingSave, timeIsUp, useGame, type Screen } from "./store";
 import { stopSpeech, onEnglishSpoken } from "./lib/speech";
 import { skyFor } from "./lib/routine";
 import { Welcome } from "./screens/Welcome";
@@ -45,13 +45,15 @@ const IconSheet = import.meta.env.DEV ? lazy(() => import("./icons/IconSheet").t
 
 const TICK = 10;
 
+const ACTIVITIES = new Set<Screen["name"]>(["lesson", "task", "story", "diary", "catch", "review"]);
+
 export default function App() {
   const loaded = useGame((s) => s.loaded);
   const saveIssue=useGame(s=>s.saveIssue);
   const screen = useGame((s) => s.screen);
   const trainer=useGame(s=>s.save.trainer);
   const settings=useGame(s=>s.save.settings);
-  const timeUp=useGame(s=>!!s.save.trainer&&s.save.daily.playSeconds>=playLimitSeconds(s.save));
+  const timeUp=useGame(s=>timeIsUp(s.save));
   const load = useGame((s) => s.load);
   const addPlaySeconds = useGame((s) => s.addPlaySeconds);
   const noteHeard = useGame((s) => s.noteHeard);
@@ -60,6 +62,7 @@ export default function App() {
   useSceneMusic({screen:screen.name,level:settings.backgroundMusic??'soft',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
   useEnvironmentAudio({screen:screen.name,level:settings.environmentSound??'soft',mode:settings.islandWeather??'auto',blocked:!loaded||!!saveIssue||timeUp||(screen.name==='home'&&!islandView)});
   const homeSeen = useRef(false);
+  const finishing = useRef<Screen | null>(null);
   if (!trainer) homeSeen.current = false;
   if (loaded && islandView) homeSeen.current = true;
 
@@ -104,7 +107,10 @@ export default function App() {
   if(saveIssue)return <SaveRecovery/>;
   if (!loaded) return <div className="screen loading"><div className="sl-ball" /></div>;
 
-  const resting = !!timeUp && screen.name !== "parent" && screen.name !== "welcome";
+  // Time up never cuts into what the child is doing: the lesson, game, story, diary or visit open at that moment runs
+  // to its end, and the rest page comes when the child leaves it. Only that one activity: the next one rests.
+  if (!timeUp) finishing.current = null; else if (finishing.current === null) finishing.current = screen;
+  const resting = !!timeUp && !(ACTIVITIES.has(screen.name) && screen === finishing.current) && screen.name !== "parent" && screen.name !== "welcome";
   const homeActive = islandView && !resting;
 
   return (

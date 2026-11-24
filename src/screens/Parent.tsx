@@ -24,6 +24,7 @@ import type { BallType, SaveData } from "../types";
 import { Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
 import { DeviceSetup } from "../components/DeviceSetup";
+import { useNotices } from "../lib/announcements";
 import { LEARNING_UNITS,learningEntry,selectedUnit } from '../data/curriculum';
 import { reviewKeys } from '../lib/learningProgress';
 import {familyLearning} from '../lib/familyLearning';
@@ -36,7 +37,9 @@ import {AlphabetGrid,ChapterProgressStrip,RingMeter,WeeklyBarChart} from '../com
 
 export function Parent() {
   const save = useGame((s) => s.save);
-  const go = useGame((s) => s.go);
+  const go = useGame((s) => s.go), back = useGame((s) => s.back);
+  // Updates install themselves; the update panel opens only when a new version is waiting.
+  const { updateAvailable } = useNotices(false);
   const updateSettings = useGame((s) => s.updateSettings);
   const markHomeTried = useGame((s) => s.markHomeTried);
   const grantExtraMinutes = useGame((s) => s.grantExtraMinutes);
@@ -71,7 +74,7 @@ export function Parent() {
   };
 
   const exportSave = () => {
-    downloadJson(exportableSave(save), `pokepal-save-${d.date}.json`);
+    downloadJson(exportableSave(save), `啵啵岛-存档-${d.date}.json`);
   };
   const onImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -104,7 +107,7 @@ export function Parent() {
 
   const titles={report:'了解孩子的学习',settings:'找到舒服的陪伴节奏',data:'更新与保管小岛'};
   return <div className="screen parent parent-organized">
-   <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={()=>go({name:'home'})} aria-label="返回"><Icon name="back" size={30}/></button><h2>家长中心</h2></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
+   <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={back} aria-label="返回"><Icon name="back" size={30}/></button><h2>家长中心</h2></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
    {msg&&<div className="toast" role="status">{msg}</div>}
    <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看今日数据与 7 天趋势，再按需展开明细。':tab==='settings'?'常用陪伴设置优先，修改后自动保存。':'更新保留学习进度，备份与清空分开管理。'}</p></div>
    {tab==='data'&&<section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div><TrafficPreferences/><AnalyticsPreferences/><p>暂停试用会回到首页、关闭访问统计并撤回本机阅读确认，不删除已有进度。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></section>}
@@ -116,7 +119,7 @@ export function Parent() {
     </div>
     <div className="parent-kpi-card">
      <span className="parent-kpi-icon is-green"><Icon name="book" size={28}/></span>
-     <div><small>今日接触词汇</small><strong>{todayWords.length} <small>个</small></strong><span>累计不同日选对 {learned.length} 个</span></div>
+     <div><small>今日接触词汇</small><strong>{todayWords.length} <small>个</small></strong><span>比较熟的词 {learned.length} 个</span></div>
     </div>
     <div className="parent-kpi-card">
      <span className="parent-kpi-icon is-orange"><Icon name="speak" size={28}/></span>
@@ -138,7 +141,7 @@ export function Parent() {
 <h3 className="parent-detail-heading">需要时，再展开明细</h3>
 <details className="parent-fold"><summary><Icon name="book" size={28}/><span>词汇与字母墙<small>今日 {todayWords.length} 词 · 字母 {letters.length}/26</small></span></summary><div className="parent-fold-content"><h3>今天接触的词（{todayWords.length}）</h3>
               <div className="chips">{todayWords.map((w) => <button key={w} className="chip" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
-              <h3>在两个不同日期都没用提示选对的词（{learned.length}，不代表已掌握）</h3>
+              <h3>比较熟的词（{learned.length}）<small>两天都自己选对，口径见下方说明</small></h3>
               <div className="chips">{learned.map((w) => <button key={w} className="chip ok" onClick={() => {const e=learningEntry(w);if(e)void hearEntry(e);else void say(['en',w]);}}>{learningEntry(w)?.en??w}</button>)}</div>
               <h3>写过的字母（{letters.length} / 26）</h3>
               <AlphabetGrid traced={letters}/>
@@ -166,26 +169,26 @@ export function Parent() {
                 <span className="muted">刚开始建议保留中文提示（先英文、再中文、最后英文复述）；宝宝熟悉这些句型后可切到只说英文。</span>
               </label><label>语速：<b>{s.speechRate.toFixed(1)}×</b>
                 <input type="range" min={0.6} max={1.3} step={0.1} value={s.speechRate} onChange={(e) => updateSettings({ speechRate: Number(e.target.value) })} />
-              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！'])}><Icon name="speaker" size={22}/>试听语音</button><label>家园英语（磨耳朵）
+              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！'])}><Icon name="speaker" size={22}/>试听语音</button><label>小岛英语（磨耳朵）
                 <div className="seg">
                   {([["off", "关闭"], ["some", "少一点"], ["more", "多一点"]] as const).map(([v, t]) => (
                     <button key={v} aria-label={t} aria-pressed={(s.ambientEnglish ?? "some") === v} className={(s.ambientEnglish ?? "some") === v ? "on" : ""} onClick={() => updateSettings({ ambientEnglish: v })}>{t}</button>
                   ))}
                 </div>
-                <span className="muted">宝宝在家园里玩的时候，旁白会用简单英语描述小精灵正在做的事（Look! Bubbo is eating. Yum yum!），也会数一数、找一找、说颜色。少一点约 50 秒一句，多一点约 25 秒一句。</span>
+                <span className="muted">宝宝在“我的小岛”玩的时候，旁白会用简单英语描述小精灵正在做的事（Look! Bubbo is eating. Yum yum!），也会数一数、找一找、说颜色。少一点约 50 秒一句，多一点约 25 秒一句。</span>
               </label><label>背景音乐
                 <div className="seg">
                   {([['off','关闭'],['soft','轻轻播放'],['normal','标准音量']] as const).map(([value,label])=><button key={value} aria-pressed={(s.backgroundMusic??'soft')===value} className={(s.backgroundMusic??'soft')===value?'on':''} onClick={()=>updateSettings({backgroundMusic:value})}>{label}</button>)}
                 </div>
-                <span className="muted">小岛配乐随设备当地时间变化：6–9 点晨光、9–17 点白天、17–21 点傍晚、21–6 点星夜。配音时自动降低，答题、跟读和日记录音时暂停。锁屏或切到后台也会暂停。</span>
+                <span className="muted">小岛配乐随设备当地时间变化：6–9 点晨光、9–17 点白天、17–21 点傍晚、21–6 点星夜。只在欢迎页和“我的小岛”播放，学习路线和课程里保持安静；配音时自动降低，答题、跟读和日记录音时暂停。锁屏或切到后台也会暂停。</span>
               </label><details className="parent-inner-fold"><summary>配音来源</summary><p>英文 {voiceInfo().en}，中文 {voiceInfo().zh}。统一使用火山引擎离线配音，角色使用对应音色，不切换设备系统语音。</p></details></div></details>
 <details className="parent-fold"><summary><Icon name="island" size={28}/><span>小岛天气与声音<small>天气、自然环境声音</small></span></summary><div className="parent-fold-content"><WeatherSettings/></div></details>
 <details className="parent-fold"><summary><Icon name="hand" size={28}/><span>操作引导<small>{save.onboarding?.automatic!==false?'首次使用主动提示':'按需点“帮助”'}</small></span></summary><div className="parent-fold-content"><GuideSettings/></div></details>
 <details className="parent-fold" onToggle={e=>setFavoritesOpen(e.currentTarget.open)}><summary><Icon name="invite-berry" size={28}/><span>偏爱的伙伴<small>已置顶 {s.favorites.length} 只 · 优先坐船来做客</small></span></summary>{favoritesOpen&&<div className="parent-fold-content"><p>只影响谁更常坐船来小岛做客，以及学习路线上陪在旁边的伙伴；不影响孩子自己选择和谁玩。</p><label className="parent-search">找一个伙伴<input type="search" value={favoriteQuery} placeholder="中文、英文或编号" onChange={e=>{setFavoriteQuery(e.target.value);setFavoriteLimit(24);}}/></label><label className="parent-fav-filter"><input type="checkbox" checked={onlyFavorites} onChange={e=>{setOnlyFavorites(e.target.checked);setFavoriteLimit(24);}}/>只看已置顶</label><div className="fav-grid">{favoriteOptions.slice(0,favoriteLimit).map(p=>{const on=s.favorites.includes(p.id);return <button key={p.id} className={`fav ${on?'on':''}`} aria-pressed={on} aria-label={`${p.nameZh}，${on?'已置顶，点击取消':'点击置顶'}`} onClick={()=>updateSettings({favorites:on?s.favorites.filter(x=>x!==p.id):[...s.favorites,p.id]})}><CreatureImg src={creatureAvatar(p.id)} alt=""/><span>{p.nameZh}</span>{on&&<small>已置顶</small>}</button>;})}</div>{!favoriteOptions.length&&<p role="status">{onlyFavorites?'没有符合条件的已置顶伙伴，可以取消筛选看看。':'没有找到，试试其他名字或编号。'}</p>}{favoriteOptions.length>favoriteLimit&&<button className="btn-small" onClick={()=>setFavoriteLimit(n=>n+24)}>再看一些（{Math.min(favoriteLimit,favoriteOptions.length)} / {favoriteOptions.length}）</button>}</div>}</details>
 <details className="parent-fold"><summary><Icon name="avatar-red" size={28}/><span>小岛主人的名字<small>{save.trainer?.name||'小岛主人'}</small></span></summary><div className="parent-fold-content form"><label>小岛主人的名字
-                <input defaultValue={save.trainer?.name} onBlur={(e) => renameTrainer(e.target.value)} maxLength={10} />
-              </label><p className="muted">输入后离开输入框即可保存，最多 10 个字。</p></div></details></>}
-   {tab==='data'&&<><DeviceSetup initiallyOpen compactTools/>
+                <input defaultValue={save.trainer?.name} onChange={(e) => { if (e.target.value.trim()) renameTrainer(e.target.value); }} onBlur={(e) => renameTrainer(e.target.value)} maxLength={10} />
+              </label><p className="muted">改了就自动保存，上方会显示新名字。最多 10 个字。</p></div></details></>}
+   {tab==='data'&&<><DeviceSetup initiallyOpen={updateAvailable} compactTools/>
 <details className="parent-fold"><summary><Icon name="book" size={28}/><span>备份与恢复<small>导出存档、导入或恢复上次存档</small></span></summary><div className="parent-fold-content">
               <div className="row">
                 <button className="btn-small" onClick={exportSave}>导出存档</button>

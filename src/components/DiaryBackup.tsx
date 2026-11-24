@@ -19,7 +19,7 @@ export function DiaryBackup({ entry }: { entry?: DiaryEntry }) {
         const entries = entry ? [entry] : await db.diaries.toArray();
         if (!entries.length) { setStatus('还没有需要备份的日记。'); return; }
         const content = await encodeDiaryBackup(entries);
-        downloadDiaryFile(new Blob([content], { type: 'application/json' }), `pokepal-diaries-${Date.now()}.json`);
+        downloadDiaryFile(new Blob([content], { type: 'application/json' }), `啵啵岛-日记备份-${new Date().toISOString().slice(0,10)}.json`);
         setStatus(`已准备 ${entries.length} 篇日记，请在下载中保存好文件。`);
       })}>{busy ? '正在处理…' : entry ? '备份这篇日记与原声' : '备份全部日记与原声'}</button>
       {!entry && <><button className="btn-small" disabled={busy} onClick={() => input.current?.click()}>恢复日记备份</button>

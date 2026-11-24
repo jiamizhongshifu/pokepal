@@ -19,7 +19,6 @@ export function ParentLinks() {
 
 export function ParentNotice({onContinue,onClose}:{onContinue:()=>void;onClose:()=>void}) {
   const dialog=useRef<HTMLDialogElement>(null);
-  const [checked,setChecked]=useState(false);
   useModalLayer();
   useEffect(()=>{const el=dialog.current;el?.showModal();return()=>el?.close();},[]);
   return <dialog ref={dialog} className="parent-notice ps-surface" aria-labelledby="parent-notice-title" onCancel={onClose}>
@@ -32,11 +31,9 @@ export function ParentNotice({onContinue,onClose}:{onContinue:()=>void;onClose:(
     </ul>
     <p className="ps-muted">联网加载会产生必要的请求信息。数据用途、保管、删除和反馈方式见下方说明。</p>
     <ParentLinks/>
-    <TrafficPreferences/>
-    <AnalyticsPreferences/>
-    <label className="ps-confirm"><input type="checkbox" checked={checked} onChange={e=>setChecked(e.target.checked)}/><span>我是陪伴的家长，已阅读试用与隐私说明，了解上述限制。</span></label>
-    <p className="ps-muted">阅读确认仅保存本机阅读状态，不会开启麦克风、相机；基础访问量可在上方关闭；Google 访问与交互统计需另行同意。</p>
-    <div className="ps-actions"><button onClick={onClose}>暂不开始</button><button className="ps-primary" disabled={!checked} onClick={()=>{try{recordParentNotice(localStorage);}catch{/* Continue only for this session if storage is blocked. */}onContinue();}}>了解了，一起开始</button></div>
+    <details className="ps-optional"><summary>访问统计（可选，随时可在家长中心改）</summary><TrafficPreferences/><AnalyticsPreferences/></details>
+    <p className="ps-muted">点“开始”只在这台设备记下已读，不会打开麦克风或相机。</p>
+    <div className="ps-actions"><button onClick={onClose}>暂不开始</button><button className="ps-primary" onClick={()=>{try{recordParentNotice(localStorage);}catch{/* Continue only for this session if storage is blocked. */}onContinue();}}>我是家长，已了解，一起开始</button></div>
   </dialog>;
 }
 

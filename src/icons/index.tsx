@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ICON_ASSETS } from "./generated";
 
-export { AVATARS } from "./avatars";
+export { AVATARS, AVATAR_NAMES } from "./avatars";
 
 /** imagegen 绘制、按清单切图的透明 PNG。原 SVG 源稿保留供回溯。 */
 export const ICONS = ICON_ASSETS;

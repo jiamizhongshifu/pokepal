@@ -14,7 +14,7 @@ import { creatureArt, getCreature } from '../data/creatures';
 import { CreatureImg } from '../components/CreatureImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
-import { useGame } from '../store';
+import { timeIsUp, useGame } from '../store';
 import { say, setVoicePace, stopSpeech, sfx } from '../lib/speech';
 import { EchoPractice, ReadAlongText, WordCard, useSpokenWord } from '../components/StoryReadAlong';
 import { storyWordEntry, storyWordVoice } from '../lib/storyWords';
@@ -34,7 +34,7 @@ function StoryReading({page,spoken,selected,onWord}:{page:StoryPage;spoken:numbe
 }
 
 export function StoryLibrary(){
- const go=useGame(s=>s.go);
+ const go=useGame(s=>s.go),back=useGame(s=>s.back);
  const progress=useGame(s=>s.save.storyProgress);
  const settings=useGame(s=>s.save.settings);
  const bookmark=(story:Story)=>storyBookmarkKey(story,storyLanguage(story,settings));
@@ -43,7 +43,7 @@ export function StoryLibrary(){
  const books=STORIES.filter(s=>theme==='all'||s.group===theme);
  const resume=STORIES.find(s=>{const p=progress?.[bookmark(s)]??0;return p>0&&p<=s.pages.length;});
  return <div className="screen story-library">
-  <TopBar title="啵啵岛故事屋" onBack={()=>go({name:'home'})} focused help={<FeatureGuide id="stories" compact/>}/>
+  <TopBar title="啵啵岛故事屋" onBack={back} focused help={<FeatureGuide id="stories" compact/>}/>
   <header className="learning-heading"><h1>今天想听哪个故事？</h1></header>
   <nav className="story-themes" aria-label="故事主题"><button aria-pressed={theme==='all'} onClick={()=>setTheme('all')}><Icon name="book" size={32}/>全部故事</button>{STORY_THEMES.map(t=><button key={t.id} aria-pressed={theme===t.id} onClick={()=>setTheme(t.id)}><Icon name={t.icon} size={32}/>{t.name}</button>)}</nav>
   {resume&&(theme==='all'||resume.group===theme)&&<button className="story-resume" onClick={()=>go({name:'story',id:resume.id})}><Icon name="book" size={30}/><span><b>接着读：{resume.title}</b><small>停在第 {progress?.[bookmark(resume)]} 页 · 随时可以重读</small></span><span aria-hidden="true">›</span></button>}
@@ -73,8 +73,8 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const bookmark=storyBookmarkKey(story,language);
  const hasLevels=!!SHORT_STORY_LINES[story.id];
  const discover=learningProfile(settings).entry==='choose';
- const go=useGame(s=>s.go);
- const noteStoryPage=useGame(s=>s.noteStoryPage);
+ const go=useGame(s=>s.go),back=useGame(s=>s.back);
+ const noteStoryPage=useGame(s=>s.noteStoryPage),timeUp=useGame(s=>timeIsUp(s.save));
  const readPages=useGame(s=>s.save.daily.storyReadPages?.[storyProgressKey(story)]);
  const noteRead=()=>useGame.getState().noteStoryRead(storyProgressKey(story),idx+1);
  const [idx,setIdx]=useState(()=>storyInitialPage(story,useGame.getState().save.storyProgress?.[bookmark]));
@@ -82,7 +82,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const reader=useRef<HTMLDivElement>(null);
  useEffect(()=>{reader.current?.scrollTo({top:0,behavior:"instant"});},[idx,ended]);
  const [autoPlay,setAutoPlay]=useState(useGame.getState().save.settings.storyMode==='listen');
- const [bilingual,setBilingual]=useState(useGame.getState().save.settings.englishMode!=='english');
+ const [bilingual,setBilingual]=useState(()=>{const s=useGame.getState().save.settings;return (s.storyVoice??s.englishMode)!=='english';});
  const [replay,setReplay]=useState(0);
  const [choice,setChoice]=useState<{page:number;index:number}|null>(null);
  const [status,setStatus]=useState<'playing'|'idle'|'unavailable'>('playing');
@@ -133,7 +133,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  const pickWord=(next:string,index:number)=>{setWord({word:next,index});void hearWord(next);};
  const toggleSlow=()=>{const next=!slow;setVoicePace(next?'slow':'normal');setSlow(next);useGame.getState().updateSettings({storyPace:next?'slow':'normal'});read();};
  return <div className="screen story-reader">
-   <TopBar title={story.title} onBack={()=>go({name:'home'})} focused
+   <TopBar title={story.title} onBack={back} focused
      progress={!ended&&<span className="story-page-count" aria-label={`第 ${idx+1} 页，共 ${story.pages.length} 页`}>{idx+1} / {story.pages.length}</span>}
      help={!ended&&<FeatureGuide id="story" compact autoVoice={false} onVoiceStart={pause}/>}/>
    <div ref={reader} className="story-pages">
@@ -152,7 +152,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
        {story.id==='keep-promise'&&<button className="btn-small" onClick={()=>go({name:'home',station:'farm'})}>陪伙伴照顾一颗小种子</button>}
        {story.id==='try-again'&&<button className="btn-small" onClick={()=>go({name:'home',station:'sand'})}>去沙坑慢慢玩，累了就休息</button>}
        {story.id==='tell-truth'&&<button className="btn-small" onClick={()=>go({name:'diary'})}>把今天的小事，说给我听</button>}
-       <button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button><button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
+       {!timeUp&&<button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button>}<button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
    </main> : <main className="open-storybook">
      <header className="story-page-header"><h2 className="story-beat">{page.beat}</h2>
      <div className="story-mode" aria-label="阅读方式">{(['listen','read'] as const).map(mode=><button key={mode} aria-label={mode==='listen'?'听故事，自动翻页':'一起读，自己翻页'} aria-pressed={autoPlay===(mode==='listen')} onClick={()=>{setAutoPlay(mode==='listen');useGame.getState().updateSettings({storyMode:mode});read();}}><Icon name={mode==='listen'?'ear':'book'} size={26}/>{mode==='listen'?'听故事':'一起读'}<small>{mode==='listen'?'自动翻页':'自己翻页'}</small></button>)}</div>
@@ -166,7 +166,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{sfx('click');setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
      </div>
      <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · {story.themeEn}{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>
-     <div className="story-options"><button aria-pressed={bilingual} onClick={()=>setBilingual(v=>!v)}>{bilingual?'中英朗读':'只听英文'}<small lang="en">{bilingual?'English + Chinese':'English audio'}</small></button></div></details>
+     <div className="story-options"><button aria-pressed={bilingual} onClick={()=>{const next=!bilingual;setBilingual(next);useGame.getState().updateSettings({storyVoice:next?'bilingual':'english'});}}>{bilingual?'中英朗读':'只听英文'}<small lang="en">{bilingual?'English + Chinese':'English audio'}</small></button></div></details>
      {autoPlay&&page.pause&&<p className="story-pause-note">故事在这里等你。想继续时，点下一页。</p>}
      {status==='unavailable'&&<p role="status" className="story-audio-note">这页声音暂时没准备好，点“再听一次”重试。</p>}
    </main>}

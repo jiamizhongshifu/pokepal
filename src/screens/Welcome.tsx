@@ -7,9 +7,8 @@ import { requestPersist } from "../lib/db";
 import type React from 'react';
 import { creatureArt, getCreature, WELCOME_CAST } from "../data/creatures";
 import { homeOf, type Spot } from '../island/world';
-import { AVATARS, Icon } from "../icons";
+import { AVATARS, AVATAR_NAMES, Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";
-import { DeviceSetup } from "../components/DeviceSetup";
 import { TrainerAvatar } from "../components/TrainerAvatar";
 import {useEffect,useMemo,useRef,useState} from 'react';
 import { BlockingDialog } from '../components/BlockingDialog';
@@ -96,7 +95,6 @@ export function Welcome() {
         <section ref={panel} className="start-adults-panel" role="dialog" aria-label="给大人">
           <header><strong>给陪伴的大人</strong><button type="button" aria-label="关闭" onClick={closeAdults}><Icon name="close" size={24}/></button></header>
           <Announcements/>
-          <DeviceSetup/>
           <ParentLinks/>
         </section>
       </>}
@@ -120,8 +118,8 @@ export function Welcome() {
         <section className="start-card start-pick" aria-label="选一个你喜欢的形象">
           <header className="help-heading"><div className="start-pick-hint">选一个你喜欢的形象<small lang="en">Choose your look</small></div><FeatureGuide id="welcome" autoVoice={false}/></header>
           <div className="start-pick-row">
-            {AVATARS.map((a, i) => (
-              <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label={`选择形象 ${i + 1}`}><Icon name={a} size={120} /></button>
+            {AVATARS.map((a) => (
+              <button key={a} className="avatar-choice" onClick={() => requestBegin(a)} aria-label={`选择${AVATAR_NAMES[a]}`}><Icon name={a} size={120} /></button>
             ))}
           </div>
         </section>
@@ -132,11 +130,14 @@ export function Welcome() {
         <p className="handoff-eyebrow">给陪伴的大人</p>
         <h2 id="handoff-title">设置好啦，可以交给孩子了</h2>
         <ul>
+          {!trainer&&!handoff.avatar&&<li><Icon name="hand" size={32}/><span>先让孩子<b>点一个喜欢的形象</b>，伙伴会用声音告诉孩子。</span></li>}
           <li><Icon name="play" size={32}/><span>孩子只要点<b>亮着的绿色大圆圈</b>，伙伴会用声音带着做。</span></li>
           <li><Icon name="ear" size={32}/><span>没听清时，点右上角<b>帮助</b>里的「听一听」再听一次。</span></li>
           <li><Icon name="rest" size={32}/><span>想停就停，进度会留在这台设备上。</span></li>
         </ul>
-        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);if(trainer||avatar)void begin(avatar);}}><Icon name="hand" size={36}/>交给孩子</button>
+        <button className="btn-big handoff-go" onClick={()=>{const avatar=handoff.avatar;setHandoff(null);if(trainer||avatar){void begin(avatar);return;}
+          // The child cannot read the picker's title: the friend says it as the device is handed over.
+          unlockAudio();void say(["zh","选一个你喜欢的样子吧！"],["en","Choose your look!"]);}}><Icon name="hand" size={36}/>交给孩子</button>
       </section></BlockingDialog>}
     </div>
   );

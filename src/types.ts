@@ -94,6 +94,8 @@ export interface Settings {
   storyPace?: 'normal'|'slow';
   storyLanguage?: 'stage'|'short'|'full';
   englishMode?: "bilingual" | "english";
+  /** Story read-aloud: both languages or English only; starts from englishMode and is remembered on its own. */
+  storyVoice?: "bilingual" | "english";
 }
 
 export interface WordStat {

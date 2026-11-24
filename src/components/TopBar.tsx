@@ -45,16 +45,18 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
 /** 家长入口：长按 3 秒后再答一道算术题 */
 export function ParentButton({ onOpen }: { onOpen: () => void }) {
   const [progress, setProgress] = useState(0);
-  const [gate, setGate] = useState(false);
-  const timer = useRef<number | undefined>(undefined);
-  useEffect(()=>()=>{if(timer.current)cancelAnimationFrame(timer.current);},[]);
+  const [gate, setGate] = useState(false), [hint, setHint] = useState(false);
+  const timer = useRef<number | undefined>(undefined), hintTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined), pressed = useRef(false);
+  useEffect(()=>()=>{if(timer.current)cancelAnimationFrame(timer.current);clearTimeout(hintTimer.current);},[]);
   const start = () => {
+    pressed.current = true;
     if(timer.current)cancelAnimationFrame(timer.current);
     const t0 = performance.now();
     const tick = () => {
       const p = Math.min(1, (performance.now() - t0) / 3000);
       setProgress(p);
       if (p >= 1) {
+        pressed.current = false;
         setProgress(0);
         setGate(true);
         return;
@@ -67,13 +69,19 @@ export function ParentButton({ onOpen }: { onOpen: () => void }) {
     if (timer.current) cancelAnimationFrame(timer.current);
     setProgress(0);
   };
+  // A short tap says how to get in, so a grown-up does not think the button is broken.
+  const release = () => {
+    const short = pressed.current; pressed.current = false; cancel();
+    if (!short) return;
+    setHint(true); clearTimeout(hintTimer.current); hintTimer.current = setTimeout(() => setHint(false), 2200);
+  };
   return (
     <>
       <button
         className="parent-btn"
         onPointerDown={start}
         onClick={e=>{if(e.detail===0){cancel();setGate(true);}}}
-        onPointerUp={cancel}
+        onPointerUp={release}
         onPointerLeave={cancel}
         onPointerCancel={cancel}
         onContextMenu={(e) => e.preventDefault()}
@@ -81,6 +89,7 @@ export function ParentButton({ onOpen }: { onOpen: () => void }) {
         style={{ background: `conic-gradient(var(--brand-sun) ${progress * 360}deg, rgba(255,255,255,.5) 0)` }}
       >
         <span><Icon name="gear" size={28} /></span>
+        {hint && <small className="parent-btn-hint" role="status">给大人：按住 3 秒</small>}
       </button>
       {gate && <ParentGate onPass={() => { setGate(false); onOpen(); }} onCancel={() => setGate(false)} />}
     </>

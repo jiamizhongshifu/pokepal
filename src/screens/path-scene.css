@@ -99,6 +99,8 @@
  .path-turn { width: 50px; height: 50px; } .path-turn .icon { width: 26px !important; height: 26px !important; }
  .path-extra { bottom: calc(96px + env(safe-area-inset-bottom)); right: 50%; translate: 50% 0; }
  .path-extra button { min-height: 50px; padding: 6px 14px 6px 10px; font-size: 14px; }
+ .path-extra { flex-wrap: wrap; justify-content: center; width: max-content; max-width: calc(100vw - 24px); }
+ .path-extra .path-now { order: -1; flex-basis: 100%; justify-content: center; }
  .path-stop { --token: clamp(48px, 8.8cqw, 132px); gap: 4px; } .path-stop.is-current { --token: clamp(66px, 11.5cqw, 168px); }
  .stop-token { box-shadow: 0 0 0 4px var(--ring), 0 6px 0 4px var(--ring-deep), 0 10px 14px rgba(20, 50, 40, .25); }
  .path-stop.is-done .stop-token { box-shadow: 0 0 0 4px var(--scene-gold), 0 6px 0 4px var(--scene-gold-deep), 0 10px 14px rgba(20, 50, 40, .25); }
@@ -117,3 +119,4 @@
 @media (max-width: 700px) { .stop-bubble-word { width: 26px; height: 26px; } }
 /* A tablet held upright: the scene fills more of the height and slides sideways like on a phone. */
 @media (min-width: 701px) and (orientation: portrait) { .path-world { width: max(100cqw, 110cqh); } }
+.path-extra .path-now { background: var(--brand-primary); color: var(--brand-on-primary); box-shadow: 0 5px 0 var(--brand-primary-deep); }

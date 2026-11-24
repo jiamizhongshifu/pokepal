@@ -8,7 +8,7 @@ import {say,stopSpeech} from '../lib/speech';
 import {useClipRecorder,type ClipFailure} from '../lib/clipRecorder';
 import {useEvent} from '../lib/hooks';
 
-const RECORDING_FAILURES:Partial<Record<ClipFailure,string>>={unsupported:'请大人打开受信任的 HTTPS 并允许麦克风，也可以用下面的文字框记录。',permission:'麦克风还没有打开，请大人在系统设置里允许。也可以先用文字记录。',interrupted:'这次没有录好，原来的回答还在，请再试一次。',empty:'这次没有录好，原来的回答还在，请再试一次。'};
+const RECORDING_FAILURES:Partial<Record<ClipFailure,string>>={unsupported:'这个页面现在不能录音。请大人用正式网址打开并允许麦克风，也可以在下面直接打字记下来。',permission:'麦克风还没有打开，请大人在系统设置里允许。也可以先用文字记录。',interrupted:'这次没有录好，原来的回答还在，请再试一次。',empty:'这次没有录好，原来的回答还在，请再试一次。'};
 
 function AnswerAudio({audio}:{audio?:Blob}){
  const [url,setUrl]=useState('');useEffect(()=>{if(!audio){setUrl('');return;}const u=URL.createObjectURL(audio);setUrl(u);return()=>URL.revokeObjectURL(u);},[audio]);
@@ -60,6 +60,9 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
   finally{lock.current=false;if(live.current)setSaving(false);}
  };
  const hasAnswers=(entry.answers??[]).some(a=>!a.skipped&&(a.audio||a.text?.trim()));
+ // Every answer is already saved as it is recorded; on the web (no transcription to offer) the last question closes the diary by itself.
+ const autoFinish=useEvent(()=>void finish());
+ useEffect(()=>{if(!prompt&&hasAnswers&&import.meta.env.VITE_ONLINE&&!entry.guidedComplete)autoFinish();},[prompt,hasAnswers,entry.guidedComplete,autoFinish]);
  return <><TopBar title="我的小日记" onBack={onLeave} focused
   help={<FeatureGuide id="diary" compact autoOpen={false} enabled={!recording&&!busy&&!!prompt} autoVoice={false} onVoiceStart={silence}/>}
   progress={<><button className="diary-shelf-toggle" disabled={busy||recording} onClick={()=>{silence();onLibrary();}}><Icon name="book" size={22}/>翻看日记</button><span className="diary-question-count" aria-label={prompt?`第 ${step+1} 个问题，共 ${DIARY_PROMPTS.length} 个`:'分享完成'}>{Math.min(step+1,DIARY_PROMPTS.length)} / {DIARY_PROMPTS.length}</span></>}/>
@@ -74,7 +77,7 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
   </article>:<article className="diary-question diary-wrapup"><Icon name="heart" size={42}/><h2>{hasAnswers?'谢谢你，让我走进你的一天':'今天安静待一会儿，也很好'}</h2><p>{hasAnswers?'我们把刚才的声音珍藏起来，想听的时候就来这里。':'不用一定说点什么。等你想分享了，再来找伙伴。'}</p><div className="diary-answer-list">{DIARY_PROMPTS.map((p,i)=>{const a=entry.answers?.find(a=>a.question===p.id);return <div key={p.id}><div><strong>{p.title}</strong><small>{a?.skipped||!a?'这次先不说':a.audio?'声音已保存':'文字已保存'}</small></div><button disabled={busy} onClick={()=>move(i)}>回去看看</button></div>;})}</div>
    {hasAnswers?<button className="farm-primary" disabled={busy} onClick={()=>finish()}>{busy?'正在整理…':'保存我的日记'}</button>:<button className="farm-primary" onClick={onLeave}>回小岛，和伙伴待一会儿</button>}
    {hasAnswers&&!import.meta.env.VITE_ONLINE&&pendingDiaryAnswers(entry.answers??[]).length>0&&<details className="diary-parent"><summary>和大人一起转成文字（可选）</summary><p>把本次录音上传到火山转写，需要联网。</p><button disabled={busy} onClick={()=>finish(true)}>上传录音，转成文字</button></details>}
-   {hasAnswers&&<p className="diary-caption">{import.meta.env.VITE_ONLINE?"网页版暂不提供云端转写。录音留在本机，可以回到问题请大人补写，也可以用键盘听写。":"点‘转成文字’才会上传录音到火山。需要联网；请和大人一起检查文字，再保存故事。"}</p>}
+   {hasAnswers&&!import.meta.env.VITE_ONLINE&&<p className="diary-caption">点‘转成文字’才会上传录音到火山。需要联网；请和大人一起检查文字，再保存故事。</p>}
   </article>}
   <p role="status" className="diary-guide-status">{status}</p>{error&&<p role="alert" className="diary-error">{error}</p>}
   <p className="diary-caption">没有标准答案，也没有分数。想停下来，随时可以返回。回答只保存在这台设备上。</p>

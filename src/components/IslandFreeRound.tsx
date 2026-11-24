@@ -34,7 +34,6 @@ export function IslandFreeRound({ kind, items, speaker, station, taps, onTap, on
  };
  return <section className={`island-ask is-free is-${kind}`} aria-label={kind === 'echo' ? '点一点，伙伴跟着学' : kind === 'lead' ? '你来说，伙伴来做' : '想点哪个都可以'}>
   <header><CreatureImg className="island-ask-speaker" src={creatureArt(speaker)} alt="" />
-   <span className="island-free-note">{kind === 'echo' ? '点一个，它会学你' : kind === 'lead' ? '点一句话，它照着做' : '喜欢哪个点哪个'}</span>
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
   <div className={`island-ask-stage is-free${kind === 'lead' ? ' is-lead' : ''}`}><h2 className="island-ask-title"><small>{kind === 'lead' ? '你来说' : '自由玩'}</small>{kind === 'echo' ? '点一个，它会学你' : kind === 'lead' ? '点一句话，伙伴照着做' : '喜欢哪个点哪个'}</h2><div className="island-ask-options">{items.map(key => { const e = learningEntry(key)!; return <button key={key} aria-label={e.zh} onClick={() => void tap(key)}><LearningArt entry={e} /><small>{kind === 'lead' ? <b lang="en">{e.en}</b> : e.zh}</small></button>; })}</div></div>
   {did && <p className="island-free-did" role="status">{did}</p>}

@@ -17,6 +17,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
   const go = useGame((s) => s.go);
   const cap = useGame((s) => s.save.captures.find((c) => c.id === id));
   const p = getCreature(id);
+  const berries = useGame((s) => s.save.balls.poke), wished = useGame((s) => s.save.catchWish) === p.id;
   const setCatchWish = useGame((s) => s.setCatchWish);
   const desc = kidDescription(p);
   const h = hobby(p);
@@ -50,7 +51,11 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
             <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
-            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>{sfx("click");go({name:"home",companion:p.id});}}><Icon name="heart" size={28}/>回家陪它玩<small lang="en">Play at home</small></button></> : <><button className="wish-button primary" onClick={()=>{sfx("click");setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>我想找这只<small lang="en">Find this friend!</small></span></button><p>有邀请果时，它会坐船来做客。<small lang="en">Bring an invite berry.</small></p></>}
+            {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>{sfx("click");go({name:"home",companion:p.id});}}><Icon name="heart" size={28}/>去小岛陪它玩<small lang="en">Play on the island</small></button></> : <>{berries>0
+              ? <button className="wish-button primary" onClick={()=>{sfx("click");setCatchWish(p.id);go({name:"catch"});}}><Icon name="waves" size={32}/><span>请它来做客<small lang="en">Invite this friend!</small></span></button>
+              // No berry yet: the wish is kept here and the boat brings this friend once a berry comes; tapping again takes it back.
+              : <button className="wish-button primary" aria-pressed={wished} onClick={()=>{sfx("click");setCatchWish(wished?null:p.id);if(!wished)void say(["zh","记下啦！拿到邀请果，它就坐船来。"]);}}><Icon name={wished?"check":"heart"} size={32}/><span>{wished?"已记下，再点取消":"我想找这只"}<small lang="en">{wished?"Saved":"Find this friend!"}</small></span></button>}
+              <p>{berries>0?"它会坐船来做客。":"有邀请果时，它会坐船来做客。"}<small lang="en">{berries>0?"It comes by boat.":"Bring an invite berry."}</small></p></>}
           </div>
           <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
           <div className="type-row">

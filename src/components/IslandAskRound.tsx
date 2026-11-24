@@ -7,7 +7,7 @@ import { creatureArt } from '../data/creatures';
 import { LearningArt } from './LearningItem';
 import { learningVoice } from '../lib/learningVoice';
 import { sayOnIsland as say } from '../lib/islandSpeech';
-import { sfx } from '../lib/speech';
+import { sfx, stopSpeech } from '../lib/speech';
 import { dragTo } from '../lib/dragTo';
 import type { LearningEntry } from '../data/curriculum';
 import { classifyResponse } from '../lib/learningProgress';
@@ -37,6 +37,9 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
  lead?: LearningEntry;
 }) {
  const [shown, setShown] = useState(false), [wrong, setWrong] = useState<string | null>(null), [done, setDone] = useState(false);
+ // In a situation the options are sentences the child cannot read: after the situation each one is read aloud while its card lights up.
+ const [reading, setReading] = useState<string | null>(null);
+ const replay = useRef<ReturnType<typeof setTimeout>>();
  const trace = useRef({ firstAnswer: null as null | 'correct' | 'wrong', replays: 0, heard: false, tries: 0, wrongs: 0 });
  const live = useRef(true), recorded = useRef(false);
  const scene = kind === 'find', give = kind === 'do';
@@ -45,7 +48,15 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
  const spot = (i: number) => SPOTS[(i + Math.abs(seedOf(ask.answer))) % SPOTS.length];
  const hear = async (replay = false) => {
   if (replay && trace.current.firstAnswer === null) trace.current.replays++;
-  const ok = ask.situation ? await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : [])) : await say(...(lead && !replay && !trace.current.heard ? [...learningVoice(lead), 350] : []), ...(ask.also ? [['en', comboLine(ask.also.key, ask.prompt.key)] as ['en', string]] : learningVoice(ask.prompt)));
+  let ok: boolean;
+  if (ask.situation) {
+   ok = await say(['zh', ask.situation], ...(ask.model ? learningVoice(ask.prompt) : []));
+   for (const o of options) {
+    if (!ok || !live.current || !o.entry) break;
+    setReading(o.id); ok = await say(400, ...learningVoice(o.entry));
+   }
+   if (live.current) setReading(null);
+  } else ok = await say(...(lead && !replay && !trace.current.heard ? [...learningVoice(lead), 350] : []), ...(ask.also ? [['en', comboLine(ask.also.key, ask.prompt.key)] as ['en', string]] : learningVoice(ask.prompt)));
   if (ok && live.current) { trace.current.heard = true; useGame.getState().noteStationLearning(station, ask.prompt.key, false); }
  };
  const record = (outcome: 'solved' | 'left') => {
@@ -54,9 +65,11 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   useGame.getState().noteOpportunity({ source: ISLAND_SOURCE(ask.play), key: ask.prompt.key, kind: classifyResponse({ firstAnswer: t.firstAnswer, replays: t.replays, modelShown: shown, heardBeforeAnswer: t.heard, outcome }), tries: t.tries, replays: t.replays });
  };
  const begin = useEvent(() => void hear()), leave = useEvent(() => record('left'));
- useEffect(() => { const traced = trace; live.current = true; const start = setTimeout(begin, 250); return () => { clearTimeout(start); live.current = false; if (traced.current.tries) setTimeout(leave, 0); }; }, [begin, leave]);
+ useEffect(() => { const traced = trace; live.current = true; const start = setTimeout(begin, 250); return () => { clearTimeout(start); clearTimeout(replay.current); live.current = false; if (traced.current.tries) setTimeout(leave, 0); }; }, [begin, leave]);
  const tap = (id: string) => {
   if (done) return;
+  // A tap ends whatever is being read and any replay still waiting, so no card lights up after the child chose.
+  stopSpeech(); clearTimeout(replay.current); setReading(null);
   const t = trace.current; t.tries++;
   if (t.firstAnswer === null) t.firstAnswer = id === ask.answer ? 'correct' : 'wrong';
   for (const key of ask.also ? [ask.prompt.key, ask.also.key] : [ask.prompt.key]) useGame.getState().noteAttempt(key, id === ask.answer, t.wrongs > 0 || shown || !t.heard || !!ask.model, ISLAND_SOURCE(ask.play));
@@ -68,7 +81,7 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   }
   t.wrongs++; sfx('boop'); setWrong(id);
   if (t.wrongs >= 2) setShown(true);
-  setTimeout(() => { if (!live.current) return; setWrong(null); void hear(); }, 600);
+  replay.current = setTimeout(() => { if (!live.current) return; setWrong(null); void hear(); }, 600);
  };
  // Handing over: the thing can be dragged onto whoever it is for (the place it goes to, or the friend), or tapped.
  const root = useRef<HTMLElement>(null);
@@ -77,10 +90,9 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   <header>{speaker !== undefined && <CreatureImg className="island-ask-speaker" src={creatureArt(speaker)} alt="" />}
    <button className="island-ask-hear" onClick={() => void hear(true)} aria-label="再听一次" disabled={done}><Icon name="speaker" size={30} /><span>再听一次</span></button>
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
-  {ask.situation && <p className="island-ask-situation">{ask.situation}</p>}
   <div className={`island-ask-stage is-${kind}${ask.situation ? ' is-situation' : ''}`}>
    <h2 className="island-ask-title"><small>{ask.situation ? '这时候说什么' : KIND_TAG[kind]}</small>{ask.situation ?? HINTS[kind][0]}</h2>
-   <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} {...(give ? dragTo(receiver, () => tap(o.id)) : { onClick: () => tap(o.id) })}>
+   <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${reading === o.id ? ' is-reading' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} {...(give ? dragTo(receiver, () => tap(o.id)) : { onClick: () => tap(o.id) })}>
     {o.entry && o.tint ? <span className="island-ask-tinted" style={{ background: o.tint }}><LearningArt entry={o.entry} /></span> : <LearningArt entry={o.entry} countIcon={countIcon} />}{!scene && !o.tint && <small>{ask.situation ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
    {give && to && <div className="island-ask-target" aria-hidden="true"><Icon name={to.icon} size={56} /><small>{to.label}</small></div>}
   </div>

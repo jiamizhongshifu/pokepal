@@ -10,8 +10,8 @@ export function SaveRecovery(){
  useEffect(()=>{void storageFacts().then(setFacts);},[issue]);
  const exportNow=async()=>{
   try{
-   if(issue==='write'){downloadJson(exportableSave(useGame.getState().save),`pokepal-save-unsaved-${Date.now()}.json`);setNote('已导出当前页面里的进度。空间腾出后可以先重试保存；仍不行时，可在家长中心“导入存档”。');}
-   else{const raw=(await readSaveSnapshot()).save;if(raw===undefined){setNote('本机没有找到原有存档。');return;}downloadJson(exportableSave(raw),`pokepal-save-unreadable-${Date.now()}.json`);setNote('已导出原有存档的原样内容，方便排查；它没能通过检查，不能直接导入。原存档仍留在本机。');}
+   if(issue==='write'){downloadJson(exportableSave(useGame.getState().save),`啵啵岛-未保存进度-${Date.now()}.json`);setNote('已导出当前页面里的进度。空间腾出后可以先重试保存；仍不行时，可在家长中心“导入存档”。');}
+   else{const raw=(await readSaveSnapshot()).save;if(raw===undefined){setNote('本机没有找到原有存档。');return;}downloadJson(exportableSave(raw),`啵啵岛-原有存档-${Date.now()}.json`);setNote('已导出原有存档的原样内容，方便排查；它没能通过检查，不能直接导入。原存档仍留在本机。');}
   }catch{setNote('没能导出，原有存档没有改动。');}
  };
  const title=issue==='busy'?'游戏已在另一个窗口打开':issue==='conflict'?'另一窗口更新了进度':issue==='write'?'进度还没有保存好':'暂时没能读取进度';

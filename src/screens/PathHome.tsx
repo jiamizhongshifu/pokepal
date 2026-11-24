@@ -114,9 +114,9 @@ export function PathHome() {
       const talking = speakingKey === node.key;
       return <div key={node.key} ref={here} className={`path-stop is-current kind-${node.kind}${friend ? ' has-friend' : ''}`} style={style}>
        {friend && (words.length > 0
-        ? <button type="button" className={`stop-friend-btn${talking ? ' is-talking' : ''}`} aria-label="点一点伙伴，听听这一站玩什么" onClick={() => void hear(node)}><CreatureImg className="stop-friend" src={creatureExpression(friend.id, talking ? 'cheer' : 'hello')} alt="" /></button>
+        ? <button type="button" className={`stop-friend-btn${talking ? ' is-talking' : ''}`} aria-label="点一点伙伴，听听这一站玩什么" onClick={() => talking ? stopSpeaking() : void hear(node)}><CreatureImg className="stop-friend" src={creatureExpression(friend.id, talking ? 'cheer' : 'hello')} alt="" /></button>
         : <CreatureImg className="stop-friend" src={creatureExpression(friend.id, 'hello')} alt="" />)}
-       {words.length > 0 && <button type="button" className={`stop-bubble${talking ? ' is-speaking' : ''}`} aria-label={node.kind === 'review' ? '听一听要再见面的词' : '听一听这一站要做什么'} aria-pressed={talking} onClick={() => void hear(node)}>
+       {words.length > 0 && <button type="button" className={`stop-bubble${talking ? ' is-speaking' : ''}`} aria-label={node.kind === 'review' ? '听一听要再见面的词' : '听一听这一站要做什么'} aria-pressed={talking} onClick={() => talking ? stopSpeaking() : void hear(node)}>
         <span className="stop-bubble-hear" aria-hidden="true"><Icon name="speaker" size={24} /></span>
         <span className="stop-bubble-text">{talking ? '正在说…' : '听一听'}</span>
         <span className="stop-bubble-preview" aria-hidden="true">{words.map(e => <span key={e.key} className="stop-bubble-word"><LearningArt entry={e} /></span>)}</span>
@@ -146,13 +146,14 @@ export function PathHome() {
     <div className={`path-plaque tone-${chapter.index % 6}`}>
      <small>第 {chapter.index + 1} 章<i aria-hidden="true">·</i>{chapterProgress(chapter).done} / {chapterProgress(chapter).total}</small>
      <strong>{chapter.title}</strong>
-     <ol className="path-pages" aria-label="六章">{path.map(c => <li key={c.index}><button type="button" className={`${c.index === chapter.index ? 'is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
+     <ol className="path-pages" aria-label={`共 ${path.length} 章`}>{path.map(c => <li key={c.index}><button type="button" className={`${c.index === chapter.index ? 'is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
     </div>
     <button type="button" className="path-turn is-next" aria-label="下一章" disabled={chapter.index === path.length - 1} onClick={() => turn(chapter.index + 1)}><Icon name="back" size={30} /></button>
    </div>
    <div className="path-tools"><FeatureGuide id="path" compact /><ParentButton onOpen={() => go({ name: 'parent' })} /></div>
   </header>
   <nav className="path-extra" aria-label="还想多玩一会儿">
+   {now && page !== now.chapter && <button type="button" className="path-now" onClick={() => turn(now.chapter)}><Icon name="play" size={30} /><span>回到现在这一站</span></button>}
    {finished && <button type="button" onClick={() => go({ name: 'notebook' })}><Icon name="refresh" size={30} /><span>老朋友</span></button>}
    <button type="button" onClick={() => go({ name: 'practice' })}><Icon name="target" size={30} /><span>小游戏</span></button>
    <button type="button" onClick={() => go({ name: 'stories' })}><Icon name="book" size={30} /><span>故事书架</span></button>

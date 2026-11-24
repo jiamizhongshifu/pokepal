@@ -27,6 +27,8 @@ button:not(:disabled):active { transform: scale(.97); }
 .balls-chip { padding: 7px 14px; min-height: 52px; font-size:var(--text-2xl); color: var(--text); box-shadow: none; }
 .parent-btn { flex: none; width: 52px; height: 52px; opacity: 1; }
 .parent-btn span { background: var(--surface); }
+.parent-btn { position: relative; }
+.parent-btn-hint { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--brand-ink); color: var(--brand-paper); font-size: var(--text-sm); font-weight: 800; white-space: nowrap; pointer-events: none; }
 /* 欢迎：先看伙伴，再选一个头像。 */
 .start { min-height: 168px; min-width: 220px; border-radius:var(--radius-xl); animation: none; }
 .avatar-row { justify-content: center; flex-wrap: wrap; gap: 20px; }

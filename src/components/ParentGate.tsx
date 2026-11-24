@@ -45,7 +45,7 @@ export function ParentGate({ onPass, onCancel }: { onPass: () => void; onCancel:
         {wrong && <div className="gate-wrong">不对哦，再试一次</div>}
         <div className="keypad">
           {["1", "2", "3", "4", "5", "6", "7", "8", "9", "del", "0", "OK"].map((k) => (
-            <button key={k} onClick={() => press(k)} className={k === "OK" ? "ok" : ""} aria-label={k === "del" ? "删除" : k}>{k === "del" ? <Icon name="backspace" size={34} /> : k}</button>
+            <button key={k} onClick={() => press(k)} className={k === "OK" ? "ok" : ""} aria-label={k === "del" ? "删除" : k === "OK" ? "确定" : k}>{k === "del" ? <Icon name="backspace" size={34} /> : k === "OK" ? "确定" : k}</button>
           ))}
         </div>
       </div>

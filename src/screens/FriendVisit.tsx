@@ -8,6 +8,7 @@ import { CreatureImg } from '../components/CreatureImg';
 import { CREATURES, creatureArt } from '../data/creatures';
 import { visitors, homeOpen } from '../island/visits';
 import { unlockingUnit } from '../lib/islandPlan';
+import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
 import { storyBackground, storyProp } from '../data/sceneArt';
 import { pickRandom } from '../data/words';
 import { say, playCry, sfx, stopSpeech } from '../lib/speech';
@@ -23,18 +24,20 @@ type Phase = 'choose' | 'arriving' | 'greet' | 'friends';
  * and the child says hello back. Each invite berry the path gives is one friend coming to visit.
  */
 export function FriendVisit() {
- const save = useGame(s => s.save), go = useGame(s => s.go), inviteFriend = useGame(s => s.inviteFriend), setCatchWish = useGame(s => s.setCatchWish);
+ const save = useGame(s => s.save), go = useGame(s => s.go), back = useGame(s => s.back), inviteFriend = useGame(s => s.inviteFriend);
  const wish = CREATURES.find(p => p.id === save.catchWish && !save.captures.some(c => c.id === p.id));
  const [phase, setPhase] = useState<Phase>('choose');
  const [guest, setGuest] = useState<Creature | null>(null);
  const [round, setRound] = useState({ n: 0, previous: [] as number[] });
+ // Looking at other boats keeps the wish: it is only shown aside for this visit.
+ const [others, setOthers] = useState(false);
  const live = useRef(true), busy = useRef(false);
  useEffect(() => { live.current = true; return () => { live.current = false; stopSpeech(); }; }, []);
  const ready = save.balls.poke > 0;
  // Babies not yet met first, favourites first; "other boats" brings different friends when there are enough.
  // Boats are picked from the save as it stands when a round begins; later saves don't swap them under the child.
  const boats = useMemo(() => {
-  if (wish) return [wish];
+  if (wish && !others) return [wish];
   const save = useGame.getState().save;
   const allowed = visitors(save);
   if (round.n > 0) { const fresh = pickRandom(allowed.filter(p => !round.previous.includes(p.id)), 3); return [...fresh, ...pickRandom(allowed.filter(p => !fresh.includes(p)), 3 - fresh.length)]; }
@@ -42,7 +45,7 @@ export function FriendVisit() {
   const atHome = allowed.filter(p => homeOpen(save, p)), first = atHome.length >= 3 ? atHome : allowed;
   const fav = first.filter(p => save.settings.favorites.includes(p.id));
   return [...fav, ...pickRandom(first.filter(p => !fav.includes(p)), 3)].slice(0, 3);
- }, [wish, round]);
+ }, [wish, round, others]);
  const invite = useEvent(() => { if (boats.length) void say(['en', 'Which one do you like?']); });
  useEffect(() => { if (phase === 'choose' && ready) invite(); }, [phase, ready, invite]);
 
@@ -68,20 +71,20 @@ export function FriendVisit() {
   if (live.current) void playCry(guest.id);
  };
  const otherBoats = () => {
-  if (wish) setCatchWish(null);
+  if (wish) setOthers(true);
   setRound(r => ({ n: r.n + 1, previous: boats.map(p => p.id) }));
   sfx('pop'); void say(['en', "Let's meet new friends!"], ['zh', '发现新伙伴啦！你想和谁打招呼？']);
  };
 
  return <div className={`screen friend-visit phase-${phase}`} style={{ backgroundImage: `url(${storyBackground('beach')})` }}>
-  <TopBar title="朋友来做客" onBack={() => go({ name: 'home' })} focused help={<FeatureGuide compact id="catch" enabled={phase === 'choose'} autoVoice={false} />} />
+  <TopBar title="朋友来做客" onBack={back} focused help={<FeatureGuide compact id="catch" enabled={phase === 'choose'} autoVoice={false} />} />
   <main className="friend-visit-sea">
    {phase === 'choose' && (!ready ? <section className="friend-visit-note"><Icon name="sign" size={48} /><h1>新朋友会坐船来</h1><p>走到学习路线上的“新朋友”站，就会有一位小精灵坐船来做客。</p><button className="btn-big" onClick={() => go({ name: 'home' })}><Icon name="sign" size={36} />去学习路线</button></section>
     : !boats.length ? <section className="friend-visit-note"><Icon name="heart" size={48} /><h1>大家都是好朋友啦</h1><button className="btn-big" onClick={() => go({ name: 'dex' })}><Icon name="dex" size={36} />看看好朋友</button></section>
     : <><h1 className="friend-visit-title">谁坐船来呢？点一艘小船</h1>
      <div className="friend-visit-boats">{boats.map((p, i) => <button key={p.id} className="friend-boat" style={{ animationDelay: `${i * 0.4}s` }} aria-label={`请${p.nameZh}来做客`} onClick={() => welcome(p)}>
       <CreatureImg className="friend-boat-guest" src={creatureArt(p.id)} alt="" /><img className="friend-boat-hull" src={storyProp('visit-boat')} alt="" draggable={false} /><span>{p.nameZh}</span></button>)}</div>
-     {!wish && visitors(save).length > 3 && <button className="friend-visit-more" onClick={otherBoats}><Icon name="refresh" size={28} />看看别的小船</button>}</>)}
+     {(wish ? visitors(save).length > 1 : visitors(save).length > 3) && <button className="friend-visit-more" onClick={otherBoats}><Icon name="refresh" size={28} />看看别的小船</button>}</>)}
    {guest && phase !== 'choose' && <div className={`friend-arrival is-${phase}`}>
     <div className="friend-pier-boat"><CreatureImg className="friend-boat-guest" src={creatureArt(guest.id)} alt="" /><img className="friend-boat-hull" src={storyProp('visit-boat')} alt="" draggable={false} /></div>
     {phase === 'arriving' && <p className="friend-visit-status" role="status">小船靠岸啦……</p>}
@@ -89,8 +92,12 @@ export function FriendVisit() {
      <button className="btn-big friend-hello" onClick={() => void greet()}><Icon name="hand" size={40} /><span lang="en">Hello!</span></button></>}
     {phase === 'friends' && <section className="friend-visit-done" role="status"><Confetti />
      <h1>{guest.nameZh}成了你的新朋友！</h1><p>{homeOpen(save, guest) ? `它的家在${homeOf(guest.species).name}，以后可以去那里找它玩。` : `它的家在${homeOf(guest.species).name}，学到「${unlockingUnit(homeOf(guest.species).district)?.title ?? ''}」那里就开放啦。现在先在帐篷边玩。`}</p>
-     <div className="friend-visit-actions"><button className="btn-big" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button>
-      <button className="btn-big alt" onClick={() => go({ name: 'dexDetail', id: guest.id })}><Icon name="dex" size={36} />认识它</button></div></section>}
+     {/* When a lesson waits on the path (always after the very first friend), going to learn is the next step; the island stays one tap away. */}
+     <div className="friend-visit-actions">{pathNodes(withWelcomeFriend(save, withReview(save, learningPath(save)))).find(n => n.state === 'current')?.kind === 'lesson'
+      ? <><button className="btn-big" onClick={() => go({ name: 'home' })}><Icon name="play" size={36} />和它一起学一学</button>
+       <button className="btn-big alt" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button></>
+      : <><button className="btn-big" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button>
+       <button className="btn-big alt" onClick={() => go({ name: 'dexDetail', id: guest.id })}><Icon name="dex" size={36} />认识它</button></>}</div></section>}
    </div>}
   </main>
  </div>;
