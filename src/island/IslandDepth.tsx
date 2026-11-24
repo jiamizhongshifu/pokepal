@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { useEvent } from '../lib/hooks';
 import { LayeredArt } from '../components/LayeredArt';
-import { layerArt } from '../data/sceneArt';
+import { layerArt, storyProp } from '../data/sceneArt';
 import { LAYER_AREA } from './islandLayers';
 import { MAX_ZOOM, REST_VIEW, WORLD_H, WORLD_W, clampView, project, type View } from './depth';
 import type { District } from './world';
-import type { IslandScene } from './islandScene3d';
+import type { IslandProp, IslandScene } from './islandScene3d';
 
 /** Things placed on the picture in % that stand on the island and follow the camera, with where their foot is. */
 const ON_ISLAND = '.island-world-sticker, .island-world-trace, .island-place, .island-teaser, .island-walker';
@@ -15,11 +15,11 @@ const TAP_SLOP = 8;
 
 /**
  * The island overview with depth: three.js draws the vector pieces, pinch or wheel zooms in (up to 2x), dragging
- * pans while zoomed in, and scrolling a wide island sideways lets near things slide past far ones. Friends, places
- * and signs stay page elements and are moved to where the camera shows their spot. Until three.js is ready, or
+ * pans while zoomed in, and scrolling a wide island sideways lets near things slide past far ones. The props the
+ * child has earned stand among the pieces in 3D. Friends, places and signs stay page elements and are moved to where the camera shows their spot. Until three.js is ready, or
  * where a device cannot draw it, the same pieces show as flat pictures.
  */
-export function IslandDepth({ world, scroller, nudged, active }: { world: RefObject<HTMLDivElement | null>; scroller: RefObject<HTMLDivElement | null>; nudged: District | null; active: boolean }) {
+export function IslandDepth({ world, scroller, props, nudged, active }: { world: RefObject<HTMLDivElement | null>; scroller: RefObject<HTMLDivElement | null>; props: IslandProp[]; nudged: District | null; active: boolean }) {
  const canvas = useRef<HTMLCanvasElement>(null);
  const scene = useRef<IslandScene | null>(null);
  const [ready, setReady] = useState(false);
@@ -84,6 +84,7 @@ export function IslandDepth({ world, scroller, nudged, active }: { world: RefObj
   return () => { gone = true; made?.dispose(); scene.current = null; cancelAnimationFrame(easing.current); };
  }, [world]);
  useEffect(() => { scene.current?.run(active && ready); }, [active, ready]);
+ useEffect(() => { if (ready) scene.current?.props(props); }, [ready, props]);
  useEffect(() => { if (nudged && !calm.current) scene.current?.hop(Object.keys(LAYER_AREA).filter(n => LAYER_AREA[n] === nudged)); }, [nudged]);
 
  // Size, scroll and gestures.
@@ -151,5 +152,6 @@ export function IslandDepth({ world, scroller, nudged, active }: { world: RefObj
  return <>
   <canvas ref={canvas} className={`island-depth${ready ? ' is-ready' : ''}`} aria-hidden="true" />
   {!ready && <LayeredArt className="island-world-art" ground={layerArt('island-map', 'base')} scene="island-map" area={LAYER_AREA} nudged={nudged} still={!active} />}
+  {!ready && props.map(k => <img key={k.id} className="island-world-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
  </>;
 }

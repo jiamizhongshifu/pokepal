@@ -22,3 +22,16 @@ test('every scene ground and background is a vector file', () => {
  for (const bg of STORY_BACKGROUNDS) assert.ok(existsSync(`public/scenes/flat-v1/story-bg/${bg}.svg`), `${bg}: ${RUN} --whole ${bg}`);
  assert.ok(existsSync('public/scenes/flat-v1/world/diary-desk.svg'), `${RUN} --whole diary-desk`);
 });
+
+test('icons and props are vector files, and no screen asks for a painted bitmap of the scene art', async () => {
+ const { ICON_ASSETS } = await import('../../src/icons/generated');
+ // The app's home-screen icon (/icons/icon-512.png) stays a PNG: install prompts need one.
+ for (const [name, url] of Object.entries(ICON_ASSETS).filter(([, u]) => u.startsWith('/scenes/'))) {
+  assert.ok(url.endsWith('.svg'), `${name} points at ${url}: run python3 scripts/art/vectorize.py --assets icon prop and use the .svg`);
+  assert.ok(existsSync(`public${url}`), `${name}: public${url} is missing (${RUN} --assets icon prop)`);
+ }
+ const { execFileSync } = await import('node:child_process');
+ let hits = '';
+ try { hits = execFileSync('git', ['grep', '-n', 'flat-v1[^\'"`]*\\.webp', '--', 'src', 'index.html'], { encoding: 'utf8' }).trim(); } catch { /* git grep exits 1 when nothing matches */ }
+ assert.equal(hits, '', 'Scene art, props and icons are .svg; point at the vector file instead.');
+});

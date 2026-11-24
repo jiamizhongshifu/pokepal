@@ -84,6 +84,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   return residents.map(c => { const species = getCreature(c.id).species, place = whereNow(species, hour, weather.kind, cycle, c.id); return { id: c.id, species, place: open.has(place.district) ? place.id : 'tent' }; });
  }, [residents, now, weather.kind, open]);
  const invites = useMemo(() => islandInvites(save, standing, save.daily.date, now), [save, standing, now]);
+ const stickers = useMemo(() => shownStickers(save), [save]);
 
  const enter = (d: District) => {
   stopSpeech();
@@ -210,8 +211,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   <div className="island-view" ref={view}>
    <img className="scene-backdrop" src={layerArt('island-map', 'base')} alt="" aria-hidden="true" draggable={false} />
    <div className="island-world" ref={world} role="group" aria-label="我的小岛">
-    <IslandDepth world={world} scroller={view} nudged={nudged} active={active} />
-    {shownStickers(save).map(k => <img key={k.id} className="island-world-sticker" src={storyProp(k.id)} alt="" draggable={false} style={{ left: `${k.spot[0]}%`, top: `${k.spot[1]}%`, width: `${k.size}%` }} />)}
+    <IslandDepth world={world} scroller={view} props={stickers} nudged={nudged} active={active} />
     {shownTraces(save, now).map(t => <span key={t.id} className="island-world-trace" role="img" aria-label={t.label} style={{ left: `${t.spot[0]}%`, top: `${t.spot[1]}%` }}><Icon name={t.icon} size={30} /></span>)}
     {PLACES.map(p => { const locked = !open.has(p.district); return <button key={p.id} type="button" className={`island-place${locked ? ' is-locked' : ''}${nudged === p.district ? ' is-nudged' : ''}`} style={{ left: `${p.spot[0]}%`, top: `${p.spot[1]}%` }} aria-label={locked ? `${p.name}（还没开放）` : `走进${p.name}`} onClick={() => enter(p.district)} />; })}
     {(() => {

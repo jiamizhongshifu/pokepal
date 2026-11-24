@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { layerArt } from '../data/sceneArt';
+import { layerArt, storyProp } from '../data/sceneArt';
 import { scenePieces } from '../data/sceneLayers';
 import { ASPECT, REST, TAN, WORLD_H, WORLD_W, depthAt, restScale, type View } from './depth';
 
@@ -47,7 +47,12 @@ const ON: Record<string, string> = { 'windmill-sails': 'windmill', flame: 'campf
 /** Pieces that turn about their middle rather than stand on their foot. */
 const CENTRED = new Set(['windmill-sails']);
 
+/** A prop standing on the island: centred on `spot` (% of the picture), `size` % of the picture's width. */
+export interface IslandProp { id: string; spot: readonly [number, number]; size: number }
+
 export interface IslandScene {
+ /** The props standing on the island now (stickers the child has earned). */
+ props(list: IslandProp[]): void;
  /** Show this view (the caller eases it). */
  view(v: View): void;
  /** The pieces of these names hop once. */
@@ -83,8 +88,32 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
   pivot.position.set(x * s, y * s, z); pivot.scale.setScalar(s); pivot.add(mesh); scene.add(pivot);
   pivots.set(name, { pivot, rest: pivot.position.clone(), scale: s });
  });
-
  let view: View = { zoom: 1, gx: 0, gy: 0, px: 0, py: 0 }, running = false, frame = 0, dirty = true;
+ // Props go between the pieces by where their foot is, so a prop in front of a piece is drawn over it.
+ const bottoms = pieces.map(([, b]) => b.y + b.h);
+ const propGroup = new THREE.Group(); scene.add(propGroup);
+ let propKey = '', propTicket = 0;
+ async function showProps(list: IslandProp[]) {
+  const key = JSON.stringify(list);
+  if (key === propKey) return;
+  propKey = key;
+  const ticket = ++propTicket, geos = await Promise.all(list.map(p => svgGeometry(storyProp(p.id)).catch(() => null)));
+  if (ticket !== propTicket) return;
+  propGroup.clear();
+  list.forEach((p, i) => {
+   const geo = geos[i];
+   if (!geo) return;
+   const size = p.size / 100 * WORLD_W, foot = p.spot[1] + p.size * WORLD_W / WORLD_H / 2;
+   const z = depthAt(foot), s = restScale(z), mesh = new THREE.Mesh(geo, material);
+   mesh.scale.set(size, size, 1); mesh.position.set(-size / 2, -size / 2, 0);
+   mesh.renderOrder = bottoms.filter(b => b <= foot).length + .5;
+   const pivot = new THREE.Group(), x = (p.spot[0] / 100 - .5) * WORLD_W, y = (.5 - p.spot[1] / 100) * WORLD_H;
+   pivot.position.set(x * s, y * s, z); pivot.scale.setScalar(s); pivot.add(mesh); propGroup.add(pivot);
+  });
+  dirty = true;
+  if (!running) { place(); renderer.render(scene, camera); dirty = false; }
+ }
+
  const hops = new Map<string, number>();
  function place() {
   const cz = REST / view.zoom, near = camera.near;
@@ -114,6 +143,7 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
   if (moving || hops.size || dirty) { place(); renderer.render(scene, camera); dirty = false; }
  }
  return {
+  props(list) { void showProps(list); },
   view(v) { view = v; dirty = true; if (!running) { place(); renderer.render(scene, camera); dirty = false; } },
   hop(names) { const at = performance.now(); names.forEach(n => pivots.has(n) && hops.set(n, at)); if (running && !frame) tick(); },
   run(on) { if (on === running) return; running = on; if (on) { dirty = true; tick(); } else if (frame) { cancelAnimationFrame(frame); frame = 0; } },

@@ -78,7 +78,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .home .topbar { pointer-events: none; }
 .home .topbar > * { pointer-events: auto; }
 .scene-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; font-size:var(--text-3xl); font-weight: 800; background: var(--page-bg); z-index: 5; }
-.sl-ball { width: 84px; height: 84px; background: url("/scenes/flat-v1/prop/invite-berry.webp") center / contain no-repeat; animation: wiggle 1s var(--ease-breathe) infinite; }
+.sl-ball { width: 84px; height: 84px; background: url("/scenes/flat-v1/prop/invite-berry.svg") center / contain no-repeat; animation: wiggle 1s var(--ease-breathe) infinite; }
 .empty-home { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
 .sign { font-size:var(--text-4xl); font-weight: 800; padding: 12px 30px; border-radius:var(--radius-pill); }
 .hearts { font-size:var(--text-3xl); }

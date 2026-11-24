@@ -5,6 +5,8 @@
     分层：scenes.json 里 layerOf 指向这张画的 layer / layer-base 条目，各自转成矢量，并量出每块在原画里的位置。
   python3 scripts/art/vectorize.py --whole beach orchard ...
     整张：没有要单独动的东西的画，整张转成 public/scenes/flat-v1/<group>/<id>.svg。
+  python3 scripts/art/vectorize.py --assets prop icon
+    透明底的道具和图标：public/scenes/flat-v1/<group>/ 下打包好的每张图，按原画布（同样的留白）转成同名 .svg。
 依赖：pip install vtracer opencv-python pillow numpy
 输入：output/rebrand/scenes/<id>/<id>.png（generate.mjs scene 生成）
 输出：public/scenes/flat-v1/layers/<scene>/<id>.svg（本地媒体，不入库）
@@ -112,8 +114,20 @@ def whole(id):
   raw, gz = trace(work, out, size, layer_difference=7, color_precision=7)
   print(f"{s['group']}/{id:16s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB")
 
+def asset(png: Path):
+  """A packaged transparent prop or icon, traced on its own canvas so it keeps the same margins and size."""
+  work = SRC / '_assets' / f'{png.parent.name}-{png.stem}.png'
+  work.parent.mkdir(exist_ok=True)
+  _, size = prepare(png, work, cut=False)
+  return trace(work, png.with_suffix('.svg'), size)
+
 args = sys.argv[1:] or ['island-map']
 if args[0] == '--whole':
   for id in args[1:]: whole(id)
+elif args[0] == '--assets':
+  for group in args[1:]:
+    files = sorted((ROOT / 'public/scenes/flat-v1' / group).glob('*.webp'))
+    sizes = [asset(f) for f in files]
+    print(f"{group}: {len(files)} 个，合计 {sum(r for r, _ in sizes) // 1024}KB，压缩后 {sum(g for _, g in sizes) // 1024}KB")
 else:
   for scene in args: layered(scene)
