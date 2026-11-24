@@ -11,7 +11,9 @@ import { lessonWords } from '../data/learning';
 import { PHRASES } from '../data/words';
 import type {Reward} from '../lib/participation';
 import {RoundProgress} from '../components/RoundProgress';
-import {noteFirstAnswer} from '../lib/roundStreak';
+import {noteFirstAnswer,resetStreak,sittingTally} from '../lib/roundStreak';
+import {lessonSummary} from '../lib/lessonSummary';
+import {LessonSummary} from '../components/LessonSummary';
 import { useEffect,useRef,useState,useSyncExternalStore } from 'react';
 import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
@@ -42,6 +44,9 @@ export function LearningLesson({id}:{id:string}){
  const [resolvedRound,setResolvedRound]=useState(-1);
  const [finish,setFinish]=useState(false),[reward,setReward]=useState<Reward>(),[retry,setRetry]=useState(false);
  const advancing=useRef(false);
+ const startedAt=useRef(Date.now()),[doneAt,setDoneAt]=useState(0);
+ // The summary counts this sitting only, also when the stop is resumed part-way.
+ useEffect(()=>{resetStreak();},[]);
  if(!u||!unitUnlocked(s,id))return <div className="screen"><TopBar title="小岛英语冒险" onBack={()=>go({name:'home'})}/><p className="page-prompt">先去前一站和伙伴玩一玩吧。</p></div>;
  const profile=learningProfile(s.settings),total=unitRoundCount(u),wordKeys=lessonWords(u,profile.vocabulary);
  const phraseRound=round>=u.words.length;
@@ -57,7 +62,7 @@ export function LearningLesson({id}:{id:string}){
   advancing.current=true;setRetry(false);
   const result=await advance(id,round+1,skipped);advancing.current=false;
   const screen=useGame.getState().screen;if(screen.name!=='lesson'||screen.id!==id)return;
-  if(round+1>=total){if(!result){if(useGame.getState().save.learning?.units[id]?.pendingAudio?.length&&!useGame.getState().saveIssue){setFinish(true);return;}setRetry(true);return;}setReward(result);setFinish(true);if(result.fresh)void say(['en','You did it!']);}
+  if(round+1>=total){if(!result){if(useGame.getState().save.learning?.units[id]?.pendingAudio?.length&&!useGame.getState().saveIssue){setFinish(true);return;}setRetry(true);return;}setReward(result);setDoneAt(Date.now());setFinish(true);if(result.fresh)void say(['en','You did it!']);}
   else{setResolvedRound(-1);setRound(n=>n+1);}
  };
  // Every lesson is played in its scene; the snack lesson also lays what was found on a picnic cloth beside the friend.
@@ -66,7 +71,7 @@ export function LearningLesson({id}:{id:string}){
    {!picnicLesson&&<div className="lesson-breadcrumb"><span>{finish?(reward?'小冒险完成啦':'下次接着听'):phraseRound?(listenFirst?'听一句有用的话':round>u.words.length?'换个情境，用一用':'选一句有用的话'):listenFirst?'听听新的小发现':'帮伙伴找到它'}</span></div>}
    {picnicLesson&&finish?<LessonPicnic words={wordKeys} packed={packed} latest={resolvedRound>=0?wordKeys[resolvedRound]:undefined} buddy={buddy.id} finished={!!reward}/>:<div className="lesson-world buddy-strip"><CreatureImg src={finish&&reward?creatureExpression(buddy.id,'cheer'):creatureArt(buddy.id)} alt={buddy.nameZh}/><span>{buddy.nameZh}{s.captures.length?'陪你一起玩':'是这次的小向导'}</span></div>}
    {picnicLesson&&!finish&&<ol className="lesson-mat" aria-label={`已放好 ${packed.length} 样点心，一共 ${wordKeys.length} 样`}>{wordKeys.map(word=>{const entry=learningEntry(word)!,ready=packed.includes(word);return <li key={word} className={ready?'is-packed':undefined}>{ready&&<span className={resolvedRound>=0&&wordKeys[resolvedRound]===word?'is-new':undefined}><LearningArt entry={entry}/></span>}</li>;})}</ol>}
-   {finish&&!reward?<section className="lesson-finished"><Icon name="speaker" size={48}/><h1>先把小发现留下来</h1><p>还有 {s.learning?.units[id]?.pendingAudio?.length??0} 段声音待补听。这次先不算完成。</p><p>不着急，声音准备好了再来。</p><div className="lesson-actions"><button className="journey-primary" onClick={()=>{setRound(s.learning?.units[id]?.pendingAudio?.[0]??0);setFinish(false);}}><Icon name="speaker" size={28}/>补听这些声音</button><button onClick={()=>go({name:'home'})}>回小岛休息</button></div></section>:finish?<section className="lesson-finished"><h1>我们一起做到了</h1>{reward&&<EnergyToast reward={reward}/>}<p>今天带回家这一句，点一下可以再听。</p><button className="lesson-phrase" onClick={()=>hearEntry(learningEntry(u.phrase)!)}><Icon name="speaker" size={28}/>{u.phrase}<small>{learningEntry(u.phrase)!.zh}</small></button><aside className="lesson-home-idea" aria-label="给大人"><strong>给大人：在家这样玩一次</strong><p>{u.homePlay}</p><small>不用录音、不用打卡。试过后，可以在家长中心记一笔；那里也能看到这一周孩子是怎样作答的（长按右上角齿轮进入）。</small></aside>
+   {finish&&!reward?<section className="lesson-finished"><Icon name="speaker" size={48}/><h1>先把小发现留下来</h1><p>还有 {s.learning?.units[id]?.pendingAudio?.length??0} 段声音待补听。这次先不算完成。</p><p>不着急，声音准备好了再来。</p><div className="lesson-actions"><button className="journey-primary" onClick={()=>{setRound(s.learning?.units[id]?.pendingAudio?.[0]??0);setFinish(false);}}><Icon name="speaker" size={28}/>补听这些声音</button><button onClick={()=>go({name:'home'})}>回小岛休息</button></div></section>:finish?<section className="lesson-finished"><h1>我们一起做到了</h1>{reward&&<EnergyToast reward={reward}/>}<p>今天带回家这一句，点一下可以再听。</p><button className="lesson-phrase" onClick={()=>hearEntry(learningEntry(u.phrase)!)}><Icon name="speaker" size={28}/>{u.phrase}<small>{learningEntry(u.phrase)!.zh}</small></button><aside className="lesson-home-idea" aria-label="给大人">{reward&&<><strong>给大人：这一次</strong><LessonSummary items={lessonSummary({words:wordKeys.length,fresh:reward.fresh,...sittingTally(),startedAt:startedAt.current,endedAt:doneAt})}/></>}<strong>给大人：在家这样玩一次</strong><p>{u.homePlay}</p><small>不用录音、不用打卡。试过后，可以在家长中心记一笔；那里也能看到这一周孩子是怎样作答的（长按右上角齿轮进入）。</small></aside>
     <div className="completion-next"><button className="journey-primary" onClick={()=>go({name:'home'})}><Icon name="sign" size={32}/>回到学习路线<span aria-hidden="true">›</span></button><div className="lesson-actions"><button onClick={()=>go({name:'home',station:u.station})}><Icon name={picnicLesson?'bowl':'island'} size={26}/>{picnicLesson?'去岛上分享':'回小岛玩'}</button><button onClick={()=>go({name:'story',id:u.story})}><Icon name="book" size={26}/>听配套故事</button><button onClick={()=>go({name:'task',kind:'repeat',boardIndex:null,session:Date.now()})}><Icon name="mic" size={26}/>和伙伴说一说</button></div></div></section>
     :<LearningRound key={round} target={target} choices={phraseRound?[situation.phrase,situation.alternative]:wordKeys} listenFirst={listenFirst} count={profile.choices} situation={phraseRound?situation.situation:undefined} onNext={()=>next()} onSkip={()=>next(true)} source={`unit:${id}`} staged={staged} onReady={picnicLesson?()=>setResolvedRound(round):undefined} />}
   {retry&&<button className="journey-primary" onClick={()=>next()} disabled={!!saveIssue}>保存恢复后，领取这次的小收获</button>}

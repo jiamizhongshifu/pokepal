@@ -1,0 +1,9 @@
+/* Three framed counts for the grown-up after a stop: a coloured band with the label, a white well with the number in that colour's ink. */
+.lesson-summary{display:flex;justify-content:center;gap:10px;margin:4px 0 14px;padding:0;list-style:none}
+.lesson-summary li{display:grid;flex:1;max-width:150px;min-width:0;padding:0 3px 3px;border-radius:var(--radius-md);text-align:center}
+.lesson-summary small{padding:5px 4px 4px;font-size:var(--text-sm);font-weight:800;letter-spacing:.04em}
+.lesson-summary b{display:flex;align-items:center;justify-content:center;gap:6px;min-height:56px;border-radius:13px;background:var(--brand-paper);font-size:var(--text-xl);font-weight:800;white-space:nowrap}
+.lesson-summary .is-sun{background:var(--brand-sun)}.lesson-summary .is-sun small{color:var(--brand-ink)}.lesson-summary .is-sun b{color:var(--brand-ink)}
+.lesson-summary .is-green{background:var(--brand-primary)}.lesson-summary .is-green small{color:var(--brand-on-primary)}.lesson-summary .is-green b{color:var(--brand-primary-ink)}
+.lesson-summary .is-sky{background:var(--brand-sky-ink)}.lesson-summary .is-sky small{color:#fff}.lesson-summary .is-sky b{color:var(--brand-sky-ink)}
+@media(max-width:420px){.lesson-summary{gap:6px}.lesson-summary b{font-size:var(--text-lg)}.lesson-summary b .icon{width:22px;height:22px}}
