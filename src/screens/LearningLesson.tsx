@@ -14,6 +14,7 @@ import {RoundProgress} from '../components/RoundProgress';
 import {noteFirstAnswer,resetStreak,sittingTally} from '../lib/roundStreak';
 import {lessonSummary} from '../lib/lessonSummary';
 import {LessonSummary} from '../components/LessonSummary';
+import {FeedbackStrip,type FeedbackTone} from '../components/FeedbackStrip';
 import { useEffect,useRef,useState,useSyncExternalStore } from 'react';
 import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
@@ -112,7 +113,9 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const assisted=useRef(initialListening||target.kind==='phrase'||!!situation||source.startsWith('unit:')||options.length<2),busy=useRef(false),active=useRef(true);
  const continued=useRef(false),audioRun=useRef(0),introTimer=useRef<ReturnType<typeof setTimeout>>();
  const heardTarget=useRef(false);
- const [feedback,setFeedback]=useState(''),[playing,setPlaying]=useState(true),[guided,setGuided]=useState(initialListening);
+ const [feedback,setFeedback]=useState(''),[tone,setTone]=useState<FeedbackTone>('idle'),[playing,setPlaying]=useState(true),[guided,setGuided]=useState(initialListening);
+ // Only the two answer outcomes colour the strip; every other message is a plain prompt.
+ const tell=(text:string,next:FeedbackTone='idle')=>{setFeedback(text);setTone(next);};
  const [explaining,setExplaining]=useState(false);
  const [audioFailed,setAudioFailed]=useState(false);
  const [heard,setHeard]=useState(false);
@@ -123,7 +126,7 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
   auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);
   let ok=await speak();
   if(!ok&&active.current&&ticket===audioRun.current&&!document.hidden&&!isForegroundAudioActive()){
-   setFeedback('声音还在路上，再帮你试一次…');
+   tell('声音还在路上，再帮你试一次…');
    await new Promise(resolve=>setTimeout(resolve,600));
    if(!active.current||ticket!==audioRun.current)return;
    if(document.hidden||isForegroundAudioActive()){setPlaying(false);setAudioFailed(true);return;}
@@ -131,10 +134,10 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
   }
   // A newer tap intentionally cancels the old voice. Only the latest request
   // may report its outcome; cancellation is not a missing recording.
-  if(active.current&&ticket===audioRun.current){setPlaying(false);if(ok){note(entry.key,'heard');if(entry.key===target.key){heardTarget.current=true;setHeard(true);}}else{setAudioFailed(true);setFeedback('声音暂时没准备好，可以稍后再听。');}if(busy.current)setAnsweredAudio(true);}
+  if(active.current&&ticket===audioRun.current){setPlaying(false);if(ok){note(entry.key,'heard');if(entry.key===target.key){heardTarget.current=true;setHeard(true);}}else{setAudioFailed(true);tell('声音暂时没准备好，可以稍后再听。');}if(busy.current)setAnsweredAudio(true);}
  };
  const hear=()=>playEntry(target,explaining);
- const hearSituation=async()=>{if(guideIsOpen())return;auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);const ok=await speakOwned(['zh',situation!]);if(active.current&&ticket===audioRun.current){setPlaying(false);if(!ok){setAudioFailed(true);setFeedback('声音暂时没准备好，可以稍后再听。');}}};
+ const hearSituation=async()=>{if(guideIsOpen())return;auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);const ok=await speakOwned(['zh',situation!]);if(active.current&&ticket===audioRun.current){setPlaying(false);if(!ok){setAudioFailed(true);tell('声音暂时没准备好，可以稍后再听。');}}};
  const intro=useEvent(()=>{if(situation&&!guided)void hearSituation();else void hear();}),leave=useEvent(()=>finishTrace('left'));
  useEffect(()=>{const runs=audioRun,timer=introTimer,voice=narration;active.current=true;timer.current=setTimeout(intro,300);return()=>{active.current=false;runs.current++;clearTimeout(timer.current);voice.current?.cancel();
   // Only a real departure counts as leaving: a remount on the next tick (React StrictMode) is not one.
@@ -155,11 +158,11 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
   if(result==='wrong'){
    assisted.current=true;t.wrong++;
    if(retryMode&&t.wrong>=2){explainTarget();return;}
-   setFeedback('没关系，我们再听听。');if(retryMode&&!staged)setTimeout(()=>setOrder(o=>o+1),520);void hear();
+   tell(target.kind==='phrase'?'没关系，再听听，选另一句':'没关系，再听听，点另一张','again');if(retryMode&&!staged)setTimeout(()=>setOrder(o=>o+1),520);void hear();
   }
-  else{busy.current=true;finishTrace('solved');setFeedback('找到啦！');void playEntry(target);}
+  else{busy.current=true;finishTrace('solved');tell('找对啦！','good');void playEntry(target);}
  };
- const explainTarget=()=>{if(busy.current)return;assisted.current=true;trace.current.modelShown=true;setExplaining(true);setFeedback('看看亮起来的图片，听完点一点。');void playEntry(target,true);};
+ const explainTarget=()=>{if(busy.current)return;assisted.current=true;trace.current.modelShown=true;setExplaining(true);tell('看看亮起来的图片，听完点一点。');void playEntry(target,true);};
  const finishListening=()=>{
   if(continued.current||!heardTarget.current||playing)return;
   continued.current=true;
@@ -181,12 +184,12 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const flow=<p className="round-flow-status" role="status">{guideOpen?'帮助打开时，伙伴会等你':audioFailed?'这段声音可以稍后补听':auto.paused?'慢慢来，伙伴等着你':playing?'先听一听…':ready?'马上去下一个小发现':'听听声音，再点图片'}</p>;
  const stage=staged?' is-staged':'';
  // In a scene, what to answer sits on one white card with the question as its title; the friend and its voice stay in the scene.
- const card=(kind:string,title:string,body:React.ReactNode,tools?:React.ReactNode)=>staged?<div className="round-card"><header><div><small>{kind}</small><h2>{title}</h2></div>{tools}</header>{body}<p className="round-card-note">{feedback||(target.kind==='phrase'?'先听两句话，再选一句。':'听伙伴说，再点一点。')}</p></div>:<>{body}{tools}</>;
+ const card=(kind:string,title:string,body:React.ReactNode,tools?:React.ReactNode)=>staged?<div className="round-card"><header><div><small>{kind}</small><h2>{title}</h2></div>{tools}</header>{body}<FeedbackStrip tone={tone} onReplay={()=>void replay()}>{feedback||(target.kind==='phrase'?'听两句，选一句':'听一听，点图片')}</FeedbackStrip></div>:<>{body}{tools}</>;
  if(guided)return <section className={`learning-round learning-guided${stage}`}>
   <h1>和伙伴一起听</h1><p>看看图片，听听声音。不用着急回答。</p>
   <div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
   {card('先听一听','认识它，不用着急回答',<div className="guided-example"><LearningArt entry={target}/><strong lang="en">{target.en}</strong><span>{target.zh}</span></div>,
-   <div className="lesson-actions"><button className="round-try" onClick={()=>{sfx('click');trace.current.asked=true;setGuided(false);setFeedback('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>)}
+   <div className="lesson-actions"><button className="round-try" onClick={()=>{sfx('click');trace.current.asked=true;setGuided(false);tell('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>)}
   {feedback&&<p role="status">{feedback}</p>}
  </section>;
  if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;

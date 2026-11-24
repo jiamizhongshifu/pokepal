@@ -269,7 +269,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .btn-round.back .icon { width:28px; height:28px; }
 /* 先听指令、点图、得到反馈。图片与点击区域的大小分别控制。 */
 .round-instruction { margin:0; max-width:850px; text-align:center; font-size:clamp(23px,3vw,34px); line-height:1.4; text-wrap:balance; }
-.choice-feedback { min-height:30px; font-size:var(--text-xl); font-weight:800; color:var(--accent-en); text-align:center; }
 .choice:disabled { opacity:1; }
 .choice.eliminated { opacity:.4; box-shadow:none; }
 .choices.size-choices { max-width:760px; }
@@ -283,7 +282,6 @@ button:not(:disabled):active { transform: scale(.97); }
   .btn-round.back .icon { width:24px; height:24px; }
   .screen:not(.home) .tb-title { font-size:var(--text-xl); }
   .round-instruction { font-size:var(--text-2xl); }
-  .choice-feedback { font-size:var(--text-lg); }
   .round.listen-round,.round.picture-round { min-height:0; justify-content:flex-start; padding-top:60px; }
   .trace-instruction { font-size:var(--text-xl); }
 }

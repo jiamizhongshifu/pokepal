@@ -1,5 +1,6 @@
 import {RoundProgress} from '../../components/RoundProgress';
 import {noteFirstAnswer} from '../../lib/roundStreak';
+import {FeedbackStrip} from '../../components/FeedbackStrip';
 import { learningProfile } from '../../lib/learningStage';
 import { ListeningDiscovery } from './ListeningDiscovery';
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -192,7 +193,7 @@ function ListenRound({ round, idx, total, onNext, noteWord }: { round: Round; id
           </button>
         ))}
       </div>
-      <div className="choice-feedback" role="status">{solved ? "找对啦！" : eliminated.length > 0 ? "再看看，点另一张" : "听一听，再点图片"}</div>
+      <FeedbackStrip tone={solved ? "good" : shake !== null || eliminated.length > 0 ? "again" : "idle"} onReplay={() => hear()}>{solved ? "找对啦！" : shake !== null || eliminated.length > 0 ? "没关系，再听听，点另一张" : "听一听，点图片"}</FeedbackStrip>
     </div>
   );
 }

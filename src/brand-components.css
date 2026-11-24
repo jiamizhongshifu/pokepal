@@ -42,7 +42,7 @@
   border:var(--brand-border) solid var(--brand-sky); box-shadow:0 2px 0 var(--brand-sky-deep);
 }
 #root .island-ask-options button.is-wrong { background:var(--brand-sky-soft); border-color:var(--brand-sky); }
-#root .screen .choice.glow { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
+#root .screen .choice.glow:not(.right) { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
 
 
 /* ── Icon buttons and navigation ─────────────────────── */
