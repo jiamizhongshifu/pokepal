@@ -254,7 +254,7 @@
   {
    "id": "violin",
    "group": "icon",
-   "prompt": "A small warm-brown violin with its bow lying diagonally across it."
+   "prompt": "A small warm-brown violin standing upright with its bow lying diagonally across it; two thick light strings only."
   },
   {
    "id": "app-icon",
@@ -304,7 +304,7 @@
   {
    "id": "wing",
    "group": "icon",
-   "prompt": "A single soft white bird wing with three rounded feather layers and a light-blue shade."
+   "prompt": "A single soft bird wing with three rounded feather layers, pale blue."
   },
   {
    "id": "snowman",
@@ -324,7 +324,7 @@
   {
    "id": "normal",
    "group": "icon",
-   "prompt": "A simple five-petal white flower with a yellow center."
+   "prompt": "A simple five-petal daisy with cream petals and a big yellow centre."
   },
   {
    "id": "car",
@@ -359,7 +359,7 @@
   {
    "id": "dog",
    "group": "icon",
-   "prompt": "Head of a friendly brown puppy with floppy ears, front view."
+   "prompt": "Head of a friendly brown puppy with floppy darker-brown ears and a light tan muzzle and eye patches, so its dark eyes stand out, front view."
   },
   {
    "id": "fish",
@@ -379,7 +379,7 @@
   {
    "id": "rabbit",
    "group": "icon",
-   "prompt": "Head of a white bunny with long upright ears with pink insides, front view."
+   "prompt": "Head of a cream bunny with long upright ears with pink insides and a pink nose, front view."
   },
   {
    "id": "frog",
@@ -439,7 +439,7 @@
   {
    "id": "ui-decor-mat",
    "group": "icon",
-   "prompt": "A round woven floor mat."
+   "prompt": "A round woven picnic mat seen from slightly above, flat and wide like a rug, with three thick concentric rings in yellow and orange."
   },
   {
    "id": "ui-decor-bush",
@@ -484,7 +484,7 @@
   {
    "id": "ui-decor-track",
    "group": "icon",
-   "prompt": "A short curved toy race track."
+   "prompt": "A short toy train track: a gentle curve of brown wooden sleepers under two thick grey rails."
   },
   {
    "id": "ui-decor-garden",
@@ -494,7 +494,7 @@
   {
    "id": "ui-decor-music",
    "group": "icon",
-   "prompt": "A small xylophone with colorful bars."
+   "prompt": "A toy xylophone seen from slightly above: five chunky rainbow-coloured bars, longest on the left to shortest on the right, on a wooden frame, with one mallet resting across."
   },
   {
    "id": "ui-decor-camp",
@@ -584,7 +584,7 @@
   {
    "id": "ui-mic",
    "group": "icon",
-   "prompt": "A microphone."
+   "prompt": "A classic round-headed microphone on a short stand, the kind a child sings into: grey round head with three thick horizontal slots, a blue handle, a small blue base."
   },
   {
    "id": "ui-ear",
@@ -604,7 +604,7 @@
   {
    "id": "ui-swipe",
    "group": "icon",
-   "prompt": "A pointing hand with a curved motion arrow."
+   "prompt": "A child's hand with skin colour #ffc7a1, pointing finger out, with a thick curved blue arrow sweeping sideways above it."
   },
   {
    "id": "ui-sign",
@@ -699,7 +699,7 @@
   {
    "id": "ui-bubbles",
    "group": "icon",
-   "prompt": "A few soap bubbles."
+   "prompt": "Three round soap bubbles of different sizes, light blue and clearly separate, each with one small white shine."
   },
   {
    "id": "ui-picture",
@@ -734,7 +734,7 @@
   {
    "id": "ui-cloud",
    "group": "icon",
-   "prompt": "A fluffy cloud."
+   "prompt": "A fluffy cloud of three round puffs, pale blue."
   },
   {
    "id": "ui-tree",
@@ -769,7 +769,7 @@
   {
    "id": "ui-music",
    "group": "icon",
-   "prompt": "Two music notes."
+   "prompt": "Two music notes joined by a thick beam."
   },
   {
    "id": "ui-shovel",
@@ -794,7 +794,7 @@
   {
    "id": "ui-tent",
    "group": "icon",
-   "prompt": "A triangle tent."
+   "prompt": "A camping tent seen from the front: an orange triangle with a darker open doorway in the middle and a little green flag on top."
   },
   {
    "id": "ui-ball",
@@ -854,7 +854,7 @@
   {
    "id": "ui-egg",
    "group": "icon",
-   "prompt": "A single whole chicken egg, oval, WHITE shell with a light gray-beige shade along the bottom; not yellow."
+   "prompt": "A single whole chicken egg, oval, cream shell with a light beige shade along the bottom; not yellow."
   },
   {
    "id": "ui-watermelon",
@@ -889,7 +889,7 @@
   {
    "id": "ui-riceball",
    "group": "icon",
-   "prompt": "A rice ball with a seaweed band."
+   "prompt": "A triangular Japanese rice ball, cream rice with a dark green seaweed band across the bottom."
   },
   {
    "id": "ui-nuts",
@@ -952,7 +952,7 @@
    "prompt": "A small friendly wooden sailboat with a white triangular sail with one round sun patch, empty deck, floating, seen from the side."
   }
  ],
- "iconStyle": "A single game UI icon in the style of a modern gamified language-learning app (Duolingo-like icon language): bold, chunky, very rounded silhouette, front view, centered with generous margin, nothing cropped, instantly readable at 40 pixels. Flat fills only, at most four colors taken from this palette: green #58cc02 (shade #58a700), blue #1cb0f6 (shade #1899d6), yellow #ffc800 (shade #d1a400), red #ff4b4b (shade #cc3b3b), orange #ff9600, purple #ce82ff, brown #a5642c, white, and dark gray #4b4b4b for small details. Each color has one darker hard-edged shade shape along the bottom and one small white highlight; no outlines, no gradients, no texture, no 3D clay look. Fully transparent background (PNG with alpha), no ground shadow, no backdrop, no circle badge. No text, letters or numbers.",
+ "iconStyle": "A single game UI icon for a children's language-learning app, in the bold flat sticker icon language of modern gamified learning apps. Shape: one chunky, very rounded silhouette, front or slight three-quarter view, centred, filling about 80% of the canvas, nothing cropped, instantly readable at 32 pixels. Colour: flat fills only, 2 to 4 colours per icon, picked from this exact palette where every colour is always paired with its own fixed darker shade: green #58cc02 / #58a700, blue #1cb0f6 / #1899d6, yellow #ffc800 / #e0a800, red #ff4b4b / #d93a3a, orange #ff9600 / #d97f00, purple #ce82ff / #a568cc, pink #ff86d0 / #e06bb4, brown #a5642c / #7d4a1f, skin exactly as the description says (light, tan, brown or deep brown) with one darker shade of that same skin, white #ffffff / #e5e5e5, grey #afafaf / #8a8a8a, and dark ink #4b4b4b only for eyes and small marks. The icon sits on a white card, so its main shape is never plain white: white things (rice, eggs, clouds, snow, petals, feathers, paper) are cream #fff4d6 with a light grey #d9d2bf shade, or pale blue #ddf4ff with a #b6e3fa shade. Shading: each colour area gets exactly one darker hard-edged shade shape along its lower-right side, about a fifth of that area; no gradients, no glossy highlights, no white shine spots (the only exception: things made of glass, water or soap bubbles get one small white rounded shine so they read as shiny), no outlines, no texture, no 3D or clay look, no drop shadow. Details: few and large. Any line inside the icon (strings, whiskers, veins, stitches, ribs) is a thick rounded-cap stroke at least one sixteenth of the icon width (draw fewer, thicker strings or lines rather than many thin ones); no thin lines, no tiny dots, no small marks that look like writing. Faces appear only where the description asks for a face or names an animal or a person: dark oval eyes looking straight at the viewer, each with one small white catchlight, and a simple smile; food, plants and objects otherwise have no face. Fully transparent background (PNG with alpha), no backdrop, no circle badge, no ground shadow. No text, letters or numbers.",
  "appStyle": "A square app icon that fills the whole canvas edge to edge with a solid bright background color (no transparency, no rounded corners drawn, no border); one bold centered subject, simple rounded shapes, flat fills with one darker hard-edged shade shape per color, no outlines. Same flat vector style as the attached style reference. No text, letters or numbers.",
  "sameLayout": "The second attached image is the LAYOUT reference and must be followed closely: the same camera, the same island outline and sea, the same wide sandy path, the same four large empty round sandy clearings at exactly the same positions and sizes, the stream with its small wooden bridge, the triangle tent at the left edge, the wooden pier with the rowboat at the lower left, the checkered picnic blanket under the round tree, and the windmill on the hill at the upper right. Repaint that same place for the time of day and theme described above; add the described details only beside the path, never on the clearings, the bridge, the tent, the boat or the picnic blanket."
 }
