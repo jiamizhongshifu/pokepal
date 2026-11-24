@@ -53,10 +53,10 @@ export function meetableCreatures(owned: ReadonlySet<number>): Creature[] {
 }
 
 const sprite = (c: Creature) => `/sprites/${c.species}`;
-export const creatureArt = (id: number) => `${sprite(getCreature(id))}/stage-${getCreature(id).stage}.webp`;
-export const creatureAvatar = (id: number) => `${sprite(getCreature(id))}/avatar-${getCreature(id).stage}.webp`;
+export const creatureArt = (id: number) => `${sprite(getCreature(id))}/stage-${getCreature(id).stage}.svg`;
+export const creatureAvatar = (id: number) => `${sprite(getCreature(id))}/avatar-${getCreature(id).stage}.svg`;
 /** Expression art exists for the baby stage; older stages fall back to their standing pose. */
-export const creatureExpression = (id: number, expression: string) => getCreature(id).stage === 1 ? `${sprite(getCreature(id))}/expr-${expression}.webp` : creatureArt(id);
+export const creatureExpression = (id: number, expression: string) => getCreature(id).stage === 1 ? `${sprite(getCreature(id))}/expr-${expression}.svg` : creatureArt(id);
 
 export const RARITY: Record<Rarity, { zh: string; en: string; stars: number }> = {
   common: { zh: '宝宝', en: 'Little', stars: 1 },

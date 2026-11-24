@@ -5,8 +5,9 @@
     分层：scenes.json 里 layerOf 指向这张画的 layer / layer-base 条目，各自转成矢量，并量出每块在原画里的位置。
   python3 scripts/art/vectorize.py --whole beach orchard ...
     整张：没有要单独动的东西的画，整张转成 public/scenes/flat-v1/<group>/<id>.svg。
-  python3 scripts/art/vectorize.py --assets prop icon
-    透明底的道具和图标：public/scenes/flat-v1/<group>/ 下打包好的每张图，按原画布（同样的留白）转成同名 .svg。
+  python3 scripts/art/vectorize.py --assets prop icon sprites
+    透明底的道具、图标和小精灵：public/scenes/flat-v1/<group>/（或 public/<group>/，含子目录）下打包好的每张图，
+    按原画布（同样的留白）转成同名 .svg。
 依赖：pip install vtracer opencv-python pillow numpy
 输入：output/rebrand/scenes/<id>/<id>.png（generate.mjs scene 生成）
 输出：public/scenes/flat-v1/layers/<scene>/<id>.svg（本地媒体，不入库）
@@ -115,18 +116,28 @@ def whole(id):
   print(f"{s['group']}/{id:16s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB")
 
 def asset(png: Path):
-  """A packaged transparent prop or icon, traced on its own canvas so it keeps the same margins and size."""
-  work = SRC / '_assets' / f'{png.parent.name}-{png.stem}.png'
+  """A packaged transparent prop, icon or creature, traced on its own canvas so it keeps the same margins and size."""
+  work = SRC / '_assets' / f'{png.parent.parent.name}-{png.parent.name}-{png.stem}.png'
   work.parent.mkdir(exist_ok=True)
-  _, size = prepare(png, work, cut=False)
-  return trace(work, png.with_suffix('.svg'), size)
+  # Creatures carry pale, low-contrast detail (cloud edges, belly stripes): finer colour steps keep it.
+  source, finer = png, (dict(layer_difference=8, color_precision=7) if png.parent.parent.name == 'sprites' else {})
+  if png.stem.startswith('avatar-'):
+    # A creature's avatar is its stage portrait framed a little tighter (package.mjs fits the art to 92% instead of
+    # 86%). Cut it from the 1024px portrait rather than tracing the 256px avatar, so the outline stays smooth.
+    stage = Image.open(png.with_name(png.stem.replace('avatar-', 'stage-') + '.webp')).convert('RGBA')
+    side = round(stage.width * .86 / .92); off = (stage.width - side) // 2
+    stage.crop((off, off, off + side, off + side)).resize((512, 512), Image.LANCZOS).save(work)
+    source, finer = work, {**finer, 'filter_speckle': 20}
+  _, size = prepare(source, work, cut=False)
+  return trace(work, png.with_suffix('.svg'), size, **finer)
 
 args = sys.argv[1:] or ['island-map']
 if args[0] == '--whole':
   for id in args[1:]: whole(id)
 elif args[0] == '--assets':
   for group in args[1:]:
-    files = sorted((ROOT / 'public/scenes/flat-v1' / group).glob('*.webp'))
+    folder = ROOT / 'public/scenes/flat-v1' / group
+    files = sorted((folder if folder.exists() else ROOT / 'public' / group).rglob('*.webp'))
     sizes = [asset(f) for f in files]
     print(f"{group}: {len(files)} 个，合计 {sum(r for r, _ in sizes) // 1024}KB，压缩后 {sum(g for _, g in sizes) // 1024}KB")
 else:

@@ -1,5 +1,5 @@
 /** Island illustration paths. Every screen takes scene art from here so the whole game shares one style set.
-    Scenes, backgrounds, props and icons are vectors (scripts/art/vectorize.py); creatures are still pictures. */
+    Scenes, backgrounds, props, icons and creatures are all vectors (scripts/art/vectorize.py). */
 const ROOT = '/scenes/flat-v1';
 
 export const STORY_BACKGROUNDS = ['beach', 'garden-flowers', 'garden-path', 'meadow', 'orchard', 'playground'] as const;

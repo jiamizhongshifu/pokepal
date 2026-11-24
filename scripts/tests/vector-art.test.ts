@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { scenePieces } from '../../src/data/sceneLayers';
 import { PATH_ART, STORY_BACKGROUNDS } from '../../src/data/sceneArt';
 import { LAYER_AREA } from '../../src/island/islandLayers';
@@ -23,7 +23,7 @@ test('every scene ground and background is a vector file', () => {
  assert.ok(existsSync('public/scenes/flat-v1/world/diary-desk.svg'), `${RUN} --whole diary-desk`);
 });
 
-test('icons and props are vector files, and no screen asks for a painted bitmap of the scene art', async () => {
+test('icons, props and creatures are vector files, and no screen asks for a painted bitmap', async () => {
  const { ICON_ASSETS } = await import('../../src/icons/generated');
  // The app's home-screen icon (/icons/icon-512.png) stays a PNG: install prompts need one.
  for (const [name, url] of Object.entries(ICON_ASSETS).filter(([, u]) => u.startsWith('/scenes/'))) {
@@ -32,6 +32,12 @@ test('icons and props are vector files, and no screen asks for a painted bitmap 
  }
  const { execFileSync } = await import('node:child_process');
  let hits = '';
- try { hits = execFileSync('git', ['grep', '-n', 'flat-v1[^\'"`]*\\.webp', '--', 'src', 'index.html'], { encoding: 'utf8' }).trim(); } catch { /* git grep exits 1 when nothing matches */ }
- assert.equal(hits, '', 'Scene art, props and icons are .svg; point at the vector file instead.');
+ try { hits = execFileSync('git', ['grep', '-n', '\\.webp', '--', 'src', 'index.html'], { encoding: 'utf8' }).trim(); } catch { /* git grep exits 1 when nothing matches */ }
+ assert.equal(hits, '', 'Scene art, props, icons and creatures are .svg; point at the vector file instead.');
+ // Every creature picture the packager made (stages, avatars, baby expressions) has its vector twin.
+ const sprites = JSON.parse(readFileSync('public/sprites/manifest.json', 'utf8')) as { sprites: Record<string, { stages: string[]; avatars: string[]; expressions: string[] }> };
+ for (const e of Object.values(sprites.sprites)) for (const f of [...e.stages, ...e.avatars, ...e.expressions]) {
+  const svg = `public/sprites/${f.replace(/\.webp$/, '.svg')}`;
+  assert.ok(existsSync(svg), `${svg} is missing: ${RUN} --assets sprites`);
+ }
 });
