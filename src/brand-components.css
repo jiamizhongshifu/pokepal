@@ -34,14 +34,14 @@
 
 /* ── Answer feedback ──────────────────────────────────── */
 #root .screen .choice.right { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); color:var(--brand-ink); }
-#root .screen .choice.shake { background:var(--brand-danger-soft); border-color:var(--brand-danger); box-shadow:0 var(--brand-press) 0 var(--brand-danger-deep); }
-/* "Try again" carries a picture badge besides the red tint and the shake, so it reads without colour vision or motion. */
+#root .screen .choice.shake { background:var(--brand-sky-soft); border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
+/* "Try again" is the hint blue, never red: nothing is marked wrong. It carries a picture badge besides the tint and the shake, so it reads without colour vision or motion. */
 #root :is(.screen .choice.shake, .lesson-staged .learning-choices > div > button.shake, .island-ask-options button.is-wrong)::after {
   content:""; position:absolute; top:6px; right:6px; z-index:1; width:44px; height:44px; border-radius:50%;
   background:var(--brand-paper) url('/scenes/flat-v1/icon/ui-refresh.webp') center / 72% no-repeat;
-  border:var(--brand-border) solid var(--brand-danger); box-shadow:0 2px 0 var(--brand-danger-deep);
+  border:var(--brand-border) solid var(--brand-sky); box-shadow:0 2px 0 var(--brand-sky-deep);
 }
-#root .island-ask-options button.is-wrong { background:var(--brand-danger-soft); border-color:var(--brand-danger); }
+#root .island-ask-options button.is-wrong { background:var(--brand-sky-soft); border-color:var(--brand-sky); }
 #root .screen .choice.glow { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
 
 /* ── Progress: 16px pill bar, beads for rounds ────────── */

@@ -55,7 +55,6 @@
 #root .screen .learning-choices>div>button:not(.learning-choice-audio) { background:var(--brand-sky-soft); border-color:var(--brand-line); color:var(--brand-ink); }
 #root .screen .choice { border-color:var(--brand-line); background:var(--brand-paper); color:var(--brand-ink); box-shadow:0 4px 0 var(--brand-line-deep); }
 #root .screen .choice.right { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 4px 0 #70b99b55; }
-#root .screen .choice.shake { background:var(--brand-coral-soft); border-color:var(--brand-danger); }
 #root .screen .choice.glow { border-color:var(--brand-streak); }
 #root .screen .trace-side { border-color:var(--brand-line); background-color:var(--brand-paper); }
 

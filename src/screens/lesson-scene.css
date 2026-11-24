@@ -76,7 +76,7 @@
 #root .lesson-staged .round-card .learning-choices > div { flex: 0 1 min(17vw, 24vh); }
 #root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio) { border-radius: 26px; background: #f3f8f6; border: 3px solid #e3ece8; box-shadow: 0 5px 0 #dce7e2; filter: none; transition: transform .14s ease-out, box-shadow .14s ease-out, background-color .2s, border-color .2s, opacity .25s; }
 #root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button:not(.learning-choice-audio):not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 #dce7e2; }
-#root .lesson-staged .round-card .learning-choices > div > button.shake { background: #fff0f0 !important; border-color: #ff9c9c !important; box-shadow: 0 4px 0 #f2b5b5 !important; animation: lesson-shake .45s ease-in-out; }
+#root .lesson-staged .round-card .learning-choices > div > button.shake { background: var(--brand-sky-soft) !important; border-color: var(--brand-sky) !important; box-shadow: 0 4px 0 var(--brand-sky-deep) !important; animation: lesson-shake .45s ease-in-out; }
 #root .lesson-staged .round-card .learning-choices:not(.phrase-choices) > div > button.chosen { background: #fff6d6 !important; border-color: #ffc531 !important; box-shadow: 0 0 0 4px rgba(255, 197, 49, .35), 0 5px 0 #e6b83c; }
 #root .lesson-staged .round-card .phrase-choices > div { flex-basis: min(26vw, 34vh); }
 #root .lesson-staged .round-card .phrase-choices > div > button:not(.learning-choice-audio) { background: #f3f9ff; border: 3px solid #d8ebfc; box-shadow: 0 5px 0 #cde2f5; transition: transform .14s ease-out, box-shadow .14s ease-out; }
