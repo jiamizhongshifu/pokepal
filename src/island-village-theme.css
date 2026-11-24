@@ -18,7 +18,7 @@
 #root .screen .btn-big:not(.alt),#root .screen .learning-trail-primary {
   background:linear-gradient(var(--brand-primary),var(--brand-primary)); color:var(--brand-on-primary); border:2px solid var(--brand-primary-deep);
   border-top-color:#76bed3; border-radius:24px 27px 23px 26px;
-  box-shadow:0 5px 0 var(--brand-primary-deep),0 8px 16px #214f6718; text-shadow:none;
+  box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); text-shadow:none;
 }
 #root .screen .btn-big.alt { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:var(--village-shadow); border-radius:var(--radius-lg); }
 #root .screen :is(.learning-trail-primary,.journey-primary)>.icon {

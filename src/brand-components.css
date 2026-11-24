@@ -26,6 +26,10 @@
 #root .screen .farm-primary.harvest:not(:disabled):hover { background:#ffd333; }
 #root .screen .btn-big::after { display:none; }
 
+/* ── Press: anything with a solid edge sinks onto it, and the edge is gone while it is held ── */
+#root .screen :is(.btn-big, .journey-primary, .farm-primary, .wish-button, .learning-trail-primary):not(:disabled):active { transform:translateY(var(--brand-press)); box-shadow:none; filter:none; }
+#root .screen .choice:not(:disabled):active { transform:translateY(var(--brand-press)); }
+
 /* ── Focus: eel-blue glow ─────────────────────────────── */
 #root :is(button, summary, a, input, select, textarea):focus-visible { outline:2px solid var(--brand-sky); outline-offset:3px; box-shadow:var(--brand-focus); }
 #root :is(input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea) {

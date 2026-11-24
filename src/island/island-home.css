@@ -63,7 +63,7 @@
 .island-shelf button:active { translate: 0 3px; box-shadow: 0 1px 0 #f0d9a0; }
 
 /* The island's day: three stars, one for each thing done together. */
-.island-day { position: absolute; z-index: 20; left: 50%; top: calc(10px + env(safe-area-inset-top)); translate: -50% 0; display: flex; gap: 6px; margin: 0; padding: 6px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.island-day { position: absolute; z-index: 20; left: 50%; top: calc(10px + env(safe-area-inset-top)); translate: -50% 0; display: flex; gap: 6px; margin: 0; padding: 6px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
 .island-day li { display: grid; place-items: center; }
 .island-day li:not(.is-done) { opacity: .45; }
 .island-day.is-done { background: #ffe27a; }

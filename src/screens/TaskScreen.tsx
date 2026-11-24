@@ -1,7 +1,7 @@
 import { storyBackground } from '../data/sceneArt';
 import './task-scene.css';
 import { CreatureImg } from "../components/CreatureImg";
-import { creatureArt, getCreature } from "../data/creatures";
+import { creatureExpression, getCreature } from "../data/creatures";
 import { BuddyImg } from "../components/BuddyImg";
 import {trackInteraction} from '../lib/interaction';
 import {EnergyToast} from '../components/EnergyToast';
@@ -91,7 +91,7 @@ export function TaskScreen({ kind, boardIndex, practice=false }: { kind: TaskKin
         <Celebration onClose={back}>
           <div className="learning-reward">
           <div className="cel-title">这一小段完成啦！</div>
-          {buddy!==undefined&&<p className="task-buddy-done"><CreatureImg src={creatureArt(buddy)} alt=""/>和{getCreature(buddy).nameZh}一起练了一次</p>}
+          {buddy!==undefined&&<p className="task-buddy-done"><CreatureImg src={creatureExpression(buddy,"proud")} alt=""/>和{getCreature(buddy).nameZh}一起练了一次</p>}
           {!!discoveries.length&&<><p>刚才一起遇见了</p><div className="session-discoveries">{discoveries.map(key=>{const entry=learningEntry(key)!;return <span key={key}><LearningArt entry={entry}/><b lang="en">{entry.en}</b><small>{entry.zh}</small></span>;})}</div></>}
           <EnergyToast reward={reward}/>
           <div className="cel-actions completion-next">

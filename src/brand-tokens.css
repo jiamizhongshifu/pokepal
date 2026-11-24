@@ -25,9 +25,13 @@
   --brand-coral:#ff4b4b;   --brand-coral-deep:#cc3b3b;  --brand-coral-soft:#ffdfe0;
   --brand-grape:#ce82ff;   --brand-gem-deep:#a568cc;   --brand-gem-soft:#f4e6ff;
   --brand-sky-soft:#ddf4ff; --brand-streak-soft:#ffe8cc;
+  /* Text colours for the three families that had none: each reads at 5.5:1 or more on white and on its own soft tint. */
+  --brand-danger-ink:#a8261f; --brand-streak-ink:#8a4b00; --brand-gem-ink:#7a3db3;
   /* Type scale (DESIGN.md §3) plus 20px and 28px steps for children's body and large buttons. */
   --text-xs:12px; --text-sm:13px; --text-base:15px; --text-lg:18px; --text-xl:20px;
   --text-2xl:24px; --text-3xl:28px; --text-4xl:32px; --text-5xl:40px; --text-6xl:56px;
+  /* Spacing: one scale for gaps and padding in new work. */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-7:32px;
   /* Radii: inputs 12, cards and buttons 16, sheets 20, large panels 24, chips 9999. */
   --radius-sm:12px; --radius-md:16px; --radius-lg:20px; --radius-xl:24px; --radius-pill:9999px;
   /* Surfaces, ink and borders. */

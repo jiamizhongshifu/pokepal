@@ -45,7 +45,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 /* ---------- 按钮 ---------- */
 .btn-big { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 78px; padding: 0 40px; border-radius:var(--radius-pill); background: var(--grad-primary); color: var(--brand-on-primary); font-size:var(--text-3xl); font-weight: 800; border: 1px solid rgba(255, 255, 255, 0.45); box-shadow: 0 10px 30px rgba(66, 82, 255, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.5); text-shadow: 0 1px 4px rgba(40, 20, 120, 0.4); transition: transform 0.2s var(--ease-out), filter 0.2s; overflow: hidden; }
 .btn-big::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 45%, transparent 60%); transform: translateX(-120%); animation: sheen 3.6s ease-in-out infinite; }
-.btn-big:active { transform: translateY(2px) scale(0.98); filter: brightness(1.1); }
 .btn-big.alt { background: var(--surface); border-color: var(--surface-border); box-shadow: 0 6px 20px rgba(20, 30, 120, 0.2); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .btn-big.alt::after { display: none; }
 .btn-round { width: 72px; height: 72px; border-radius: 50%; font-size:var(--text-4xl); display: grid; place-items: center; }
@@ -103,7 +102,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .replay { border-radius:var(--radius-pill); padding: 12px 28px; font-size:var(--text-2xl); font-weight: 800; }
 .choices { display: flex; gap: 36px; justify-content: center; min-height: 270px; align-items: center; }
 .choice { width: 260px; height: 260px; border-radius:var(--radius-xl); display: grid; place-items: center; position: relative; transition: transform 0.25s var(--ease-out), opacity 0.3s, box-shadow 0.3s; }
-.choice:active { transform: scale(0.95); }
 .choice.poke img:not(.icon):not(.invite-berry) { width: 86%; height: 86%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(20, 20, 120, 0.35)); }
 .choice.right { box-shadow: 0 0 0 6px #9bffcb, 0 0 40px rgba(0, 255, 140, 0.7); animation: happyJump 0.5s ease-in-out 2; }
 .choice.glow { animation: glow 1s ease-in-out infinite; }

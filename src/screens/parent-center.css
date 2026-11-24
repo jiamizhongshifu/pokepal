@@ -78,7 +78,7 @@
 #root .parent-organized .fav small{font-size:var(--text-xs)}
 #root .parent-organized .device-setup{width:100%;max-width:none;margin:0 0 20px}
 #root .parent-organized .parent-danger>summary{color:var(--brand-danger-deep)}
-#root .parent-organized .parent-danger .danger{background:var(--brand-streak-soft);color:var(--brand-danger-deep);border:1px solid var(--brand-danger)}
+#root .parent-organized .parent-danger .danger{background:var(--brand-streak-soft);color:var(--brand-danger-ink);border:1px solid var(--brand-danger)}
 #root .parent-organized .toast{z-index:100;pointer-events:none;max-width:calc(100% - 32px);overflow-wrap:anywhere}
 @media(max-width:680px){
  #root .parent-organized .parent-head{gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}

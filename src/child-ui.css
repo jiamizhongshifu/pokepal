@@ -320,7 +320,6 @@ button:not(:disabled):active { transform: scale(.97); }
 .wish-button small { display:block; font-size:var(--text-sm); font-weight:650; margin-top:3px; }
 .wish-button.primary { background:var(--brand-primary); border-color:var(--brand-primary); }
 .wish-button:focus-visible { outline:3px solid var(--brand-sky-deep); outline-offset:4px; }
-.wish-button:active { transform:translateY(2px); box-shadow:none; }
 .wish-search { display:flex; flex-wrap:wrap; gap:6px; font-size:var(--text-base); font-weight:700; max-width:100%; }
 .wish-search span { color:var(--muted); font-size:var(--text-sm); }
 .wish-search input { display:block; width:100%; min-height:48px; border:2px solid var(--surface-border); border-radius:var(--radius-md); padding:8px 14px; background:var(--surface); color:var(--text); font:inherit; }

@@ -66,7 +66,7 @@
 .path-berry { display: flex; align-items: center; gap: 4px; padding: 4px 12px 4px 6px; border: 0; border-radius: 30px; background: #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); font-size: 18px; font-weight: 800; color: #5b4a2f; }
 .path-tools { display: flex; align-items: center; gap: 8px; justify-self: end; }
 .path-chapter { display: flex; align-items: center; gap: 8px; }
-.path-plaque { --tone: var(--brand-primary); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid #fff; border-radius: 22px; background: var(--paper); box-shadow: 0 5px 0 rgba(0, 0, 0, .14), inset 0 -5px 0 var(--tone); color: var(--ink); }
+.path-plaque { --tone: var(--brand-primary); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 7px 22px 8px; border: 4px solid #fff; border-radius: 22px; background: var(--paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .1), inset 0 -5px 0 var(--tone); color: var(--ink); }
 .path-plaque.tone-1 { --tone: #f2c230; } .path-plaque.tone-2 { --tone: #f59a3d; } .path-plaque.tone-3 { --tone: #f2735a; } .path-plaque.tone-4 { --tone: #8d8de6; } .path-plaque.tone-5 { --tone: #ef8cc4; }
 .path-plaque small { font-size: 14px; font-weight: 800; letter-spacing: .08em; color: var(--brand-ink-muted); }
 .path-plaque small i { margin: 0 6px; font-style: normal; }

@@ -1,0 +1,150 @@
+{
+ "src/brand-components.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/child-ui.css": {
+  "colours": 22,
+  "blurs": 2
+ },
+ "src/components/analytics-preferences.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/components/announcements.css": {
+  "colours": 3,
+  "blurs": 2
+ },
+ "src/components/author-contact.css": {
+  "colours": 6,
+  "blurs": 1
+ },
+ "src/components/avatar-editor.css": {
+  "colours": 6,
+  "blurs": 2
+ },
+ "src/components/device-setup.css": {
+  "colours": 5,
+  "blurs": 0
+ },
+ "src/components/energy-toast.css": {
+  "colours": 2,
+  "blurs": 1
+ },
+ "src/components/feature-guide.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/components/feedback-strip.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/components/island-ask.css": {
+  "colours": 1,
+  "blurs": 1
+ },
+ "src/components/island-living.css": {
+  "colours": 5,
+  "blurs": 0
+ },
+ "src/components/learning-trail.css": {
+  "colours": 1,
+  "blurs": 1
+ },
+ "src/components/lesson-picnic.css": {
+  "colours": 14,
+  "blurs": 0
+ },
+ "src/components/lesson-summary.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/components/music.css": {
+  "colours": 6,
+  "blurs": 0
+ },
+ "src/components/parent-support.css": {
+  "colours": 15,
+  "blurs": 1
+ },
+ "src/components/scroll-peek.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/components/story-read-along.css": {
+  "colours": 3,
+  "blurs": 0
+ },
+ "src/components/story-stage.css": {
+  "colours": 15,
+  "blurs": 2
+ },
+ "src/island-village-theme.css": {
+  "colours": 16,
+  "blurs": 1
+ },
+ "src/island/island-home.css": {
+  "colours": 46,
+  "blurs": 5
+ },
+ "src/learning-flow.css": {
+  "colours": 1,
+  "blurs": 1
+ },
+ "src/learning-journey.css": {
+  "colours": 4,
+  "blurs": 0
+ },
+ "src/learning-ui.css": {
+  "colours": 1,
+  "blurs": 0
+ },
+ "src/page-hierarchy.css": {
+  "colours": 2,
+  "blurs": 1
+ },
+ "src/screens/diary-room.css": {
+  "colours": 34,
+  "blurs": 2
+ },
+ "src/screens/lesson-scene.css": {
+  "colours": 40,
+  "blurs": 3
+ },
+ "src/screens/notebook-cards.css": {
+  "colours": 7,
+  "blurs": 0
+ },
+ "src/screens/parent-center.css": {
+  "colours": 15,
+  "blurs": 1
+ },
+ "src/screens/path-scene.css": {
+  "colours": 51,
+  "blurs": 8
+ },
+ "src/screens/sleepy.css": {
+  "colours": 15,
+  "blurs": 1
+ },
+ "src/screens/story-adventure-preview.css": {
+  "colours": 4,
+  "blurs": 2
+ },
+ "src/screens/task-scene.css": {
+  "colours": 3,
+  "blurs": 1
+ },
+ "src/screens/welcome-start.css": {
+  "colours": 17,
+  "blurs": 2
+ },
+ "src/small-screen-theme.css": {
+  "colours": 3,
+  "blurs": 0
+ },
+ "src/styles.css": {
+  "colours": 43,
+  "blurs": 35
+ }
+}
