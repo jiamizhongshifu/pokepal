@@ -1,7 +1,7 @@
 /* Keep characters, props and motion inside one quiet, readable stage. */
-.story-stage.story-theatre{isolation:isolate;background:#e8efcf;border:1px solid #b7c8ad80;container-type:inline-size}
+.story-stage.story-theatre{isolation:isolate;background:var(--scene-moss);border:1px solid #b7c8ad80;container-type:inline-size}
 .theatre-picture{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
-.theatre-backdrop{position:absolute;inset:0;background:#f4edcf}
+.theatre-backdrop{position:absolute;inset:0;background:var(--scene-sand)}
 .theatre-painted-background{display:block;width:100%;height:100%;object-fit:cover;object-position:center bottom;pointer-events:none}
 .theatre-actor{position:absolute;height:64%;transform:translateX(-50%);z-index:3;pointer-events:none}
 .theatre-actor-art{position:absolute;inset:0;transform-origin:50% 90%}
@@ -37,11 +37,11 @@
 @media(min-width:601px) and (max-width:899px){.story-stage.story-theatre:not(.cover-scene){height:clamp(290px,52vw,400px)}}
 
 /* One optional listening target, attached to a matching pictured object. */
-.theatre-word{position:absolute;left:var(--word-layout-x,var(--word-anchor-x,50%));z-index:4;transform:translateX(-50%);display:flex;align-items:center;gap:6px;min-height:48px;min-width:48px;padding:8px 12px;border:2px solid #d6b85e;border-radius:18px;background:#fff3b2;color:#163d50;font:inherit;font-weight:800;box-shadow:0 3px 0 #c6a84d;max-width:70%;overflow-wrap:anywhere}
-.theatre-word:focus-visible{outline:3px solid #176eaa;outline-offset:3px}
+.theatre-word{position:absolute;left:var(--word-layout-x,var(--word-anchor-x,50%));z-index:4;transform:translateX(-50%);display:flex;align-items:center;gap:6px;min-height:48px;min-width:48px;padding:8px 12px;border:2px solid var(--scene-gold-edge);border-radius:18px;background:var(--scene-cream);color:var(--scene-night);font:inherit;font-weight:800;box-shadow:0 3px 0 #c6a84d;max-width:70%;overflow-wrap:anywhere}
+.theatre-word:focus-visible{outline:3px solid var(--brand-sky-ink);outline-offset:3px}
 .story-language-options{border:0;padding:12px 0;margin:0;min-width:0}
 .story-language-options legend{font-weight:800}
 .story-language-options p,.story-language-options small{font-size:14px;line-height:1.6}
 .story-language-options>div{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .story-language-options button{min-height:48px;padding:10px 14px;border:2px solid var(--surface-border);border-radius:16px;background:var(--brand-paper);color:var(--text);font:inherit;font-weight:700}
-.story-language-options button[aria-pressed=true]{background:#fff0ac;border-color:#c2a13e}
+.story-language-options button[aria-pressed=true]{background:var(--scene-cream);border-color:#c2a13e}

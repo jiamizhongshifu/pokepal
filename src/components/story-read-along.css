@@ -6,8 +6,8 @@
   transition:background-color .12s ease, box-shadow .12s ease;
   box-decoration-break:clone; -webkit-box-decoration-break:clone;
 }
-#root .story-word[data-keyword] { text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:6px; text-decoration-color:#e3b23c; }
-#root .story-word[aria-current=true] { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 0 0 2px #ffe27a; }
+#root .story-word[data-keyword] { text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:6px; text-decoration-color:var(--brand-sun-deep); }
+#root .story-word[aria-current=true] { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 0 0 2px var(--scene-gold-soft); }
 #root .story-word[aria-pressed=true] { background:var(--brand-sky-soft); color:var(--brand-ink); box-shadow:0 0 0 2px #7fb9d4; }
 #root .story-word:focus-visible { outline:3px solid var(--brand-sky); outline-offset:2px; }
 #root .story-word:disabled { cursor:default; }

@@ -44,6 +44,36 @@
   --brand-line:#e5e5e5;
   --brand-line-deep:#d7d7d7;
   --brand-night:#131f24;
+  /* Scene colours: the storybook pages (path, island, lessons, diary) sit on illustrations and keep these in day and night. */
+  --scene-ink:#24413a;
+  --scene-paper:#fffdf4;
+  --scene-paper-cool:#f3fbff;
+  --scene-line:#dce7e2;
+  --scene-sand:#f1e4cc;
+  --scene-gold:#ffc531;
+  --scene-gold-deep:#e0a100;
+  --scene-gold-soft:#ffe27a;
+  --scene-gold-edge:#e8c96b;
+  --scene-cream:#fff3b2;
+  --scene-slate:#4b656b;
+  --scene-sky-line:#cde2f5;
+  --scene-sky-edge:#7cd4fd;
+  --scene-tan:#c8b38b;
+  --scene-wood:#5b4a2f;
+  --scene-leaf:#267660;
+  --scene-leaf-soft:#b4e890;
+  --scene-mint-line:#aacfc3;
+  --scene-night:#273e49;
+  --scene-moss:#e8efcf;
+  --scene-parchment:#e3d2af;
+  --scene-teal:#14c4a8;
+  --scene-teal-deep:#0c9883;
+  --scene-pink:#ff86b6;
+  --scene-pink-deep:#e0618f;
+  --scene-coral:#f2735a;
+  --scene-periwinkle:#8d8de6;
+  --scene-water:#22d3e6;
+  --scene-sage:#62806b;
   /* Shape, elevation, focus and motion. */
   --brand-radius-button:16px;
   --brand-radius-card:16px;

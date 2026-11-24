@@ -7,7 +7,7 @@
 #root button.feedback-strip.is-tappable{box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep);cursor:pointer}
 #root button.feedback-strip.is-tappable:active{transform:translateY(var(--brand-press));box-shadow:none}
 .feedback-mark{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;font-style:normal;font-size:var(--text-xl);font-weight:900;line-height:1}
-.is-good>.feedback-mark{background:var(--brand-primary-ink);color:#fff}
+.is-good>.feedback-mark{background:var(--brand-primary-ink);color:var(--brand-paper)}
 .is-again>.feedback-mark{background:var(--brand-paper);border:var(--brand-border) solid var(--brand-sky);box-sizing:border-box}
 @keyframes feedback-strip-in{from{transform:translateY(8px) scale(.96);opacity:0}}
 @media(prefers-reduced-motion:reduce){.feedback-strip{animation:none!important}}

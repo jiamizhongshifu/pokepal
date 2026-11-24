@@ -23,7 +23,7 @@
 
 /* Reward moments use the yellow "streak" recipe. */
 #root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }
-#root .screen .farm-primary.harvest:not(:disabled):hover { background:#ffd333; }
+#root .screen .farm-primary.harvest:not(:disabled):hover { background:var(--scene-gold); }
 #root .screen .btn-big::after { display:none; }
 
 /* ── Press: anything with a solid edge sinks onto it, and the edge is gone while it is held ── */

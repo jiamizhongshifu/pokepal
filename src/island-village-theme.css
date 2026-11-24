@@ -65,7 +65,7 @@
 #root .dex .dex-cell>small,#root .dex .dex-cell .dex-no { color:var(--brand-ink); }
 #root .dex .dex-meet-status { color:var(--brand-primary-ink); background:var(--brand-primary-soft); }
 #root .screen .collection-tabs button { color:var(--brand-ink); background:var(--brand-paper); border-color:var(--brand-line); }
-#root .screen .storybook { background:var(--brand-paper); border:2px solid var(--brand-line); box-shadow:4px 5px 0 #d4c5a0,0 9px 17px #214f670d; border-radius:12px 25px 25px 12px; }
+#root .screen .storybook { background:var(--brand-paper); border:2px solid var(--brand-line); box-shadow:4px 5px 0 var(--scene-tan),0 9px 17px #214f670d; border-radius:12px 25px 25px 12px; }
 #root .screen .book-title { color:var(--brand-ink); background:var(--brand-paper); }
 #root .screen .book-title strong { color:var(--brand-ink); }
 #root .screen .book-footer b { background:var(--brand-primary-soft); color:var(--brand-sky-ink); }
@@ -77,7 +77,7 @@
 #root .home .home-actions button { background:#fffef7ee; color:var(--brand-ink); border-color:var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
 
 /* Night ocean surroundings keep reading cards light, with explicit dark ink. */
-:root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:#f2fbff; color:var(--brand-sky-deep); }
+:root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:var(--scene-paper-cool); color:var(--brand-sky-deep); }
 :root[data-theme="dark"] #root .screen .btn-big.alt { color:var(--accent-en); }
 @media(max-width:600px) {
   #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
@@ -145,7 +145,7 @@
 #root .screen .stage-presets>button[aria-pressed=true] { background:var(--brand-primary-soft); outline-color:#70b99b; }
 #root .screen .stage-current { color:var(--brand-primary-ink); background:var(--brand-primary-soft); }
 #root .screen .stage-preview { background:var(--surface); border-color:var(--brand-sky); }
-#root .screen .guide-target { outline-color:#e6bc37!important; }
+#root .screen .guide-target { outline-color:var(--brand-sun-deep)!important; }
 #root .screen .diary-friend { background:var(--brand-primary-soft); }
 #root .screen .diary-question-icon { background:var(--surface); }
 

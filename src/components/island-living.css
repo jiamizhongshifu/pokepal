@@ -11,7 +11,7 @@
 .home-actions button:active { transform:translateY(2px); box-shadow:none; }
 .home-actions button:focus-visible { outline:3px solid var(--brand-primary-deep); outline-offset:3px; }
 .home-actions i { position:absolute; top:1px; right:2px; width:10px; height:10px; background:var(--brand-danger); border-radius:50%; border:2px solid var(--brand-sun-soft); }
-.guided-diary { --diary-ink:#294e45; color:var(--diary-ink); }
+.guided-diary { --diary-ink:var(--scene-ink); color:var(--diary-ink); }
 .diary-welcome { display:flex; align-items:center; gap:18px; margin-bottom:24px; text-align:left; }
 .diary-welcome h1 { font-size:clamp(24px,3vw,32px); margin:4px 0 8px; }
 .diary-welcome p { margin:0; }
@@ -21,7 +21,7 @@
 .diary-steps li { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:var(--text-base); }
 .diary-steps li span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--brand-section); }
 .diary-steps li[aria-current=step] { color:var(--text); font-weight:800; }
-.diary-steps li[aria-current=step] span { background:var(--brand-primary-ink); color:#fff; }
+.diary-steps li[aria-current=step] span { background:var(--brand-primary-ink); color:var(--brand-paper); }
 .diary-question { padding:28px; border:1px solid var(--surface-border); border-radius:var(--radius-xl); background:var(--surface); box-shadow:0 6px 0 var(--brand-primary-soft); text-align:center; }
 .diary-question h2 { margin:16px 0 10px; font-size:clamp(24px,3vw,30px); }
 .diary-question-heading { display:flex; align-items:center; justify-content:space-between; }

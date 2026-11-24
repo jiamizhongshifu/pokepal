@@ -4,7 +4,7 @@
   --accent-en:var(--brand-sky-ink); --sea:var(--brand-sky-ink); --surface:var(--brand-paper); --surface-strong:var(--brand-paper); --surface-border:var(--brand-line);
   color:var(--text);
 }
-#root .parent-organized .parent-fold-content { --p-ink:var(--brand-ink); --p-muted:var(--brand-ink-muted); --p-card:#ffffff; --p-well:#f2f6f8; --p-border:#e2eaed; }
+#root .parent-organized .parent-fold-content { --p-ink:var(--brand-ink); --p-muted:var(--brand-ink-muted); --p-card:var(--brand-paper); --p-well:var(--scene-paper-cool); --p-border:var(--brand-line); }
 #root .story-reader .story-page-count { color:var(--brand-ink); }
 #root .story-reader .theatre-word { width:max-content; max-width:calc(100% - 24px); }
 #root .story-reader .theatre-word>span { overflow-wrap:normal; }

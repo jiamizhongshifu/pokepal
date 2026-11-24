@@ -1,6 +1,6 @@
 /* Parent tools share the island palette, with a clean dashboard hierarchy and dark-mode support. */
-#root .parent-organized{--p-card:#ffffff;--p-well:#f2f6f8;--p-border:#e2eaed;--p-ink:#3c3c3c;--p-muted:#6f7c82;--p-path-bg:#dbf8c5;--p-path-border:#bfe89e;background:var(--page-bg);color:var(--p-ink);padding-bottom:0;overflow:hidden;min-height:0}
-:root[data-theme="dark"] #root .parent-organized{--p-card:#1d2d35;--p-well:#131f24;--p-border:#31454f;--p-ink:#f1f7fb;--p-muted:#9eb3be;--p-path-bg:#1b3528;--p-path-border:#366945}
+#root .parent-organized{--p-card:var(--brand-paper);--p-well:var(--scene-paper-cool);--p-border:var(--brand-line);--p-ink:var(--brand-ink);--p-muted:var(--brand-ink-muted);--p-path-bg:var(--brand-primary-soft);--p-path-border:var(--scene-leaf-soft);background:var(--page-bg);color:var(--p-ink);padding-bottom:0;overflow:hidden;min-height:0}
+:root[data-theme="dark"] #root .parent-organized{--p-card:#1d2d35;--p-well:var(--brand-night);--p-border:#31454f;--p-ink:var(--night-ink);--p-muted:var(--night-muted);--p-path-bg:var(--scene-ink);--p-path-border:#366945}
 /* Night cards: what sits inside a card takes the card's own well, not the daytime paper. */
 :root[data-theme="dark"] #root .parent.parent-organized .parent-body section{--surface:var(--p-well);--surface-strong:var(--p-well);--surface-border:var(--p-border)}
 #root .parent-organized .parent-head{flex:none;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) 14px max(24px,env(safe-area-inset-left));backdrop-filter:none;box-shadow:none;border-bottom:1px solid var(--p-border);z-index:2}
@@ -127,7 +127,7 @@
 #root .parent-media-list li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--brand-line)}
 #root .parent-media-list li>span{display:grid;gap:2px;flex:1 1 180px}
 #root .parent-media-list small{color:var(--brand-ink-muted);font-size:var(--text-sm);margin-left:6px}
-#root .parent-media-list .is-armed{background:var(--brand-danger);border-color:var(--brand-danger-deep);color:#fff}
+#root .parent-media-list .is-armed{background:var(--brand-danger);border-color:var(--brand-danger-deep);color:var(--brand-paper)}
 #root .parent-media-status{min-height:1.4em;font-size:var(--text-sm);color:var(--brand-ink-muted)}
 #root .parent-storage-facts{margin:14px 0;padding:12px 14px;border-radius:var(--radius-md);background:var(--brand-sun-soft)}
 #root .parent-storage-facts p{margin:0 0 6px;font-size:var(--text-base)}
