@@ -32,8 +32,7 @@
 .start-go { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 30px 10px 10px; border: 6px solid var(--brand-paper); border-radius: 70px; background: var(--brand-primary); box-shadow: 0 8px 0 var(--brand-primary-deep), 0 14px 30px rgba(0, 60, 40, .25); color: var(--brand-on-primary); animation: start-pulse 1.4s ease-in-out infinite alternate; }
 .start-go:active { translate: 0 6px; box-shadow: 0 2px 0 var(--brand-primary-deep); }
 .start-go-face { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 50%; background: var(--brand-paper); overflow: hidden; }
-.start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
-.start-go-play .icon { filter: brightness(0) opacity(.7); }
+.start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--brand-primary-deep); }
 .start-go-words { display: grid; text-align: left; }
 .start-go-words strong { font-size: 28px; line-height: 1.1; }
 .start-go-words span { font-size: 16px; font-weight: 800; opacity: .9; }

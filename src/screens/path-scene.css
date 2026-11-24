@@ -34,8 +34,7 @@
 /* ── Today's stop: a big green start medallion, the friend beside it, a picture bubble above ── */
 .path-stop.is-current { --token: clamp(76px, 11cqw, 168px); z-index: 4; display: grid; }
 .stop-go { padding: 0; border: 0; background: var(--brand-primary); box-shadow: 0 0 0 7px var(--brand-paper), 0 11px 0 7px var(--brand-primary-deep), 0 0 0 18px color-mix(in srgb, var(--brand-primary) 25%, transparent), 0 20px 30px rgba(20, 50, 40, .3); animation: stop-pulse 1.3s ease-in-out infinite alternate; }
-/* The arrow is the picture darkened to the deep green of text on the fill, so it reads at 3:1 without a white chip. */
-.stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; filter: brightness(0) opacity(.7); }
+.stop-go .icon { width: 50% !important; height: 50% !important; margin-left: 8%; }
 .stop-go:active { transform: translateY(5px); }
 .stop-friend-btn { position: absolute; right: calc(50% + var(--token) * .48); bottom: 24px; width: calc(var(--token) * 1.15); aspect-ratio: 1; padding: 0; border: 0; background: transparent; }
 .stop-friend-btn .stop-friend { position: static; width: 100% !important; height: 100% !important; pointer-events: none; }

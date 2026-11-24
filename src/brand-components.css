@@ -19,7 +19,18 @@
 }
 #root .screen :is(.btn-big.alt, .wish-button:not(.primary)):not(:disabled):hover { color:var(--text); border-color:var(--brand-ink-meta); }
 
-/* Icons are full-colour pictures, so inside a coloured button they sit on a white chip and never blend in (green on green). */
+/* Icons on a green fill: an action mark (Icon's is-glyph: play, mic, check…) turns white over a hard deep-green edge;
+   a picture keeps its colours on a white chip, so nothing blends into the green. */
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
+  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play,
+  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon:not(.is-glyph) {
+  background:var(--brand-paper); border-radius:var(--radius-sm); padding:4px; box-sizing:content-box; flex:none;
+}
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
+  .avatar-save, .story-echo-main, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play,
+  :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true]) > .icon.is-glyph {
+  background:none; padding:0; filter:brightness(0) invert(1) drop-shadow(0 3px 0 var(--brand-primary-deep));
+}
 
 /* Reward moments use the yellow "streak" recipe. */
 #root .screen .farm-primary.harvest { background:var(--brand-sun); color:var(--brand-ink); box-shadow:0 var(--brand-press) 0 var(--brand-sun-deep); }

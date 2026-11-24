@@ -79,7 +79,7 @@ function run(sprite, v, force) {
  mkdirSync(dir, { recursive: true });
  writeFileSync(resolve(dir, `${base}.prompt.txt`), v.prompt);
  const task = `Read ${base}.prompt.txt in the current directory and generate exactly that image with your built-in image generation tool (highest quality, ${v.size}). Save it in the current directory as ${v.file}. Do not create or change any other files.`;
- const args = ['exec', '--skip-git-repo-check', '-s', 'workspace-write', '-C', dir, ...v.refs.flatMap(r => ['-i', r]), ...(process.env.CODEX_MODEL ? ['-m', process.env.CODEX_MODEL] : []), task];
+ const args = ['exec', '--skip-git-repo-check', '-s', 'workspace-write', '-C', dir, ...v.refs.flatMap(r => ['-i', r]), ...(process.env.CODEX_MODEL ? ['-m', process.env.CODEX_MODEL] : []), '--', task]; // `-i` takes several files, so `--` keeps the task from being read as one
  return new Promise(done => {
   const child = spawn('codex', args, { stdio: ['ignore', 'ignore', 'ignore'] });
   child.on('close', code => {

@@ -21,9 +21,6 @@
   box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); text-shadow:none;
 }
 #root .screen .btn-big.alt { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:var(--village-shadow); border-radius:var(--radius-lg); }
-#root .screen :is(.learning-trail-primary,.journey-primary)>.icon {
-  background:var(--brand-sun-soft); border-radius:var(--radius-sm); padding:4px; box-sizing:content-box;
-}
 #root .screen .btn-big:disabled { opacity:.58; box-shadow:0 2px 0 #7b796355; }
 #root .screen :is(.replay,.cry-btn,.wish-button,.task-rest) { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:0 3px 0 var(--brand-line-deep); }
 #root .modal-backdrop { background:#214f675e; }

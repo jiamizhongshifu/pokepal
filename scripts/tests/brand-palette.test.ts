@@ -54,3 +54,8 @@ test('no stylesheet adds a hard-coded colour or a blurred shadow, and what is re
   if (lowered.length && process.env.UPDATE_STYLE_DEBT) { writeFileSync(BASELINE, `${JSON.stringify(now, null, 1)}\n`); return; }
   assert.deepEqual(lowered, [], 'Debt went down: record it with UPDATE_STYLE_DEBT=1 npx tsx --test scripts/tests/brand-palette.test.ts');
 });
+
+test('icons on a coloured fill are never darkened into the fill', () => {
+  const darkened = files('src').filter(path => /brightness\(0\)\s*opacity\(/.test(readFileSync(path, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\.dex-cell\.unknown[^{]*\{[^}]*\}/g, '')));
+  assert.deepEqual(darkened, [], 'An action mark on a green fill turns white (Icon marks it is-glyph, src/brand-components.css paints it); a picture sits on a white chip there. Add the fill to that rule instead of darkening the icon.');
+});

@@ -9,6 +9,9 @@ export type IconName = keyof typeof ICONS;
 
 const loadedIcons = new Set<string>();
 
+/** Action marks (not things a child names). On a coloured fill they turn white; every other icon is a picture and sits on a white chip there. */
+export const GLYPHS = new Set(["play", "check", "back", "close", "refresh", "mic", "speaker"]);
+
 /** Square icon picture. While it loads it shows a soft placeholder; if it fails it retries once, then falls back to a neutral face, so a slot is never blank or the wrong character. */
 export function Icon({ name, size = 48, className = "", style, label }: { name: string; size?: number | string; className?: string; style?: CSSProperties; label?: string }) {
   const wanted = ICONS[name] ?? ICONS.star;
@@ -29,7 +32,7 @@ export function Icon({ name, size = 48, className = "", style, label }: { name: 
       width={size}
       height={size}
       decoding="async"
-      className={`icon ${current.loaded ? "" : "is-loading "}${className}`}
+      className={`icon ${GLYPHS.has(name) ? "is-glyph " : ""}${current.loaded ? "" : "is-loading "}${className}`}
       style={style}
       alt={label ?? ""}
       aria-hidden={label ? undefined : true}
