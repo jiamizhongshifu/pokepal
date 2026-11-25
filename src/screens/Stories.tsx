@@ -51,7 +51,7 @@ export function StoryLibrary(){
       <div className="book-title">{unit.story===story.id&&<span className="story-learning-link">和「{unit.title}」一起读</span>}<h2>{story.title}</h2><span lang="en">{story.titleEn}</span><p className="book-summary">{story.summary}</p><div className="book-footer"><small>{story.pages.length} 页 · 约 {story.pages.length<=4?1:3} 分钟</small><b>{seen>story.pages.length?'再读一次':seen?'接着读':'翻开看看'} <span aria-hidden="true">›</span></b></div></div>
     </button>;
   })}</div>
-  <p className="story-parent-note">陪读小提示：不用考宝宝。听完后，聊一聊他自己的小经历。</p>
+  <p className="story-parent-note">陪读小提示：听完不用考，和孩子聊聊类似的小经历。</p>
  </div>;
 }
 

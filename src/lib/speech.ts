@@ -40,7 +40,7 @@ function voiceTiming(key: string): Promise<RawTiming | undefined> {
   return localTimings.then((all) => all[key]);
 }
 export const ttsAvailable = () => typeof window !== "undefined" && !!(window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext);
-export const voiceInfo = () => ({ en: "火山豆包 · Allison", zh: "火山豆包 · 小雪", provider: "volcengine", ready: import.meta.env.VITE_ONLINE || !!voiceManifest });
+export const voiceInfo = () => ({ en: "Allison", zh: "小雪", provider: "volcengine", ready: import.meta.env.VITE_ONLINE || !!voiceManifest });
 
 // ---------- 预合成配音（火山引擎豆包语音合成，构建期生成于 public/voice） ----------
 let voiceManifest: Record<string, string> | null = null;

@@ -31,9 +31,9 @@ export function LearningStageSettings(){
  };
  const pressed=shown??profile.stage;
  return <section className="learning-stage-settings" aria-labelledby="learning-stage-title">
-  <header><div><h3 id="learning-stage-title">宝宝的英语学习阶段</h3><p>按现在的准备程度选一个，随时可以换。</p></div><span className="stage-current">当前：{learningStageTitle(settings)}</span></header>
+  <header><div><h3 id="learning-stage-title">孩子的英语学习阶段</h3><p>按现在的准备程度选一个，随时可以换。</p></div><span className="stage-current">当前：{learningStageTitle(settings)}</span></header>
   {profile.stage==='custom'&&<p className="stage-legacy">现在用的是以前调过的专属节奏，会一直保留；点下面任一阶段就换成整套设置。</p>}
-  <fieldset disabled={unavailable} className="stage-presets"><legend>选择一个适合宝宝的起点</legend>
+  <fieldset disabled={unavailable} className="stage-presets"><legend>选择一个适合孩子的起点</legend>
    {LEARNING_STAGES.map(stage=><button type="button" key={stage.id} aria-pressed={pressed===stage.id} onClick={()=>void choose(stage.id)}>
     <Icon name={stage.icon} size={44}/><span><strong>{stage.title}</strong><span>{stage.description}</span><small>{stage.example}</small></span><span className="stage-check" aria-hidden="true">{pressed===stage.id?'✓':'○'}</span>
    </button>)}

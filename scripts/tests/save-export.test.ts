@@ -22,5 +22,6 @@ test('an unreadable save is exported as it is (minus the photo), and odd values 
 
 test('storage facts say unknown rather than guessing',()=>{
  assert.match(describeStorage({}),/未知/);
- assert.match(describeStorage({usage:1048576,quota:10485760,persisted:false}),/1\.0 MB.*10\.0 MB.*未承诺/);
+ assert.match(describeStorage({usage:1048576,quota:10485760,persisted:false}),/1\.0 MB.*10\.0 MB.*可能清理.*导出/);
+ assert.match(describeStorage({usage:1048576,quota:10485760,persisted:true}),/不会自动清理/);
 });

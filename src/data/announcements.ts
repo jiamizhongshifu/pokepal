@@ -65,7 +65,7 @@ export const ANNOUNCEMENTS = [
     {icon:'island',title:'小岛入口更清楚',text:'装扮、小日记和看风景收在小岛生活里。先选喜欢的升级，再看看需要多少能量。'}
   ]},
   {id:'2026-10-17-learning-home',date:'2026-10-17',title:'学英语，知道从哪里开始',items:[
-    {icon:'ear',title:'点一下，接着学',text:'学习首页突出今天的课程。学完一课，再回来就能继续下一课。'},
+    {icon:'ear',title:'点一下，接着学',text:'学习路线突出今天的课程。学完一课，再回来就能继续下一课。'},
     {icon:'book',title:'喜欢的玩法，也找得到',text:'小游戏、发现手册和学习小路集中放在下方。岛上互动、配套故事和家长记录可以展开查看。'}
   ]},
   {id:'2026-10-17-readable-pages',date:'2026-10-17',title:'看得清，玩得更顺手',items:[
@@ -84,7 +84,7 @@ export const ANNOUNCEMENTS = [
   ]},
   {id:'2026-10-17-island-dressing', date:'2026-10-17', title:'一起装扮我们的小岛', items:[
     {icon:'island',title:'小岛换新装',text:'选择喜欢的装饰，轻轻一点就能摆好。也可以扩建小岛、升级不同的活动区域。'},
-    {icon:'speaker',title:'小岛来信啦',text:'首页和家园都能查看公告。有新版本或没读过的消息时，入口会亮起小红点。'},
+    {icon:'speaker',title:'小岛来信啦',text:'开始页和“我的小岛”都能查看公告。有新版本或没读过的消息时，入口会亮起小红点。'},
     {icon:'star',title:'更明亮的海岛色彩',text:'图标换上明黄、薄荷绿和海洋蓝，陪你一起学英语、照顾伙伴。'}
   ]}
 ];

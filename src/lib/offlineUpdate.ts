@@ -70,7 +70,7 @@ export function useOfflineUpdate(open:boolean,native:boolean) {
         const stalled=Date.now()-progress.current.at>25000;
         const phase:UpdatePhase=!ready?'downloading':installing?'activating':snapshot.id!==loadedBuild?'reload':'ready';
         const titles={downloading:target.current&&target.current!==loadedBuild?'发现新版本，正在下载':'正在准备离线资源',activating:'下载完成，正在启用新版本',reload:'更新成功，重开即可使用',ready:requested.current?'已是最新版本':'离线资源已就绪'};
-        const details={downloading:navigator.onLine?(stalled?'暂时没有新进度，请确认 Wi-Fi 和 Mac 服务可用；已完成的资源会保留。':'请保持页面打开、iPad 亮屏并连接 Wi-Fi。已缓存的资源会自动复用。'):'网络已断开，已完成的资源会保留。恢复连接后点击重新检查。',activating:'正在完成最后的安装，请稍候。',reload:'新资源已保存。点击下方“立即重开”载入新版本，小精灵和学习进度不会被清空。',ready:requested.current?'本次检查未发现待安装的更新；当前版本与离线资源均已就绪。':'页面、模型和配音均已保存在此设备，可以离线使用。'};
+        const details={downloading:navigator.onLine?(stalled?'暂时没有新进度，请确认 Wi-Fi 和 Mac 服务可用；已完成的资源会保留。':'请保持页面打开、iPad 亮屏并连接 Wi-Fi。已缓存的资源会自动复用。'):'网络已断开，已完成的资源会保留。恢复连接后点“重新检查”。',activating:'正在完成最后的安装，请稍候。',reload:'新资源已保存。点下方“立即重开”载入新版本，小精灵和学习进度不会被清空。',ready:requested.current?'本次检查未发现待安装的更新；当前版本与离线资源均已就绪。':'页面、模型和配音均已保存在此设备，可以离线使用。'};
         setState({phase,title:titles[phase],detail:details[phase],snapshot,checkedAt:checkedAt.current,stalled:!ready&&stalled});
       } catch (error) {
         if(!stopped&&!checkInFlight.current){
@@ -79,8 +79,8 @@ export function useOfflineUpdate(open:boolean,native:boolean) {
           const detail=!navigator.onLine?'网络已断开。已下载的资源会保留，恢复 Wi-Fi 后可重试。'
             : /QuotaExceeded/i.test(code)?'iPad 可用存储不足，未能保存资源。请释放一些设备空间后重试，不必卸载游戏。'
             : slow?'更新服务仍在忙，暂时未读到进度；这不代表下载失败。页面会继续检查，也可以稍后重试。'
-            : /HTTP|Incomplete|hash mismatch|DownloadError|Abort|Timeout/i.test(code)?'有资源未下载完整。已完成的分包会复用，点击重试可接着下载。'
-            : '未能完成版本检查或安装。请保持 iPad 与 Mac 在同一 Wi-Fi，点击重试；不会清除小精灵和学习记录。';
+            : /HTTP|Incomplete|hash mismatch|DownloadError|Abort|Timeout/i.test(code)?'有资源未下载完整。已完成的分包会复用，点“重试”可以接着下载。'
+            : '未能完成版本检查或安装。请保持 iPad 与 Mac 在同一 Wi-Fi，点“重试”；不会清除小精灵和学习记录。';
           setState(prev=>({...prev,phase:slow?'downloading':'error',stalled:slow,title:slow?'正在等待更新进度':navigator.onLine?'更新暂未完成':'当前处于离线状态',detail,errorCode:code.slice(0,200),checkedAt:checkedAt.current}));
           if(!slow&&code!==reported.current){reported.current=code;void fetch('/__ipad/update-report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:'ipad-update-1',release:target.current||loadedBuild,phase:'page-error',error:code.slice(0,600)}),signal:AbortSignal.timeout(5000)}).catch(()=>{});}
         }

@@ -28,7 +28,9 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
  const targetRef=useRef<HTMLElement|null>(null);
  const root=useRef<HTMLElement>(null),live=useRef(true),autoCancelled=useRef(false),sequence=useRef(0);
  const run=useRef<ReturnType<typeof sayCancellableWhile>|null>(null);
- const scope=useRef(useGame.getState().screen);
+ // The page this guide belongs to, by what it shows rather than by object: the learning path stays mounted while the
+ // island is in front, and coming back makes a new screen object for the same page.
+ const scope=useRef(JSON.stringify(useGame.getState().screen));
  useLayoutEffect(()=>open?holdGuide():undefined,[open]);
  useLayoutEffect(()=>{
   if(!compact||!open)return;
@@ -55,7 +57,7 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   fit();window.addEventListener('resize',fit);
   return()=>window.removeEventListener('resize',fit);
  },[compact,open]);
- const allowed=useEvent(()=>live.current&&!modalIsOpen()&&!document.hidden&&!isMicActive()&&useGame.getState().screen===scope.current&&!useGame.getState().saveIssue);
+ const allowed=useEvent(()=>live.current&&!modalIsOpen()&&!document.hidden&&!isMicActive()&&JSON.stringify(useGame.getState().screen)===scope.current&&!useGame.getState().saveIssue);
  const cancel=useEvent(()=>{sequence.current++;run.current?.cancel();run.current=null;if(live.current)setSpeaking(false);});
  const hear=useEvent(async(manual=false)=>{
   if(!allowed())return;

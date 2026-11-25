@@ -41,7 +41,7 @@ export function AuthorContact({active=true}:{active?:boolean}) {
     <button ref={entry} className="author-entry" aria-haspopup="dialog" aria-expanded={open&&active} onClick={e=>{e.stopPropagation();trackInteraction('author_contact_opened');setStatus('');setOpen(true);}}><Icon name="heart" size={26}/><span>联系作者</span></button>
     {open&&active&&createPortal(<dialog ref={dialog} className="author-dialog" aria-labelledby={heading} onCancel={e=>{e.preventDefault();close();}} onClick={e=>{e.stopPropagation();if(e.target===dialog.current)close();}}>
       <header><div><small>给陪伴的家长</small><h2 id={heading}>联系作者 · {PARENT_CONTACT.operator}</h2></div><button autoFocus aria-label="关闭联系作者" onClick={close}><Icon name="close" size={26}/></button></header>
-      <p>欢迎告诉我宝宝喜欢什么、哪里不太好用，或遇到的问题。</p>
+      <p>欢迎告诉我孩子喜欢什么、哪里不太好用，或遇到的问题。</p>
       <div className="author-contact-body">
       <section className="author-wechat-qr" aria-label="扫码添加作者微信">
         <h3>微信扫一扫，添加好友</h3>

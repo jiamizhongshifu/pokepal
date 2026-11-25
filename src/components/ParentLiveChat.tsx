@@ -9,7 +9,7 @@ export function ParentLiveChat() {
   useEffect(()=>{const closed=()=>{if(openedFromTrigger.current)requestAnimationFrame(()=>trigger.current?.focus());openedFromTrigger.current=false;};window.addEventListener('chatwoot:closed',closed);return()=>window.removeEventListener('chatwoot:closed',closed);},[]);
   if(!token||!/^[a-zA-Z0-9_-]{16,128}$/.test(token))return null;
   return <section><h2>和我们聊聊</h2>
-    <p>仅供家长使用。点击后连接 Chatwoot 客服，发送的消息与必要的浏览器信息会由该服务处理；不会读取小岛存档、照片或录音。请勿提供孩子的个人信息。</p>
+    <p>仅供家长使用。点了才会连接 Chatwoot 客服，发送的消息与必要的浏览器信息会由该服务处理；不会读取小岛存档、照片或录音。请勿提供孩子的个人信息。</p>
     <p className="ps-muted">离线时也可留言，请用同一浏览器返回查看回复。聊天记录保留 30 天；邮件联系方式仍在上方。</p>
     <button type="button" className="ps-primary" ref={trigger} disabled={status==='loading'} aria-busy={status==='loading'} onClick={async()=>{
       setStatus('loading');

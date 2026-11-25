@@ -38,7 +38,7 @@ export function applyLearningSettings(settings:Settings,patch:Partial<Settings>)
  if(patch.level!==undefined&&patch.learningProfile===undefined)delete next.learningProfile;
  return normalizeLearningSettings(next);
 }
-export function learningStageTitle(settings:Settings){const p=learningProfile(settings);return p.stage==='custom'?'宝宝的专属节奏':LEARNING_STAGES.find(s=>s.id===p.stage)!.title;}
+export function learningStageTitle(settings:Settings){const p=learningProfile(settings);return p.stage==='custom'?'孩子的专属节奏':LEARNING_STAGES.find(s=>s.id===p.stage)!.title;}
 export function startsWithListening(profile:LearningProfile,kind:string,phraseLevel:1|2=1){
  return kind==='phrase'?profile.phrases==='listen'||(profile.phrases==='supported'&&phraseLevel===2):profile.entry==='listen';
 }

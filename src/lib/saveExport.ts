@@ -19,7 +19,7 @@ export async function storageFacts(): Promise<StorageFacts> {
 }
 const mb = (n?: number) => n === undefined ? '未知' : `${(n / 1048576).toFixed(1)} MB`;
 export function describeStorage(f: StorageFacts) {
-  return `已用 ${mb(f.usage)} / 可用 ${mb(f.quota)} · ${f.persisted === undefined ? '持久保存状态未知' : f.persisted ? '浏览器已同意持久保存' : '浏览器未承诺持久保存'}`;
+  return `已用 ${mb(f.usage)}，还能存 ${mb(f.quota)}${f.persisted === undefined ? '' : f.persisted ? ' · 浏览器不会自动清理' : ' · 空间紧张时浏览器可能清理，记得定期导出备份'}`;
 }
 /** A diagnostic line for feedback: the problem kind and storage facts only, never save contents. */
 export function diagnosticText(issue: string, f: StorageFacts, at = new Date()) {
