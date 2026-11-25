@@ -41,3 +41,11 @@ test('icons, props and creatures are vector files, and no screen asks for a pain
   assert.ok(existsSync(svg), `${svg} is missing: ${RUN} --assets sprites`);
  }
 });
+
+test('no scene or picture is blurred: the art is vector and is extended, never smeared', async () => {
+  const { readdirSync } = await import('node:fs');
+  const files = (readdirSync('src', { recursive: true }) as string[]).filter(f => f.endsWith('.css')).map(f => `src/${f}`);
+  // The story-adventure preview is a design sketch outside the product.
+  const blurred = files.filter(f => f !== 'src/screens/story-adventure-preview.css' && /filter\s*:[^;}]*blur\(/.test(readFileSync(f, 'utf8')));
+  assert.deepEqual(blurred, [], 'To fill a screen of another shape, extend the scene: its flat sky and water colours above and below (sceneEdge), its mirror image at the sides (SceneFill). See .scene-host in src/styles.css.');
+});

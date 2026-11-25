@@ -444,5 +444,14 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .evo-result { color: var(--brand-paper); font-size:var(--text-4xl); font-weight: 900; text-align: center; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); }
 .evo-result span { display: block; font-family: var(--brand-font); color: var(--brand-primary-ink); font-size:var(--text-3xl); }
 
-/* A picture that keeps its proportions on a wider screen: the same picture, soft and blurred, fills the sides. */
-.scene-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(22px) saturate(1.1); opacity: .9; pointer-events: none; }
+/* A 3:2 scene on a screen of another shape, never blurred: above and below it the picture's own flat sky and water
+   colours go on (sceneEdge), and on a wider screen the same picture continues on each side as its mirror image (SceneFill).
+   The host is the size container; --scene-w is the scene's width when the screen is wider, --scene-y its middle. */
+.scene-host { background: linear-gradient(var(--scene-tint, transparent), var(--scene-tint, transparent)), linear-gradient(var(--scene-top) var(--scene-y, 50%), var(--scene-bottom) var(--scene-y, 50%)); background-blend-mode: var(--scene-tint-blend, normal), normal; }
+/* Each side piece fills exactly the gap beside the scene (never wider, so the view gains nothing to scroll) and shows the
+   part of the mirror image that meets the scene's edge. A scene that tints itself by time of day (--scene-tint) tints these too. */
+.scene-side { display: none; position: absolute; top: var(--scene-y, 50%); width: calc(50% - var(--scene-w, 150cqh) / 2); height: calc(var(--scene-w, 150cqh) * 2 / 3); translate: 0 -50%; scale: -1 1; pointer-events: none;
+  background: linear-gradient(var(--scene-tint, transparent), var(--scene-tint, transparent)), var(--scene-art) left center / auto 100% no-repeat; background-blend-mode: var(--scene-tint-blend, normal), normal; }
+.scene-side.is-left { left: 0; }
+.scene-side.is-right { right: 0; background-position: 0 0, right center; }
+@container (min-aspect-ratio: 3 / 2) { .scene-side { display: block; } }

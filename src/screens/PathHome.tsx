@@ -10,7 +10,8 @@ import { Confetti } from '../components/Celebration';
 import { say, stopSpeech, sfx } from '../lib/speech';
 import { STORIES } from '../data/stories';
 import { creatureArt, creatureExpression } from '../data/creatures';
-import { pathArt } from '../data/sceneArt';
+import { pathArt, pathScene, sceneEdge } from '../data/sceneArt';
+import { SceneFill } from '../components/SceneFill';
 import { LayeredArt } from '../components/LayeredArt';
 import { Icon } from '../icons';
 import { ScrollPeek } from '../components/ScrollPeek';
@@ -104,8 +105,8 @@ export function PathHome() {
 
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
  return <div className="screen path-scene">
-  <div className="path-view" ref={view}>
-   <img className="scene-backdrop" src={pathArt(chapter.index)} alt="" aria-hidden="true" draggable={false} />
+  <div className="path-view scene-host" ref={view} style={sceneEdge(pathScene(chapter.index))}>
+   <SceneFill scene={pathScene(chapter.index)} />
    <section data-turn={turnDir} className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <LayeredArt className="path-world-art" ground={pathArt(chapter.index)} scene="learning-path" />
     {chapter.nodes.map((node, i) => {

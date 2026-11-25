@@ -24,7 +24,8 @@ import { withTransition } from '../lib/viewTransition';
 import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
 import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
-import { layerArt, storyBackground, storyProp } from '../data/sceneArt';
+import { sceneEdge, storyBackground, storyProp } from '../data/sceneArt';
+import { SceneFill } from '../components/SceneFill';
 import { IslandDepth } from '../island/IslandDepth';
 import { bi } from '../lib/bi';
 import { nextDistrict, stationDistrict, unlockedDistricts, unlockingUnit } from '../lib/islandPlan';
@@ -208,8 +209,8 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  const groups = new Map<string, number[]>();
  for (const f of standing) groups.set(f.place, [...(groups.get(f.place) ?? []), f.id]);
  return <div className={`screen island-home sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`}>
-  <div className="island-view" ref={view}>
-   <img className="scene-backdrop" src={layerArt('island-map', 'base')} alt="" aria-hidden="true" draggable={false} />
+  <div className="island-view scene-host" ref={view} style={sceneEdge('island-map')}>
+   <SceneFill scene="island-map" />
    <div className="island-world" ref={world} role="group" aria-label="我的小岛">
     <IslandDepth world={world} scroller={view} props={stickers} nudged={nudged} active={active} />
     {shownTraces(save, now).map(t => <span key={t.id} className="island-world-trace" role="img" aria-label={t.label} style={{ left: `${t.spot[0]}%`, top: `${t.spot[1]}%` }}><Icon name={t.icon} size={30} /></span>)}

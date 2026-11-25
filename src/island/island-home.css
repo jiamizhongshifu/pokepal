@@ -2,7 +2,7 @@
 .island-home { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 .island-home button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 /* On a tall phone the island keeps a readable size and is wider than the screen: it scrolls sideways. */
-.island-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: var(--scene-water); }
+.island-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; }
 .island-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; overflow: clip; }
 /* three.js draws the island here (IslandDepth); until it is ready the flat pieces show in its place. */
 .island-depth { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
@@ -145,10 +145,12 @@
 @keyframes island-give { to { translate: -60vw -20vh; scale: .2; opacity: 0; } }
 
 .island-home .island-tint { position: absolute; inset: 0; z-index: 7; pointer-events: none; transition: background-color 1.2s var(--ease-standard); }
-.island-home.sky-morning .island-tint { background: rgba(255, 214, 160, .14); }
-.island-home.sky-evening .island-tint { background: rgba(255, 140, 90, .22); mix-blend-mode: multiply; }
-.island-home.sky-night .island-tint { background: rgba(28, 40, 110, .42); mix-blend-mode: multiply; }
-.island-home.is-cloudy .island-tint { background-color: rgba(120, 140, 160, .16); }
+/* The time of day tints the island and, with the same colour, the sea around it (the scene host and its side pieces read these). */
+.island-home .island-tint { background-color: var(--scene-tint, transparent); mix-blend-mode: var(--scene-tint-blend, normal); }
+.island-home.sky-morning { --scene-tint: rgba(255, 214, 160, .14); }
+.island-home.sky-evening { --scene-tint: rgba(255, 140, 90, .22); --scene-tint-blend: multiply; }
+.island-home.sky-night { --scene-tint: rgba(28, 40, 110, .42); --scene-tint-blend: multiply; }
+.island-home.is-cloudy { --scene-tint: rgba(120, 140, 160, .16); }
 
 @keyframes island-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
 @keyframes island-bob { to { transform: translateY(-6px); } }
