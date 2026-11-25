@@ -35,9 +35,11 @@ function Guide({id,autoVoice,autoOpen,floating,topics,onTopic,manual,compact,onV
   const host=root.current?.closest<HTMLElement>('.topbar,.companion-toolbar,.panel-toolbar,.help-heading');
   const panel=root.current?.querySelector<HTMLElement>('.guide-content');
   if(!host||!panel)return;
-  const measure=()=>host.style.setProperty('--guide-space',`${Math.ceil(panel.getBoundingClientRect().height)}px`);
+  // Set on the whole screen so anything placed below the toolbar (a game card in a scene) can make room too.
+  const scope=host.closest<HTMLElement>('.screen')??host;
+  const measure=()=>scope.style.setProperty('--guide-space',`${Math.ceil(panel.getBoundingClientRect().height)}px`);
   measure();const observer=new ResizeObserver(measure);observer.observe(panel);
-  return()=>{observer.disconnect();host.style.removeProperty('--guide-space');};
+  return()=>{observer.disconnect();scope.style.removeProperty('--guide-space');};
  },[compact,open]);
  // A help bubble hangs from its button; keep it on screen wherever that button sits.
  useLayoutEffect(()=>{

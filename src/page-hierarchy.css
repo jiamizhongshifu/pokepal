@@ -28,7 +28,7 @@
 #root .notebook-parent .btn-small{min-height:48px}
 /* Three top actions replace five competing shortcuts; announcements keep their dot. */
 @media(max-width:600px){
- #root .story-primary-controls{padding:8px;gap:6px;bottom:calc(8px + env(safe-area-inset-bottom))}
+ #root .story-primary-controls{padding:8px;gap:8px;bottom:calc(8px + env(safe-area-inset-bottom))}
  #root .story-primary-controls button{min-height:60px;padding:6px}
  #root .story-primary-controls .story-listen span{font-size:var(--text-base)}
  #root .notebook-listen-card{gap:10px}

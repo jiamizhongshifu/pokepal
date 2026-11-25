@@ -28,3 +28,7 @@
  #root .task-staged .practice-card { left: 24px; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom)); max-height: calc(100% - 18vh - 112px - env(safe-area-inset-top)); }
  #root .task-staged .task-friend span { display: none; }
 }
+
+/* While the help bubble is open under the toolbar, the game card stays below it instead of sitting under it. */
+#root .task-staged:has(.guide-compact.is-open) .practice-card { max-height: calc(100% - 112px - var(--guide-space, 130px) - env(safe-area-inset-top)); }
+@media (max-width: 700px) { #root .task-staged:has(.guide-compact.is-open) .practice-card { max-height: calc(100% - 92px - var(--guide-space, 130px) - env(safe-area-inset-top)); } }

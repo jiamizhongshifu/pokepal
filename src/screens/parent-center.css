@@ -83,7 +83,7 @@
 #root .parent-organized .toast{z-index:100;pointer-events:none;max-width:calc(100% - 32px);overflow-wrap:anywhere}
 @media(max-width:680px){
  #root .parent-organized .parent-head{gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
- #root .parent-organized .tabs{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #root .parent-organized .tabs{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
  #root .parent-organized .tabs button{padding:8px 4px;gap:5px;font-size:var(--text-base);min-height:48px}
  #root .parent-organized .tabs .icon{width:20px!important;height:20px!important}
  #root .parent-organized .parent-body{padding:20px 16px calc(32px + env(safe-area-inset-bottom))}
@@ -179,7 +179,7 @@
   display: inline-flex; align-items: center; padding: 4px 12px; border-radius: var(--radius-pill);
   background: var(--brand-primary-soft); color: var(--brand-primary-ink); font-size: var(--text-sm); font-weight: 800;
 }
-.pchart-switch { display: inline-flex; gap: 4px; padding: 3px; border-radius: var(--radius-md); background: var(--p-well); border: 1px solid var(--p-border); }
+.pchart-switch { display: inline-flex; gap: 8px; padding: 3px; border-radius: var(--radius-md); background: var(--p-well); border: 1px solid var(--p-border); }
 .pchart-switch button {
   min-height: 36px; padding: 4px 12px; border: 0; border-radius: 10px; background: transparent;
   color: var(--p-muted); font-size: var(--text-sm); font-weight: 700; cursor: pointer;
