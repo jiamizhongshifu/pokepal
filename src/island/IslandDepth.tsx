@@ -92,7 +92,7 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
    s.view(shown.current); setReady(true);
   }).catch(() => { /* stays on the flat pieces */ });
   return () => { gone = true; made?.dispose(); scene.current = null; cancelAnimationFrame(easing.current); };
- }, [world]);
+ }, [world, fit]);
  useEffect(() => { scene.current?.run(active && ready); }, [active, ready]);
  useEffect(() => { if (ready) scene.current?.props(props); }, [ready, props]);
  useEffect(() => { if (nudged && !calm.current) scene.current?.hop(Object.keys(LAYER_AREA).filter(n => LAYER_AREA[n] === nudged)); }, [nudged]);
@@ -157,7 +157,7 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
    removeEventListener('pointerup', onUp); removeEventListener('pointercancel', onUp);
    box.removeEventListener('click', onClick, true); box.removeEventListener('wheel', onWheel);
   };
- }, [world, scroller, follow, aim]);
+ }, [world, scroller, follow, aim, fit]);
 
  return <>
   <canvas ref={canvas} className={`island-depth${ready ? ' is-ready' : ''}`} aria-hidden="true" />
