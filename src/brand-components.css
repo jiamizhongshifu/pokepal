@@ -131,6 +131,8 @@
     color var(--motion-quick) var(--ease-standard), opacity var(--motion-quick) var(--ease-standard), filter var(--motion-quick) var(--ease-standard);
 }
 :where(button, summary, a):active { transition-duration: var(--motion-press); transition-timing-function: var(--ease-standard); }
+/* A fold-out row has no edge to press into: it dims a little while held, so the tap is felt before it opens. */
+#root :where(summary):active { opacity: .7; }
 
 /* Page changes crossfade (lib/viewTransition.ts); the bottom navigation is the same on every page, so it stays put. */
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--motion-base); animation-timing-function: var(--ease-standard); }

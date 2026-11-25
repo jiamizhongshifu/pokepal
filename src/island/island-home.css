@@ -24,6 +24,10 @@
 .island-place:focus-visible { outline: 4px solid var(--brand-paper); outline-offset: -4px; }
 /* A place in an area not open yet is just quiet (tapping it says what to learn first). */
 .island-place.is-locked { z-index: 1; }
+/* Places and friends on the island carry the camera's offset as their transform (IslandDepth), which would hide the
+   usual pressed transform: they shrink with the separate scale property, which adds to it. */
+.island-world :is(.island-place, .island-walker-body) { transition: scale var(--motion-quick) var(--ease-spring); }
+.island-world :is(.island-place, .island-walker-body):not(:disabled):active { scale: .94; }
 .island-teaser { position: absolute; z-index: 5; translate: -50% -50%; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border: 3px solid var(--brand-paper); border-radius: 999px; background: rgba(255, 253, 244, .94); box-shadow: 0 4px 0 rgba(0, 0, 0, .14); color: var(--scene-slate); white-space: nowrap; }
 .island-teaser .icon { padding: 4px; border-radius: 50%; background: var(--brand-section); }
 .island-teaser span { display: grid; text-align: left; line-height: 1.2; }
