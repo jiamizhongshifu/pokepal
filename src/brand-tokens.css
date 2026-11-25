@@ -31,6 +31,8 @@
      the screen width in between (no clamp or vw), so every size on any screen is one of the scale above. */
   --text-step-body:var(--text-base); --text-step-lead:var(--text-lg); --text-step-title:var(--text-xl);
   --text-step-heading:var(--text-2xl); --text-step-display:var(--text-3xl);
+  /* Behind every dialog and panel that takes the whole screen: one deep-blue veil, dark enough that the page behind reads as paused. */
+  --scrim:#102b4266;
   /* Spacing: one scale for gaps and padding in new work. */
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-7:32px;
   /* Radii: inputs 12, cards and buttons 16, sheets 20, large panels 24, chips 9999. */

@@ -27,4 +27,4 @@
 #root .sleepy.rest-day .sleepy-text{color:var(--text)}
 #root .sleepy .sleepers.few-friends{align-content:center;row-gap:22px}
 #root .sleepy .few-friends .sleeper>img:not(.icon){width:128px;height:128px}
-@media(max-width:600px){#root .sleepy .sleepers.few-friends{align-content:start;row-gap:12px}#root .sleepy .few-friends .sleeper>img:not(.icon){width:84px;height:84px}}
+@media(max-width:600px){#root .sleepy .sleepers.few-friends{row-gap:16px}#root .sleepy .few-friends .sleeper>img:not(.icon){width:100px;height:100px}}

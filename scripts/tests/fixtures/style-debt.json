@@ -8,15 +8,15 @@
   "blurs": 0
  },
  "src/components/announcements.css": {
-  "colours": 3,
+  "colours": 2,
   "blurs": 2
  },
  "src/components/author-contact.css": {
-  "colours": 2,
+  "colours": 1,
   "blurs": 1
  },
  "src/components/avatar-editor.css": {
-  "colours": 4,
+  "colours": 3,
   "blurs": 2
  },
  "src/components/device-setup.css": {
@@ -64,7 +64,7 @@
   "blurs": 2
  },
  "src/island-village-theme.css": {
-  "colours": 13,
+  "colours": 12,
   "blurs": 1
  },
  "src/island/island-home.css": {

@@ -133,7 +133,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .trace-canvas.ink { touch-action: none; }
 
 /* ---------- 弹窗 / 庆祝 ---------- */
-.modal-backdrop { position: fixed; inset: 0; background: rgba(10, 14, 60, 0.5); display: grid; place-items: center; z-index: 200; animation: motion-fade-in var(--motion-base) var(--ease-standard); }
+.modal-backdrop { position: fixed; inset: 0; background: var(--scrim); display: grid; place-items: center; z-index: 200; animation: motion-fade-in var(--motion-base) var(--ease-standard); }
 .modal { background: var(--surface); border: 1px solid rgba(255, 255, 255, 0.35); border-radius:var(--radius-xl); padding: 34px 46px; box-shadow: 0 30px 90px rgba(0, 0, 40, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); text-align: center; animation: motion-sheet-in var(--motion-base) var(--ease-standard); position: relative; z-index: 2; color: var(--brand-paper); text-shadow: none; }
 .celebrate-card { display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 480px; }
 .cel-title { font-size:var(--text-5xl); font-weight: 900; color: var(--text); text-shadow: none; }

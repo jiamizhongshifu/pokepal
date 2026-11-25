@@ -23,7 +23,7 @@
 #root .screen .btn-big.alt { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:var(--brand-elev); border-radius:var(--radius-lg); }
 #root .screen .btn-big:disabled { opacity:.58; box-shadow:0 2px 0 #7b796355; }
 #root .screen :is(.replay,.cry-btn,.wish-button,.task-rest) { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
-#root .modal-backdrop { background:#214f675e; }
+#root .modal-backdrop { background:var(--scrim); }
 #root .parent .parent-body section,#root .parent .stat { --text:var(--brand-ink); --muted:var(--brand-ink-muted); --accent-en:var(--brand-sky-ink); background:var(--brand-paper); color:var(--brand-ink); border:1px solid var(--brand-line); box-shadow:var(--brand-elev); }
 #root .parent .tabs button { background:var(--brand-sun-soft); color:var(--brand-ink); }
 #root .screen .btn-big::after { display:none; }
