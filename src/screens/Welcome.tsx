@@ -81,11 +81,11 @@ export function Welcome() {
   return (
     <div className="screen start-screen">
       <div className="start-view scene-host" style={sceneEdge('island-map')}>
-        <SceneFill scene="island-map"/>
         <div className="start-world" aria-hidden={false}>
           <LayeredArt className="start-world-art" ground={layerArt('island-map', 'base')} scene="island-map"/>
           {friends.map(f => { const c = getCreature(f.id); return <button key={f.id} type="button" className={`start-friend${hop === f.id ? ' is-hopping' : ''}`} style={{ left: `${f.spot[0]}%`, top: `${f.spot[1]}%`, '--size': `${[10, 12, 14][c.stage - 1] ?? 10}%` } as React.CSSProperties} aria-label={`${c.nameZh} ${c.nameEn}`} onClick={() => greet(f.id)}><CreatureImg src={creatureArt(f.id)} alt=""/></button>; })}
         </div>
+        <SceneFill scene="island-map"/>
       </div>
 
       <header className="start-title"><Icon name="leaf" size={34} className="start-title-leaf"/><h1>啵啵岛</h1><span lang="en">Bubbly Isle</span></header>

@@ -210,7 +210,6 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  for (const f of standing) groups.set(f.place, [...(groups.get(f.place) ?? []), f.id]);
  return <div className={`screen island-home sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`}>
   <div className="island-view scene-host" ref={view} style={sceneEdge('island-map')}>
-   <SceneFill scene="island-map" />
    <div className="island-world" ref={world} role="group" aria-label="我的小岛">
     <IslandDepth world={world} scroller={view} props={stickers} nudged={nudged} active={active} />
     {shownTraces(save, now).map(t => <span key={t.id} className="island-world-trace" role="img" aria-label={t.label} style={{ left: `${t.spot[0]}%`, top: `${t.spot[1]}%` }}><Icon name={t.icon} size={30} /></span>)}
@@ -235,6 +234,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     })}
     <div className="island-tint" aria-hidden="true" />
    </div>
+   <SceneFill scene="island-map" />
    {active && save.captures.length === 0 && <button type="button" className="island-first-friend" aria-label="去海边迎接新朋友" onClick={() => go({ name: 'catch' })}><img src={storyProp('visit-boat')} alt="" /><Icon name="play" size={44} /></button>}
   </div>
   {active && <ScrollPeek target={view} watch={district} />}

@@ -5,6 +5,8 @@
     分层：scenes.json 里 layerOf 指向这张画的 layer / layer-base 条目，各自转成矢量，并量出每块在原画里的位置。
   python3 scripts/art/vectorize.py --whole beach orchard ...
     整张：没有要单独动的东西的画，整张转成 public/scenes/flat-v1/<group>/<id>.svg。
+  python3 scripts/art/vectorize.py --sides island-map learning-path ...
+    宽屏两侧：<side>/side.png 是把地面边缘 40% 接着往外画满的整张，取新画的 60%（连同贴边的 4%，用来渐变盖住接缝）转成 layers/<scene>/side-left|right.svg。
   python3 scripts/art/vectorize.py --assets prop icon sprites
     透明底的道具、图标和小精灵：public/scenes/flat-v1/<group>/（或 public/<group>/，含子目录）下打包好的每张图，
     按原画布（同样的留白）转成同名 .svg。
@@ -114,6 +116,35 @@ def layered(scene):
     data[scene] = layout
     gen.write_text(json.dumps(data, ensure_ascii=False, indent=1) + '\n')
 
+# Where each scene's wide-screen side paintings are: output/rebrand/scenes/<prefix>-left|right/side.png.
+SIDE_SOURCE = {'island-map': 'island-side', 'learning-path': 'path-side-1', **{f'learning-path-{n}': f'path-side-{n}' for n in range(2, 7)}}
+KEPT = .4  # the part of each side painting that is the ground's own edge, painted over unchanged
+OVER = .04  # how much of that edge each side keeps, to fade in over the scene (styles.css .scene-side: --scene-over)
+
+def to_palette(png: Path, ground: Path):
+  """Every pixel takes the nearest colour of the traced ground beside it. A side painting's open sky fades into the
+  sea with no hill between them, and traced as it is the whole fade would merge into the sea colour; in the ground's
+  own colour bands it splits where the ground splits, and the two meet at the seam in the same colours."""
+  palette = np.array([[int(h[i:i + 2], 16) for i in (0, 2, 4)] for h in sorted(set(re.findall(r'fill="#([0-9A-Fa-f]{6})"', ground.read_text())))], np.int32)
+  im = np.array(Image.open(png).convert('RGBA'))
+  rgb = im[:, :, :3].reshape(-1, 3).astype(np.int32)
+  colours, back = np.unique(rgb, axis=0, return_inverse=True)
+  nearest = palette[np.argmin(((colours[:, None, :] - palette[None, :, :]) ** 2).sum(2), axis=1)]
+  im[:, :, :3] = nearest[back.ravel()].reshape(im.shape[0], im.shape[1], 3)
+  Image.fromarray(im.astype(np.uint8)).save(png)
+
+def sides(scene):
+  out_dir = ROOT / 'public/scenes/flat-v1/layers' / scene
+  for side in ('left', 'right'):
+    src = SRC / f'{SIDE_SOURCE[scene]}-{side}'
+    im = Image.open(src / 'side.png').convert('RGB')
+    k = round(im.width * (KEPT - OVER))
+    im.crop((0, 0, im.width - k, im.height) if side == 'left' else (k, 0, im.width, im.height)).save(src / 'new.png')
+    to_palette(src / 'new.png', out_dir / 'base.svg')
+    _, size = prepare(src / 'new.png', src / 'vector.png', cut=False)
+    raw, gz = trace(src / 'vector.png', out_dir / f'side-{side}.svg', size, layer_difference=7, color_precision=7)
+    print(f"{scene}/side-{side:5s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB")
+
 def whole(id):
   s = next(s for s in catalog['scenes'] if s['id'] == id)
   work = SRC / id / 'vector.png'
@@ -150,6 +181,8 @@ def asset(png: Path):
 args = sys.argv[1:] or ['island-map']
 if args[0] == '--whole':
   for id in args[1:]: whole(id)
+elif args[0] == '--sides':
+  for scene in args[1:]: sides(scene)
 elif args[0] == '--assets':
   for group in args[1:]:
     folder = ROOT / 'public/scenes/flat-v1' / group

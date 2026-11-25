@@ -147,10 +147,12 @@
 .island-home .island-tint { position: absolute; inset: 0; z-index: 7; pointer-events: none; transition: background-color 1.2s var(--ease-standard); }
 /* The time of day tints the island and, with the same colour, the sea around it (the scene host and its side pieces read these). */
 .island-home .island-tint { background-color: var(--scene-tint, transparent); mix-blend-mode: var(--scene-tint-blend, normal); }
+/* The wide-screen sides tint themselves and reach over the island's edge: drawn after the tint, not under it again. */
+.island-home .scene-side { z-index: 7; }
 .island-home.sky-morning { --scene-tint: rgba(255, 214, 160, .14); }
 .island-home.sky-evening { --scene-tint: rgba(255, 140, 90, .22); --scene-tint-blend: multiply; }
 .island-home.sky-night { --scene-tint: rgba(28, 40, 110, .42); --scene-tint-blend: multiply; }
-.island-home.is-cloudy { --scene-tint: rgba(120, 140, 160, .16); }
+.island-home.is-cloudy:is(.sky-morning, .sky-day) { --scene-tint: rgba(120, 140, 160, .16); }
 
 @keyframes island-idle { 50% { transform: scaleY(1.03) scaleX(.985); } }
 @keyframes island-bob { to { transform: translateY(-6px); } }

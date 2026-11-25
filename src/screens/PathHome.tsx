@@ -106,7 +106,6 @@ export function PathHome() {
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
  return <div className="screen path-scene">
   <div className="path-view scene-host" ref={view} style={sceneEdge(pathScene(chapter.index))}>
-   <SceneFill scene={pathScene(chapter.index)} />
    <section data-turn={turnDir} className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <LayeredArt className="path-world-art" ground={pathArt(chapter.index)} scene="learning-path" />
     {chapter.nodes.map((node, i) => {
@@ -139,6 +138,7 @@ export function PathHome() {
      </button>;
     })}
    </section>
+   <SceneFill scene={pathScene(chapter.index)} />
   </div>
   <ScrollPeek target={view} watch={page} />
 

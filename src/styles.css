@@ -445,13 +445,17 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .evo-result span { display: block; font-family: var(--brand-font); color: var(--brand-primary-ink); font-size:var(--text-3xl); }
 
 /* A 3:2 scene on a screen of another shape, never blurred: above and below it the picture's own flat sky and water
-   colours go on (sceneEdge), and on a wider screen the same picture continues on each side as its mirror image (SceneFill).
+   colours go on (sceneEdge), and on a wider screen the ground goes on at each side in its painted continuation (SceneFill),
+   which ends in open sky and sea, so a still wider screen meets the same flat colours.
    The host is the size container; --scene-w is the scene's width when the screen is wider, --scene-y its middle. */
 .scene-host { background: linear-gradient(var(--scene-tint, transparent), var(--scene-tint, transparent)), linear-gradient(var(--scene-top) var(--scene-y, 50%), var(--scene-bottom) var(--scene-y, 50%)); background-blend-mode: var(--scene-tint-blend, normal), normal; }
-/* Each side piece fills exactly the gap beside the scene (never wider, so the view gains nothing to scroll) and shows the
-   part of the mirror image that meets the scene's edge. A scene that tints itself by time of day (--scene-tint) tints these too. */
-.scene-side { display: none; position: absolute; top: var(--scene-y, 50%); width: calc(50% - var(--scene-w, 150cqh) / 2); height: calc(var(--scene-w, 150cqh) * 2 / 3); translate: 0 -50%; scale: -1 1; pointer-events: none;
-  background: linear-gradient(var(--scene-tint, transparent), var(--scene-tint, transparent)), var(--scene-art) left center / auto 100% no-repeat; background-blend-mode: var(--scene-tint-blend, normal), normal; }
+/* Each side piece fills exactly the gap beside the scene (never wider, so the view gains nothing to scroll) and reaches
+   --scene-over into it, drawn over the scene's edge and fading in there (the mask reads only opacity, so any solid colour serves): the side painting carries that strip of the
+   scene's own edge (vectorize.py OVER), and two tracings of the same sky band it slightly differently, so a hard join
+   would show as a line. A scene that tints itself by time of day (--scene-tint) tints these too. */
+.scene-side { --scene-over: calc(var(--scene-w, 150cqh) * .04); display: none; position: absolute; top: var(--scene-y, 50%); width: calc(50% - var(--scene-w, 150cqh) / 2 + var(--scene-over)); height: calc(var(--scene-w, 150cqh) * 2 / 3); translate: 0 -50%; pointer-events: none;
+  background: linear-gradient(var(--scene-tint, transparent), var(--scene-tint, transparent)), var(--scene-art) right center / auto 100% no-repeat; background-blend-mode: var(--scene-tint-blend, normal), normal;
+  mask: linear-gradient(to left, transparent, var(--brand-ink) var(--scene-over)); }
 .scene-side.is-left { left: 0; }
-.scene-side.is-right { right: 0; background-position: 0 0, right center; }
+.scene-side.is-right { right: 0; background-position: 0 0, left center; mask: linear-gradient(to right, transparent, var(--brand-ink) var(--scene-over)); }
 @container (min-aspect-ratio: 3 / 2) { .scene-side { display: block; } }
