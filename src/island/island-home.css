@@ -27,7 +27,7 @@
 .island-teaser { position: absolute; z-index: 5; translate: -50% -50%; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border: 3px solid var(--brand-paper); border-radius: 999px; background: rgba(255, 253, 244, .94); box-shadow: 0 4px 0 rgba(0, 0, 0, .14); color: var(--scene-slate); white-space: nowrap; }
 .island-teaser .icon { padding: 4px; border-radius: 50%; background: var(--brand-section); }
 .island-teaser span { display: grid; text-align: left; line-height: 1.2; }
-.island-teaser b { font-size: 16px; } .island-teaser small { font-size: 14px; color: var(--brand-ink-muted); }
+.island-teaser b { font-size: var(--text-base); } .island-teaser small { font-size: var(--text-sm); color: var(--brand-ink-muted); }
 .island-teaser.is-nudged { animation: island-wobble .6s var(--ease-standard); }
 .island-place.is-nudged { animation: island-wobble .6s var(--ease-standard); }
 
@@ -100,7 +100,7 @@
 .garden-plot .garden-sparkle { position: absolute; right: 2%; top: 4%; width: 30% !important; height: auto !important; animation: island-bob .8s var(--ease-breathe) 4 alternate; }
 .garden-plot .garden-splash { position: absolute; left: 50%; top: 10%; translate: -50% 0; width: 40% !important; height: auto !important; animation: garden-drop .9s var(--ease-exit) forwards; }
 .garden-basket { position: absolute; z-index: 8; left: calc(112px + env(safe-area-inset-left)); top: calc(16px + env(safe-area-inset-top)); display: flex; gap: 6px; margin: 0; padding: 8px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
-.garden-basket li { display: flex; align-items: center; gap: 2px; font-size: 20px; font-weight: 800; color: var(--scene-wood); }
+.garden-basket li { display: flex; align-items: center; gap: 2px; font-size: var(--text-xl); font-weight: 800; color: var(--scene-wood); }
 @keyframes garden-drop { to { translate: -50% 120%; opacity: 0; } }
 
 /* Doing something together happens in the scene itself: the friend asks, the things lie on the ground. */
@@ -195,7 +195,7 @@
 
 /* ── The answer card on the island: the question as a title, the things to choose on one white card ── */
 .island-stage .island-ask-stage { left: 30%; right: 3%; bottom: 4%; display: grid; gap: 10px; padding: 14px 20px 18px; border-radius: 30px; background: var(--brand-paper); box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); pointer-events: auto; }
-.island-stage .island-ask-title { margin: 0; display: grid; justify-items: start; gap: 4px; font-size: clamp(17px, 1.7vw, 22px); line-height: 1.35; color: var(--scene-ink); text-align: left; }
+.island-stage .island-ask-title { margin: 0; display: grid; justify-items: start; gap: 4px; font-size: var(--text-step-lead); line-height: 1.35; color: var(--scene-ink); text-align: left; }
 .island-stage .island-ask-title small { padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft); color: var(--brand-primary-ink); font-size: var(--text-base); font-weight: 800; }
 .island-stage .island-ask-stage .island-ask-options { gap: 16px; }
 #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: min(15vw, 21vh); border-radius: 26px; background: var(--brand-section); border: 3px solid var(--scene-line); box-shadow: 0 5px 0 var(--scene-line); filter: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
@@ -210,7 +210,7 @@
 }
 
 /* Choosing what to say: each bubble carries its sentence, like in lessons. */
-.island-stage .island-ask-stage.is-situation .island-ask-options small, .island-stage .island-ask-stage.is-lead .island-ask-options small { display: block !important; margin-top: 2px; font-size: 15px; font-weight: 800; color: var(--scene-ink); }
+.island-stage .island-ask-stage.is-situation .island-ask-options small, .island-stage .island-ask-stage.is-lead .island-ask-options small { display: block !important; margin-top: 2px; font-size: var(--text-base); font-weight: 800; color: var(--scene-ink); }
 @media (max-width: 700px) { .island-stage .island-play > header { top: calc(70px + env(safe-area-inset-top)); } .island-stage .island-play-made { top: calc(98px + env(safe-area-inset-top)); } }
 /* On a wide screen the answer card keeps a comfortable width instead of stretching across. */
 @media (min-width: 1300px) { .island-stage .island-ask-stage { left: auto; width: min(62%, 880px); } }

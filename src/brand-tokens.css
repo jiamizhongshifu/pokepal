@@ -27,6 +27,10 @@
   /* Type scale (DESIGN.md §3) plus 20px and 28px steps for children's body and large buttons. */
   --text-xs:12px; --text-sm:13px; --text-base:15px; --text-lg:18px; --text-xl:20px;
   --text-2xl:24px; --text-3xl:28px; --text-4xl:32px; --text-5xl:40px; --text-6xl:56px;
+  /* Steps for text that grows on a larger screen: the phone size, then from 601px the tablet size. Text never scales with
+     the screen width in between (no clamp or vw), so every size on any screen is one of the scale above. */
+  --text-step-body:var(--text-base); --text-step-lead:var(--text-lg); --text-step-title:var(--text-xl);
+  --text-step-heading:var(--text-2xl); --text-step-display:var(--text-3xl);
   /* Spacing: one scale for gaps and padding in new work. */
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-7:32px;
   /* Radii: inputs 12, cards and buttons 16, sheets 20, large panels 24, chips 9999. */
@@ -103,7 +107,11 @@
   --activity-listen:#ddf4ff; --activity-wordpic:#dbf8c5;
   --activity-repeat:#ffe8cc; --activity-trace:#fff4cc;
 
+}@media (min-width: 601px) {
+  :root { --text-step-body:var(--text-lg); --text-step-lead:var(--text-xl); --text-step-title:var(--text-2xl);
+    --text-step-heading:var(--text-3xl); --text-step-display:var(--text-5xl); }
 }
+
 :root, :root[data-theme="light"] {
   --page-bg:var(--brand-page);
   --surface:var(--brand-paper); --surface-border:var(--brand-line);

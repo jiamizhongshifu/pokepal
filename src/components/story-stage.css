@@ -11,8 +11,8 @@
 .theatre-item-art{width:100%;display:grid;place-items:center;transform:rotate(var(--prop-turn));transform-origin:center bottom}
 .theatre-painted-prop{display:block;width:100%;height:auto;max-width:100%;filter:drop-shadow(0 2px 2px #675a3820)}
 .theatre-item.item-heart{z-index:2}
-.theatre-place{position:absolute;left:12px;top:12px;padding:5px 10px;background:#fffbedce;border-radius:10px;font-size:12px;color:var(--muted);z-index:5;pointer-events:none}
-.theatre-replay{position:absolute;right:8px;top:6px;z-index:6;display:flex;align-items:center;gap:5px;min-height:48px;padding:6px 10px;border:0;border-radius:14px;background:#fffbeddf;color:var(--muted);font-size:12px}.theatre-replay:hover{background:var(--surface)}.theatre-replay:active{transform:scale(.97)}
+.theatre-place{position:absolute;left:12px;top:12px;padding:5px 10px;background:#fffbedce;border-radius:10px;font-size:var(--text-sm);color:var(--muted);z-index:5;pointer-events:none}
+.theatre-replay{position:absolute;right:8px;top:6px;z-index:6;display:flex;align-items:center;gap:5px;min-height:48px;padding:6px 10px;border:0;border-radius:14px;background:#fffbeddf;color:var(--muted);font-size:var(--text-sm)}.theatre-replay:hover{background:var(--surface)}.theatre-replay:active{transform:scale(.97)}
 .mood-quiet .theatre-painted-background,.mood-worried .theatre-painted-background{filter:saturate(.88)}
 .move-arrive{animation:story-walk-in 1.2s var(--ease-standard) both}
 .move-roll{animation:story-ball-roll 1.6s var(--ease-standard) both}
@@ -32,7 +32,7 @@
 .cover-scene.story-theatre{border:0;border-radius:0}.cover-scene .theatre-actor{height:66%}.cover-scene [class*="move-"]{animation:none!important}
 .scene-offscreen [class*="move-"]{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){.story-theatre [class*="move-"]{animation:none!important}.theatre-replay{display:none}}
-@media(max-width:600px){.theatre-place{top:8px;left:8px;font-size:11px}.theatre-replay{font-size:11px}}
+@media(max-width:600px){.theatre-place{top:8px;left:8px;font-size:var(--text-sm)}.theatre-replay{font-size:var(--text-sm)}}
 /* Preserve the painted horizon in the tablet's single-column book layout. */
 @media(min-width:601px) and (max-width:899px){.story-stage.story-theatre:not(.cover-scene){height:clamp(290px,52vw,400px)}}
 
@@ -41,7 +41,7 @@
 .theatre-word:focus-visible{outline:3px solid var(--brand-sky-ink);outline-offset:3px}
 .story-language-options{border:0;padding:12px 0;margin:0;min-width:0}
 .story-language-options legend{font-weight:800}
-.story-language-options p,.story-language-options small{font-size:14px;line-height:1.6}
+.story-language-options p,.story-language-options small{font-size:var(--text-base);line-height:1.6}
 .story-language-options>div{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .story-language-options button{min-height:48px;padding:10px 14px;border:2px solid var(--surface-border);border-radius:16px;background:var(--brand-paper);color:var(--text);font:inherit;font-weight:700}
 .story-language-options button[aria-pressed=true]{background:var(--scene-cream);border-color:#c2a13e}

@@ -9,11 +9,11 @@
 #root .story-reader .story-page-header { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; }
 #root .story-reader .story-beat { margin:0; font-size:var(--text-2xl); }
 #root .story-reader .story-mode { margin:0; gap:8px; flex-wrap:nowrap; flex:none; }
-#root .story-reader .story-mode button { min-height:48px; padding:8px 12px; gap:6px; }
+#root .story-reader .story-mode button { min-height:48px; font-size:var(--text-base); padding:8px 12px; gap:6px; }
 #root .story-reader .story-mode small { display:none; }
 #root .story-reader .open-storybook > .story-stage { height:clamp(280px,46vh,480px); align-self:start; }
 #root .story-reader .story-reading-text { padding:0; }
-#root .story-reader .story-text-en { font-size:clamp(22px,2.4vw,28px); }
+#root .story-reader .story-text-en { font-size:var(--text-step-heading); }
 #root .story-reader .story-parent-options { grid-column:1/-1; margin:0; }
 #root .story-reader .story-context { font-size:var(--text-base); color:var(--brand-ink-muted); }
 #root .story-reader .story-primary-controls { position:static; flex:none; transform:none; width:min(640px,calc(100% - 32px)); margin:0 auto; padding:10px 8px; box-shadow:none; background:transparent; border:0; border-radius:0; }

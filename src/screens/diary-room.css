@@ -20,7 +20,7 @@
 #root .diary-room .diary-welcome { justify-content:center; gap:12px; margin:0 0 14px; color:var(--muted); font-size:var(--text-base); }
 #root .diary-room .diary-friend { background:transparent; }
 #root .diary-room .diary-question { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; color:var(--text); }
-#root .diary-room .diary-question h2 { font-size:clamp(23px,2.5vw,32px); margin:14px 0 10px; }
+#root .diary-room .diary-question h2 { font-size:var(--text-step-heading); margin:14px 0 10px; }
 #root .diary-room .diary-question-heading { justify-content:center; gap:20px; }
 #root .diary-room .diary-question-icon { background:#ead9ac80; }
 #root .diary-room .diary-record { background:var(--brand-primary); border-color:var(--brand-primary-deep); box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); color:var(--brand-on-primary); margin:22px auto 16px; }
@@ -37,7 +37,7 @@
 
 #root .diary-room .diary-guide-status:empty { display:none; }
 #root .diary-room .diary-parent { color:var(--muted); margin-top:12px; }
-#root .diary-room .diary-caption { color:var(--muted); font-size:var(--text-xs); letter-spacing:0; line-height:1.7; }
+#root .diary-room .diary-caption { color:var(--muted); font-size:var(--text-sm); letter-spacing:0; line-height:1.7; }
 #root .diary-room .diary-original { white-space:pre-wrap; overflow-wrap:anywhere; }
 #root .diary-room .diary-room-eyebrow { color:var(--muted); font-size:var(--text-base); letter-spacing:2px; }
 #root .diary-room .diary-collection { min-height:320px; }
@@ -93,7 +93,7 @@
 #root .diary-room .diary-page-footer .diary-parent { margin-top:0; }
 @media(min-width:1000px) {
  :root[data-theme="dark"] #root .diary-room .guided-diary { background:linear-gradient(90deg,var(--scene-parchment),var(--scene-sand) 41%,var(--scene-tan) 43%,var(--scene-tan) 43.6%,var(--scene-parchment) 44%,var(--scene-sand) 46%,var(--scene-sand)); }
- #root .diary-room .diary-question h2 { font-size:clamp(23px,2.1vw,30px); }
+ #root .diary-room .diary-question h2 { font-size:var(--text-step-heading); }
 }
 /* Side companions stand at desk level; the narrow layout uses the book's top edge. */
 @media(min-width:701px) { .diary-room-friend.friend-2 { display:none; } }

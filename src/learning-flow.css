@@ -1,7 +1,7 @@
 /* Learning navigation: progress belongs to the task; help stays at the right edge. */
 #root .screen .topbar.has-learning-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;min-height:80px;padding-top:10px;padding-bottom:10px}
 #root .topbar.has-learning-tools .tb-left{display:flex;min-width:0;gap:12px;flex:1 1 auto}
-#root .topbar.has-learning-tools .tb-title{font-size:clamp(18px,2.2vw,26px);line-height:1.35;min-width:0;overflow-wrap:anywhere}
+#root .topbar.has-learning-tools .tb-title{font-size:var(--text-step-title);line-height:1.35;min-width:0;overflow-wrap:anywhere}
 .tb-learning-tools{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex:none;margin-left:auto}
 .tb-progress:empty{display:none}
 /* A lesson or game is played on a painted daytime scene that stays bright at night, so its title and round count keep the scene ink. */
@@ -19,7 +19,7 @@
 #root .learning-lesson .buddy-strip>img{position:static;width:52px;height:56px;object-fit:contain;flex:none}
 #root .learning-lesson .buddy-strip>span{position:static;background:transparent;padding:0;font-size:var(--text-base);color:var(--text)}
 #root .learning-lesson .learning-round{padding-top:6px}
-#root .learning-lesson .learning-round h1{margin:12px 0;font-size:clamp(22px,2.5vw,30px)}
+#root .learning-lesson .learning-round h1{margin:12px 0;font-size:var(--text-step-heading)}
 #root .learning-lesson .learning-choices{margin-top:16px}
 .course-reward-preview{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 0 0;font-size:var(--text-base);font-weight:800;color:var(--brand-ink,var(--text))}
 #root .task .task-stage{padding-top:8px}
@@ -43,7 +43,7 @@
 @media(max-height:650px){#root .learning-lesson .lesson-wrap{margin-bottom:20px}#root .learning-lesson .lesson-world.buddy-strip{height:50px}#root .learning-lesson .buddy-strip>img{height:44px}}
 @media(max-width:600px){
  #root .topbar.has-learning-tools .guide-reopen{flex-direction:column;justify-content:center;gap:0;width:48px;min-height:48px;padding:2px}
- #root .topbar.has-learning-tools .guide-reopen span{display:block;font-size:var(--text-xs);line-height:1.3}
+ #root .topbar.has-learning-tools .guide-reopen span{display:block;font-size:var(--text-sm);line-height:1.2}
  #root .topbar.has-learning-tools .back{min-width:48px;width:48px;height:48px;padding:0}
  #root .topbar.has-learning-tools .back span{display:none}
 }
@@ -57,7 +57,7 @@
 #root .home .panel-toolbar>.icon{display:none}
 #root .home .panel-toolbar .guide-compact{width:auto;margin:0}
 #root .home .panel-toolbar .guide-reopen{width:48px;min-height:48px;display:flex;flex-direction:column;justify-content:center;gap:0;padding:4px}
-#root .home .panel-toolbar .guide-reopen span{font-size:var(--text-xs);line-height:1.3}
+#root .home .panel-toolbar .guide-reopen span{font-size:var(--text-sm);line-height:1.2}
 #root .home .panel-toolbar .guide-content{right:-52px;width:min(300px,calc(100vw - 64px));box-sizing:border-box}
 #root .home .panel-toolbar:has(.guide-compact.is-open){padding-bottom:calc(var(--guide-space,130px) + 12px)}
 /* The meadow's old floating-help offsets must not move its toolbar button. */

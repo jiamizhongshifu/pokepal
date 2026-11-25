@@ -8,8 +8,8 @@
 .friend-pier-boat,.friend-boat{position:relative}
 .friend-boat .friend-boat-guest{bottom:calc(27% + 18px)}
 .friend-boat-hull{width:100%}
-.friend-boat span{margin-top:4px;padding:5px 16px;border-radius:var(--radius-pill);background:var(--surface);box-shadow:0 3px 0 rgba(0,0,0,.12);font-weight:800;color:var(--text)}
-.friend-visit-more{display:inline-flex;align-items:center;gap:8px;min-height:54px;padding:8px 20px;border-radius:var(--radius-pill);border:2px solid var(--surface-border);background:var(--surface);box-shadow:0 4px 0 var(--brand-line-deep);color:var(--text);font-weight:800;cursor:pointer;transition:transform var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
+.friend-boat span{font-size:var(--text-lg);margin-top:4px;padding:5px 16px;border-radius:var(--radius-pill);background:var(--surface);box-shadow:0 3px 0 rgba(0,0,0,.12);font-weight:800;color:var(--text)}
+.friend-visit-more{font-size:var(--text-lg);display:inline-flex;align-items:center;gap:8px;min-height:54px;padding:8px 20px;border-radius:var(--radius-pill);border:2px solid var(--surface-border);background:var(--surface);box-shadow:0 4px 0 var(--brand-line-deep);color:var(--text);font-weight:800;cursor:pointer;transition:transform var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
 .friend-visit-more:active{transform:translateY(3px) scale(.97);box-shadow:0 1px 0 var(--brand-line-deep)}
 .friend-arrival{display:grid;justify-items:center;gap:16px}
 .friend-pier-boat{display:grid;justify-items:center;width:min(300px,60vw)}

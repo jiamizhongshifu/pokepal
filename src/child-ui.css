@@ -15,7 +15,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .link { font-size:var(--text-lg); }
 .replay,.cry-btn { min-height: 64px; font-size:var(--text-2xl); padding: 10px 24px; }
 .hint { color: var(--text); font-size:var(--text-3xl); }
-.page-prompt { font-size: clamp(24px, 3vw, 34px); line-height: 1.4; text-align: center; margin: 22px 20px 14px; font-weight: 800; }
+.page-prompt { font-size: var(--text-step-heading); line-height: 1.4; text-align: center; margin: 22px 20px 14px; font-weight: 800; }
 /* 可预测的返回位置。学习页完全隐藏库存和家长按钮。 */
 .topbar { flex: none; min-height: 92px; padding: 14px 24px; gap: 14px; }
 .screen:not(.home) > .topbar { position: relative; top: auto; background: transparent; }
@@ -69,7 +69,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .buddy { width: min(780px,100%); justify-content: center; gap: 24px; }
 .buddy img:not(.icon):not(.invite-berry) { width: clamp(140px,24vw,260px); height: auto; filter: drop-shadow(0 8px 10px #16384618); }
 .bubble { min-width: 0; padding: 36px 36px 24px; text-align: center; }
-.bubble-en { font-size: clamp(32px,4.5vw,58px); overflow-wrap: anywhere; }
+.bubble-en { font-size: var(--text-step-display); overflow-wrap: anywhere; }
 .bubble-zh { font-size:var(--text-2xl); }
 .bubble-replay { right: 12px; top: 8px; }
 .bubble-replay .icon { width: 26px; height: 26px; }
@@ -133,7 +133,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .parent .stat b { color: var(--text); }
 .parent .row { gap: 12px; }
 .sleepy { padding: 80px 24px 40px; color: var(--brand-paper); }
-.sleepy-text { font-size: clamp(28px,4vw,44px); text-shadow: none; text-align: center; }
+.sleepy-text { font-size: var(--text-step-display); text-shadow: none; text-align: center; }
 .sleepers { max-width: 100%; justify-content: center; }
 .sleeper img:not(.icon):not(.invite-berry) { width: min(130px,16vw); height: auto; }
 .evo-card { max-height: calc(100dvh - 32px); overflow-y: auto; padding: 24px; }
@@ -264,7 +264,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .btn-round.back { display:flex; align-items:center; justify-content:center; width:auto; min-width:92px; gap:5px; padding:0 12px; border-radius:var(--radius-lg); font-size:var(--text-lg); font-weight:800; }
 .btn-round.back .icon { width:28px; height:28px; }
 /* 先听指令、点图、得到反馈。图片与点击区域的大小分别控制。 */
-.round-instruction { margin:0; max-width:850px; text-align:center; font-size:clamp(23px,3vw,34px); line-height:1.4; text-wrap:balance; }
+.round-instruction { margin:0; max-width:850px; text-align:center; font-size:var(--text-step-heading); line-height:1.4; text-wrap:balance; }
 .choice:disabled { opacity:1; }
 .choice.eliminated { opacity:.4; box-shadow:none; }
 .choices.size-choices { max-width:760px; }
@@ -285,7 +285,7 @@ button:not(:disabled):active { transform: scale(.97); }
 /* Island districts: large picture buttons and one invitation at a time. */
 
 /* A friendly island invitation, with the same cream, mint and rounded woodlike depth as home. */.avatar-pick .hint small{display:block;font-size:var(--text-base);color:var(--muted);margin-top:8px}.act.following{background:var(--brand-primary-soft);border-color:var(--brand-primary)}
-.round-instruction>span,.round-instruction>small{display:block}.round-instruction>span{font-size:clamp(22px,3vw,32px);color:var(--accent-en)}.round-instruction>small{font-size:clamp(17px,2vw,23px);font-weight:750;margin-top:5px}
+.round-instruction>span,.round-instruction>small{display:block}.round-instruction>span{font-size:var(--text-step-heading);color:var(--accent-en)}.round-instruction>small{font-size:var(--text-step-lead);font-weight:750;margin-top:5px}
 .actions .act small{display:block;font-size:var(--text-sm);color:var(--muted);line-height:1.25}.trace-instruction small{display:block;text-align:left;font-size:var(--text-base);color:var(--muted);margin-top:4px}
 @media(max-width:600px){.tasks .task-card{height:208px;padding:32px 8px 60px}}
 @media(max-width:600px) and (max-height:780px){.tasks .task-card{height:194px}.tasks .page-prompt{margin:12px 16px 10px;font-size:var(--text-2xl)}.tasks .board{margin-top:16px}}
@@ -393,7 +393,7 @@ button:not(:disabled):active { transform: scale(.97); }
 /* The meadow keeps a light paper header in both day and night themes. */
 
 .save-recovery { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:32px; text-align:center; }
-.save-recovery h1 { font-size:clamp(24px,4vw,34px); margin:0; }
+.save-recovery h1 { font-size:var(--text-step-heading); margin:0; }
 .save-recovery p { max-width:480px; line-height:1.8; margin:0 0 12px; }
 
 /* Keep the title readable without shrinking the inventory tap targets. */

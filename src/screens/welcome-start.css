@@ -16,17 +16,17 @@
 .start-friend.is-hopping img { animation: start-hop .7s var(--ease-standard); }
 
 .start-title { position: absolute; z-index: 5; left: calc(16px + env(safe-area-inset-left)); top: calc(14px + env(safe-area-inset-top)); display: grid; grid-template-columns: auto auto; align-items: center; column-gap: 8px; padding: 8px 20px 10px 14px; border: 5px solid var(--brand-paper); border-radius: 28px; background: var(--scene-paper); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
-.start-title h1 { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.05; letter-spacing: .04em; color: var(--scene-ink); }
-.start-title span { grid-column: 2; font-size: 13px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink-muted); }
+.start-title h1 { margin: 0; font-size: var(--text-step-display); line-height: 1.05; letter-spacing: .04em; color: var(--scene-ink); }
+.start-title span { grid-column: 2; font-size: var(--text-sm); font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--brand-ink-muted); }
 .start-title-leaf { grid-row: span 2; }
 
 .start-tools { position: absolute; z-index: 6; right: calc(14px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); display: flex; align-items: center; gap: 10px; }
-.start-adults { display: flex; align-items: center; gap: 6px; min-height: 48px; padding: 6px 14px 6px 10px; border: 3px solid var(--brand-paper); border-radius: 28px; background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); font-size: 15px; font-weight: 800; color: var(--scene-slate); }
+.start-adults { display: flex; align-items: center; gap: 6px; min-height: 48px; padding: 6px 14px 6px 10px; border: 3px solid var(--brand-paper); border-radius: 28px; background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); font-size: var(--text-base); font-weight: 800; color: var(--scene-slate); }
 .start-adults { position: relative; }
 .start-adults-dot { position: absolute; top: -3px; right: -3px; width: 14px; height: 14px; border: 3px solid var(--brand-paper); border-radius: 50%; background: var(--brand-danger, var(--brand-danger)); }
 .start-adults-backdrop { position: fixed; inset: 0; z-index: 7; border: 0; background: rgba(20, 50, 60, .25); }
 .start-adults-panel { position: absolute; z-index: 8; right: calc(14px + env(safe-area-inset-right)); top: calc(76px + env(safe-area-inset-top)); display: grid; gap: 12px; width: min(380px, calc(100vw - 28px)); max-height: calc(100dvh - 110px); overflow: auto; padding: 16px; border-radius: 24px; background: var(--scene-paper); box-shadow: 0 10px 30px rgba(0, 40, 60, .25); color: var(--scene-night); }
-.start-adults-panel > header { display: flex; align-items: center; justify-content: space-between; font-size: 17px; }
+.start-adults-panel > header { display: flex; align-items: center; justify-content: space-between; font-size: var(--text-lg); }
 .start-adults-panel > header button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; }
 #root .start-adults-panel .notice-entry { position: relative; inset: auto; justify-self: start; translate: none; }
 .start-adults-panel .device-setup, .start-adults-panel .parent-support-links { position: static; margin: 0; width: auto; transform: none; }
@@ -38,13 +38,13 @@
 .start-go-face { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 50%; background: var(--brand-paper); overflow: hidden; }
 .start-go-play { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--brand-primary-deep); }
 .start-go-words { display: grid; text-align: left; }
-.start-go-words strong { font-size: 28px; line-height: 1.1; }
-.start-go-words span { font-size: 16px; font-weight: 800; opacity: .9; }
+.start-go-words strong { font-size: var(--text-3xl); line-height: 1.1; }
+.start-go-words span { font-size: var(--text-base); font-weight: 800; opacity: .9; }
 
 .start-card { padding: 18px 22px; border: 5px solid var(--brand-paper); border-radius: 30px; background: var(--scene-paper); box-shadow: 0 8px 0 rgba(0, 0, 0, .12); color: var(--scene-night); text-align: center; }
-.start-parent-first h2 { margin: 4px 0; font-size: 22px; } .start-parent-first p { margin: 4px 0 12px; }
+.start-parent-first h2 { margin: 4px 0; font-size: var(--text-2xl); } .start-parent-first p { margin: 4px 0 12px; }
 .start-pick > header { display: flex; align-items: center; justify-content: center; gap: 10px; }
-.start-pick-hint { display: grid; font-size: 20px; font-weight: 800; } .start-pick-hint small { font-size: var(--text-base); color: var(--brand-ink-muted); }
+.start-pick-hint { display: grid; font-size: var(--text-xl); font-weight: 800; } .start-pick-hint small { font-size: var(--text-base); color: var(--brand-ink-muted); }
 .start-pick-row { display: flex; justify-content: center; gap: 14px; margin-top: 10px; }
 .start-pick .avatar-choice { display: grid; place-items: center; width: 108px; height: 108px; padding: 0; border: 5px solid var(--brand-paper); border-radius: 50%; background: var(--scene-paper-cool); box-shadow: 0 6px 0 rgba(0, 0, 0, .14); animation: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 .start-pick .avatar-choice:active { transform: translateY(4px) scale(.94); box-shadow: 0 2px 0 rgba(0, 0, 0, .14); }
@@ -59,7 +59,11 @@
  .start-title { padding: 6px 14px 8px 10px; border-width: 4px; } .start-title-leaf { width: 26px !important; height: 26px !important; }
  .start-adults span { display: none; } .start-adults { padding: 6px 10px; }
  .start-go { gap: 10px; padding: 8px 22px 8px 8px; } .start-go-face { width: 76px; height: 76px; } .start-go-play { width: 50px; height: 50px; }
- .start-go-words strong { font-size: 22px; }
+ .start-go-words strong { font-size: var(--text-2xl); }
  .start-pick .avatar-choice { width: 84px; height: 84px; } .start-pick-row { gap: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .start-screen * { animation: none !important; } }
+
+/* The note for the adult on the start card: a small heading over a body line. */
+.start-card .handoff-eyebrow { font-size: var(--text-sm); }
+.start-card p { font-size: var(--text-base); }

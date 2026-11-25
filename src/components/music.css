@@ -1,5 +1,5 @@
 .music-toggle{position:relative;flex:none;display:grid;place-items:center;width:48px;height:48px;border:2px solid var(--surface-border);border-radius:50%;background:var(--surface);color:var(--text);box-shadow:0 var(--brand-press) 0 var(--scene-mint-line);cursor:pointer;touch-action:manipulation}
-.music-toggle-state{position:absolute;right:-3px;bottom:-2px;padding:1px 4px;border-radius:9px;background:var(--scene-leaf);color:var(--brand-paper);font-size:13px;line-height:16px;font-weight:800}
+.music-toggle-state{position:absolute;right:-3px;bottom:-2px;padding:1px 4px;border-radius:9px;background:var(--scene-leaf);color:var(--brand-paper);font-size:var(--text-sm);line-height:16px;font-weight:800}
 .music-toggle.is-muted .icon{opacity:.45}
 .music-toggle.is-muted .music-toggle-state{background:var(--scene-slate)}
 .music-toggle:active{transform:translateY(var(--brand-press));box-shadow:none}

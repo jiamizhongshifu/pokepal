@@ -4,11 +4,11 @@
 .choice-art { width:100%;height:100%;min-height:0;display:grid;place-items:center; }
 .choices .choice.pic .choice-art .pic-icon { width:72%;height:100%;max-height:174px;object-fit:contain; }
 .choices .choice.pic .color-dot { width:65%;height:auto;max-height:100%;aspect-ratio:1; }
-.choices .choice .pic-label { position:static;display:block;min-width:0;max-width:100%;height:38px;line-height:38px;margin:0;text-align:center;font-size:clamp(18px,2.2vw,26px); }
+.choices .choice .pic-label { position:static;display:block;min-width:0;max-width:100%;height:38px;line-height:38px;margin:0;text-align:center;font-size:var(--text-step-title); }
 .choices .choice.poke>img { object-position:center; }
 .choices .size-stage { height:88%;width:88%; }
 .trace-session{width:100%;display:flex;flex-direction:column;align-items:center}
-.learning-heading{max-width:960px;margin:36px auto 28px;padding:0 24px;text-align:center}.section-eyebrow{font-size:var(--text-sm);font-weight:900;letter-spacing:.15em;color:var(--accent-en)}.learning-heading h1{font-size:clamp(26px,4vw,40px);margin:14px 0 12px}.learning-heading p{font-size:var(--text-lg);line-height:1.6;margin:0;color:var(--muted)}
+.learning-heading{max-width:960px;margin:36px auto 28px;padding:0 24px;text-align:center}.section-eyebrow{font-size:var(--text-sm);font-weight:900;letter-spacing:.15em;color:var(--accent-en)}.learning-heading h1{font-size:var(--text-step-display);margin:14px 0 12px}.learning-heading p{font-size:var(--text-lg);line-height:1.6;margin:0;color:var(--muted)}
 .practice-options{width:min(880px,calc(100% - 32px));margin:0 auto;display:grid;gap:18px}.practice-option{display:flex;align-items:center;gap:24px;text-align:left;padding:22px 26px;border:2px solid var(--surface-border);border-radius:var(--radius-xl);background:var(--surface);color:var(--text);min-height:132px}.practice-option>span{flex:1}.practice-option strong{font-size:var(--text-3xl);display:block}.practice-option small{display:block;color:var(--accent-en);font-size:var(--text-lg);margin:4px 0}.practice-note,.story-parent-note{text-align:center;color:var(--muted);font-size:var(--text-base);padding:18px 24px 32px;line-height:1.6}
 .story-library{overflow-y:auto}.story-shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 26px;width:min(1120px,calc(100% - 48px));margin:0 auto 12px}.storybook{padding:0;text-align:left;overflow:hidden;min-width:0;border:1px solid var(--surface-border);border-radius:12px 26px 26px 12px;background:var(--surface);color:var(--text);box-shadow:inset 7px 0 var(--brand-sun),0 7px 0 var(--surface-border);transition:transform var(--motion-quick) var(--ease-standard)}.storybook:hover{transform:translateY(-4px)}.book-cover{position:relative;padding-left:9px}.book-title{padding:20px 22px 20px 27px}.book-title h2{font-size:var(--text-2xl);margin:0 0 6px;line-height:1.4}.book-title>span{font-size:var(--text-base);color:var(--accent-en);font-weight:800}.book-number{position:absolute;top:14px;left:23px;font-weight:900;color:var(--text);letter-spacing:.08em;font-size:var(--text-sm)}.book-theme{position:absolute;right:10px;top:10px;background:var(--surface);padding:7px 12px;border-radius:var(--radius-sm);font-size:var(--text-sm);font-weight:800}.book-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px}.book-footer small{font-size:var(--text-xs)}.book-footer b{color:var(--text);font-size:var(--text-base)}
 .story-reader{overflow-y:auto;padding-bottom:32px}.open-storybook{width:min(960px,calc(100% - 36px));margin:20px auto 0;background:var(--surface);border:2px solid var(--surface-border);border-radius:var(--radius-xl);padding:20px 24px;color:var(--text);box-shadow:0 8px 0 var(--brand-primary)}.story-page-count{background:var(--brand-primary-soft);border-radius:var(--radius-sm);padding:8px 13px;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -27,9 +27,9 @@
 .story-reader .open-storybook{flex-shrink:0}
 .story-reading{min-width:0}
 .story-reading-text{padding:18px 4px 8px}
-.story-text-en{font-size:clamp(22px,2.4vw,28px);line-height:1.65;font-weight:800;color:var(--text);margin:0 0 12px;text-wrap:pretty;overflow-wrap:break-word}
+.story-text-en{font-size:var(--text-step-heading);line-height:1.65;font-weight:800;color:var(--text);margin:0 0 12px;text-wrap:pretty;overflow-wrap:break-word}
 .story-text-en mark{background:var(--brand-sun);color:inherit;border-radius:4px;padding:0 2px;box-decoration-break:clone;-webkit-box-decoration-break:clone;text-decoration:underline;text-decoration-color:#bf8a30;text-underline-offset:5px;text-decoration-thickness:2px}
-.story-text-zh{font-size:clamp(18px,1.9vw,21px);line-height:1.8;color:var(--muted);margin:0}
+.story-text-zh{font-size:var(--text-step-lead);line-height:1.8;color:var(--muted);margin:0}
 .story-keyword{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px;margin:16px 0 0;padding-top:12px;border-top:1px solid var(--surface-border);font-size:var(--text-base);line-height:1.6;color:var(--muted)}
 .story-keyword>span:first-child{font-size:var(--text-sm);color:var(--muted)}.story-keyword b{color:var(--text)}
 .story-choice-response span{display:block;line-height:1.6}.story-choice-response span[lang=en]{font-weight:750;margin-bottom:4px}
@@ -48,7 +48,7 @@
 
 /* Give book covers and the four practice choices the first look. */
 :is(.story-library,.practice-screen) .learning-heading { flex:none; margin:10px auto 20px; }
-:is(.story-library,.practice-screen) .learning-heading h1 { font-size:clamp(24px,3vw,30px); margin:4px 0 8px; }
+:is(.story-library,.practice-screen) .learning-heading h1 { font-size:var(--text-step-heading); margin:4px 0 8px; }
 :is(.story-library,.practice-screen) .learning-heading p { margin:0; line-height:1.6; }
 .story-library .story-themes { flex:none; }
 .story-library .story-resume { flex:none; }
@@ -75,6 +75,17 @@
 .practice-screen .practice-option>.icon { width:76px; height:76px; }
 .practice-screen .practice-option>span { min-width:0; }
 .practice-screen .practice-option small { font-size:var(--text-base); line-height:1.4; }
+/* A tablet has room: the four games are larger cards, and the heading, cards and note sit together in the middle of the
+   page instead of leaving its lower half empty. */
+@media (min-width:601px) and (min-height:700px) {
+ .practice-screen > .learning-heading { margin-top:auto; }
+ .practice-screen > .practice-note { margin-bottom:auto; }
+ .practice-screen .practice-options { gap:24px; }
+ .practice-screen .practice-option { grid-template-columns:104px minmax(0,1fr); gap:20px; min-height:176px; padding:28px; }
+ .practice-screen .practice-option>.icon { width:104px; height:104px; }
+ .practice-screen .practice-option strong { font-size:var(--text-3xl); }
+ .practice-screen .practice-option small { font-size:var(--text-lg); }
+}
 @media(max-width:600px) {
  :is(.story-library,.practice-screen) .learning-heading { margin:8px auto 16px; }
  .story-library .story-themes { width:calc(100% - 28px); display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; gap:8px; margin-bottom:16px; }

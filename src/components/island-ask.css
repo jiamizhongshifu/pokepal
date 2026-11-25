@@ -30,7 +30,7 @@
 .island-ask-stage.is-do{grid-template-columns:minmax(0,1fr) auto}
 .island-ask-target{display:grid;justify-items:center;gap:2px;padding:8px 10px;border-radius:var(--radius-lg);border:2px dashed var(--brand-sun-deep);background:var(--brand-sun-soft);position:relative}
 .island-ask-target img{width:64px;height:64px;object-fit:contain}
-.island-ask-target span{position:absolute;left:-14px;top:50%;translate:0 -50%;font-size:28px;font-weight:800;color:var(--brand-sun-deep)}
+.island-ask-target span{position:absolute;left:-14px;top:50%;translate:0 -50%;font-size:var(--text-3xl);font-weight:800;color:var(--brand-sun-deep)}
 .island-ask-target small{font-size:var(--text-sm);font-weight:800}
 .island-ask-stage.is-do .island-ask-options button{border-style:dashed;background:var(--surface)}
 .island-ask-stage.is-do .is-taken{animation:island-ask-give var(--motion-reward) var(--ease-exit) forwards}
