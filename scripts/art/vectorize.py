@@ -123,6 +123,10 @@ def whole(id):
   raw, gz = trace(work, out, size, layer_difference=7, color_precision=7)
   print(f"{s['group']}/{id:16s} {raw // 1024:5d}KB  压缩后 {gz // 1024:4d}KB")
 
+# Marks drawn in one flat colour that the interface wants in another: the close mark is a quiet grey that reads on
+# light and night surfaces (red is kept for recording and deleting).
+SINGLE_COLOUR = {'ui-close': '#8A8A8A'}
+
 def asset(png: Path):
   """A packaged transparent prop, icon or creature, traced on its own canvas so it keeps the same margins and size."""
   work = SRC / '_assets' / f'{png.parent.parent.name}-{png.parent.name}-{png.stem}.png'
@@ -137,7 +141,11 @@ def asset(png: Path):
     stage.crop((off, off, off + side, off + side)).resize((512, 512), Image.LANCZOS).save(work)
     source, finer = work, {**finer, 'filter_speckle': 20}
   _, size = prepare(source, work, cut=False)
-  return trace(work, png.with_suffix('.svg'), size, **finer)
+  sizes = trace(work, png.with_suffix('.svg'), size, **finer)
+  if png.stem in SINGLE_COLOUR:
+    svg = png.with_suffix('.svg')
+    svg.write_text(re.sub(r'fill="#[0-9A-Fa-f]{6}"', f'fill="{SINGLE_COLOUR[png.stem]}"', svg.read_text()))
+  return sizes
 
 args = sys.argv[1:] or ['island-map']
 if args[0] == '--whole':

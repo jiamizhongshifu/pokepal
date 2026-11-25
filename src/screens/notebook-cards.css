@@ -6,9 +6,9 @@
 #root .learning-notebook .notebook-art .learning-color { width: 42px; height: 42px; border-radius: 50%; }
 #root .learning-notebook .notebook-art .phrase-picture { display: flex; align-items: center; justify-content: center; gap: 3px; padding: 4px; } #root .learning-notebook .notebook-art .phrase-picture .icon { width: 24px !important; height: 24px !important; }
 #root .learning-notebook .notebook-definition { flex: 1; }
-#root .learning-notebook .notebook-bookmark { justify-self: end; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent; }
-#root .notebook-again { justify-self: end; display: flex; align-items: center; gap: 5px; min-height: 44px; padding: 6px 12px 6px 8px; border: 2px solid var(--brand-primary); border-radius: 999px; background: var(--brand-primary-soft, var(--brand-primary-soft)); box-shadow: 0 3px 0 var(--scene-leaf-soft); color: var(--brand-ink, var(--scene-ink)); font-size: 14px; font-weight: 800; white-space: nowrap; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
-#root .notebook-again:active { transform: translateY(2px) scale(.97); box-shadow: 0 1px 0 var(--scene-leaf-soft); }
+#root .learning-notebook .notebook-bookmark { justify-self: end; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: transparent; }
+#root .notebook-again { justify-self: end; display: flex; align-items: center; gap: 5px; min-height: 48px; padding: 6px 14px 6px 10px; border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-md); background: var(--surface); box-shadow: 0 var(--brand-press) 0 var(--surface-border); color: var(--text); font-size: var(--text-base); font-weight: var(--brand-weight-display); white-space: nowrap; }
+#root .notebook-again:active { transform: translateY(var(--brand-press)); box-shadow: none; }
 #root .notebook-again .icon { width: 22px !important; height: 22px !important; }
 
 #root .learning-notebook .notebook-listen-card .notebook-definition { flex: 0 1 auto; min-width: 0; }

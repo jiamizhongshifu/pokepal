@@ -10,9 +10,9 @@
 #root .screen .tb-title { color:var(--text); letter-spacing:.01em; }
 #root .screen .btn-round.back {
   background:var(--brand-paper); color:var(--brand-ink); border:2px solid var(--brand-line);
-  border-radius:20px 23px 19px 24px; box-shadow:0 3px 0 var(--brand-line-deep);
+  border-radius:var(--radius-md); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep);
 }
-#root .screen .balls-chip { background:var(--brand-paper); color:var(--brand-ink); border:2px solid var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
+#root .screen .balls-chip { background:var(--brand-paper); color:var(--brand-ink); border:2px solid var(--brand-line); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 #root .screen .parent-btn { background:#fffef7c9; border:1px solid var(--brand-line); border-radius:50%; }
 #root .screen button:focus-visible,#root .screen summary:focus-visible { outline:3px solid var(--brand-primary); outline-offset:4px; }
 #root .screen .btn-big:not(.alt),#root .screen .learning-trail-primary {
@@ -22,15 +22,13 @@
 }
 #root .screen .btn-big.alt { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:var(--brand-elev); border-radius:var(--radius-lg); }
 #root .screen .btn-big:disabled { opacity:.58; box-shadow:0 2px 0 #7b796355; }
-#root .screen :is(.replay,.cry-btn,.wish-button,.task-rest) { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:0 3px 0 var(--brand-line-deep); }
+#root .screen :is(.replay,.cry-btn,.wish-button,.task-rest) { background:var(--brand-paper); border:2px solid var(--brand-line); color:var(--brand-sky-ink); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 #root .modal-backdrop { background:#214f675e; }
 #root .parent .parent-body section,#root .parent .stat { --text:var(--brand-ink); --muted:var(--brand-ink-muted); --accent-en:var(--brand-sky-ink); background:var(--brand-paper); color:var(--brand-ink); border:1px solid var(--brand-line); box-shadow:var(--brand-elev); }
 #root .parent .tabs button { background:var(--brand-sun-soft); color:var(--brand-ink); }
 #root .screen .btn-big::after { display:none; }
 #root .screen .feature-guide { --guide-ink:var(--brand-ink); }
-#root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
-#root .screen .guide-hear { background:var(--brand-primary-soft); border-color:var(--surface-border); }
-#root .screen .guide-reopen { background:var(--brand-sun-soft); border-color:var(--brand-line); }
+#root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-line); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 
 /* A sunlit sign with the original tactile grain and rounded silhouette. */
 
@@ -46,7 +44,6 @@
 #root .tasks .task-games>summary { color:var(--text); }
 #root .tasks .task-card { background:var(--brand-paper); border-color:var(--brand-line); box-shadow:var(--brand-elev); border-radius:var(--radius-lg); }
 #root .tasks .task-card.done { border-color:var(--brand-primary); background:var(--brand-primary-soft); }
-#root .screen .practice-option { border-color:var(--brand-line); box-shadow:var(--brand-elev); }
 #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --leaf:var(--brand-primary); --text:var(--brand-ink); color:var(--brand-ink); }
 #root .screen .lesson-actions>button:not(.journey-primary) { color:var(--brand-sky-ink); background:var(--brand-sky-soft); border-color:var(--surface-border); }
 #root .screen .learning-choices>div>button:not(.learning-choice-audio) { background:var(--brand-sky-soft); border-color:var(--brand-line); color:var(--brand-ink); }
@@ -71,7 +68,7 @@
 #root .screen .story-text-zh { color:var(--brand-ink-muted); }
 
 /* Island tools remain small and unframed so the world stays visible. */
-#root .home .home-actions button { background:#fffef7ee; color:var(--brand-ink); border-color:var(--brand-line); box-shadow:0 3px 0 var(--brand-line-deep); }
+#root .home .home-actions button { background:#fffef7ee; color:var(--brand-ink); border-color:var(--brand-line); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 
 /* Night ocean surroundings keep reading cards light, with explicit dark ink. */
 :root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:var(--scene-paper-cool); color:var(--text); }
@@ -90,7 +87,7 @@
 #root .diary-screen .diary-steps li { flex-direction:column; gap:6px; font-size:var(--text-base); }
 #root .diary-screen .diary-steps li span { width:46px; height:46px; border-radius:var(--radius-md); background:var(--brand-sky-soft); border:2px solid transparent; }
 #root .diary-screen .diary-steps li[aria-current=step] { color:var(--text); }
-#root .diary-screen .diary-steps li[aria-current=step] span { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 3px 0 #b7d7c555; }
+#root .diary-screen .diary-steps li[aria-current=step] span { background:var(--brand-primary-soft); border-color:var(--brand-primary); box-shadow:0 var(--brand-press) 0 #b7d7c555; }
 #root .diary-screen .diary-question { color:var(--brand-ink); background:var(--brand-paper); border:2px solid var(--brand-line); border-top:7px solid var(--brand-primary); border-radius:23px 23px 29px 29px; box-shadow:var(--brand-elev); }
 #root .diary-screen .diary-question-icon { width:76px; height:76px; border-radius:var(--radius-lg); background:var(--brand-sun-soft); }
 #root .diary-screen :is(.diary-hear,.diary-return,.diary-answer-list button) { background:var(--brand-sky-soft); border-color:var(--brand-line); color:var(--brand-ink); min-height:48px; }
@@ -102,14 +99,14 @@
 #root .diary-screen .diary-guide-actions>button:not(.farm-primary) { color:var(--brand-ink); background:var(--brand-sky-soft); border-color:var(--brand-line); }
 #root .diary-screen .farm-primary { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
 #root .diary-screen .diary-paper { color:var(--brand-ink); background:var(--brand-paper); border-color:var(--brand-line); box-shadow:-7px 0 0 #98d9c1; }
-#root .screen :is(.diary-entry,.diary-books button) { color:var(--brand-ink); background:var(--brand-sun-soft); border-color:var(--brand-sun); box-shadow:0 3px 0 var(--brand-line-deep); }
+#root .screen :is(.diary-entry,.diary-books button) { color:var(--brand-ink); background:var(--brand-sun-soft); border-color:var(--brand-sun); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 
 #root .avatar-editor .avatar-preview { background:var(--brand-sky-soft); border-color:var(--brand-sun); }
 #root .avatar-editor .avatar-save>.icon { background:var(--brand-sun-soft); border-radius:var(--radius-sm); padding:3px; box-sizing:content-box; }
-#root .avatar-editor .avatar-photo-actions button { flex-direction:column; gap:5px; min-height:96px; border:2px solid var(--brand-line); background:var(--brand-sky-soft); color:var(--brand-ink); box-shadow:0 3px 0 var(--brand-line-deep); }
+#root .avatar-editor .avatar-photo-actions button { flex-direction:column; gap:5px; min-height:96px; border:2px solid var(--brand-line); background:var(--brand-sky-soft); color:var(--brand-ink); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 #root .avatar-editor :is(.avatar-photo-hint,.avatar-privacy) { color:var(--brand-ink-muted); }
 #root .avatar-editor .avatar-presets button { background:var(--brand-sky-soft); }
-#root .avatar-editor .avatar-presets button[aria-pressed=true] { border-color:var(--brand-primary); background:var(--brand-primary-soft); box-shadow:0 3px 0 #b7d7c555; }
+#root .avatar-editor .avatar-presets button[aria-pressed=true] { border-color:var(--brand-primary); background:var(--brand-primary-soft); box-shadow:0 var(--brand-press) 0 #b7d7c555; }
 #root .parent .tabs button { display:flex; align-items:center; justify-content:center; gap:7px; min-height:50px; }
 #root .parent .parent-head { background:var(--page-bg); color:var(--text); border-bottom:1px solid var(--surface-border); }
 #root .parent .parent-head h2 { color:var(--text); }
@@ -131,7 +128,6 @@
 #root .screen { --leaf:var(--brand-primary); --honey:var(--brand-sun); }
 #root .screen .journey-primary { --leaf:var(--brand-primary); box-shadow:0 4px 0 var(--brand-primary-deep); }
 #root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-sun); }
-#root .screen .guide-hear { background:var(--brand-sky-soft); border-color:var(--surface-border); }
 #root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }
 #root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
 
@@ -155,7 +151,7 @@
 :root .offline-update-steps li{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column;text-align:center;padding:10px 4px;background:var(--brand-sky-soft);border-radius:var(--radius-sm);color:var(--brand-ink-muted)}
 :root .offline-update-steps li.current{background:var(--brand-sun-soft);color:var(--text)}:root .offline-update-steps li.finished{background:var(--brand-primary-soft);color:var(--text)}
 :root .device-setup .offline-update progress{height:19px;background:var(--brand-sky-soft)}:root .offline-update progress::-webkit-progress-value{background:var(--brand-sky)}:root .offline-update progress::-moz-progress-bar{background:var(--brand-sky)}
-:root .offline-update-actions button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border:2px solid var(--brand-sky);background:var(--brand-paper);color:var(--brand-ink);border-radius:var(--radius-md);box-shadow:0 3px 0 var(--brand-sky)}
+:root .offline-update-actions button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border:2px solid var(--brand-sky);background:var(--brand-paper);color:var(--brand-ink);border-radius:var(--radius-md);box-shadow:0 var(--brand-press) 0 var(--brand-sky)}
 :root .offline-update-actions .offline-update-reopen{background:var(--brand-sun);color:var(--brand-ink);border-color:var(--brand-sun)}
 :root .offline-update.is-ready,:root .offline-update.is-reload,:root .offline-update.is-latest{background:var(--surface);border-color:var(--brand-primary)}:root .offline-update.is-error{background:var(--surface);border-color:var(--brand-streak)}
 :root .update-parent-notes>summary{font-size:var(--text-base);color:var(--brand-ink-muted);padding:10px;min-height:44px;cursor:pointer}

@@ -85,7 +85,7 @@
 .island-free-did{margin:0;text-align:center;font-weight:800;color:var(--text)}
 
 /* The group picture at the end of a chapter party. */
-.island-party-photo{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px;border-radius:var(--radius-lg);border:4px solid var(--surface);background:var(--brand-sun-soft);box-shadow:0 3px 0 rgb(0 0 0/.12);rotate:-2deg}
+.island-party-photo{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px;border-radius:var(--radius-lg);border:4px solid var(--surface);background:var(--brand-sun-soft);box-shadow:0 var(--brand-press) 0 rgb(0 0 0/.12);rotate:-2deg}
 .island-party-photo img{width:52px;height:52px;object-fit:contain}
 
 /* After an errand: one line for the grown-up, the same thing to try at home. */

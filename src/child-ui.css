@@ -442,7 +442,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .dex-discovery-tools { width:min(1000px,92vw); margin:0 auto 16px; display:flex; flex-wrap:wrap; align-items:flex-start; gap:12px; flex:none; }
 .dex-discovery-tools>.wish-button { min-height:54px; flex:none; }
 .dex-filters { flex:1; min-width:240px; color:var(--text); }
-#root .screen .collection-tabs button[aria-pressed=true] { background:var(--brand-primary); border-color:var(--brand-primary-deep); color:var(--brand-on-primary); box-shadow:0 3px 0 var(--brand-primary-deep); }
+#root .screen .collection-tabs button[aria-pressed=true] { background:var(--brand-primary); border-color:var(--brand-primary-deep); color:var(--brand-on-primary); box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); }
 .diary-parent>summary { min-height:48px; font-weight:800; }
 #root .dex .dex-filters.dex-filters>summary::after { margin-left:4px; }
 .dex-filters summary { min-height:54px; padding:14px 12px; cursor:pointer; font-size:var(--text-base); font-weight:700; }
@@ -481,7 +481,7 @@ button:not(:disabled):active { transform: scale(.97); }
 }
 /* Narrow phones keep all inventory targets without horizontal page scrolling. */
 @media(max-width:380px) {
- .screen:not(.home):not(.parent) .topbar .btn-round.back { min-width:44px; width:44px; height:48px; padding:0; }
+ .screen:not(.home):not(.parent) .topbar .btn-round.back { min-width:48px; width:48px; height:48px; padding:0; }
  .screen:not(.home):not(.parent) .topbar .back span { display:none; }
  .screen:not(.home):not(.parent) .topbar .tb-right { gap:5px; }
 }

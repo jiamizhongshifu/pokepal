@@ -1,6 +1,6 @@
 /* The learning path as a picture book: one painted scene per chapter. Positions are % of the 3:2 picture. */
 .path-scene { --ink: var(--scene-ink); --paper: var(--scene-paper); user-select: none; -webkit-user-select: none; touch-action: manipulation; }
-.path-scene button { -webkit-tap-highlight-color: transparent; cursor: pointer; font: inherit; }
+.path-scene button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
 .path-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; background: #3bc3ee; }
 .path-view:has(.tone-4), .path-view:has(.tone-5) { background: #2b3f8f; }
 .path-world { container-type: inline-size; position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; }

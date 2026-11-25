@@ -12,8 +12,8 @@
   cursor: pointer; -webkit-tap-highlight-color: transparent;
   transition: transform var(--motion-quick) var(--ease-standard), background-color var(--motion-quick) var(--ease-standard), border-color var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard);
 }
-.bottom-nav-tab[aria-current="page"] { background: var(--brand-sky-soft); border-color: var(--brand-sky); color: var(--brand-sky-ink); box-shadow: 0 3px 0 var(--brand-sky); }
+.bottom-nav-tab[aria-current="page"] { background: var(--brand-sky-soft); border-color: var(--brand-sky); color: var(--brand-sky-ink); box-shadow: 0 var(--brand-press) 0 var(--brand-sky-deep); }
 .bottom-nav-tab[aria-current="page"] .icon { transform: scale(1.08); }
 .bottom-nav-tab:focus-visible { outline: 2px solid var(--brand-sky); outline-offset: 2px; }
-#root button.bottom-nav-tab:not(:disabled):active { transform: translateY(3px) scale(.97); box-shadow: none; }
+#root button.bottom-nav-tab:not(:disabled):active { transform: translateY(var(--brand-press)); box-shadow: none; }
 @media (max-height: 600px) { .bottom-nav-tab { min-height: 56px; } .bottom-nav-tab .icon { width: 32px; height: 32px; } }

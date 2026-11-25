@@ -83,7 +83,7 @@
 #root .learning-notebook .notebook-tabs{display:flex;flex:1;gap:8px;margin:0;min-width:0}
 #root .learning-notebook .notebook-tabs button{flex:1;flex-direction:row;gap:8px;min-height:56px;padding:8px;font-size:var(--text-base)}
 #root .learning-notebook .notebook-tabs .icon{width:30px;height:30px;flex:none}
-#root .notebook-search-toggle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:48px;min-height:56px;border:1px solid var(--brand-line);border-radius:var(--radius-md);background:var(--brand-paper);color:var(--brand-ink);font:inherit;font-size:var(--text-xs);cursor:pointer}
+#root .notebook-search-toggle{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:56px;min-height:56px;border:var(--brand-border) solid var(--surface-border);border-radius:var(--radius-md);background:var(--surface);color:var(--text);box-shadow:0 var(--brand-press) 0 var(--surface-border);font:inherit;font-size:var(--text-sm);font-weight:var(--brand-weight-display);cursor:pointer}#root .notebook-search-toggle:active{transform:translateY(var(--brand-press));box-shadow:none}
 #root .learning-notebook .notebook-header p{margin:12px 0 0;font-size:var(--text-base);line-height:1.5}
 #root .learning-notebook .notebook-search{margin:12px 0 0}
 #root .learning-notebook .notebook-review{margin-bottom:16px}

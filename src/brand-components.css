@@ -43,15 +43,15 @@
 @media (max-width: 600px) { #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .learning-trail-primary, .wish-button.primary, .avatar-save) { min-height: 56px; padding: 8px 18px; } }
 
 /* One segmented choice everywhere (notebook, album, story shelf, grown-ups' tabs, settings switches, chart views): 56px, 16px corners, 2px outline,
-   18px bold; the chosen one is green with a 3px deep edge. */
+   18px bold, the 4px edge; the chosen one is green. */
 #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs, .parent .seg, .pchart-switch) button {
   min-height: 56px; border: var(--brand-border) solid var(--surface-border); border-radius: var(--radius-md);
-  background: var(--surface); color: var(--text); box-shadow: 0 3px 0 var(--surface-border);
+  background: var(--surface); color: var(--text); box-shadow: 0 var(--brand-press) 0 var(--surface-border);
   font-size: var(--text-lg); font-weight: var(--brand-weight-display); padding: 8px 16px; gap: 8px;
 }
 #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs, .parent .seg, .pchart-switch) button > .icon { width: 28px !important; height: 28px !important; }
 #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs, .parent .seg, .pchart-switch) button:is([aria-pressed=true], .on) {
-  background: var(--brand-primary); border-color: var(--brand-primary-deep); color: var(--brand-on-primary); box-shadow: 0 3px 0 var(--brand-primary-deep);
+  background: var(--brand-primary); border-color: var(--brand-primary-deep); color: var(--brand-on-primary); box-shadow: 0 var(--brand-press) 0 var(--brand-primary-deep);
 }
 @media (max-width: 600px) {
   #root .screen :is(.notebook-tabs, .collection-tabs:not(.dex-generations), .story-themes, .parent-organized .tabs, .parent .seg, .pchart-switch) button { flex-direction: row; font-size: var(--text-base); padding: 6px 8px; gap: 6px; white-space: nowrap; }
