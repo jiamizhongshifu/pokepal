@@ -38,7 +38,7 @@
   #root .topbar.has-learning-tools .tb-learning-tools { gap:12px; }
   #root .parent-organized .parent-head { flex-wrap:nowrap; padding:6px 14px; gap:12px; }
   #root .parent-organized .parent-title-row { gap:8px; }
-  #root .parent-organized .parent-title-row h2 { font-size:var(--text-xl); white-space:nowrap; }
+  #root .parent-organized .parent-title-row h1 { font-size:var(--text-xl); white-space:nowrap; }
   #root .parent-organized .tabs { width:auto; flex:1; max-width:380px; }
   #root .parent-organized .parent-body { padding-top:14px; }
   #root .story-reader .open-storybook { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }

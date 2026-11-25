@@ -30,7 +30,7 @@
 #root .story-echo-main { display:inline-flex; align-items:center; gap:10px; min-height:60px; padding:8px 20px; border:var(--brand-border) solid var(--brand-sky); border-radius:var(--radius-md); background:var(--brand-sky-soft); color:var(--brand-sky-ink); box-shadow:0 4px 0 var(--brand-sky-deep); font:inherit; font-size:var(--text-xl); font-weight:800; text-align:left; cursor:pointer; transition:transform var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard); }
 /* Saying it along is optional, so it is the blue "listen and say" button; the page's one green button is the next page. */
 #root .story-echo-main:not(:disabled):active { transform:translateY(var(--brand-press)); box-shadow:none; }
-#root .story-echo-main small { display:block; font-size:var(--text-sm); font-weight:600; opacity:.9; }
+#root .story-echo-main small { display:block; font-size:var(--text-sm); font-weight:600; }
 #root .story-echo-main[data-phase=recording] { background:var(--brand-danger); border-color:var(--brand-danger-deep); color:var(--brand-paper); box-shadow:0 4px 0 var(--brand-danger-deep); }
 #root .story-echo-main:disabled { opacity:.75; cursor:default; }
 #root .story-echo-mine { display:inline-flex; align-items:center; gap:6px; min-height:48px; padding:6px 16px; border:1px solid var(--brand-primary); border-radius:var(--radius-sm); background:var(--surface); font:inherit; font-size:var(--text-base); font-weight:700; cursor:pointer; }

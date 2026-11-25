@@ -209,6 +209,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  const groups = new Map<string, number[]>();
  for (const f of standing) groups.set(f.place, [...(groups.get(f.place) ?? []), f.id]);
  return <div className={`screen island-home sky-${sky}${weather.cloud > 0.55 ? ' is-cloudy' : ''}`}>
+  <h1 className="sr-only">我的小岛</h1>
   <div className="island-view scene-host" ref={view} style={sceneEdge('island-map')}>
    <div className="island-world" ref={world} role="group" aria-label="我的小岛">
     <IslandDepth world={world} scroller={view} props={stickers} nudged={nudged} active={active} />

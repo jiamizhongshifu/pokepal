@@ -66,7 +66,7 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
  return <><TopBar title="我的小日记" onBack={onLeave} focused
   help={<FeatureGuide id="diary" compact autoOpen={false} enabled={!recording&&!busy&&!!prompt} autoVoice={false} onVoiceStart={silence}/>}
   progress={<><button className="diary-shelf-toggle" disabled={busy||recording} onClick={()=>{silence();onLibrary();}}><Icon name="book" size={22}/>翻看日记</button><span className="diary-question-count" aria-label={prompt?`第 ${step+1} 个问题，共 ${DIARY_PROMPTS.length} 个`:'分享完成'}>{Math.min(step+1,DIARY_PROMPTS.length)} / {DIARY_PROMPTS.length}</span></>}/>
- <main className="guided-diary child-page" aria-label="陪我聊聊今天">
+ <section className="guided-diary child-page" aria-label="陪我聊聊今天">
   <div className="diary-welcome"><time dateTime={new Date(entry.createdAt).toISOString()}><small>我的一天</small><b>{new Date(entry.createdAt).getMonth()+1}<span>月</span>{new Date(entry.createdAt).getDate()}<span>日</span></b></time><p>你的一天，我想听听</p></div>
   {prompt?<article className="diary-question" key={prompt.id}><div className="diary-question-heading"><span className="diary-question-icon"><Icon name={prompt.icon} size={58}/></span><button className="diary-hear" disabled={busy||recording} onClick={hear} aria-label="听听这个问题"><Icon name="speaker" size={22}/>{speaking?'正在读…':'听一听'}</button></div><h2>{prompt.title}</h2><p>{prompt.hint}</p>
    <button className="diary-record" disabled={busy} aria-pressed={recording} onClick={recording?stop:start}><Icon name={recording?'check':'mic'} size={44}/><span>{recording?`说完啦 · ${seconds} 秒`:answer?.audio?'再录一次':'我来说一说'}</span></button>
@@ -82,5 +82,5 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
   <p role="status" className="diary-guide-status">{status}</p>{error&&<p role="alert" className="diary-error">{error}</p>}
   <p className="diary-caption">没有标准答案，也没有分数。想停下来，随时可以返回。回答只保存在这台设备上。</p>
   {footer&&<footer className="diary-page-footer">{footer}</footer>}
- </main></>;
+ </section></>;
 }

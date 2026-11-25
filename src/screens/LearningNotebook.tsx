@@ -26,7 +26,7 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
  const records=s.learning?.records??{};
  const keys=Object.keys(records).filter(k=>learningEntry(k)).filter(k=>filter==='all'||(filter==='saved'?records[k].saved:(records[k].needsPractice||records[k].pendingAudio))).filter(k=>{const e=learningEntry(k)!;return `${e.en} ${e.zh}`.toLowerCase().includes(query.trim().toLowerCase());}).sort((a,b)=>records[b].lastSeen-records[a].lastSeen);
  const due=(filter==='retry'?reviewKeys(s,'retry'):recommendedReviewKeys(s)).filter(k=>keys.includes(k)).slice(0,reviewGroupSize(s));
- return <div className="screen learning-notebook"><TopBar title={filter==='retry'?'再试试':'发现手册'} onBack={()=>go({name:returnTo??'home'})} focused help={<FeatureGuide compact id="notebook" autoVoice={false}/>}/><main className="journey-wrap">
+ return <div className="screen learning-notebook"><TopBar title={filter==='retry'?'再试试':'发现手册'} onBack={()=>go({name:returnTo??'home'})} focused help={<FeatureGuide compact id="notebook" autoVoice={false}/>}/><div className="journey-wrap">
   <header ref={header} className="notebook-header">
    <div className="notebook-toolbar"><nav className="notebook-tabs" aria-label="手册分类">{([['all','全部发现'],['saved','我的收藏']] as const).map(([id,label])=><button key={id} aria-pressed={filter===id} onClick={()=>{setFilter(id);setLimit(24);}}><Icon name={id==='all'?'book':'heart'} size={30}/><span>{label}</span></button>)}</nav>
     <button className="notebook-search-toggle" aria-label={searching?'收起找词':'按名字找一个词'} aria-expanded={searching} onClick={()=>{setSearching(v=>!v);setQuery('');setLimit(24);}}><Icon name={searching?'close':'search'} size={26}/><span>{searching?'收起':'找词'}</span></button>
@@ -42,7 +42,7 @@ export function LearningNotebook({mode='all',returnTo}:{mode?:'all'|'saved'|'ret
   </article>;})}</div>}
   {keys.length>limit&&<div className="lesson-actions"><button onClick={()=>setLimit(n=>n+24)}><Icon name="search" size={30}/>再看一些发现（{limit} / {keys.length}）</button></div>}
   <details className="quiet-disclosure notebook-parent"><summary>给家长 · 需要帮助的小发现</summary><p>这些词孩子用过提示或多试了几次，可以在生活里再指一指、说一说。</p><button className="btn-small" onClick={()=>{setFilter(filter==='retry'?'all':'retry');setQuery('');setLimit(24);requestAnimationFrame(()=>header.current?.scrollIntoView({block:'start'}));}}>{filter==='retry'?'返回全部发现':'看看需要再试的词'}</button>{filter==='retry'&&<p role="status">当前只显示需要帮助的小发现。</p>}</details>
- </main></div>;
+ </div></div>;
 }
 
 export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'home'|'parent'}){
@@ -60,7 +60,7 @@ export function LearningReview({keys,returnTo}:{keys:string[];returnTo?:'home'|'
  const e=entries[idx],unit=e?reviewSituation(e.key,records?.[e.key]?.contexts):undefined;
  // Each word is met again in the scene of the lesson it comes from, with a friend, like in the lesson itself.
  const scene=storyBackground(e?reviewScene(e.key,records?.[e.key]?.contexts):entries[0]?reviewScene(entries[0].key,records?.[entries[0].key]?.contexts):'meadow');
- return <div className={`screen learning-review learning-lesson lesson-staged${e?' lesson-playing':''}`} style={{backgroundImage:`url(${scene})`}}><TopBar title="和老朋友见面" onBack={()=>go(returnTo?{name:returnTo}:{name:'notebook',mode:'retry'})} focused progress={e&&<RoundProgress index={idx} total={entries.length}/>} help={<FeatureGuide compact id="review" autoVoice={false} enabled={!!e}/>}/><main className="lesson-wrap">
+ return <div className={`screen learning-review learning-lesson lesson-staged${e?' lesson-playing':''}`} style={{backgroundImage:`url(${scene})`}}><TopBar title="和老朋友见面" onBack={()=>go(returnTo?{name:returnTo}:{name:'notebook',mode:'retry'})} focused progress={e&&<RoundProgress index={idx} total={entries.length}/>} help={<FeatureGuide compact id="review" autoVoice={false} enabled={!!e}/>}/><div className="lesson-wrap">
   {!e?<section className="learning-empty"><Icon name="heart" size={80}/><h1>{deferred.current.length?'声音准备好后，再一起听':entries.length?'又多认识了一点':'现在可以自由玩耍啦'}</h1><p>{deferred.current.length?"已经帮你记好啦，联网后可以回来继续。":"今天先到这里。过几天，我们再和这些词见面。"}</p>{entries.length>0&&!deferred.current.length&&<ParticipationNote kind="review"/>}{deferred.current.length>0&&<p>有 {deferred.current.length} 个小发现留在手册里，补听前不会算作完成。</p>}<div className="lesson-actions">{deferred.current.length>0&&<button onClick={()=>go({name:'notebook',mode:'retry',returnTo:returnTo==='home'?undefined:returnTo})}>看看待补听的小发现</button>}<button className="journey-primary" onClick={()=>go({name:returnTo??'home'})}>{returnTo==='parent'?'回家长中心':'回到学习路线'}</button><button onClick={()=>go({name:'home',view:'island'})}>回小岛玩</button></div></section>:<><div className="lesson-breadcrumb"><span>陪伙伴找一找</span></div><div className="lesson-world buddy-strip"><BuddyImg id={buddy} alt=""/><span/></div><LearningRound key={idx} staged target={e} situation={unit?.situation} choices={unit?[unit.phrase,unit.alternative]:undefined} onNext={()=>next()} onSkip={()=>next(true)} source="review"/></>}
- </main></div>;
+ </div></div>;
 }

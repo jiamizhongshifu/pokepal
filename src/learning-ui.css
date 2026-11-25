@@ -72,6 +72,7 @@
 /* The four cards keep their light activity colours at night, so their words keep the day ink. */
 .practice-screen .practice-option { color:var(--brand-ink); }
 .practice-screen .practice-option small { color:var(--brand-sky-ink); }
+.practice-screen .practice-option.kind-repeat small { color:var(--brand-streak-ink); }
 .practice-screen .practice-option>.icon { width:76px; height:76px; }
 .practice-screen .practice-option>span { min-width:0; }
 .practice-screen .practice-option small { font-size:var(--text-base); line-height:1.4; }

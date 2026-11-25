@@ -146,7 +146,7 @@ export function TraceTask({ onFinish, excluded=[] }: { onFinish: (letter:string)
       <div className="trace-side">
         <div className="trace-example">
         {item.creatureId ? <CreatureImg src={creatureArt(item.creatureId)} alt="" /> : <Icon name={item.icon ?? "star"} size={170} className="trace-icon" />}
-        <div className="trace-word"><b>{item.letter}</b>{item.en.slice(1)}</div>
+        <div className="trace-word" lang="en"><b>{item.letter}</b>{item.en.slice(1)}</div>
         <div className="trace-zh">{item.zh}</div>
         <button className="replay trace-listen" onClick={intro} disabled={completed}><Icon name="speaker" size={32} /> 听一听</button>
         </div>

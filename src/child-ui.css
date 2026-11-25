@@ -21,7 +21,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .screen:not(.home) > .topbar { position: relative; top: auto; background: transparent; }
 .tb-left { min-width: 0; gap: 16px; }
 .tb-right { gap: 10px; flex-shrink: 0; }
-.tb-title,.home .tb-title { padding: 4px 0; color: var(--text); background: none; text-shadow: none; font-size:var(--text-3xl); line-height: 1.25; white-space: normal; gap: 10px; }
+.tb-title,.home .tb-title { margin: 0; font-weight: inherit; padding: 4px 0; color: var(--text); background: none; text-shadow: none; font-size:var(--text-3xl); line-height: 1.25; white-space: normal; gap: 10px; }
 .btn-round,.avatar { width: 64px; height: 64px; flex-shrink: 0; }
 .btn-round .icon { width: 32px; height: 32px; }
 .balls-chip { padding: 7px 14px; min-height: 52px; font-size:var(--text-2xl); color: var(--text); box-shadow: none; }
@@ -124,7 +124,7 @@ button:not(:disabled):active { transform: scale(.97); }
 .gate { width: 400px; }
 .keypad button { color: var(--text); min-height: 64px; }
 .parent-head { flex-wrap: wrap; background: var(--surface); border-bottom: 2px solid var(--surface-border); box-shadow: none; }
-.parent-head h2 { font-size:var(--text-3xl); }
+.parent-head h1 { font-size:var(--text-3xl); }
 .parent { background: var(--surface); color: var(--text); }
 .parent-body { width: min(1100px,100%); margin: 0 auto; flex-shrink: 0; }
 .parent-body section,.stat { box-shadow: none; background: var(--surface); border: 1px solid var(--surface-border); }
@@ -230,7 +230,7 @@ button:not(:disabled):active { transform: scale(.97); }
   .cel-actions { width: 100%; flex-direction: column; }
   .cel-actions .btn-big { width: 100%; }
   .parent-head { gap: 10px; padding: 12px; }
-  .parent-head h2 { font-size:var(--text-2xl); }
+  .parent-head h1 { font-size:var(--text-2xl); }
   .parent-head .tabs { margin: 0; width: 100%; }
   .tabs button { flex: 1; padding: 10px; font-size:var(--text-lg); }
   .parent-body { padding: 16px 12px 32px; }

@@ -138,7 +138,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      progress={!ended&&<span className="story-page-count" aria-label={`第 ${idx+1} 页，共 ${story.pages.length} 页`}>{idx+1} / {story.pages.length}</span>}
      help={!ended&&<FeatureGuide id="story" compact autoVoice={false} onVoiceStart={pause}/>}/>
    <div ref={reader} className="story-pages">
-   {ended ? <main className="story-ending">
+   {ended ? <div className="story-ending">
      <span className="section-eyebrow">THE END · 故事读完啦</span><h1>把温柔的话，带到生活里</h1>
      <ParticipationNote kind="story"/><div className="ending-friends">{story.cast.map(id=><CreatureImg key={id} src={creatureArt(id)} alt={getCreature(id).nameZh}/>)}</div>
      <button className="story-phrase" onClick={()=>readPair(story.phrase)}><Icon name="speaker" size={36}/><span><b lang="en">{story.phrase.en}</b><small>{story.phrase.zh}</small></span></button>
@@ -154,7 +154,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
        {story.id==='try-again'&&<button className="btn-small" onClick={()=>go({name:'home',station:'sand'})}>去沙坑慢慢玩，累了就休息</button>}
        {story.id==='tell-truth'&&<button className="btn-small" onClick={()=>go({name:'diary'})}>把今天的小事，说给我听</button>}
        {!timeUp&&<button className="btn-small" onClick={()=>{setIdx(0);setEnded(false);setChoice(null);}}>再读一次 <span lang="en">Read again</span></button>}<button className="btn-small alt" onClick={()=>go({name:'stories'})}>选另一个故事 <span lang="en">More stories</span></button></div></details>
-   </main> : <main className="open-storybook" data-turn={dir}>
+   </div> : <div className="open-storybook" data-turn={dir}>
      <header className="story-page-header"><h2 className="story-beat">{page.beat}</h2>
      <div className="story-mode" aria-label="阅读方式">{(['listen','read'] as const).map(mode=><button key={mode} aria-label={mode==='listen'?'听故事，自动翻页':'一起读，自己翻页'} aria-pressed={autoPlay===(mode==='listen')} onClick={()=>{setAutoPlay(mode==='listen');useGame.getState().updateSettings({storyMode:mode});read();}}><Icon name={mode==='listen'?'ear':'book'} size={26}/>{mode==='listen'?'听故事':'一起读'}<small>{mode==='listen'?'自动翻页':'自己翻页'}</small></button>)}</div>
      </header>
@@ -166,11 +166,11 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <EchoPractice key={`${story.id}:${idx}`} en={page.en} onStart={()=>{pause();setWord(null);}}/>
      {page.pause&&<section className="story-play-along" aria-label="一起演一演"><div><b>一起演一演</b><p>{page.pause.invite}</p><small>都可以试试，也可以直接翻到下一页。</small></div><div className="story-play-choices">{page.pause.choices.map((c,i)=><button key={c.label} aria-pressed={choice?.page===idx&&choice.index===i} onClick={()=>{sfx('click');setChoice({page:idx,index:i});void readPair(c.reply);}}>{c.label}<Icon name="speaker" size={22}/></button>)}</div>{choice?.page===idx&&<p className="story-choice-response" role="status"><span lang="en">{page.pause.choices[choice.index].reply.en}</span><span lang="zh-CN">{page.pause.choices[choice.index].reply.zh}</span></p>}</section>}
      </div>
-     <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · {story.themeEn}{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>
+     <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · <span lang="en">{story.themeEn}</span>{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>
      <div className="story-options"><button aria-pressed={bilingual} onClick={()=>{const next=!bilingual;setBilingual(next);useGame.getState().updateSettings({storyVoice:next?'bilingual':'english'});}}>{bilingual?'中英朗读':'只听英文'}<small lang="en">{bilingual?'English + Chinese':'English audio'}</small></button></div></details>
      {autoPlay&&page.pause&&<p className="story-pause-note">故事在这里等你。想继续时，点下一页。</p>}
      {status==='unavailable'&&<p role="status" className="story-audio-note">这页声音暂时没准备好，点“再听一次”重试。</p>}
-   </main>}
+   </div>}
    </div>
    {!ended&&<div className="story-controls story-primary-controls" aria-label="阅读操作">
        <button onClick={()=>{sfx('click');turn(idx-1);}} disabled={idx===0} aria-label="上一页 Previous page"><span aria-hidden="true">‹</span><small>上一页</small></button>

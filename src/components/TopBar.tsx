@@ -24,7 +24,7 @@ export function TopBar({ title, icon, onBack, focused = false, homeActions, prog
           home ? <button className="avatar avatar-edit" aria-label="更换我的头像" onClick={()=>setEditingAvatar(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44}/></button>
           : <div className="avatar"><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={60}/></div>
         )}
-        {title && !home && <div className="tb-title">{icon && <Icon name={icon} size={34} />}{title}</div>}
+        {title && !home && <h1 className="tb-title">{icon && <Icon name={icon} size={34} />}{title}</h1>}
       </div>
       {!home&&(help||progress)&&<div className="tb-learning-tools">{progress&&<div className="tb-progress">{progress}</div>}{help}</div>}
       {!focused && <div className="tb-right">

@@ -78,7 +78,7 @@ export function FriendVisit() {
 
  return <div className={`screen friend-visit phase-${phase}`} style={{ backgroundImage: `url(${storyBackground('beach')})` }}>
   <TopBar title="朋友来做客" onBack={back} focused help={<FeatureGuide compact id="catch" enabled={phase === 'choose'} autoVoice={false} />} />
-  <main className="friend-visit-sea">
+  <div className="friend-visit-sea">
    {phase === 'choose' && (!ready ? <section className="friend-visit-note"><Icon name="sign" size={48} /><h1>新朋友会坐船来</h1><p>走到学习路线上的“新朋友”站，就会有一位小精灵坐船来做客。</p><button className="btn-big" onClick={() => go({ name: 'home' })}><Icon name="sign" size={36} />去学习路线</button></section>
     : !boats.length ? <section className="friend-visit-note"><Icon name="heart" size={48} /><h1>大家都是好朋友啦</h1><button className="btn-big" onClick={() => go({ name: 'dex' })}><Icon name="dex" size={36} />看看好朋友</button></section>
     : <><h1 className="friend-visit-title">谁坐船来呢？点一艘小船</h1>
@@ -99,6 +99,6 @@ export function FriendVisit() {
       : <><button className="btn-big" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button>
        <button className="btn-big alt" onClick={() => go({ name: 'dexDetail', id: guest.id })}><Icon name="dex" size={36} />认识它</button></>}</div></section>}
    </div>}
-  </main>
+  </div>
  </div>;
 }

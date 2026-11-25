@@ -55,7 +55,7 @@ export function Stars({ n, size = 22 }: { n: number; size?: number }) {
 /** 爱心（亲密度） */
 export function Hearts({ n, total = 5, size = 26 }: { n: number; total?: number; size?: number }) {
   return (
-    <span className="hearts" aria-label={`亲密度 ${n}/${total}`}>
+    <span className="hearts" role="img" aria-label={`亲密度 ${n}/${total}`}>
       {Array.from({ length: total }, (_, i) => <Icon key={i} name={i < n ? "heart" : "heart-empty"} size={size} />)}
     </span>
   );

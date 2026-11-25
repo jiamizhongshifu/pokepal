@@ -4,6 +4,7 @@ import { useSceneMusic } from './lib/music';
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { playLimitSeconds, flushPendingSave, timeIsUp, useGame, type Screen } from "./store";
 import { stopSpeech, onEnglishSpoken } from "./lib/speech";
+import { landOnPageSoon } from "./lib/pageFocus";
 import { skyFor } from "./lib/routine";
 import { Welcome } from "./screens/Welcome";
 import { Island } from "./screens/Island";
@@ -106,6 +107,11 @@ export default function App() {
     return () => clearInterval(t);
   }, [addPlaySeconds]);
 
+  // A new page: a screen reader lands on its heading and the tab is named after it (not on first load).
+  const landed = useRef(false);
+  const pageKey = `${JSON.stringify(screen)}|${islandView}|${timeUp}`;
+  useEffect(() => { const first = !landed.current; landed.current = true; return landOnPageSoon(!first); }, [pageKey]);
+
   if (IconSheet && location.hash === "#icons") return <Suspense fallback={null}><IconSheet /></Suspense>;
   if(saveIssue)return <SaveRecovery/>;
   if (!loaded) return <div className="screen loading"><div className="sl-ball" /></div>;
@@ -117,7 +123,7 @@ export default function App() {
   const homeActive = islandView && !resting;
 
   return (
-    <>
+    <main className="app-main">
       {/* Keep the island's journeys, residents and camera alive across pages.
           Hidden islands stop rendering and narration; other pages stay lightweight. */}
       {homeSeen.current && <div className="home-host" style={{display:homeActive?'contents':'none'}} aria-hidden={!homeActive}>
@@ -128,7 +134,7 @@ export default function App() {
       {!homeActive && <ErrorBoundary key={resting?'sleepy':screen.name} onReset={() => useGame.getState().go({ name: "home" })}>
         <Suspense fallback={<div className="screen loading" role="status"><span className="sl-ball"/>正在准备小发现…</div>}>{resting ? <Sleepy/> : renderScreen()}</Suspense>
       </ErrorBoundary>}
-    </>
+    </main>
   );
 
   function renderScreen() {

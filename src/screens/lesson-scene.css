@@ -11,7 +11,7 @@
 /* Written lines stay for whoever reads along, small and out of the way; a child follows the voice. */
 #root .lesson-staged .is-staged > h1 { position: absolute; left: 50%; top: 10px; translate: -50% 0; max-width: 62%; margin: 0; padding: 6px 16px; border-radius: 20px; background: rgba(255, 255, 255, .88); font-size: var(--text-base); line-height: 1.4; font-weight: 700; color: var(--scene-slate); }
 #root .lesson-staged .is-staged:not(.is-situation):not(.is-context) > h1, #root .lesson-staged .is-staged > p:not(.round-flow-status):not(.learning-feedback),
-#root .lesson-staged .is-staged .round-hear span, #root .lesson-staged .is-staged .round-pace span, #root .lesson-staged .is-staged .round-try span, #root .lesson-staged .is-staged .learning-help span, #root .lesson-staged .is-staged .learning-choice-audio span { display: none; }
+#root .lesson-staged .is-staged .round-hear span, #root .lesson-staged .is-staged .round-pace span, #root .lesson-staged .is-staged .round-try span, #root .lesson-staged .is-staged .learning-help span, #root .lesson-staged .is-staged .learning-choice-audio span { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #root .lesson-staged .is-staged .round-flow-status, #root .lesson-staged .is-staged .learning-feedback, #root .lesson-staged .is-staged > [role="status"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
 #root .lesson-staged .is-staged .round-toolbar { position: absolute; left: 16%; top: 16%; translate: -50% 0; display: flex; align-items: center; gap: 10px; margin: 0; }
@@ -93,7 +93,7 @@
  #root .lesson-staged .round-card { left: 12px; right: 12px; bottom: 12px; padding: 12px 14px 10px; border-radius: 24px; }
  #root .lesson-staged .round-card .learning-choices > div { flex-basis: 30vw; }
  #root .lesson-staged .round-card .phrase-choices > div { flex-basis: 44vw; }
- #root .lesson-staged .round-card .learning-help span { display: none !important; }
+ #root .lesson-staged .round-card .learning-help span { position: absolute !important; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 
 /* The snack lesson: a picnic cloth beside the friend, each found snack set down on its plate. */

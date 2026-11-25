@@ -48,7 +48,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
         </div>
         <div className="detail-info">
           <Speak en={p.nameEn} zh={p.nameZh}>
-            <div className="detail-name">{p.nameZh}<span>{p.nameEn}</span></div>
+            <div className="detail-name">{p.nameZh}<span lang="en">{p.nameEn}</span></div>
           </Speak>
           <div className="detail-wish">
             {cap ? <><strong>已经是你的伙伴啦！</strong><small lang="en">Already your friend!</small><button className="wish-button primary" onClick={()=>{sfx("click");go({name:"home",companion:p.id});}}><Icon name="heart" size={28}/>去小岛陪它玩<small lang="en">Play on the island</small></button></> : <>{berries>0
@@ -57,19 +57,19 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
               : <button className="wish-button primary" aria-pressed={wished} onClick={()=>{sfx("click");setCatchWish(wished?null:p.id);if(!wished)void say(["zh","记下啦！拿到邀请果，它就坐船来。"]);}}><Icon name={wished?"check":"heart"} size={32}/><span>{wished?"已记下，再点取消":"我想找这只"}<small lang="en">{wished?"Saved":"Find this friend!"}</small></span></button>}
               <p>{berries>0?"它会坐船来做客。":"有邀请果时，它会坐船来做客。"}<small lang="en">{berries>0?"It comes by boat.":"Bring an invite berry."}</small></p></>}
           </div>
-          <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · {p.genusEn}</div></Speak>
+          <Speak en={p.genusEn} zh={p.genusZh}><div className="detail-genus">{p.genusZh} · <span lang="en">{p.genusEn}</span></div></Speak>
           <div className="type-row">
             {p.types.map((t) => <span key={t} className="type-chip" style={{ background: CREATURE_TYPES[t as CreatureType]?.color }}><Icon name={CREATURE_TYPES[t as CreatureType]?.icon ?? "normal"} size={26} /> {CREATURE_TYPES[t as CreatureType]?.zh}</span>)}
             <span className="type-chip home-chip"><Icon name={homeOf(p.species).icon} size={26} /> 家在{homeOf(p.species).name}</span>
             {COLORS[p.color] && (
               <Speak en={COLORS[p.color].en} zh={COLORS[p.color].zh}>
-                <span className="type-chip color" ><i style={{ background: COLORS[p.color].css }} />{COLORS[p.color].zh} {COLORS[p.color].en}</span>
+                <span className="type-chip color" ><i style={{ background: COLORS[p.color].css }} />{COLORS[p.color].zh} <span lang="en">{COLORS[p.color].en}</span></span>
               </Speak>
             )}
           </div>
           <Speak en={desc.en} zh={desc.zh}>
             <div className="detail-desc">
-              <p className="en">{desc.en}</p>
+              <p className="en" lang="en">{desc.en}</p>
               <p className="zh">{desc.zh}</p>
             </div>
           </Speak>
@@ -78,7 +78,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
               <div className="fact"><Icon name="ruler" size={44} />{p.heightCm} 厘米<small>{taller ? "比你还高！" : "比你矮"}</small></div>
             </Speak>
             <Speak en={h.en} zh={h.zh}><div className="fact"><Icon name={h.icon} size={44} />爱好<small>{h.zh}</small></div></Speak>
-            <Speak en={`It likes ${f.en}.`} zh={`它爱吃${f.zh}。`}><div className="fact"><Icon name={f.icon} size={44} />爱吃<small>{f.zh} {f.en}</small></div></Speak>
+            <Speak en={`It likes ${f.en}.`} zh={`它爱吃${f.zh}。`}><div className="fact"><Icon name={f.icon} size={44} />爱吃<small>{f.zh} <span lang="en">{f.en}</span></small></div></Speak>
           </div>
           {cap && (
             <div className="bond">
@@ -89,7 +89,7 @@ export function DexDetail({ id, picking = false, browse }: { id: number; picking
           <details className="official">
             <summary>给爸爸妈妈读</summary>
             <p>{p.nameZh}是一只{speciesOf(p).genusZh}，它的家在小岛的{homeOf(p.species).name}。{p.isFinal ? "它已经长大成年。" : "多和它一起玩，它会慢慢长大。"}</p>
-            <p className="en">{p.nameEn} is a {speciesOf(p).genusEn.toLowerCase()}.</p>
+            <p className="en" lang="en">{p.nameEn} is a {speciesOf(p).genusEn.toLowerCase()}.</p>
           </details>
         </div>
       </div>

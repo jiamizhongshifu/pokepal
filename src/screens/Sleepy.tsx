@@ -66,7 +66,7 @@ export function Sleepy({clock=localClock}:{clock?:()=>Date}) {
     <section className="rest-family" aria-label="所有已拥有的小精灵">
       <div className="rest-family-heading"><Icon name="heart" size={24}/><span>伙伴都在这里 <b>{ids.length}</b></span></div>
       {ids.length>0?<ul className={`sleepers ${ids.length<=12?"few-friends":""}`} style={{"--rest-cols":ids.length<=6?Math.max(1,ids.length):ids.length<=12?Math.ceil(ids.length/2):6} as CSSProperties} ref={gallery} onScroll={updateMore} tabIndex={0} aria-label={`全部 ${ids.length} 位伙伴，可上下滑动查看`}>
-        {ids.map((id,i)=><li key={id} className="sleeper"><Icon name="zz" size={22}/><CreatureImg src={creatureAvatar(id)} alt={getCreature(id).nameZh} loading={i<12?'eager':'lazy'}/><span>{getCreature(id).nameZh}</span></li>)}
+        {ids.map((id,i)=><li key={id} className="sleeper"><Icon name="zz" size={22}/><CreatureImg src={creatureAvatar(id)} alt="" loading={i<12?'eager':'lazy'}/><span>{getCreature(id).nameZh}</span></li>)}
       </ul>:<p className="rest-empty">小岛也在安静休息，伙伴下次再见。</p>}
       {more&&<button className="rest-more" onClick={()=>gallery.current?.scrollBy({top:Math.max(120,gallery.current.clientHeight*.75),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}><Icon name="swipe" size={24}/>下面还有伙伴 <span aria-hidden="true">↓</span></button>}
     </section>

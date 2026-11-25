@@ -196,7 +196,7 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 /* ---------- 家长中心（保持高可读性） ---------- */
 .parent { -webkit-user-select: text; user-select: text; text-shadow: none; color: var(--text); }
 .parent-head { display: flex; align-items: center; gap: 18px; padding: 14px 24px; background: rgba(255, 255, 255, 0.82); box-shadow: 0 2px 12px rgba(30, 30, 120, 0.12); }
-.parent-head h2 { margin: 0; font-size:var(--text-3xl); }
+.parent-head h1 { margin: 0; font-size:var(--text-3xl); }
 .tabs { margin-left: auto; display: flex; gap: 8px; }
 .tabs button { padding: 10px 20px; border-radius:var(--radius-pill); font-size:var(--text-lg); font-weight: 700; background: rgba(90, 100, 220, 0.1); }
 .parent-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 28px 60px; }
