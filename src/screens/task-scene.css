@@ -32,3 +32,17 @@
 /* While the help bubble is open under the toolbar, the game card stays below it instead of sitting under it. */
 #root .task-staged:has(.guide-compact.is-open) .practice-card { max-height: calc(100% - 112px - var(--guide-space, 130px) - env(safe-area-inset-top)); }
 @media (max-width: 700px) { #root .task-staged:has(.guide-compact.is-open) .practice-card { max-height: calc(100% - 92px - var(--guide-space, 130px) - env(safe-area-inset-top)); } }
+
+/* Tracing on a phone: the card uses the whole height under the toolbar and the letter is as big as the height left
+   allows, so the letter and the buttons under it are on screen together. */
+@media (max-width: 700px) {
+ #root .task-trace.task-staged .task-friend { display: none; }
+ #root .task-trace.task-staged .practice-card { max-height: calc(100% - 92px - var(--guide-space, 0px) - env(safe-area-inset-top)); }
+ #root .task-trace.task-staged .practice-card > header small, #root .task-trace .trace-round .trace-instruction small { display: none; }
+ #root .task-trace .trace-round .trace-instruction { min-height: 0; }
+ #root .task-trace .trace-round .trace-pad { width: min(100%, 420px, max(180px, calc(100dvh - 92px - 366px - var(--guide-space, 0px) - env(safe-area-inset-top)))); }
+}
+/* On a wide screen the letter also gives way while the help bubble is open, so the buttons under it stay on screen. */
+@media (min-width: 701px) and (orientation: landscape) {
+ #root .task-trace .trace-round .trace-pad { width: min(100%, max(180px, calc(100dvh - 112px - 330px - var(--guide-space, 0px) - env(safe-area-inset-top)))); }
+}

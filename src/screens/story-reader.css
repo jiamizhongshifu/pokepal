@@ -19,11 +19,10 @@
 #root .story-reader .story-primary-controls { position:static; flex:none; transform:none; width:min(640px,calc(100% - 32px)); margin:0 auto; padding:10px 8px; box-shadow:none; background:transparent; border:0; border-radius:0; }
 #root .story-reader .story-primary-controls button { min-height:64px; border-radius:var(--radius-lg); box-shadow:0 4px 0 var(--brand-line-deep); transition:transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 #root .story-reader .story-primary-controls button:not(:disabled):active { transform:translateY(var(--brand-press));box-shadow:none; }
-#root .story-reader .story-primary-controls .story-next { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); box-shadow:0 4px 0 var(--brand-primary-deep); }
-#root .story-reader .story-primary-controls .story-next:not(:disabled):active { box-shadow:0 1px 0 var(--brand-primary-deep); }
-#root .story-reader .story-primary-controls .story-listen { box-shadow:0 4px 0 var(--brand-sun-deep); }
-#root .story-reader .story-primary-controls .story-listen.is-speaking { box-shadow:0 4px 0 var(--brand-sun-deep), 0 0 0 6px rgba(255, 200, 0, .28); }
-#root .story-reader .story-primary-controls .story-listen:not(:disabled):active { box-shadow:0 1px 0 var(--brand-sun-deep); }
+#root .story-reader .story-primary-controls .story-next { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); }
+#root .story-reader .story-primary-controls .story-listen { box-shadow:0 var(--brand-press) 0 var(--surface-border); }
+/* While the page is being read aloud the button wears the hint-blue outline. */
+#root .story-reader .story-primary-controls .story-listen.is-speaking { border-color:var(--brand-sky); box-shadow:0 var(--brand-press) 0 var(--brand-sky-deep); }
 #root .story-reader .story-pause-note, #root .story-reader .story-audio-note { grid-column:1/-1; margin:0; }
 @media(min-width:701px) and (max-width:900px) {
  #root .story-reader .open-storybook { grid-template-columns:minmax(0,1fr); }
