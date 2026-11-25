@@ -23,14 +23,14 @@
 #root .parent-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 #root .parent-eyebrow{font-size:var(--text-sm);font-weight:700;color:var(--p-muted)}
 #root .parent-section-heading h3{font-size:var(--text-2xl);margin:4px 0 0;color:var(--p-ink)}
-#root .parent-inline-action{display:flex;align-items:center;gap:6px;flex:none;border:2px solid var(--p-border);background:var(--p-well);color:var(--p-ink);padding:8px 14px;border-radius:var(--radius-md);min-height:44px;font-size:var(--text-base);font-weight:700}
+#root .parent-inline-action{display:flex;align-items:center;gap:6px;flex:none;border:2px solid var(--p-border);background:var(--p-well);color:var(--p-ink);padding:8px 14px;border-radius:var(--radius-md);min-height:48px;font-size:var(--text-base);font-weight:700}
 #root .parent-course-progress{color:var(--brand-ink-muted);font-size:var(--text-base);margin:10px 0 20px}
 #root .parent-home-idea{display:flex;align-items:flex-start;gap:12px;padding:16px 0;border-top:1px solid var(--brand-line);border-bottom:1px solid var(--brand-line)}
 #root .parent-home-idea>.icon{flex:none}
 #root .parent-home-idea strong{font-size:var(--text-base)}
 #root .parent-home-idea p{margin:6px 0 0;line-height:1.7}
 #root .parent-review-note{font-size:var(--text-base);color:var(--brand-ink-muted);margin:16px 0 12px}
-#root .parent-organized .btn-small{font-size:var(--text-base);min-height:46px;padding:10px 16px;box-shadow:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-sm)}
+#root .parent-organized .btn-small{font-size:var(--text-base);min-height:48px;padding:10px 16px;box-shadow:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-sm)}
 #root .parent-today h3{margin:0 0 18px}
 #root .parent-today dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;gap:16px}
 #root .parent-today dl>div+div{border-left:1px solid var(--brand-line);padding-left:20px}

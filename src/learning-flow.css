@@ -4,6 +4,8 @@
 #root .topbar.has-learning-tools .tb-title{font-size:clamp(18px,2.2vw,26px);line-height:1.35;min-width:0;overflow-wrap:anywhere}
 .tb-learning-tools{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex:none;margin-left:auto}
 .tb-progress:empty{display:none}
+/* A lesson or game is played on a painted daytime scene that stays bright at night, so its title and round count keep the scene ink. */
+#root .screen:is(.task-staged,.lesson-staged) .topbar :is(.tb-title,.round-progress,.round-progress *){color:var(--scene-ink)}
 .round-progress{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--brand-ink,var(--text));white-space:nowrap;font-size:var(--text-base)}
 #root .feature-guide.guide-compact{position:relative;flex:none;width:auto;max-width:none;margin:0;padding:0;border:0;background:none;box-shadow:none;z-index:5}
 .guide-compact .guide-content{position:absolute;right:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 32px));padding:10px;border:2px solid var(--brand-sun);border-radius:var(--radius-lg);background:var(--surface);box-shadow:0 6px 20px #234b4626;color:var(--text);--guide-ink:var(--text)}
@@ -42,7 +44,7 @@
 @media(max-width:600px){
  #root .topbar.has-learning-tools .guide-reopen{flex-direction:column;justify-content:center;gap:0;width:48px;min-height:48px;padding:2px}
  #root .topbar.has-learning-tools .guide-reopen span{display:block;font-size:var(--text-xs);line-height:1.3}
- #root .topbar.has-learning-tools .back{min-width:44px;width:44px;height:48px;padding:0}
+ #root .topbar.has-learning-tools .back{min-width:48px;width:48px;height:48px;padding:0}
  #root .topbar.has-learning-tools .back span{display:none}
 }
 /* First-use guidance expands below the toolbar, never over the question. */
