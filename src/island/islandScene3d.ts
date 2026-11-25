@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { layerArt, storyProp } from '../data/sceneArt';
+import { SIDE_OVER, SIDE_WIDTH, layerArt, storyProp } from '../data/sceneArt';
 import { scenePieces } from '../data/sceneLayers';
 import { ASPECT, REST, TAN, WORLD_H, WORLD_W, depthAt, restScale, type View } from './depth';
 
@@ -59,6 +59,7 @@ export interface IslandScene {
  hop(names: string[]): void;
  /** Run or pause the little motions and drawing (paused while the screen is out of sight). */
  run(on: boolean): void;
+ /** The canvas size. A canvas wider than the picture's 3:2 keeps the picture in its middle at the same size and shows the painted sides beyond it. */
  resize(width: number, height: number): void;
  dispose(): void;
 }
@@ -78,6 +79,14 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
  const groundMesh = new THREE.Mesh(ground, material);
  groundMesh.scale.set(WORLD_W, WORLD_H, 1); groundMesh.position.set(-WORLD_W / 2, -WORLD_H / 2, 0);
  scene.add(groundMesh);
+ // The painted sides lie on the ground plane beyond its edges, under the ground where they keep its edge strip, so they
+ // zoom and pan with it. A missing side leaves the flat sea colour around the picture.
+ const sideW = SIDE_WIDTH * WORLD_W, sideAt = { left: -WORLD_W / 2 + SIDE_OVER * WORLD_W - sideW, right: WORLD_W / 2 - SIDE_OVER * WORLD_W };
+ await Promise.all((['left', 'right'] as const).map(side => svgGeometry(layerArt('island-map', `side-${side}`)).then(geo => {
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.scale.set(sideW, WORLD_H, 1); mesh.position.set(sideAt[side], -WORLD_H / 2, 0); mesh.renderOrder = -1;
+  scene.add(mesh);
+ }, () => { /* the page's own sides stay */ })));
  const pivots = new Map<string, { pivot: THREE.Group; rest: THREE.Vector3; scale: number }>();
  pieces.forEach(([name, b], i) => {
   const mesh = new THREE.Mesh(pieceGeos[i], material), w = b.w / 100 * WORLD_W, h = b.h / 100 * WORLD_H, centred = CENTRED.has(name);
@@ -88,7 +97,7 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
   pivot.position.set(x * s, y * s, z); pivot.scale.setScalar(s); pivot.add(mesh); scene.add(pivot);
   pivots.set(name, { pivot, rest: pivot.position.clone(), scale: s });
  });
- let view: View = { zoom: 1, gx: 0, gy: 0, px: 0, py: 0 }, running = false, frame = 0, dirty = true;
+ let view: View = { zoom: 1, gx: 0, gy: 0, px: 0, py: 0 }, running = false, frame = 0, dirty = true, wide = 1;
  // Props go between the pieces by where their foot is, so a prop in front of a piece is drawn over it.
  const bottoms = pieces.map(([, b]) => b.y + b.h);
  const propGroup = new THREE.Group(); scene.add(propGroup);
@@ -120,8 +129,9 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
   camera.position.set(view.gx + view.px, view.gy + view.py, cz);
   camera.lookAt(camera.position.x, camera.position.y, 0);
   // Shift the lens so the ground stays put while the eye moves (parallax): see project() in depth.ts.
+  // A wider canvas widens the view by `wide` on both sides; the picture keeps its place and size in the middle.
   const r = near * TAN * ASPECT, t = near * TAN, dx = view.px / cz / (TAN * ASPECT), dy = view.py / cz / TAN;
-  camera.projectionMatrix.makePerspective(-r - r * dx, r - r * dx, t - t * dy, -t - t * dy, near, camera.far);
+  camera.projectionMatrix.makePerspective(-r * wide - r * dx, r * wide - r * dx, t - t * dy, -t - t * dy, near, camera.far);
   camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
  }
  const clock = new THREE.Clock();
@@ -147,7 +157,7 @@ export async function createIslandScene(canvas: HTMLCanvasElement, opts: { calm:
   view(v) { view = v; dirty = true; if (!running) { place(); renderer.render(scene, camera); dirty = false; } },
   hop(names) { const at = performance.now(); names.forEach(n => pivots.has(n) && hops.set(n, at)); if (running && !frame) tick(); },
   run(on) { if (on === running) return; running = on; if (on) { dirty = true; tick(); } else if (frame) { cancelAnimationFrame(frame); frame = 0; } },
-  resize(width, height) { renderer.setSize(width, height, false); dirty = true; if (!running) { place(); renderer.render(scene, camera); } },
+  resize(width, height) { renderer.setSize(width, height, false); wide = Math.max(1, width / height / ASPECT); dirty = true; if (!running) { place(); renderer.render(scene, camera); } },
   dispose() { running = false; if (frame) cancelAnimationFrame(frame); material.dispose(); renderer.dispose(); },
  };
 }

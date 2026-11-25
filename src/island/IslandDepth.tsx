@@ -69,6 +69,17 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
   return (s.scrollLeft / (s.scrollWidth - s.clientWidth) - .5) * 2 * SCROLL_PARALLAX;
  };
 
+ // On a screen wider than the picture the canvas spans the whole view (the picture keeps its box in the middle) and
+ // three.js draws the painted sides too, so they zoom and pan with the island.
+ const fit = useEvent(() => {
+  const box = world.current, sc = scroller.current;
+  if (!box) return;
+  const pad = Math.max(0, ((sc?.clientWidth ?? 0) - box.clientWidth) / 2);
+  box.style.setProperty('--wide-pad', `${pad}px`);
+  sc?.classList.toggle('is-wide', pad > .5);
+  scene.current?.resize(box.clientWidth + pad * 2, box.clientHeight);
+ });
+
  // Load three.js only for this page; a device that cannot draw it keeps the flat pieces.
  useEffect(() => {
   let gone = false, made: IslandScene | null = null;
@@ -77,8 +88,7 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
   import('./islandScene3d').then(m => m.createIslandScene(c, { calm: calm.current })).then(s => {
    if (gone) { s.dispose(); return; }
    made = scene.current = s;
-   const box = world.current;
-   if (box) s.resize(box.clientWidth, box.clientHeight);
+   fit();
    s.view(shown.current); setReady(true);
   }).catch(() => { /* stays on the flat pieces */ });
   return () => { gone = true; made?.dispose(); scene.current = null; cancelAnimationFrame(easing.current); };
@@ -91,8 +101,8 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
  useEffect(() => {
   const box = world.current, sc = scroller.current;
   if (!box) return;
-  const ro = new ResizeObserver(() => { scene.current?.resize(box.clientWidth, box.clientHeight); follow(); });
-  ro.observe(box);
+  const ro = new ResizeObserver(() => { fit(); follow(); });
+  ro.observe(box); if (sc) ro.observe(sc);
   // Friends walk and things appear: keep them on their spots in the current view.
   const mo = new MutationObserver(follow);
   mo.observe(box, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
@@ -142,7 +152,7 @@ export function IslandDepth({ world, scroller, props, nudged, active }: { world:
   box.addEventListener('wheel', onWheel, { passive: false });
   box.style.touchAction = 'pan-x';
   return () => {
-   ro.disconnect(); mo.disconnect(); sc?.removeEventListener('scroll', onScroll);
+   ro.disconnect(); mo.disconnect(); sc?.removeEventListener('scroll', onScroll); sc?.classList.remove('is-wide');
    box.removeEventListener('pointerdown', onDown); removeEventListener('pointermove', onMove);
    removeEventListener('pointerup', onUp); removeEventListener('pointercancel', onUp);
    box.removeEventListener('click', onClick, true); box.removeEventListener('wheel', onWheel);

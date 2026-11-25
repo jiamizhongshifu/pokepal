@@ -11,6 +11,9 @@ export const storyBackground = (name: StoryBackground | string) => `${ROOT}/stor
 export const storyProp = (name: string) => `${ROOT}/prop/${name}.svg`;
 /** A painted scene redrawn as vector pieces (scripts/art/vectorize.py): `base` is its ground, the rest move on their own. */
 export const layerArt = (scene: WorldArt, piece: string) => `${ROOT}/layers/${scene}/${piece}.svg`;
+/** Each wide-screen side painting (`side-left` / `side-right`): the 60% painted outward from the ground's edge plus the
+ *  4% of the ground's own edge it keeps, to reach over the scene (vectorize.py KEPT and OVER, styles.css .scene-side). */
+export const SIDE_WIDTH = .64, SIDE_OVER = .04;
 /** The learning path's chapters, in order: the same island trail painted for six times of day and themes. */
 export const PATH_ART: WorldArt[] = ['learning-path', 'learning-path-2', 'learning-path-3', 'learning-path-4', 'learning-path-5', 'learning-path-6'];
 /** Each ground is painted with one flat colour along its top edge (sky) and one along its bottom edge (water), so on a

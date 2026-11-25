@@ -5,7 +5,13 @@
 .island-view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; container-type: size; scrollbar-width: none; }
 .island-world { position: relative; flex: none; width: max(min(100cqw, 150cqh), 84cqh); aspect-ratio: 3 / 2; overflow: clip; }
 /* three.js draws the island here (IslandDepth); until it is ready the flat pieces show in its place. */
-.island-depth { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
+/* --wide-pad (IslandDepth): how far the view reaches past the picture on each side of a wide screen. The canvas and the
+   time-of-day tint reach that far, and the picture's box lets them show; the view itself never scrolls then. */
+.island-depth { position: absolute; top: 0; left: calc(-1 * var(--wide-pad, 0px)); display: block; width: calc(100% + 2 * var(--wide-pad, 0px)); height: 100%; opacity: 0; }
+.island-view.is-wide { overflow-x: clip; }
+.island-view.is-wide .island-world { overflow: visible; }
+/* Once three.js draws the sides with the island, the page's own sides step aside. */
+.island-view.is-wide:has(.island-depth.is-ready) .scene-side { display: none; }
 .island-depth.is-ready { opacity: 1; }
 .island-world .island-place, .island-world .island-walker { transform-origin: 50% 92%; }
 .island-world .island-place { transform-origin: 50% 65%; }
@@ -144,7 +150,7 @@
 .island-stage .island-play-actions { gap: 18px; margin-top: 6px; }
 @keyframes island-give { to { translate: -60vw -20vh; scale: .2; opacity: 0; } }
 
-.island-home .island-tint { position: absolute; inset: 0; z-index: 7; pointer-events: none; transition: background-color 1.2s var(--ease-standard); }
+.island-home .island-tint { position: absolute; inset: 0 calc(-1 * var(--wide-pad, 0px)); z-index: 7; pointer-events: none; transition: background-color 1.2s var(--ease-standard); }
 /* The time of day tints the island and, with the same colour, the sea around it (the scene host and its side pieces read these). */
 .island-home .island-tint { background-color: var(--scene-tint, transparent); mix-blend-mode: var(--scene-tint-blend, normal); }
 /* The wide-screen sides tint themselves and reach over the island's edge: drawn after the tint, not under it again. */
