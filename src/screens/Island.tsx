@@ -40,15 +40,19 @@ import { learningEntry } from '../data/curriculum';
 import { ISLAND_DAY, SCENES, dayDone, inviteKey, islandDone, islandInvites, scenePlays, sceneThings, type Invite, type Standing } from '../island/scenes';
 import { shownStickers } from '../island/stickers';
 import { MOOD_MARK, useFriendMood } from '../island/mood';
+import { SCENE_LAYOUT, targetSpot, type SceneObject } from '../island/sceneLayout';
 import { DISTRICTS, PLACES, placeOf, placesIn, whereNow, type District, type Spot } from '../island/world';
 import '../island/island-home.css';
 
 const RESIDENTS = 12, REACT_MS = 1400, PERIOD = 20 * 60 * 1000;
 /** Where a scene's things lie and where its friends stand, in % of the scene. */
 const THING_SPOTS: Spot[] = [[13, 74], [29, 86], [44, 76], [59, 88], [73, 76], [88, 86], [94, 68], [5, 90]];
-const FRIEND_SPOTS: Spot[] = [[50, 62], [26, 60], [74, 60], [88, 52]];
-/** The garden keeps its middle for the plots: one friend helps at the side, the things lie in a row in front. */
-const GARDEN_FRIEND: Spot[] = [[16, 62]], GARDEN_THINGS: Spot[] = [0, 1, 2, 3, 4, 5].map(i => [9 + i * 16.4, 90] as const);
+/** The garden keeps its middle for the plots: the things lie in a row in front. */
+const GARDEN_THINGS: Spot[] = [0, 1, 2, 3, 4, 5].map(i => [9 + i * 16.4, 90] as const);
+/** While a friend does something with the child, the others step back and watch. */
+const WATCH_SPOTS: Spot[] = [[42, 46], [58, 44]];
+/** A thing on the ground keeps clear of the objects standing in the scene. */
+const clearOf = (objects: SceneObject[]) => (s: Spot) => !objects.some(o => Math.abs(o.spot[0] - s[0]) < o.size * .75 + 5 && s[1] > o.spot[1] - 16 && s[1] < o.spot[1] + 8);
 const SOIL = { icon: 'seed', label: '地里' };
 /** At a party the other friends stand behind, watching. */
 const GUEST_SPOTS: Spot[] = [[38, 50], [54, 47], [70, 50], [86, 47]];
@@ -148,6 +152,8 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   void say(...learningVoice(entry.entry)).then(heard => { if (heard) useGame.getState().noteWord(en, 'heard'); });
  };
 
+ // An object with nothing to do yet just wobbles: it is there, its activity comes with learning.
+ const tapObject = (id: string) => { sfx('boop'); setReact({ id, at: Date.now() }); later(() => setReact(r => r?.id === id ? null : r), 600); };
  // An empty plot: the friend names a fruit the child has learned, and that one is planted. Before any fruit word
  // is learned, the plot says which lesson brings the first seed.
  const plant = (index: number) => {
@@ -162,7 +168,8 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  if (district) {
   const here = standing.filter(f => placeOf(f.place).district === district);
   const partner = session?.partner;
-  const garden = district === 'garden', friendSpots = garden ? GARDEN_FRIEND : FRIEND_SPOTS, thingSpots = garden ? GARDEN_THINGS : THING_SPOTS, busy = !!session || !!planting;
+  const layout = SCENE_LAYOUT[district], objects = Object.entries(layout.objects);
+  const garden = district === 'garden', friendSpots = layout.friends, thingSpots = (garden ? GARDEN_THINGS : THING_SPOTS).filter(clearOf(objects.map(([, o]) => o))), busy = !!session || !!planting;
   const friends = [...new Set([...(partner !== undefined ? [partner] : []), ...here.map(f => f.id), ...(here.length ? [] : residents.slice(0, 1).map(c => c.id))])].slice(0, friendSpots.length);
   const guests = session?.kind === 'party' ? residents.map(c => c.id).filter(id => id !== partner).slice(0, GUEST_SPOTS.length) : [];
   const waiting = invites.filter(i => i.district === district);
@@ -171,6 +178,12 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   const spots = ball ? thingSpots.filter((_, i) => i !== 2 && i !== 3) : thingSpots;
   const things = sceneThings(save, district).filter(t => !(ball && t.entry.key === 'ball')).slice(0, spots.length);
   const plays = scenePlays(save, district).filter(p => !waiting.some(i => i.kind === 'play' && i.play.id === p.id));
+  // Where what is handed over goes: the place's object (the tent, the soil of a plot), drawn where it stands.
+  const handTo = planting ? SOIL : session?.kind === 'play' ? session.play.to : session?.kind === 'errand' ? session.errand.to : undefined;
+  const target = planting ? [44 + planting.index * 20, 60] as const : session ? targetSpot(district, placeOf(session.place).id, handTo?.label === '天上') : undefined;
+  const stageStyle = target && { '--target-x': `${target[0]}%`, '--target-y': `${target[1]}%` } as CSSProperties;
+  const start = (p: Play) => begin({ kind: 'play', play: p, district, place: p.place, partner: friends[0], icon: p.icon, lesson: false });
+  let watcher = 0;
   return <div className={`screen island-home is-scene sky-${asleep ? 'night' : sky}`}>
    <div className={`island-scene${busy ? ' is-busy' : ''}`} style={{ backgroundImage: `url(${storyBackground(SCENES[district].background)})` }}>
     <button type="button" className="island-back" aria-label={busy ? '先不做了' : '回到小岛'} onClick={leave}><Icon name={busy ? 'back' : 'island'} size={48} /></button>
@@ -180,9 +193,10 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     </button>)}
     {friends.map((id, i) => {
      const creature = getCreature(id), invite = !busy && !asleep ? waiting.find(w => w.partner === id) ?? (i === 0 ? waiting.find(w => !friends.includes(w.partner!)) : undefined) : undefined;
-     const leading = busy && id === (partner ?? friends[0]);
-     if (busy && !leading) return null;
-     const spot = leading ? [16, 62] as const : friendSpots[i];
+     const leading = busy && id === (partner ?? friends[0]), watching = busy && !leading;
+     if (watching && (session?.kind === 'party' || watcher >= WATCH_SPOTS.length)) return null;
+     const spot = leading ? [16, 62] as const : watching ? WATCH_SPOTS[watcher++] : friendSpots[i];
+     if (watching) return <div key={id} className="island-friend is-guest" style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }}><span className="island-friend-body"><CreatureImg src={mood && mood.mood !== 'thinking' ? creatureExpression(id, 'cheer') : creatureArt(id)} alt="" /></span></div>;
      const feels = mood?.id === id && react?.id !== id ? mood : undefined;
      return <div key={id} className={`island-friend${leading ? ' is-leading' : ''}${grows(id) ? ' is-growing' : ''}${feels ? ` is-mood-${feels.mood}` : ''}`} style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }}>
       {invite && <button type="button" className={`island-invite${invite.lesson ? ' is-lesson' : ''}`} aria-label="和它一起做这件事" onClick={() => begin({ ...invite, partner: id })}><Icon name={invite.icon} size={56} /></button>}
@@ -196,15 +210,27 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     {guests.map((id, i) => <div key={`guest-${id}`} className="island-friend is-guest" style={{ left: `${GUEST_SPOTS[i][0]}%`, top: `${GUEST_SPOTS[i][1]}%` }}><span className="island-friend-body"><CreatureImg src={creatureExpression(id, 'cheer')} alt="" /></span></div>)}
     {ball && !busy && <BallTurns friend={friends[0]} />}
     {district === 'beach' && !busy && save.balls.poke > 0 && <button type="button" className="beach-boat" aria-label="小船来了，去迎接新朋友" onClick={() => { stopSpeech(); sfx('sparkle'); go({ name: 'catch' }); }}><img src={storyProp('visit-boat')} alt="" /><span className="island-invite is-lesson"><InviteBerry type="poke" size={56} /></span></button>}
-    {!busy && plays.length > 0 && friends.length > 0 && <nav className="island-shelf" aria-label="在这里可以一起做的事">
-     {plays.map(p => <button key={p.id} type="button" aria-label={p.title} onClick={() => begin({ kind: 'play', play: p, district, place: p.place, partner: friends[0], icon: p.icon, lesson: false })}><Icon name={p.icon} size={52} /></button>)}
-    </nav>}
-    {session && partner !== undefined && <section className="island-stage" aria-label="一起做的事">
+    {objects.map(([id, o]) => {
+     // The object a thing is handed to is drawn by the activity itself while it lasts.
+     // While something is being done the objects step aside, so nothing looks like a thing to choose; the one a
+     // thing is handed to is drawn by the activity itself.
+     if (busy) return null;
+     const offered = friends.length > 0 && !asleep ? plays.filter(p => placeOf(p.place).id === id) : [];
+     // Near an edge the pictures line up toward the middle, so none is cut off on a narrow screen.
+     const edge = o.spot[0] < 30 ? ' is-left' : o.spot[0] > 70 ? ' is-right' : '';
+     return <div key={id} className={`island-object${edge}${offered.length ? ' is-open' : ''}${react?.id === id ? ' is-tapped' : ''}`} style={{ left: `${o.spot[0]}%`, top: `${o.spot[1]}%`, '--size': o.size } as CSSProperties}>
+      {offered.length > 0 && <span className="island-object-plays">{offered.map(p => <button key={p.id} type="button" className="island-invite" aria-label={p.title} onClick={() => start(p)}><Icon name={p.icon} size={48} /></button>)}</span>}
+      <button type="button" className="island-object-art" aria-label={offered[0]?.title ?? placeOf(id).name} onClick={() => offered[0] ? start(offered[0]) : tapObject(id)}>
+       {'icon' in o.art ? <Icon name={o.art.icon} size={160} /> : <img src={storyProp(o.art.prop)} alt="" draggable={false} />}
+      </button>
+     </div>;
+    })}
+    {session && partner !== undefined && <section className="island-stage" style={stageStyle} aria-label="一起做的事">
      {session.kind === 'party' ? <IslandPartySession key={inviteKey(session)} party={session.party} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} />
       : session.kind === 'errand' ? <IslandErrandSession key={inviteKey(session)} errand={session.errand} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onRoute={() => { stopSpeech(); go({ name: 'home' }); }} />
       : <IslandPlaySession key={inviteKey(session)} play={session.play} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onFinished={(play, made) => { if (play.sleeps) setAsleep(true); if (play.slots) setKept({ play, made }); }} />}
     </section>}
-    {planting && friends.length > 0 && <section className="island-stage" aria-label="种一种水果">
+    {planting && friends.length > 0 && <section className="island-stage" style={stageStyle} aria-label="种一种水果">
      <IslandAskRound key={`plant-${planting.index}`} ask={planting.ask} speaker={friends[0]} station="farm" kind="do" to={SOIL} onClose={() => setPlanting(null)}
       onSolved={id => { useGame.getState().plantCrop(planting.index, id as CropKind); setPlanting(null); }} />
     </section>}

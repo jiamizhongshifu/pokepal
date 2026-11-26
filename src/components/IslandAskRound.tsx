@@ -93,8 +93,8 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
    <h2 className="island-ask-title"><small>{ask.situation ? '这时候说什么' : KIND_TAG[kind]}</small>{ask.situation ?? HINTS[kind][0]}</h2>
    <div className="island-ask-options">{options.map((o, i) => <button key={o.id} className={`${shown && o.id === ask.answer ? 'is-shown' : ''}${reading === o.id ? ' is-reading' : ''}${wrong === o.id ? ' is-wrong' : ''}${done && o.id === ask.answer ? ' is-taken' : ''}`} style={scene ? { left: `${spot(i)[0]}%`, top: `${spot(i)[1]}%`, rotate: `${spot(i)[2]}deg` } : undefined} aria-label={o.label} {...(give ? dragTo(receiver, () => tap(o.id)) : { onClick: () => tap(o.id) })}>
     {o.entry && o.tint ? <span className="island-ask-tinted" style={{ background: o.tint }}><LearningArt entry={o.entry} /></span> : <LearningArt entry={o.entry} countIcon={countIcon} />}{!scene && !o.tint && <small>{ask.situation ? <b lang="en">{o.entry.en}</b> : o.label}</small>}</button>)}</div>
-   {give && to && <div className="island-ask-target" aria-hidden="true"><Icon name={to.icon} size={56} /><small>{to.label}</small></div>}
   </div>
+  {give && to && <div className="island-ask-target" aria-hidden="true"><Icon name={to.icon} size={56} /><small>{to.label}</small></div>}
   <p className="island-ask-hint" role="status">{shown ? '看，亮起来的就是它。' : ask.situation ? (wrong ? '再听一听，这时候说哪一句？' : '听一听，你想说哪一句？') : HINTS[kind][wrong ? 1 : 0]}</p>
  </section>;
 }

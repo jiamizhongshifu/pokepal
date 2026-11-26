@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { PLAYS } from '../../src/island/plays';
-import { DISTRICTS, placesIn } from '../../src/island/world';
+import { DISTRICTS, PLACES, placesIn } from '../../src/island/world';
+import { SCENE_LAYOUT } from '../../src/island/sceneLayout';
 import { FIND_SPOTS } from '../../src/lib/islandAsk';
 import { MOOD_MARK, SENTENCE_MOODS, type Mood } from '../../src/island/mood';
 import { BABY_CREATURES, creatureExpression } from '../../src/data/creatures';
@@ -37,4 +38,16 @@ test('things to find never cover each other', () => {
   }));
   assert.deepEqual(covered, []);
   assert.ok(FIND_SPOTS.every(([x, y]) => x + WIDE <= 100 && y + HIGH <= 100), 'Every thing stays inside the box.');
+});
+
+test('every place stands in its scene as an object a child can tap, and objects keep apart', () => {
+  const missing = PLACES.filter(p => !SCENE_LAYOUT[p.district].objects[p.id]).map(p => p.name);
+  assert.deepEqual(missing, [], 'Give the place an object in SCENE_LAYOUT (src/island/sceneLayout.ts): its activities start from it.');
+  const art = Object.values(SCENE_LAYOUT).flatMap(l => Object.values(l.objects)).filter(o => 'icon' in o.art ? !(o.art.icon in ICONS) : !existsSync(`public/scenes/flat-v1/prop/${o.art.prop}.svg`));
+  assert.deepEqual(art, [], 'An object is drawn with an existing icon or prop.');
+  const close = Object.entries(SCENE_LAYOUT).flatMap(([d, l]) => {
+    const all = Object.entries(l.objects);
+    return all.flatMap(([a, x], i) => all.slice(i + 1).filter(([, y]) => Math.abs(x.spot[0] - y.spot[0]) < (x.size + y.size) / 2 && Math.abs(x.spot[1] - y.spot[1]) < 10).map(([b]) => `${d}: ${a} / ${b}`));
+  });
+  assert.deepEqual(close, [], 'Objects in one scene stand apart, so each can be tapped.');
 });

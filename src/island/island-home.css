@@ -73,9 +73,6 @@
 .island-thing.is-tapped { animation: island-hop var(--motion-reward) var(--ease-standard); }
 .island-thing.is-shadow.is-tapped { animation: island-wobble var(--motion-reward) var(--ease-standard); }
 
-.island-shelf { position: absolute; z-index: 8; right: calc(14px + env(safe-area-inset-right)); top: calc(12px + env(safe-area-inset-top)); display: flex; gap: 12px; padding: 10px 14px; border-radius: 44px; background: rgba(255, 255, 255, .9); box-shadow: 0 6px 0 rgba(0, 0, 0, .14); }
-.island-shelf button { display: grid; place-items: center; width: 76px; height: 76px; padding: 0; border: 0; border-radius: 50%; background: var(--scene-sand); box-shadow: 0 4px 0 var(--scene-cream); }
-.island-shelf button:active { translate: 0 3px; box-shadow: 0 1px 0 var(--scene-cream); }
 
 /* The island's day: three stars, one for each thing done together. */
 .island-day { position: absolute; z-index: 20; left: 50%; top: calc(10px + env(safe-area-inset-top)); translate: -50% 0; display: flex; gap: 6px; margin: 0; padding: 6px 14px; list-style: none; border-radius: 40px; background: rgba(255, 255, 255, .9); box-shadow: 0 2px 0 rgba(0, 0, 0, .1); }
@@ -135,7 +132,7 @@
 #root .island-home .island-stage .island-ask-options .is-shown { filter: drop-shadow(0 0 6px var(--brand-paper)) drop-shadow(0 0 16px var(--scene-gold)); animation: island-hop 1s var(--ease-breathe) 3; }
 .island-stage .island-ask-stage.is-do .is-taken { animation: island-give var(--motion-reward) var(--ease-exit) forwards; }
 /* Choosing what to say: each sentence is a speech bubble of pictures. */
-#root .island-home .island-stage .island-ask-stage.is-situation .island-ask-options button { flex-basis: min(30vw, 30vh); aspect-ratio: 1.5; padding: 10px; background: var(--brand-paper); border: 5px solid var(--brand-paper); border-radius: 34px 34px 34px 8px; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); filter: none; }
+#root .island-home .island-stage .island-ask-stage:is(.is-situation, .is-say) .island-ask-options button { flex-basis: min(30vw, 30vh); aspect-ratio: 1.5; padding: 10px; background: var(--brand-paper); border: 5px solid var(--brand-paper); border-radius: 34px 34px 34px 8px; box-shadow: 0 6px 0 rgba(0, 0, 0, .16); filter: none; }
 .island-stage .island-ask-options .phrase-picture { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; height: 100%; }
 .island-stage .island-ask-options .phrase-picture .icon { width: 42% !important; height: auto !important; max-height: 100%; }
 /* Finding: the things lie about the ground. */
@@ -173,14 +170,10 @@
 @keyframes island-wobble { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
 @media (max-width: 700px) {
  .island-back { width: 64px; height: 64px; } .island-back .icon { width: 36px !important; height: 36px !important; }
- .island-shelf { top: auto; bottom: calc(10px + env(safe-area-inset-bottom)); right: 50%; translate: 50% 0; gap: 8px; padding: 8px 10px; }
- .island-shelf button { width: 58px; height: 58px; } .island-shelf .icon { width: 38px !important; height: 38px !important; }
  .island-friend { width: min(44vw, 30vh); } .island-friend:nth-of-type(n+2) { width: min(32vw, 22vh); }
  .island-thing { width: min(20vw, 13vh); }
  .island-stage .island-ask-stage { left: 3%; }
  .island-stage .island-ask > header { left: 22%; top: 27%; }
- /* The row of activities sits at the bottom here; the things on the ground keep clear of it. */
- .island-thing { margin-top: -10vh; } .garden-plot { top: 60%; width: 26vw; } .ball-turns { top: 76%; width: 22vw; }
  .island-stage .island-ask-target { width: 26vw; }
  #root .island-home .island-stage .island-ask-options button { flex-basis: 30vw; }
  .island-stage .island-play-done { left: 50%; width: 88%; }
@@ -200,27 +193,9 @@
  #root .island-scene.is-busy ~ .island-scene-help .guide-content { top: 44vh; }
 }
 
-/* ── The answer card on the island: the question as a title, the things to choose on one white card ── */
-.island-stage .island-ask-stage { left: 30%; right: 3%; bottom: 4%; display: grid; gap: 10px; padding: 14px 20px 18px; border-radius: 30px; background: var(--brand-paper); box-shadow: 0 8px 0 rgba(0, 0, 0, .08), 0 18px 40px rgba(20, 60, 40, .18); pointer-events: auto; }
-.island-stage .island-ask-title { margin: 0; display: grid; justify-items: start; gap: 4px; font-size: var(--text-step-lead); line-height: 1.35; color: var(--scene-ink); text-align: left; }
-.island-stage .island-ask-title small { padding: 2px 10px; border-radius: 999px; background: var(--brand-primary-soft); color: var(--brand-primary-ink); font-size: var(--text-base); font-weight: 800; }
-.island-stage .island-ask-stage .island-ask-options { gap: 16px; }
-#root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: min(15vw, 21vh); border-radius: 26px; background: var(--brand-section); border: 3px solid var(--scene-line); box-shadow: 0 5px 0 var(--scene-line); filter: none; transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
-#root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button:not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 var(--scene-line); }
-#root .island-home .island-stage .island-ask-stage.is-situation .island-ask-options button, #root .island-home .island-stage .island-ask-stage.is-lead .island-ask-options button { background: var(--scene-paper-cool); border: 3px solid var(--scene-sky-line); box-shadow: 0 5px 0 var(--scene-sky-line); transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
-#root .island-home .island-stage .island-ask-stage.is-situation .island-ask-options button:not(:disabled):active, #root .island-home .island-stage .island-ask-stage.is-lead .island-ask-options button:not(:disabled):active { transform: translateY(4px) scale(.97); box-shadow: 0 1px 0 var(--scene-sky-line); }
-.island-stage .island-ask-stage.is-find { top: auto; bottom: 4%; }
-.island-stage .island-ask-stage.is-find .island-ask-options { height: min(34vh, 280px); }
-@media (max-width: 700px) {
- .island-stage .island-ask-stage { left: 12px; right: 12px; bottom: 12px; padding: 12px 14px 14px; border-radius: 24px; }
- #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: 28vw; }
-}
-
 /* Choosing what to say: each bubble carries its sentence, like in lessons. */
 .island-stage .island-ask-stage.is-situation .island-ask-options small, .island-stage .island-ask-stage.is-lead .island-ask-options small { display: block !important; margin-top: 2px; font-size: var(--text-base); font-weight: 800; color: var(--scene-ink); }
 @media (max-width: 700px) { .island-stage .island-play > header { top: calc(70px + env(safe-area-inset-top)); } .island-stage .island-play-made { top: calc(98px + env(safe-area-inset-top)); } }
-/* On a wide screen the answer card keeps a comfortable width instead of stretching across. */
-@media (min-width: 1300px) { .island-stage .island-ask-stage { left: auto; width: min(62%, 880px); } }
 /* A tablet held upright: the island fills more of the height and slides sideways like on a phone. */
 @media (min-width: 701px) and (orientation: portrait) { .island-world { width: max(100cqw, 110cqh); } }
 /* On a phone the corner buttons reach the middle: the day's stars move to the free top-left corner. */
@@ -258,3 +233,41 @@
 /* After a few taps the done button bobs, so a child who cannot read sees how to finish. */
 .island-stage .island-free-done.is-ready { animation: island-bob 1s var(--ease-breathe) infinite alternate; }
 @media (min-width: 701px) { .island-stage.is-kept .island-play-made.is-lamp { left: 36%; } }
+
+/* ── The places of a scene are objects in it, and an object is how its activities begin ── */
+.island-object { position: absolute; z-index: 3; width: min(calc(var(--size) * 1vw), calc(var(--size) * 1.4vh)); translate: -50% -100%; }
+.island-object-art { display: block; width: 100%; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .14)); transform-origin: 50% 100%; transition: scale var(--motion-quick) var(--ease-spring); }
+.island-object-art > .icon, .island-object-art > img { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; object-fit: contain; }
+.island-object-art:not(:disabled):active { scale: .94; }
+/* An object with something to do glows softly, the way a lit lantern says "come here". */
+.island-object.is-open .island-object-art { filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .14)) drop-shadow(0 0 0 var(--brand-paper)) drop-shadow(0 0 14px var(--scene-gold-soft)); }
+.island-object.is-tapped .island-object-art { animation: island-wobble var(--motion-reward) var(--ease-standard); }
+/* Its activities: pictures above it, like the ones above a friend's head. */
+.island-object-plays { position: absolute; z-index: 6; left: 50%; bottom: calc(100% + 14px); translate: -50% 0; display: flex; gap: 10px; }
+#root .island-home .island-object-plays .island-invite { position: relative; left: auto; bottom: auto; translate: none; width: 76px; min-width: 0; max-width: none; }
+.island-object.is-left .island-object-plays { left: 0; translate: none; } .island-object.is-right .island-object-plays { left: auto; right: 0; translate: none; }
+.island-object-plays .island-invite:nth-child(2) { animation-delay: .2s; } .island-object-plays .island-invite:nth-child(3) { animation-delay: .4s; }
+
+/* ── Doing something together: the friend asks from a speech bubble, the things lie on the ground ── */
+.island-stage .island-ask-title { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.island-stage .island-ask > header { left: calc(16% + min(12vw, 16vh)); top: 16%; translate: 0 0; }
+#root .island-home .island-stage .island-ask-hear { width: 104px; height: 84px; border-radius: 42px 42px 42px 8px; }
+.island-stage .island-ask-stage { left: 30%; right: 3%; bottom: 3%; }
+.island-stage .island-ask-options { gap: 2%; }
+#root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: min(15vw, 20vh); }
+.island-stage .island-ask-stage.is-find { top: 40%; }
+/* The thing handed over goes to the object it belongs to, standing where it stands in the scene. */
+#root .island-home .island-stage .island-ask-target { position: absolute; z-index: 2; left: var(--target-x, 84%); top: var(--target-y, 60%); right: auto; bottom: auto; translate: -50% -100%; width: min(20vw, 28vh); padding: 0; border: 0; border-radius: 50%; background: transparent; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .14)); animation: island-bob 1.4s var(--ease-breathe) infinite alternate; }
+#root .island-home .island-stage .island-ask-target .icon { width: 100% !important; height: 100% !important; }
+@media (max-width: 700px) {
+ .island-object { width: min(calc(var(--size) * 1.5vw), calc(var(--size) * 1vh)); }
+ #root .island-home .island-object-plays .island-invite { width: 54px; }
+ .island-object-plays { gap: 6px; }
+ .island-stage .island-ask-stage.is-find { top: 56%; }
+ .island-stage .island-ask-stage { left: 3%; }
+ .island-stage .island-ask > header { left: 34%; top: 30%; }
+ #root .island-home .island-stage .island-ask-stage:not(.is-situation):not(.is-lead) .island-ask-options button { flex-basis: 22vw; }
+}
+/* Handed to an object rather than the friend, the thing drops into it instead of flying to the friend's side. */
+.island-stage .island-ask:has(> .island-ask-target) .island-ask-stage.is-do .is-taken { animation: island-tuck var(--motion-reward) var(--ease-exit) forwards; }
+@keyframes island-tuck { to { translate: 0 -40%; scale: .3; opacity: 0; } }
