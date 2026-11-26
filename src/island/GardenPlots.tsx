@@ -7,6 +7,7 @@ import { sayOnIsland as say } from '../lib/islandSpeech';
 import { learningVoice } from '../lib/learningVoice';
 import { sfx, stopSpeech } from '../lib/speech';
 import { learnedKeys } from './plays';
+import { showMood } from './mood';
 
 /**
  * The garden's three plots, drawn in the scene: an empty one is planted (the friend says which fruit), a planted one
@@ -24,11 +25,11 @@ export function GardenPlots({ helper, onPlant }: { helper: number; onPlant: (ind
   if (stage === 'empty') { onPlant(index); return; }
   if (stage === 'thirsty') {
    if (!useGame.getState().waterCrop(index, crop!.plantedAt, helper)) return;
-   sfx('pop'); setSplash(index); setTimeout(() => setSplash(s => s === index ? null : s), 900); setClock(Date.now()); hear('water');
+   sfx('pop'); showMood(helper, 'cheer'); setSplash(index); setTimeout(() => setSplash(s => s === index ? null : s), 900); setClock(Date.now()); hear('water');
    return;
   }
   if (stage === 'growing') { sfx('boop'); return; }
-  if (await useGame.getState().harvestCrop(index)) { sfx('sparkle'); hear(crop!.berry); }
+  if (await useGame.getState().harvestCrop(index)) { sfx('sparkle'); showMood(helper, 'giggle'); hear(crop!.berry); }
  };
  const basket = CROP_KINDS.filter(k => farm.basket[k] > 0);
  return <>

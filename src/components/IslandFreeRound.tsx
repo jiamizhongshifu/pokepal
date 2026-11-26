@@ -9,6 +9,7 @@ import { learningVoice } from '../lib/learningVoice';
 import { sayOnIsland as say, cryOnIsland } from '../lib/islandSpeech';
 import { sfx } from '../lib/speech';
 import { LEAD_REACTIONS } from '../island/plays';
+import { SENTENCE_MOODS, showMood } from '../island/mood';
 
 /**
  * Play with no question: the child taps any learned thing and hears its word. In `echo` the friend answers in its
@@ -26,6 +27,8 @@ export function IslandFreeRound({ kind, items, speaker, station, taps, onTap, on
   const entry = learningEntry(key);
   if (!entry || busy.current) return;
   busy.current = true; sfx('ding'); onTap(key);
+  // The friend answers at once: it does what was said, copies the word, or cheers at the new colour.
+  showMood(speaker, kind === 'lead' ? SENTENCE_MOODS[entry.key] ?? 'cheer' : kind === 'echo' ? 'giggle' : 'cheer', kind === 'lead' ? 2400 : undefined);
   const heard = await say(...learningVoice(entry));
   if (heard && live.current) useGame.getState().noteStationLearning(station, entry.key, false);
   if (kind === 'lead' && live.current) { setDid(LEAD_REACTIONS[entry.key] ?? '伙伴照着做啦'); await cryOnIsland(speaker); }
@@ -37,6 +40,6 @@ export function IslandFreeRound({ kind, items, speaker, station, taps, onTap, on
    <button className="island-ask-close" onClick={onClose} aria-label="先不玩了"><Icon name="close" size={24} /></button></header>
   <div className={`island-ask-stage is-free${kind === 'lead' ? ' is-lead' : ''}`}><h2 className="island-ask-title"><small>{kind === 'lead' ? '你来说' : '自由玩'}</small>{kind === 'echo' ? '点一个，它会学你' : kind === 'lead' ? '点一句话，伙伴照着做' : '喜欢哪个点哪个'}</h2><div className="island-ask-options">{items.map(key => { const e = learningEntry(key)!; return <button key={key} aria-label={e.zh} onClick={() => void tap(key)}><LearningArt entry={e} /><small>{kind === 'lead' ? <b lang="en">{e.en}</b> : e.zh}</small></button>; })}</div></div>
   {did && <p className="island-free-did" role="status">{did}</p>}
-  {taps > 0 ? <button className="farm-primary island-free-done" onClick={onDone}><Icon name="check" size={26} /><span>玩好啦</span></button> : <p className="island-ask-hint" role="status">没有对错，想怎么玩都可以。</p>}
+  {taps > 0 ? <button className={`farm-primary island-free-done${taps >= 3 ? ' is-ready' : ''}`} onClick={onDone}><Icon name="check" size={26} /><span>玩好啦</span></button> : <p className="island-ask-hint" role="status">没有对错，想怎么玩都可以。</p>}
  </section>;
 }

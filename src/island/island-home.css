@@ -118,6 +118,7 @@
 .island-stage .island-ask-hear span, .island-stage .island-play-actions span, .island-stage .island-free-done span { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .island-stage .island-play-rounds { gap: 8px; }
 .island-stage .island-play-rounds i { width: 18px; height: 18px; border: 3px solid var(--brand-paper); background: rgba(255, 255, 255, .6); }
+.island-stage .island-play-rounds .is-current { background: var(--brand-sky); } .island-stage .island-play-rounds .is-done { background: var(--brand-primary); }
 .island-stage .island-play-made { position: absolute; top: calc(44px + env(safe-area-inset-top)); left: 50%; translate: -50% 0; padding: 8px 12px; border-radius: 24px; background: rgba(255, 255, 255, .9); box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
 .island-stage .island-ask { display: block; }
 .island-stage .island-ask > header { position: absolute; left: 16%; top: 20%; translate: -50% 0; display: block; }
@@ -140,7 +141,7 @@
 /* Finding: the things lie about the ground. */
 .island-stage .island-ask-stage.is-find { top: 34%; bottom: 3%; }
 .island-stage .island-ask-stage.is-find .island-ask-options { display: block !important; position: relative; height: 100%; border: 0; background: none; overflow: visible; }
-#root .island-home .island-stage .island-ask-stage.is-find .island-ask-options button { position: absolute; width: 24%; }
+#root .island-home .island-stage .island-ask-stage.is-find .island-ask-options button { position: absolute; width: auto; height: 44%; max-width: 30%; }
 /* Where a thing is taken when it is not for the friend: a place drawn in the scene. */
 .island-stage .island-ask-target { position: absolute; right: 2%; bottom: 112%; display: grid; place-items: center; width: min(18vw, 24vh); aspect-ratio: 1; padding: 0; border: 6px dashed var(--brand-paper); border-radius: 50%; background: rgba(255, 255, 255, .55); }
 .island-stage .island-ask-target .icon { width: 62% !important; height: 62% !important; }
@@ -227,3 +228,33 @@
 #root .island-home .island-stage .island-ask-options .is-reading { filter: drop-shadow(0 5px 0 var(--brand-sky)); scale: 1.08; }
 .island-teaser-go { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--brand-primary); box-shadow: 0 3px 0 var(--brand-primary-deep); }
 .island-teaser .island-teaser-go .icon { padding: 0; }
+/* A friend answering what the child did: a hop for joy, a sway when it thinks again, a slow nod when it dozes. */
+.island-friend[class*="is-mood-"] .island-friend-body img { animation: island-hop var(--motion-reward) var(--ease-standard) 2; }
+.island-friend.is-mood-hello .island-friend-body img { animation: island-wobble var(--motion-reward) var(--ease-standard) 2; }
+.island-friend.is-mood-thinking .island-friend-body img, .island-friend.is-mood-surprised .island-friend-body img { animation: island-wobble var(--motion-move) var(--ease-standard); }
+.island-friend.is-mood-sleepy .island-friend-body img { animation: island-idle 2.6s var(--ease-breathe) infinite; }
+/* Lamps and boats the child coloured are part of the scene: a string of lamps across the sky, a row of boats on the water. */
+.island-stage .island-play-made.is-lamp, .island-stage .island-play-made.is-boat { gap: clamp(28px, 6vw, 72px); padding: 0; background: none; box-shadow: none; border-radius: 0; }
+.island-stage .island-play-made.is-lamp { padding: 30px 28px 0; }
+.island-stage .island-play-made.is-lamp::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 40px; border-bottom: 4px solid var(--scene-wood); border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+.island-stage .island-play-made.is-lamp li { position: relative; width: 66px; height: 66px; border: 5px dashed var(--brand-paper); border-radius: 50%; background: color-mix(in srgb, var(--brand-paper) 35%, transparent); }
+.island-stage .island-play-made.is-lamp li::before { content: ""; position: absolute; left: 50%; top: -16px; width: 22px; height: 14px; translate: -50% 0; border-radius: 6px 6px 2px 2px; background: var(--scene-wood); }
+.island-stage .island-play-made.is-lamp li.is-made { border: 5px solid var(--brand-paper); box-shadow: 0 0 0 10px color-mix(in srgb, var(--brand-sun) 40%, transparent); animation: island-hop var(--motion-reward) var(--ease-standard); }
+.island-stage .island-play-made.is-boat { top: 36%; left: 62%; padding-top: 58px; }
+.island-stage .island-play-made.is-boat li { position: relative; width: 112px; height: 42px; border: 4px dashed var(--brand-paper); border-radius: 8px 8px 56px 56px / 8px 8px 42px 42px; background: color-mix(in srgb, var(--brand-paper) 35%, transparent); }
+.island-stage .island-play-made.is-boat li::before { content: ""; position: absolute; left: 30%; bottom: calc(100% + 4px); width: 50px; height: 58px; background: var(--brand-paper); clip-path: polygon(0 100%, 100% 100%, 0 0); opacity: .55; }
+.island-stage .island-play-made.is-boat li.is-made { border: 4px solid var(--brand-paper); animation: island-bob 1.6s var(--ease-breathe) infinite alternate; }
+.island-stage .island-play-made.is-boat li.is-made::before { opacity: 1; }
+@media (max-width: 700px) {
+ .island-stage .island-play-made.is-lamp li { width: 52px; height: 52px; }
+ .island-stage .island-play-made.is-boat { top: 16%; left: 50%; gap: 20px; }
+ .island-stage .island-play-made.is-boat li { width: 84px; height: 34px; }
+ .island-stage .island-play-made.is-boat li::before { width: 38px; height: 44px; }
+}
+.island-mood-mark { position: absolute; z-index: 2; right: 4%; top: 2%; pointer-events: none; animation: island-hop var(--motion-reward) var(--ease-standard); }
+.island-stage.is-kept { z-index: 5; }
+.island-stage.is-kept .island-play-made { pointer-events: none; }
+.island-stage.is-kept .island-play-made.is-lamp li { animation: none; }
+/* After a few taps the done button bobs, so a child who cannot read sees how to finish. */
+.island-stage .island-free-done.is-ready { animation: island-bob 1s var(--ease-breathe) infinite alternate; }
+@media (min-width: 701px) { .island-stage.is-kept .island-play-made.is-lamp { left: 36%; } }

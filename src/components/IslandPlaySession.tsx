@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useGame } from '../store';
 import { Icon } from '../icons';
 import { IslandAskRound } from './IslandAskRound';
@@ -10,21 +10,25 @@ import { IslandFreeRound } from './IslandFreeRound';
 import { LearningArt } from './LearningItem';
 import { learningEntry } from '../data/curriculum';
 import { sfx } from '../lib/speech';
+import { showMood } from '../island/mood';
 
 /**
  * Three rounds of one island activity with one companion, then what it did and a way back. What each round brought
  * about stays in view (things handed over, things found, lamps or boats in their colours), so the play has a result.
  */
-export function IslandPlaySession({ play, partner, station, onClose, onFinished }: { play: Play; partner: number; station: string; onClose: () => void; onFinished?: (play: Play) => void }) {
+export function IslandPlaySession({ play, partner, station, onClose, onFinished }: { play: Play; partner: number; station: string; onClose: () => void; onFinished?: (play: Play, made: string[]) => void }) {
  const [session, setSession] = useState(() => crypto.randomUUID());
- const [round, setRound] = useState(0), [done, setDone] = useState(false), [made, setMade] = useState<string[]>([]);
+ const [round, setRound] = useState(0), [done, setDone] = useState(false), [made, setMadeState] = useState<string[]>([]);
+ // What was made is also handed to the scene when the play ends, so the lamps and boats stay where they were lit.
+ const madeNow = useRef<string[]>([]);
+ const setMade = (next: string[] | ((m: string[]) => string[])) => { madeNow.current = typeof next === 'function' ? next(madeNow.current) : next; setMadeState(madeNow.current); };
  const save = useGame(s => s.save);
  // Each session is planned from the save as it stood when it began, so finishing a round never reshuffles the rest.
  const order = useMemo(() => playOrder(useGame.getState().save, play, session), [play, session]);
  const ask = useMemo(() => playAsk(useGame.getState().save, play, session, round, order), [play, session, round, order]);
  const free = isFreePlay(play);
  const items = useMemo(() => free ? freeItems(useGame.getState().save, play, session) : [], [free, play, session]);
- const finish = () => { useGame.getState().finishIslandPlay(play.id, partner); sfx('sparkle'); setDone(true); onFinished?.(play); const end = playLine(save, play, 'end'); if (end) void say(...learningVoice(end)); };
+ const finish = () => { useGame.getState().finishIslandPlay(play.id, partner); sfx('sparkle'); setDone(true); showMood(partner, play.sleeps ? 'sleepy' : 'proud', 3200); onFinished?.(play, madeNow.current); const end = playLine(save, play, 'end'); if (end) void say(...learningVoice(end)); };
  // The friend answers what it was given with a learned sentence; the next round waits until it has said it.
  const solved = async (id: string) => {
   setMade(m => [...m, id]);

@@ -79,3 +79,9 @@ export function plantAsk(s: SaveData, seed: number): IslandAsk | undefined {
  if (!crops.length) return undefined;
  return wordAsk('plant', pick(crops, seed), crops, seed, 3, [...learnedFoods(s), ...learnedWords(s)]);
 }
+
+/**
+ * Where the things of a "find" round lie in the scene (% of its box), in two rows that never cover each other: each
+ * thing is at most 44% of the box high and 30% wide. The round's seed decides which goes where.
+ */
+export const FIND_SPOTS: ReadonlyArray<readonly [x: number, y: number, tilt: number]> = [[4, 4, -6], [37, 0, 5], [70, 4, -4], [20, 54, 7], [53, 52, -7]];

@@ -35,9 +35,11 @@ import { skyFor } from '../lib/routine';
 import { sfx, stopSpeech } from '../lib/speech';
 import { weatherAt } from '../lib/weather';
 import { shownTraces } from '../island/errands';
-import { learnedKeys, readyToGrow } from '../island/plays';
+import { ROUNDS, learnedKeys, readyToGrow, type Play } from '../island/plays';
+import { learningEntry } from '../data/curriculum';
 import { ISLAND_DAY, SCENES, dayDone, inviteKey, islandDone, islandInvites, scenePlays, sceneThings, type Invite, type Standing } from '../island/scenes';
 import { shownStickers } from '../island/stickers';
+import { MOOD_MARK, useFriendMood } from '../island/mood';
 import { DISTRICTS, PLACES, placeOf, placesIn, whereNow, type District, type Spot } from '../island/world';
 import '../island/island-home.css';
 
@@ -50,7 +52,8 @@ const GARDEN_FRIEND: Spot[] = [[16, 62]], GARDEN_THINGS: Spot[] = [0, 1, 2, 3, 4
 const SOIL = { icon: 'seed', label: '地里' };
 /** At a party the other friends stand behind, watching. */
 const GUEST_SPOTS: Spot[] = [[38, 50], [54, 47], [70, 50], [86, 47]];
-const side = (spot: Spot, slot: number, of: number): Spot => of < 2 ? spot : [spot[0] + (slot - (of - 1) / 2) * 5.5, spot[1] + (slot % 2) * 1.5];
+/** Friends at the same place stand side by side, every other one a step forward, so none hides behind another. */
+const side = (spot: Spot, slot: number, of: number): Spot => of < 2 ? spot : [spot[0] + (slot - (of - 1) / 2) * 9, spot[1] + (slot % 2) * 5];
 
 /**
  * The island: an overview to look around, and five scenes to step into. A child only taps: a place to walk in, a
@@ -68,6 +71,9 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  const [evolving, setEvolving] = useState<number | null>(null);
  const [asleep, setAsleep] = useState(false), [party, setParty] = useState(false);
  const [planting, setPlanting] = useState<{ index: number; ask: IslandAsk } | null>(null);
+ const mood = useFriendMood();
+ // The lamps lit and boats coloured last stay in the scene until the child walks out of it.
+ const [kept, setKept] = useState<{ play: Play; made: string[] } | null>(null);
  const view = useRef<HTMLDivElement>(null), world = useRef<HTMLDivElement>(null);
  // When the island is wider than the screen (a tall phone), start in its middle.
  useEffect(() => { const v = view.current; if (v && v.scrollWidth > v.clientWidth) v.scrollLeft = (v.scrollWidth - v.clientWidth) / 2; }, [district, active]);
@@ -103,14 +109,15 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
  };
  const begin = (invite: Invite) => { if (invite.partner === undefined) return; stopSpeech(); sfx('sparkle'); withTransition(() => { setDistrict(invite.district); setSession(invite); }); };
  // The way back: out of what is being done first, then out of the scene.
- const leave = () => { stopSpeech(); sfx('click'); withTransition(() => { if (session || planting) { setSession(null); setPlanting(null); } else { setDistrict(null); setAsleep(false); } }); };
+ const leave = () => { stopSpeech(); sfx('click'); withTransition(() => { if (session || planting) { setSession(null); setPlanting(null); } else { setDistrict(null); setAsleep(false); setKept(null); } }); };
  // The third thing of the day: back on the island everyone cheers, once.
  const done = islandDone(save), cheered = useRef(done);
  useEffect(() => {
-  if (district || !active || done <= cheered.current) return;
+  if (!active || done <= cheered.current) return;
   cheered.current = done;
   if (done < ISLAND_DAY) return;
-  setParty(true); sfx('sparkle'); void say(['en', 'You did it!']); later(() => setParty(false), 3200);
+  // Right where the third thing was done; in a scene, after the friend has said its last line.
+  later(() => { setParty(true); sfx('sparkle'); void say(['en', 'You did it!']); later(() => setParty(false), 3200); }, district ? 1800 : 0);
  }, [district, active, done]);
 
  // The path's island stop hands over a place: walk into its scene and start the lesson's errand there.
@@ -176,10 +183,12 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
      const leading = busy && id === (partner ?? friends[0]);
      if (busy && !leading) return null;
      const spot = leading ? [16, 62] as const : friendSpots[i];
-     return <div key={id} className={`island-friend${leading ? ' is-leading' : ''}${grows(id) ? ' is-growing' : ''}`} style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }}>
+     const feels = mood?.id === id && react?.id !== id ? mood : undefined;
+     return <div key={id} className={`island-friend${leading ? ' is-leading' : ''}${grows(id) ? ' is-growing' : ''}${feels ? ` is-mood-${feels.mood}` : ''}`} style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }}>
       {invite && <button type="button" className={`island-invite${invite.lesson ? ' is-lesson' : ''}`} aria-label="和它一起做这件事" onClick={() => begin({ ...invite, partner: id })}><Icon name={invite.icon} size={56} /></button>}
+      {feels && <Icon key={feels.at} name={MOOD_MARK[feels.mood]} size={56} className="island-mood-mark" />}
       <button type="button" className="island-friend-body" aria-label={`${creature.nameZh} ${creature.nameEn}`} onClick={() => tapFriend(id)}>
-       <CreatureImg src={react?.id === id ? creatureExpression(id, 'giggle') : asleep ? creatureExpression(id, 'sleepy') : creatureArt(id)} alt="" />
+       <CreatureImg key={feels?.at} src={react?.id === id ? creatureExpression(id, 'giggle') : party ? creatureExpression(id, 'cheer') : feels ? creatureExpression(id, feels.mood) : asleep ? creatureExpression(id, 'sleepy') : creatureArt(id)} alt="" />
       </button>
      </div>;
     })}
@@ -193,14 +202,16 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     {session && partner !== undefined && <section className="island-stage" aria-label="一起做的事">
      {session.kind === 'party' ? <IslandPartySession key={inviteKey(session)} party={session.party} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} />
       : session.kind === 'errand' ? <IslandErrandSession key={inviteKey(session)} errand={session.errand} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onRoute={() => { stopSpeech(); go({ name: 'home' }); }} />
-      : <IslandPlaySession key={inviteKey(session)} play={session.play} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onFinished={play => { if (play.sleeps) setAsleep(true); }} />}
+      : <IslandPlaySession key={inviteKey(session)} play={session.play} partner={partner} station={session.place} onClose={() => withTransition(() => setSession(null))} onFinished={(play, made) => { if (play.sleeps) setAsleep(true); if (play.slots) setKept({ play, made }); }} />}
     </section>}
     {planting && friends.length > 0 && <section className="island-stage" aria-label="种一种水果">
      <IslandAskRound key={`plant-${planting.index}`} ask={planting.ask} speaker={friends[0]} station="farm" kind="do" to={SOIL} onClose={() => setPlanting(null)}
       onSolved={id => { useGame.getState().plantCrop(planting.index, id as CropKind); setPlanting(null); }} />
     </section>}
+    {!busy && kept && placeOf(kept.play.place).district === district && <div className="island-stage is-kept" aria-hidden="true"><ol className={`island-play-made is-${kept.play.slots}`}>{kept.made.slice(-ROUNDS).map((key, i) => <li key={i} className="is-made" style={{ background: learningEntry(key)?.css }} />)}</ol></div>}
     <div className="island-tint" aria-hidden="true" />
    </div>
+   {party && <Confetti />}
    {active && evolving === null && friends.length > 0 && <div className="island-scene-help"><FeatureGuide id={busy ? 'islandDo' : garden ? 'garden' : 'scene'} autoOpen={busy || garden || things.some(t => t.learned)} /></div>}
    {growing}
   </div>;

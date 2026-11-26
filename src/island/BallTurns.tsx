@@ -6,6 +6,7 @@ import { cryOnIsland, sayOnIsland as say } from '../lib/islandSpeech';
 import { learningVoice } from '../lib/learningVoice';
 import { sfx, stopSpeech } from '../lib/speech';
 import { taughtPhrases } from './plays';
+import { showMood } from './mood';
 
 const ROLL_MS = 900;
 /**
@@ -25,9 +26,9 @@ export function BallTurns({ friend }: { friend: number }) {
  const roll = async () => {
   if (busy.current) return;
   busy.current = true; stopSpeech(); sfx('pop'); setAway(true);
-  await wait(ROLL_MS); if (live.current) await line('My turn!');
+  await wait(ROLL_MS); if (live.current) { showMood(friend, 'cheer', 1600); await line('My turn!'); }
   if (live.current) { sfx('pop'); setAway(false); await wait(ROLL_MS); }
-  if (live.current) await line('Your turn!');
+  if (live.current) { showMood(friend, 'giggle', 1200); await line('Your turn!'); }
   busy.current = false;
  };
  return <button type="button" className={`ball-turns${away ? ' is-away' : ''}`} aria-label="把小球滚给伙伴" onClick={() => void roll()}><Icon name="ball" size={120} /></button>;

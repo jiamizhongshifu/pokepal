@@ -52,8 +52,8 @@ export const PLAYS: Play[] = [
  { id: 'sea', kind: 'find', place: 'shells', title: '海边小发现', pool: ['fish', 'bird', 'water'], result: '发现都收进手册啦', icon: 'search', lines: { start: "Let's go!" } },
  { id: 'sky', kind: 'find', place: 'windmill', title: '看看天上有什么', pool: ['sun', 'cloud', 'rainbow', 'bird', 'balloon', 'star'], result: '风车转呀转，天上真热闹', icon: 'wind' },
  { id: 'boats', kind: 'sort', slots: 'boat', place: 'pier', title: '给小船涂颜色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船变得五颜六色啦', icon: 'waves' },
- { id: 'stage-free', kind: 'toy', slots: 'lamp', place: 'music', title: '自己点彩灯', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '舞台被你点得亮闪闪的', icon: 'music' },
- { id: 'boats-free', kind: 'toy', slots: 'boat', place: 'pier', title: '自己给小船涂色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船都穿上了你选的颜色', icon: 'waves' },
+ { id: 'stage-free', kind: 'toy', slots: 'lamp', place: 'music', title: '自己点彩灯', pool: ['red', 'yellow', 'green', 'blue', 'purple', 'orange', 'pink'], result: '舞台被你点得亮闪闪的', icon: 'decor-lantern' },
+ { id: 'boats-free', kind: 'toy', slots: 'boat', place: 'pier', title: '自己给小船涂色', pool: ['red', 'blue', 'yellow', 'green', 'orange', 'purple', 'pink'], result: '小船都穿上了你选的颜色', icon: 'pencil' },
  { id: 'lead', kind: 'lead', from: 20, place: 'ball', title: '你来说，伙伴来做', pool: ['My turn!', 'Your turn!', "Let's play!", "Let's go!", "Let's tidy up!", 'Good night!', 'Hello!'], result: '你说什么，伙伴就做什么', icon: 'speak' },
  { id: 'nap', kind: 'say', place: 'hammock', title: '吊床午睡', pool: ['I need a rest.', 'Good night!', 'Stay with me, please.', 'I feel sad.'], result: '伙伴在吊床上安心地睡着啦', icon: 'moon' },
 ];

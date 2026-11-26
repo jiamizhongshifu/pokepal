@@ -6,6 +6,7 @@ import { CreatureImg } from './CreatureImg';
 import { creatureAvatar } from '../data/creatures';
 import { partySteps, type Party } from '../island/parties';
 import { sfx } from '../lib/speech';
+import { showMood } from '../island/mood';
 
 /**
  * A chapter's party with everyone on the island: the chapter's sentences, each in its situation, one after another.
@@ -18,7 +19,7 @@ export function IslandPartySession({ party, partner, station, onClose }: { party
  const friends = useGame(s => s.save.captures).slice(0, 8);
  const solved = () => {
   if (step + 1 < steps.length) { setTimeout(() => setStep(n => n + 1), 500); return; }
-  useGame.getState().finishParty(party.chapter); sfx('sparkle'); setDone(true);
+  useGame.getState().finishParty(party.chapter); sfx('sparkle'); setDone(true); showMood(partner, 'proud', 3200);
  };
  const current = steps[step];
  return <div className="island-play is-party">

@@ -11,12 +11,11 @@ import { sfx, stopSpeech } from '../lib/speech';
 import { dragTo } from '../lib/dragTo';
 import type { LearningEntry } from '../data/curriculum';
 import { classifyResponse } from '../lib/learningProgress';
-import { ISLAND_SOURCE, comboLine, seedOf, type IslandAsk } from '../lib/islandAsk';
+import { FIND_SPOTS as SPOTS, ISLAND_SOURCE, comboLine, seedOf, type IslandAsk } from '../lib/islandAsk';
 import type { AskKind as PlayKind } from '../island/plays';
+import { showMood } from '../island/mood';
 import './island-ask.css';
 
-/** Where the things of a "find" round lie in the scene (% of its box); the round's seed decides which goes where. */
-const SPOTS: ReadonlyArray<readonly [x: number, y: number, tilt: number]> = [[4, 8, -6], [38, 0, 5], [71, 10, -4], [18, 52, 7], [54, 50, -7]];
 /** The small label above a round's question: what kind of thing the child does. */
 const KIND_TAG: Record<PlayKind | 'cards', string> = { cards: '听音找一找', say: '选一句话', do: '拿给它', find: '找一找', sort: '选颜色' };
 const HINTS: Record<PlayKind | 'cards', [start: string, again: string]> = {
@@ -74,12 +73,12 @@ export function IslandAskRound({ ask, speaker, station, onSolved, onClose, count
   if (t.firstAnswer === null) t.firstAnswer = id === ask.answer ? 'correct' : 'wrong';
   for (const key of ask.also ? [ask.prompt.key, ask.also.key] : [ask.prompt.key]) useGame.getState().noteAttempt(key, id === ask.answer, t.wrongs > 0 || shown || !t.heard || !!ask.model, ISLAND_SOURCE(ask.play));
   if (id === ask.answer) {
-   setDone(true); sfx('ding'); record('solved');
+   setDone(true); sfx('ding'); record('solved'); showMood(speaker, 'giggle');
    // In a situation the chosen sentence is what gets said: the child hears their choice before the island answers.
    if (ask.situation) void say(...learningVoice(ask.prompt)).then(() => { if (live.current) onSolved(id); }); else onSolved(id);
    return;
   }
-  t.wrongs++; sfx('boop'); setWrong(id);
+  t.wrongs++; sfx('boop'); setWrong(id); showMood(speaker, 'thinking', 1000);
   if (t.wrongs >= 2) setShown(true);
   replay.current = setTimeout(() => { if (!live.current) return; setWrong(null); void hear(); }, 600);
  };

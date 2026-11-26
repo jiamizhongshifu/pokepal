@@ -6,6 +6,7 @@ import { LearningArt } from './LearningItem';
 import { learningEntry } from '../data/curriculum';
 import { errandSteps, type Errand } from '../island/errands';
 import { sfx } from '../lib/speech';
+import { showMood } from '../island/mood';
 
 /**
  * One lesson's errand with one companion: say the sentence the situation calls for, act on the lesson's words, and
@@ -18,7 +19,7 @@ export function IslandErrandSession({ errand, partner, station, onClose, onRoute
  const solved = (id: string) => {
   setMade(m => [...m, id]);
   if (step + 1 < steps.length) { setTimeout(() => setStep(n => n + 1), 500); return; }
-  useGame.getState().finishErrand(errand.unit.id, partner); sfx('sparkle'); setDone(true);
+  useGame.getState().finishErrand(errand.unit.id, partner); sfx('sparkle'); setDone(true); showMood(partner, 'proud', 3200);
  };
  const current = steps[step];
  return <div className="island-play is-errand">
