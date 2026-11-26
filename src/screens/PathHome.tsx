@@ -62,13 +62,17 @@ export function PathHome() {
   if (!v || v.scrollWidth <= v.clientWidth) return;
   if (here.current) here.current.scrollIntoView({ inline: 'center', block: 'nearest' }); else v.scrollLeft = (v.scrollWidth - v.clientWidth) / 2;
  }, [page]);
- // Warm adjacent chapter paintings in the background so turning pages feels instant.
+ // Warm adjacent chapter paintings so turning pages feels instant, but only once this chapter's pictures have all
+ // arrived: on a slow network they would otherwise share the line with the painting the child is waiting for.
  useEffect(() => {
   const urls = [page - 1, page + 1].filter(i => i >= 0 && i < path.length).map(i => pathArt(path[i].index));
-  const timer = setTimeout(() => {
+  let gone = false;
+  const pictures = [...(view.current?.querySelectorAll('img') ?? [])].map(img => img.complete ? Promise.resolve() : new Promise(done => { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }));
+  void Promise.all(pictures).then(() => {
+   if (gone) return;
    for (const url of urls) { const img = new Image(); img.decoding = 'async'; img.src = url; }
-  }, 400);
-  return () => clearTimeout(timer);
+  });
+  return () => { gone = true; };
  }, [page, path]);
  useEffect(() => () => stopSpeech(), []);
 

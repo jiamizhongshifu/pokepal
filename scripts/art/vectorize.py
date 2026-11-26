@@ -8,6 +8,8 @@
   python3 scripts/art/vectorize.py --sides island-map learning-path ...
     宽屏两侧：<side>/side.png 是把地面边缘 40% 接着往外画满的整张，取新画的 60%（连同贴边的 4%，用来渐变盖住接缝）转成 layers/<scene>/side-left|right.svg。
   python3 scripts/art/vectorize.py --assets prop icon sprites
+  python3 scripts/art/vectorize.py --compact
+    把 public 下已有的矢量图改写成相对坐标的最短写法（画面不变，压缩后约小一半）；新转的图已经是这种写法。
     透明底的道具、图标和小精灵：public/scenes/flat-v1/<group>/（或 public/<group>/，含子目录）下打包好的每张图，
     按原画布（同样的留白）转成同名 .svg。
 依赖：pip install vtracer opencv-python pillow numpy
@@ -17,7 +19,7 @@
 """
 import json, sys, gzip, re
 from pathlib import Path
-import numpy as np, cv2, vtracer
+import numpy as np, cv2
 from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -41,13 +43,51 @@ def prepare(png: Path, dst: Path, cut: bool):
   rgb.save(dst)
   return im, big.size
 
+PATH_TOKEN = re.compile(r'[MLCZmlcz]|-?\d+(?:\.\d+)?')
+
+def _numbers(values):
+  out = ''
+  for v in values:
+    s = '%g' % (v + 0)  # + 0 turns -0 into 0
+    out += s if not out or s.startswith('-') or out[-1].isalpha() else ' ' + s
+  return out
+
+def compact_path(d: str) -> str:
+  """The same outline in relative coordinates with the fewest characters: the picture is unchanged, the file about 40%
+  smaller and its compressed download about half (absolute four-digit coordinates repeat little)."""
+  t = PATH_TOKEN.findall(d); i = 0; cx = cy = sx = sy = 0.; out = []; last = None
+  while i < len(t):
+    c = t[i]; i += 1
+    if c in 'Zz': out.append('z'); cx, cy = sx, sy; last = 'z'; continue
+    n = 6 if c in 'Cc' else 2; first = True
+    while i < len(t) and not t[i].isalpha():
+      v = [float(x) for x in t[i:i + n]]; i += n
+      if c.islower(): v = [v[k] + (cx if k % 2 == 0 else cy) for k in range(n)]
+      letter = 'l' if c in 'Mm' and not first else c.lower()
+      seg = _numbers([v[k] - (cx if k % 2 == 0 else cy) for k in range(n)])
+      # A repeated command needs no letter again (numbers after m continue as l).
+      out.append(letter + seg if letter != last or letter == 'm' else ('' if seg.startswith('-') else ' ') + seg)
+      last = 'l' if letter == 'm' else letter
+      cx, cy = v[-2], v[-1]
+      if letter == 'm': sx, sy = cx, cy
+      first = False
+  return ''.join(out)
+
+# What the tracer writes: absolute M, L, C and Z with whole numbers. Anything else (hand-drawn icons, a path already
+# compacted) is left as it is.
+TRACED = re.compile(r'[MLCZ0-9 -]*')
+
+def compact(svg: str) -> str:
+  return re.sub(r' d="([^"]*)"', lambda m: f' d="{compact_path(m.group(1)) if TRACED.fullmatch(m.group(1)) else m.group(1)}"', svg)
+
 def trace(src: Path, dst: Path, size, **finer):
+  import vtracer  # only tracing needs it; --compact does not
   vtracer.convert_image_to_svg_py(str(src), str(dst), **{**TRACE, **finer})
   svg = dst.read_text()
   svg = re.sub(r'<svg [^>]*>', f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size[0]} {size[1]}">', svg, count=1)
   # Drop what a browser does not need: the XML prolog, the generator comment, empty moves and the space before Z.
   svg = re.sub(r'<\?xml[^>]*>\s*|<!--.*?-->\s*', '', svg)
-  svg = svg.replace(' transform="translate(0,0)"', '').replace(' Z ', 'Z').replace('\n', '')
+  svg = compact(svg.replace(' transform="translate(0,0)"', '').replace('\n', ''))
   dst.write_text(svg)
   return len(svg), len(gzip.compress(svg.encode(), 9))
 
@@ -179,7 +219,14 @@ def asset(png: Path):
   return sizes
 
 args = sys.argv[1:] or ['island-map']
-if args[0] == '--whole':
+if args[0] == '--compact':
+  before = after = 0
+  for f in sorted(ROOT.glob('public/**/*.svg')):
+    old = f.read_text(); new = compact(old)
+    before += len(gzip.compress(old.encode(), 9)); after += len(gzip.compress(new.encode(), 9))
+    if new != old: f.write_text(new)
+  print(f'压缩后合计 {before // 1024}KB → {after // 1024}KB')
+elif args[0] == '--whole':
   for id in args[1:]: whole(id)
 elif args[0] == '--sides':
   for scene in args[1:]: sides(scene)
