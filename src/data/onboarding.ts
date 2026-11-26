@@ -4,7 +4,7 @@ export const GUIDES = {
  firstFriend:{icon:'waves',title:'交个新朋友',voice:'送你的邀请果已经准备好啦。去海边，迎接一位坐船来的新朋友。',target:'.empty-home .btn-big',sequence:['invite-berry','waves']},
  music:{icon:'music',title:'音乐轻轻响',voice:'点小音符，可以打开或关掉音乐。想调小声音，请大人到家长设置里帮忙。',target:'.music-toggle',sequence:['music','speaker']},
  island:{icon:'island',title:'点一点，走进去',voice:'点一个地方，就能走进去玩。伙伴头上有图画，点一下，就和它一起做。每做完一件事，上面的星星亮一颗。',target:'.island-invite',sequence:['hand','island','star']},
- scene:{icon:'hand',title:'点东西，听英语',voice:'点地上的东西，听听它的英语。点点伙伴，听它说话。发亮的地方，点一下就能一起玩。想回小岛，点左上角。',target:'.island-thing:not(.is-shadow)',sequence:['hand','ear','island']},
+ scene:{icon:'hand',title:'点东西，听英语',voice:'点地上的东西，听听它的英语。点点伙伴，听它说话。发亮的地方，点一下就能一起玩。会晃的草丛和石头，点开看看。想回小岛，点左上角。',target:'.island-thing:not(.is-shadow)',sequence:['hand','ear','island']},
  islandDo:{icon:'ear',title:'听一听，拿给它',voice:'听伙伴说要什么，把它拖过去，直接点一下也可以。没听清，就点小喇叭再听一次。',target:'.island-stage .island-ask-options',sequence:['ear','hand','speaker']},
  garden:{icon:'seed',title:'种下，浇水，摘果子',voice:'点空地，听伙伴想种什么，把它拖进地里。再点一下浇浇水，等水果长大，点一下就摘下来。',target:'.garden-plot',sequence:['seed','watering-can','strawberry']},
  path:{icon:'sign',title:'跟着路线，学一点',voice:'点绿色的大按钮，和伙伴学一点英语。也能去岛上玩，或者一起读故事。想休息，随时回来。',target:'.path-stop.is-current .stop-go',sequence:['play','ear','hand']},

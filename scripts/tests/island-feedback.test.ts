@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { PLAYS } from '../../src/island/plays';
 import { DISTRICTS, PLACES, placesIn } from '../../src/island/world';
 import { SCENE_LAYOUT } from '../../src/island/sceneLayout';
+import { hiddenToday } from '../../src/island/hidden';
 import { FIND_SPOTS } from '../../src/lib/islandAsk';
 import { MOOD_MARK, SENTENCE_MOODS, type Mood } from '../../src/island/mood';
 import { BABY_CREATURES, creatureExpression } from '../../src/data/creatures';
@@ -61,4 +62,32 @@ test('the beach keeps its right side for the boat that brings a new friend', () 
 test('each scene toy is placed once', () => {
   const toys = Object.values(SCENE_LAYOUT).flatMap(l => Object.values(l.objects)).flatMap(o => o.toy ? [o.toy.kind] : []).sort();
   assert.deepEqual(toys, ['castle', 'roast', 'shake']);
+});
+
+test('the little surprises hide only learned picture words, not ones lying in the scene, and change by day', () => {
+  const learned = ['ball', 'book', 'hat', 'apple', 'red', 'Hello!', 'fish', 'bird', 'star', 'moon'];
+  const a = hiddenToday(learned, ['ball'], 'camp', '2026-11-26', 3), b = hiddenToday(learned, ['ball'], 'camp', '2026-11-27', 3);
+  assert.equal(a.length, 3);
+  assert.ok(a.every(k => learned.includes(k) && k !== 'ball' && k !== 'red' && k !== 'Hello!'), 'No colour, sentence or thing already in the scene.');
+  assert.deepEqual(a, hiddenToday(learned, ['ball'], 'camp', '2026-11-26', 3), 'The same all day.');
+  assert.notDeepEqual(a, b, 'Another set tomorrow.');
+  assert.deepEqual(hiddenToday([], [], 'camp', '2026-11-26', 3), [], 'Nothing hides before anything is learned.');
+});
+
+test('every scene has three hiding places apart from its objects, drawn with existing art', () => {
+  const wrong = Object.entries(SCENE_LAYOUT).flatMap(([d, l]) => {
+    const art = l.hides.filter(h => 'icon' in h.art ? !(h.art.icon in ICONS) : !existsSync(`public/scenes/flat-v1/prop/${h.art.prop}.svg`)).map(() => `${d}: missing art`);
+    // Each covers its width across and, on a 3:2 screen, about 1.4 times that upward from its foot.
+    const box = (p: { spot: readonly [number, number]; size: number }) => [p.spot[0] - p.size / 2, p.spot[0] + p.size / 2, p.spot[1] - p.size * 1.4, p.spot[1]];
+    const meet = (a: number[], b: number[]) => a[0] < b[1] && b[0] < a[1] && a[2] < b[3] && b[2] < a[3];
+    const close = l.hides.flatMap((h, i) => [...Object.entries(l.objects), ...l.hides.slice(i + 1).map(x => ['another hide', x] as const)].filter(([, o]) => meet(box(o), box(h))).map(([id]) => `${d}: hide at ${h.spot} / ${id}`));
+    return [...(l.hides.length === 3 ? [] : [`${d}: ${l.hides.length} hides`]), ...art, ...close];
+  });
+  assert.deepEqual(wrong, []);
+});
+
+test('no friend stands in front of a hiding place', () => {
+  // A friend covers about 12% to each side of where it stands and some 30% above its feet.
+  const hidden = Object.entries(SCENE_LAYOUT).flatMap(([d, l]) => l.hides.filter(h => l.friends.some(f => Math.abs(f[0] - h.spot[0]) < 12 && h.spot[1] > f[1] - 30 && h.spot[1] <= f[1] + 2)).map(h => `${d}: ${h.spot}`));
+  assert.deepEqual(hidden, [], 'Move the hiding place to the front or the sides of the scene.');
 });

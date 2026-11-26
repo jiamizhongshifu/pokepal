@@ -40,7 +40,8 @@ import { learningEntry } from '../data/curriculum';
 import { ISLAND_DAY, SCENES, dayDone, inviteKey, islandDone, islandInvites, scenePlays, sceneThings, type Invite, type Standing } from '../island/scenes';
 import { shownStickers } from '../island/stickers';
 import { MOOD_MARK, useFriendMood } from '../island/mood';
-import { SCENE_LAYOUT, targetSpot, type SceneObject } from '../island/sceneLayout';
+import { SCENE_LAYOUT, targetSpot, type Hideaway } from '../island/sceneLayout';
+import { Hideaways } from '../island/Hideaways';
 import { SceneToy } from '../island/SceneToy';
 import { DISTRICTS, PLACES, placeOf, placesIn, whereNow, type District, type Spot } from '../island/world';
 import '../island/island-home.css';
@@ -53,7 +54,7 @@ const GARDEN_THINGS: Spot[] = [0, 1, 2, 3, 4, 5].map(i => [9 + i * 16.4, 90] as 
 /** While a friend does something with the child, the others step back and watch. */
 const WATCH_SPOTS: Spot[] = [[42, 46], [58, 44]];
 /** A thing on the ground keeps clear of the objects standing in the scene. */
-const clearOf = (objects: SceneObject[]) => (s: Spot) => !objects.some(o => Math.abs(o.spot[0] - s[0]) < o.size * .75 + 5 && s[1] > o.spot[1] - 16 && s[1] < o.spot[1] + 8);
+const clearOf = (objects: Hideaway[]) => (s: Spot) => !objects.some(o => Math.abs(o.spot[0] - s[0]) < o.size * .75 + 5 && s[1] > o.spot[1] - 16 && s[1] < o.spot[1] + 8);
 const SOIL = { icon: 'seed', label: '地里' };
 /** At a party the other friends stand behind, watching. */
 const GUEST_SPOTS: Spot[] = [[38, 50], [54, 47], [70, 50], [86, 47]];
@@ -170,7 +171,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   const here = standing.filter(f => placeOf(f.place).district === district);
   const partner = session?.partner;
   const layout = SCENE_LAYOUT[district], objects = Object.entries(layout.objects);
-  const garden = district === 'garden', friendSpots = layout.friends, thingSpots = (garden ? GARDEN_THINGS : THING_SPOTS).filter(clearOf(objects.map(([, o]) => o))), busy = !!session || !!planting;
+  const garden = district === 'garden', friendSpots = layout.friends, thingSpots = (garden ? GARDEN_THINGS : THING_SPOTS).filter(clearOf([...objects.map(([, o]) => o), ...layout.hides])), busy = !!session || !!planting;
   const friends = [...new Set([...(partner !== undefined ? [partner] : []), ...here.map(f => f.id), ...(here.length ? [] : residents.slice(0, 1).map(c => c.id))])].slice(0, friendSpots.length);
   const guests = session?.kind === 'party' ? residents.map(c => c.id).filter(id => id !== partner).slice(0, GUEST_SPOTS.length) : [];
   const waiting = invites.filter(i => i.district === district);
@@ -211,6 +212,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
     {guests.map((id, i) => <div key={`guest-${id}`} className="island-friend is-guest" style={{ left: `${GUEST_SPOTS[i][0]}%`, top: `${GUEST_SPOTS[i][1]}%` }}><span className="island-friend-body"><CreatureImg src={creatureExpression(id, 'cheer')} alt="" /></span></div>)}
     {ball && !busy && <BallTurns friend={friends[0]} />}
     {district === 'beach' && !busy && save.balls.poke > 0 && <button type="button" className="beach-boat" aria-label="小船来了，去迎接新朋友" onClick={() => { stopSpeech(); sfx('sparkle'); go({ name: 'catch' }); }}><img src={storyProp('visit-boat')} alt="" /><span className="island-invite is-lesson"><InviteBerry type="poke" size={56} /></span></button>}
+    {!busy && !asleep && <Hideaways district={district} spots={layout.hides} lying={things.map(t => t.entry.key)} friend={friends[0]} />}
     {objects.map(([id, o]) => {
      // The object a thing is handed to is drawn by the activity itself while it lasts.
      // While something is being done the objects step aside, so nothing looks like a thing to choose; the one a

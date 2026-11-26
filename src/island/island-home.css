@@ -292,3 +292,22 @@
 .island-toy-basket b { position: absolute; right: -8%; top: -8%; display: grid; place-items: center; min-width: 34px; height: 34px; padding: 0 6px; border-radius: 17px; background: var(--brand-paper); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); color: var(--scene-wood); font-size: var(--text-lg); font-weight: 800; }
 .island-toy-wave { position: absolute; left: -20%; bottom: 0; width: 70% !important; height: auto !important; pointer-events: none; animation: island-wave 1.4s var(--ease-exit) forwards; }
 @keyframes island-wave { from { translate: -60% 0; opacity: 0; } 40% { opacity: 1; } to { translate: 120% 0; opacity: 0; } }
+
+/* ── Little surprises: bushes and rocks that wobble now and then each hide a learned thing ── */
+.island-hide { position: absolute; z-index: 3; width: min(calc(var(--size) * 1vw), calc(var(--size) * 1.4vh)); translate: -50% -100%; }
+.island-hide > button { display: block; width: 100%; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 5px 0 rgba(0, 0, 0, .14)); transform-origin: 50% 100%; animation: island-peek 5s var(--ease-standard) infinite; animation-delay: inherit; }
+.island-hide > button > .icon, .island-hide > button > img { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; object-fit: contain; }
+.island-hide.is-found > button { animation: none; }
+.island-hide > button.is-rustling { animation: island-wobble var(--motion-reward) var(--ease-standard); }
+@keyframes island-peek { 0%, 84%, 100% { rotate: 0deg; } 88% { rotate: -7deg; } 92% { rotate: 6deg; } 96% { rotate: -3deg; } }
+.island-hide-pop { position: absolute; z-index: 4; left: 50%; bottom: 60%; width: 110%; translate: -50% 0; pointer-events: none; animation: island-pop 1.6s var(--ease-standard) forwards; }
+.island-hide-pop > * { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; }
+@keyframes island-pop { 0% { translate: -50% 40%; scale: .3; opacity: 0; } 25% { translate: -50% -20%; scale: 1.15; opacity: 1; } 80% { translate: -50% -10%; scale: 1; opacity: 1; } 100% { translate: -50% -140%; scale: .4; opacity: 0; } }
+/* What has been found: slots at the top of the scene. */
+.island-found { position: absolute; z-index: 9; left: 50%; top: calc(12px + env(safe-area-inset-top)); translate: -50% 0; display: flex; gap: 8px; margin: 0; padding: 6px 12px; list-style: none; border-radius: 30px; background: rgba(255, 255, 255, .9); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); }
+.island-found li { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; border: 3px dashed var(--scene-line); }
+.island-found li:not(.is-found) .icon { opacity: .45; }
+.island-found li.is-found { border-style: solid; border-color: var(--brand-primary); background: var(--brand-primary-soft); animation: island-hop var(--motion-reward) var(--ease-standard); }
+.island-found li > :is(.icon, img, .learning-color) { width: 38px !important; height: 38px !important; }
+.island-found.is-done { background: var(--scene-gold-soft); }
+@media (max-width: 700px) { .island-found { top: calc(84px + env(safe-area-inset-top)); } .island-found li { width: 44px; height: 44px; } .island-hide { width: min(calc(var(--size) * 1.5vw), calc(var(--size) * 1vh)); } }
