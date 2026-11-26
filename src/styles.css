@@ -399,9 +399,6 @@ input { font: inherit; -webkit-user-select: text; user-select: text; }
 .poke-img-fallback { display: inline-flex; align-items: center; justify-content: center; aspect-ratio: 1; min-width: 56px; min-height: 56px; opacity: 0.55; animation: pokeFallback 1.6s var(--ease-breathe) infinite; }
 @keyframes pokeFallback { 50% { opacity: 0.85; transform: scale(1.05); } }
 
-/* 家园环境英语字幕：顶部居中的白边胶囊，英文大字、中文小字 */
-@keyframes acIn { from { opacity: 0; transform: translate(-50%, -10px); } }
-
 /* 听一听：数一数（图标成组排列）、大小（同一只小精灵一大一小） */
 .choice.count { display: flex; align-items: center; justify-content: center; }
 .count-group { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; max-width: 200px; padding: 8px; }

@@ -84,15 +84,10 @@ export interface Settings {
   islandWeather?: import("./lib/weather").WeatherMode;
   environmentSound?: import("./lib/weather").NatureLevel;
   backgroundMusic?: "off" | "soft" | "normal";
-  /** 高画质光影：实时环境光遮蔽（较耗性能，适合 iPad Pro） */
-  hqLighting?: boolean;
-  idleCamera?: boolean;
-  /** 家园环境英语（磨耳朵）：关 / 少（约 50 秒一句）/ 多（约 25 秒一句），默认少 */
-  ambientEnglish?: "off" | "some" | "more";
-  /** 中文提示：双语（英文 → 中文提示 → 英文复述）/ 纯英文，默认双语 */
   storyMode?: 'listen'|'read';
   storyPace?: 'normal'|'slow';
   storyLanguage?: 'stage'|'short'|'full';
+  /** 中文提示：双语（英文 → 中文提示 → 英文复述）/ 纯英文，默认双语 */
   englishMode?: "bilingual" | "english";
   /** Story read-aloud: both languages or English only; starts from englishMode and is remembered on its own. */
   storyVoice?: "bilingual" | "english";

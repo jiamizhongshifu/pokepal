@@ -144,7 +144,7 @@ export type Part = CaptionPart;
 
 /** 依次朗读；数字表示停顿毫秒。新的 say() 会打断旧的。 */
 let busy = false;
-/** 当前是否正在朗读（环境英语用它避免插话） */
+/** 当前是否正在朗读 */
 export const isSpeaking = () => busy;
 
 export async function say(...parts: Part[]): Promise<boolean> {

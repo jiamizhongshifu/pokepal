@@ -60,7 +60,7 @@ export function Parent() {
   const [favoriteQuery,setFavoriteQuery]=useState('');
   const [onlyFavorites,setOnlyFavorites]=useState(false);
   const [favoriteLimit,setFavoriteLimit]=useState(24);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState(""), [msgFailed, setMsgFailed] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const s = save.settings;
   const d = save.daily;
@@ -69,9 +69,10 @@ export function Parent() {
     recordingCount().then(setRecCount).catch(() => setRecCount(0));
   }, []);
 
-  const flash = (m: string) => {
-    setMsg(m);
-    setTimeout(() => setMsg(""), 2500);
+  // A failure stays long enough to read and act on; a confirmation passes quickly.
+  const flash = (m: string, failed = false) => {
+    setMsg(m); setMsgFailed(failed);
+    setTimeout(() => setMsg(c => c === m ? "" : c), failed ? 8000 : 2500);
   };
 
   const exportSave = () => {
@@ -83,14 +84,14 @@ export function Parent() {
     e.target.value = "";
     if (!f) return;
     if (f.size > 2 * 1024 * 1024) {
-      flash("导入失败：存档文件过大（不能超过 2 MB）");
+      flash("导入失败：存档文件过大（不能超过 2 MB）", true);
       return;
     }
     try {
       await importSave(JSON.parse(await f.text()) as SaveData);
       flash("已导入存档");
     } catch (err) {
-      flash(`导入失败：${(err as Error).message}`);
+      flash(`导入失败：${(err as Error).message}`, true);
     }
   };
 
@@ -109,7 +110,7 @@ export function Parent() {
   const titles={report:'了解孩子的学习',settings:'找到舒服的陪伴节奏',data:'更新与保管小岛'};
   return <div className="screen parent parent-organized">
    <header className="parent-head"><div className="parent-title-row"><button className="btn-round back" onClick={back} aria-label="返回"><Icon name="back" size={30}/></button><h1>家长中心</h1></div><nav className="tabs" aria-label="家长中心分区">{([['report','tasks','学习概况'],['settings','heart','陪伴设置'],['data','gear','应用维护']] as const).map(([id,icon,label])=><button key={id} className={tab===id?'on':''} aria-pressed={tab===id} aria-controls="parent-content" onClick={()=>setTab(id)}><Icon name={icon} size={25}/>{label}</button>)}</nav></header>
-   {msg&&<div className="toast" role="status">{msg}</div>}
+   {msg&&<div className="toast" role={msgFailed?"alert":"status"}>{msg}</div>}
    <div className="parent-body" ref={bodyRef} id="parent-content"><div className="parent-page-intro"><h2 tabIndex={-1} ref={headingRef}>{titles[tab]}</h2><p>{tab==='report'?'先看今日数据与 7 天趋势，再按需展开明细。':tab==='settings'?'常用陪伴设置优先，修改后自动保存。':'更新保留学习进度，备份与清空分开管理。'}</p></div>
    {tab==='data'&&<section className="parent-support-tools" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div><TrafficPreferences/><AnalyticsPreferences/><p>暂停试用会回到开始页、关闭访问统计，下次打开需要重新确认试用须知；已有进度不会删除。</p><button className="btn-small" onClick={()=>{setAggregateEnabled(false);setAnalyticsConsent(false);try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}go({name:'welcome'});}}>暂停试用</button></section>}
    {tab==='report'&&<>
@@ -156,7 +157,7 @@ export function Parent() {
                 </tbody>
               </table></div></div></details>
 <details className="parent-fold"><summary><Icon name="mic" size={28}/><span>跟读录音<small>{recCount} 条，仅保存在本机</small></span></summary><div className="parent-fold-content"><ParentRecordings onCount={setRecCount}/></div></details>
-<details className="parent-fold"><summary><Icon name="book" size={28}/><span>数据口径说明<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，跟读只记录开口尝试。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>场景行动</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div><div><dt>伙伴收集</dt><dd>{save.captures.length} / {CREATURES.length}</dd></div></dl></div></details>
+<details className="parent-fold"><summary><Icon name="book" size={28}/><span>数据口径说明<small>参与、提示与掌握的区别</small></span></summary><div className="parent-fold-content"><p>“不同日期都选对”表示在两个不同日期未使用应用内提示地选对，不代表完全掌握。应用无法判断家长是否提供了帮助，跟读只记录开口尝试。</p><dl className="parent-record-definitions"><div><dt>未用应用提示选对</dt><dd>{records.reduce((n,r)=>n+r.independent,0)} 次</dd></div><div><dt>应用引导或提示下完成</dt><dd>{records.reduce((n,r)=>n+(r.supported??0),0)} 次</dd></div><div><dt>小岛上听懂后去做</dt><dd>{records.reduce((n,r)=>n+(r.actions??0),0)} 次</dd></div><div><dt>今天英文播放（含重播）</dt><dd>{d.heard} 次</dd></div><div><dt>今天完成任务</dt><dd>{d.tasksCompleted} 次</dd></div><div><dt>累计参与天数</dt><dd>{save.participation?.days??save.streak.count} 天</dd></div></dl></div></details>
 <section className="parent-support-tools parent-footer-links" aria-label="试用与隐私帮助"><ParentLinks/><div className="parent-project-links"><SourceRepositoryLink/><AuthorContact/></div></section></>}
    {tab==='settings'&&<><details className="parent-fold parent-stage-fold" open={stageOpen} onToggle={e=>setStageOpen(e.currentTarget.open)}><summary><Icon name="sign" size={28}/><span>英语学习阶段<small>当前：{learningStageTitle(s)}</small></span></summary><div className="parent-fold-content"><LearningStageSettings/></div></details>
 <section className="form parent-routine"><h3>游玩与休息</h3><label><span>每日游玩时长：<b>{s.dailyMinutes} 分钟</b></span>
@@ -170,31 +171,24 @@ export function Parent() {
                 <span className="muted">刚开始建议保留中文提示（先英文、再中文、最后英文复述）；孩子熟悉这些句型后可切到只说英文。</span>
               </label><label>语速：<b>{s.speechRate.toFixed(1)}×</b>
                 <input type="range" min={0.6} max={1.3} step={0.1} value={s.speechRate} onChange={(e) => updateSettings({ speechRate: Number(e.target.value) })} />
-              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！'])}><Icon name="speaker" size={22}/>试听语音</button><label>小岛英语（磨耳朵）
-                <div className="seg">
-                  {([["off", "关闭"], ["some", "少一点"], ["more", "多一点"]] as const).map(([v, t]) => (
-                    <button key={v} aria-label={t} aria-pressed={(s.ambientEnglish ?? "some") === v} className={(s.ambientEnglish ?? "some") === v ? "on" : ""} onClick={() => updateSettings({ ambientEnglish: v })}>{t}</button>
-                  ))}
-                </div>
-                <span className="muted">孩子在“我的小岛”玩的时候，旁白会用简单英语描述小精灵正在做的事（Look! Bubbo is eating. Yum yum!），也会数一数、找一找、说颜色。少一点约 50 秒一句，多一点约 25 秒一句。</span>
-              </label><label>背景音乐
+              </label><button className="btn-small parent-voice-preview" onClick={()=>say(['en',"Hello! I'm Bubbo!"],['zh','你好，我是啵啵！'])}><Icon name="speaker" size={22}/>试听语音</button><label>背景音乐
                 <div className="seg">
                   {([['off','关闭'],['soft','轻轻播放'],['normal','标准音量']] as const).map(([value,label])=><button key={value} aria-pressed={(s.backgroundMusic??'soft')===value} className={(s.backgroundMusic??'soft')===value?'on':''} onClick={()=>updateSettings({backgroundMusic:value})}>{label}</button>)}
                 </div>
-                <span className="muted">小岛配乐随设备当地时间变化：6–9 点晨光、9–17 点白天、17–21 点傍晚、21–6 点星夜。只在欢迎页和“我的小岛”播放，学习路线和课程里保持安静；配音时自动降低，答题、跟读和日记录音时暂停。锁屏或切到后台也会暂停。</span>
+                <span className="muted">开始页和“我的小岛”的配乐随设备当地时间变化：6–9 点晨光、9–17 点白天、17–21 点傍晚、21–6 点星夜；故事、好朋友相册这些页面有各自的配乐。学习路线、课程、练习、日记、家长中心和休息页保持安静；配音时自动降低，锁屏或切到后台时暂停。</span>
               </label><details className="parent-inner-fold"><summary>配音来源</summary><p>英文旁白 {voiceInfo().en}，中文旁白 {voiceInfo().zh}。所有声音都是提前准备好的配音，每个小精灵有自己的声音，不会换成设备自带的朗读声。</p></details></div></details>
 <details className="parent-fold"><summary><Icon name="island" size={28}/><span>小岛天气与声音<small>天气、自然环境声音</small></span></summary><div className="parent-fold-content"><WeatherSettings/></div></details>
 <details className="parent-fold"><summary><Icon name="hand" size={28}/><span>操作引导<small>{save.onboarding?.automatic!==false?'首次使用主动提示':'按需点“帮助”'}</small></span></summary><div className="parent-fold-content"><GuideSettings/></div></details>
 <details className="parent-fold" onToggle={e=>setFavoritesOpen(e.currentTarget.open)}><summary><Icon name="invite-berry" size={28}/><span>偏爱的伙伴<small>已置顶 {s.favorites.length} 只 · 优先坐船来做客</small></span></summary>{favoritesOpen&&<div className="parent-fold-content"><p>只影响谁更常坐船来小岛做客，以及学习路线上陪在旁边的伙伴；不影响孩子自己选择和谁玩。</p><label className="parent-search">找一个伙伴<input type="search" value={favoriteQuery} placeholder="中文、英文或编号" onChange={e=>{setFavoriteQuery(e.target.value);setFavoriteLimit(24);}}/></label><label className="parent-fav-filter"><input type="checkbox" checked={onlyFavorites} onChange={e=>{setOnlyFavorites(e.target.checked);setFavoriteLimit(24);}}/>只看已置顶</label><div className="fav-grid">{favoriteOptions.slice(0,favoriteLimit).map(p=>{const on=s.favorites.includes(p.id);return <button key={p.id} className={`fav ${on?'on':''}`} aria-pressed={on} aria-label={`${p.nameZh}，${on?'已置顶，点一下取消':'点一下置顶'}`} onClick={()=>updateSettings({favorites:on?s.favorites.filter(x=>x!==p.id):[...s.favorites,p.id]})}><CreatureImg src={creatureAvatar(p.id)} alt=""/><span>{p.nameZh}</span>{on&&<small>已置顶</small>}</button>;})}</div>{!favoriteOptions.length&&<p role="status">{onlyFavorites?'没有符合条件的已置顶伙伴，可以取消筛选看看。':'没有找到，试试其他名字或编号。'}</p>}{favoriteOptions.length>favoriteLimit&&<button className="btn-small" onClick={()=>setFavoriteLimit(n=>n+24)}>再看一些（{Math.min(favoriteLimit,favoriteOptions.length)} / {favoriteOptions.length}）</button>}</div>}</details>
 <details className="parent-fold"><summary><Icon name="avatar-red" size={28}/><span>小岛主人的名字<small>{save.trainer?.name||'小岛主人'}</small></span></summary><div className="parent-fold-content form"><label>小岛主人的名字
-                <input defaultValue={save.trainer?.name} onChange={(e) => { if (e.target.value.trim()) renameTrainer(e.target.value); }} onBlur={(e) => renameTrainer(e.target.value)} maxLength={10} />
+                <input defaultValue={save.trainer?.name} onChange={(e) => { if (e.target.value.trim()) renameTrainer(e.target.value); }} onBlur={(e) => { renameTrainer(e.target.value); e.target.value = useGame.getState().save.trainer?.name ?? ""; }} maxLength={10} />
               </label><p className="muted">改了就自动保存，上方会显示新名字。最多 10 个字。</p></div></details></>}
    {tab==='data'&&<><DeviceSetup initiallyOpen={updateAvailable} compactTools/>
 <details className="parent-fold"><summary><Icon name="book" size={28}/><span>备份与恢复<small>导出存档、导入或恢复上次存档</small></span></summary><div className="parent-fold-content">
               <div className="row">
                 <button className="btn-small" onClick={exportSave}>导出存档</button>
                 <button className="btn-small" disabled={saveBusy} onClick={() => fileRef.current?.click()}>{saveBusy?"正在保存…":"导入存档"}</button>
-                {hasBackup&&<button className="btn-small" disabled={saveBusy} onClick={async()=>{try{await useGame.getState().restoreSaveBackup();}catch(error){flash((error as Error).message);}}}>恢复上次导入前的存档</button>}
+                {hasBackup&&<button className="btn-small" disabled={saveBusy} onClick={async()=>{try{await useGame.getState().restoreSaveBackup();}catch(error){flash((error as Error).message, true);}}}>恢复上次导入前的存档</button>}
                 <input ref={fileRef} type="file" accept="application/json" hidden onChange={onImport} />
                 
               </div>
@@ -202,7 +196,7 @@ export function Parent() {
             <StorageFacts/>
             <DiaryBackup/></div></details>
 <details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
-<details className="parent-fold parent-danger"><summary><Icon name="book" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => setClearing(true)}>清空全部数据</button>{clearing&&<BlockingDialog className="modal-backdrop" label="清空本机数据" onClose={()=>withTransition(()=>setClearing(false))}><section className="modal clear-confirm" aria-labelledby="clear-confirm-title"><h2 id="clear-confirm-title">清空这台设备上的全部数据？</h2><p>会删除本机存档、跟读录音和小日记（文字和原声），无法撤销。</p><div className="row"><button className="btn-small" autoFocus onClick={()=>withTransition(()=>setClearing(false))}>取消</button><button className="btn-small danger" onClick={()=>{setClearing(false);setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();}}>清空全部数据</button></div></section></BlockingDialog>}</div></details></>}
+<details className="parent-fold parent-danger"><summary><Icon name="backspace" size={28}/><span>清空本机数据<small>仅在确定不再保留时使用</small></span></summary><div className="parent-fold-content"><p>会删除本机存档、录音和小日记，无法撤销。请先导出游戏存档、备份全部日记与原声，并另存需要保留的跟读录音。</p><button className="btn-small danger" onClick={() => setClearing(true)}>清空全部数据</button>{clearing&&<BlockingDialog className="modal-backdrop" label="清空本机数据" onClose={()=>withTransition(()=>setClearing(false))}><section className="modal clear-confirm" aria-labelledby="clear-confirm-title"><h2 id="clear-confirm-title">清空这台设备上的全部数据？</h2><p>会删除本机存档、跟读录音和小日记（文字和原声），无法撤销。</p><div className="row"><button className="btn-small" autoFocus onClick={()=>withTransition(()=>setClearing(false))}>取消</button><button className="btn-small danger" onClick={()=>{setClearing(false);setAggregateEnabled(false);setAnalyticsConsent(false);void resetAll();}}>清空全部数据</button></div></section></BlockingDialog>}</div></details></>}
    </div>
   </div>;
 }

@@ -14,12 +14,13 @@ for(const corrupt of [
  (s:any)=>s.energy=NaN,
  (s:any)=>s.daily.boardDone=[false],
  (s:any)=>s.settings.dailyMinutes=0,
- (s:any)=>s.settings.idleCamera='yes',
+ (s:any)=>s.settings.backgroundMusic='loud',
  (s:any)=>s.learning={version:1,records:{apple:{contexts:null}},units:{}},
  (s:any)=>s.history=[{date:'2026-10-15',words:'wrong'}],
 ]){const bad=fixture();corrupt(bad);assert.throws(()=>validateSave(bad),/原存档未被替换/);}
 const extended=fixture();extended.learning={version:1,records:{},units:{'water-break':{round:5,completedAt:1},'hello-island':{round:4,completedAt:1}}};assert.doesNotThrow(()=>validateSave(extended));extended.learning.units['water-break'].round=6;assert.throws(()=>validateSave(extended));
-const camera=fixture();camera.settings.idleCamera=false;assert.equal(validateSave(camera).settings.idleCamera,false);
+// A save from before a setting was retired (island narration, lighting, idle camera) still imports.
+const retired=fixture() as any;Object.assign(retired.settings,{idleCamera:false,hqLighting:true,ambientEnglish:'more'});assert.doesNotThrow(()=>validateSave(retired));
 const legacy=fixture();legacy.settings={} as SaveData['settings'];assert.doesNotThrow(()=>validateSave(legacy));
 // Preserve valid negative seed timestamps used to stagger hunger and companionship.
 const care=fixture();care.captures[0].care={seconds:0,fedAt:-300,petAt:-100,quietUntil:0};assert.doesNotThrow(()=>validateSave(care));

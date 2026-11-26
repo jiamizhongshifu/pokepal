@@ -58,14 +58,11 @@ export function validateSave(input:unknown):SaveData {
  if(cfg.islandWeather!==undefined)requireValue(validWeatherMode(cfg.islandWeather),'小岛天气');
  if(cfg.environmentSound!==undefined)requireValue(oneOf(['off','soft','normal'],cfg.environmentSound),'环境声音');
  if(cfg.backgroundMusic!==undefined)requireValue(oneOf(['off','soft','normal'],cfg.backgroundMusic),'背景音乐');
- if(cfg.ambientEnglish!==undefined)requireValue(oneOf(['off','some','more'],cfg.ambientEnglish),'环境英语');
  if(cfg.storyLanguage!==undefined)requireValue(oneOf(['stage','short','full'],cfg.storyLanguage),'故事语言版本');
  if(cfg.storyMode!==undefined)requireValue(oneOf(['listen','read'],cfg.storyMode),'故事阅读模式');
  if(cfg.storyPace!==undefined)requireValue(oneOf(['normal','slow'],cfg.storyPace),'故事朗读速度');
  if(cfg.englishMode!==undefined)requireValue(oneOf(['english','bilingual'],cfg.englishMode),'语言设置');
  if(cfg.storyVoice!==undefined)requireValue(oneOf(['english','bilingual'],cfg.storyVoice),'故事朗读语言');
- if(cfg.idleCamera!==undefined)requireValue(typeof cfg.idleCamera==='boolean','自动观察设置');
- if(cfg.hqLighting!==undefined)requireValue(typeof cfg.hqLighting==='boolean','画质设置');
  requireValue(Array.isArray(s.history)&&s.history.every((h:unknown)=>object(h)&&typeof h.date==='string'&&['energyEarned','tasksCompleted','heard','spoken','words','caught','playMinutes'].every(k=>number(h[k]))),'历史记录');
  if(s.onboarding!==undefined)requireValue(validOnboarding(s.onboarding),'新手引导');
  if(s.dex!==undefined)requireValue(creatureIds(s.dex),'好朋友相册');
