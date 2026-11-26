@@ -12,6 +12,7 @@ import { Sleepy } from "./screens/Sleepy";
 import { SaveRecovery } from "./components/SaveRecovery";
 import { todayStr } from "./lib/date";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { NetworkNotice } from "./components/NetworkNotice";
 import { lazy, Suspense } from "react";
 
 
@@ -134,6 +135,7 @@ export default function App() {
       {!homeActive && <ErrorBoundary key={resting?'sleepy':screen.name} onReset={() => useGame.getState().go({ name: "home" })}>
         <Suspense fallback={<div className="screen loading" role="status"><span className="sl-ball"/>正在准备小发现…</div>}>{resting ? <Sleepy/> : renderScreen()}</Suspense>
       </ErrorBoundary>}
+      <NetworkNotice/>
     </main>
   );
 

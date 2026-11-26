@@ -47,7 +47,7 @@ function OnlineSetup({initiallyOpen}:{initiallyOpen:boolean}){
    <p className="offline-update-detail">{phase==='error'?'检查未完成，可能是网络或浏览器更新服务暂时无响应。可重试，或点“打开新版入口”；不会清除本机存档。':phase==='ready'?'新页面已准备好，点下面的按钮进入。':'资源会在游玩时下载。更新保留本机的小精灵、学习进度和日记。'}</p>
    <div className="offline-update-actions">{phase==='ready'?<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}><Icon name="play" size={28}/>打开新版本</button>:<button disabled={busy} onClick={()=>void check()}><Icon name="refresh" size={28}/>{busy?'正在准备…':phase==='error'?'再试一次':'检查更新'}</button>}{phase==='error'&&<button className="offline-update-reopen" onClick={()=>location.assign(onlineUpdateEntry())}>打开新版入口</button>}</div>
   </section>
-  <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。网页版不提供完整离线安装。</p><p>打开或回到网站时会自动检查新版本，并在孩子没有进行课程或游戏时自动换成新版本，进度会先保存。这里的按钮留作需要时手动检查。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心分别导出游戏存档、备份日记与原声，并另存需要保留的跟读录音。</p></details>
+  <details className="update-parent-notes"><summary>家长小贴士</summary><p>保持联网即可游玩，可以通过浏览器菜单添加到主屏幕。短时断网时玩过的页面还能接着玩；暂不支持断网时完整游玩。</p><p>打开或回到网站时会自动检查新版本，并在孩子没有进行课程或游戏时自动换成新版本，进度会先保存。这里的按钮留作需要时手动检查。</p><p>存档和日记录音保存在当前浏览器；更换网址或清除网站数据前，请在家长中心分别导出游戏存档、备份日记与原声，并另存需要保留的跟读录音。</p></details>
  </div></details>;
 }
 function OfflineSetup({initiallyOpen,compactTools}:{initiallyOpen:boolean;compactTools:boolean}) {

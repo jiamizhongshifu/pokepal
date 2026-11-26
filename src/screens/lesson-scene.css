@@ -122,3 +122,10 @@
 /* Growing into the way on: a scale, so the speaker beside it does not move. */
 #root .lesson-staged .is-staged .round-pace { transition: scale var(--motion-move) var(--ease-spring), translate var(--motion-move) var(--ease-spring), background-color var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard); }
 #root .lesson-staged .is-staged .round-pace.is-next { scale: 1.3; translate: 12px 0; }
+
+/* When a voice could not play, "see the next one" hangs right under the speaker with its words showing: the grown-up
+   reads it, since nothing is being said. It belongs to the speaker's bar, so it follows it on every screen size. */
+#root .lesson-staged .is-staged .round-toolbar > .learning-skip { position: absolute; z-index: 3; left: 0; top: calc(100% + 10px); display: inline-flex; gap: 8px; width: max-content; height: auto; min-height: 48px; margin: 0; padding: 8px 16px 8px 10px; border: 2px solid var(--brand-paper); border-radius: var(--radius-pill); background: var(--brand-sun-soft); color: var(--scene-wood); box-shadow: 0 var(--brand-press) 0 var(--scene-gold-edge); font-size: var(--text-base); font-weight: 800; white-space: nowrap; }
+#root .lesson-staged .is-staged .round-toolbar > .learning-skip:active { transform: translateY(var(--brand-press)); box-shadow: none; }
+#root .lesson-staged .is-staged .round-toolbar > .learning-skip span { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; }
+#root .lesson-staged .is-staged .round-toolbar > .learning-skip .icon { width: 28px !important; height: 28px !important; }

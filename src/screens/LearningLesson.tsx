@@ -18,6 +18,7 @@ import {BuddyImg} from '../components/BuddyImg';
 import {FeedbackStrip,type FeedbackTone} from '../components/FeedbackStrip';
 import { useEffect,useRef,useState,useSyncExternalStore } from 'react';
 import { useEvent } from '../lib/hooks';
+import { useBackOnline,voiceMissNote } from '../lib/network';
 import { useGame } from '../store';
 import { learningEntry,unitById,unitUnlocked,unitSituations,unitRoundCount,type LearningEntry } from '../data/curriculum';
 import { learningChoices } from '../lib/learningChoices';
@@ -135,11 +136,13 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
   }
   // A newer tap intentionally cancels the old voice. Only the latest request
   // may report its outcome; cancellation is not a missing recording.
-  if(active.current&&ticket===audioRun.current){setPlaying(false);if(ok){note(entry.key,'heard');if(entry.key===target.key){heardTarget.current=true;setHeard(true);}}else{setAudioFailed(true);tell('声音暂时没准备好，可以稍后再听。');}if(busy.current)setAnsweredAudio(true);}
+  if(active.current&&ticket===audioRun.current){setPlaying(false);if(ok){note(entry.key,'heard');if(entry.key===target.key){heardTarget.current=true;setHeard(true);}}else{setAudioFailed(true);tell(voiceMissNote('声音暂时没准备好，可以稍后再听。'));}if(busy.current)setAnsweredAudio(true);}
  };
  const hear=()=>playEntry(target,explaining);
- const hearSituation=async()=>{if(guideIsOpen())return;auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);const ok=await speakOwned(['zh',situation!]);if(active.current&&ticket===audioRun.current){setPlaying(false);if(!ok){setAudioFailed(true);tell('声音暂时没准备好，可以稍后再听。');}}};
+ const hearSituation=async()=>{if(guideIsOpen())return;auto.cancel();clearTimeout(introTimer.current);const ticket=++audioRun.current;setPlaying(true);setAudioFailed(false);const ok=await speakOwned(['zh',situation!]);if(active.current&&ticket===audioRun.current){setPlaying(false);if(!ok){setAudioFailed(true);tell(voiceMissNote('声音暂时没准备好，可以稍后再听。'));}}};
  const intro=useEvent(()=>{if(situation&&!guided)void hearSituation();else void hear();}),leave=useEvent(()=>finishTrace('left'));
+ // A voice that failed for want of a network plays once the network is back.
+ useBackOnline(audioFailed,()=>{tell('');intro();});
  useEffect(()=>{const runs=audioRun,timer=introTimer,voice=narration;active.current=true;timer.current=setTimeout(intro,300);return()=>{active.current=false;runs.current++;clearTimeout(timer.current);voice.current?.cancel();
   // Only a real departure counts as leaving: a remount on the next tick (React StrictMode) is not one.
   setTimeout(()=>{if(!active.current)leave();},0);};},[intro,leave]);
@@ -184,7 +187,7 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  // Paused with the round done, the pause button becomes the way on; while the round is about to move on, a bar fills along it.
  const next=auto.paused&&ready&&!guideOpen,counting=auto.counting;
  const pacing=<button className={`round-pace${next?' is-next':''}`} style={{'--advance':`${advanceDelay}ms`} as React.CSSProperties} disabled={guideOpen} onClick={()=>{sfx('click');if(next){advance();return;}const resume=auto.paused;auto.toggle();if(resume&&!ready&&!guideIsOpen()){if(situation&&!guided&&!choice.solved)void hearSituation();else void hear();}}} aria-pressed={next?undefined:auto.paused} aria-label={next?'下一个':auto.paused?'接着玩':'慢一点'}><Icon name={auto.paused?'play':staged?'rest':'hand'} size={26}/><span>{next?'下一个':auto.paused?'接着玩':'慢一点'}</span>{counting&&<i key={auto.run} className="round-pace-bar" aria-hidden="true"/>}</button>;
- const fallback=audioFailed&&onSkip?<button className="learning-help" onClick={()=>{if(continued.current)return;sfx('click');continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
+ const fallback=audioFailed&&onSkip?<button className="learning-help learning-skip" onClick={()=>{if(continued.current)return;sfx('click');continued.current=true;finishTrace('skipped');auto.cancel();stopSpeech();onSkip();}}><Icon name="book" size={26}/>先看下一个，稍后再听</button>:null;
  // The pace line (waiting, paused, about to move on) is for screen readers in a scene; the answer feedback is the strip's alone.
  const flow=<p className="round-flow-status" role="status">{guideOpen?'帮助打开时，伙伴会等你':audioFailed?'这段声音可以稍后补听':auto.paused?'慢慢来，伙伴等着你':playing?'先听一听…':ready?'马上去下一个小发现':'听听声音，再点图片'}</p>;
  const stage=staged?' is-staged':'';
@@ -192,14 +195,14 @@ export function LearningRound({target,choices,count,situation,listenFirst,onNext
  const card=(kind:string,title:string,body:React.ReactNode,tools?:React.ReactNode)=>staged?<div className="round-card"><header><div><small>{kind}</small><h2>{title}</h2></div>{tools}</header>{body}<FeedbackStrip tone={tone} onReplay={()=>void replay()}>{feedback||(target.kind==='phrase'?'听两句，选一句':'听一听，点图片')}</FeedbackStrip></div>:<>{body}{tools}</>;
  if(guided)return <section className={`learning-round learning-guided${stage}`}>
   <h1>和伙伴一起听</h1><p>看看图片，听听声音。不用着急回答。</p>
-  <div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
+  <div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/><span>{playing?'正在说…':'再听一次'}</span></button>{pacing}{fallback}</div>{flow}
   {card('先听一听','认识它，不用着急回答',<div className="guided-example"><LearningArt entry={target}/><strong lang="en">{target.en}</strong><span>{target.zh}</span></div>,
    <div className="lesson-actions"><button className="round-try" onClick={()=>{sfx('click');trace.current.asked=true;setGuided(false);tell('我们一起找，不着急。');}}><Icon name="search" size={28}/><span>试着找一找</span></button></div>)}
   {feedback&&<p role="status">{feedback}</p>}
  </section>;
- if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}</div>{flow}{fallback}{feedback&&<p role="status">{feedback}</p>}</section>;
+ if(target.contextOnly)return <section className={`learning-round is-context${stage}`}><h1 lang="en">{target.en}</h1><p>{target.zh}</p><p>听听它在故事和生活里怎么用，不用答题。</p><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void hear();}}><Icon name="speaker" size={28}/>再听这段话</button>{pacing}{fallback}</div>{flow}{feedback&&<p role="status">{feedback}</p>}</section>;
 
- return <section className={`learning-round${situation?' is-situation':''}${stage}`}><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void (situation?hearSituation():replay());}}><Icon name="speaker" size={28}/><span>{situation?'听听发生了什么':'再听一次'}</span></button>{pacing}</div>{flow}{fallback}
+ return <section className={`learning-round${situation?' is-situation':''}${stage}`}><h1>{situation??'听一听，点图片'}</h1><div className="lesson-actions round-toolbar"><button className={`round-hear${playing?' is-speaking':''}`} onClick={()=>{sfx('click');void (situation?hearSituation():replay());}}><Icon name="speaker" size={28}/><span>{situation?'听听发生了什么':'再听一次'}</span></button>{pacing}{fallback}</div>{flow}
   {card(situation?'这时候说什么':target.kind==='phrase'?'选一句话':'听音找一找',situation??(target.kind==='phrase'?'听一听，选出伙伴说的话':'听伙伴说，点出对的那个'),<div className={`learning-choices ${target.kind==='phrase'?'phrase-choices':''}`}>{shown.map(o=><div key={o.key}>
    {target.kind==='phrase'&&<button className="learning-choice-audio" aria-label={`听听 ${o.en}`} onClick={()=>{sfx('click');void replay(o);}}><Icon name="speaker" size={24}/><span>听这句话</span></button>}
    <button className={`${choice.shake===o?'shake':''} ${choice.solved&&o.key===target.key?'chosen':''} ${choice.eliminated.includes(o)?'faded':''} ${explaining&&o.key===target.key?'is-explained':''}`} aria-label={`选择${o.zh}`} disabled={choice.solved||choice.shake!==null||choice.eliminated.includes(o)} onClick={()=>tap(o)}>{target.kind==='phrase'?<><LearningArt entry={o}/><strong lang="en">{o.en}</strong><small>{o.zh}</small></>:<><LearningArt entry={o}/>{explaining&&o.key===target.key&&<span className="learning-explanation-label"><strong lang="en">{o.en}</strong><small>{o.zh}</small></span>}</>}{explaining&&o.key===target.key&&<span className="learning-explanation-pointer" aria-hidden="true"><Icon name="hand" size={28}/></span>}</button>

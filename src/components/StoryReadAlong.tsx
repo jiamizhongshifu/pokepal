@@ -4,6 +4,7 @@ import { useGame } from '../store';
 import { getAudioContext, onVoicePlayback, sayCancellableWhile, stopSpeech } from '../lib/speech';
 import { alignTiming, storyTokens, storyWordEntry, storyWordGloss, storyWordVoice, wordAt } from '../lib/storyWords';
 import { useClipRecorder, type ClipFailure } from '../lib/clipRecorder';
+import { voiceMissNote } from '../lib/network';
 import './story-read-along.css';
 
 /** Index of the word currently being spoken in this sentence, following the recording's own timings; -1 otherwise. */
@@ -80,7 +81,7 @@ export function EchoPractice({en,onStart}:{en:string;onStart:()=>void}){
   const ok=await example.done;
   if(model.current===example)model.current=null;
   if(!live.current||ticket!==run.current)return;
-  if(!ok){setPhase('idle');setNote('这句声音暂时没准备好，可以先请大人读一遍。');return;}
+  if(!ok){setPhase('idle');setNote(voiceMissNote('这句声音暂时没准备好，可以先请大人读一遍。'));return;}
   setPhase('turn');
   if(!await rec.start()&&live.current)setPhase(p=>p==='turn'?'idle':p);
  };

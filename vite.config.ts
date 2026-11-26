@@ -8,6 +8,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { existsSync, readFileSync, writeFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
+import { RUNTIME_CACHE, WITH_APP } from "./scripts/online/offline-cache";
 
 const buildId = new Date().toISOString();
 let buildOutput = resolve('dist');
@@ -35,7 +36,7 @@ return {
     ...(process.env.NO_SSL || hasCert ? [] : [basicSsl()]),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: online ? ["icons/icon-192.png", "icons/icon-512.png"] : ["icons/*"],
+      includeAssets: online ? WITH_APP : ["icons/*"],
       manifest: {
         id: "/",
         lang: "zh-CN",
@@ -58,12 +59,7 @@ return {
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/(api|voice|scenes|sprites|art|icons|music|environment|__ipad|release|privacy|terms|feedback)/],
-        runtimeCaching: [
-          {urlPattern:/\/scenes\/flat-v1\/.*\.(?:webp|png)$/,handler:'StaleWhileRevalidate',options:{cacheName:'pokepal-scenes-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:280,maxAgeSeconds:30*24*60*60}}},
-          {urlPattern:/\/sprites\/.*\.(?:webp|png)$/,handler:'StaleWhileRevalidate',options:{cacheName:'pokepal-sprites-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:300,maxAgeSeconds:30*24*60*60}}},
-          {urlPattern:/\/environment\/[a-z-]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-nature-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:6,maxAgeSeconds:365*24*60*60}}},
-          {urlPattern:/\/music\/[a-z]+-v\d+\.m4a$/,handler:'CacheFirst',options:{cacheName:'pokepal-music-v1',cacheableResponse:{statuses:[200]},expiration:{maxEntries:8,maxAgeSeconds:365*24*60*60}}}
-        ],
+        runtimeCaching: RUNTIME_CACHE,
         cleanupOutdatedCaches: true
       } : {
         cacheId: "pokepal-core-v2",

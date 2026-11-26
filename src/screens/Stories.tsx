@@ -8,6 +8,7 @@ import { learningEntry, selectedUnit } from '../data/curriculum';
 import { ParticipationNote } from '../components/ParticipationNote';
 import { useEffect, useRef, useState } from 'react';
 import { useEvent } from '../lib/hooks';
+import { useBackOnline, voiceMissNote } from '../lib/network';
 import { StoryStage } from '../components/StoryStage';
 import { STORY_COVER_PAGE } from '../data/storyScenes';
 import { STORIES, STORY_THEMES, storyProgressKey, type StoryTheme, type Story, type StoryPage } from '../data/stories';
@@ -114,6 +115,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
  useEffect(()=>ended?undefined:narrate(),[idx,replay,bilingual,ended,story.id,narrate]);
  const pause=()=>{run.current++;clearTimeout(timer.current);stopSpeech();setStatus('idle');};
  const read=()=>setReplay(n=>n+1);
+ useBackOnline(status==='unavailable',read);
  const readPair=async(line:{en:string;zh:string})=>{
    pause();const ticket=++run.current;setStatus('playing');
    const ok=await say(["en",line.en,line],...(bilingual ? [["zh",line.zh,line]] as Parameters<typeof say> : []));
@@ -169,7 +171,7 @@ function Book({story,language}:{story:Story;language:StoryLanguage}){
      <details className="story-parent-options quiet-disclosure"><summary>陪读设置与记录</summary><p className="story-context">{story.theme} · <span lang="en">{story.themeEn}</span>{hasLevels&&` · ${language==='short'?'短句听读':'完整共读'}`}</p>{hasLevels&&<fieldset className="story-language-options"><legend>故事语言</legend><p>跟随家长设置的英语阶段；也可以只调整故事文本。听故事或一起读仍单独控制翻页方式。</p><div>{(['stage','short','full'] as const).map(value=><button key={value} aria-pressed={(settings.storyLanguage??'stage')===value} onClick={()=>{pause();useGame.getState().updateSettings({storyLanguage:value});}}>{value==='stage'?'跟随学习阶段':value==='short'?'短句听读':'完整共读'}</button>)}</div><small>两种文本分别记住阅读位置；同一本故事共享今日参与奖励，不代表掌握更长的句子。</small></fieldset>}<div className="participation-note"><span>今天读过 {readPages?.length??0} / {story.pages.length} 页；听完或由陪读家长确认后记下。</span><button className="btn-small" disabled={readPages?.includes(idx+1)} onClick={noteRead}>{readPages?.includes(idx+1)?"这页已读过":"和大人一起读过这页"}</button></div>
      <div className="story-options"><button aria-pressed={bilingual} onClick={()=>{const next=!bilingual;setBilingual(next);useGame.getState().updateSettings({storyVoice:next?'bilingual':'english'});}}>{bilingual?'中英朗读':'只听英文'}<small lang="en">{bilingual?'English + Chinese':'English audio'}</small></button></div></details>
      {autoPlay&&page.pause&&<p className="story-pause-note">故事在这里等你。想继续时，点下一页。</p>}
-     {status==='unavailable'&&<p role="status" className="story-audio-note">这页声音暂时没准备好，点“再听一次”重试。</p>}
+     {status==='unavailable'&&<p role="status" className="story-audio-note">{voiceMissNote('这页声音暂时没准备好，点“再听一次”重试。')}</p>}
    </div>}
    </div>
    {!ended&&<div className="story-controls story-primary-controls" aria-label="阅读操作">

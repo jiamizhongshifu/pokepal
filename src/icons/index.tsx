@@ -8,6 +8,8 @@ export const ICONS = ICON_ASSETS;
 export type IconName = keyof typeof ICONS;
 
 const loadedIcons = new Set<string>();
+/** An empty picture: the placeholder's grey shows through. */
+const BLANK = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"/%3E';
 
 /** Action marks (not things a child names). On a coloured fill they turn white; every other icon is a picture and sits on a white chip there. */
 export const GLYPHS = new Set(["play", "check", "back", "close", "refresh", "mic", "speaker"]);
@@ -16,15 +18,24 @@ export const GLYPHS = new Set(["play", "check", "back", "close", "refresh", "mic
 export function Icon({ name, size = 48, className = "", style, label }: { name: string; size?: number | string; className?: string; style?: CSSProperties; label?: string }) {
   const wanted = ICONS[name] ?? ICONS.star;
   const [state, setState] = useState<{ src: string; tries: number; loaded: boolean }>(() => ({ src: wanted, tries: 0, loaded: loadedIcons.has(wanted) }));
-  const current = state.src.startsWith(wanted) || state.src === ICONS.face ? state : { src: wanted, tries: 0, loaded: loadedIcons.has(wanted) };
+  const current = state.src.startsWith(wanted) || state.src === ICONS.face || state.src === BLANK ? state : { src: wanted, tries: 0, loaded: loadedIcons.has(wanted) };
   const ref = useRef<HTMLImageElement>(null);
   useEffect(() => {
-    if (ref.current?.complete && ref.current.naturalWidth) {
+    if (current.src !== BLANK && ref.current?.complete && ref.current.naturalWidth) {
       loadedIcons.add(current.src);
       setState(s => s.loaded ? s : { ...s, loaded: true });
     }
   }, [current.src]);
-  const failed = () => setState(s => s.tries < 1 ? { src: `${wanted}?retry=1`, tries: 1, loaded: false } : { src: ICONS.face, tries: 2, loaded: loadedIcons.has(ICONS.face) });
+  // The face comes with the app; if even it cannot load, the soft placeholder stays rather than a broken-picture mark.
+  const failed = () => setState(s => s.tries < 1 ? { src: `${wanted}?retry=1`, tries: 1, loaded: false } : s.tries < 2 ? { src: ICONS.face, tries: 2, loaded: loadedIcons.has(ICONS.face) } : { src: BLANK, tries: 3, loaded: false });
+  // A picture that failed while the network was down comes back by itself when it returns.
+  const gaveUp = current.tries > 0;
+  useEffect(() => {
+    if (!gaveUp) return;
+    const again = () => setState({ src: wanted, tries: 0, loaded: loadedIcons.has(wanted) });
+    addEventListener('online', again);
+    return () => removeEventListener('online', again);
+  }, [gaveUp, wanted]);
   return (
     <img
       ref={ref}
@@ -37,7 +48,7 @@ export function Icon({ name, size = 48, className = "", style, label }: { name: 
       alt={label ?? ""}
       aria-hidden={label ? undefined : true}
       draggable={false}
-      onLoad={() => { loadedIcons.add(current.src); setState(s => s.loaded ? s : { ...s, loaded: true }); }}
+      onLoad={() => { if (current.src === BLANK) return; loadedIcons.add(current.src); setState(s => s.loaded ? s : { ...s, loaded: true }); }}
       onError={failed}
     />
   );
