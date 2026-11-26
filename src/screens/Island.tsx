@@ -41,6 +41,7 @@ import { ISLAND_DAY, SCENES, dayDone, inviteKey, islandDone, islandInvites, scen
 import { shownStickers } from '../island/stickers';
 import { MOOD_MARK, useFriendMood } from '../island/mood';
 import { SCENE_LAYOUT, targetSpot, type SceneObject } from '../island/sceneLayout';
+import { SceneToy } from '../island/SceneToy';
 import { DISTRICTS, PLACES, placeOf, placesIn, whereNow, type District, type Spot } from '../island/world';
 import '../island/island-home.css';
 
@@ -218,11 +219,11 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
      const offered = friends.length > 0 && !asleep ? plays.filter(p => placeOf(p.place).id === id) : [];
      // Near an edge the pictures line up toward the middle, so none is cut off on a narrow screen.
      const edge = o.spot[0] < 30 ? ' is-left' : o.spot[0] > 70 ? ' is-right' : '';
-     return <div key={id} className={`island-object${edge}${offered.length ? ' is-open' : ''}${react?.id === id ? ' is-tapped' : ''}`} style={{ left: `${o.spot[0]}%`, top: `${o.spot[1]}%`, '--size': o.size } as CSSProperties}>
+     const art = 'icon' in o.art ? <Icon name={o.art.icon} size={160} /> : <img src={storyProp(o.art.prop)} alt="" draggable={false} />;
+     return <div key={id} className={`island-object${edge}${offered.length || o.toy ? ' is-open' : ''}${react?.id === id ? ' is-tapped' : ''}`} style={{ left: `${o.spot[0]}%`, top: `${o.spot[1]}%`, '--size': o.size } as CSSProperties}>
       {offered.length > 0 && <span className="island-object-plays">{offered.map(p => <button key={p.id} type="button" className="island-invite" aria-label={p.title} onClick={() => start(p)}><Icon name={p.icon} size={48} /></button>)}</span>}
-      <button type="button" className="island-object-art" aria-label={offered[0]?.title ?? placeOf(id).name} onClick={() => offered[0] ? start(offered[0]) : tapObject(id)}>
-       {'icon' in o.art ? <Icon name={o.art.icon} size={160} /> : <img src={storyProp(o.art.prop)} alt="" draggable={false} />}
-      </button>
+      {o.toy ? <SceneToy kind={o.toy.kind} label={o.toy.label} friend={friends[0]} art={art} />
+       : <button type="button" className="island-object-art" aria-label={offered[0]?.title ?? placeOf(id).name} onClick={() => offered[0] ? start(offered[0]) : tapObject(id)}>{art}</button>}
      </div>;
     })}
     {session && partner !== undefined && <section className="island-stage" style={stageStyle} aria-label="一起做的事">

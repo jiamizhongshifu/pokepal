@@ -237,7 +237,7 @@
 /* ── The places of a scene are objects in it, and an object is how its activities begin ── */
 .island-object { position: absolute; z-index: 3; width: min(calc(var(--size) * 1vw), calc(var(--size) * 1.4vh)); translate: -50% -100%; }
 .island-object-art { display: block; width: 100%; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .14)); transform-origin: 50% 100%; transition: scale var(--motion-quick) var(--ease-spring); }
-.island-object-art > .icon, .island-object-art > img { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; object-fit: contain; }
+.island-object-art > .icon, .island-object-art > img, .island-toy > span > .icon, .island-toy > span > img { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; object-fit: contain; }
 .island-object-art:not(:disabled):active { scale: .94; }
 /* An object with something to do glows softly, the way a lit lantern says "come here". */
 .island-object.is-open .island-object-art { filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .14)) drop-shadow(0 0 0 var(--brand-paper)) drop-shadow(0 0 14px var(--scene-gold-soft)); }
@@ -271,3 +271,24 @@
 /* Handed to an object rather than the friend, the thing drops into it instead of flying to the friend's side. */
 .island-stage .island-ask:has(> .island-ask-target) .island-ask-stage.is-do .is-taken { animation: island-tuck var(--motion-reward) var(--ease-exit) forwards; }
 @keyframes island-tuck { to { translate: 0 -40%; scale: .3; opacity: 0; } }
+
+/* ── Toys that stay in a scene: played by tapping the object itself ── */
+.island-toy > span { display: block; transform-origin: 50% 100%; }
+.island-toy > .is-shaken { animation: island-wobble var(--motion-reward) var(--ease-standard); }
+.island-toy.is-castle > .is-shaken { animation: island-hop var(--motion-reward) var(--ease-standard); }
+/* A snack on a stick over the fire, then off to the friend. */
+.island-toy-snack { position: absolute; z-index: 2; left: -10%; bottom: 34%; width: 70%; translate: -50% 0; pointer-events: none; animation: island-bob var(--motion-move) var(--ease-breathe) infinite alternate; }
+.island-toy-snack > :not(i) { display: block; width: 100% !important; height: auto !important; aspect-ratio: 1; }
+.island-toy-snack i { position: absolute; left: 40%; top: 50%; width: 150%; height: 8px; border-radius: 4px; background: var(--scene-wood); rotate: 18deg; z-index: -1; }
+.island-toy-snack.is-eaten { animation: island-eaten var(--motion-reward) var(--ease-exit) forwards; }
+@keyframes island-eaten { to { translate: -300% -40%; scale: .3; opacity: 0; } }
+/* Fruit fallen from the tree lies at its foot; the basket beside it fills up. */
+.island-toy-fruit { position: absolute; z-index: 2; top: 88%; width: max(44%, 56px); aspect-ratio: 1; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .16)); animation: island-fall var(--motion-reward) var(--ease-exit); }
+.island-toy-fruit > * { width: 100% !important; height: 100% !important; }
+@keyframes island-fall { from { translate: 0 -260%; } }
+.island-toy-basket { position: absolute; z-index: 2; left: 100%; bottom: -4%; width: 56%; pointer-events: none; }
+.island-toy-basket img { display: block; width: 100%; }
+.island-toy-basket.is-full { animation: island-hop var(--motion-reward) var(--ease-standard); }
+.island-toy-basket b { position: absolute; right: -8%; top: -8%; display: grid; place-items: center; min-width: 34px; height: 34px; padding: 0 6px; border-radius: 17px; background: var(--brand-paper); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); color: var(--scene-wood); font-size: var(--text-lg); font-weight: 800; }
+.island-toy-wave { position: absolute; left: -20%; bottom: 0; width: 70% !important; height: auto !important; pointer-events: none; animation: island-wave 1.4s var(--ease-exit) forwards; }
+@keyframes island-wave { from { translate: -60% 0; opacity: 0; } 40% { opacity: 1; } to { translate: 120% 0; opacity: 0; } }

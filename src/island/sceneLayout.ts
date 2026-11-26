@@ -1,28 +1,32 @@
 import type { District, Spot } from './world';
+import type { ToyKind } from './SceneToy';
 
 /**
  * Where things stand inside each scene (% of the scene, where an object's foot rests). Every place of the area is
  * drawn as an object, and an object is how its activities begin: a child taps the tent to tidy up, the stage to light
  * the lamps. Friends stand where no object is. `size` is the object's width in % of the scene.
  */
-export interface SceneObject { art: { icon: string } | { prop: string }; spot: Spot; size: number }
+export interface SceneObject { art: { icon: string } | { prop: string }; spot: Spot; size: number;
+ /** A toy played by tapping the object itself (its activities start from the pictures above it); `label` is read aloud by screen readers. */
+ toy?: { kind: ToyKind; label: string } }
 export interface SceneLayout { friends: Spot[]; objects: Record<string, SceneObject> }
 
 const icon = (name: string) => ({ icon: name }), prop = (name: string) => ({ prop: name });
 export const SCENE_LAYOUT: Record<District, SceneLayout> = {
  camp: { friends: [[42, 64], [20, 62], [58, 54]], objects: {
   tent: { art: icon('tent'), spot: [84, 62], size: 22 },
-  fire: { art: icon('flame'), spot: [68, 68], size: 10 },
+  fire: { art: icon('flame'), spot: [68, 68], size: 10, toy: { kind: 'roast', label: '篝火，烤点心给伙伴吃' } },
  } },
  garden: { friends: [[16, 62]], objects: {
   tree: { art: prop('basket-apples'), spot: [34, 52], size: 9 },
   farm: { art: prop('watering-can'), spot: [34, 76], size: 9 },
   windmill: { art: icon('decor-pinwheel'), spot: [94, 46], size: 10 },
  } },
- leisure: { friends: [[48, 66], [26, 64], [66, 56]], objects: {
+ leisure: { friends: [[38, 70], [18, 68], [74, 64]], objects: {
+  'fruit-tree': { art: icon('tree'), spot: [60, 50], size: 16, toy: { kind: 'shake', label: '果树，摇一摇掉水果' } },
   hammock: { art: icon('rest'), spot: [10, 58], size: 12 },
-  bench: { art: icon('decor-table'), spot: [36, 50], size: 9 },
-  picnic: { art: prop('deco-picnic-basket'), spot: [72, 70], size: 10 },
+  bench: { art: icon('decor-table'), spot: [24, 46], size: 9 },
+  picnic: { art: icon('decor-mat'), spot: [86, 80], size: 11 },
   parasol: { art: icon('umbrella'), spot: [88, 60], size: 15 },
  } },
  play: { friends: [[44, 62], [22, 58], [64, 56]], objects: {
@@ -30,9 +34,11 @@ export const SCENE_LAYOUT: Record<District, SceneLayout> = {
   music: { art: icon('decor-music'), spot: [90, 54], size: 12 },
   sand: { art: prop('castle-building'), spot: [84, 76], size: 12 },
  } },
- beach: { friends: [[46, 62], [28, 66], [70, 58]], objects: {
+ // The right of the beach is kept for the boat that brings a new friend.
+ beach: { friends: [[50, 62], [26, 64], [68, 56]], objects: {
   pier: { art: icon('decor-track'), spot: [10, 64], size: 13 },
   shells: { art: icon('decor-shells'), spot: [60, 82], size: 10 },
+  sandcastle: { art: prop('castle-fallen'), spot: [38, 88], size: 13, toy: { kind: 'castle', label: '沙堆，点一下堆高城堡' } },
  } },
 };
 

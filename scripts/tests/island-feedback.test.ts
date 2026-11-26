@@ -51,3 +51,14 @@ test('every place stands in its scene as an object a child can tap, and objects 
   });
   assert.deepEqual(close, [], 'Objects in one scene stand apart, so each can be tapped.');
 });
+
+test('the beach keeps its right side for the boat that brings a new friend', () => {
+  // .beach-boat (island-home.css) stands at the right of the beach, from about 70% across and halfway down.
+  const under = Object.entries(SCENE_LAYOUT.beach.objects).filter(([, o]) => o.spot[0] + o.size / 2 > 70 && o.spot[1] > 50).map(([id]) => id);
+  assert.deepEqual(under, [], 'An object under the boat cannot be tapped: the boat takes the tap.');
+});
+
+test('each scene toy is placed once', () => {
+  const toys = Object.values(SCENE_LAYOUT).flatMap(l => Object.values(l.objects)).flatMap(o => o.toy ? [o.toy.kind] : []).sort();
+  assert.deepEqual(toys, ['castle', 'roast', 'shake']);
+});
