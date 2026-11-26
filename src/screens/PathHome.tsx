@@ -150,7 +150,7 @@ export function PathHome() {
   <header className="path-top">
    <div className="path-me">
     <button className="path-avatar" aria-label="更换我的头像" onClick={() => setEditing(true)}><TrainerAvatar avatar={save.trainer?.avatar} photo={save.trainer?.avatarPhoto} size={44} /></button>
-    {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => go({ name: 'catch' })}><InviteBerry type="poke" size={30} /><b key={save.balls.poke} className="motion-tick">{save.balls.poke}</b></button>}
+    {save.balls.poke > 0 && <button className="path-berry" aria-label={`邀请果 ${save.balls.poke} 个，去海边迎接新朋友`} onClick={() => { sfx('click'); go({ name: 'catch' }); }}><InviteBerry type="poke" size={30} /><b key={save.balls.poke} className="motion-tick">{save.balls.poke}</b></button>}
    </div>
    <div className="path-chapter">
     <button type="button" className="path-turn" aria-label="上一章" disabled={chapter.index === 0} onClick={() => turn(chapter.index - 1)}><Icon name="back" size={30} /></button>

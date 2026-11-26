@@ -77,7 +77,8 @@ export function Dex({ picking = false, browse }: { picking?: boolean; browse?:De
               <span className="dex-no">#{String(p.id).padStart(3, "0")}</span>
               <CreatureImg src={creatureAvatar(p.id)} alt="" draggable={false} loading={i < 12 ? "eager" : "lazy"} />
               <span className="dex-name">{p.nameZh}</span><small lang="en">{p.nameEn}</small>
-              <span className="dex-meet-status">{save.captures.some(c=>c.id===p.id) ? "已经是伙伴" : has ? "已经长大啦" : "可以去找它"}</span>
+              {/* In "my friends" every card is a friend: only one that has grown up says so. */}
+              {!(onlyOwned && save.captures.some(c=>c.id===p.id)) && <span className="dex-meet-status">{save.captures.some(c=>c.id===p.id) ? "已经是伙伴" : has ? "已经长大啦" : "可以去找它"}</span>}
             </button>
           );
         })}

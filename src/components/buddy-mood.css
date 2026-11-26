@@ -1,0 +1,8 @@
+/* The buddy answers the card: a hop when the answer is found, a sway on a try-again, and a small sign over it. */
+#root img.buddy-is-good { transform-origin: 50% 100%; animation: buddy-hop var(--motion-reward) var(--ease-standard) 2 !important; }
+#root img.buddy-is-again { transform-origin: 50% 100%; animation: buddy-sway var(--motion-move) var(--ease-standard) !important; }
+#root .buddy-mood-mark { position: absolute; z-index: 3; right: 2%; top: 0; pointer-events: none; animation: buddy-hop var(--motion-reward) var(--ease-standard); }
+#root .buddy-mood-mark > .icon { display: block; width: 44px !important; height: 44px !important; animation: none !important; }
+@keyframes buddy-hop { 40% { transform: translateY(-12%) scale(1.06); } }
+@keyframes buddy-sway { 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@media (prefers-reduced-motion: reduce) { #root img.buddy-is-good, #root img.buddy-is-again, #root .buddy-mood-mark { animation: none !important; } }
