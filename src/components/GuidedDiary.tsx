@@ -77,7 +77,7 @@ export function GuidedDiary({entry,onSave,onLeave,onLibrary,footer}:{entry:Diary
   </article>:<article className="diary-question diary-wrapup"><Icon name="heart" size={42}/><h2>{hasAnswers?'谢谢你，让我走进你的一天':'今天安静待一会儿，也很好'}</h2><p>{hasAnswers?'我们把刚才的声音珍藏起来，想听的时候就来这里。':'不用一定说点什么。等你想分享了，再来找伙伴。'}</p><div className="diary-answer-list">{DIARY_PROMPTS.map((p,i)=>{const a=entry.answers?.find(a=>a.question===p.id);return <div key={p.id}><div><strong>{p.title}</strong><small>{a?.skipped||!a?'这次先不说':a.audio?'声音已保存':'文字已保存'}</small></div><button disabled={busy} onClick={()=>move(i)}>回去看看</button></div>;})}</div>
    {hasAnswers?<button className="farm-primary" disabled={busy} onClick={()=>finish()}>{busy?'正在整理…':'保存我的日记'}</button>:<button className="farm-primary" onClick={onLeave}>回小岛，和伙伴待一会儿</button>}
    {hasAnswers&&!import.meta.env.VITE_ONLINE&&pendingDiaryAnswers(entry.answers??[]).length>0&&<details className="diary-parent"><summary>和大人一起转成文字（可选）</summary><p>把本次录音上传到火山转写，需要联网。</p><button disabled={busy} onClick={()=>finish(true)}>上传录音，转成文字</button></details>}
-   {hasAnswers&&!import.meta.env.VITE_ONLINE&&<p className="diary-caption">点‘转成文字’才会上传录音到火山。需要联网；请和大人一起检查文字，再保存故事。</p>}
+   {hasAnswers&&!import.meta.env.VITE_ONLINE&&<p className="diary-caption">点‘转成文字’才会把录音发给语音识别服务（火山引擎）。需要联网；请和大人一起检查文字，再保存故事。</p>}
   </article>}
   <p role="status" className="diary-guide-status">{status}</p>{error&&<p role="alert" className="diary-error">{error}</p>}
   <p className="diary-caption">没有标准答案，也没有分数。想停下来，随时可以返回。回答只保存在这台设备上。</p>

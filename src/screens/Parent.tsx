@@ -192,7 +192,7 @@ export function Parent() {
                 <input ref={fileRef} type="file" accept="application/json" hidden onChange={onImport} />
                 
               </div>
-              <div className="muted">存档、录音和小日记保存在当前设备。{import.meta.env.VITE_ONLINE?'网页版暂不提供云端日记转写，不会把日记录音发送到火山。':'只有大人点“上传录音，转成文字”时，才会把选中的日记录音发给语音识别服务（火山引擎），需要联网。'}游戏存档不包含录音和日记。请同时使用下方的日记备份；跟读录音可在学习记录中另存。</div>
+              <div className="muted">存档、录音和小日记保存在当前设备。{import.meta.env.VITE_ONLINE?'网页版暂不提供云端日记转写，不会把日记录音发给语音识别服务。':'只有大人点“上传录音，转成文字”时，才会把选中的日记录音发给语音识别服务（火山引擎），需要联网。'}游戏存档不包含录音和日记。请同时使用下方的日记备份；跟读录音可在学习记录中另存。</div>
             <StorageFacts/>
             <DiaryBackup/></div></details>
 <details className="parent-fold"><summary><Icon name="diary" size={28}/><span>小日记与原声<small>查看并逐篇删除</small></span></summary><div className="parent-fold-content"><ParentDiaries/></div></details>
