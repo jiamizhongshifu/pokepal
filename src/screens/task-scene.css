@@ -46,3 +46,38 @@
 @media (min-width: 701px) and (orientation: landscape) {
  #root .task-trace .trace-round .trace-pad { width: min(100%, max(180px, calc(100dvh - 112px - 330px - var(--guide-space, 0px) - env(safe-area-inset-top)))); }
 }
+
+/* A short screen (a phone held sideways): the card shows the whole round without scrolling — no kind label, a smaller
+   title and tools, pictures sized by the height left — so the choices are never cut off at the bottom. */
+@media (max-height: 500px) {
+ #root .task-staged .practice-card { top: calc(62px + env(safe-area-inset-top)); bottom: 8px; max-height: none; padding: 8px 16px 8px; border-radius: 22px; }
+ #root .task-staged .practice-card > header { padding-bottom: 2px; }
+ #root .task-staged .practice-card > header small { display: none; }
+ #root .task-staged .practice-card > header h2 { font-size: var(--text-lg); }
+ #root .task-staged .practice-card .round { padding: 0; gap: 4px; min-height: 0; }
+ #root .task-staged .practice-card .round-instruction { margin: 0; }
+ #root .task-staged .practice-card .round-instruction > span { font-size: var(--text-lg); }
+ #root .task-staged .practice-card .replay, #root .task-staged .practice-card .round button.help { min-height: 38px; padding: 4px 12px; font-size: var(--text-base); }
+ #root .task-staged .practice-card .choices { gap: 12px; }
+ #root .task-staged .practice-card .choice.pic, #root .task-staged .practice-card .choice.poke { height: calc(100dvh - 264px); min-height: 72px; width: auto; aspect-ratio: 1.2; }
+ #root .task-staged .practice-card .choice :is(img, .icon, .pic-icon) { width: auto !important; height: 72% !important; max-width: 86%; max-height: none; object-fit: contain; }
+ #root .task-staged .practice-card .round > .round-hint, #root .task-staged .practice-card .round > p:last-child { margin: 0; }
+ #root .task-staged .practice-card .choice .color-dot { width: 60%; height: auto; aspect-ratio: 1; }
+ #root .task-trace .trace-round .trace-instruction small { display: none; }
+ #root .task-trace .trace-round { padding: 0; gap: 12px; }
+ #root .task-trace .trace-round .trace-pad { width: calc(100dvh - 236px) !important; min-width: 140px; height: auto !important; }
+ /* The word and the buttons on the left, the letter with its strokes on the right: everything in one view. */
+ #root .task-trace .trace-round { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "side instr" "side pad" "tools steps" "status steps"; align-items: center; column-gap: 18px; row-gap: 4px; }
+ #root .task-trace .trace-round .trace-workspace { display: contents; }
+ #root .task-trace .trace-round .trace-side { grid-area: side; width: auto; }
+ #root .task-trace .trace-round .trace-example { gap: 2px; padding: 0; }
+ #root .task-trace .trace-round .trace-example > :is(img, .icon) { width: 44px !important; height: 44px !important; }
+ #root .task-trace .trace-round .trace-word { font-size: var(--text-xl); } #root .task-trace .trace-round .trace-word b { font-size: var(--text-3xl); }
+ #root .task-trace .trace-round .trace-listen { min-height: 38px; }
+ #root .task-trace .trace-round .trace-instruction { grid-area: instr; }
+ #root .task-trace .trace-round .trace-pad { grid-area: pad; justify-self: center; }
+ #root .task-trace .trace-round .trace-steps { grid-area: steps; }
+ #root .task-trace .trace-round .trace-tools { grid-area: tools; justify-content: center; gap: 8px; }
+ #root .task-trace .trace-round .trace-status { grid-area: status; }
+ #root .task-trace .trace-round .trace-tools .replay { min-height: 38px; padding: 4px 12px; }
+}

@@ -311,3 +311,5 @@
 .island-found li > :is(.icon, img, .learning-color) { width: 38px !important; height: 38px !important; }
 .island-found.is-done { background: var(--scene-gold-soft); }
 @media (max-width: 700px) { .island-found { top: calc(84px + env(safe-area-inset-top)); } .island-found li { width: 44px; height: 44px; } .island-hide { width: min(calc(var(--size) * 1.5vw), calc(var(--size) * 1vh)); } }
+/* On a short screen the found slots shrink and step behind what can be tapped (a friend's invite, an object's pictures). */
+@media (max-height: 500px) { .island-found { z-index: 2; padding: 4px 8px; } .island-found li { width: 38px; height: 38px; } .island-found li > :is(.icon, img, .learning-color) { width: 28px !important; height: 28px !important; } }

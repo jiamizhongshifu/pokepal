@@ -92,3 +92,5 @@
 }
 /* The meadow stays sunlit even when the island uses its night palette. */
 /* A narrow viewport must constrain the meadow's intrinsic grid track. */
+/* On a wide screen the search button reads like the tabs beside it: picture and word side by side, the same height. */
+@media(min-width:601px){#root .notebook-search-toggle{flex-direction:row;gap:8px;min-height:64px;padding:0 18px;font-size:var(--text-base)}}
