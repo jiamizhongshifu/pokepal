@@ -8,12 +8,12 @@ const config = ts.readConfigFile('tsconfig.json', ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, '\n'));
 const project = ts.parseJsonConfigFileContent(config.config, ts.sys, resolve('.'));
 const graph = new Map();
-for (const file of project.fileNames.filter(file => !file.endsWith('.d.ts'))) {
+for (const file of project.fileNames.filter(file => /\.(?:tsx?|m?js)$/.test(file) && !file.endsWith('.d.ts'))) {
   const source = readFileSync(file, 'utf8');
   const { outputText } = ts.transpileModule(source, { compilerOptions: project.options, fileName: file });
   const imports = ts.preProcessFile(outputText, true, true).importedFiles;
   const targets = imports.map(({ fileName }) => ts.resolveModuleName(fileName, file, project.options, ts.sys).resolvedModule)
-    .filter(target => target && !target.isExternalLibraryImport && /\.tsx?$/.test(target.resolvedFileName))
+    .filter(target => target && !target.isExternalLibraryImport && /\.(?:tsx?|m?js)$/.test(target.resolvedFileName))
     .map(target => relative('.', target.resolvedFileName));
   graph.set(relative('.', file), new Set(targets));
 }

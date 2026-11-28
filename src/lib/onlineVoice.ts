@@ -1,3 +1,4 @@
+import { voiceShard } from './voiceShard.js';
 import type { RawTiming } from './storyWords';
 /** Online recordings share the original Volcengine MP3 bytes; no runtime synthesis. */
 type Recording = [pack:string, offset:number, bytes:number, timing?:RawTiming];
@@ -5,7 +6,6 @@ const shards=import.meta.env.VITE_VOICE_SHARDS as string[];
 const base=String(import.meta.env.VITE_VOICE_BASE || '').replace(/\/$/,'');
 const indexes=new Map<number,Promise<Record<string,Recording>>>();
 const packs=new Map<string,Promise<ArrayBuffer>>();
-export function voiceShard(key:string){let h=2166136261;for(let i=0;i<key.length;i++)h=Math.imul(h^key.charCodeAt(i),16777619);return (h>>>0)%256;}
 async function get<T>(path:string,read:(r:Response)=>Promise<T>):Promise<T>{
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
  try{const response=await fetch(`${base}/voice-online/${path}`,{signal:controller.signal});if(!response.ok)throw new Error(`Voice HTTP ${response.status}`);return await read(response);}finally{clearTimeout(timer);}

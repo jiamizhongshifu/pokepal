@@ -1,3 +1,4 @@
+import { voiceShard, VOICE_SHARD_COUNT } from '../../src/lib/voiceShard.js';
 import {readFile,readdir,stat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
@@ -5,11 +6,11 @@ import {resolve} from 'node:path';
 const root=resolve(process.argv[2]||'dist-online');
 const manifest=JSON.parse(await readFile('public/voice/manifest.json','utf8'));
 const names=JSON.parse(await readFile(resolve(root,'voice-online/build-index.json'),'utf8'));
+assert.equal(names.length, VOICE_SHARD_COUNT);
 const packNames=new Set(),entries=[];
-const shardKey=key=>{let h=2166136261;for(let i=0;i<key.length;i++)h=Math.imul(h^key.charCodeAt(i),16777619);return(h>>>0)%256;};
 for(let i=0;i<names.length;i++){
  const bytes=await readFile(resolve(root,'voice-online/index',names[i]));assert.equal(createHash('sha256').update(bytes).digest('hex').slice(0,24)+'.json',names[i]);
- for(const [key,entry]of Object.entries(JSON.parse(bytes))){assert.equal(shardKey(key),i);assert.ok(manifest[key]);entries.push([key,entry]);packNames.add(entry[0]);}
+ for(const [key,entry]of Object.entries(JSON.parse(bytes))){assert.equal(voiceShard(key),i);assert.ok(manifest[key]);entries.push([key,entry]);packNames.add(entry[0]);}
 }
 assert.equal(entries.length,Object.keys(manifest).length);
 {const timings=JSON.parse(await readFile('public/voice/timings.json','utf8'));for(const [key,e]of entries){const x=timings[key];assert.deepEqual(e[3],x&&{w:x.w,t:x.t,end:x.end},`Timing for ${key}`);}}
