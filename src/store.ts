@@ -1,3 +1,4 @@
+import { newSave, prepareForPlay, rollover } from './lib/saveLifecycle';
 import { TASK_KINDS, type TaskKind } from './data/tasks';
 import { withTransition } from './lib/viewTransition';
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
@@ -11,23 +12,23 @@ import {markReviewAudio,settleUnitRound, recordOpportunity, markHomeTried, type 
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
-import { normalizeLearningSettings,applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
+import { applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { mergeInvites, invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
-import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
+import { rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
 import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './lib/farm';
 import { create } from "zustand";
-import type { Daily, DaySummary, SaveData, Settings } from "./types";
+import type { SaveData, Settings } from "./types";
 import { todayStr } from "./lib/date";
 import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictError } from "./lib/db";
 import {clearParentNotice} from './lib/parentNotice';
 import { validateSave } from "./lib/saveValidation";
 import { acquireSaveSession } from "./lib/saveSession";
-import { CREATURES, FIRST_FRIEND } from "./data/creatures";
+import { CREATURES } from "./data/creatures";
 import { setSpeechRate } from "./lib/speech";
 import { isAvatarPhoto } from "./lib/avatar";
-import { migrateLearning,ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
+import { ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
 import { learningEntry,unitUnlocked,unitById,unitRoundCount } from './data/curriculum';
 
 export interface DexBrowseState { onlyOwned:boolean; query:string; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
@@ -47,61 +48,6 @@ export type Screen =
   | { name: "dex"; picking?: boolean; browse?:DexBrowseState }
   | { name: "dexDetail"; id: number; picking?: boolean; browse?:DexBrowseState }
   | { name: "parent" };
-
-const DEFAULT_SETTINGS: Settings = { dailyMinutes: 15, tasksPerDay: 4, level: 1, favorites: [FIRST_FRIEND], speechRate: 1 };
-
-function newDaily(date: string): Daily {
-  const board = [...TASK_KINDS];
-  return {
-    date,
-    energyEarned: 0,
-    board,
-    boardDone: board.map(() => false),
-    bonusGiven: false,
-    tasksCompleted: 0,
-    heard: 0,
-    spoken: 0,
-    words: [],
-    caught: [],
-    playSeconds: 0,
-    extraSeconds: 0
-  };
-}
-
-function newSave(): SaveData {
-  return {
-    version: 1,
-    trainer: null,
-    energy: 0,
-    balls: { poke: 0, great: 0, ultra: 0, master: 0 },
-    captures: [],
-    daily: newDaily(todayStr()),
-    streak: { lastDate: "", count: 0 },
-    wordStats: {},
-    settings: normalizeLearningSettings({ ...DEFAULT_SETTINGS }),
-    history: []
-  };
-}
-
-function summarize(d: Daily): DaySummary {
-  return {
-    date: d.date,
-    energyEarned: d.energyEarned,
-    tasksCompleted: d.tasksCompleted,
-    heard: d.heard,
-    spoken: d.spoken,
-    words: d.words.filter((w) => !w.startsWith("letter:")).length,
-    caught: d.caught.length,
-    playMinutes: Math.round(d.playSeconds / 60)
-  };
-}
-
-function rollover(s: SaveData) {
-  const today = todayStr();
-  if (s.daily.date === today) return;
-  s.history = [...s.history.filter((h) => h.date !== s.daily.date), summarize(s.daily)].slice(-30);
-  s.daily = newDaily(today);
-}
 
 interface State {
   /** Light up newly finished path stops once; island stops grant the next island upgrade. Returns the keys celebrated. */
@@ -254,10 +200,9 @@ export const useGame = create<State>((set, get) => {
           if(saving)await saving;
           const snapshot=await readSaveSnapshot();
           const s=snapshot.save===undefined?newSave():validateSave(snapshot.save);
-          s.settings=normalizeLearningSettings({...DEFAULT_SETTINGS,...s.settings});
           if(s.trainer&&!s.trainer.avatar.startsWith('avatar-'))s.trainer.avatar='avatar-red';
-          if(s.trainer&&!isAvatarPhoto(s.trainer.avatarPhoto))delete s.trainer.avatarPhoto;
-          migrateLearning(s);migrateParticipation(s);rollover(s);setSpeechRate(s.settings.speechRate);
+          prepareForPlay(s);
+          setSpeechRate(s.settings.speechRate);
           revision=snapshot.revision;pendingSave=undefined;
           const backup=await loadSaveBackup().catch(()=>undefined);
           set({save:s,loaded:true,saveIssue:null,hasSaveBackup:!!backup});
@@ -499,9 +444,7 @@ export const useGame = create<State>((set, get) => {
       // Validate the complete candidate before touching either live state or the disk.
       const s=validateSave(data);
       if(get().saveBusy||get().saveIssue||!get().loaded)throw new Error('请先完成存档重试，再导入。');
-      s.settings=normalizeLearningSettings({...DEFAULT_SETTINGS,...s.settings});
-      if(s.trainer&&!isAvatarPhoto(s.trainer.avatarPhoto))delete s.trainer.avatarPhoto;
-      migrateLearning(s);migrateParticipation(s);rollover(s);
+      prepareForPlay(s);
       set({saveBusy:true});
       try{
         await flushSave();
