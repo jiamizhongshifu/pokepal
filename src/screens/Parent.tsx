@@ -21,7 +21,8 @@ import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/cre
 import { learningPath, guidedPath, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
 import { recordingCount } from "../lib/db";
-import { say, voiceInfo } from "../lib/speech";
+import { voiceInfo } from "../lib/voiceAssets";
+import { say } from "../lib/speech";
 import type { BallType, SaveData } from "../types";
 import { Icon } from "../icons";
 import { CreatureImg } from "../components/CreatureImg";

@@ -3,6 +3,8 @@
 <script type="module">
 // Run through Vite: /scripts/tests/island-audio.browser.html.
 // Test real playback orchestration with deterministic audio/network boundaries.
+// Exercise audio after the screen change, independently of the browser's visual crossfade.
+Object.defineProperty(document, 'startViewTransition', {value: undefined});
 const sources=[];
 let pendingDownload;
 class FakeAudioContext {
@@ -35,14 +37,14 @@ try{
  const go=name=>useGame.getState().go({name,...(name==='home'?{view:'island'}:{})});
  go('home');
  const delayed=island.sayOnIsland(['en','pending']);await until(()=>pendingDownload);assert(pendingDownload,'download started');
- go('tasks');pendingDownload();assert(await delayed===false,'pending island recording must be rejected after navigation');assert(sources.length===0,'no late audio start');
- result.push('Pending island download cannot start on tasks');
+ go('practice');pendingDownload();assert(await delayed===false,'pending island recording must be rejected after navigation');assert(sources.length===0,'no late audio start');
+ result.push('Pending island download cannot start in practice');
  const teaching=speech.say(['en','lesson']);await until(()=>sources.length===1);const teacher=sources.at(-1);assert(teacher,'lesson starts');
  const stale=island.narrateOnIsland(['en','island']);assert(await stale.done===false,'hidden island call rejected');stale.cancel();
  assert(!teacher.stopped&&speech.isSpeaking(),'rejected island call/cancellation must preserve lesson');teacher.finish();assert(await teaching===true,'teaching completes');
  result.push('Late island call and cancellation preserve foreground teaching');
  go('home');const sequence=island.sayOnIsland(['en','first'],35,['en','second']);await until(()=>sources.length===2);sources.at(-1).finish();await flush();
- const count=sources.length;go('tasks');assert(await sequence===false,'sequence is cancelled during pause');assert(sources.length===count,'second line cannot leak');
+ const count=sources.length;go('practice');assert(await sequence===false,'sequence is cancelled during pause');assert(sources.length===count,'second line cannot leak');
  result.push('Leaving during a pause suppresses later bilingual lines');
  go('home');const resumed=island.sayOnIsland(['en','island']);await until(()=>sources.length===count+1);assert(sources.length===count+1,'returning home allows new speech');sources.at(-1).finish();assert(await resumed===true,'home speech completes');
  result.push('Returning home restores island speech');

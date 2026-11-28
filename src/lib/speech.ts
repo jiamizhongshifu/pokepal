@@ -1,7 +1,6 @@
 import { playCreatureVoice } from "./creatureVoice";
-import { onlineVoiceBytes } from "./onlineVoice";
+import { loadVoicePack, resolveVoice, voiceBytes, voiceTiming, voiceInfo } from "./voiceAssets";
 import { type CaptionPart } from "./captions";
-import { onlineVoiceAvailable, onlineVoiceTiming } from "./onlineVoice";
 import { voiceKey, type VoicePace } from "./voiceKey";
 import type { RawTiming } from "./storyWords";
 import type { Lang } from "../types";
@@ -33,60 +32,25 @@ export function onVoicePlayback(listener: (playback: VoicePlayback | null) => vo
 }
 const emitPlayback = (playback: VoicePlayback | null) => playbackListeners.forEach((l) => l(playback));
 
-let localTimings: Promise<Record<string, RawTiming>> | null = null;
-function voiceTiming(key: string): Promise<RawTiming | undefined> {
-  if (import.meta.env.VITE_ONLINE) return onlineVoiceTiming(key);
-  if (!localTimings) localTimings = fetchVoiceAsset("/voice/timings.json", (r) => r.json()).catch(() => { localTimings = null; return {}; });
-  return localTimings.then((all) => all[key]);
-}
-export const ttsAvailable = () => typeof window !== "undefined" && !!(window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext);
-export const voiceInfo = () => ({ en: "Allison", zh: "小雪", provider: "volcengine", ready: import.meta.env.VITE_ONLINE || !!voiceManifest });
-
-// ---------- 预合成配音（火山引擎豆包语音合成，构建期生成于 public/voice） ----------
-let voiceManifest: Record<string, string> | null = null;
 const bufferCache = new Map<string, Promise<AudioBuffer | null>>();
 let currentSource: AudioBufferSourceNode | null = null;
 const missed = new Set<string>();
 
-async function fetchVoiceAsset<T>(url: string, read: (r: Response) => Promise<T>): Promise<T> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 12000);
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) throw new Error(`Voice HTTP ${response.status}`);
-    return await read(response);
-  } finally { clearTimeout(timer); }
-}
-
-let manifestLoading: Promise<void> | null = null;
-export function loadVoicePack(): Promise<void> {
-  if (import.meta.env.VITE_ONLINE || voiceManifest) return Promise.resolve();
-  if (!manifestLoading) manifestLoading = (async () => {
-    try {
-      voiceManifest = await fetchVoiceAsset("/voice/manifest.json", r => r.json());
-    } catch {
-      voiceManifest = null;
-    } finally {
-      manifestLoading = null;
-    }
-  })();
-  return manifestLoading;
-}
 void loadVoicePack();
 
-export const voiceDiagnostics = () => ({ provider: "volcengine", ready: import.meta.env.VITE_ONLINE || !!voiceManifest, missing: [...missed] });
+export const voiceDiagnostics = () => ({ provider: "volcengine", ready: voiceInfo().ready, missing: [...missed] });
 function reportVoiceIssue(text: string, lang: Lang, reason: string) {
-  const key = `${lang}|${text}`;
+  const key = voiceKey(lang, text);
   if (!missed.has(key)) { missed.add(key); console.warn("[火山配音未播放]", reason, lang, text); }
 }
 
 function voiceBuffer(file: string): Promise<AudioBuffer | null> {
   let p = bufferCache.get(file);
   if (!p) {
-    p = (import.meta.env.VITE_ONLINE ? onlineVoiceBytes(file).then(ab => { if (!ab) throw new Error("Recording unavailable"); return ab; }) : fetchVoiceAsset(`/voice/${file}`, r => r.arrayBuffer()))
+    p = voiceBytes(file)
       .then((ab) => getAudioContext().decodeAudioData(ab))
       .catch(() => {
-        bufferCache.delete(file);
+        if (bufferCache.get(file) === p) bufferCache.delete(file);
         return null;
       });
     bufferCache.set(file, p);
@@ -100,12 +64,10 @@ function voiceBuffer(file: string): Promise<AudioBuffer | null> {
 async function playVoice(text: string, lang: Lang, myToken: number, allowed: () => boolean): Promise<boolean> {
   await loadVoicePack();
   if (myToken !== token || !allowed()) return false;
-  const slow = pace === "slow" && lang === "en" ? voiceKey(lang, text, "slow") : undefined;
-  const key = slow && (import.meta.env.VITE_ONLINE ? await onlineVoiceAvailable(slow) : voiceManifest?.[slow]) ? slow : voiceKey(lang, text);
+  const { key, file } = await resolveVoice(lang, text, pace);
   if (myToken !== token || !allowed()) return false;
-  const file = import.meta.env.VITE_ONLINE ? key : voiceManifest?.[key];
   if (!file) {
-    reportVoiceIssue(text, lang, voiceManifest ? "missing-file" : "manifest-unavailable");
+    reportVoiceIssue(text, lang, voiceInfo().ready ? "missing-file" : "manifest-unavailable");
     return false;
   }
   const [buf, timing] = await Promise.all([voiceBuffer(file), playbackListeners.size ? voiceTiming(key) : undefined]);

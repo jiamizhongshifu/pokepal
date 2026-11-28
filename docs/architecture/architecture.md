@@ -30,7 +30,7 @@ flowchart TD
 | 页面、临时弹层 | App 和页面组件负责显示。store 的 go/back 保留可返回的浏览页，切换存档会重置足迹。单次练习和录音的临时状态归当前组件。 |
 | 学习、奖励与小岛 | curriculum 定义课程与顺序，learningProgress 维护学习记录，learningPath 计算路线，participation 结算每日参与。island/world 定义地点，plays、errands、parties 各负责一种活动。store 组合动作并决定何时持久化。 |
 | 本地数据 | types 定义存档契约，saveValidation 校验外部数据、在副本上迁移历史字段。db 拥有版本、事务、修订号和导入前备份。儿童日记和跟读录音是独立数据表。 |
-| 语音与媒体 | voiceKey 定义台词键，speech 调度播放，onlineVoice 读取发布包。scripts/voice 与 scripts/art 生产媒体。运行时录音与合成素材分开管理。 |
+| 语音与媒体 | voiceKey 定义台词键，speech 调度播放，voiceAssets 读取本地清单或发布包。scripts/voice 与 scripts/art 生产媒体。运行时录音与合成素材分开管理。 |
 | 界面与视觉 | screens 组织页面，components 复用操作、导航、图标和无障碍行为。brand-tokens.css 定义品牌变量。图像位置来自 sceneLayers.generated.json，二维与立体渲染共用布局。样式欠账由既有样式测试限定。 |
 | 设备能力 | lib/mic、clipRecorder、native、network 处理设备生命周期。绘本临时回放、练习留档、小日记原声有不同保留契约。 |
 | 配置、更新与缓存 | vite.config.ts 组装入口、构建变量与缓存。scripts/online 管分片、网站清单、请求头和产物验证。onlineUpdate 管网页换版，offlineUpdate 服务离线包。安卓及离线包保留原发布入口。 |
