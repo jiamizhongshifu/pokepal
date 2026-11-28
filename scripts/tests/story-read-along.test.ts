@@ -40,7 +40,7 @@ test('a word stays lit from its start until the next word; nothing is lit in lea
  assert.deepEqual([0, 0.39, 0.4, 0.79, 0.8, 1.2, 1.59, 1.6].map(s => wordAt(timing, s)), [-1, -1, 0, 0, 1, 2, 2, -1]);
 });
 
-test('every picture-book sentence has aligned word timings at both paces in the local voice pack', () => {
+test('media: every picture-book sentence has aligned word timings at both paces in the local voice pack', () => {
  const timings = JSON.parse(readFileSync('public/voice/timings.json', 'utf8')) as Record<string, RawTiming>;
  const manifest = JSON.parse(readFileSync('public/voice/manifest.json', 'utf8')) as Record<string, string>;
  for (const { en } of pages) for (const pace of ['normal', 'slow'] as const) {

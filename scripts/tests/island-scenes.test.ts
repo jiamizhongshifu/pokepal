@@ -17,7 +17,7 @@ const fixture=()=>{const s=validateSave(JSON.parse(readFileSync('scripts/tests/f
 const learn=(s:SaveData,n:number)=>{for(const u of LEARNING_UNITS.slice(0,n))progressUnit(s,u.id,unitRoundCount(u),100);};
 const friends:Standing[]=[{id:1001,species:'bubbo',place:'tent'},{id:1041,species:'berry',place:'tree'}];
 
-test('every area of the island is a scene with its own picture',()=>{
+test('media: every area of the island is a scene with its own picture',()=>{
  assert.deepEqual([...SCENE_ORDER].sort(),DISTRICTS.map(d=>d.id).sort());
  for(const d of SCENE_ORDER)assert.ok(existsSync(`public/scenes/flat-v1/story-bg/${SCENES[d].background}.svg`),d);
 });

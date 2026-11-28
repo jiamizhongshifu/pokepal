@@ -36,7 +36,7 @@ flowchart TD
 | 配置、更新与缓存 | vite.config.ts 组装入口、构建变量与缓存。scripts/online 管分片、网站清单、请求头和产物验证。onlineUpdate 管网页换版，offlineUpdate 服务离线包。安卓及离线包保留原发布入口。 |
 | 错误与恢复 | SaveRecovery 处理读取、写入、冲突与重试。网络统计失败可丢弃，媒体读取失败允许下次点击重试。它们需要各自的失败语义。 |
 | 访问控制与统计 | 家长入口由 ParentGate 负责。访问量接口校验来源、格式、限额与隐私信号。analyticsPolicy、trafficPolicy、interactionPolicy 限定可发送内容。家长授权、退出选择和儿童数据各有独立用途。 |
-| 工具与验收 | scripts/tests 自动发现用例。check:source 用源码跑依赖、类型、静态检查和核心契约测试。check 还运行全部媒体用例。网页构建走 scripts/online/build.mjs，发布另行执行。 |
+| 工具与验收 | scripts/tests 自动发现用例。check:source 用源码跑依赖、类型、静态检查和全部无需媒体的测试。check 还运行全部媒体用例。网页构建走 scripts/online/build.mjs，发布另行执行。 |
 
 ## 决策记录
 

@@ -16,7 +16,7 @@ test('operation success survives storage without inventing seen state or enablin
  assert(validOnboarding(JSON.parse(JSON.stringify(s.onboarding))));
  for(const completed of [null,[],{catch:1},{toString:true},{unknown:true}])assert.equal(validOnboarding({...s.onboarding,completed}),false);
 });
-test('every guide uses an existing icon and a generated Volcengine voice asset',()=>{
+test('media: every guide uses an existing icon and a generated Volcengine voice asset',()=>{
  const manifest=JSON.parse(readFileSync('public/voice/manifest.json','utf8'));
  const icons=readFileSync('src/icons/generated.ts','utf8');
  for(const [id,g] of Object.entries(GUIDES)){

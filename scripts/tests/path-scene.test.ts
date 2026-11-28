@@ -41,7 +41,7 @@ test('what a stop shows is always a picture that exists',()=>{
 import {existsSync} from 'node:fs';
 import {LEARNING_CHAPTERS} from '../../src/data/curriculum';
 import {PATH_ART,pathArt} from '../../src/data/sceneArt';
-test('every chapter of the path has its own painting, listed in the art catalogue as a repeat of the first one\'s layout',()=>{
+test('media: every chapter of the path has its own painting, listed in the art catalogue as a repeat of the first one\'s layout',()=>{
  assert.equal(PATH_ART.length,LEARNING_CHAPTERS.length);assert.equal(new Set(PATH_ART).size,PATH_ART.length);
  const catalogue=JSON.parse(readFileSync('scripts/art/scenes.json','utf8')).scenes as {id:string;group:string;layoutOf?:string}[];
  PATH_ART.forEach((id,i)=>{
@@ -53,7 +53,7 @@ test('every chapter of the path has its own painting, listed in the art catalogu
 
 import {reviewScene,unitSituations} from '../../src/data/curriculum';
 import {storyBackground} from '../../src/data/sceneArt';
-test('a word comes back in the scene of the lesson it was last practised in, else its own lesson\'s',()=>{
+test('media: a word comes back in the scene of the lesson it was last practised in, else its own lesson\'s',()=>{
  for(const u of LEARNING_UNITS)for(const key of [...u.words,...unitSituations(u).map(x=>x.phrase)]){
   const scene=reviewScene(key);assert.ok(existsSync(`public${storyBackground(scene)}`),`${key}: ${scene}`);
  }

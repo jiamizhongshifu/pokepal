@@ -8,7 +8,7 @@ import {LEARNING_UNITS,learningEntry} from '../../src/data/curriculum';
 import {placeById} from '../../src/island/world';
 import {storyProp} from '../../src/data/sceneArt';
 
-test('every short story has bilingual pages, matching art assets and reusable learning words',()=>{
+test('media: every short story has bilingual pages, matching art assets and reusable learning words',()=>{
  for(const story of LIFE_SHORT_STORIES){
   assert.equal(STORIES.filter(s=>s.id===story.id).length,1);
   assert(LEARNING_UNITS.some(u=>u.story===story.id),'story has a relevant lesson');

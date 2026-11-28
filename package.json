@@ -28,7 +28,7 @@
     "preview:ipad": "vite preview --host",
     "analytics:report": "node scripts/online/traffic-report.mjs",
     "architecture": "node scripts/architecture.mjs",
-    "check:source": "npm run architecture && npm run typecheck && npm run lint && node --import tsx --test scripts/tests/save-validation.test.ts scripts/tests/traffic.test.ts scripts/tests/learning-path.test.ts"
+    "check:source": "npm run test -- --test-skip-pattern=^media: && npm run architecture && npm run typecheck && npm run lint"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",

@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { resolve, relative } from 'node:path';
+import { resolve, relative, sep } from 'node:path';
 import ts from 'typescript';
 
 // Inspect emitted imports so a type-only reference cannot create a runtime cycle.
@@ -7,6 +7,10 @@ import ts from 'typescript';
 const config = ts.readConfigFile('tsconfig.json', ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, '\n'));
 const project = ts.parseJsonConfigFileContent(config.config, ts.sys, resolve('.'));
+if (project.errors.length) throw new Error(ts.formatDiagnosticsWithColorAndContext(project.errors, {
+  getCanonicalFileName: path => path, getCurrentDirectory: process.cwd, getNewLine: () => '\n',
+}));
+const projectPath = file => relative('.', file).split(sep).join('/');
 const graph = new Map();
 for (const file of project.fileNames.filter(file => /\.(?:tsx?|m?js)$/.test(file) && !file.endsWith('.d.ts'))) {
   const source = readFileSync(file, 'utf8');
@@ -14,8 +18,8 @@ for (const file of project.fileNames.filter(file => /\.(?:tsx?|m?js)$/.test(file
   const imports = ts.preProcessFile(outputText, true, true).importedFiles;
   const targets = imports.map(({ fileName }) => ts.resolveModuleName(fileName, file, project.options, ts.sys).resolvedModule)
     .filter(target => target && !target.isExternalLibraryImport && /\.(?:tsx?|m?js)$/.test(target.resolvedFileName))
-    .map(target => relative('.', target.resolvedFileName));
-  graph.set(relative('.', file), new Set(targets));
+    .map(target => projectPath(target.resolvedFileName));
+  graph.set(projectPath(file), new Set(targets));
 }
 
 if (process.argv.includes('--dot')) {

@@ -18,11 +18,11 @@
 
 ## 运行与验证
 
-使用 Node.js 22+：
+源码测试使用 Node.js 22 和 Python 3（校验配音时间轴算法）：
 
 ```sh
 npm ci
-npm run typecheck
+npm run check:source
 ```
 
 完整开发与构建还需要下列资源目录，结构可从源代码引用和 `scripts/online/prepare.mjs` 核对：

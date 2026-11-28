@@ -6,7 +6,7 @@ import { PATH_ART, STORY_BACKGROUNDS } from '../../src/data/sceneArt';
 import { LAYER_AREA } from '../../src/island/islandLayers';
 
 const RUN = 'run python3 scripts/art/vectorize.py';
-test('every vector piece has its file and a box inside the picture; island pieces belong to an area', () => {
+test('media: every vector piece has its file and a box inside the picture; island pieces belong to an area', () => {
  for (const scene of ['island-map', 'learning-path'] as const) {
   const dir = `public/scenes/flat-v1/layers/${scene}`;
   for (const [name, b] of scenePieces(scene)) {
@@ -17,14 +17,14 @@ test('every vector piece has its file and a box inside the picture; island piece
  }
 });
 
-test('every scene ground and background is a vector file', () => {
+test('media: every scene ground and background is a vector file', () => {
  for (const scene of ['island-map', ...PATH_ART]) assert.ok(existsSync(`public/scenes/flat-v1/layers/${scene}/base.svg`), `${scene} has no vector ground: ${RUN} ${scene}`);
  for (const scene of ['island-map', ...PATH_ART]) for (const side of ['left', 'right']) assert.ok(existsSync(`public/scenes/flat-v1/layers/${scene}/side-${side}.svg`), `${scene} has no wide-screen ${side} side: ${RUN} --sides ${scene}`);
  for (const bg of STORY_BACKGROUNDS) assert.ok(existsSync(`public/scenes/flat-v1/story-bg/${bg}.svg`), `${bg}: ${RUN} --whole ${bg}`);
  assert.ok(existsSync('public/scenes/flat-v1/world/diary-desk.svg'), `${RUN} --whole diary-desk`);
 });
 
-test('icons, props and creatures are vector files, and no screen asks for a painted bitmap', async () => {
+test('media: icons, props and creatures are vector files, and no screen asks for a painted bitmap', async () => {
  const { ICON_ASSETS } = await import('../../src/icons/generated');
  // The app's home-screen icon (/icons/icon-512.png) stays a PNG: install prompts need one.
  for (const [name, url] of Object.entries(ICON_ASSETS).filter(([, u]) => u.startsWith('/scenes/'))) {

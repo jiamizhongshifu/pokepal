@@ -81,7 +81,7 @@ test('the child gives the instruction only in the last chapter, with learned sen
  for(const k of items)assert.ok(LEARNING_UNITS.slice(0,20).some(u=>u.phrase===k),`${k} is learned`);
 });
 
-test('a combined instruction is one natural phrase, and every one the island can give is in the recorded list',()=>{
+test('media: a combined instruction is one natural phrase, and every one the island can give is in the recorded list',()=>{
  assert.equal(comboLine('red','ball'),'a red ball');assert.equal(comboLine('orange','hat'),'an orange hat');
  assert.equal(comboLine('blue','water'),'blue water');assert.equal(comboLine('purple','grapes'),'purple grapes');assert.equal(comboLine('green','milk'),'green milk');
  const lines=new Set(comboLines());assert.equal(lines.size,comboLines().length,'no duplicates');

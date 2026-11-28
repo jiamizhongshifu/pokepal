@@ -18,7 +18,7 @@
 
 ```sh
 npm ci
-npm run typecheck  # 仅源码类型检查，无需媒体资源
+npm run check:source  # 源码测试、依赖边界、类型与静态检查，无需媒体资源
 # 准备好本地媒体与配音后：
 npm run dev:http        # http://localhost:5180/
 npm run build           # 网页构建（含测试、类型检查、lint），输出 dist-online/
@@ -77,7 +77,7 @@ npm run preview         # http://127.0.0.1:4190/ 预览 dist-online/
 ## 技术栈
 
 - React 18 + TypeScript + Vite 6；Zustand 管理状态；Dexie / IndexedDB 保存本地存档和录音。
-- 小岛是 2D 插画加可点区域（`src/island/IslandMap.tsx`），伙伴在站点之间平滑移动，昼夜与天气用色调图层表现。
+- 小岛是 2D 插画加可点区域（`src/screens/Island.tsx`），伙伴在站点之间平滑移动，昼夜与天气用色调图层表现。
 - vite-plugin-pwa / Service Worker 负责网页缓存和更新。
 
 ## 火山配音
@@ -108,8 +108,10 @@ npm run voice:verify
 ## 检查与验收
 
 ```bash
-npm run check   # 测试 + 类型检查 + lint（lint 警告上限只降不升）
+npm run check   # 全部测试、依赖边界、类型与静态检查
 ```
+
+模块所有权、依赖图生成方式和决策见[架构说明](docs/architecture/architecture.md)。
 
 **代码检查、浏览器验收和线上发布分开记录。** 推送 GitHub 不会更新网站；网站发布见下文。
 
@@ -120,7 +122,6 @@ src/data/            小精灵、行为、课程、词库、故事与插画路�
 src/island/          2D 插画小岛
 src/screens/         页面、学习工具与练习
 src/components/      共用界面、头像、录音组件
-src/scene/           小岛站点、作息、天气与伙伴活动逻辑
 src/lib/             配音、叫声合成、学习进度、存档迁移与设备适配
 src/icons/           图标索引
 src/store.ts         状态、奖励、存档和学习操作

@@ -71,7 +71,7 @@ test('listen-only review is not a scored attempt and does not reduce a longer in
  r.nextReview=now+7*DAY;restAfterListening(s,'ball',now+2000);assert.equal(r.nextReview,now+7*DAY);
  restAfterListening(s,'not-a-word',now);assert.equal(Object.keys(s.learning!.records).length,1);
 });
-test('every core phrase has real visual assets and existing Volcengine audio',()=>{
+test('media: every core phrase has real visual assets and existing Volcengine audio',()=>{
  const manifest=JSON.parse(readFileSync('public/voice/manifest.json','utf8'));
  for(const phrase of PHRASES){
   assert(PHRASE_PICTURES[phrase.en]?.length,phrase.en);

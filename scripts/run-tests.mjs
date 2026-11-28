@@ -7,6 +7,6 @@ const files = readdirSync('scripts/tests')
   .map(name => `scripts/tests/${name}`);
 if (!files.length) throw new Error('scripts/tests 下没有找到测试文件。');
 
-const result = spawnSync(process.execPath, ['--import', 'tsx', '--test', ...files], { stdio: 'inherit' });
+const result = spawnSync(process.execPath, ['--import', 'tsx', '--test', ...process.argv.slice(2), ...files], { stdio: 'inherit' });
 if (result.error) throw result.error;
 process.exit(result.status ?? 1);

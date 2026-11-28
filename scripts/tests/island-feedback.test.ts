@@ -17,7 +17,7 @@ test('the friend acts out every sentence the child can say to it', () => {
   assert.deepEqual(said.filter(s => !SENTENCE_MOODS[s]), [], 'Give the sentence a mood in SENTENCE_MOODS (src/island/mood.ts).');
 });
 
-test('every mood has a face for each young friend and a sign for grown ones', () => {
+test('media: every mood has a face for each young friend and a sign for grown ones', () => {
   const moods = Object.keys(MOOD_MARK) as Mood[];
   const missing = BABY_CREATURES.flatMap(c => moods.map(m => `public${creatureExpression(c.id, m)}`)).filter(path => !existsSync(path));
   assert.deepEqual(missing, [], 'Draw the expression, or pick a mood the friends already have.');
@@ -41,7 +41,7 @@ test('things to find never cover each other', () => {
   assert.ok(FIND_SPOTS.every(([x, y]) => x + WIDE <= 100 && y + HIGH <= 100), 'Every thing stays inside the box.');
 });
 
-test('every place stands in its scene as an object a child can tap, and objects keep apart', () => {
+test('media: every place stands in its scene as an object a child can tap, and objects keep apart', () => {
   const missing = PLACES.filter(p => !SCENE_LAYOUT[p.district].objects[p.id]).map(p => p.name);
   assert.deepEqual(missing, [], 'Give the place an object in SCENE_LAYOUT (src/island/sceneLayout.ts): its activities start from it.');
   const art = Object.values(SCENE_LAYOUT).flatMap(l => Object.values(l.objects)).filter(o => 'icon' in o.art ? !(o.art.icon in ICONS) : !existsSync(`public/scenes/flat-v1/prop/${o.art.prop}.svg`));
@@ -74,7 +74,7 @@ test('the little surprises hide only learned picture words, not ones lying in th
   assert.deepEqual(hiddenToday([], [], 'camp', '2026-11-26', 3), [], 'Nothing hides before anything is learned.');
 });
 
-test('every scene has three hiding places apart from its objects, drawn with existing art', () => {
+test('media: every scene has three hiding places apart from its objects, drawn with existing art', () => {
   const wrong = Object.entries(SCENE_LAYOUT).flatMap(([d, l]) => {
     const art = l.hides.filter(h => 'icon' in h.art ? !(h.art.icon in ICONS) : !existsSync(`public/scenes/flat-v1/prop/${h.art.prop}.svg`)).map(() => `${d}: missing art`);
     // Each covers its width across and, on a 3:2 screen, about 1.4 times that upward from its foot.
