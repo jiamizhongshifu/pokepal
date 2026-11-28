@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useEvent } from '../lib/hooks';
-import { deleteDiary, deleteRecording, db, listRecordings, RECORDING_LIMIT, type Recording } from '../lib/db';
+import { deleteDiary, deleteRecording, listDiaries, listRecordings, RECORDING_LIMIT, type Recording } from '../lib/db';
 import type { DiaryEntry } from '../lib/diary';
 import { playUrl } from '../lib/speech';
 import { Icon } from '../icons';
@@ -45,7 +45,7 @@ export function ParentRecordings({ onCount }: { onCount?: (n: number) => void })
 export function ParentDiaries() {
   const [list, setList] = useState<DiaryEntry[]>([]), [status, setStatus] = useState('');
   const confirm = useConfirm();
-  const refresh = () => db.diaries.orderBy('createdAt').reverse().toArray().then(setList).catch(() => setStatus('暂时读不到日记，原有日记没有改动。'));
+  const refresh = () => listDiaries('newest').then(setList).catch(() => setStatus('暂时读不到日记，原有日记没有改动。'));
   useEffect(() => { void refresh(); }, []);
   const remove = async (d: DiaryEntry) => {
     if (!confirm.ask(`diary-${d.id}`)) return;

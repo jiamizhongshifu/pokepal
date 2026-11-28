@@ -24,6 +24,10 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-hooks/exhaustive-deps': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      'no-restricted-imports': ['error', {patterns: [{
+        group: ['**/lib/db', './db', '**/lib/db.ts', './db.ts'], importNames: ['db'],
+        message: '请调用 db 的存档、日记或录音操作；表结构和事务归数据库模块管理。',
+      }]}],
       'no-restricted-syntax': ['error', {
         selector: "MemberExpression[object.name='WebAssembly']",
         message: 'The site CSP does not allow WebAssembly compilation.',

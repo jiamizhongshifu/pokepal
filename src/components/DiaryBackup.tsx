@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { db } from '../lib/db';
+import { listDiaries, restoreDiaries } from '../lib/db';
 import { decodeDiaryBackup, encodeDiaryBackup, downloadDiaryFile, DIARY_BACKUP_MAX_BYTES } from '../lib/diaryBackup';
 import type { DiaryEntry } from '../lib/diary';
 
@@ -16,7 +16,7 @@ export function DiaryBackup({ entry }: { entry?: DiaryEntry }) {
     <p>{entry ? '备份这篇日记的文字和每段原声，换设备后也能珍藏。' : '日记单独备份，包含文字、故事页和每段原声。恢复时只添加缺少的日记，不覆盖本机已有记录。'}</p>
     <div className="row">
       <button className="btn-small" disabled={busy} onClick={() => void run(async () => {
-        const entries = entry ? [entry] : await db.diaries.toArray();
+        const entries = entry ? [entry] : await listDiaries('backup');
         if (!entries.length) { setStatus('还没有需要备份的日记。'); return; }
         const content = await encodeDiaryBackup(entries);
         downloadDiaryFile(new Blob([content], { type: 'application/json' }), `啵啵岛-日记备份-${new Date().toISOString().slice(0,10)}.json`);
@@ -28,11 +28,7 @@ export function DiaryBackup({ entry }: { entry?: DiaryEntry }) {
           void run(async () => {
             if (file.size > DIARY_BACKUP_MAX_BYTES) throw new Error('文件过大，请使用逐篇导出的日记备份。');
             const entries = decodeDiaryBackup(await file.text());
-            const added = await db.transaction('rw', db.diaries, async () => {
-              const existing = new Set(await db.diaries.toCollection().primaryKeys());
-              const missing = entries.filter(v => !existing.has(v.id));
-              await db.diaries.bulkAdd(missing); return missing.length;
-            });
+            const added = await restoreDiaries(entries);
             setStatus(`已恢复 ${added} 篇日记，${entries.length - added} 篇已有日记保持原样。`);
           });
         }}/></>}

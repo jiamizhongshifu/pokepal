@@ -6,7 +6,7 @@ import { Icon } from '../icons';
 import { CreatureImg } from '../components/CreatureImg';
 import { creatureArt,getCreature } from '../data/creatures';
 import { timeIsUp, useGame } from '../store';
-import { db } from '../lib/db';
+import { listDiaries, readDiary, saveDiary } from '../lib/db';
 import { diaryPages,toDiaryWav,type DiaryEntry } from '../lib/diary';
 import { say,stopSpeech } from '../lib/speech';
 import { useClipRecorder,type ClipFailure } from '../lib/clipRecorder';
@@ -23,10 +23,10 @@ export function Diary({id}:{id?:string}){
   onRecorded:async audio=>{const next={...baseline.current,audio,audioRevision:crypto.randomUUID(),transcript:'',pages:undefined,title:undefined};try{await persist(next);if(mounted.current)setStatus('录音已保存在这台设备上');}catch{if(mounted.current){setEntry(next);setError('设备没有保存成功，请先下载录音备份，再腾出空间。');}}},
   onFailure:(kind,e)=>{if(mounted.current)setError(recordingFailures[kind]??(e instanceof Error?e.message:'录音暂时无法开始。'));}});
  const {recording,seconds,stop}=rec,busy=working||rec.busy;
- const refresh=()=>db.diaries.orderBy('createdAt').reverse().toArray().then(rows=>{if(mounted.current)setLibrary(rows);});
- useEffect(()=>{mounted.current=true;void refresh().catch(()=>setError('暂时读不到日记，请稍后重试。'));if(id)void db.diaries.get(id).then(v=>{if(!mounted.current)return;if(v)setEntry(v);else setError('没有找到这篇日记，请翻看其他日记。');setLoading(false);}).catch(()=>{setLoading(false);setError('日记暂时读不到，请重试。');});return()=>{mounted.current=false;request.current?.abort();stopSpeech();};},[id]);
+ const refresh=()=>listDiaries('newest').then(rows=>{if(mounted.current)setLibrary(rows);});
+ useEffect(()=>{mounted.current=true;void refresh().catch(()=>setError('暂时读不到日记，请稍后重试。'));if(id)void readDiary(id).then(v=>{if(!mounted.current)return;if(v)setEntry(v);else setError('没有找到这篇日记，请翻看其他日记。');setLoading(false);}).catch(()=>{setLoading(false);setError('日记暂时读不到，请重试。');});return()=>{mounted.current=false;request.current?.abort();stopSpeech();};},[id]);
  useEffect(()=>{if(!entry.audio){setUrl('');return;}const u=URL.createObjectURL(entry.audio);setUrl(u);return()=>URL.revokeObjectURL(u);},[entry.audio]);
- const persist=async(next:DiaryEntry)=>{current.current=next;if(mounted.current&&!next.guidedComplete&&!next.pages?.length)setEntry(next);await db.transaction('rw',db.diaries,async()=>{await db.diaries.put(next);});if(mounted.current){current.current=next;setEntry(next);void refresh().catch(()=>{});}};
+ const persist=async(next:DiaryEntry)=>{current.current=next;if(mounted.current&&!next.guidedComplete&&!next.pages?.length)setEntry(next);await saveDiary(next);if(mounted.current){current.current=next;setEntry(next);void refresh().catch(()=>{});}};
  const start=async()=>{
   if(starting.current||busy||recording)return;setError('');stopSpeech();
   baseline.current=current.current;
