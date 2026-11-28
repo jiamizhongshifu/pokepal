@@ -12,10 +12,13 @@ if (project.errors.length) throw new Error(ts.formatDiagnosticsWithColorAndConte
 }));
 const projectPath = file => relative('.', file).split(sep).join('/');
 const graph = new Map();
+const frameworkImports = new Map();
 for (const file of project.fileNames.filter(file => /\.(?:tsx?|m?js)$/.test(file) && !file.endsWith('.d.ts'))) {
   const source = readFileSync(file, 'utf8');
   const { outputText } = ts.transpileModule(source, { compilerOptions: project.options, fileName: file });
   const imports = ts.preProcessFile(outputText, true, true).importedFiles;
+  frameworkImports.set(projectPath(file), imports.map(entry => entry.fileName)
+    .filter(name => /^(?:react|react-dom|zustand|dexie)(?:\/|$)/.test(name)));
   const targets = imports.map(({ fileName }) => ts.resolveModuleName(fileName, file, project.options, ts.sys).resolvedModule)
     .filter(target => target && !target.isExternalLibraryImport && /\.(?:tsx?|m?js)$/.test(target.resolvedFileName))
     .map(target => projectPath(target.resolvedFileName));
@@ -49,9 +52,14 @@ if (process.argv.includes('--dot')) {
   }
   for (const file of graph.keys()) visit(file);
   // These entries must work before the child opens a game or grants device access.
-  const isolated = [
-    'src/parentInfoMain.tsx', 'functions/api/traffic.ts', 'src/lib/saveValidation.ts',
+  const domains = new Set([
+    'src/lib/learningPath.ts', 'src/lib/learningProgress.ts', 'src/lib/playClock.ts',
+    'src/lib/participation.ts', 'src/lib/saveLifecycle.ts', 'src/lib/saveValidation.ts',
+    'src/lib/navigation.ts', 'src/lib/trafficPolicy.ts',
     ...[...graph.keys()].filter(file => file.startsWith('src/data/')),
+  ]);
+  const isolated = [
+    'src/parentInfoMain.tsx', 'functions/api/traffic.ts', ...domains,
   ];
   const gameServices = new Set(['src/store.ts', 'src/lib/db.ts', 'src/lib/speech.ts', 'src/lib/mic.ts']);
   for (const root of isolated) {
@@ -59,6 +67,11 @@ if (process.argv.includes('--dot')) {
     function checkBoundary(file, chain) {
       if (reached.has(file)) return;
       reached.add(file);
+      if (domains.has(root)) {
+        for (const name of frameworkImports.get(file) ?? []) {
+          problems.add('领域规则应独立于界面、状态库和数据库，请在调用入口组合：' + [...chain, file, name].join(' → '));
+        }
+      }
       if (gameServices.has(file)) {
         problems.add('该入口必须能独立加载，请把所需数据或纯规则移出游戏服务：' + [...chain, file].join(' → '));
         return;

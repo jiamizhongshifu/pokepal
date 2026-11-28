@@ -1,5 +1,4 @@
 import type { TaskKind } from '../data/tasks';
-import { withTransition } from './viewTransition';
 
 export interface DexBrowseState { onlyOwned:boolean; query:string; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
 
@@ -22,7 +21,7 @@ export type Screen =
 const browsable: ReadonlySet<Screen['name']> = new Set(['home', 'stories', 'dex', 'dexDetail', 'notebook', 'practice', 'parent', 'catch']);
 const sameScreen = (a: Screen, b: Screen) => JSON.stringify(a) === JSON.stringify(b);
 
-export function createNavigation(read: () => Screen, display: (screen: Screen) => void, transition = withTransition) {
+export function createNavigation(read: () => Screen, display: (screen: Screen) => void, transition: (update: () => void) => void) {
   let trail: Screen[] = [];
   let heading: Screen | undefined;
   let revision = 0;

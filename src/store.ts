@@ -1,3 +1,4 @@
+import { withTransition } from './lib/viewTransition';
 import { AVATARS, DEFAULT_AVATAR } from './icons/avatars';
 import { SavePersistence } from './lib/savePersistence';
 import { newSave, prepareForPlay, rollover } from './lib/saveLifecycle';
@@ -108,7 +109,7 @@ const persistence = new SavePersistence(error => {
 export function flushPendingSave() { return persistence.flush(); }
 
 export const useGame = create<State>((set, get) => {
-  const navigation = createNavigation(() => get().screen, screen => set({screen}));
+  const navigation = createNavigation(() => get().screen, screen => set({screen}), withTransition);
   let loading: Promise<void> | undefined;
   function editableSave() {
     const state = get();
