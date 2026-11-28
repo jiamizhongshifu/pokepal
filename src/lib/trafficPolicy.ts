@@ -3,6 +3,7 @@ import {ANALYTICS_HOST,trafficPage} from './analyticsPolicy';
 export const TRAFFIC_ENDPOINT='/api/traffic';
 export const TRAFFIC_PREFERENCE_KEY='pokepal-traffic-disabled';
 export const TRAFFIC_RETENTION_DAYS=30;
+export const MAX_PAGE_COUNT=20;
 export type PageCount={page:string;count:number};
 export function trafficAvailable(online:boolean,host:string){return online&&host===ANALYTICS_HOST;}
 export function trafficEnabled(storage:Pick<Storage,'getItem'>,signals:{doNotTrack?:string|null;globalPrivacyControl?:boolean}){
@@ -17,7 +18,7 @@ export function parsePageCounts(value:unknown):PageCount[]|null{
  const seen=new Set<string>();
  for(const row of pages){
   if(!row||typeof row!=='object'||Array.isArray(row)||Object.keys(row).sort().join()!=='count,page')return null;
-  if(typeof row.page!=='string'||!trafficPage(row.page)||seen.has(row.page)||!Number.isInteger(row.count)||row.count<1||row.count>20)return null;
+  if(typeof row.page!=='string'||!trafficPage(row.page)||seen.has(row.page)||!Number.isInteger(row.count)||row.count<1||row.count>MAX_PAGE_COUNT)return null;
   seen.add(row.page);
  }
  return pages.map(({page,count})=>({page,count}));

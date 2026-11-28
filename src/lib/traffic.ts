@@ -1,5 +1,5 @@
 import {trafficPage} from './analyticsPolicy';
-import {TRAFFIC_ENDPOINT,TRAFFIC_PREFERENCE_KEY,trafficAvailable,trafficEnabled} from './trafficPolicy';
+import {MAX_PAGE_COUNT,TRAFFIC_ENDPOINT,TRAFFIC_PREFERENCE_KEY,trafficAvailable,trafficEnabled} from './trafficPolicy';
 const CHANGE='pokepal-traffic-change';
 let previous='',timer:ReturnType<typeof setTimeout>|undefined,blocked=false;
 const pending=new Map<string,number>();
@@ -33,7 +33,7 @@ export function recordAggregatePage(page:string){
  if(!trafficPage(page)||page===previous)return;
  previous=page;
  if(!aggregateAvailable()||!aggregateEnabled())return;
- pending.set(page,Math.min(20,(pending.get(page)??0)+1));
+ pending.set(page,Math.min(MAX_PAGE_COUNT,(pending.get(page)??0)+1));
  timer??=setTimeout(flushTraffic,5000);
 }
 export function initializeAggregate(){

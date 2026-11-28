@@ -3,6 +3,7 @@ import {parsePageCounts,TRAFFIC_RETENTION_DAYS} from '../../src/lib/trafficPolic
 interface Statement {bind(...values:(string|number)[]):Statement;}
 export interface CounterDatabase {prepare(sql:string):Statement;batch(statements:Statement[]):Promise<unknown>;}
 type Context={request:Request;env:{TRAFFIC_DB?:CounterDatabase}};
+const MAX_BODY_BYTES=2048;
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
 const reply=(status:number)=>new Response(null,{status,headers});
 export async function onRequest({request,env}:Context):Promise<Response>{
@@ -13,11 +14,11 @@ export async function onRequest({request,env}:Context):Promise<Response>{
  if(origin!==url.origin||request.headers.get('Sec-Fetch-Site')==='cross-site')return reply(403);
  if(request.headers.get('DNT')==='1'||request.headers.get('Sec-GPC')==='1')return reply(204);
  if(!request.headers.get('Content-Type')?.startsWith('application/json'))return reply(415);
- if(Number(request.headers.get('Content-Length')??0)>2048)return reply(413);
+ if(Number(request.headers.get('Content-Length')??0)>MAX_BODY_BYTES)return reply(413);
  // Bound reads even for chunked requests. Do not log bodies, headers, IPs or errors.
  const reader=request.body?.getReader();if(!reader)return reply(400);
  const chunks:Uint8Array[]=[];let length=0;
- try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>2048){await reader.cancel();return reply(413);}chunks.push(value);}}catch{return reply(400);}
+ try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>MAX_BODY_BYTES){await reader.cancel();return reply(413);}chunks.push(value);}}catch{return reply(400);}
  let counts;
  try{const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}counts=parsePageCounts(JSON.parse(new TextDecoder().decode(bytes)));}catch{return reply(400);}
  if(!counts)return reply(400);
