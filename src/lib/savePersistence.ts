@@ -1,3 +1,4 @@
+import { DEFAULT_AVATAR } from '../icons/avatars';
 import type { SaveData } from '../types';
 import { readSaveSnapshot, resetSave, writeSave } from './db';
 import { newSave, prepareForPlay } from './saveLifecycle';
@@ -45,7 +46,7 @@ export class SavePersistence {
     else await this.flush();
     const snapshot = await readSaveSnapshot();
     const save = snapshot.save === undefined ? newSave() : validateSave(snapshot.save);
-    if (save.trainer && !save.trainer.avatar.startsWith('avatar-')) save.trainer.avatar = 'avatar-red';
+    if (save.trainer && !save.trainer.avatar.startsWith('avatar-')) save.trainer.avatar = DEFAULT_AVATAR;
     prepareForPlay(save);
     this.revision = snapshot.revision;
     this.pending = undefined;

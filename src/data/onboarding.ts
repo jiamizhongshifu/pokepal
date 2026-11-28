@@ -30,9 +30,10 @@ export const GUIDES = {
 } as const;
 export type GuideId=keyof typeof GUIDES;
 export interface Onboarding {version:1;seen:Partial<Record<GuideId,boolean>>;completed?:Partial<Record<GuideId,boolean>>;automatic:boolean;}
+export function newOnboarding():Onboarding {return {version:1,seen:{},automatic:true};}
 /** Operation success is separate from seeing/dismissing help, and is not language mastery. */
 export function completeGuide(s:{onboarding?:Onboarding},id:GuideId){
- s.onboarding??={version:1,seen:{},automatic:true};
+ s.onboarding??=newOnboarding();
  (s.onboarding.completed??={})[id]=true;
 }
 /** Guides whose screens no longer exist (energy, exchange, throwing in the grass); old saves drop them on load. */

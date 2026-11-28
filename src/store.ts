@@ -1,3 +1,4 @@
+import { AVATARS, DEFAULT_AVATAR } from './icons/avatars';
 import { SavePersistence } from './lib/savePersistence';
 import { newSave, prepareForPlay, rollover } from './lib/saveLifecycle';
 import { TASK_KINDS, type TaskKind } from './data/tasks';
@@ -12,7 +13,7 @@ import { advancePlayClock, grantPlayMinutes } from './lib/playClock';
 import {markReviewAudio,settleUnitRound, recordOpportunity, markHomeTried, type Opportunity } from './lib/learningProgress';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
-import { completeGuide, type GuideId } from './data/onboarding';
+import { newOnboarding, completeGuide, type GuideId } from './data/onboarding';
 import { applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
 import { invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
@@ -338,9 +339,9 @@ export const useGame = create<State>((set, get) => {
     },
 
     rainWaterCrops(){const s=get().save,now=Date.now();if(weatherAt(now,s.settings.islandWeather??'auto').rain<.65||!s.farm?.plots.some(c=>c&&c.wateredAt===undefined&&now-c.plantedAt>=12000))return 0;return mut(s=>waterCropsWithRain(s,now)) ?? 0;},
-    markGuideSeen(id) {if(get().save.onboarding?.seen[id])return;mut(s=>{s.onboarding??={version:1,seen:{},automatic:true};s.onboarding.seen[id]=true;});},
-    resetGuides() {mut(s=>{s.onboarding={version:1,seen:{},automatic:true};});},
-    setGuideAutomatic(automatic) {mut(s=>{s.onboarding??={version:1,seen:{},automatic:true};s.onboarding.automatic=automatic;});},
+    markGuideSeen(id) {if(get().save.onboarding?.seen[id])return;mut(s=>{s.onboarding??=newOnboarding();s.onboarding.seen[id]=true;});},
+    resetGuides() {mut(s=>{s.onboarding=newOnboarding();});},
+    setGuideAutomatic(automatic) {mut(s=>{s.onboarding??=newOnboarding();s.onboarding.automatic=automatic;});},
     updateSettings(patch) {
       mut((s) => {
         const prevTasks = s.settings.tasksPerDay;
@@ -363,7 +364,7 @@ export const useGame = create<State>((set, get) => {
     setTrainerAvatar(avatar, photo) {
       mut((s) => {
         if (!s.trainer) return;
-        s.trainer.avatar = ["avatar-red", "avatar-pink", "avatar-blue", "avatar-yellow"].includes(avatar) ? avatar : "avatar-red";
+        s.trainer.avatar = AVATARS.includes(avatar) ? avatar : DEFAULT_AVATAR;
         if (isAvatarPhoto(photo)) s.trainer.avatarPhoto = photo;
         else delete s.trainer.avatarPhoto;
       });

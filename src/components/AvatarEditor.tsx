@@ -1,3 +1,4 @@
+import { DEFAULT_AVATAR } from '../icons/avatars';
 import {stopSpeech} from '../lib/speech';
 import {useModalLayer} from '../lib/modalLayer';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
@@ -11,7 +12,7 @@ export function AvatarEditor({onClose}:{onClose:()=>void}) {
   useModalLayer();
   const trainer=useGame(s=>s.save.trainer);
   const setAvatar=useGame(s=>s.setTrainerAvatar);
-  const [avatar,setChoice]=useState(trainer?.avatar ?? 'avatar-red');
+  const [avatar,setChoice]=useState(trainer?.avatar ?? DEFAULT_AVATAR);
   const [photo,setPhoto]=useState(trainer?.avatarPhoto);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
