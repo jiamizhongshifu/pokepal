@@ -21,7 +21,7 @@ import { firstFruitUnit, plantAsk, seedOf, type IslandAsk } from '../lib/islandA
 import type { CropKind } from '../lib/farm';
 import { Icon } from '../icons';
 import { withTransition } from '../lib/viewTransition';
-import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
+import { pathNodes, guidedPath } from '../lib/learningPath';
 import { BEHAVIORS } from '../data/behaviors';
 import { creatureArt, creatureExpression, getCreature } from '../data/creatures';
 import { sceneEdge, storyBackground, storyProp } from '../data/sceneArt';
@@ -106,7 +106,7 @@ export function Island({ initialStation, initialCompanion, active = true }: { in
   if (unit && armed === d) {
    // The lesson opens only when the learning path itself lets it; otherwise the path shows where the child is.
    sfx('click'); armTicket.current++; setArmed(null);
-   const stop = pathNodes(withWelcomeFriend(save, withReview(save, learningPath(save)))).find(n => n.kind === 'lesson' && n.unit?.id === unit.id);
+   const stop = pathNodes(guidedPath(save)).find(n => n.kind === 'lesson' && n.unit?.id === unit.id);
    if (stop && stop.state !== 'locked') useGame.getState().startUnit(unit.id); else go({ name: 'home' });
    return;
   }

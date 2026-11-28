@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import type {SaveData} from '../../src/types';
 import {LEARNING_UNITS,unitRoundCount} from '../../src/data/curriculum';
 import {progressUnit} from '../../src/lib/learningProgress';
-import {learningPath,withReview,withWelcomeFriend} from '../../src/lib/learningPath';
+import {learningPath,guidedPath} from '../../src/lib/learningPath';
 import {sceneSpots,leftBehind,bubbleWords,LESSON_SPOTS} from '../../src/lib/pathScene';
 import {validateSave} from '../../src/lib/saveValidation';
 import {ICON_ASSETS as ICONS} from '../../src/icons/generated';
@@ -15,7 +15,7 @@ const learn=(s:SaveData,n:number)=>{for(const u of LEARNING_UNITS.slice(0,n))pro
 test('every stop of every chapter has its own place in the scene, lessons on the four clearings in order',()=>{
  for(const n of [0,5,LEARNING_UNITS.length]){
   const s=fixture();learn(s,n);
-  for(const chapter of withWelcomeFriend(s,withReview(s,learningPath(s)))){
+  for(const chapter of guidedPath(s)){
    const spots=sceneSpots(chapter.nodes);
    assert.equal(spots.length,chapter.nodes.length);
    assert.equal(new Set(spots.map(p=>p.join())).size,spots.length,`chapter ${chapter.index}: no two stops on one place`);

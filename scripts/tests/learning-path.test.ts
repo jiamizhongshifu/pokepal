@@ -6,7 +6,7 @@ import {LEARNING_CHAPTERS,LEARNING_UNITS,unitRoundCount} from '../../src/data/cu
 import {STORIES,storyProgressKey} from '../../src/data/stories';
 import {progressUnit} from '../../src/lib/learningProgress';
 import {finishErrand} from '../../src/island/errands';
-import {learningPath,withReview,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION,withWelcomeFriend} from '../../src/lib/learningPath';
+import {learningPath,guidedPath,pathStars,currentNode,pathNodes,claimChapterFriend,markPathSeen,migratePathEconomy,openChapterDiary,notePathReview,REVIEW_THRESHOLD,chapterProgress,PATH_CONTENT_VERSION} from '../../src/lib/learningPath';
 import {invitePartner} from '../../src/lib/invites';
 import {validateSave} from '../../src/lib/saveValidation';
 import {BABY_CREATURES} from '../../src/data/creatures';
@@ -53,7 +53,7 @@ test('finishing stops in order moves the single current stop and earns one star 
 test('a whole chapter ends with the chapter friend recorded and the next chapter current',()=>{
  const s=fresh();walkChapter(s,0);
  const path=learningPath(s);
- assert.equal(path[0].done,8);assert.ok(s.path!.friends['0']);assert.equal(s.balls.poke,0);
+ assert.equal(chapterProgress(path[0]).done,8);assert.ok(s.path!.friends['0']);assert.equal(s.balls.poke,0);
  assert.equal(currentNode(path)?.unit?.id,lessonsOf(1)[0].id);
 });
 
@@ -82,14 +82,17 @@ test('every lesson happens at one of the island\'s places',async()=>{
 test('due review waits as one stop just before the current stop, and earns a star when done',()=>{
  const s=fresh();finishLesson(s,LEARNING_UNITS[0]);
  const route=learningPath(s);
- assert.equal(withReview(s,route,0),route,'nothing due yet');
+ assert.equal(guidedPath(s,route,0),route,'nothing due yet');
  const keys=['ball','book','hat','Hello!'];
  for(const k of keys)s.learning!.records[k]={seen:1,spoken:0,attempts:1,misses:0,independent:1,streak:1,lastSeen:1,nextReview:1,needsPractice:false,actions:0,contexts:[]} as never;
- const woven=pathNodes(withReview(s,route,10_000));
+ const woven=pathNodes(guidedPath(s,route,10_000));
  const at=woven.findIndex(n=>n.kind==='review');
  assert.ok(at>0);assert.equal(woven[at].state,'current');assert.ok(woven[at].reviewKeys!.length>=REVIEW_THRESHOLD);
  assert.equal(woven.filter(n=>n.state==='current').length,1);assert.equal(woven[at+1].unit?.id,LEARNING_UNITS[1].id);
  assert.equal(woven[at+1].state,'open','review is optional: the next lesson stays reachable (T07)');
+ s.balls.poke=1;
+ const simultaneous=pathNodes(guidedPath(s,route,10_000)).slice(at,at+3);
+ assert.deepEqual(simultaneous.map(n=>[n.kind,n.state]),[['welcome','current'],['review','locked'],['lesson','open']]);
  notePathReview(s);assert.equal(pathStars(learningPath(s),s),2);
 });
 
@@ -108,11 +111,11 @@ test('chapter counts come from one rule: 0/8 fresh, 2/8 after two lessons, uncha
  const [a,b]=lessonsOf(0);finishLesson(s,a);finishLesson(s,b);
  assert.deepEqual(chapterProgress(learningPath(s)[0]),{done:2,total:8});
  for(const k of ['ball','book','hat'])s.learning!.records[k]={seen:1,spoken:0,attempts:1,misses:0,independent:1,streak:1,lastSeen:1,nextReview:1,needsPractice:false,actions:0,contexts:[]} as never;
- const woven=withReview(s,learningPath(s),10_000)[0];
+ const woven=guidedPath(s,learningPath(s),10_000)[0];
  assert.ok(woven.nodes.some(n=>n.kind==='review'));
  assert.deepEqual(chapterProgress(woven),{done:2,total:8},'a review stop never changes the denominator');
  finishLesson(s,a);assert.deepEqual(chapterProgress(learningPath(s)[0]),{done:2,total:8},'replaying a finished lesson does not count twice');
- assert.equal(learningPath(s)[0].done,chapterProgress(learningPath(s)[0]).done);
+ assert.equal(pathStars(learningPath(s)),chapterProgress(learningPath(s)[0]).done);
 });
 
 test('a save from the seven-stop route (version 2) keeps every finished stop and gains the chat stop as next',()=>{
@@ -126,11 +129,11 @@ test('a save from the seven-stop route (version 2) keeps every finished stop and
 // T03: one next step for a new child — the welcome voice, the empty island and the path all point to meeting a first friend.
 test('with the welcome berry and no friend yet, the path first meets a friend, without changing any count',()=>{
  const s=fresh();s.balls.poke=1;
- const woven=withWelcomeFriend(s,learningPath(s));
+ const woven=guidedPath(s);
  assert.equal(currentNode(woven)?.kind,'welcome');
  assert.equal(woven[0].nodes[1].state,'locked','the first lesson waits behind it');
  assert.deepEqual(chapterProgress(woven[0]),{done:0,total:8});
  invitePartner(s,BABY_CREATURES[0].id);
- assert.equal(currentNode(withWelcomeFriend(s,learningPath(s)))?.kind,'lesson','gone once a friend is met');
- const none=fresh();assert.equal(currentNode(withWelcomeFriend(none,learningPath(none)))?.kind,'lesson','no berry, no detour');
+ assert.equal(currentNode(guidedPath(s))?.kind,'lesson','gone once a friend is met');
+ const none=fresh();assert.equal(currentNode(guidedPath(none))?.kind,'lesson','no berry, no detour');
 });

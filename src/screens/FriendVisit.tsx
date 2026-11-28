@@ -8,7 +8,7 @@ import { CreatureImg } from '../components/CreatureImg';
 import { CREATURES, creatureArt } from '../data/creatures';
 import { visitors, homeOpen } from '../island/visits';
 import { unlockingUnit } from '../lib/islandPlan';
-import { learningPath, pathNodes, withReview, withWelcomeFriend } from '../lib/learningPath';
+import { currentNode, guidedPath } from '../lib/learningPath';
 import { storyBackground, storyProp } from '../data/sceneArt';
 import { pickRandom } from '../data/words';
 import { say, playCry, sfx, stopSpeech } from '../lib/speech';
@@ -93,7 +93,7 @@ export function FriendVisit() {
     {phase === 'friends' && <section className="friend-visit-done" role="status"><Confetti />
      <h1>{guest.nameZh}成了你的新朋友！</h1><p>{homeOpen(save, guest) ? `它的家在${homeOf(guest.species).name}，以后可以去那里找它玩。` : `它的家在${homeOf(guest.species).name}，学到「${unlockingUnit(homeOf(guest.species).district)?.title ?? ''}」那里就开放啦。现在先在帐篷边玩。`}</p>
      {/* When a lesson waits on the path (always after the very first friend), going to learn is the next step; the island stays one tap away. */}
-     <div className="friend-visit-actions">{pathNodes(withWelcomeFriend(save, withReview(save, learningPath(save)))).find(n => n.state === 'current')?.kind === 'lesson'
+     <div className="friend-visit-actions">{currentNode(guidedPath(save))?.kind === 'lesson'
       ? <><button className="btn-big" onClick={() => go({ name: 'home' })}><Icon name="play" size={36} />和它一起学一学</button>
        <button className="btn-big alt" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button></>
       : <><button className="btn-big" onClick={() => go({ name: 'home', view: 'island', companion: guest.id })}><Icon name="island" size={36} />带它回小岛</button>

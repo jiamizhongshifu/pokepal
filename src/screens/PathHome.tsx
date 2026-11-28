@@ -2,13 +2,12 @@ import { withTransition } from '../lib/viewTransition';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useEvent } from '../lib/hooks';
 import { useGame } from '../store';
-import { learningPath, withReview, withWelcomeFriend, pathNodes, currentNode, chapterProgress, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
+import { learningPath, guidedPath, pathNodes, currentNode, chapterProgress, PATH_COMPLETE, type PathNode } from '../lib/learningPath';
 import { bubbleWords, leftBehind, sceneSpots } from '../lib/pathScene';
 import { LearningArt } from '../components/LearningItem';
 import { learningVoice } from '../lib/learningVoice';
 import { Confetti } from '../components/Celebration';
 import { say, stopSpeech, sfx } from '../lib/speech';
-import { STORIES } from '../data/stories';
 import { creatureArt, creatureExpression } from '../data/creatures';
 import { pathArt, pathScene, sceneEdge } from '../data/sceneArt';
 import { SceneFill } from '../components/SceneFill';
@@ -35,8 +34,8 @@ export function PathHome() {
  const save = useGame(s => s.save), go = useGame(s => s.go), start = useGame(s => s.startUnit);
  const celebrate = useGame(s => s.celebratePath), claimFriend = useGame(s => s.claimChapterFriend), openDiary = useGame(s => s.openChapterDiary);
  const route = useMemo(() => learningPath(save), [save]);
- const path = useMemo(() => withWelcomeFriend(save, withReview(save, route)), [save, route]);
- const now = pathNodes(path).find(n => n.state === 'current');
+ const path = useMemo(() => guidedPath(save, route), [save, route]);
+ const now = currentNode(path);
  const friend = save.captures.find(c => save.settings.favorites.includes(c.id)) ?? save.captures[0];
  const [page, setPage] = useState(() => now?.chapter ?? path.length - 1);
  const [editing, setEditing] = useState(false);
@@ -108,13 +107,14 @@ export function PathHome() {
  const turn = (to: number) => { if (to < 0 || to >= path.length) return; stopSpeaking(); sfx('click'); setTurnDir(d => `${to < page ? 'prev' : 'next'}-${d?.endsWith('a') ? 'b' : 'a'}`); setPage(to); };
 
  const chapter = path[Math.min(page, path.length - 1)], spots = sceneSpots(chapter.nodes);
+ const progress = chapterProgress(chapter);
  return <div className="screen path-scene">
   <h1 className="sr-only">学习路线</h1>
   <div className="path-view scene-host" ref={view} style={sceneEdge(pathScene(chapter.index))}>
    <section data-turn={turnDir} className={`path-world tone-${chapter.index % 6}`} aria-label={`第 ${chapter.index + 1} 章 ${chapter.title}`}>
     <LayeredArt className="path-world-art" ground={pathArt(chapter.index)} scene="learning-path" />
     {chapter.nodes.map((node, i) => {
-     const title = node.kind === 'story' ? STORIES.find(s => s.id === node.storyId)?.title ?? node.title : node.title;
+     const title = node.title;
      const met = node.kind === 'friend' ? save.path?.friends[String(node.chapter)] : undefined;
      const label = `${node.kind === 'review' || node.kind === 'welcome' ? '' : `第 ${node.index + 1} 站，`}${KIND_LABEL[node.kind]}，${title}，${node.state === 'done' ? '已完成，可以再去看看' : node.state === 'current' ? '现在开始' : node.state === 'open' ? '也可以直接学这一站' : '还没解锁'}`;
      const style = { left: `${spots[i][0]}%`, top: `${spots[i][1]}%` };
@@ -155,7 +155,7 @@ export function PathHome() {
    <div className="path-chapter">
     <button type="button" className="path-turn" aria-label="上一章" disabled={chapter.index === 0} onClick={() => turn(chapter.index - 1)}><Icon name="back" size={30} /></button>
     <div className={`path-plaque tone-${chapter.index % 6}`}>
-     <small>第 {chapter.index + 1} 章<i aria-hidden="true">·</i>{chapterProgress(chapter).done} / {chapterProgress(chapter).total}</small>
+     <small>第 {chapter.index + 1} 章<i aria-hidden="true">·</i>{progress.done} / {progress.total}</small>
      <strong>{chapter.title}</strong>
      <ol className="path-pages" aria-label={`共 ${path.length} 章`}>{path.map(c => <li key={c.index}><button type="button" className={`${c.index === chapter.index ? 'is-here' : ''}${c.nodes.every(n => n.state === 'done') ? ' is-done' : ''}`} aria-label={`第 ${c.index + 1} 章 ${c.title}`} aria-current={c.index === chapter.index ? 'page' : undefined} onClick={() => turn(c.index)} /></li>)}</ol>
     </div>

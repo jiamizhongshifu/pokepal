@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { BlockingDialog } from "../components/BlockingDialog";
 import { useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
-import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
+import { learningPath, guidedPath, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";
 import { recordingCount } from "../lib/db";
 import { say, voiceInfo } from "../lib/speech";
@@ -206,7 +206,7 @@ const NEXT_KIND:Record<string,string>={lesson:'学一站课',story:'听这一章
 /** The learning path as a parent sees it: where the child is, what comes next, and the friends met on the way. */
 function ParentPathSummary(){
  const save=useGame(s=>s.save);
- const route=learningPath(save),path=withWelcomeFriend(save,withReview(save,route)),next=currentNode(path);
+ const route=learningPath(save),path=guidedPath(save, route),next=currentNode(path);
  const chapter=path[next?.chapter??path.length-1],total=pathNodes(route).length,stars=pathStars(route,save);
  const friends=Object.entries(save.path?.friends??{}).sort(([a],[b])=>+a-+b);
  const chapters=route.map(c=>{const p=chapterProgress(c);return {index:c.index,title:c.title,done:p.done,total:p.total};});
