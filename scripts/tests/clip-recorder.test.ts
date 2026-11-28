@@ -38,6 +38,7 @@ test('a finished clip is delivered once, the microphone is released, and the rec
  assert.deepEqual(t.phases,['starting','recording','saving','idle']);
  assert.equal(t.clip.capturing,false);
  assert.equal(await t.clip.start(),true);
+ t.clip.dispose();await flush();
 });
 
 test('recording stops by itself at the time cap',async()=>{
