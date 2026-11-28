@@ -51,7 +51,7 @@ try{
  Object.defineProperty(document,'hidden',{configurable:true,value:true});assert(await island.sayOnIsland(['en','island'])===false,'background tab muted');
  result.push('Hidden tab cannot start island speech');
  Object.defineProperty(document,'hidden',{configurable:true,value:false});
- const {playLimitSeconds}=await import('/src/store.ts');
+ const {playLimitSeconds}=await import('/src/lib/playClock.ts');
  useGame.setState(s=>({save:{...s.save,daily:{...s.save.daily,playSeconds:playLimitSeconds(s.save)}}}));
  assert(await island.sayOnIsland(['en','island'])===false,'resting overlay muted');
  result.push('Daily rest overlay cannot play island speech');

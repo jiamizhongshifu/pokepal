@@ -1,3 +1,4 @@
+import { playLimitSeconds } from '../lib/playClock';
 import { withTransition } from '../lib/viewTransition';
 import {setAggregateEnabled} from '../lib/traffic';
 import {TrafficPreferences} from '../components/TrafficPreferences';
@@ -15,7 +16,7 @@ import { learningStageTitle } from '../lib/learningStage';
 import { hearEntry } from '../components/LearningItem';
 import { useEffect, useRef, useState } from "react";
 import { BlockingDialog } from "../components/BlockingDialog";
-import { playLimitSeconds, useGame } from "../store";
+import { useGame } from "../store";
 import { CREATURES, creatureAvatar, creatureArt, getCreature } from "../data/creatures";
 import { learningPath, withReview, withWelcomeFriend, currentNode, pathNodes, pathStars, chapterProgress } from "../lib/learningPath";
 import { INVITE_KINDS, INVITE_ORDER } from "../data/invites";

@@ -1,3 +1,4 @@
+import { timeIsUp } from '../lib/playClock';
 import {DiaryBackup} from '../components/DiaryBackup';
 import { GuidedDiary,DiaryRecordings } from '../components/GuidedDiary';
 import { useEffect,useRef,useState } from 'react';
@@ -5,7 +6,7 @@ import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
 import { CreatureImg } from '../components/CreatureImg';
 import { creatureArt,getCreature } from '../data/creatures';
-import { timeIsUp, useGame } from '../store';
+import { useGame } from '../store';
 import { listDiaries, readDiary, saveDiary } from '../lib/db';
 import { diaryPages,toDiaryWav,type DiaryEntry } from '../lib/diary';
 import { say,stopSpeech } from '../lib/speech';

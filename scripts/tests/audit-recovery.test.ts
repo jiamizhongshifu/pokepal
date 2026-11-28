@@ -32,7 +32,7 @@ test('deferred review survives export/import without creating attempts or master
  markReviewAudio(copy,'water',false);assert.ok(!reviewKeys(copy,'retry').includes('water'));
 });
 test('clock updates are immutable, capped and do not copy or mutate unrelated learning history',()=>{
- const s=make();s.daily.playSeconds=30;
- const next=advancePlayClock(s,20,40);assert.equal(s.daily.playSeconds,30);assert.equal(next.daily.playSeconds,40);
- assert.equal(next.learning,s.learning);assert.equal(next.captures,s.captures);assert.equal(advancePlayClock(next,10,40),next);
+ const s=make();s.settings.dailyMinutes=1;s.daily.extraSeconds=0;s.daily.playSeconds=50;
+ const next=advancePlayClock(s,20);assert.equal(s.daily.playSeconds,50);assert.equal(next.daily.playSeconds,60);
+ assert.equal(next.learning,s.learning);assert.equal(next.captures,s.captures);assert.equal(advancePlayClock(next,10),next);
 });

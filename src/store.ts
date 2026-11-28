@@ -7,7 +7,7 @@ import { finishParty } from './island/parties';
 import { noteIslandDone } from './island/scenes';
 import { getCreature as creatureOf } from './data/creatures';
 import {trackInteraction,trackLearningCompletion} from './lib/interaction';
-import {advancePlayClock} from './lib/playClock';
+import { advancePlayClock, grantPlayMinutes } from './lib/playClock';
 import {markReviewAudio,settleUnitRound, recordOpportunity, markHomeTried, type Opportunity } from './lib/learningProgress';
 import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
@@ -370,19 +370,18 @@ export const useGame = create<State>((set, get) => {
 
     addPlaySeconds(sec) {
       if(!get().loaded||get().saveIssue||get().saveBusy)return;
-      if(get().save.daily.date!==todayStr()){mut(s=>{s.daily.playSeconds+=Math.max(0,Math.min(sec,playLimitSeconds(s)-s.daily.playSeconds));});return;}
-      const save=advancePlayClock(get().save,sec,playLimitSeconds(get().save));
-      if(save===get().save)return;set({save});scheduleSave(save);
+      const current = get().save;
+      if (current.daily.date !== todayStr()) {
+        mut(s => { s.daily = advancePlayClock(s, sec).daily; });
+        return;
+      }
+      const save = advancePlayClock(current, sec);
+      if (save === current) return;
+      set({ save });
+      scheduleSave(save);
     },
 
-    grantExtraMinutes(min) {
-      mut((s) => {
-        // Older releases counted time spent on the rest screen. A fresh grant
-        // must still give the full requested time, even for those existing saves.
-        const overrun=Math.max(0,s.daily.playSeconds-playLimitSeconds(s));
-        s.daily.extraSeconds += overrun + Math.max(0,min) * 60;
-      });
-    },
+    grantExtraMinutes(min) { mut(s => grantPlayMinutes(s, min)); },
 
     grantMysteryGift() {
       mut((s) => {
@@ -460,9 +459,4 @@ export const useGame = create<State>((set, get) => {
   };
 });
 
-export const playLimitSeconds = (s: SaveData) => s.settings.dailyMinutes * 60 + s.daily.extraSeconds;
-/** Today's play time is used up: the activity under way finishes, nothing new starts. */
-export const timeIsUp = (s: SaveData) => !!s.trainer && s.daily.playSeconds >= playLimitSeconds(s);
-
-/** 好朋友相册里“已拥有”的小精灵：现在的伙伴 + 长大前的形态 */
 export const dexOwned = (s: SaveData) => new Set([...(s.dex ?? []), ...s.captures.map((c) => c.id)]);

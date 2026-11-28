@@ -1,8 +1,9 @@
+import { playLimitSeconds, timeIsUp } from './lib/playClock';
 import { withTransition } from "./lib/viewTransition";
 import {useEnvironmentAudio} from './lib/environmentAudio';
 import { useSceneMusic } from './lib/music';
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { playLimitSeconds, flushPendingSave, timeIsUp, useGame, type Screen } from "./store";
+import { flushPendingSave, useGame, type Screen } from "./store";
 import { stopSpeech, onEnglishSpoken } from "./lib/speech";
 import { landOnPageSoon } from "./lib/pageFocus";
 import { skyFor } from "./lib/routine";

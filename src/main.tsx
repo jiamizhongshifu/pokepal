@@ -2,22 +2,21 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import {initializeAnalytics,recordTrafficPage} from "./lib/analytics";
-import {playLimitSeconds} from "./store";
+import { timeIsUp } from "./lib/playClock";
 import "./ui.css";
 import "./learning-next.css";
 import "./camp-interaction.css";
 import "./help-layout.css";
 import "./camp-play.css";
 import { installViewportSizing } from "./lib/viewport";
-import { useGame } from "./store";
+import { flushPendingSave, useGame } from "./store";
 import { preloadCreatureImages } from "./lib/imageCache";
 import { setupNative } from "./lib/native";
 import { installAutoUpdate, quietMoment, restoreEntryAddress } from "./lib/autoUpdate";
-import { flushPendingSave } from "./store";
 
 // Only fixed page names enter analytics; no save fields or lesson IDs leave the app.
 const stopAnalytics=initializeAnalytics();
-const reportPage=()=>{const {loaded,screen,save,saveIssue}=useGame.getState();if(loaded&&!saveIssue)recordTrafficPage(save.trainer&&screen.name!=="parent"&&screen.name!=="welcome"&&save.daily.playSeconds>=playLimitSeconds(save)?"rest":screen.name);};
+const reportPage=()=>{const {loaded,screen,save,saveIssue}=useGame.getState();if(loaded&&!saveIssue)recordTrafficPage(screen.name!=="parent"&&screen.name!=="welcome"&&timeIsUp(save)?"rest":screen.name);};
 const stopTraffic=useGame.subscribe(reportPage);
 reportPage();
 if(import.meta.hot)import.meta.hot.dispose(()=>{stopTraffic();stopAnalytics();});

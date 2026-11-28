@@ -1,3 +1,4 @@
+import { timeIsUp } from '../lib/playClock';
 import { withTransition } from '../lib/viewTransition';
 import {trackInteraction} from '../lib/interaction';
 import './story-reader.css';
@@ -16,7 +17,7 @@ import { creatureArt, getCreature } from '../data/creatures';
 import { CreatureImg } from '../components/CreatureImg';
 import { TopBar } from '../components/TopBar';
 import { Icon } from '../icons';
-import { timeIsUp, useGame } from '../store';
+import { useGame } from '../store';
 import { say, setVoicePace, stopSpeech, sfx } from '../lib/speech';
 import { EchoPractice, ReadAlongText, WordCard, useSpokenWord } from '../components/StoryReadAlong';
 import { storyWordEntry, storyWordVoice } from '../lib/storyWords';
