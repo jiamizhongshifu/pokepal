@@ -138,3 +138,5 @@ docs/                需求、规范和历史记录
 ## 发布
 
 发布前执行 `npm run build` 与 `npm run release:prepare`（核对真实生产资源，不部署）；明确发布后使用 `npm run release:publish`，再做线上验收。源码仓库：[jiamizhongshifu/pokepal](https://github.com/jiamizhongshifu/pokepal)。
+
+本地有完整媒体、Chrome 和 Python 的 Playwright 包时，先运行 `npm run dev:http`，再运行 `npm run test:browser`。可在命令末尾添加 `-- http://127.0.0.1:端口` 指定另一个刚启动的开发服务。每个用例使用独立的临时浏览器资料。

@@ -28,7 +28,8 @@
     "preview:ipad": "vite preview --host",
     "analytics:report": "node scripts/online/traffic-report.mjs",
     "architecture": "node scripts/architecture.mjs",
-    "check:source": "npm run test -- --test-skip-pattern=^media: && npm run architecture && npm run typecheck && npm run lint"
+    "check:source": "npm run test -- --test-skip-pattern=^media: && npm run architecture && npm run typecheck && npm run lint",
+    "test:browser": "python3 scripts/tests/run-browser.py"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",

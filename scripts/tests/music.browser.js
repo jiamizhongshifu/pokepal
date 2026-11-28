@@ -4,8 +4,8 @@
  const results=[];
  const waitFor=async(fn,label)=>{const deadline=Date.now()+12000;while(!fn()){if(Date.now()>deadline)throw new Error(label+': '+JSON.stringify(window.__music));await new Promise(r=>setTimeout(r,100));}};
  const check=(ok,label)=>{if(!ok)throw new Error(label);results.push(label);};
- speech.stopSpeech();g.getState().updateSettings({ambientEnglish:'off',backgroundMusic:'soft'});
- g.getState().go({name:'home'});
+ speech.stopSpeech();g.getState().updateSettings({backgroundMusic:'soft'});
+ g.getState().go({name:'home',view:'island'});
  for(const sky of ['morning','day','evening','night']){
   window.__sky=sky;await waitFor(()=>window.__music.playing.includes(sky)&&window.__music.pending===null,'load '+sky);
   check(window.__music.playing.length<=2,'bounded crossfade '+sky);
@@ -22,7 +22,7 @@
   g.getState().go({name:screen});await waitFor(()=>window.__music.playing.length===0&&window.__music.desired===null,'silent '+screen);
   check(true,'silent '+screen);
  }
- g.getState().go({name:'home'});await waitFor(()=>window.__music.playing.includes('night'),'return home');
+ g.getState().go({name:'home',view:'island'});await waitFor(()=>window.__music.playing.includes('night'),'return home');
  g.getState().updateSettings({backgroundMusic:'off'});await waitFor(()=>window.__music.playing.length===0,'mute');
  check(window.__music.desired===null,'disabled has no pending track');
  await (await import('/src/store.ts')).flushPendingSave();
