@@ -1,6 +1,7 @@
+import type { DexBrowseState } from '../lib/navigation';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect } from "react";
-import { useGame, type DexBrowseState } from "../store";
+import { useGame } from "../store";
 import { TopBar } from "../components/TopBar";
 import { COLORS, CREATURE_TYPES, speciesOf, type CreatureType, creatureArt, favoriteFood, getCreature, hobby, kidDescription } from "../data/creatures";
 import { INVITE_KINDS } from "../data/invites";

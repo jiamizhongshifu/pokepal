@@ -1,9 +1,10 @@
+import type { Screen } from './lib/navigation';
 import { playLimitSeconds, timeIsUp } from './lib/playClock';
 import { withTransition } from "./lib/viewTransition";
 import {useEnvironmentAudio} from './lib/environmentAudio';
 import { useSceneMusic } from './lib/music';
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { flushPendingSave, useGame, type Screen } from "./store";
+import { flushPendingSave, useGame } from "./store";
 import { stopSpeech, onEnglishSpoken } from "./lib/speech";
 import { landOnPageSoon } from "./lib/pageFocus";
 import { skyFor } from "./lib/routine";

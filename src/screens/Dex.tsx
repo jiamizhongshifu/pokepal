@@ -1,6 +1,7 @@
+import type { DexBrowseState } from '../lib/navigation';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useLayoutEffect, useRef, useState } from "react";
-import { dexOwned, useGame, type DexBrowseState } from "../store";
+import { dexOwned, useGame } from "../store";
 import { TopBar } from "../components/TopBar";
 import { BottomNav } from "../components/BottomNav";
 import { CREATURES, creatureAvatar, CREATURE_TYPES, type CreatureType } from "../data/creatures";

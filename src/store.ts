@@ -1,7 +1,7 @@
 import { SavePersistence } from './lib/savePersistence';
 import { newSave, prepareForPlay, rollover } from './lib/saveLifecycle';
 import { TASK_KINDS, type TaskKind } from './data/tasks';
-import { withTransition } from './lib/viewTransition';
+import { createNavigation, type Screen } from './lib/navigation';
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { finishErrand } from './island/errands';
 import { finishParty } from './island/parties';
@@ -31,24 +31,6 @@ import { setSpeechRate } from "./lib/speech";
 import { isAvatarPhoto } from "./lib/avatar";
 import { ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
 import { learningEntry,unitUnlocked,unitById,unitRoundCount } from './data/curriculum';
-
-export interface DexBrowseState { onlyOwned:boolean; query:string; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
-
-export type Screen =
-  | { name: "welcome" }
-  | { name: "home"; view?:"island"; station?:string; companion?:number }
-  | { name: "lesson"; id:string }
-  | { name: "notebook"; mode?:'all'|'saved'|'retry'; returnTo?:'parent' }
-  | { name: "review"; keys:string[]; returnTo?:'home'|'parent' }
-  | { name: "practice" }
-  | { name: "diary"; id?:string }
-  | { name: "stories" }
-  | { name: "story"; id:string }
-  | { name: "task"; kind: TaskKind; boardIndex: number | null; practice?:boolean; session?:number }
-  | { name: "catch" }
-  | { name: "dex"; picking?: boolean; browse?:DexBrowseState }
-  | { name: "dexDetail"; id: number; picking?: boolean; browse?:DexBrowseState }
-  | { name: "parent" };
 
 interface State {
   /** Light up newly finished path stops once; island stops grant the next island upgrade. Returns the keys celebrated. */
@@ -119,25 +101,13 @@ interface State {
   importSave: (data: unknown) => Promise<void>;
 }
 
-/** Pages visited before the current one, for `back`. Only pages to browse are kept: back never re-enters a lesson, a game, a story, a diary or a visit already left. */
-let trail: Screen[] = [];
-/** The page asked for while its crossfade has not swapped it in yet, so quick taps read where the child is going. */
-let heading: Screen | null = null;
-/** Bumped whenever the page is set outright (a save imported or cleared): page changes still waiting for their crossfade are dropped. */
-let navigation = 0;
-const show = (screen: Screen) => {
-  heading = screen; const ticket = navigation;
-  withTransition(() => { if (ticket !== navigation) return; useGame.setState({ screen }); if (heading === screen) heading = null; });
-};
-const resetNavigation = () => { navigation++; heading = null; trail = []; };
-const BROWSE: ReadonlySet<Screen['name']> = new Set(['home', 'stories', 'dex', 'dexDetail', 'notebook', 'practice', 'parent', 'catch']);
-const sameScreen = (a: Screen, b: Screen) => JSON.stringify(a) === JSON.stringify(b);
 const persistence = new SavePersistence(error => {
   useGame.setState({ saveIssue: error instanceof SaveConflictError ? 'conflict' : 'write' });
 });
 export function flushPendingSave() { return persistence.flush(); }
 
 export const useGame = create<State>((set, get) => {
+  const navigation = createNavigation(() => get().screen, screen => set({screen}));
   let loading: Promise<void> | undefined;
   function editableSave() {
     const state = get();
@@ -209,21 +179,10 @@ export const useGame = create<State>((set, get) => {
       await get().importSave(backup);
     },
 
-    go(screen) {
-      const from = heading ?? get().screen;
-      // Going to the page just left is going back: it is taken off the trail instead of stacking a loop (相册 ⇄ 资料).
-      if (trail.length && trail[trail.length - 1].name === screen.name) trail = trail.slice(0, -1);
-      else if (BROWSE.has(from.name) && !sameScreen(from, screen)) trail = [...trail.slice(-19), from];
-      show(screen);
-    },
-    back() {
-      const here = heading ?? get().screen;
-      let to = trail.pop();
-      while (to && sameScreen(to, here)) to = trail.pop();
-      show(to ?? { name: 'home' });
-    },
+    go: navigation.go,
+    back: navigation.back,
 
-    startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});show({name:'lesson',id}); },
+    startUnit(id) { if(!unitUnlocked(get().save,id))return;mut(s=>{ensureLearning(s).activeUnit=id;});navigation.show({name:'lesson',id}); },
     async advanceUnit(id,round,skipped=false) {
       const u=unitById(id);if(!u||!unitUnlocked(get().save,id))return;
       if(round!==unitRoundCount(u)){mut(s=>{settleUnitRound(s,id,round,skipped);});return;}
@@ -417,7 +376,7 @@ export const useGame = create<State>((set, get) => {
         const s = newSave();
         await persistence.replace(s, 'reset');
         try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}
-        resetNavigation();set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
+        navigation.reset();set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
       }catch(error){set({saveIssue:error instanceof SaveConflictError?'conflict':'write'});}
       finally{set({saveBusy:false});}
     },
@@ -431,7 +390,7 @@ export const useGame = create<State>((set, get) => {
       try{
         await persistence.replace(s, 'import');
         setSpeechRate(s.settings.speechRate);
-        resetNavigation();set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
+        navigation.reset();set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
       }catch(error){
         if(error instanceof SaveConflictError)set({saveIssue:'conflict'});
         throw error;
