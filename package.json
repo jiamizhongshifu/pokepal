@@ -22,11 +22,13 @@
     "test": "node scripts/run-tests.mjs",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.scripts.json",
     "lint": "eslint . --max-warnings 0",
-    "check": "npm run test && npm run typecheck && npm run lint",
+    "check": "npm run test && npm run architecture && npm run typecheck && npm run lint",
     "build:ipad": "node scripts/build.mjs",
     "prebuild:ipad": "npm run voice:collect && npm run voice:coverage && npm run voice:verify && npm run voice:pack",
     "preview:ipad": "vite preview --host",
-    "analytics:report": "node scripts/online/traffic-report.mjs"
+    "analytics:report": "node scripts/online/traffic-report.mjs",
+    "architecture": "node scripts/architecture.mjs",
+    "check:source": "npm run architecture && npm run typecheck && npm run lint && node --import tsx --test scripts/tests/save-validation.test.ts scripts/tests/traffic.test.ts scripts/tests/learning-path.test.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
