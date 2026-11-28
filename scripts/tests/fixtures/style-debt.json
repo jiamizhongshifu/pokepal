@@ -39,10 +39,6 @@
   "colours": 3,
   "blurs": 0
  },
- "src/components/learning-trail.css": {
-  "colours": 1,
-  "blurs": 1
- },
  "src/components/lesson-picnic.css": {
   "colours": 6,
   "blurs": 0

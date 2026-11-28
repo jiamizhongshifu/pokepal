@@ -63,6 +63,16 @@ if (process.argv.includes('--dot')) {
     }
     checkBoundary(root, []);
   }
+  const reachable = new Set();
+  function markReachable(file) {
+    if (reachable.has(file)) return;
+    reachable.add(file);
+    for (const target of graph.get(file) ?? []) markReachable(target);
+  }
+  for (const entry of ['src/main.tsx', 'src/parentInfoMain.tsx', 'src/storyPreviewMain.tsx']) markReachable(entry);
+  for (const file of graph.keys()) {
+    if (file.endsWith('.tsx') && !reachable.has(file)) problems.add('页面入口无法加载此组件，请接入现有入口或移除失效实现：' + file);
+  }
   for (const problem of problems) console.error(problem);
   if (problems.size) process.exitCode = 1;
   else console.log(`已检查 ${graph.size} 个应用和接口模块的运行时依赖。`);

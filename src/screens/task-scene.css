@@ -81,3 +81,11 @@
  #root .task-trace .trace-round .trace-status { grid-area: status; }
  #root .task-trace .trace-round .trace-tools .replay { min-height: 38px; padding: 4px 12px; }
 }
+
+.session-discoveries{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.session-discoveries>span{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:var(--text-lg)}
+.session-discoveries .icon{width:48px;height:48px}
+.session-discoveries img{width:48px;height:48px;object-fit:contain}
+.session-discoveries .learning-color{width:44px;height:44px}
+.learning-reward .cel-actions .btn-big{min-height:64px;font-size:var(--text-xl)}
+.learning-reward .cel-actions .icon{width:32px;height:32px}

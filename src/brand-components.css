@@ -21,12 +21,12 @@
 
 /* Icons on a green fill: an action mark (Icon's is-glyph: play, mic, check…) turns white over a hard deep-green edge;
    a picture keeps its colours on a white chip, so nothing blends into the green. */
-#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next,
   .avatar-save, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
   :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true], .parent-organized .tabs button.on) > .icon:not(.is-glyph) {
   background:var(--brand-paper); border-radius:var(--radius-sm); padding:4px; box-sizing:content-box; flex:none;
 }
-#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next, .learning-trail-primary,
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .wish-button.primary, .story-next,
   .avatar-save, .diary-room .diary-record:not([aria-pressed=true]), .stop-go, .start-go-play, .path-extra .path-now, .round-pace.is-next, .island-teaser-go,
   :is(.notebook-tabs, .collection-tabs, .story-themes) button[aria-pressed=true], .parent-organized .tabs button.on) > .icon.is-glyph {
   background:none; padding:0; filter:brightness(0) invert(1) drop-shadow(0 3px 0 var(--brand-primary-deep));
@@ -34,13 +34,13 @@
 
 /* One green primary button everywhere a page moves on: 64px tall (56 on a phone), 20px bold, 16px corners, no outline,
    a 4px deep-green edge. Shaped exceptions keep their own form: the welcome button, path stops, the recorder, pills. */
-#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .learning-trail-primary, .wish-button.primary, .avatar-save) {
+#root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .wish-button.primary, .avatar-save) {
   min-height: 64px; padding: 10px 24px; border: 0; border-radius: var(--radius-md);
   background: var(--brand-primary); color: var(--brand-on-primary); text-shadow: none;
   box-shadow: 0 var(--brand-press) 0 var(--brand-primary-deep);
   font-size: var(--text-xl); font-weight: var(--brand-weight-display); line-height: 1.2;
 }
-@media (max-width: 600px) { #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .learning-trail-primary, .wish-button.primary, .avatar-save) { min-height: 56px; padding: 8px 18px; } }
+@media (max-width: 600px) { #root .screen :is(.btn-big:not(.alt), .farm-primary:not(.harvest), .journey-primary, .story-next, .wish-button.primary, .avatar-save) { min-height: 56px; padding: 8px 18px; } }
 
 /* One segmented choice everywhere (notebook, album, story shelf, grown-ups' tabs, settings switches, chart views): 56px, 16px corners, 2px outline,
    18px bold, the 4px edge; the chosen one is green. */
@@ -64,7 +64,7 @@
 #root .screen .btn-big::after { display:none; }
 
 /* ── Press: anything with a solid edge sinks onto it, and the edge is gone while it is held ── */
-#root .screen :is(.btn-big, .journey-primary, .farm-primary, .wish-button, .learning-trail-primary):not(:disabled):active { transform:translateY(var(--brand-press)); box-shadow:none; filter:none; }
+#root .screen :is(.btn-big, .journey-primary, .farm-primary, .wish-button):not(:disabled):active { transform:translateY(var(--brand-press)); box-shadow:none; filter:none; }
 #root .screen .choice:not(:disabled):active { transform:translateY(var(--brand-press)); }
 
 /* ── Focus: eel-blue glow ─────────────────────────────── */

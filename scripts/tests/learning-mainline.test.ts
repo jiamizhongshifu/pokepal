@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type {SaveData} from '../../src/types';
-import {learningTrail} from '../../src/lib/learningTrail';
 import {LEARNING_UNITS,selectedUnit,recommendedUnit,unitUnlocked,unitRoundCount,learningEntry} from '../../src/data/curriculum';
 import {migrateLearning,progressUnit,applyStation,noteLearningStory,toggleSavedLearning,encounter,reviewKeys} from '../../src/lib/learningProgress';
 import {dailyLearningPlan,lessonWords} from '../../src/data/learning';
@@ -20,21 +19,21 @@ test('snack lesson reconnects to an actual picnic without claiming speech or ind
  assert.equal(s.learning!.records['Yummy!'].independent,0);
 });
 test('learning theme survives course completion until related island and story experiences',()=>{
- const s=fresh();assert.equal(learningTrail(s).phase,'lesson');
- progressUnit(s,first.id,1,100);assert.equal(learningTrail(s).phase,'lesson');
+ const s=fresh();assert.equal(selectedUnit(s).id,first.id);
+ progressUnit(s,first.id,1,100);assert.equal(selectedUnit(s).id,first.id);
  progressUnit(s,first.id,unitRoundCount(first),200);
- assert.equal(learningTrail(s).phase,'island');assert.equal(selectedUnit(s).id,first.id);
+ assert.equal(selectedUnit(s).id,first.id);
  assert.deepEqual(dailyLearningPlan(s,false,200).words.map(w=>w.en),lessonWords(first,1));
- applyStation(s,'unrelated',300,'Look!',true);assert.equal(learningTrail(s).phase,'island');
- applyStation(s,first.station,350,'Welcome home!',true);assert.equal(learningTrail(s).phase,'island','hearing something at the place is not the errand');
- finishErrand(s,first.id,undefined,400);assert.equal(learningTrail(s).phase,'story');
- noteLearningStory(s,first.story,500);assert.equal(selectedUnit(s).id,second.id);assert.equal(learningTrail(s).phase,'lesson');
+ applyStation(s,'unrelated',300,'Look!',true);assert.equal(s.learning!.units[first.id].encounteredAt,undefined);
+ applyStation(s,first.station,350,'Welcome home!',true);assert.equal(s.learning!.units[first.id].encounteredAt,undefined,'hearing something at the place is not the errand');
+ finishErrand(s,first.id,undefined,400);assert.equal(s.learning!.units[first.id].encounteredAt,400);
+ noteLearningStory(s,first.story,500);assert.equal(selectedUnit(s).id,second.id);
  assert.equal(s.learning!.records['Hello!'],undefined,'scene visits do not invent course-phrase exposure');
 });
 test('optional island and story steps never lock next course, including story-first order',()=>{
  const s=fresh();progressUnit(s,first.id,unitRoundCount(first),100);
  assert(unitUnlocked(s,second.id));assert.equal(recommendedUnit(s).id,second.id);
- noteLearningStory(s,first.story,200);assert.equal(learningTrail(s).phase,'island');
+ noteLearningStory(s,first.story,200);assert.equal(s.learning!.units[first.id].encounteredAt,undefined);
  const before=structuredClone(s.learning!.units[first.id]);
  progressUnit(s,second.id,1,300);assert.equal(selectedUnit(s).id,second.id);
  assert.deepEqual(s.learning!.units[first.id],before);
@@ -63,19 +62,20 @@ test('migration removes identifiable bookmark-only exposure once without erasing
  const before=structuredClone(s);migrateLearning(s);assert.deepEqual(s,before);
 });
 
-test('learning home keeps the course primary after completion, without requiring island or story',async()=>{
- const {learningHome}=await import('../../src/lib/learningTrail');
- const s=fresh();assert.equal(learningHome(s).unit.id,first.id);assert(!learningHome(s).resuming);
- progressUnit(s,first.id,1,100);assert(learningHome(s).resuming);
+test('the next course can resume while the island still refers to the previous theme',()=>{
+ const s=fresh();
  progressUnit(s,first.id,unitRoundCount(first),200);
- const home=learningHome(s);assert.equal(home.unit.id,second.id);assert.equal(home.extension.id,first.id);
- assert(!home.resuming);assert(!home.completed);assert(unitUnlocked(s,home.unit.id));
- assert.equal(selectedUnit(s).id,first.id,'island transfer context is preserved until the next course is opened');
- progressUnit(s,second.id,1,300);assert.equal(learningHome(s).unit.id,second.id);assert(learningHome(s).resuming);
+ assert.equal(recommendedUnit(s).id,second.id);
+ assert.equal(selectedUnit(s).id,first.id);
+ progressUnit(s,second.id,1,300);
+ assert.equal(selectedUnit(s).id,second.id);
+ assert.equal(s.learning!.units[second.id].round,1);
 });
 
-test('all courses complete keeps a valid replay entry',async()=>{
- const {learningHome}=await import('../../src/lib/learningTrail');
- const s=fresh();for(const u of LEARNING_UNITS)progressUnit(s,u.id,unitRoundCount(u),100);
- const home=learningHome(s);assert(home.completed);assert(!home.resuming);assert(unitUnlocked(s,home.unit.id));
+test('all courses complete keeps a valid replay entry',()=>{
+ const s=fresh();
+ for(const u of LEARNING_UNITS)progressUnit(s,u.id,unitRoundCount(u),100);
+ const replay=recommendedUnit(s);
+ assert(s.learning!.units[replay.id].completedAt);
+ assert(unitUnlocked(s,replay.id));
 });

@@ -9,7 +9,6 @@ import {ProgressHost,RoundProgress} from '../components/RoundProgress';
 import { learningProfile } from '../lib/learningStage';
 import {selectedUnit,learningEntry} from '../data/curriculum';
 import {LearningArt} from '../components/LearningItem';
-import '../components/learning-trail.css';
 import { FeatureGuide } from '../components/FeatureGuide';
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "../store";

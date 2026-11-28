@@ -15,7 +15,7 @@
 #root .screen .balls-chip { background:var(--brand-paper); color:var(--brand-ink); border:2px solid var(--brand-line); box-shadow:0 var(--brand-press) 0 var(--brand-line-deep); }
 #root .screen .parent-btn { background:#fffef7c9; border:1px solid var(--brand-line); border-radius:50%; }
 #root .screen button:focus-visible,#root .screen summary:focus-visible { outline:3px solid var(--brand-primary); outline-offset:4px; }
-#root .screen .btn-big:not(.alt),#root .screen .learning-trail-primary {
+#root .screen .btn-big:not(.alt) {
   background:linear-gradient(var(--brand-primary),var(--brand-primary)); color:var(--brand-on-primary); border:2px solid var(--brand-primary-deep);
   border-top-color:#76bed3; border-radius:24px 27px 23px 26px;
   box-shadow:0 var(--brand-press) 0 var(--brand-primary-deep); text-shadow:none;
@@ -33,14 +33,6 @@
 /* A sunlit sign with the original tactile grain and rounded silhouette. */
 
 /* Notebook pages: one clear next step, with little picture tiles to explore. */
-#root .tasks .learning-trail {
-  position:relative; color:var(--brand-ink); background:var(--brand-paper); border:2px solid var(--brand-line); border-top:9px solid var(--brand-primary);
-  border-radius:25px 25px 30px 30px; padding:24px; box-shadow:var(--brand-elev);
-}
-#root .learning-trail header { color:var(--brand-ink-muted); }
-#root .learning-trail header small { background:var(--brand-primary-soft); color:var(--brand-primary-ink); padding:6px 10px; border-radius:var(--radius-sm); }
-#root .learning-trail h1 { color:var(--brand-ink); }
-#root .learning-trail footer,#root .learning-trail footer button { color:var(--brand-ink-muted); }
 #root .tasks .task-games>summary { color:var(--text); }
 #root .tasks .task-card { background:var(--brand-paper); border-color:var(--brand-line); box-shadow:var(--brand-elev); border-radius:var(--radius-lg); }
 #root .tasks .task-card.done { border-color:var(--brand-primary); background:var(--brand-primary-soft); }
@@ -74,8 +66,6 @@
 :root[data-theme="dark"] #root .screen:is(.learning-journey,.learning-lesson,.learning-notebook,.learning-review) { --text:var(--scene-paper-cool); color:var(--text); }
 :root[data-theme="dark"] #root .screen .btn-big.alt { color:var(--accent-en); }
 @media(max-width:600px) {
-  #root .tasks .learning-trail { padding:16px; border-top-width:7px; }
-  #root .learning-trail header small { padding:5px 8px; white-space:nowrap; }
 }
 
 /* Small island moments: a diary, a photo frame and a parcel on the same desk. */
@@ -128,7 +118,6 @@
 #root .screen { --leaf:var(--brand-primary); --honey:var(--brand-sun); }
 #root .screen .journey-primary { --leaf:var(--brand-primary); box-shadow:0 4px 0 var(--brand-primary-deep); }
 #root .screen .feature-guide.is-open { background:var(--brand-sun-soft); border-color:var(--brand-sun); }
-#root .learning-trail header small { color:var(--brand-sun-ink); background:var(--brand-sun-soft); }
 #root .screen :is(.story-next,.farm-primary) { background:var(--brand-primary); color:var(--brand-on-primary); border-color:var(--brand-primary-deep); }
 
 #root .screen .learning-stage-settings { }
