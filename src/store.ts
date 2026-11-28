@@ -1,3 +1,4 @@
+import { SavePersistence } from './lib/savePersistence';
 import { newSave, prepareForPlay, rollover } from './lib/saveLifecycle';
 import { TASK_KINDS, type TaskKind } from './data/tasks';
 import { withTransition } from './lib/viewTransition';
@@ -13,7 +14,7 @@ import {weatherAt} from './lib/weather';
 import {waterCropsWithRain} from './lib/farm';
 import { completeGuide, type GuideId } from './data/onboarding';
 import { applyLearningSettings,validLearningProfile,type LearningProfile } from './lib/learningStage';
-import { mergeInvites, invitePartner } from "./lib/invites";
+import { invitePartner } from "./lib/invites";
 import { markPathSeen, claimChapterFriend, notePathReview, openChapterDiary } from "./lib/learningPath";
 import { rewardParticipation, rewardCourse, courseClaims, type Reward } from './lib/participation';
 import { STORIES, storyProgressKey } from './data/stories';
@@ -21,7 +22,7 @@ import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './li
 import { create } from "zustand";
 import type { SaveData, Settings } from "./types";
 import { todayStr } from "./lib/date";
-import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictError } from "./lib/db";
+import { loadSaveBackup, SaveConflictError } from "./lib/db";
 import {clearParentNotice} from './lib/parentNotice';
 import { validateSave } from "./lib/saveValidation";
 import { acquireSaveSession } from "./lib/saveSession";
@@ -56,7 +57,7 @@ interface State {
   claimChapterFriend:(chapter:number)=>Promise<boolean>;
   /** Diary stop: opening the chapter's diary completes it; telling anything is optional. */
   openChapterDiary:(chapter:number)=>void;
-  finishReview: () => Reward;
+  finishReview: () => Reward | undefined;
   markReviewAudio: (key:string,pending:boolean)=>void;
   noteStoryRead: (id:string,page:number) => void;
   startUnit: (id:string)=>void;
@@ -131,54 +132,38 @@ const show = (screen: Screen) => {
 const resetNavigation = () => { navigation++; heading = null; trail = []; };
 const BROWSE: ReadonlySet<Screen['name']> = new Set(['home', 'stories', 'dex', 'dexDetail', 'notebook', 'practice', 'parent', 'catch']);
 const sameScreen = (a: Screen, b: Screen) => JSON.stringify(a) === JSON.stringify(b);
-let saveTimer: ReturnType<typeof setTimeout> | undefined;
-let revision=0;
-let pendingSave:SaveData|undefined;
-let saving:Promise<void>|undefined;
-let loading:Promise<void>|undefined;
-async function flushSave():Promise<void>{
-  clearTimeout(saveTimer);
-  if(saving){await saving;if(pendingSave)await flushSave();return;}
-  saving=(async()=>{
-    while(pendingSave){
-      const snapshot=pendingSave;pendingSave=undefined;
-      try{revision=await writeSave(snapshot,revision);}
-      catch(error){pendingSave??=snapshot;useGame.setState({saveIssue:error instanceof SaveConflictError?'conflict':'write'});throw error;}
-    }
-  })();
-  try{await saving;}finally{saving=undefined;}
-}
-export function flushPendingSave(){return flushSave();}
-function scheduleSave(s:SaveData){
-  pendingSave=s;clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{void flushSave().catch(()=>{});},400);
-}
+const persistence = new SavePersistence(error => {
+  useGame.setState({ saveIssue: error instanceof SaveConflictError ? 'conflict' : 'write' });
+});
+export function flushPendingSave() { return persistence.flush(); }
 
 export const useGame = create<State>((set, get) => {
-  /** 所有存档修改都走这里：先换日，再修改副本，再异步落盘 */
-  function mut<R>(fn: (s: SaveData) => R): R {
-    if(!get().loaded||get().saveIssue||get().saveBusy)return undefined as R;
-    const s = structuredClone(get().save);
-    rollover(s);
-    mergeInvites(s);
-    const r = fn(s);
-    
-    set({ save: s });
-    scheduleSave(s);
-    return r;
+  let loading: Promise<void> | undefined;
+  function editableSave() {
+    const state = get();
+    if (!state.loaded || state.saveIssue || state.saveBusy) return;
+    const save = structuredClone(state.save);
+    rollover(save);
+    return save;
+  }
+
+  function mut<R>(fn: (s: SaveData) => R): R | undefined {
+    const save = editableSave();
+    if (!save) return;
+    const result = fn(save);
+    set({ save });
+    persistence.schedule(save);
+    return result;
   }
 
   // Final rewards are shown only after their snapshot is durable. A failed write
   // retains that snapshot for SaveRecovery; retry writes it without rerunning fn.
   async function commit<R>(fn:(s:SaveData)=>R):Promise<R|undefined> {
-    if(!get().loaded||get().saveIssue||get().saveBusy)return undefined;
-    const s=structuredClone(get().save);
-    rollover(s);mergeInvites(s);
-    const result=fn(s);
-    
-    set({saveBusy:true});
-    pendingSave=s;
-    try { await flushSave();set({save:s});return result; }
+    const s = editableSave();
+    if (!s) return;
+    const result = fn(s);
+    set({ saveBusy: true });
+    try { await persistence.flush(s); set({save:s}); return result; }
     catch { set({save:s});return undefined; }
     finally { set({saveBusy:false}); }
   }
@@ -191,24 +176,22 @@ export const useGame = create<State>((set, get) => {
 
     async load() {
       if(loading)return loading;
+      if(get().saveBusy)return;
       loading=(async()=>{
-        clearTimeout(saveTimer);
         set({saveBusy:true});
         try{
           if(!await acquireSaveSession()){set({saveIssue:'busy'});return;}
-          // Never read past a pending write, or replace a failed read with a blank save.
-          if(saving)await saving;
-          const snapshot=await readSaveSnapshot();
-          const s=snapshot.save===undefined?newSave():validateSave(snapshot.save);
-          if(s.trainer&&!s.trainer.avatar.startsWith('avatar-'))s.trainer.avatar='avatar-red';
-          prepareForPlay(s);
+          const s = await persistence.readForPlay(get().saveIssue === 'conflict' || get().saveIssue === 'load');
           setSpeechRate(s.settings.speechRate);
-          revision=snapshot.revision;pendingSave=undefined;
           const backup=await loadSaveBackup().catch(()=>undefined);
           set({save:s,loaded:true,saveIssue:null,hasSaveBackup:!!backup});
           // Persist migration only after a successful read, with a revision check.
-          scheduleSave(s);
-        }catch{set({saveIssue:'load'});}
+          persistence.schedule(s);
+        }catch{
+          // A flush can fail before the read starts. Keep its retry action and pending snapshot.
+          const issue = get().saveIssue;
+          if (issue !== 'write' && issue !== 'conflict') set({saveIssue:'load'});
+        }
         finally{set({saveBusy:false});}
       })();
       try{await loading;}finally{loading=undefined;}
@@ -217,7 +200,7 @@ export const useGame = create<State>((set, get) => {
       if(get().saveBusy)return;
       if(get().saveIssue!=='write'){await get().load();return;}
       set({saveBusy:true});
-      try{await flushSave();set({saveIssue:null});}catch{/* Keep the recoverable snapshot and visible error. */}
+      try{await persistence.flush();set({saveIssue:null});}catch{/* Keep the recoverable snapshot and visible error. */}
       finally{set({saveBusy:false});}
     },
     async restoreSaveBackup(){
@@ -254,7 +237,7 @@ export const useGame = create<State>((set, get) => {
       trackLearningCompletion('lesson_completed',result);return result;
     },
     markReviewAudio(key,pending){mut(s=>markReviewAudio(s,key,pending));},
-    finishReview(){const reward=mut(s=>{notePathReview(s);return rewardParticipation(s,'review');});if(reward)void flushSave().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
+    finishReview(){const reward=mut(s=>{notePathReview(s);return rewardParticipation(s,'review');});if(reward)void persistence.flush().then(()=>{trackLearningCompletion('review_completed',reward);}).catch(()=>{});return reward;},
     noteStoryRead(id,page){
       const reward=mut(s=>{
         const story=STORIES.find(st=>storyProgressKey(st)===id);
@@ -265,7 +248,7 @@ export const useGame = create<State>((set, get) => {
         if(wasComplete||pages.length!==story.pages.length)return;
         noteLearningStory(s,story.id);return rewardParticipation(s,'story');
       });
-      if(reward)void flushSave().then(()=>{trackLearningCompletion('story_completed',reward);}).catch(()=>{});
+      if(reward)void persistence.flush().then(()=>{trackLearningCompletion('story_completed',reward);}).catch(()=>{});
     },
     restLearningWord(word) {mut(s=>restAfterListening(s,word));},
     noteAttempt(word,correct,assisted,source) {mut(s=>attempt(s,word,correct,assisted,source));},
@@ -284,13 +267,13 @@ export const useGame = create<State>((set, get) => {
         if(!s.daily.words.includes(entry.key))s.daily.words.push(entry.key);
         if(action)return rewardParticipation(s,'island');
       }
-    });if(reward)void flushSave().catch(()=>{});},
+    });if(reward)void persistence.flush().catch(()=>{});},
 
     plantCrop(index,berry) {return mut(s=>plantCrop(s,index,berry))??false;},
     waterCrop(index,plantedAt,id) {return mut(s=>waterCrop(s,index,plantedAt,id))??false;},
     async harvestCrop(index) {return await commit(s=>harvestCrop(s,index))??false;},
     feedCrop(id,berry) {return mut(s=>{return feedCrop(s,id,berry);})??false;},
-    celebratePath(keys){let fresh:string[]=[];mut(s=>{fresh=markPathSeen(s,keys);});return fresh;},
+    celebratePath(keys){return mut(s=>markPathSeen(s,keys)) ?? [];},
     async claimChapterFriend(chapter){return !!await commit(s=>claimChapterFriend(s,chapter));},
     openChapterDiary(chapter){mut(s=>openChapterDiary(s,chapter));},
 
@@ -378,7 +361,7 @@ export const useGame = create<State>((set, get) => {
       const save = advancePlayClock(current, sec);
       if (save === current) return;
       set({ save });
-      scheduleSave(save);
+      persistence.schedule(save);
     },
 
     grantExtraMinutes(min) { mut(s => grantPlayMinutes(s, min)); },
@@ -392,10 +375,10 @@ export const useGame = create<State>((set, get) => {
     async setLearningProfile(profile) {
       if(!validLearningProfile(profile)||!get().loaded||get().saveBusy||get().saveIssue)return false;
       mut(s=>{s.settings=applyLearningSettings(s.settings,{learningProfile:profile});});
-      try{await flushSave();trackInteraction('learning_settings_saved');return true;}catch{return false;}
+      try{await persistence.flush();trackInteraction('learning_settings_saved');return true;}catch{return false;}
     },
 
-    rainWaterCrops(){const s=get().save,now=Date.now();if(weatherAt(now,s.settings.islandWeather??'auto').rain<.65||!s.farm?.plots.some(c=>c&&c.wateredAt===undefined&&now-c.plantedAt>=12000))return 0;return mut(s=>waterCropsWithRain(s,now));},
+    rainWaterCrops(){const s=get().save,now=Date.now();if(weatherAt(now,s.settings.islandWeather??'auto').rain<.65||!s.farm?.plots.some(c=>c&&c.wateredAt===undefined&&now-c.plantedAt>=12000))return 0;return mut(s=>waterCropsWithRain(s,now)) ?? 0;},
     markGuideSeen(id) {if(get().save.onboarding?.seen[id])return;mut(s=>{s.onboarding??={version:1,seen:{},automatic:true};s.onboarding.seen[id]=true;});},
     resetGuides() {mut(s=>{s.onboarding={version:1,seen:{},automatic:true};});},
     setGuideAutomatic(automatic) {mut(s=>{s.onboarding??={version:1,seen:{},automatic:true};s.onboarding.automatic=automatic;});},
@@ -431,8 +414,8 @@ export const useGame = create<State>((set, get) => {
       if(get().saveBusy||get().saveIssue)return;
       set({saveBusy:true});
       try{
-        await flushSave();const s=newSave();
-        revision=await resetSave(s,revision);
+        const s = newSave();
+        await persistence.replace(s, 'reset');
         try{clearParentNotice(localStorage);}catch{/* Storage may be blocked. */}
         resetNavigation();set({save:s,screen:{name:'welcome'},hasSaveBackup:false});
       }catch(error){set({saveIssue:error instanceof SaveConflictError?'conflict':'write'});}
@@ -446,8 +429,7 @@ export const useGame = create<State>((set, get) => {
       prepareForPlay(s);
       set({saveBusy:true});
       try{
-        await flushSave();
-        revision=await writeSave(s,revision,true);
+        await persistence.replace(s, 'import');
         setSpeechRate(s.settings.speechRate);
         resetNavigation();set({save:s,screen:{name:s.trainer?'home':'welcome'},hasSaveBackup:true});
       }catch(error){

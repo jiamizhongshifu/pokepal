@@ -3,7 +3,8 @@
  const g=window.__game;
  if(!g?.getState().loaded || g.getState().save.trainer || g.getState().save.captures.length)throw new Error('Open an isolated dev session and finish loading first');
  const {db,readSaveSnapshot}=await import('/src/lib/db.ts');
- const {flushPendingSave}=await import('/src/store.ts');
+ const {useGame,flushPendingSave}=await import('/src/store.ts');
+ if(useGame!==g)throw new Error('Restart Vite before running this fixture so the test and page share one writer');
  const check=(value,message)=>{if(!value)throw new Error(message);};
  const evidence=[];
  const fixture=structuredClone(g.getState().save);
@@ -45,5 +46,18 @@
  check(g.getState().saveIssue===null,'retry clears failure');
  check(disk.balls.poke===before.balls.poke-1&&disk.captures.filter(c=>c.id===1011).length===1,'retry saves same transaction exactly once');
  evidence.push('quota fault: no success, old disk intact, retry commits exactly once');
+ g.getState().grantMysteryGift();
+ await g.getState().load();
+ check(g.getState().save.balls.poke===disk.balls.poke+1,'reload drains a scheduled write');
+ await flushPendingSave();
+ const external=await readSaveSnapshot();
+ external.save.balls.poke+=3;
+ await db.kv.put({key:'save',value:external.save,revision:external.revision+1});
+ g.getState().grantMysteryGift();
+ await flushPendingSave().catch(()=>{});
+ check(g.getState().saveIssue==='conflict','a stale write reports conflict');
+ await g.getState().retrySave();
+ check(g.getState().saveIssue===null && g.getState().save.balls.poke===external.save.balls.poke,'reload adopts the other revision');
+ evidence.push('normal reload drains queued progress; conflict reload keeps the newer disk state');
  return {passed:true,evidence,final:{energy:disk.energy,balls:disk.balls,captures:disk.captures.length,basket:disk.farm.basket}};
 })()
