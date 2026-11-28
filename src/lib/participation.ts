@@ -1,10 +1,10 @@
+import { TASK_KINDS } from '../data/tasks';
 import type { SaveData } from '../types';
 import { todayStr } from './date';
 import { unitById, unitUnlocked, unitRoundCount } from '../data/curriculum';
 
-export const PARTICIPATION_KINDS=['listen','wordpic','repeat','trace','course','review','story','island'] as const;
+export const PARTICIPATION_KINDS=[...TASK_KINDS,'course','review','story','island'] as const;
 export type ParticipationKind=typeof PARTICIPATION_KINDS[number];
-export const PARTICIPATION_LABELS:Record<ParticipationKind,string>={listen:'听一听',wordpic:'认一认',repeat:'说一说',trace:'写一写',course:'英语冒险',review:'再遇见',story:'一起读故事',island:'小岛交流'};
 /** A day counts when three kinds of activity were done; every seventh such day brings one more invite berry. */
 export const DAILY_GOAL=3, DAYS_FOR_GIFT=7;
 export interface Participation {version:1;days:number;lastDate:string;gifts:number}
@@ -12,7 +12,7 @@ export interface Participation {version:1;days:number;lastDate:string;gifts:numb
 export interface Reward {fresh:boolean;dayCounted:boolean;ballGranted:boolean;repeated:boolean}
 export function migrateParticipation(s:SaveData){
  if(!s.participation)s.participation={version:1,days:s.streak.count,lastDate:s.streak.lastDate,gifts:Math.floor(s.streak.count/DAYS_FOR_GIFT)};
- for(const kind of ['listen','wordpic','repeat','trace'] as const)if(!s.daily.board.includes(kind)){s.daily.board.push(kind);s.daily.boardDone.push(false);}
+ for(const kind of TASK_KINDS)if(!s.daily.board.includes(kind)){s.daily.board.push(kind);s.daily.boardDone.push(false);}
  if(!s.daily.participated)s.daily.participated=s.daily.board.filter((_,i)=>s.daily.boardDone[i]);
  // A legacy completed board already granted its daily bonus and day credit.
  if(s.daily.goalDone===undefined)s.daily.goalDone=s.daily.bonusGiven;

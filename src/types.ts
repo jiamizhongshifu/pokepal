@@ -1,7 +1,8 @@
+import type { TaskKind } from './data/tasks';
+
 export type Lang = "en" | "zh";
 export type Rarity = "common" | "uncommon" | "rare" | "legend";
 export type BallType = "poke" | "great" | "ultra" | "master";
-export type TaskKind = "listen" | "repeat" | "wordpic" | "trace";
 
 /** One growth stage of an original island creature (see src/data/creatures.ts). */
 export interface Creature {

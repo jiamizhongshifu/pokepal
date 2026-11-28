@@ -1,10 +1,11 @@
+import { TASK_KINDS } from '../data/tasks';
 import {validPath,migratePathEconomy} from './learningPath';
 import {OPPORTUNITY_LIMIT,validOpportunity} from './learningProgress';
 import {validWeatherMode} from './weather';
 import { validOnboarding, migrateOnboarding } from '../data/onboarding';
 import { validLearningProfile } from './learningStage';
 import { mergeInvites } from "./invites";
-import { PARTICIPATION_KINDS } from './participation';
+import { PARTICIPATION_KINDS, DAYS_FOR_GIFT } from './participation';
 import { validFarm, migrateCrops } from './farm';
 import { validWishes } from '../island/plays';
 import { validTraces } from '../island/errands';
@@ -39,14 +40,14 @@ export function validateSave(input:unknown):SaveData {
  }
  const d=s.daily;
  requireValue(object(d)&&typeof d.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)&&Number.isFinite(Date.parse(d.date)),'日期');
- requireValue(Array.isArray(d.board)&&[3,4].includes(d.board.length)&&new Set(d.board).size===d.board.length&&d.board.every((k:unknown)=>oneOf(['listen','repeat','wordpic','trace'],k))&&Array.isArray(d.boardDone)&&d.boardDone.length===d.board.length&&d.boardDone.every((v:unknown)=>typeof v==='boolean')&&typeof d.bonusGiven==='boolean','任务板');
+ requireValue(Array.isArray(d.board)&&[3,4].includes(d.board.length)&&new Set(d.board).size===d.board.length&&d.board.every((k:unknown)=>oneOf(TASK_KINDS,k))&&Array.isArray(d.boardDone)&&d.boardDone.length===d.board.length&&d.boardDone.every((v:unknown)=>typeof v==='boolean')&&typeof d.bonusGiven==='boolean','任务板');
  requireValue(['energyEarned','tasksCompleted','heard','spoken','playSeconds','extraSeconds'].every(k=>number(d[k]))&&strings(d.words)&&Array.isArray(d.caught)&&d.caught.every((id:unknown)=>typeof id==='number'&&ids.has(id)),'每日进度');
  if(d.participated!==undefined)requireValue(strings(d.participated)&&new Set(d.participated).size===d.participated.length&&d.participated.every(k=>oneOf(PARTICIPATION_KINDS,k)),'参与奖励');
  if(d.courseUnits!==undefined)requireValue(strings(d.courseUnits)&&new Set(d.courseUnits).size===d.courseUnits.length&&d.courseUnits.every((id:string)=>!!unitById(id)),'课程奖励');
  if(d.islandDone!==undefined)requireValue(integer(d.islandDone)&&d.islandDone<=9999,'小岛的一天');
  if(d.goalDone!==undefined)requireValue(typeof d.goalDone==='boolean','今日参与目标');
  if(d.storyReadPages!==undefined)requireValue(object(d.storyReadPages)&&Object.values(d.storyReadPages).every(v=>Array.isArray(v)&&v.length<=8&&new Set(v).size===v.length&&v.every(n=>Number.isInteger(n)&&n>=1&&n<=8)),'共读页数');
- const pa=s.participation;if(pa!==undefined)requireValue(object(pa)&&pa.version===1&&integer(pa.days)&&integer(pa.gifts)&&pa.gifts<=Math.floor(pa.days/7)&&typeof pa.lastDate==='string','累计参与');
+ const pa=s.participation;if(pa!==undefined)requireValue(object(pa)&&pa.version===1&&integer(pa.days)&&integer(pa.gifts)&&pa.gifts<=Math.floor(pa.days/DAYS_FOR_GIFT)&&typeof pa.lastDate==='string','累计参与');
  requireValue(object(s.streak)&&typeof s.streak.lastDate==='string'&&integer(s.streak.count),'连续天数');
  requireValue(object(s.wordStats)&&Object.values(s.wordStats).every(v=>object(v)&&['heard','spoken','correct'].every(k=>number(v[k]))),'词汇记录');
  requireValue(object(s.settings),'设置');const cfg=s.settings;
@@ -88,7 +89,7 @@ export function validateSave(input:unknown):SaveData {
   requireValue(l.opportunities===undefined||(Array.isArray(l.opportunities)&&l.opportunities.length<=OPPORTUNITY_LIMIT&&l.opportunities.every(validOpportunity)),'作答记录');
   for(const [id,p] of Object.entries(l.units))requireValue(object(p)&&(p.pendingAudio===undefined||Array.isArray(p.pendingAudio)&&p.pendingAudio.length<=20&&p.pendingAudio.every((n:unknown)=>integer(n)&&n<(unitById(id)?unitRoundCount(unitById(id)!):20)))&&integer(p.round)&&(!unitById(id)||p.round<=unitRoundCount(unitById(id)!))&&['completedAt','appliedAt','encounteredAt','storyAt','homeTriedAt'].every(k=>p[k]===undefined||number(p[k])),'课程进度');
  }
- const result=structuredClone(s) as unknown as SaveData;
+ const result=s as unknown as SaveData;
  mergeInvites(result);
  migratePathEconomy(result);
  return result;

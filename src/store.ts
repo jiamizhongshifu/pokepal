@@ -1,3 +1,4 @@
+import { TASK_KINDS, type TaskKind } from './data/tasks';
 import { withTransition } from './lib/viewTransition';
 import { playById, finishPlay, wishFor, notePlayedTogether } from './island/plays';
 import { finishErrand } from './island/errands';
@@ -17,7 +18,7 @@ import { migrateParticipation, rewardParticipation, rewardCourse, courseClaims, 
 import { STORIES, storyProgressKey } from './data/stories';
 import { plantCrop, waterCrop, harvestCrop, feedCrop, type CropKind } from './lib/farm';
 import { create } from "zustand";
-import type { Daily, DaySummary, SaveData, Settings, TaskKind } from "./types";
+import type { Daily, DaySummary, SaveData, Settings } from "./types";
 import { todayStr } from "./lib/date";
 import { readSaveSnapshot, writeSave, resetSave, loadSaveBackup, SaveConflictError } from "./lib/db";
 import {clearParentNotice} from './lib/parentNotice';
@@ -28,15 +29,6 @@ import { setSpeechRate } from "./lib/speech";
 import { isAvatarPhoto } from "./lib/avatar";
 import { migrateLearning,ensureLearning,toggleSavedLearning,encounter,attempt,applyStation,noteLearningStory,restAfterListening } from './lib/learningProgress';
 import { learningEntry,unitUnlocked,unitById,unitRoundCount } from './data/curriculum';
-
-export const BOARD_BONUS = 1;
-export const TASK_ENERGY: Record<TaskKind, number> = { listen: 2, wordpic: 2, repeat: 2, trace: 2 };
-export const TASK_INFO: Record<TaskKind, { zh: string; en: string; icon: string; color: string }> = {
-  listen: { zh: "听一听", en: "Listen", icon: "ear", color: "#4fc3f7" },
-  repeat: { zh: "说一说", en: "Speak", icon: "speak", color: "#ff8a65" },
-  wordpic: { zh: "认一认", en: "Look", icon: "picture", color: "#aed581" },
-  trace: { zh: "写一写", en: "Write", icon: "pencil", color: "#ba68c8" }
-};
 
 export interface DexBrowseState { onlyOwned:boolean; query:string; generation:number; scrollTop:number; filtersOpen:boolean; focusId:number }
 
@@ -58,10 +50,8 @@ export type Screen =
 
 const DEFAULT_SETTINGS: Settings = { dailyMinutes: 15, tasksPerDay: 4, level: 1, favorites: [FIRST_FRIEND], speechRate: 1 };
 
-function makeBoard(_n:3|4,_date:string):TaskKind[]{return ['listen','wordpic','repeat','trace'];}
-
-function newDaily(date: string, settings: Settings): Daily {
-  const board = makeBoard(settings.tasksPerDay, date);
+function newDaily(date: string): Daily {
+  const board = [...TASK_KINDS];
   return {
     date,
     energyEarned: 0,
@@ -85,7 +75,7 @@ function newSave(): SaveData {
     energy: 0,
     balls: { poke: 0, great: 0, ultra: 0, master: 0 },
     captures: [],
-    daily: newDaily(todayStr(), DEFAULT_SETTINGS),
+    daily: newDaily(todayStr()),
     streak: { lastDate: "", count: 0 },
     wordStats: {},
     settings: normalizeLearningSettings({ ...DEFAULT_SETTINGS }),
@@ -110,10 +100,8 @@ function rollover(s: SaveData) {
   const today = todayStr();
   if (s.daily.date === today) return;
   s.history = [...s.history.filter((h) => h.date !== s.daily.date), summarize(s.daily)].slice(-30);
-  s.daily = newDaily(today, s.settings);
+  s.daily = newDaily(today);
 }
-
-export type TaskReward = Reward;
 
 interface State {
   /** Light up newly finished path stops once; island stops grant the next island upgrade. Returns the keys celebrated. */
@@ -155,7 +143,7 @@ interface State {
   back: () => void;
   createTrainer: (avatar: string) => Promise<boolean>;
   /** `partner`: the companion practising alongside; a finished set counts as time played together. */
-  completeTask: (kind: TaskKind, boardIndex: number | null, partner?: number) => Promise<TaskReward | undefined>;
+  completeTask: (kind: TaskKind, boardIndex: number | null, partner?: number) => Promise<Reward | undefined>;
   noteStoryPage: (id:string,page:number) => void;
   inviteFriend: (id: number) => Promise<boolean>;
   setCatchWish: (id: number | null) => void;
@@ -474,7 +462,7 @@ export const useGame = create<State>((set, get) => {
         if (patch.speechRate) setSpeechRate(patch.speechRate);
         // 任务数变化时，若今天还没开始做任务就重排任务板
         if (patch.tasksPerDay && patch.tasksPerDay !== prevTasks && !s.daily.boardDone.some(Boolean)) {
-          s.daily.board = makeBoard(patch.tasksPerDay, s.daily.date);
+          s.daily.board = [...TASK_KINDS];
           s.daily.boardDone = s.daily.board.map(() => false);
         }
       });
